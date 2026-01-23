@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import CTASection from '../components/CTASection.astro';
+
+const stats = [
+    { value: '$2.5B+', label: 'Transaction Value' },
+    { value: '15+', label: 'M&A Projects' },
+    { value: '100%', label: 'Remote Delivery' },
+    { value: '<72H', label: 'Response Time' },
+];
+---
+
+<BaseLayout
+    title="Strategic Advisory & Implementation"
+    description="Technical diligence, integration planning, and value creation execution for high-stakes transactions."
+>
+    <Hero
+        title="Strategic Advisory"
+        subtitle="& Implementation"
+        description="Technical diligence, integration planning, and value creation execution for high-stakes transactions."
+    />
+
+    <StatsBar stats={stats} />
+
+    <CTASection
+        title="Let's discuss your next challenge"
+        description="Schedule a confidential consultation to discuss your objectives."
+        buttonText="BOOK_CALENDAR_SLOT()"
+        buttonAction="mailto:contact@globalstrategic.tech"
+    />
+</BaseLayout>

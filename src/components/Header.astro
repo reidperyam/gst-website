@@ -1,0 +1,22 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+    currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+---
+
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">G<span>S</span>T</div>
+            <ul>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>

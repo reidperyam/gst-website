@@ -1,0 +1,25 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    buttonText?: string;
+    buttonAction?: string;
+}
+
+const {
+    title,
+    description,
+    buttonText = "BOOK_CALENDAR_SLOT()",
+    buttonAction = "mailto:contact@globalstrategic.tech"
+} = Astro.props;
+---
+
+<section class="cta-section" id="contact">
+    <div class="container">
+        <div class="cta-box">
+            <h2>{title}</h2>
+            <p>{description}</p>
+            <a href={buttonAction} class="cta-button">{buttonText}</a>
+        </div>
+    </div>
+</section>
