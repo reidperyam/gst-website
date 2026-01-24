@@ -518,7 +518,7 @@ footer p {
 
 .footer-links {
     display: flex;
-    gap: 0.5rem;
+    gap: 2rem;
     align-items: center;
 }
 
