@@ -688,7 +688,7 @@ body.dark-theme .service-card h3 {
 }
 
 body.dark-theme .service-card p {
-    color: #b0b0b0;
+    color: #d0d0d0;
 }
 
 body.dark-theme .about {
@@ -718,7 +718,7 @@ body.dark-theme .about-cta:hover {
 body.dark-theme .about-image {
     background: #1a1a1a;
     border-color: #2a2a2a;
-    color: #404040;
+    color: #808080;
 }
 
 body.dark-theme footer {
@@ -728,6 +728,20 @@ body.dark-theme footer {
 
 body.dark-theme footer p {
     color: rgba(153, 153, 153, 0.85);
+}
+
+body.dark-theme .contact-info {
+    color: rgba(200, 200, 200, 0.8);
+}
+
+body.dark-theme .contact-info:hover {
+    color: #05cd99;
+    border-bottom-color: #05cd99;
+}
+
+body.dark-theme .contact-info:focus-visible {
+    outline: 2px solid #05cd99;
+    outline-offset: 0.25rem;
 }
 
 body.dark-theme .footer-links a {
