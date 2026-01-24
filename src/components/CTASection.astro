@@ -3,14 +3,14 @@ interface Props {
     title: string;
     description: string;
     buttonText?: string;
-    buttonAction?: string;
+    calendlyUrl?: string;
 }
 
 const {
     title,
     description,
     buttonText = "BOOK_CALENDAR_SLOT()",
-    buttonAction = "mailto:contact@globalstrategic.tech"
+    calendlyUrl = "https://calendly.com/globalstrategictech"
 } = Astro.props;
 ---
 
@@ -19,7 +19,7 @@ const {
         <div class="cta-box">
             <h2>{title}</h2>
             <p>{description}</p>
-            <a href={buttonAction} class="cta-button">{buttonText}</a>
+            <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" class="cta-button">{buttonText}</a>
         </div>
     </div>
 </section>
