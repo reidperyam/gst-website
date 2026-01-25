@@ -11,5 +11,8 @@
   "dependencies": {
     "@astrojs/vercel": "^9.0.4",
     "astro": "^5.16.15"
+  },
+  "devDependencies": {
+    "xlsx": "^0.18.5"
   }
 }
