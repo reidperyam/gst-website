@@ -68,6 +68,13 @@ nav {
     align-items: center;
     gap: 0.5rem;
     height: 2rem;
+    text-decoration: none;
+    border-bottom: none;
+    transition: color 0.2s;
+}
+
+.logo:hover {
+    color: #05cd99;
 }
 
 .logo span {
@@ -628,6 +635,10 @@ body.dark-theme header {
 
 body.dark-theme .logo {
     color: rgba(245, 245, 245, 0.9);
+}
+
+body.dark-theme .logo:hover {
+    color: #05cd99;
 }
 
 body.dark-theme nav a {

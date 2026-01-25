@@ -11,7 +11,7 @@ const { currentPath = '/' } = Astro.props;
 <header>
     <div class="container">
         <nav>
-            <div class="logo">G<span>S</span>T</div>
+            <a href="/" class="logo">G<span>S</span>T</a>
             <ul>
                 <li><a href="/#services">Services</a></li>
                 <li><a href="/portfolio" class={currentPath?.startsWith('/portfolio') ? 'active' : ''}>Portfolio</a></li>
