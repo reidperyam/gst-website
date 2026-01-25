@@ -73,11 +73,12 @@ const { projects } = Astro.props;
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
+        const techs = Array.isArray(project.technologies) ? project.technologies : (typeof project.technologies === 'string' ? project.technologies.split(',').map(t => t.trim()) : []);
         const searchableText = [
           project.codeName,
           project.industry,
           project.summary,
-          ...project.technologies
+          ...techs
         ].join(' ').toLowerCase();
 
         if (!searchableText.includes(searchLower)) return false;
@@ -170,7 +171,11 @@ const { projects } = Astro.props;
       `;
     } else {
       tbody.innerHTML = paginatedProjects
-        .map(project => `
+        .map(project => {
+          // Ensure technologies is always an array
+          const techs = Array.isArray(project.technologies) ? project.technologies : (typeof project.technologies === 'string' ? project.technologies.split(',').map(t => t.trim()) : []);
+
+          return `
           <tr>
             <td>
               <div class="project-cell">
@@ -185,11 +190,12 @@ const { projects } = Astro.props;
             <td class="year-cell">${project.year}</td>
             <td class="tech-cell">
               <div class="tech-tags">
-                ${project.technologies.map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`).join('')}
+                ${techs.map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`).join('')}
               </div>
             </td>
           </tr>
-        `)
+        `;
+        })
         .join('');
     }
 
