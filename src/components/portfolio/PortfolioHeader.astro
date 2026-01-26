@@ -96,8 +96,67 @@ const { stats } = Astro.props;
   }
 
   @media (max-width: 768px) {
+    .portfolio-header {
+      padding: 1rem 0;
+    }
+
+    .portfolio-header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .portfolio-title {
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
     .portfolio-stats {
-      display: none;
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      font-size: 0.75rem;
+      justify-content: space-between;
+    }
+
+    .portfolio-stat {
+      align-items: flex-start;
+    }
+
+    .portfolio-stat-value {
+      font-size: 1.25rem;
+    }
+
+    .portfolio-stat-label {
+      font-size: 0.65rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .portfolio-header {
+      padding: 0.75rem 0;
+    }
+
+    .portfolio-header-content {
+      gap: 0.75rem;
+    }
+
+    .portfolio-title {
+      font-size: 1.1rem;
+    }
+
+    .portfolio-stats {
+      gap: 1rem;
+      font-size: 0.65rem;
+    }
+
+    .portfolio-stat-value {
+      font-size: 1rem;
+    }
+
+    .portfolio-stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.03em;
     }
   }
 </style>

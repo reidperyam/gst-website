@@ -31,6 +31,11 @@ const { projects } = Astro.props;
     attachEventListeners();
     applyURLParams();
     renderTable();
+
+    // Setup modal close handler
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('project-modal').close();
+    });
   }
 
   // Apply URL parameters
@@ -117,9 +122,9 @@ const { projects } = Astro.props;
           valA = a.codeName.toLowerCase();
           valB = b.codeName.toLowerCase();
           break;
-        case 'theme':
-          valA = a.theme.toLowerCase();
-          valB = b.theme.toLowerCase();
+        case 'industry':
+          valA = a.industry.toLowerCase();
+          valB = b.industry.toLowerCase();
           break;
         case 'arr':
           valA = a.arrNumeric;
@@ -164,7 +169,7 @@ const { projects } = Astro.props;
     if (paginatedProjects.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align: center; padding: 3rem 1.5rem; color: rgba(26, 26, 26, 0.65);">
+          <td colspan="5" style="text-align: center; padding: 3rem 1.5rem; color: rgba(26, 26, 26, 0.65);">
             No projects match your filters. Try adjusting your search or filters.
           </td>
         </tr>
@@ -172,27 +177,18 @@ const { projects } = Astro.props;
     } else {
       tbody.innerHTML = paginatedProjects
         .map(project => {
-          // Ensure technologies is always an array
-          const techs = Array.isArray(project.technologies) ? project.technologies : (typeof project.technologies === 'string' ? project.technologies.split(',').map(t => t.trim()) : []);
-
+          const displayArr = project.arr === 'Not in source' ? '--' : escapeHtml(project.arr);
           return `
-          <tr>
+          <tr class="project-row" data-project-id="${project.id}" role="button" tabindex="0" aria-label="View details for ${escapeHtml(project.codeName)}">
             <td>
               <div class="project-cell">
                 <div class="project-title">${escapeHtml(project.codeName)}</div>
-                <div class="project-subtitle">${escapeHtml(project.industry)}</div>
               </div>
             </td>
-            <td><span class="theme-pill">${escapeHtml(project.theme)}</span></td>
-            <td class="summary-cell">${escapeHtml(project.summary)}</td>
-            <td class="arr-cell"><span class="arr-amount">${escapeHtml(project.arr)}</span></td>
+            <td class="industry-cell">${escapeHtml(project.industry)}</td>
+            <td class="arr-cell"><span class="arr-amount">${displayArr}</span></td>
             <td class="stage-cell">${escapeHtml(project.growthStage)}</td>
             <td class="year-cell">${project.year}</td>
-            <td class="tech-cell">
-              <div class="tech-tags">
-                ${techs.map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`).join('')}
-              </div>
-            </td>
           </tr>
         `;
         })
@@ -201,7 +197,45 @@ const { projects } = Astro.props;
 
     renderPagination();
     updateSortIndicators();
+    attachProjectRowListeners();
   }
+
+  // Open modal and populate with project details
+  function openProjectModal(projectId) {
+    const project = allProjects.find(p => p.id === projectId);
+    if (!project) return;
+
+    // Populate modal
+    document.getElementById('modal-title').textContent = project.codeName;
+    document.getElementById('modal-industry').textContent = project.industry;
+    document.getElementById('modal-summary').textContent = project.summary;
+    document.getElementById('modal-theme').textContent = project.theme;
+    document.getElementById('modal-arr').textContent = project.arr;
+    document.getElementById('modal-stage').textContent = project.growthStage;
+    document.getElementById('modal-year').textContent = project.year;
+
+    // Render technologies
+    const techs = Array.isArray(project.technologies) ? project.technologies : (typeof project.technologies === 'string' ? project.technologies.split(',').map(t => t.trim()) : []);
+    document.getElementById('modal-tech-tags').innerHTML = techs.map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`).join('');
+
+    // Show modal
+    document.getElementById('project-modal').showModal();
+  }
+
+  function attachProjectRowListeners() {
+    document.querySelectorAll('.project-row').forEach(row => {
+      row.addEventListener('click', () => {
+        openProjectModal(row.dataset.projectId);
+      });
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openProjectModal(row.dataset.projectId);
+        }
+      });
+    });
+  }
+
 
   // Render pagination
   function renderPagination() {

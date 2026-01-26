@@ -1,0 +1,497 @@
+---
+import type { Project } from '../../types/portfolio';
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+
+// Extract unique values
+const uniqueThemes = [...new Set(projects.map(p => p.theme))].sort();
+const uniqueYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
+
+// Categorize growth stages
+const growthKeywords = ['growth', 'expansion', 'small', 'scaling', 'scale-up', 'startup', 'early'];
+const matureKeywords = ['mature', 'maturity', 'established', 'developed', 'legacy', 'modernizing', 'enterprise'];
+
+const uniqueStages = [...new Set(projects.map(p => p.growthStage))];
+const growthStages = uniqueStages.filter(s => growthKeywords.some(k => s.toLowerCase().includes(k))).sort();
+const matureStages = uniqueStages.filter(s => matureKeywords.some(k => s.toLowerCase().includes(k))).sort();
+
+// Combined categorized stages for display
+const categorizedStages = [
+  { label: 'Growth Stage (all growth-oriented projects)', value: 'growth-category', stages: growthStages },
+  { label: 'Mature Stage (all mature/established projects)', value: 'mature-category', stages: matureStages }
+];
+---
+
+<div class="portfolio-controls-2">
+  <div class="container">
+    <div class="search-box">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input
+        type="search"
+        id="search-input-2"
+        class="search-input"
+        placeholder="Search by project name, technology, or industry..."
+        aria-label="Search projects"
+      />
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Growth Stage</div>
+      <div class="filter-chips" id="stage-chips">
+        <div class="chip active" data-value="all">All Stages</div>
+        <div class="chip" data-value="growth-category">Growth Stage</div>
+        <div class="chip" data-value="mature-category">Mature Stage</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Theme</div>
+      <div class="filter-chips" id="theme-chips">
+        <div class="chip active" data-value="all">All Themes</div>
+        {uniqueThemes.map(theme => (
+          <div class="chip" data-value={theme}>{theme}</div>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Year</div>
+      <div class="filter-chips" id="year-chips">
+        <div class="chip active" data-value="all">All Years</div>
+        {uniqueYears.map(year => (
+          <div class="chip" data-value={year.toString()}>{year}</div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .portfolio-controls-2 {
+    background: #ffffff;
+    border-bottom: 2px solid #05cd99;
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 160px;
+    z-index: 98;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(26, 26, 26, 0.5);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    background: rgba(26, 26, 26, 0.02);
+    color: rgba(26, 26, 26, 0.85);
+    font-size: 0.875rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    transition: all 0.2s;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #05cd99;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.1);
+  }
+
+  .search-input::placeholder {
+    color: rgba(26, 26, 26, 0.5);
+  }
+
+  .filter-section {
+    margin-bottom: 1rem;
+  }
+
+  .filter-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .filter-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 26, 26, 0.6);
+    margin-bottom: 0.75rem;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .chip {
+    padding: 0.5rem 1rem;
+    background: rgba(26, 26, 26, 0.05);
+    color: rgba(26, 26, 26, 0.7);
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+  }
+
+  .chip:hover {
+    background: rgba(26, 26, 26, 0.08);
+    border-color: #05cd99;
+    color: #05cd99;
+  }
+
+  .chip.active {
+    background: #05cd99;
+    color: #ffffff;
+    border-color: #05cd99;
+  }
+
+  /* Dark theme */
+  :global(body.dark-theme) .portfolio-controls-2 {
+    background: #1a1a1a;
+    border-bottom-color: #05cd99;
+  }
+
+  :global(body.dark-theme) .search-input {
+    background: rgba(5, 205, 153, 0.05);
+    border-color: rgba(5, 205, 153, 0.2);
+    color: rgba(245, 245, 245, 0.85);
+  }
+
+  :global(body.dark-theme) .search-input:focus {
+    background: #1a1a1a;
+    border-color: #05cd99;
+    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.15);
+  }
+
+  :global(body.dark-theme) .search-input::placeholder {
+    color: rgba(200, 200, 200, 0.5);
+  }
+
+  :global(body.dark-theme) .search-icon {
+    color: rgba(200, 200, 200, 0.5);
+  }
+
+  :global(body.dark-theme) .filter-label {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .chip {
+    background: rgba(5, 205, 153, 0.1);
+    border-color: rgba(5, 205, 153, 0.2);
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .chip:hover {
+    background: rgba(5, 205, 153, 0.15);
+    border-color: #05cd99;
+    color: #05cd99;
+  }
+
+  :global(body.dark-theme) .chip.active {
+    background: #05cd99;
+    color: #0a0a0a;
+    border-color: #05cd99;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .portfolio-controls-2 {
+      padding: 1rem 0;
+      top: 140px;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .search-box {
+      margin-bottom: 1rem;
+    }
+
+    .filter-section {
+      margin-bottom: 0.75rem;
+    }
+
+    .filter-label {
+      font-size: 0.7rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .filter-chips {
+      gap: 0.5rem;
+    }
+
+    .chip {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .portfolio-controls-2 {
+      padding: 0.75rem 0;
+    }
+
+    .container {
+      padding: 0 0.75rem;
+    }
+
+    .search-input {
+      padding: 0.75rem 0.875rem 0.75rem 2.5rem;
+      font-size: 0.8rem;
+    }
+
+    .search-icon {
+      width: 18px;
+      height: 18px;
+      left: 0.75rem;
+    }
+
+    .filter-chips {
+      gap: 0.4rem;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 0.3rem;
+    }
+
+    .chip {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+  }
+</style>
+
+<script is:inline define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages }}>
+  // Initialize global state if it doesn't exist
+  if (!window.portfolioState) {
+    window.portfolioState = {
+      allProjects: JSON.parse(projectsData),
+      filteredProjects: [],
+      filters: {
+        search: '',
+        stage: 'all',
+        theme: 'all',
+        year: 'all'
+      },
+      growthStages: growthStagesList,
+      matureStages: matureStagesList
+    };
+  }
+
+  let allProjects = window.portfolioState.allProjects;
+  let filteredProjects = window.portfolioState.filteredProjects;
+  let filters = window.portfolioState.filters;
+  let growthStagesList = window.portfolioState.growthStages;
+  let matureStagesList = window.portfolioState.matureStages;
+
+  function filterProjects() {
+    window.portfolioState.filteredProjects = allProjects.filter(project => {
+      // Search filter
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        const techs = Array.isArray(project.technologies)
+          ? project.technologies
+          : (typeof project.technologies === 'string'
+              ? project.technologies.split(',').map(t => t.trim())
+              : []);
+        const searchableText = [
+          project.codeName,
+          project.industry,
+          project.summary,
+          ...techs
+        ].join(' ').toLowerCase();
+
+        if (!searchableText.includes(searchLower)) return false;
+      }
+
+      // Stage filter - handle category filtering
+      if (filters.stage !== 'all') {
+        if (filters.stage === 'growth-category') {
+          if (!growthStagesList.includes(project.growthStage)) return false;
+        } else if (filters.stage === 'mature-category') {
+          if (!matureStagesList.includes(project.growthStage)) return false;
+        } else if (project.growthStage !== filters.stage) {
+          return false;
+        }
+      }
+
+      // Theme filter
+      if (filters.theme !== 'all' && project.theme !== filters.theme) return false;
+
+      // Year filter
+      if (filters.year !== 'all' && project.year.toString() !== filters.year) return false;
+
+      return true;
+    });
+
+    filteredProjects = window.portfolioState.filteredProjects;
+    updateGridDisplay();
+    window.dispatchEvent(new CustomEvent('portfolioFiltered', { detail: { count: filteredProjects.length } }));
+  }
+
+  function updateGridDisplay() {
+    const cards = document.querySelectorAll('.project-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const projectId = card.dataset.projectId;
+      const isVisible = window.portfolioState.filteredProjects.some(p => p.id === projectId);
+
+      if (isVisible) {
+        card.style.display = '';
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+        card.classList.add('hidden');
+      }
+    });
+
+    // Show "no results" message if needed
+    showNoResultsMessage(visibleCount === 0);
+  }
+
+  function showNoResultsMessage(show) {
+    let message = document.getElementById('portfolio-no-results');
+
+    if (show) {
+      if (!message) {
+        message = document.createElement('div');
+        message.id = 'portfolio-no-results';
+        message.className = 'no-results-message';
+        message.textContent = 'No projects match your filters. Try adjusting your search or filters.';
+        const grid = document.querySelector('.grid');
+        if (grid) grid.parentElement.insertBefore(message, grid);
+      }
+      message.style.display = 'block';
+    } else {
+      if (message) message.style.display = 'none';
+    }
+  }
+
+  function attachChipListeners() {
+    // Add event delegation instead of individual listeners
+    const stageChipsContainer = document.getElementById('stage-chips');
+    const themeChipsContainer = document.getElementById('theme-chips');
+    const yearChipsContainer = document.getElementById('year-chips');
+
+    if (stageChipsContainer && !stageChipsContainer.hasListener) {
+      stageChipsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (chip) {
+          console.log('[Portfolio2Controls] Stage chip clicked:', chip.dataset.value);
+          document.querySelectorAll('#stage-chips .chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          filters.stage = chip.dataset.value;
+          window.portfolioState.filters.stage = filters.stage;
+          console.log('[Portfolio2Controls] Filter updated. New stage:', window.portfolioState.filters.stage);
+          filterProjects();
+          console.log('[Portfolio2Controls] Filtered to', window.portfolioState.filteredProjects.length, 'projects');
+        }
+      });
+      stageChipsContainer.hasListener = true;
+      console.log('[Portfolio2Controls] Stage chips listener attached');
+    }
+
+    if (themeChipsContainer && !themeChipsContainer.hasListener) {
+      themeChipsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (chip) {
+          document.querySelectorAll('#theme-chips .chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          filters.theme = chip.dataset.value;
+          window.portfolioState.filters.theme = filters.theme;
+          filterProjects();
+        }
+      });
+      themeChipsContainer.hasListener = true;
+    }
+
+    if (yearChipsContainer && !yearChipsContainer.hasListener) {
+      yearChipsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (chip) {
+          document.querySelectorAll('#year-chips .chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          filters.year = chip.dataset.value;
+          window.portfolioState.filters.year = filters.year;
+          filterProjects();
+        }
+      });
+      yearChipsContainer.hasListener = true;
+    }
+  }
+
+  function attachSearchListener() {
+    const searchInput = document.getElementById('search-input-2');
+    if (searchInput) {
+      let searchTimeout;
+      // Only attach once
+      if (!searchInput.hasListener) {
+        searchInput.addEventListener('input', (e) => {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+            filters.search = e.target.value;
+            window.portfolioState.filters.search = filters.search;
+            filterProjects();
+          }, 300);
+        });
+        searchInput.hasListener = true;
+      }
+    }
+  }
+
+  function init() {
+    console.log('[Portfolio2Controls] Initializing filters...');
+    attachChipListeners();
+    attachSearchListener();
+    // Run initial filter to populate the grid with all projects
+    filterProjects();
+    console.log('[Portfolio2Controls] Init complete. Filtered projects:', window.portfolioState.filteredProjects.length);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Expose for external use
+  window.portfolioFilters = {
+    filterProjects,
+    updateGridDisplay,
+    attachChipListeners,
+    getFilteredProjects: () => window.portfolioState.filteredProjects,
+    getFilters: () => window.portfolioState.filters
+  };
+</script>

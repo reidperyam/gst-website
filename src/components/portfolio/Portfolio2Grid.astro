@@ -1,0 +1,840 @@
+---
+import type { Project } from '../../types/portfolio';
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+---
+
+<div class="portfolio-grid-container">
+  <div class="container">
+    <div class="grid">
+      {projects.map((project) => (
+        <div class="project-card" data-project-id={project.id} role="button" tabindex="0">
+          <div class="card-header">
+            <div>
+              <h3 class="project-title">{project.codeName}</h3>
+              <p class="project-industry">{project.industry}</p>
+            </div>
+            <div class="year-badge">{project.year}</div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">ARR</div>
+              <div class="metric-value arr">
+                {project.arr === 'Not in source' ? '--' : project.arr}
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Stage</div>
+              <div class="metric-value">{project.growthStage}</div>
+            </div>
+          </div>
+
+          <p class="summary">{project.summary}</p>
+
+          <div class="tags">
+            <div class="tag theme">{project.theme}</div>
+          </div>
+
+          <div class="tech-stack">
+            {Array.isArray(project.technologies)
+              ? project.technologies.map((tech) => (
+                  <div class="tech-badge">{tech}</div>
+                ))
+              : typeof project.technologies === 'string'
+                ? project.technologies.split(',').map((tech) => (
+                    <div class="tech-badge">{tech.trim()}</div>
+                  ))
+                : null}
+          </div>
+
+          <button class="cta-button" aria-label={`View details for ${project.codeName}`}>
+            View Project Details
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Project Details Modal -->
+  <dialog id="project-modal-2" class="project-modal">
+    <div class="modal-content">
+      <button id="modal-close-2" class="modal-close" aria-label="Close modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-title-2" class="modal-title">Project Title</h2>
+          <p id="modal-industry-2" class="modal-industry">Industry</p>
+        </div>
+        <div id="modal-year-2" class="modal-year">2024</div>
+      </div>
+
+      <div class="modal-metrics">
+        <div class="modal-metric">
+          <div class="metric-label">ARR</div>
+          <div id="modal-arr-2" class="metric-value arr">$0M</div>
+        </div>
+        <div class="modal-metric">
+          <div class="metric-label">Growth Stage</div>
+          <div id="modal-stage-2" class="metric-value">Stage</div>
+        </div>
+        <div class="modal-metric">
+          <div class="metric-label">Theme</div>
+          <div id="modal-theme-2" class="metric-value">Theme</div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h3 class="modal-section-title">Summary</h3>
+        <p id="modal-summary-2" class="modal-text">Project summary goes here.</p>
+      </div>
+
+      <div class="modal-section">
+        <h3 class="modal-section-title">Technologies</h3>
+        <div id="modal-tech-tags-2" class="modal-tech-tags">
+          <!-- Tech tags will be inserted here -->
+        </div>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<style>
+  .portfolio-grid-container {
+    background: #f5f5f5;
+    padding: 2rem 0 4rem 0;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .no-results-message {
+    grid-column: 1 / -1;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: rgba(26, 26, 26, 0.65);
+    font-size: 1rem;
+  }
+
+  :global(body.dark-theme) .no-results-message {
+    color: rgba(200, 200, 200, 0.65);
+  }
+
+  .project-card {
+    background: #ffffff;
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card:hover {
+    box-shadow: 0 10px 30px rgba(5, 205, 153, 0.15);
+    transform: translateY(-4px);
+    border-color: #05cd99;
+  }
+
+  .project-card:focus-visible {
+    outline: 2px solid #05cd99;
+    outline-offset: 2px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .project-title {
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: rgba(26, 26, 26, 0.95);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .project-industry {
+    font-size: 0.8125rem;
+    color: rgba(26, 26, 26, 0.6);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .year-badge {
+    background: rgba(26, 26, 26, 0.05);
+    color: rgba(26, 26, 26, 0.7);
+    padding: 0.35rem 0.75rem;
+    border-radius: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(26, 26, 26, 0.02);
+    border-left: 3px solid #05cd99;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-label {
+    font-size: 0.65rem;
+    color: rgba(26, 26, 26, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.35rem;
+    font-weight: 700;
+  }
+
+  .metric-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(26, 26, 26, 0.9);
+    letter-spacing: -0.01em;
+  }
+
+  .metric-value.arr {
+    color: #05cd99;
+    font-size: 1.125rem;
+  }
+
+  .summary {
+    font-size: 0.875rem;
+    color: rgba(26, 26, 26, 0.7);
+    line-height: 1.6;
+    margin: 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .tag {
+    background: rgba(5, 205, 153, 0.1);
+    color: #05cd99;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tag.theme {
+    background: rgba(5, 205, 153, 0.15);
+    color: #05cd99;
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-grow: 1;
+    align-content: flex-start;
+  }
+
+  .tech-badge {
+    background: rgba(26, 26, 26, 0.08);
+    color: rgba(26, 26, 26, 0.7);
+    padding: 0.35rem 0.65rem;
+    border-radius: 0;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .cta-button {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: transparent;
+    color: #05cd99;
+    border: 2px solid #05cd99;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    margin-top: auto;
+  }
+
+  .cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #05cd99;
+    transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+  }
+
+  .cta-button:hover::before {
+    left: 0;
+  }
+
+  .cta-button:hover {
+    color: #ffffff;
+  }
+
+  .cta-button:focus-visible {
+    outline: 2px solid #05cd99;
+    outline-offset: 2px;
+  }
+
+  .cta-button:active {
+    transform: scale(0.98);
+  }
+
+  /* Dark theme */
+  :global(body.dark-theme) .portfolio-grid-container {
+    background: #0a0a0a;
+  }
+
+  :global(body.dark-theme) .project-card {
+    background: #1a1a1a;
+    border-color: rgba(5, 205, 153, 0.2);
+  }
+
+  :global(body.dark-theme) .project-card:hover {
+    border-color: #05cd99;
+    box-shadow: 0 10px 30px rgba(5, 205, 153, 0.2);
+  }
+
+  :global(body.dark-theme) .project-title {
+    color: rgba(245, 245, 245, 0.95);
+  }
+
+  :global(body.dark-theme) .project-industry {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .year-badge {
+    background: rgba(5, 205, 153, 0.1);
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .metrics {
+    background: rgba(5, 205, 153, 0.05);
+    border-left-color: #05cd99;
+  }
+
+  :global(body.dark-theme) .metric-label {
+    color: rgba(200, 200, 200, 0.6);
+  }
+
+  :global(body.dark-theme) .metric-value {
+    color: rgba(245, 245, 245, 0.95);
+  }
+
+  :global(body.dark-theme) .metric-value.arr {
+    color: #05cd99;
+  }
+
+  :global(body.dark-theme) .summary {
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .tag {
+    background: rgba(5, 205, 153, 0.15);
+    color: #05cd99;
+  }
+
+  :global(body.dark-theme) .tech-badge {
+    background: rgba(5, 205, 153, 0.1);
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .project-title {
+      font-size: 1.125rem;
+    }
+
+    .metrics {
+      gap: 0.75rem;
+    }
+
+    .cta-button {
+      padding: 0.75rem 0.875rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 0.75rem;
+    }
+
+    .portfolio-grid-container {
+      padding: 1rem 0 2rem 0;
+    }
+
+    .grid {
+      gap: 1rem;
+    }
+
+    .project-card {
+      padding: 1rem;
+    }
+
+    .card-header {
+      margin-bottom: 0.75rem;
+    }
+
+    .project-title {
+      font-size: 1rem;
+    }
+
+    .metrics {
+      margin: 0.75rem 0;
+      padding: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .metric-value {
+      font-size: 0.9rem;
+    }
+
+    .metric-value.arr {
+      font-size: 1rem;
+    }
+
+    .summary {
+      font-size: 0.8125rem;
+      margin: 0.75rem 0;
+    }
+
+    .tech-stack {
+      margin: 0.75rem 0;
+    }
+
+    .tech-badge {
+      font-size: 0.65rem;
+      padding: 0.3rem 0.5rem;
+    }
+
+    .cta-button {
+      padding: 0.65rem 0.75rem;
+      font-size: 0.7rem;
+      margin-top: 0.75rem;
+    }
+  }
+
+  /* Modal Styles */
+  .project-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    padding: 2rem;
+    background: #ffffff;
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    border-radius: 0;
+    z-index: 1000;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+  }
+
+  .project-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -2rem;
+    right: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(26, 26, 26, 0.7);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover {
+    color: #05cd99;
+  }
+
+  .modal-close:focus-visible {
+    outline: 2px solid #05cd99;
+    outline-offset: 2px;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: rgba(26, 26, 26, 0.95);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-industry {
+    font-size: 0.875rem;
+    color: rgba(26, 26, 26, 0.6);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .modal-year {
+    background: rgba(26, 26, 26, 0.05);
+    color: rgba(26, 26, 26, 0.7);
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .modal-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+  }
+
+  .modal-metric {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-section-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 26, 26, 0.65);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .modal-text {
+    font-size: 0.9375rem;
+    color: rgba(26, 26, 26, 0.7);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .modal-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .modal-tech-tags .tech-tag {
+    background: rgba(26, 26, 26, 0.08);
+    color: rgba(26, 26, 26, 0.7);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Dark theme modal */
+  :global(body.dark-theme) .project-modal {
+    background: #1a1a1a;
+    border-color: rgba(5, 205, 153, 0.2);
+  }
+
+  :global(body.dark-theme) .modal-close {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .modal-close:hover {
+    color: #05cd99;
+  }
+
+  :global(body.dark-theme) .modal-title {
+    color: rgba(245, 245, 245, 0.95);
+  }
+
+  :global(body.dark-theme) .modal-industry {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .modal-year {
+    background: rgba(5, 205, 153, 0.1);
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .modal-metrics {
+    border-bottom-color: rgba(5, 205, 153, 0.2);
+  }
+
+  :global(body.dark-theme) .modal-section-title {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .modal-text {
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .modal-tech-tags .tech-tag {
+    background: rgba(5, 205, 153, 0.1);
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  @media (max-width: 768px) {
+    .project-modal {
+      width: 95%;
+      padding: 1.5rem;
+      max-height: 90vh;
+    }
+
+    .modal-close {
+      top: -1.5rem;
+    }
+
+    .modal-metrics {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-modal {
+      width: 100%;
+      padding: 1.25rem;
+      max-height: 95vh;
+    }
+
+    .modal-close {
+      top: -1rem;
+      right: -0.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+    }
+
+    .modal-metrics {
+      grid-template-columns: 1fr;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+    }
+  }
+</style>
+
+<script is:inline define:vars={{ projectsData: JSON.stringify(projects) }}>
+  // Initialize global state if not already done
+  if (!window.portfolioState) {
+    window.portfolioState = {
+      allProjects: JSON.parse(projectsData),
+      filteredProjects: [],
+      filters: { search: '', stage: 'all', theme: 'all', year: 'all' },
+      growthStages: [],
+      matureStages: []
+    };
+  }
+
+  let allProjects = window.portfolioState.allProjects;
+
+  function escapeHtml(text) {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  function openProjectModal(projectId) {
+    const project = window.portfolioState.allProjects.find(p => p.id === projectId);
+    if (!project) return;
+
+    // Populate modal
+    document.getElementById('modal-title-2').textContent = project.codeName;
+    document.getElementById('modal-industry-2').textContent = project.industry;
+    document.getElementById('modal-year-2').textContent = project.year.toString();
+    document.getElementById('modal-arr-2').textContent = project.arr === 'Not in source' ? '--' : project.arr;
+    document.getElementById('modal-stage-2').textContent = project.growthStage;
+    document.getElementById('modal-theme-2').textContent = project.theme;
+    document.getElementById('modal-summary-2').textContent = project.summary;
+
+    // Render technologies
+    const techs = Array.isArray(project.technologies)
+      ? project.technologies
+      : (typeof project.technologies === 'string'
+          ? project.technologies.split(',').map(t => t.trim())
+          : []);
+
+    const techTagsContainer = document.getElementById('modal-tech-tags-2');
+    techTagsContainer.innerHTML = techs
+      .map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`)
+      .join('');
+
+    // Show modal
+    document.getElementById('project-modal-2').showModal();
+  }
+
+  function initPortfolioGrid() {
+    const cards = document.querySelectorAll('.project-card');
+    const modal = document.getElementById('project-modal-2');
+    const closeBtn = document.getElementById('modal-close-2');
+
+    // Card click handlers
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        openProjectModal(card.dataset.projectId);
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openProjectModal(card.dataset.projectId);
+        }
+      });
+    });
+
+    // CTA button click handlers (same as card click)
+    document.querySelectorAll('.cta-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const card = btn.closest('.project-card');
+        if (card) {
+          openProjectModal(card.dataset.projectId);
+        }
+      });
+    });
+
+    // Modal close button
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.close();
+      });
+    }
+
+    // Close modal on backdrop click
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.close();
+        }
+      });
+
+      // Close on Escape key
+      modal.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          modal.close();
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPortfolioGrid);
+  } else {
+    initPortfolioGrid();
+  }
+
+  // Listen for filter updates from Portfolio2Controls
+  window.addEventListener('portfolioFiltered', () => {
+    initPortfolioGrid();
+  });
+
+  // Also set up a mutation observer to watch for card visibility changes
+  const observer = new MutationObserver(() => {
+    // Re-initialize when DOM changes
+    const visibleCards = document.querySelectorAll('.project-card:not([style*="display: none"])');
+    if (visibleCards.length > 0) {
+      setTimeout(() => initPortfolioGrid(), 100);
+    }
+  });
+
+  const gridContainer = document.querySelector('.grid');
+  if (gridContainer) {
+    observer.observe(gridContainer, {
+      attributes: true,
+      attributeFilter: ['style'],
+      subtree: true,
+      childList: true
+    });
+  }
+</script>

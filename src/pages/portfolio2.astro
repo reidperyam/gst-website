@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PortfolioHeader from '../components/portfolio/PortfolioHeader.astro';
+import Portfolio2Controls from '../components/portfolio/Portfolio2Controls.astro';
+import Portfolio2Grid from '../components/portfolio/Portfolio2Grid.astro';
+import type { Project, Stat } from '../types/portfolio';
+import projects from '../data/projects.json';
+
+const typedProjects = projects as Project[];
+
+// Calculate statistics
+const totalProjects = typedProjects.length;
+const totalArrNumeric = typedProjects.reduce((sum, p) => sum + (p.arrNumeric || 0), 0);
+const totalArr = `$${(totalArrNumeric / 1000000000).toFixed(1)}B+`;
+const uniqueIndustries = new Set(typedProjects.map(p => p.industry)).size;
+const yearRange = `${Math.min(...typedProjects.map(p => p.year))}-${Math.max(...typedProjects.map(p => p.year))}`;
+
+const stats: Stat[] = [
+  { label: 'Projects', value: totalProjects.toString() },
+  { label: 'Combined ARR', value: totalArr },
+  { label: 'Industries', value: uniqueIndustries.toString() },
+  { label: 'Portfolio Span', value: yearRange },
+];
+---
+
+<BaseLayout title="Portfolio - Grid View">
+  <main>
+    <PortfolioHeader stats={stats} />
+    <Portfolio2Controls projects={typedProjects} />
+    <Portfolio2Grid projects={typedProjects} />
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>
