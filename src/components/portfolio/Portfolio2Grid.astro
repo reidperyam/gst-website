@@ -75,7 +75,6 @@ const { projects } = Astro.props;
           <h2 id="modal-title-2" class="modal-title">Project Title</h2>
           <p id="modal-industry-2" class="modal-industry">Industry</p>
         </div>
-        <div id="modal-year-2" class="modal-year">2024</div>
       </div>
 
       <div class="modal-metrics">
@@ -90,6 +89,10 @@ const { projects } = Astro.props;
         <div class="modal-metric">
           <div class="metric-label">Theme</div>
           <div id="modal-theme-2" class="metric-value">Theme</div>
+        </div>
+        <div class="modal-metric">
+          <div class="metric-label">Year</div>
+          <div id="modal-year-2" class="metric-value year">2024</div>
         </div>
       </div>
 
@@ -555,20 +558,9 @@ const { projects } = Astro.props;
     font-weight: 500;
   }
 
-  .modal-year {
-    background: rgba(26, 26, 26, 0.05);
-    color: rgba(26, 26, 26, 0.7);
-    padding: 0.5rem 1rem;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-
   .modal-metrics {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
@@ -645,11 +637,6 @@ const { projects } = Astro.props;
 
   :global(body.dark-theme) .modal-industry {
     color: rgba(200, 200, 200, 0.7);
-  }
-
-  :global(body.dark-theme) .modal-year {
-    background: rgba(5, 205, 153, 0.1);
-    color: rgba(200, 200, 200, 0.8);
   }
 
   :global(body.dark-theme) .modal-metrics {
