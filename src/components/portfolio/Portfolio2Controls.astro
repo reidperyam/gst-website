@@ -311,8 +311,7 @@ const categorizedStages = [
   let allProjects = window.portfolioState.allProjects;
   let filteredProjects = window.portfolioState.filteredProjects;
   let filters = window.portfolioState.filters;
-  let growthStagesList = window.portfolioState.growthStages;
-  let matureStagesList = window.portfolioState.matureStages;
+  // growthStagesList and matureStagesList are already defined via define:vars
 
   function filterProjects() {
     window.portfolioState.filteredProjects = allProjects.filter(project => {
