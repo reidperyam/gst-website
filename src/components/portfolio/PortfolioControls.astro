@@ -89,6 +89,8 @@ const uniqueYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a
   .search-input:focus {
     outline: none;
     border-color: #05cd99;
+    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.1);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   .search-input::placeholder {
@@ -123,6 +125,8 @@ const uniqueYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a
   .filter-select:focus {
     outline: none;
     border-color: #05cd99;
+    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.1);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   :global(body.dark-theme) .portfolio-controls {
@@ -140,6 +144,7 @@ const uniqueYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a
   :global(body.dark-theme) .search-input:focus,
   :global(body.dark-theme) .filter-select:focus {
     border-color: #05cd99;
+    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.12);
   }
 
   :global(body.dark-theme) .search-input::placeholder {

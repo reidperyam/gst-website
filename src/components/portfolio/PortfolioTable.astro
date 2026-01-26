@@ -93,17 +93,17 @@ const { projects } = Astro.props;
   .portfolio-table th {
     padding: 1rem 1.5rem;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: rgba(26, 26, 26, 0.85);
   }
 
   .portfolio-table th.sortable {
     cursor: pointer;
     user-select: none;
-    transition: color 0.2s;
+    transition: all 0.2s;
   }
 
   .portfolio-table th.sortable:hover {
@@ -114,6 +114,10 @@ const { projects } = Astro.props;
     text-decoration-thickness: 2px;
   }
 
+  .portfolio-table th.sortable:hover::after {
+    opacity: 0.7;
+  }
+
   .portfolio-table th:focus-visible {
     outline: 2px solid #05cd99;
     outline-offset: -2px;
@@ -121,8 +125,9 @@ const { projects } = Astro.props;
 
   .portfolio-table th.sortable::after {
     content: ' ↕';
-    opacity: 0.3;
+    opacity: 0.4;
     font-size: 0.9em;
+    transition: opacity 0.2s, color 0.2s;
   }
 
   .portfolio-table th.sortable.sorted-asc::after {
@@ -143,8 +148,9 @@ const { projects } = Astro.props;
   }
 
   .portfolio-table tbody tr:hover {
-    background: #f0f0f0;
-    box-shadow: inset 0 0 0 1px rgba(5, 205, 153, 0.08);
+    background: #e8f5f2;
+    box-shadow: inset 0 0 0 1px rgba(5, 205, 153, 0.12), 0 2px 8px rgba(5, 205, 153, 0.06);
+    transition: background 0.2s, box-shadow 0.2s;
   }
 
   .portfolio-table tbody tr:hover .arr-cell {
@@ -169,34 +175,39 @@ const { projects } = Astro.props;
   }
 
   .project-title {
-    font-weight: 600;
+    font-weight: 700;
     color: rgba(26, 26, 26, 0.95);
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     letter-spacing: -0.01em;
+    line-height: 1.3;
   }
 
   .project-subtitle {
     font-size: 0.8rem;
-    color: rgba(26, 26, 26, 0.65);
+    font-weight: 500;
+    color: rgba(26, 26, 26, 0.60);
+    line-height: 1.4;
   }
 
   .summary-cell {
     max-width: 600px;
-    line-height: 1.7;
+    line-height: 1.75;
     color: rgba(26, 26, 26, 0.75);
+    font-size: 0.85rem;
   }
 
   .theme-pill {
     display: inline-block;
-    padding: 0.375rem 0.875rem;
-    background: rgba(5, 205, 153, 0.15);
+    padding: 0.425rem 0.95rem;
+    background: rgba(5, 205, 153, 0.1);
     color: #05cd99;
-    border: 1px solid rgba(5, 205, 153, 0.3);
+    border: 1px solid rgba(5, 205, 153, 0.4);
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
     letter-spacing: 0.02em;
     border-radius: 4px;
+    transition: all 0.2s;
   }
 
   .arr-cell {
@@ -205,15 +216,17 @@ const { projects } = Astro.props;
   }
 
   .arr-amount {
-    font-weight: 700;
+    font-weight: 900;
     color: #05cd99;
-    font-size: 1rem;
+    font-size: 1.1rem;
     white-space: nowrap;
     letter-spacing: -0.02em;
-    padding: 0.25rem 0.5rem;
-    background: rgba(5, 205, 153, 0.08);
+    padding: 0.35rem 0.625rem;
+    background: rgba(5, 205, 153, 0.12);
+    border: 1px solid rgba(5, 205, 153, 0.2);
     border-radius: 3px;
     display: inline-block;
+    font-variant-numeric: tabular-nums;
   }
 
   .stage-cell {
@@ -242,21 +255,22 @@ const { projects } = Astro.props;
   }
 
   :global(.tech-tag) {
-    padding: 0.25rem 0.625rem;
+    padding: 0.3rem 0.65rem;
     background: #f0f0f0;
     color: rgba(26, 26, 26, 0.75);
     border: 1px solid rgba(26, 26, 26, 0.08);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 500;
     white-space: nowrap;
     border-radius: 3px;
-    transition: background 0.15s, color 0.15s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   :global(.tech-tag:hover) {
-    background: #e8e8e8;
-    color: rgba(26, 26, 26, 0.85);
-    cursor: default;
+    background: #e0e0e0;
+    color: rgba(26, 26, 26, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   .pagination {
@@ -269,22 +283,48 @@ const { projects } = Astro.props;
   }
 
   .pagination-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.8rem 1.75rem;
     background: transparent;
     color: #05cd99;
     border: 2px solid #05cd99;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-family: monospace;
-    transition: all 0.2s;
+    letter-spacing: 0.08em;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pagination-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #05cd99;
+    transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+  }
+
+  .pagination-btn:hover:not(:disabled)::before {
+    left: 0;
   }
 
   .pagination-btn:hover:not(:disabled) {
-    background: #05cd99;
     color: #ffffff;
+  }
+
+  .pagination-btn:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  .pagination-btn:focus-visible {
+    outline: 2px solid #05cd99;
+    outline-offset: 2px;
   }
 
   .pagination-btn:disabled {
@@ -321,8 +361,8 @@ const { projects } = Astro.props;
   }
 
   :global(body.dark-theme) .portfolio-table tbody tr:hover {
-    background: #1f1f1f;
-    box-shadow: inset 0 0 0 1px rgba(5, 205, 153, 0.12);
+    background: #1a2622;
+    box-shadow: inset 0 0 0 1px rgba(5, 205, 153, 0.15), 0 2px 8px rgba(5, 205, 153, 0.04);
   }
 
   :global(body.dark-theme) .portfolio-table tbody tr:hover .arr-cell {
@@ -354,19 +394,22 @@ const { projects } = Astro.props;
   }
 
   :global(body.dark-theme) .arr-amount {
-    background: rgba(5, 205, 153, 0.12);
+    background: rgba(5, 205, 153, 0.15);
+    border-color: rgba(5, 205, 153, 0.25);
   }
 
   :global(body.dark-theme .tech-tag) {
     background: #252525;
     color: rgba(200, 200, 200, 0.75);
     border-color: rgba(255, 255, 255, 0.08);
-    transition: background 0.15s, color 0.15s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   :global(body.dark-theme .tech-tag:hover) {
-    background: #2f2f2f;
-    color: rgba(245, 245, 245, 0.85);
+    background: #383838;
+    color: rgba(245, 245, 245, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
   }
 
   :global(body.dark-theme) .pagination-info {
