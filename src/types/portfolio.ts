@@ -10,6 +10,9 @@ export interface Project {
   growthStage: string;
   year: number;
   technologies: string[];
+  engagementType?: string;
+  engagementTypeTag?: string;
+  engagementTypeDescription?: string;
 }
 
 export interface Stat {

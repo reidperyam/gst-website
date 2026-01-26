@@ -24,6 +24,14 @@ const categorizedStages = [
   { label: 'Growth Stage (all growth-oriented projects)', value: 'growth-category', stages: growthStages },
   { label: 'Mature Stage (all mature/established projects)', value: 'mature-category', stages: matureStages }
 ];
+
+// Categorize engagement types
+const valueCreationTypes = ['Value Creation - Growth', 'Value Creation - Integration', 'Value Creation - Modernization', 'Value Creation - Turnaround'];
+const technicalDiligenceTypes = ['Early Stage Assessment', 'Technical Assessment', 'Buy-Side Technical Diligence'];
+
+const uniqueEngagementTypes = [...new Set(projects.map(p => p.engagementType))].sort();
+const valueCreationEngagements = uniqueEngagementTypes.filter(e => valueCreationTypes.includes(e)).sort();
+const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technicalDiligenceTypes.includes(e)).sort();
 ---
 
 <div class="portfolio-controls-2">
@@ -67,6 +75,21 @@ const categorizedStages = [
         <div class="chip active" data-value="all">All Years</div>
         {uniqueYears.map(year => (
           <div class="chip" data-value={year.toString()}>{year}</div>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Engagement Type</div>
+      <div class="filter-chips" id="engagement-chips">
+        <div class="chip active" data-value="all">All Types</div>
+        <div class="chip-group-header">Value Creation</div>
+        {valueCreationEngagements.map(engagement => (
+          <div class="chip" data-value={engagement}>{engagement}</div>
+        ))}
+        <div class="chip-group-header">Technical Diligence</div>
+        {technicalDiligenceEngagements.map(engagement => (
+          <div class="chip" data-value={engagement}>{engagement}</div>
         ))}
       </div>
     </div>
@@ -174,6 +197,18 @@ const categorizedStages = [
     border-color: #05cd99;
   }
 
+  .chip-group-header {
+    width: 100%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 26, 26, 0.5);
+    margin: 0.5rem 0 0.25rem 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.1);
+  }
+
   /* Dark theme */
   :global(body.dark-theme) .portfolio-controls-2 {
     background: #1a1a1a;
@@ -220,6 +255,11 @@ const categorizedStages = [
     background: #05cd99;
     color: #0a0a0a;
     border-color: #05cd99;
+  }
+
+  :global(body.dark-theme) .chip-group-header {
+    color: rgba(200, 200, 200, 0.5);
+    border-top-color: rgba(5, 205, 153, 0.2);
   }
 
   /* Responsive */
@@ -291,7 +331,7 @@ const categorizedStages = [
   }
 </style>
 
-<script is:inline define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages }}>
+<script is:inline define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages, valueCreationList: valueCreationEngagements, technicalDiligenceList: technicalDiligenceEngagements }}>
   // Initialize global state if it doesn't exist
   if (!window.portfolioState) {
     window.portfolioState = {
@@ -301,10 +341,13 @@ const categorizedStages = [
         search: '',
         stage: 'all',
         theme: 'all',
-        year: 'all'
+        year: 'all',
+        engagement: 'all'
       },
       growthStages: growthStagesList,
-      matureStages: matureStagesList
+      matureStages: matureStagesList,
+      valueCreationEngagements: valueCreationList,
+      technicalDiligenceEngagements: technicalDiligenceList
     };
   }
 
@@ -349,6 +392,9 @@ const categorizedStages = [
 
       // Year filter
       if (filters.year !== 'all' && project.year.toString() !== filters.year) return false;
+
+      // Engagement type filter
+      if (filters.engagement !== 'all' && project.engagementType !== filters.engagement) return false;
 
       return true;
     });
@@ -403,6 +449,7 @@ const categorizedStages = [
     const stageChipsContainer = document.getElementById('stage-chips');
     const themeChipsContainer = document.getElementById('theme-chips');
     const yearChipsContainer = document.getElementById('year-chips');
+    const engagementChipsContainer = document.getElementById('engagement-chips');
 
     if (stageChipsContainer && !stageChipsContainer.hasListener) {
       stageChipsContainer.addEventListener('click', (e) => {
@@ -448,6 +495,20 @@ const categorizedStages = [
         }
       });
       yearChipsContainer.hasListener = true;
+    }
+
+    if (engagementChipsContainer && !engagementChipsContainer.hasListener) {
+      engagementChipsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (chip) {
+          document.querySelectorAll('#engagement-chips .chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          filters.engagement = chip.dataset.value;
+          window.portfolioState.filters.engagement = filters.engagement;
+          filterProjects();
+        }
+      });
+      engagementChipsContainer.hasListener = true;
     }
   }
 
