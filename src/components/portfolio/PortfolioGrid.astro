@@ -546,13 +546,13 @@ const { projects } = Astro.props;
     margin: 0;
   }
 
-  .modal-tech-tags {
+  :global(.modal-tech-tags) {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
-  .modal-tech-tags .tech-tag {
+  :global(.modal-tech-tags .tech-tag) {
     background: rgba(26, 26, 26, 0.08);
     color: rgba(26, 26, 26, 0.7);
     padding: 0.35rem 0.65rem;
@@ -605,7 +605,7 @@ const { projects } = Astro.props;
     color: rgba(200, 200, 200, 0.8);
   }
 
-  :global(body.dark-theme) .modal-tech-tags .tech-tag {
+  :global(body.dark-theme) :global(.modal-tech-tags .tech-tag) {
     background: rgba(5, 205, 153, 0.1);
     color: rgba(200, 200, 200, 0.8);
   }
