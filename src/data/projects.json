@@ -1,22 +1,292 @@
 [
   {
-    "id": "project-dynamic",
-    "codeName": "Project Dynamic",
-    "industry": "Food Manufacturing",
-    "theme": "Food & Beverage",
-    "summary": "Manufacturing operation leveraging ERP systems for production, inventory, and logistics, specializing in food ingredient taxonomies and supply chain management.",
-    "arr": "$220M",
-    "arrNumeric": 220000000,
+    "id": "project-eclipse",
+    "codeName": "Project Eclipse",
+    "industry": "Healthcare Technology",
+    "theme": "Healthcare",
+    "summary": "Cloud-based suite for surgical centers providing practice management, scheduling, electronic health records, and billing solutions.",
+    "arr": "$61M",
+    "arrNumeric": 61100000,
     "currency": "USD",
-    "growthStage": "Maturity / Turnaround",
-    "year": 2023,
+    "growthStage": "Mature / Expansion",
+    "year": 2026,
     "technologies": [
-      "Oracle",
-      "QAD",
-      "BPCS",
-      "IBM AS/400",
-      "PowerBI",
-      "Salesforce"
+      "AWS",
+      ".NET 8",
+      "C#",
+      "SQL Server",
+      "ReactJS",
+      "TypeScript",
+      "Golang",
+      "Ruby on Rails",
+      "PostgreSQL",
+      "Kafka",
+      "Rhapsody"
+    ]
+  },
+  {
+    "id": "imex",
+    "codeName": "ImEx",
+    "industry": "Automotive Repair",
+    "theme": "Logistics",
+    "summary": "Specialized platform providing collision repair facilities with data integration, job costing, reconciliation, and payment management tools.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Small / Growth",
+    "year": 2026,
+    "technologies": [
+      "Node.js",
+      "AWS",
+      "RDS",
+      "Elastic Beanstalk",
+      "SES"
+    ]
+  },
+  {
+    "id": "fusion",
+    "codeName": "Fusion",
+    "industry": "Financial Administration",
+    "theme": "Finance",
+    "summary": "Unified cloud platform providing integrated company registry, fund administration, employee share plans, and equity management services with automation.",
+    "arr": "A$68M",
+    "arrNumeric": 68200000,
+    "currency": "AUD",
+    "growthStage": "Mature / Leading",
+    "year": 2025,
+    "technologies": [
+      "AWS",
+      "EKS",
+      "Java",
+      "Angular",
+      "AI",
+      "RAG",
+      "SageMaker",
+      "Multi-AZ RDS"
+    ]
+  },
+  {
+    "id": "project-quorum",
+    "codeName": "Project Quorum",
+    "industry": "Government Affairs",
+    "theme": "Public Sector",
+    "summary": "Unified platform for legislative tracking, grassroots advocacy, and PAC management with integrated data scraping and AI capabilities.",
+    "arr": "$67M",
+    "arrNumeric": 67200000,
+    "currency": "USD",
+    "growthStage": "Mature",
+    "year": 2025,
+    "technologies": [
+      "Python",
+      "Django",
+      "React",
+      "AWS",
+      "Azure",
+      "Kubernetes",
+      "EKS",
+      "Postgres",
+      "SQL Server",
+      "MySQL",
+      "Flutter",
+      ".NET",
+      "PHP"
+    ]
+  },
+  {
+    "id": "icon",
+    "codeName": "Icon",
+    "industry": "Intranet Software",
+    "theme": "Human Resources",
+    "summary": "AI-powered intranet platform designed to engage employees through personalized internal communications, social interaction, and knowledge sharing tools.",
+    "arr": "£45M",
+    "arrNumeric": 45000000,
+    "currency": "GBP",
+    "growthStage": "Growth Stage",
+    "year": 2025,
+    "technologies": [
+      ".NET",
+      "ASP.NET",
+      "React",
+      "React Native",
+      "AWS",
+      "SQL Server",
+      "AI/ML",
+      "Elasticsearch"
+    ]
+  },
+  {
+    "id": "project-longhorn",
+    "codeName": "Project Longhorn",
+    "industry": "EHS Software",
+    "theme": "Security",
+    "summary": "Cloud-native SaaS platform for incident management, audits, and compliance tracking utilizing a metadata-driven engine for high configurability.",
+    "arr": "$21M",
+    "arrNumeric": 21000000,
+    "currency": "USD",
+    "growthStage": "Expansion",
+    "year": 2025,
+    "technologies": [
+      "AWS",
+      ".NET 8",
+      "ASP.NET",
+      "C#",
+      "ReactJS",
+      "SQL Server 2022",
+      "Terraform",
+      "OpenAI",
+      "Knockout.js",
+      "Cordova"
+    ]
+  },
+  {
+    "id": "wolverine",
+    "codeName": "Wolverine",
+    "industry": "Supply Chain Analytics",
+    "theme": "Logistics",
+    "summary": "Cloud-native platform using mathematical optimization and large-scale simulation for scenario-based supply chain design and risk assessment.",
+    "arr": "$10M",
+    "arrNumeric": 10000000,
+    "currency": "USD",
+    "growthStage": "Growth Stage",
+    "year": 2025,
+    "technologies": [
+      "Azure",
+      "Kubernetes",
+      "Docker",
+      "PostgreSQL",
+      "Python",
+      "Go",
+      "Gurobi",
+      "LLM"
+    ]
+  },
+  {
+    "id": "project-shield",
+    "codeName": "Project Shield",
+    "industry": "Public Safety",
+    "theme": "Public Sector",
+    "summary": "Comprehensive public safety suite helping police, fire, and dispatch teams manage training, quality assurance, and community engagement.",
+    "arr": "$4M",
+    "arrNumeric": 4070000,
+    "currency": "USD",
+    "growthStage": "Expansion / Scale-up",
+    "year": 2025,
+    "technologies": [
+      "C#",
+      ".NET",
+      "SQL Server",
+      "Azure",
+      "Angular"
+    ]
+  },
+  {
+    "id": "catalyst",
+    "codeName": "Catalyst",
+    "industry": "Marketing Technology",
+    "theme": "Marketing",
+    "summary": "Cloud-native platform specializing in distributing content and driving employee advocacy across various social media and messaging channels.",
+    "arr": "$4M",
+    "arrNumeric": 4000000,
+    "currency": "USD",
+    "growthStage": "SaaS / Scale-up",
+    "year": 2025,
+    "technologies": [
+      "TypeScript",
+      "AWS",
+      "Docker",
+      "Fargate",
+      "ECS",
+      "Angular",
+      "React",
+      "Node.js",
+      "GraphQL",
+      "PostgreSQL",
+      "Redis",
+      "OpenAI"
+    ]
+  },
+  {
+    "id": "project-titan",
+    "codeName": "Project Titan",
+    "industry": "FinTech",
+    "theme": "Finance",
+    "summary": "Multi-asset cloud platform for trading, risk management, and prime brokerage, featuring modular service-oriented architecture and messaging.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Expansion / M&A",
+    "year": 2025,
+    "technologies": [
+      "Java",
+      "C++",
+      "Spring Boot",
+      "Angular",
+      "Snowflake",
+      "MongoDB",
+      "Google Cloud Platform",
+      "AI/LLM"
+    ]
+  },
+  {
+    "id": "wellness",
+    "codeName": "Wellness",
+    "industry": "Telehealth",
+    "theme": "Healthcare",
+    "summary": "Telemedicine platform and patient portal for hormones and clinical treatment management including provider and administrative workflows.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Growth",
+    "year": 2025,
+    "technologies": [
+      "PHP",
+      "Laravel",
+      "CodeIgniter",
+      "AWS",
+      "Aurora MySQL",
+      "Redis",
+      "Flutter",
+      "WordPress",
+      "WooCommerce"
+    ]
+  },
+  {
+    "id": "propel",
+    "codeName": "Propel",
+    "industry": "Logistics",
+    "theme": "Logistics",
+    "summary": "Cloud-native platform providing end-to-end air cargo management, revenue optimization, and international eCommerce shipping solutions for carriers.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Scaling / Expansion",
+    "year": 2025,
+    "technologies": [
+      "Microsoft Azure",
+      "AI",
+      "ML",
+      "API",
+      "Cloud-Native Architecture"
+    ]
+  },
+  {
+    "id": "na",
+    "codeName": "n/a",
+    "industry": "Real Estate Technology",
+    "theme": "Real Estate",
+    "summary": "Cloud-native SaaS platform facilitates real estate rentals by allowing landlords to list properties and renters to negotiate terms.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Developed",
+    "year": 2025,
+    "technologies": [
+      "GCP",
+      "Firebase",
+      "TypeScript",
+      "Node.js",
+      "Vue.js",
+      "Google Gemini AI"
     ]
   },
   {
@@ -134,154 +404,6 @@
     ]
   },
   {
-    "id": "fusion",
-    "codeName": "Fusion",
-    "industry": "Financial Administration",
-    "theme": "Finance",
-    "summary": "Unified cloud platform providing integrated company registry, fund administration, employee share plans, and equity management services with automation.",
-    "arr": "A$68M",
-    "arrNumeric": 68200000,
-    "currency": "AUD",
-    "growthStage": "Mature / Leading",
-    "year": 2025,
-    "technologies": [
-      "AWS",
-      "EKS",
-      "Java",
-      "Angular",
-      "AI",
-      "RAG",
-      "SageMaker",
-      "Multi-AZ RDS"
-    ]
-  },
-  {
-    "id": "project-quorum",
-    "codeName": "Project Quorum",
-    "industry": "Government Affairs",
-    "theme": "Public Sector",
-    "summary": "Unified platform for legislative tracking, grassroots advocacy, and PAC management with integrated data scraping and AI capabilities.",
-    "arr": "$67M",
-    "arrNumeric": 67200000,
-    "currency": "USD",
-    "growthStage": "Mature",
-    "year": 2025,
-    "technologies": [
-      "Python",
-      "Django",
-      "React",
-      "AWS",
-      "Azure",
-      "Kubernetes",
-      "EKS",
-      "Postgres",
-      "SQL Server",
-      "MySQL",
-      "Flutter",
-      ".NET",
-      "PHP"
-    ]
-  },
-  {
-    "id": "project-eclipse",
-    "codeName": "Project Eclipse",
-    "industry": "Healthcare Technology",
-    "theme": "Healthcare",
-    "summary": "Cloud-based suite for surgical centers providing practice management, scheduling, electronic health records, and billing solutions.",
-    "arr": "$61M",
-    "arrNumeric": 61100000,
-    "currency": "USD",
-    "growthStage": "Mature / Expansion",
-    "year": 2026,
-    "technologies": [
-      "AWS",
-      ".NET 8",
-      "C#",
-      "SQL Server",
-      "ReactJS",
-      "TypeScript",
-      "Golang",
-      "Ruby on Rails",
-      "PostgreSQL",
-      "Kafka",
-      "Rhapsody"
-    ]
-  },
-  {
-    "id": "project-trident",
-    "codeName": "Project Trident",
-    "industry": "Telehealth",
-    "theme": "Healthcare",
-    "summary": "Comprehensive virtual health and well-being platform providing 24/7 medical and mental health care services for college students.",
-    "arr": "$54M",
-    "arrNumeric": 54100000,
-    "currency": "USD",
-    "growthStage": "Growth Stage",
-    "year": 2023,
-    "technologies": [
-      "JavaScript",
-      "Node.js",
-      "Express",
-      "React",
-      "React Native",
-      "Typescript",
-      "AWS",
-      "ECS",
-      "Docker",
-      "MySQL",
-      "MongoDB",
-      "SageMaker",
-      "Python",
-      "R"
-    ]
-  },
-  {
-    "id": "icon",
-    "codeName": "Icon",
-    "industry": "Intranet Software",
-    "theme": "Human Resources",
-    "summary": "AI-powered intranet platform designed to engage employees through personalized internal communications, social interaction, and knowledge sharing tools.",
-    "arr": "£45M",
-    "arrNumeric": 45000000,
-    "currency": "GBP",
-    "growthStage": "Growth Stage",
-    "year": 2025,
-    "technologies": [
-      ".NET",
-      "ASP.NET",
-      "React",
-      "React Native",
-      "AWS",
-      "SQL Server",
-      "AI/ML",
-      "Elasticsearch"
-    ]
-  },
-  {
-    "id": "jogger",
-    "codeName": "Jogger",
-    "industry": "Real Estate / EdTech",
-    "theme": "Real Estate",
-    "summary": "SaaS platform providing real estate investors educational resources, investment calculators, forums, and a marketplace for professional services.",
-    "arr": "$44M",
-    "arrNumeric": 44000000,
-    "currency": "USD",
-    "growthStage": "Mature",
-    "year": 2023,
-    "technologies": [
-      "Ruby on Rails",
-      "PostgreSQL",
-      "ReactJS",
-      "Snowflake",
-      "Segment",
-      "Heroku",
-      "AWS S3",
-      "Cloudflare",
-      "WordPress",
-      "Stripe"
-    ]
-  },
-  {
     "id": "wizard",
     "codeName": "Wizard",
     "industry": "Cyber Protection",
@@ -326,47 +448,6 @@
     ]
   },
   {
-    "id": "project-teton",
-    "codeName": "Project Teton",
-    "industry": "Human Capital Management",
-    "theme": "Human Resources",
-    "summary": "Talent management platform streamlining location-based hiring and management workflows designed for the needs of the hourly workforce.",
-    "arr": "$34M",
-    "arrNumeric": 34000000,
-    "currency": "USD",
-    "growthStage": "SaaS / Scaling",
-    "year": 2022,
-    "technologies": [
-      "AWS",
-      "Workato",
-      "Microservices",
-      "S3",
-      "QuickSight"
-    ]
-  },
-  {
-    "id": "project-eagle",
-    "codeName": "Project Eagle",
-    "industry": "FinTech",
-    "theme": "Finance",
-    "summary": "Cloud-native payment facilitation platform providing engagement and management solutions for government, healthcare, and higher education transactions.",
-    "arr": "$24M",
-    "arrNumeric": 24000000,
-    "currency": "USD",
-    "growthStage": "Scaling / Integration",
-    "year": 2023,
-    "technologies": [
-      "AWS",
-      "Kubernetes",
-      "microservices",
-      "GoLang",
-      "TypeScript",
-      "React",
-      "Snowflake",
-      "RESTful APIs"
-    ]
-  },
-  {
     "id": "project-credential",
     "codeName": "Project Credential",
     "industry": "EdTech",
@@ -392,30 +473,6 @@
     ]
   },
   {
-    "id": "project-longhorn",
-    "codeName": "Project Longhorn",
-    "industry": "EHS Software",
-    "theme": "Security",
-    "summary": "Cloud-native SaaS platform for incident management, audits, and compliance tracking utilizing a metadata-driven engine for high configurability.",
-    "arr": "$21M",
-    "arrNumeric": 21000000,
-    "currency": "USD",
-    "growthStage": "Expansion",
-    "year": 2025,
-    "technologies": [
-      "AWS",
-      ".NET 8",
-      "ASP.NET",
-      "C#",
-      "ReactJS",
-      "SQL Server 2022",
-      "Terraform",
-      "OpenAI",
-      "Knockout.js",
-      "Cordova"
-    ]
-  },
-  {
     "id": "tempo",
     "codeName": "Tempo",
     "industry": "HealthTech",
@@ -431,28 +488,6 @@
       "SQL Server",
       "Generative AI",
       "FHIR standards"
-    ]
-  },
-  {
-    "id": "wolverine",
-    "codeName": "Wolverine",
-    "industry": "Supply Chain Analytics",
-    "theme": "Logistics",
-    "summary": "Cloud-native platform using mathematical optimization and large-scale simulation for scenario-based supply chain design and risk assessment.",
-    "arr": "$10M",
-    "arrNumeric": 10000000,
-    "currency": "USD",
-    "growthStage": "Growth Stage",
-    "year": 2025,
-    "technologies": [
-      "Azure",
-      "Kubernetes",
-      "Docker",
-      "PostgreSQL",
-      "Python",
-      "Go",
-      "Gurobi",
-      "LLM"
     ]
   },
   {
@@ -474,88 +509,6 @@
     ]
   },
   {
-    "id": "carnation",
-    "codeName": "Carnation",
-    "industry": "Medical Research",
-    "theme": "Healthcare",
-    "summary": "Medical technology platform offering aggregated electronic health records data and a web application for oncology research insights.",
-    "arr": "$6M",
-    "arrNumeric": 6000000,
-    "currency": "USD",
-    "growthStage": "Developed",
-    "year": 2023,
-    "technologies": [
-      "Modern development frameworks",
-      "Data Analytics",
-      "ETL",
-      "AWS",
-      "Terraform"
-    ]
-  },
-  {
-    "id": "project-shield",
-    "codeName": "Project Shield",
-    "industry": "Public Safety",
-    "theme": "Public Sector",
-    "summary": "Comprehensive public safety suite helping police, fire, and dispatch teams manage training, quality assurance, and community engagement.",
-    "arr": "$4M",
-    "arrNumeric": 4070000,
-    "currency": "USD",
-    "growthStage": "Expansion / Scale-up",
-    "year": 2025,
-    "technologies": [
-      "C#",
-      ".NET",
-      "SQL Server",
-      "Azure",
-      "Angular"
-    ]
-  },
-  {
-    "id": "catalyst",
-    "codeName": "Catalyst",
-    "industry": "Marketing Technology",
-    "theme": "Marketing",
-    "summary": "Cloud-native platform specializing in distributing content and driving employee advocacy across various social media and messaging channels.",
-    "arr": "$4M",
-    "arrNumeric": 4000000,
-    "currency": "USD",
-    "growthStage": "SaaS / Scale-up",
-    "year": 2025,
-    "technologies": [
-      "TypeScript",
-      "AWS",
-      "Docker",
-      "Fargate",
-      "ECS",
-      "Angular",
-      "React",
-      "Node.js",
-      "GraphQL",
-      "PostgreSQL",
-      "Redis",
-      "OpenAI"
-    ]
-  },
-  {
-    "id": "ace",
-    "codeName": "Ace",
-    "industry": "Cybersecurity",
-    "theme": "Security",
-    "summary": "Software providing comprehensive security features, including password management, sign-on management, and compliance mapping for small businesses.",
-    "arr": "$500K",
-    "arrNumeric": 500000,
-    "currency": "USD",
-    "growthStage": "Early Stage",
-    "year": 2023,
-    "technologies": [
-      "AWS",
-      "Kubernetes",
-      "EKS cluster",
-      "Microservices"
-    ]
-  },
-  {
     "id": "project-vanguard",
     "codeName": "PROJECT Vanguard",
     "industry": "IT Infrastructure",
@@ -572,116 +525,6 @@
       "Rust",
       "Python",
       "Debian Linux"
-    ]
-  },
-  {
-    "id": "project-chariot",
-    "codeName": "Project Chariot",
-    "industry": "Transportation",
-    "theme": "Logistics",
-    "summary": "On-demand bus charter platform providing applications for fleet managers, drivers, and customers alongside a transport management system.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "High Growth",
-    "year": 2022,
-    "technologies": [
-      ".NET",
-      "C#",
-      "AWS",
-      "DevOps",
-      "SaaS"
-    ]
-  },
-  {
-    "id": "project-titan",
-    "codeName": "Project Titan",
-    "industry": "FinTech",
-    "theme": "Finance",
-    "summary": "Multi-asset cloud platform for trading, risk management, and prime brokerage, featuring modular service-oriented architecture and messaging.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Expansion / M&A",
-    "year": 2025,
-    "technologies": [
-      "Java",
-      "C++",
-      "Spring Boot",
-      "Angular",
-      "Snowflake",
-      "MongoDB",
-      "Google Cloud Platform",
-      "AI/LLM"
-    ]
-  },
-  {
-    "id": "project-zoolander",
-    "codeName": "Project Zoolander",
-    "industry": "Cybersecurity",
-    "theme": "Security",
-    "summary": "Hybrid-cloud platform for mobile device data analysis to identify malicious activity and post-incident threat signatures.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Startup",
-    "year": 2022,
-    "technologies": [
-      "Docker",
-      "Docker Swarm",
-      "AWS",
-      "Azure",
-      "iOS",
-      "Android",
-      "Python",
-      "Machine Learning"
-    ]
-  },
-  {
-    "id": "wellness",
-    "codeName": "Wellness",
-    "industry": "Telehealth",
-    "theme": "Healthcare",
-    "summary": "Telemedicine platform and patient portal for hormones and clinical treatment management including provider and administrative workflows.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Growth",
-    "year": 2025,
-    "technologies": [
-      "PHP",
-      "Laravel",
-      "CodeIgniter",
-      "AWS",
-      "Aurora MySQL",
-      "Redis",
-      "Flutter",
-      "WordPress",
-      "WooCommerce"
-    ]
-  },
-  {
-    "id": "onfray",
-    "codeName": "Onfray",
-    "industry": "Logistics",
-    "theme": "Logistics",
-    "summary": "Last-mile delivery solution optimizing scheduling and dispatching to increase capacity and reduce costs for transport companies.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "High Growth",
-    "year": 2022,
-    "technologies": [
-      "NodeJS",
-      "MongoDB",
-      "PostGIS",
-      "Redis",
-      "AWS Lambda",
-      "ReactJS",
-      "AngularJS",
-      "CoffeeScript",
-      "TypeScript",
-      "Twilio"
     ]
   },
   {
@@ -789,25 +632,6 @@
     ]
   },
   {
-    "id": "ecological",
-    "codeName": "Ecological",
-    "industry": "GovTech",
-    "theme": "Public Sector",
-    "summary": "SaaS platform for government regulatory entities to manage inspections, permits, workflow management, and reporting for public safety.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Growth Stage",
-    "year": 2023,
-    "technologies": [
-      "Node.js",
-      "AWS",
-      "Azure",
-      "SQL Server",
-      "low-code/no-code"
-    ]
-  },
-  {
     "id": "inspire",
     "codeName": "Inspire",
     "industry": "EdTech",
@@ -826,6 +650,180 @@
       "ReactJS",
       "Node.js",
       "SCORM"
+    ]
+  },
+  {
+    "id": "cogep",
+    "codeName": "COGEP",
+    "industry": "Asset Management",
+    "theme": "Operations Management",
+    "summary": "Computerized maintenance management system manages preventive maintenance for equipment, vehicles, and facility infrastructures.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Legacy / Transitioning",
+    "year": 2024,
+    "technologies": [
+      "VB.NET",
+      "ASP.NET",
+      "SQL Server",
+      ".NET Core",
+      "React",
+      "Entity Framework",
+      "CQRS",
+      "iOS",
+      "Android",
+      "GCP"
+    ]
+  },
+  {
+    "id": "project-dynamic",
+    "codeName": "Project Dynamic",
+    "industry": "Food Manufacturing",
+    "theme": "Food & Beverage",
+    "summary": "Manufacturing operation leveraging ERP systems for production, inventory, and logistics, specializing in food ingredient taxonomies and supply chain management.",
+    "arr": "$220M",
+    "arrNumeric": 220000000,
+    "currency": "USD",
+    "growthStage": "Maturity / Turnaround",
+    "year": 2023,
+    "technologies": [
+      "Oracle",
+      "QAD",
+      "BPCS",
+      "IBM AS/400",
+      "PowerBI",
+      "Salesforce"
+    ]
+  },
+  {
+    "id": "project-trident",
+    "codeName": "Project Trident",
+    "industry": "Telehealth",
+    "theme": "Healthcare",
+    "summary": "Comprehensive virtual health and well-being platform providing 24/7 medical and mental health care services for college students.",
+    "arr": "$54M",
+    "arrNumeric": 54100000,
+    "currency": "USD",
+    "growthStage": "Growth Stage",
+    "year": 2023,
+    "technologies": [
+      "JavaScript",
+      "Node.js",
+      "Express",
+      "React",
+      "React Native",
+      "Typescript",
+      "AWS",
+      "ECS",
+      "Docker",
+      "MySQL",
+      "MongoDB",
+      "SageMaker",
+      "Python",
+      "R"
+    ]
+  },
+  {
+    "id": "jogger",
+    "codeName": "Jogger",
+    "industry": "Real Estate / EdTech",
+    "theme": "Real Estate",
+    "summary": "SaaS platform providing real estate investors educational resources, investment calculators, forums, and a marketplace for professional services.",
+    "arr": "$44M",
+    "arrNumeric": 44000000,
+    "currency": "USD",
+    "growthStage": "Mature",
+    "year": 2023,
+    "technologies": [
+      "Ruby on Rails",
+      "PostgreSQL",
+      "ReactJS",
+      "Snowflake",
+      "Segment",
+      "Heroku",
+      "AWS S3",
+      "Cloudflare",
+      "WordPress",
+      "Stripe"
+    ]
+  },
+  {
+    "id": "project-eagle",
+    "codeName": "Project Eagle",
+    "industry": "FinTech",
+    "theme": "Finance",
+    "summary": "Cloud-native payment facilitation platform providing engagement and management solutions for government, healthcare, and higher education transactions.",
+    "arr": "$24M",
+    "arrNumeric": 24000000,
+    "currency": "USD",
+    "growthStage": "Scaling / Integration",
+    "year": 2023,
+    "technologies": [
+      "AWS",
+      "Kubernetes",
+      "microservices",
+      "GoLang",
+      "TypeScript",
+      "React",
+      "Snowflake",
+      "RESTful APIs"
+    ]
+  },
+  {
+    "id": "carnation",
+    "codeName": "Carnation",
+    "industry": "Medical Research",
+    "theme": "Healthcare",
+    "summary": "Medical technology platform offering aggregated electronic health records data and a web application for oncology research insights.",
+    "arr": "$6M",
+    "arrNumeric": 6000000,
+    "currency": "USD",
+    "growthStage": "Developed",
+    "year": 2023,
+    "technologies": [
+      "Modern development frameworks",
+      "Data Analytics",
+      "ETL",
+      "AWS",
+      "Terraform"
+    ]
+  },
+  {
+    "id": "ace",
+    "codeName": "Ace",
+    "industry": "Cybersecurity",
+    "theme": "Security",
+    "summary": "Software providing comprehensive security features, including password management, sign-on management, and compliance mapping for small businesses.",
+    "arr": "$500K",
+    "arrNumeric": 500000,
+    "currency": "USD",
+    "growthStage": "Early Stage",
+    "year": 2023,
+    "technologies": [
+      "AWS",
+      "Kubernetes",
+      "EKS cluster",
+      "Microservices"
+    ]
+  },
+  {
+    "id": "ecological",
+    "codeName": "Ecological",
+    "industry": "GovTech",
+    "theme": "Public Sector",
+    "summary": "SaaS platform for government regulatory entities to manage inspections, permits, workflow management, and reporting for public safety.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Growth Stage",
+    "year": 2023,
+    "technologies": [
+      "Node.js",
+      "AWS",
+      "Azure",
+      "SQL Server",
+      "low-code/no-code"
     ]
   },
   {
@@ -866,25 +864,6 @@
       "SQL Server",
       "Angular SPA",
       "React JS"
-    ]
-  },
-  {
-    "id": "propel",
-    "codeName": "Propel",
-    "industry": "Logistics",
-    "theme": "Logistics",
-    "summary": "Cloud-native platform providing end-to-end air cargo management, revenue optimization, and international eCommerce shipping solutions for carriers.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Scaling / Expansion",
-    "year": 2025,
-    "technologies": [
-      "Microsoft Azure",
-      "AI",
-      "ML",
-      "API",
-      "Cloud-Native Architecture"
     ]
   },
   {
@@ -947,26 +926,6 @@
     ]
   },
   {
-    "id": "goldfinch",
-    "codeName": "Goldfinch",
-    "industry": "AI / NLP",
-    "theme": "Software",
-    "summary": "AI-powered platform delivering natural language understanding solutions for search, chat, and customer service to optimize user engagement.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Mature Startup",
-    "year": 2022,
-    "technologies": [
-      "NLP",
-      "AI",
-      "ML",
-      "AWS Lambda",
-      "Serverless",
-      "REST API"
-    ]
-  },
-  {
     "id": "snacks",
     "codeName": "Snacks",
     "industry": "Retail Technology",
@@ -986,47 +945,107 @@
     ]
   },
   {
-    "id": "na",
-    "codeName": "n/a",
-    "industry": "Real Estate Technology",
-    "theme": "Real Estate",
-    "summary": "Cloud-native SaaS platform facilitates real estate rentals by allowing landlords to list properties and renters to negotiate terms.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
+    "id": "project-teton",
+    "codeName": "Project Teton",
+    "industry": "Human Capital Management",
+    "theme": "Human Resources",
+    "summary": "Talent management platform streamlining location-based hiring and management workflows designed for the needs of the hourly workforce.",
+    "arr": "$34M",
+    "arrNumeric": 34000000,
     "currency": "USD",
-    "growthStage": "Developed",
-    "year": 2025,
+    "growthStage": "SaaS / Scaling",
+    "year": 2022,
     "technologies": [
-      "GCP",
-      "Firebase",
-      "TypeScript",
-      "Node.js",
-      "Vue.js",
-      "Google Gemini AI"
+      "AWS",
+      "Workato",
+      "Microservices",
+      "S3",
+      "QuickSight"
     ]
   },
   {
-    "id": "cogep",
-    "codeName": "COGEP",
-    "industry": "Asset Management",
-    "theme": "Operations Management",
-    "summary": "Computerized maintenance management system manages preventive maintenance for equipment, vehicles, and facility infrastructures.",
+    "id": "project-chariot",
+    "codeName": "Project Chariot",
+    "industry": "Transportation",
+    "theme": "Logistics",
+    "summary": "On-demand bus charter platform providing applications for fleet managers, drivers, and customers alongside a transport management system.",
     "arr": "Not in source",
     "arrNumeric": 0,
     "currency": "USD",
-    "growthStage": "Legacy / Transitioning",
-    "year": 2024,
+    "growthStage": "High Growth",
+    "year": 2022,
     "technologies": [
-      "VB.NET",
-      "ASP.NET",
-      "SQL Server",
-      ".NET Core",
-      "React",
-      "Entity Framework",
-      "CQRS",
+      ".NET",
+      "C#",
+      "AWS",
+      "DevOps",
+      "SaaS"
+    ]
+  },
+  {
+    "id": "project-zoolander",
+    "codeName": "Project Zoolander",
+    "industry": "Cybersecurity",
+    "theme": "Security",
+    "summary": "Hybrid-cloud platform for mobile device data analysis to identify malicious activity and post-incident threat signatures.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Startup",
+    "year": 2022,
+    "technologies": [
+      "Docker",
+      "Docker Swarm",
+      "AWS",
+      "Azure",
       "iOS",
       "Android",
-      "GCP"
+      "Python",
+      "Machine Learning"
+    ]
+  },
+  {
+    "id": "onfray",
+    "codeName": "Onfray",
+    "industry": "Logistics",
+    "theme": "Logistics",
+    "summary": "Last-mile delivery solution optimizing scheduling and dispatching to increase capacity and reduce costs for transport companies.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "High Growth",
+    "year": 2022,
+    "technologies": [
+      "NodeJS",
+      "MongoDB",
+      "PostGIS",
+      "Redis",
+      "AWS Lambda",
+      "ReactJS",
+      "AngularJS",
+      "CoffeeScript",
+      "TypeScript",
+      "Twilio"
+    ]
+  },
+  {
+    "id": "goldfinch",
+    "codeName": "Goldfinch",
+    "industry": "AI / NLP",
+    "theme": "Software",
+    "summary": "AI-powered platform delivering natural language understanding solutions for search, chat, and customer service to optimize user engagement.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Mature Startup",
+    "year": 2022,
+    "technologies": [
+      "NLP",
+      "AI",
+      "ML",
+      "AWS Lambda",
+      "Serverless",
+      "REST API"
     ]
   },
   {
@@ -1065,25 +1084,6 @@
       "Angular",
       "SQL Database",
       "SQLite"
-    ]
-  },
-  {
-    "id": "imex",
-    "codeName": "ImEx",
-    "industry": "Automotive Repair",
-    "theme": "Logistics",
-    "summary": "Specialized platform providing collision repair facilities with data integration, job costing, reconciliation, and payment management tools.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
-    "currency": "USD",
-    "growthStage": "Small / Growth",
-    "year": 2026,
-    "technologies": [
-      "Node.js",
-      "AWS",
-      "RDS",
-      "Elastic Beanstalk",
-      "SES"
     ]
   }
 ]

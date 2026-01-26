@@ -177,20 +177,23 @@ const { projects } = Astro.props;
   .project-title {
     font-weight: 700;
     color: rgba(26, 26, 26, 0.95);
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     letter-spacing: -0.01em;
-    line-height: 1.3;
+    line-height: 1.25;
+    margin-bottom: 0.35rem;
   }
 
   .project-subtitle {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(26, 26, 26, 0.60);
-    line-height: 1.4;
+    color: rgba(26, 26, 26, 0.55);
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .summary-cell {
-    max-width: 420px;
+    max-width: 336px;
     line-height: 1.75;
     color: rgba(26, 26, 26, 0.75);
     font-size: 0.85rem;
@@ -233,7 +236,7 @@ const { projects } = Astro.props;
     font-size: 0.875rem;
     color: rgba(26, 26, 26, 0.75);
     white-space: normal;
-    min-width: 140px;
+    min-width: 165px;
     line-height: 1.4;
   }
 
@@ -252,24 +255,26 @@ const { projects } = Astro.props;
   :global(.tech-tags) {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    max-width: 360px;
+    gap: 0.75rem;
+    max-width: 380px;
+    align-items: center;
   }
 
   :global(.tech-tag) {
-    padding: 0.3rem 0.65rem;
-    background: #f0f0f0;
+    padding: 0.35rem 0.7rem;
+    background: #f5f5f5;
     color: rgba(26, 26, 26, 0.75);
-    border: 1px solid rgba(26, 26, 26, 0.08);
-    font-size: 0.72rem;
+    border: 1px solid rgba(26, 26, 26, 0.12);
+    font-size: 0.7rem;
     font-weight: 500;
     white-space: nowrap;
     border-radius: 3px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.01em;
   }
 
   :global(.tech-tag:hover) {
-    background: #e0e0e0;
+    background: #e8e8e8;
     color: rgba(26, 26, 26, 0.9);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -376,7 +381,7 @@ const { projects } = Astro.props;
   }
 
   :global(body.dark-theme) .project-subtitle {
-    color: rgba(200, 200, 200, 0.65);
+    color: rgba(200, 200, 200, 0.55);
   }
 
   :global(body.dark-theme) .summary-cell {
@@ -401,14 +406,14 @@ const { projects } = Astro.props;
   }
 
   :global(body.dark-theme .tech-tag) {
-    background: #252525;
+    background: #2a2a2a;
     color: rgba(200, 200, 200, 0.75);
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   :global(body.dark-theme .tech-tag:hover) {
-    background: #383838;
+    background: #3a3a3a;
     color: rgba(245, 245, 245, 0.9);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
@@ -421,11 +426,11 @@ const { projects } = Astro.props;
   /* Responsive */
   @media (max-width: 1400px) {
     .summary-cell {
-      max-width: 300px;
+      max-width: 250px;
     }
 
     :global(.tech-tags) {
-      max-width: 320px;
+      max-width: 330px;
     }
   }
 
