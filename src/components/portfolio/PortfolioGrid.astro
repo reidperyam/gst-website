@@ -451,7 +451,13 @@ const { projects } = Astro.props;
     padding: 2rem;
     background: #ffffff;
     border: 1px solid rgba(26, 26, 26, 0.1);
-    border-radius: 12px;
+    border-radius: 0;
+    clip-path: polygon(
+      2.5% 0%, 97.5% 0%,
+      100% 2.5%, 100% 97.5%,
+      97.5% 100%, 2.5% 100%,
+      0% 97.5%, 0% 2.5%
+    );
     z-index: 1000;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
