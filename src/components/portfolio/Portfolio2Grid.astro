@@ -94,6 +94,12 @@ const { projects } = Astro.props;
       </div>
 
       <div class="modal-section">
+        <h3 class="modal-section-title">Engagement Type</h3>
+        <p id="modal-engagement-type-2" class="modal-engagement-type">Engagement Type</p>
+        <p id="modal-engagement-description-2" class="modal-text">Engagement description goes here.</p>
+      </div>
+
+      <div class="modal-section">
         <h3 class="modal-section-title">Summary</h3>
         <p id="modal-summary-2" class="modal-text">Project summary goes here.</p>
       </div>
@@ -611,6 +617,14 @@ const { projects } = Astro.props;
     letter-spacing: 0.04em;
   }
 
+  .modal-engagement-type {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #05cd99;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.01em;
+  }
+
   /* Dark theme modal */
   :global(body.dark-theme) .project-modal {
     background: #1a1a1a;
@@ -653,6 +667,10 @@ const { projects } = Astro.props;
   :global(body.dark-theme) .modal-tech-tags .tech-tag {
     background: rgba(5, 205, 153, 0.1);
     color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .modal-engagement-type {
+    color: #05cd99;
   }
 
   @media (max-width: 768px) {
@@ -736,6 +754,8 @@ const { projects } = Astro.props;
     document.getElementById('modal-arr-2').textContent = project.arr === 'Not in source' ? '--' : project.arr;
     document.getElementById('modal-stage-2').textContent = project.growthStage;
     document.getElementById('modal-theme-2').textContent = project.theme;
+    document.getElementById('modal-engagement-type-2').textContent = project.engagementType || 'N/A';
+    document.getElementById('modal-engagement-description-2').textContent = project.engagementTypeDescription || '';
     document.getElementById('modal-summary-2').textContent = project.summary;
 
     // Render technologies
