@@ -234,14 +234,14 @@ const { projects } = Astro.props;
     min-width: 200px;
   }
 
-  .tech-tags {
+  :global(.tech-tags) {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     max-width: 280px;
   }
 
-  .tech-tag {
+  :global(.tech-tag) {
     padding: 0.25rem 0.625rem;
     background: #f0f0f0;
     color: rgba(26, 26, 26, 0.75);
@@ -253,7 +253,7 @@ const { projects } = Astro.props;
     transition: background 0.15s, color 0.15s;
   }
 
-  .tech-tag:hover {
+  :global(.tech-tag:hover) {
     background: #e8e8e8;
     color: rgba(26, 26, 26, 0.85);
     cursor: default;
@@ -357,14 +357,14 @@ const { projects } = Astro.props;
     background: rgba(5, 205, 153, 0.12);
   }
 
-  :global(body.dark-theme) .tech-tag {
+  :global(body.dark-theme .tech-tag) {
     background: #252525;
     color: rgba(200, 200, 200, 0.75);
     border-color: rgba(255, 255, 255, 0.08);
     transition: background 0.15s, color 0.15s;
   }
 
-  :global(body.dark-theme) .tech-tag:hover {
+  :global(body.dark-theme .tech-tag:hover) {
     background: #2f2f2f;
     color: rgba(245, 245, 245, 0.85);
   }
@@ -379,7 +379,7 @@ const { projects } = Astro.props;
       max-width: 400px;
     }
 
-    .tech-tags {
+    :global(.tech-tags) {
       max-width: 250px;
     }
   }
