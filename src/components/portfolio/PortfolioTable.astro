@@ -190,7 +190,7 @@ const { projects } = Astro.props;
   }
 
   .summary-cell {
-    max-width: 600px;
+    max-width: 420px;
     line-height: 1.75;
     color: rgba(26, 26, 26, 0.75);
     font-size: 0.85rem;
@@ -211,7 +211,7 @@ const { projects } = Astro.props;
   }
 
   .arr-cell {
-    min-width: 140px;
+    min-width: 90px;
     text-align: right;
   }
 
@@ -232,7 +232,9 @@ const { projects } = Astro.props;
   .stage-cell {
     font-size: 0.875rem;
     color: rgba(26, 26, 26, 0.75);
-    white-space: nowrap;
+    white-space: normal;
+    min-width: 140px;
+    line-height: 1.4;
   }
 
   .year-cell {
@@ -244,14 +246,14 @@ const { projects } = Astro.props;
   }
 
   .tech-cell {
-    min-width: 200px;
+    min-width: 280px;
   }
 
   :global(.tech-tags) {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    max-width: 280px;
+    max-width: 360px;
   }
 
   :global(.tech-tag) {
@@ -419,11 +421,11 @@ const { projects } = Astro.props;
   /* Responsive */
   @media (max-width: 1400px) {
     .summary-cell {
-      max-width: 400px;
+      max-width: 300px;
     }
 
     :global(.tech-tags) {
-      max-width: 250px;
+      max-width: 320px;
     }
   }
 
