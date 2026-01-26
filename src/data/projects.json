@@ -270,13 +270,13 @@
     ]
   },
   {
-    "id": "cozy",
-    "codeName": "Cozy",
+    "id": "na",
+    "codeName": "n/a",
     "industry": "Real Estate Technology",
     "theme": "Real Estate",
     "summary": "Cloud-native SaaS platform facilitates real estate rentals by allowing landlords to list properties and renters to negotiate terms.",
-    "arr": "$100K",
-    "arrNumeric": "$100K",
+    "arr": "Not in source",
+    "arrNumeric": 0,
     "currency": "USD",
     "growthStage": "Developed",
     "year": 2025,

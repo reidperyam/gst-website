@@ -8,7 +8,7 @@ interface Props {
 const { projects } = Astro.props;
 
 // Extract unique values
-const uniqueIndustries = [...new Set(projects.map(p => p.industry))].sort();
+const uniqueThemes = [...new Set(projects.map(p => p.theme))].sort();
 const uniqueYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
 
 // Categorize growth stages
@@ -52,11 +52,11 @@ const categorizedStages = [
     </div>
 
     <div class="filter-section">
-      <div class="filter-label">Industry</div>
-      <div class="filter-chips" id="industry-chips">
-        <div class="chip active" data-value="all">All Industries</div>
-        {uniqueIndustries.map(industry => (
-          <div class="chip" data-value={industry}>{industry}</div>
+      <div class="filter-label">Theme</div>
+      <div class="filter-chips" id="theme-chips">
+        <div class="chip active" data-value="all">All Themes</div>
+        {uniqueThemes.map(theme => (
+          <div class="chip" data-value={theme}>{theme}</div>
         ))}
       </div>
     </div>
@@ -300,7 +300,7 @@ const categorizedStages = [
       filters: {
         search: '',
         stage: 'all',
-        industry: 'all',
+        theme: 'all',
         year: 'all'
       },
       growthStages: growthStagesList,
@@ -344,8 +344,8 @@ const categorizedStages = [
         }
       }
 
-      // Industry filter
-      if (filters.industry !== 'all' && project.industry !== filters.industry) return false;
+      // Theme filter
+      if (filters.theme !== 'all' && project.theme !== filters.theme) return false;
 
       // Year filter
       if (filters.year !== 'all' && project.year.toString() !== filters.year) return false;
@@ -401,7 +401,7 @@ const categorizedStages = [
   function attachChipListeners() {
     // Add event delegation instead of individual listeners
     const stageChipsContainer = document.getElementById('stage-chips');
-    const industryChipsContainer = document.getElementById('industry-chips');
+    const themeChipsContainer = document.getElementById('theme-chips');
     const yearChipsContainer = document.getElementById('year-chips');
 
     if (stageChipsContainer && !stageChipsContainer.hasListener) {
@@ -422,18 +422,18 @@ const categorizedStages = [
       console.log('[Portfolio2Controls] Stage chips listener attached');
     }
 
-    if (industryChipsContainer && !industryChipsContainer.hasListener) {
-      industryChipsContainer.addEventListener('click', (e) => {
+    if (themeChipsContainer && !themeChipsContainer.hasListener) {
+      themeChipsContainer.addEventListener('click', (e) => {
         const chip = e.target.closest('.chip');
         if (chip) {
-          document.querySelectorAll('#industry-chips .chip').forEach(c => c.classList.remove('active'));
+          document.querySelectorAll('#theme-chips .chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
-          filters.industry = chip.dataset.value;
-          window.portfolioState.filters.industry = filters.industry;
+          filters.theme = chip.dataset.value;
+          window.portfolioState.filters.theme = filters.theme;
           filterProjects();
         }
       });
-      industryChipsContainer.hasListener = true;
+      themeChipsContainer.hasListener = true;
     }
 
     if (yearChipsContainer && !yearChipsContainer.hasListener) {
