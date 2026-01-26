@@ -2,23 +2,24 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PortfolioHeader from '../components/portfolio/PortfolioHeader.astro';
 import PortfolioControls from '../components/portfolio/PortfolioControls.astro';
-import PortfolioTable from '../components/portfolio/PortfolioTable.astro';
-import PortfolioInteractive from '../components/portfolio/PortfolioInteractive.astro';
+import PortfolioGrid from '../components/portfolio/PortfolioGrid.astro';
 import projects from '../data/projects.json';
-import type { Stat } from '../types/portfolio';
+import type { Project, Stat } from '../types/portfolio';
 
-// Calculate aggregate stats
-const totalProjects = projects.length;
-const totalARR = projects.reduce((sum, p) => sum + p.arrNumeric, 0);
-const uniqueIndustries = new Set(projects.map(p => p.industry)).size;
-const yearsArray = projects.map(p => p.year);
-const yearRange = `${Math.min(...yearsArray)}-${Math.max(...yearsArray)}`;
+const typedProjects = projects as Project[];
+
+// Calculate statistics
+const totalProjects = typedProjects.length;
+const totalArrNumeric = typedProjects.reduce((sum, p) => sum + (p.arrNumeric || 0), 0);
+const totalArr = `$${(totalArrNumeric / 1000000000).toFixed(1)}B+`;
+const uniqueIndustries = new Set(typedProjects.map(p => p.industry)).size;
+const yearRange = `${Math.min(...typedProjects.map(p => p.year))}-${Math.max(...typedProjects.map(p => p.year))}`;
 
 const stats: Stat[] = [
-  { value: totalProjects.toString(), label: 'Projects' },
-  { value: `$${(totalARR / 1e9).toFixed(1)}B+`, label: 'Combined ARR' },
-  { value: uniqueIndustries.toString(), label: 'Industries' },
-  { value: yearRange, label: 'Portfolio Span' }
+  { label: 'Projects', value: totalProjects.toString() },
+  { label: 'Combined ARR', value: totalArr },
+  { label: 'Industries', value: uniqueIndustries.toString() },
+  { label: 'Portfolio Span', value: yearRange },
 ];
 ---
 
@@ -26,8 +27,15 @@ const stats: Stat[] = [
   title="Portfolio | Strategic Advisory & Implementation"
   description="Explore our track record of 51 strategic advisory and implementation projects across healthcare, logistics, software, finance, and more."
 >
-  <PortfolioHeader stats={stats} />
-  <PortfolioControls projects={projects} />
-  <PortfolioTable projects={projects} />
-  <PortfolioInteractive projects={projects} />
+  <main>
+    <PortfolioHeader stats={stats} />
+    <PortfolioControls projects={typedProjects} />
+    <PortfolioGrid projects={typedProjects} />
+  </main>
 </BaseLayout>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>

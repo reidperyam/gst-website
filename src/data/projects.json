@@ -22,7 +22,10 @@
       "PostgreSQL",
       "Kafka",
       "Rhapsody"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "imex",
@@ -41,7 +44,10 @@
       "RDS",
       "Elastic Beanstalk",
       "SES"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   },
   {
     "id": "fusion",
@@ -63,7 +69,10 @@
       "RAG",
       "SageMaker",
       "Multi-AZ RDS"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   },
   {
     "id": "project-quorum",
@@ -90,7 +99,10 @@
       "Flutter",
       ".NET",
       "PHP"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   },
   {
     "id": "icon",
@@ -98,7 +110,7 @@
     "industry": "Intranet Software",
     "theme": "Human Resources",
     "summary": "AI-powered intranet platform designed to engage employees through personalized internal communications, social interaction, and knowledge sharing tools.",
-    "arr": "£45M",
+    "arr": "\u00a345M",
     "arrNumeric": 45000000,
     "currency": "GBP",
     "growthStage": "Growth Stage",
@@ -112,7 +124,10 @@
       "SQL Server",
       "AI/ML",
       "Elasticsearch"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "project-longhorn",
@@ -136,7 +151,10 @@
       "OpenAI",
       "Knockout.js",
       "Cordova"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "wolverine",
@@ -158,7 +176,10 @@
       "Go",
       "Gurobi",
       "LLM"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "project-shield",
@@ -177,7 +198,10 @@
       "SQL Server",
       "Azure",
       "Angular"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "catalyst",
@@ -203,7 +227,10 @@
       "PostgreSQL",
       "Redis",
       "OpenAI"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "project-titan",
@@ -225,7 +252,10 @@
       "MongoDB",
       "Google Cloud Platform",
       "AI/LLM"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "wellness",
@@ -248,7 +278,10 @@
       "Flutter",
       "WordPress",
       "WooCommerce"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "propel",
@@ -267,7 +300,10 @@
       "ML",
       "API",
       "Cloud-Native Architecture"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "cosy",
@@ -287,7 +323,10 @@
       "Node.js",
       "Vue.js",
       "Google Gemini AI"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "maverick",
@@ -307,7 +346,10 @@
       "AWS ECS",
       "Kubernetes",
       "PostgreSQL"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "marvel",
@@ -315,7 +357,7 @@
     "industry": "Information Management",
     "theme": "Software",
     "summary": "Knowledge work automation platform using metadata-centric organization to facilitate document and workflow management for enterprise customers.",
-    "arr": "€120M",
+    "arr": "\u20ac120M",
     "arrNumeric": 120000000,
     "currency": "EUR",
     "growthStage": "Mature Enterprise",
@@ -331,7 +373,10 @@
       "SQL Server",
       "NLP",
       "LLM"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "brazos",
@@ -350,7 +395,10 @@
       "Entra ID",
       "SysAid",
       "SonicWall VPN"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   },
   {
     "id": "project-everton",
@@ -373,7 +421,10 @@
       "SQL Server",
       "PostgreSQL",
       "MySQL"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "project-volcano",
@@ -401,7 +452,10 @@
       "Redshift",
       "Snowflake",
       "Kafka"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "wizard",
@@ -423,7 +477,10 @@
       "Jamf",
       "ServiceNow",
       "HubSpot"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "blue-water",
@@ -431,7 +488,7 @@
     "industry": "Public Health",
     "theme": "Healthcare",
     "summary": "Software solutions for organ, blood, and plasma management supporting regulatory compliance and process management for health systems.",
-    "arr": "€36M",
+    "arr": "\u20ac36M",
     "arrNumeric": 36000000,
     "currency": "EUR",
     "growthStage": "Mature",
@@ -445,7 +502,10 @@
       "PHP",
       "Groovy",
       "Microsoft stack"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "project-credential",
@@ -470,7 +530,10 @@
       "DataDog",
       "Matillion",
       "PHP 5.6"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "tempo",
@@ -488,7 +551,10 @@
       "SQL Server",
       "Generative AI",
       "FHIR standards"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "aviator",
@@ -506,7 +572,10 @@
       "Mav 2.0 Platform",
       "Verity ID",
       "Agile/Scrum"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "project-vanguard",
@@ -525,7 +594,10 @@
       "Rust",
       "Python",
       "Debian Linux"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "vanguard",
@@ -544,7 +616,10 @@
       "DynamoDB",
       "RDS",
       "Aurora"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "knapsack",
@@ -567,7 +642,10 @@
       "Azure",
       "GCP",
       "Apache NiFi"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "ultra2",
@@ -588,7 +666,10 @@
       "RPA",
       "Fortra JAMS",
       "Xceptor"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "gimmal",
@@ -609,7 +690,10 @@
       "REST API",
       "SAP",
       "SharePoint"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "arrow",
@@ -629,7 +713,10 @@
       "FoxPro",
       "Power BI",
       "SQL"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "inspire",
@@ -650,7 +737,10 @@
       "ReactJS",
       "Node.js",
       "SCORM"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "cogep",
@@ -674,7 +764,10 @@
       "iOS",
       "Android",
       "GCP"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "project-dynamic",
@@ -694,7 +787,10 @@
       "IBM AS/400",
       "PowerBI",
       "Salesforce"
-    ]
+    ],
+    "engagementType": "Value Creation - Turnaround",
+    "engagementTypeTag": "value-creation-turnaround",
+    "engagementTypeDescription": "Operational improvement for underperforming assets"
   },
   {
     "id": "project-trident",
@@ -722,7 +818,10 @@
       "SageMaker",
       "Python",
       "R"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "jogger",
@@ -746,7 +845,10 @@
       "Cloudflare",
       "WordPress",
       "Stripe"
-    ]
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
   },
   {
     "id": "project-eagle",
@@ -768,7 +870,10 @@
       "React",
       "Snowflake",
       "RESTful APIs"
-    ]
+    ],
+    "engagementType": "Value Creation - Modernization",
+    "engagementTypeTag": "value-creation-modernization",
+    "engagementTypeDescription": "Technology transformation and platform upgrades"
   },
   {
     "id": "carnation",
@@ -787,7 +892,10 @@
       "ETL",
       "AWS",
       "Terraform"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "ace",
@@ -805,7 +913,10 @@
       "Kubernetes",
       "EKS cluster",
       "Microservices"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "ecological",
@@ -824,7 +935,10 @@
       "Azure",
       "SQL Server",
       "low-code/no-code"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "munchies",
@@ -843,7 +957,10 @@
       "C#",
       ".NET",
       "AWS"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   },
   {
     "id": "paladin",
@@ -864,7 +981,10 @@
       "SQL Server",
       "Angular SPA",
       "React JS"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "epicurean",
@@ -882,7 +1002,10 @@
       "Google App Engine",
       "PaaS",
       "API"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "luminate",
@@ -904,7 +1027,10 @@
       "AWS",
       "Kubernetes",
       "Terraform"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "oktoberfest",
@@ -923,7 +1049,10 @@
       "Oracle",
       "Cloud-based systems",
       "SaaS"
-    ]
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Comprehensive technology evaluation"
   },
   {
     "id": "snacks",
@@ -942,7 +1071,10 @@
       "AWS",
       "PostgreSQL",
       "Containerization"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "project-teton",
@@ -961,7 +1093,10 @@
       "Microservices",
       "S3",
       "QuickSight"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "project-chariot",
@@ -980,7 +1115,10 @@
       "AWS",
       "DevOps",
       "SaaS"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "project-zoolander",
@@ -1002,7 +1140,10 @@
       "Android",
       "Python",
       "Machine Learning"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "onfray",
@@ -1026,7 +1167,10 @@
       "CoffeeScript",
       "TypeScript",
       "Twilio"
-    ]
+    ],
+    "engagementType": "Value Creation - Growth",
+    "engagementTypeTag": "value-creation-growth",
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
   },
   {
     "id": "goldfinch",
@@ -1046,7 +1190,10 @@
       "AWS Lambda",
       "Serverless",
       "REST API"
-    ]
+    ],
+    "engagementType": "Early Stage Assessment",
+    "engagementTypeTag": "early-stage-assessment",
+    "engagementTypeDescription": "Early-stage company technology validation"
   },
   {
     "id": "maple",
@@ -1062,7 +1209,10 @@
     "technologies": [
       "AWS",
       "Salesforce"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   },
   {
     "id": "maple-addon",
@@ -1084,6 +1234,9 @@
       "Angular",
       "SQL Database",
       "SQLite"
-    ]
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration"
   }
 ]
