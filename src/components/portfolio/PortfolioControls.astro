@@ -31,29 +31,31 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 <!-- Sticky Header with Search and Filter Toggle -->
 <div class="portfolio-controls-sticky">
   <div class="container">
-    <div class="search-box">
-      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.35-4.35"></path>
-      </svg>
-      <input
-        type="search"
-        id="search-input-2"
-        class="search-input"
-        placeholder="Search by project name, technology, or industry..."
-        aria-label="Search projects"
-      />
-    </div>
+    <div class="controls-wrapper">
+      <div class="search-box">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input
+          type="search"
+          id="search-input-2"
+          class="search-input"
+          placeholder="Search by project name, technology, or industry..."
+          aria-label="Search projects"
+        />
+      </div>
 
-    <button id="filter-toggle" class="filter-toggle" aria-label="Open filters" aria-expanded="false">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="4" y1="6" x2="20" y2="6"></line>
-        <line x1="4" y1="12" x2="20" y2="12"></line>
-        <line x1="4" y1="18" x2="20" y2="18"></line>
-      </svg>
-      <span class="filter-text">Filters</span>
-      <span class="filter-badge" aria-live="polite"></span>
-    </button>
+      <button id="filter-toggle" class="filter-toggle" aria-label="Open filters" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+        <span class="filter-text">Filters</span>
+        <span class="filter-badge" aria-live="polite"></span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -147,9 +149,16 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: flex-start;
     background: #ffffff;
+  }
+
+  .controls-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     border-bottom: 2px solid #05cd99;
+    padding-bottom: 0.625rem;
   }
 
   .search-box {
@@ -433,6 +442,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
   :global(body.dark-theme) .portfolio-controls-sticky .container {
     background: #1a1a1a;
+  }
+
+  :global(body.dark-theme) .controls-wrapper {
     border-bottom-color: #05cd99;
   }
 
