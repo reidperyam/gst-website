@@ -13,6 +13,8 @@ export interface Project {
   engagementType?: string;
   engagementTypeTag?: string;
   engagementTypeDescription?: string;
+  challenge?: string;
+  solution?: string;
 }
 
 export interface Stat {

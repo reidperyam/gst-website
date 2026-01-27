@@ -95,6 +95,16 @@ const { projects } = Astro.props;
         <p id="modal-summary-2" class="modal-text">Project summary goes here.</p>
       </div>
 
+      <div class="modal-section" id="modal-challenge-section" style="display: none;">
+        <h3 class="modal-section-title">Challenge</h3>
+        <p id="modal-challenge-2" class="modal-text">Challenge description goes here.</p>
+      </div>
+
+      <div class="modal-section" id="modal-solution-section" style="display: none;">
+        <h3 class="modal-section-title">Solution</h3>
+        <p id="modal-solution-2" class="modal-text">Solution description goes here.</p>
+      </div>
+
       <div class="modal-section">
         <h3 class="modal-section-title">Technologies</h3>
         <div id="modal-tech-tags-2" class="modal-tech-tags">
@@ -722,6 +732,24 @@ const { projects } = Astro.props;
     document.getElementById('modal-engagement-type-2').textContent = project.engagementType || 'N/A';
     document.getElementById('modal-engagement-description-2').textContent = project.engagementTypeDescription || '';
     document.getElementById('modal-summary-2').textContent = project.summary;
+
+    // Handle Challenge section (show only if present)
+    const challengeSection = document.getElementById('modal-challenge-section');
+    if (project.challenge) {
+      document.getElementById('modal-challenge-2').textContent = project.challenge;
+      challengeSection.style.display = 'block';
+    } else {
+      challengeSection.style.display = 'none';
+    }
+
+    // Handle Solution section (show only if present)
+    const solutionSection = document.getElementById('modal-solution-section');
+    if (project.solution) {
+      document.getElementById('modal-solution-2').textContent = project.solution;
+      solutionSection.style.display = 'block';
+    } else {
+      solutionSection.style.display = 'none';
+    }
 
     // Render technologies
     const techs = Array.isArray(project.technologies)

@@ -12,7 +12,7 @@ const { stats } = Astro.props;
   <div class="container">
     <div class="portfolio-header-content">
       <div class="portfolio-brand">
-        <h1 class="portfolio-title">Select Project Portfolio</h1>
+        <h1 class="portfolio-title">CLIENT ENGAGEMENTS</h1>
       </div>
       <div class="portfolio-stats">
         {stats.map((stat) => (
@@ -30,10 +30,7 @@ const { stats } = Astro.props;
   .portfolio-header {
     background: #f5f5f5;
     border-bottom: 4px solid #05cd99;
-    padding: 1.5rem 0;
-    position: sticky;
-    top: 73px;
-    z-index: 99;
+    padding: 0.875rem 0;
   }
 
   .portfolio-header-content {
@@ -97,7 +94,7 @@ const { stats } = Astro.props;
 
   @media (max-width: 768px) {
     .portfolio-header {
-      padding: 1rem 0;
+      padding: 0.875rem 0;
     }
 
     .portfolio-header-content {
@@ -134,7 +131,7 @@ const { stats } = Astro.props;
 
   @media (max-width: 480px) {
     .portfolio-header {
-      padding: 0.75rem 0;
+      padding: 0.875rem 0;
     }
 
     .portfolio-header-content {
