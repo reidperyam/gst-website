@@ -9,14 +9,12 @@ import type { Project, Stat } from '../types/portfolio';
 const typedProjects = projects as Project[];
 
 // Calculate statistics
-const totalProjects = typedProjects.length;
 const uniqueIndustries = new Set(typedProjects.map(p => p.industry)).size;
 const minYear = Math.min(...typedProjects.map(p => p.year));
 const maxYear = Math.max(...typedProjects.map(p => p.year));
 const yearSpan = maxYear - minYear;
 
 const stats: Stat[] = [
-  { label: 'Projects', value: totalProjects.toString() },
   { label: 'Combined ARR', value: '$2B+' },
   { label: 'Industries', value: uniqueIndustries.toString() },
   { label: 'Global Markets', value: '12+' },
