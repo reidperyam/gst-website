@@ -144,14 +144,14 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   .portfolio-controls-sticky .container {
-    max-width: 1400px;
+    max-width: none;
     width: 100%;
-    padding: 0.625rem 1.5rem;
-    margin: 0 auto;
+    padding: 0;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background: #ffffff;
+    background: transparent;
   }
 
   .controls-wrapper {
@@ -159,7 +159,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     align-items: center;
     gap: 0.75rem;
     border-bottom: 2px solid #05cd99;
-    padding-bottom: 0.625rem;
+    padding: 0.625rem 1.5rem 0.625rem 1.5rem;
     width: fit-content;
   }
 
@@ -544,20 +544,24 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   /* Responsive */
   @media (max-width: 768px) {
     .portfolio-controls-sticky {
-      padding: 0.625rem 0;
+      padding: 0;
     }
 
     .portfolio-controls-sticky.sticky-active {
       position: fixed;
-      left: 0;
-      right: 0;
-      width: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 1432px;
       z-index: 101;
     }
 
     .portfolio-controls-sticky .container {
-      padding: 0.625rem 1rem;
-      gap: 0.75rem;
+      padding: 0;
+    }
+
+    .controls-wrapper {
+      padding: 0.625rem 1rem 0.625rem 1rem;
     }
 
     .search-box {
@@ -598,22 +602,26 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
   @media (max-width: 480px) {
     .portfolio-controls-sticky {
-      padding: 0.625rem 0;
+      padding: 0;
       height: auto;
     }
 
     .portfolio-controls-sticky.sticky-active {
       position: fixed;
-      left: 0;
-      right: 0;
-      width: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 1.5rem);
+      max-width: 1432px;
       z-index: 101;
     }
 
     .portfolio-controls-sticky .container {
-      padding: 0 0.75rem;
+      padding: 0;
+    }
+
+    .controls-wrapper {
+      padding: 0.625rem 0.75rem 0.625rem 0.75rem;
       gap: 0.5rem;
-      flex-wrap: nowrap;
     }
 
     .search-box {
