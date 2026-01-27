@@ -135,6 +135,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     position: fixed;
     top: 0;
     width: 100%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .portfolio-controls-sticky .container {
@@ -533,6 +536,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     .portfolio-controls-sticky.sticky-active {
       position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       width: 100%;
     }
 
@@ -586,6 +591,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     .portfolio-controls-sticky.sticky-active {
       position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       width: 100%;
     }
 
@@ -1005,34 +1012,49 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   };
 </script>
 
-<script is:inline>
+<script>
   // Initialize sticky scroll behavior
   function initStickyControls() {
     const controlsElement = document.querySelector('.portfolio-controls-sticky');
     const headerElement = document.querySelector('.portfolio-header');
 
-    if (!controlsElement || !headerElement) return;
+    console.log('[initStickyControls] Controls element found:', !!controlsElement);
+    console.log('[initStickyControls] Header element found:', !!headerElement);
+
+    if (!controlsElement || !headerElement) {
+      console.log('[initStickyControls] Missing required elements');
+      return;
+    }
+
+    let isSticky = false;
 
     function handleScroll() {
       const headerRect = headerElement.getBoundingClientRect();
-      const headerBottom = headerRect.bottom;
+      const shouldBeSticky = headerRect.bottom <= 0;
 
-      // When header scrolls out of view (headerBottom <= 0), make controls sticky
-      if (headerBottom <= 0) {
-        controlsElement.classList.add('sticky-active');
-      } else {
-        controlsElement.classList.remove('sticky-active');
+      // Only update if state changed
+      if (shouldBeSticky !== isSticky) {
+        if (shouldBeSticky) {
+          controlsElement.classList.add('sticky-active');
+          console.log('[handleScroll] Sticky ON at headerBottom:', headerRect.bottom);
+        } else {
+          controlsElement.classList.remove('sticky-active');
+          console.log('[handleScroll] Sticky OFF at headerBottom:', headerRect.bottom);
+        }
+        isSticky = shouldBeSticky;
       }
     }
 
-    // Use passive event listener for better scroll performance
+    // Attach scroll listener
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
 
-    // Initial check in case page loads already scrolled
+    // Initial check
     handleScroll();
+    console.log('[initStickyControls] Initialized');
   }
 
-  // Initialize when DOM is ready
+  // Run when ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initStickyControls);
   } else {
