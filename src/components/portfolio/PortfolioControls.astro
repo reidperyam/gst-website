@@ -121,13 +121,19 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     background: #ffffff;
     border-bottom: none;
     padding: 0.625rem 0;
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 98;
     height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    transition: position 0.2s ease-out, top 0.2s ease-out;
+  }
+
+  .portfolio-controls-sticky.sticky-active {
+    position: fixed;
+    top: 0;
     width: 100%;
   }
 
@@ -522,7 +528,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   @media (max-width: 768px) {
     .portfolio-controls-sticky {
       padding: 0.625rem 0;
+    }
+
+    .portfolio-controls-sticky.sticky-active {
+      position: fixed;
       top: 0;
+      width: 100%;
     }
 
     .portfolio-controls-sticky .container {
@@ -570,7 +581,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     .portfolio-controls-sticky {
       padding: 0.625rem 0;
       height: auto;
+    }
+
+    .portfolio-controls-sticky.sticky-active {
+      position: fixed;
       top: 0;
+      width: 100%;
     }
 
     .portfolio-controls-sticky .container {
@@ -987,4 +1003,39 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     getFilteredProjects: () => window.portfolioState.filteredProjects,
     getFilters: () => window.portfolioState.filters
   };
+</script>
+
+<script is:inline>
+  // Initialize sticky scroll behavior
+  function initStickyControls() {
+    const controlsElement = document.querySelector('.portfolio-controls-sticky');
+    const headerElement = document.querySelector('.portfolio-header');
+
+    if (!controlsElement || !headerElement) return;
+
+    function handleScroll() {
+      const headerRect = headerElement.getBoundingClientRect();
+      const headerBottom = headerRect.bottom;
+
+      // When header scrolls out of view (headerBottom <= 0), make controls sticky
+      if (headerBottom <= 0) {
+        controlsElement.classList.add('sticky-active');
+      } else {
+        controlsElement.classList.remove('sticky-active');
+      }
+    }
+
+    // Use passive event listener for better scroll performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial check in case page loads already scrolled
+    handleScroll();
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStickyControls);
+  } else {
+    initStickyControls();
+  }
 </script>
