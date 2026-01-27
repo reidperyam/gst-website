@@ -135,9 +135,10 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
   .portfolio-controls-sticky.sticky-active {
     position: fixed;
-    left: 0;
-    right: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 3rem);
+    max-width: 1432px;
     z-index: 101;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
