@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PortfolioHeader from '../components/portfolio/PortfolioHeader.astro';
-import PortfolioControls from '../components/portfolio/PortfolioControls.astro';
 import PortfolioGrid from '../components/portfolio/PortfolioGrid.astro';
 import projects from '../data/projects.json';
 import type { Project, Stat } from '../types/portfolio';
@@ -30,8 +29,7 @@ const portfolioType = 'ma';
   description="Explore our track record of 51 M&A advisory and implementation projects across healthcare, logistics, software, finance, and more."
 >
   <main>
-    <PortfolioHeader stats={stats} portfolioType={portfolioType} />
-    <PortfolioControls projects={typedProjects} />
+    <PortfolioHeader stats={stats} portfolioType={portfolioType} projects={typedProjects} />
     <PortfolioGrid projects={typedProjects} />
   </main>
 </BaseLayout>
