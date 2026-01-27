@@ -25,7 +25,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Creating a technology roadmap for a surgical platform.",
+    "solution": "Designed a 12-month plan to containerize legacy applications (Docker) and move to a modern multi-tenant AWS architecture.",
+    "engagementCategory": "Value Creation & Strategy"
   },
   {
     "id": "imex",
@@ -47,7 +50,10 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": "Moving collision repair desktop tools to the cloud.",
+    "solution": "Recommended integrating on-premise desktop applications into a cloud architecture to remove client deployment burdens.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "fusion",
@@ -72,7 +78,10 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": "Planning international expansion for a registry platform.",
+    "solution": "Mapped expansion complexity across Singapore, UK, and Canada to forecast R&D investment needs.",
+    "engagementCategory": "Value Creation & Strategy"
   },
   {
     "id": "project-quorum",
@@ -102,7 +111,10 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": "Showcasing a high-volume data platform processing high-volume data processing.",
+    "solution": "Produced an external report validating the Python/Django architecture and the modernization roadmap for legacy 'legacy product' products.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "icon",
@@ -127,7 +139,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Validating a global R&D organization for a significant annual recurring revenue intranet software provider.",
+    "solution": "Verified 'key financial performance metric' financial performance and low R&D costs (low percentage of ARR) to prove efficiency to investors.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "project-longhorn",
@@ -154,7 +169,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": "Optimizing R&D for a .NET/React platform.",
+    "solution": "Identified opportunities to use customer data to drive roadmap decisions and build engineering depth in AI/ML.",
+    "engagementCategory": "Value Creation & Strategy"
   },
   {
     "id": "wolverine",
@@ -179,7 +197,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": "Validating a cloud-native supply chain design platform.",
+    "solution": "Recommended a 'refactoring program' to target complex code modules in the solver components.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-shield",
@@ -201,7 +222,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "catalyst",
@@ -230,7 +254,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": "Rapid 'First Impressions' assessment of a target with 1.5M lines of code.",
+    "solution": "Validated the use of TypeScript/React but flagged potential data breach history requiring dark web scans.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-titan",
@@ -255,7 +282,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": "Validating a trading platform covering extensive financial instrument coverage.",
+    "solution": "Assessed the migration to Snowflake for data independence and validated the modular service-oriented architecture.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "wellness",
@@ -263,8 +293,8 @@
     "industry": "Telehealth",
     "theme": "Healthcare",
     "summary": "Telemedicine platform and patient portal for hormones and clinical treatment management including provider and administrative workflows.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
+    "arr": "$70M",
+    "arrNumeric": 70000000,
     "currency": "USD",
     "growthStage": "Growth",
     "year": 2025,
@@ -281,7 +311,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Evaluating a direct-to-consumer telemedicine model.",
+    "solution": "Confirmed a 'Growth-Ready' SDLC but recommended replacing legacy framework with Laravel to reduce maintenance costs.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "propel",
@@ -303,7 +336,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": "Developing the 'Product & Technology aspects of the Investment Thesis' for an airline cargo platform.",
+    "solution": "Helped the client demonstrate 'increased revenue potential for airline partners' to potential buyers.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "cosy",
@@ -326,7 +362,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "maverick",
@@ -349,7 +388,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Analyzing extensive codebase for a registration and titling platform.",
+    "solution": "Identified high code complexity in legacy 'legacy registration system' products and recommended moving from AngularJS to ReactJS.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "marvel",
@@ -376,7 +418,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Preparing a substantial revenue document management platform for transaction.",
+    "solution": "Coached the team to handle 'Rude Q&A' regarding legacy code and validated the metadata-centric 'platform consolidation' consolidation strategy.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "brazos",
@@ -398,7 +443,10 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": "Evaluating legacy systems for a chemical manufacturing provider.",
+    "solution": "Benchmarked IT maturity against 'Tech-Enabled' industry standards to identify operational gaps.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-everton",
@@ -424,7 +472,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Demonstrating scalability for a substantial revenue event management platform handling substantial data volume.",
+    "solution": "Validated the customer data platform and AWS RDS architecture to support a clean external investor report.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "project-volcano",
@@ -455,7 +506,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Auditing a DSP/SSP platform processing high-volume transaction processing.",
+    "solution": "Validated the scalability of the Go/Python backend but flagged identified technical debt items for remediation.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "wizard",
@@ -480,7 +534,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": "Carving out a global identity security company from a major insurance parent.",
+    "solution": "Designed a plan to replace parent-provided IT services and establish standalone operations.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "blue-water",
@@ -505,7 +562,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Assessing a transplant management system handling sensitive biological data.",
+    "solution": "Identified 'over-coupled' Docker containers and recommended a move to distinct instances to prevent outages.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-credential",
@@ -533,7 +593,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": "Evaluating an education-to-career pathway platform for post-acquisition integration.",
+    "solution": "Confirmed the Snowflake/Matillion data pipeline would support smooth data integration.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "tempo",
@@ -554,7 +617,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": "Scaling a professional services firm's technology.",
+    "solution": "Recommended migrating to a robust ERP solution to support professional services automation and financials as the company scales.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "aviator",
@@ -575,7 +641,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Ensuring a remote notary platform could scale revenue without disproportionate R&D cost.",
+    "solution": "Recommended replacing contractor teams with FTEs and implementing automated CI/CD pipelines.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-vanguard",
@@ -597,7 +666,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Proving integration readiness for a data integration service company.",
+    "solution": "Demonstrated that the SaaS-based back-office operations would require 'minimal technical consolidation' for the acquirer.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "vanguard",
@@ -619,7 +691,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Proving integration readiness for a data integration service company.",
+    "solution": "Demonstrated that the SaaS-based back-office operations would require 'minimal technical consolidation' for the acquirer.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "knapsack",
@@ -645,7 +720,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Assessing a scheduling solution for complex manufacturing constraints.",
+    "solution": "Recommended developing a new integration platform to facilitate data interchange with the acquirer\u2019s MES offerings.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "ultra2",
@@ -669,7 +747,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Assessing a 20-application 'enterprise suite' platform for financial funds.",
+    "solution": "Validated the 'Buy vs. Build' strategy for enterprise systems and the use of RPA for event-driven business rules.",
+    "engagementCategory": "Value Creation & Strategy"
   },
   {
     "id": "gimmal",
@@ -693,7 +774,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "arrow",
@@ -716,7 +800,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Validating revenue cycle management systems for hospitals.",
+    "solution": "Flagged critical risks in the use of legacy system and recommended a modernization plan for custom ETL processes.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "inspire",
@@ -740,7 +827,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "cogep",
@@ -767,7 +857,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Modernizing a 30-year-old maintenance management system for the cloud.",
+    "solution": "Proposed a re-architecture plan to move from legacy on-premise systems to a modern SaaS-ready tech stack.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-dynamic",
@@ -790,7 +883,10 @@
     ],
     "engagementType": "Value Creation - Turnaround",
     "engagementTypeTag": "value-creation-turnaround",
-    "engagementTypeDescription": "Operational improvement for underperforming assets"
+    "engagementTypeDescription": "Operational improvement for underperforming assets",
+    "challenge": "Preparing a food & beverage manufacturer with legacy BPCS ERP systems for sale.",
+    "solution": "Delivered internal recommendations to articulate the IT turnaround story and defend technical debt in Oracle/legacy ERP systems to potential buyers.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "project-trident",
@@ -821,7 +917,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Proving the scalability of a mental health platform for students.",
+    "solution": "Validated a modern React/Node.js tech stack with substantial codebase and 'no technical debt' affecting the roadmap.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "jogger",
@@ -848,7 +947,10 @@
     ],
     "engagementType": "Buy-Side Technical Diligence",
     "engagementTypeTag": "buy-side-diligence",
-    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors"
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Proving the platform readiness of a real estate investing community.",
+    "solution": "Highlighted an exceptional strong customer satisfaction metrics and a clear roadmap to demonstrate long-term growth potential.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "project-eagle",
@@ -873,7 +975,10 @@
     ],
     "engagementType": "Value Creation - Modernization",
     "engagementTypeTag": "value-creation-modernization",
-    "engagementTypeDescription": "Technology transformation and platform upgrades"
+    "engagementTypeDescription": "Technology transformation and platform upgrades",
+    "challenge": "Positioning a complex payments platform with 7 distinct products for exit.",
+    "solution": "Validated the 'microservices architecture' microservices architecture and highlighted a majority of resources to maintenance to prove operational maturity to investors.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "carnation",
@@ -895,7 +1000,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": "Determining if an oncology platform could support a 3x increase in volume.",
+    "solution": "Validated the containerized architecture and recommended building an AI/ML curation tool to replace manual workflows.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "ace",
@@ -916,7 +1024,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Assessing a cybersecurity firm aiming to democratize protection for SMBs.",
+    "solution": "Validated the platform's ability to scale from 5,000 to 25,000 active users.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "ecological",
@@ -938,7 +1049,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Assessing a regulatory permit platform's ability to grow revenue 3-4X.",
+    "solution": "Recommended integrating a leading IAM PaaS to replace custom authentication and implementing automated load testing.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "munchies",
@@ -960,7 +1074,10 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": "Assessing a pricing engine coupled to the third-party platform PaaS.",
+    "solution": "Flagged 'Critical' risk in third-party platform dependency; recommended immediate refactoring into interface-driven services.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "paladin",
@@ -984,7 +1101,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": "Sell-side preparation for a driver safety and compliance platform.",
+    "solution": "Verified the maturity of the RESTful API and Service-Oriented Architecture (SOA) to support a smooth transition for the buyer.",
+    "engagementCategory": "Sell-Side Advisory"
   },
   {
     "id": "epicurean",
@@ -1005,7 +1125,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Assessing scalability of inventory apps for grocery operations.",
+    "solution": "Recommended formal business impact analysis (BIA) to model ransomware and outage risks.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "luminate",
@@ -1030,7 +1153,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Validating an 'Intelligent Document Processing' (IDP) company.",
+    "solution": "Verified the academic depth of the data science team and assessed the NLP algorithms driving the product.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "oktoberfest",
@@ -1052,7 +1178,10 @@
     ],
     "engagementType": "Technical Assessment",
     "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Comprehensive technology evaluation"
+    "engagementTypeDescription": "Comprehensive technology evaluation",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "snacks",
@@ -1074,7 +1203,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": "Assessing a pricing optimization platform for independent grocers.",
+    "solution": "Validated the AWS/PostgreSQL architecture but recommended defining a data retention policy to manage storage growth.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "project-teton",
@@ -1096,7 +1228,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "project-chariot",
@@ -1118,7 +1253,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "project-zoolander",
@@ -1143,7 +1281,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "onfray",
@@ -1170,7 +1311,10 @@
     ],
     "engagementType": "Value Creation - Growth",
     "engagementTypeTag": "value-creation-growth",
-    "engagementTypeDescription": "Scaling support for high-growth portfolio companies"
+    "engagementTypeDescription": "Scaling support for high-growth portfolio companies",
+    "challenge": "Ensuring a platform could support 5x growth in transaction volume.",
+    "solution": "Identified risks in legacy CoffeeScript/AngularJS code and validated the migration path to ReactJS.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "goldfinch",
@@ -1193,7 +1337,10 @@
     ],
     "engagementType": "Early Stage Assessment",
     "engagementTypeTag": "early-stage-assessment",
-    "engagementTypeDescription": "Early-stage company technology validation"
+    "engagementTypeDescription": "Early-stage company technology validation",
+    "challenge": "Validating an AI/NLU customer service platform.",
+    "solution": "Identified that legacy systems comprised significant portion of hosting costs and recommended a third-party vendor for cost-reduction.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
     "id": "maple",
@@ -1212,7 +1359,10 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   },
   {
     "id": "maple-addon",
@@ -1237,6 +1387,9 @@
     ],
     "engagementType": "Value Creation - Integration",
     "engagementTypeTag": "value-creation-integration",
-    "engagementTypeDescription": "Post-acquisition platform and system integration"
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": null,
+    "solution": null,
+    "engagementCategory": null
   }
 ]
