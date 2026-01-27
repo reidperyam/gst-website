@@ -133,7 +133,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
   .portfolio-controls-sticky.sticky-active {
     position: fixed;
-    top: 0;
     width: 100%;
     left: 0;
     right: 0;
@@ -536,7 +535,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     .portfolio-controls-sticky.sticky-active {
       position: fixed;
-      top: 0;
       left: 0;
       right: 0;
       width: 100%;
@@ -592,7 +590,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     .portfolio-controls-sticky.sticky-active {
       position: fixed;
-      top: 0;
       left: 0;
       right: 0;
       width: 100%;
@@ -1020,9 +1017,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   function initStickyControls() {
     const controlsElement = document.querySelector('.portfolio-controls-sticky');
     const headerElement = document.querySelector('.portfolio-header');
+    const navHeader = document.querySelector('header');
 
     console.log('[initStickyControls] Controls element found:', !!controlsElement);
     console.log('[initStickyControls] Header element found:', !!headerElement);
+    console.log('[initStickyControls] Nav header found:', !!navHeader);
 
     if (!controlsElement || !headerElement) {
       console.log('[initStickyControls] Missing required elements');
@@ -1039,9 +1038,13 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       if (shouldBeSticky !== isSticky) {
         if (shouldBeSticky) {
           controlsElement.classList.add('sticky-active');
-          console.log('[handleScroll] Sticky ON at headerBottom:', headerRect.bottom);
+          // Position below the nav header
+          const navHeight = navHeader ? navHeader.offsetHeight : 0;
+          controlsElement.style.top = navHeight + 'px';
+          console.log('[handleScroll] Sticky ON at headerBottom:', headerRect.bottom, 'nav height:', navHeight);
         } else {
           controlsElement.classList.remove('sticky-active');
+          controlsElement.style.top = '';
           console.log('[handleScroll] Sticky OFF at headerBottom:', headerRect.bottom);
         }
         isSticky = shouldBeSticky;
