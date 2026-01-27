@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PortfolioHeader from '../components/portfolio/PortfolioHeader.astro';
 import PortfolioGrid from '../components/portfolio/PortfolioGrid.astro';
+import StickyControls from '../components/portfolio/StickyControls.astro';
 import projects from '../data/projects.json';
 import type { Project, Stat } from '../types/portfolio';
 
@@ -28,6 +29,7 @@ const portfolioType = 'ma';
   title="M&A Portfolio | Strategic Advisory & Implementation"
   description="Explore our track record of 51 M&A advisory and implementation projects across healthcare, logistics, software, finance, and more."
 >
+  <StickyControls projects={typedProjects} />
   <main>
     <PortfolioHeader stats={stats} portfolioType={portfolioType} projects={typedProjects} />
     <PortfolioGrid projects={typedProjects} />
