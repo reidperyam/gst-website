@@ -605,17 +605,23 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       left: 50%;
       transform: translateX(-50%);
       width: fit-content;
-      max-width: calc(100% - 1.5rem);
+      max-width: calc(100% - 1rem);
       z-index: 1002;
     }
 
     .portfolio-controls-sticky .container {
       padding: 0 0.75rem;
+      width: 100%;
+    }
+
+    .controls-wrapper {
+      width: 100%;
+      gap: 0.5rem;
     }
 
     .search-box {
       flex: 1;
-      min-width: 200px;
+      min-width: auto;
       min-height: 38px;
       display: flex;
       align-items: center;
@@ -635,7 +641,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     }
 
     .filter-toggle {
-      width: 38px;
+      width: 36px;
       height: 38px;
       padding: 0;
       display: flex;
