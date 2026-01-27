@@ -3,16 +3,19 @@ import type { Stat } from '../../types/portfolio';
 
 interface Props {
   stats: Stat[];
+  portfolioType?: string;
 }
 
-const { stats } = Astro.props;
+const { stats, portfolioType = 'standard' } = Astro.props;
+
+const title = portfolioType === 'ma' ? 'CLIENT M&A ENGAGEMENTS' : 'CLIENT ENGAGEMENTS';
 ---
 
 <div class="portfolio-header">
   <div class="container">
     <div class="portfolio-header-content">
       <div class="portfolio-brand">
-        <h1 class="portfolio-title">CLIENT ENGAGEMENTS</h1>
+        <h1 class="portfolio-title">{title}</h1>
       </div>
       <div class="portfolio-stats">
         {stats.map((stat) => (
@@ -28,8 +31,8 @@ const { stats } = Astro.props;
 
 <style>
   .portfolio-header {
-    background: #f5f5f5;
-    border-bottom: 4px solid #05cd99;
+    background: #ffffff;
+    border-bottom: none;
     padding: 0.875rem 0;
   }
 

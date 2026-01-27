@@ -10,26 +10,29 @@ const typedProjects = projects as Project[];
 
 // Calculate statistics
 const totalProjects = typedProjects.length;
-const totalArrNumeric = typedProjects.reduce((sum, p) => sum + (p.arrNumeric || 0), 0);
-const totalArr = `$${(totalArrNumeric / 1000000000).toFixed(1)}B+`;
 const uniqueIndustries = new Set(typedProjects.map(p => p.industry)).size;
-const yearRange = `${Math.min(...typedProjects.map(p => p.year))}-${Math.max(...typedProjects.map(p => p.year))}`;
+const minYear = Math.min(...typedProjects.map(p => p.year));
+const maxYear = Math.max(...typedProjects.map(p => p.year));
+const yearSpan = maxYear - minYear;
 
 const stats: Stat[] = [
   { label: 'Projects', value: totalProjects.toString() },
-  { label: 'Combined ARR', value: totalArr },
+  { label: 'Combined ARR', value: '$2B+' },
   { label: 'Industries', value: uniqueIndustries.toString() },
   { label: 'Global Markets', value: '12+' },
-  { label: 'Portfolio Span', value: yearRange },
+  { label: 'Year Span', value: yearSpan.toString() },
 ];
+
+// Pass the portfolio type to header
+const portfolioType = 'ma';
 ---
 
 <BaseLayout
-  title="Portfolio | Strategic Advisory & Implementation"
-  description="Explore our track record of 51 strategic advisory and implementation projects across healthcare, logistics, software, finance, and more."
+  title="M&A Portfolio | Strategic Advisory & Implementation"
+  description="Explore our track record of 51 M&A advisory and implementation projects across healthcare, logistics, software, finance, and more."
 >
   <main>
-    <PortfolioHeader stats={stats} />
+    <PortfolioHeader stats={stats} portfolioType={portfolioType} />
     <PortfolioControls projects={typedProjects} />
     <PortfolioGrid projects={typedProjects} />
   </main>
