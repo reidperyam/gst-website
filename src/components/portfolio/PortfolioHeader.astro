@@ -62,7 +62,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
               <line x1="4" y1="18" x2="20" y2="18"></line>
             </svg>
             <span class="filter-text">Filters</span>
-            <span class="filter-badge" aria-live="polite"></span>
+            <span id="filter-badge-header" class="filter-badge" aria-live="polite"></span>
           </button>
         </div>
       </div>
@@ -946,18 +946,26 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   function updateFilterBadge() {
-    const badge = document.querySelector('.filter-badge');
-    const toggle = document.getElementById('filter-toggle');
+    const headerBadge = document.getElementById('filter-badge-header');
+    const stickyBadge = document.getElementById('filter-badge-sticky');
+    const activeCount = Object.values(filters).filter(v => v !== 'all' && v !== '').length;
 
-    if (!badge || !toggle) return;
+    if (headerBadge) {
+      if (activeCount > 0) {
+        headerBadge.style.display = 'inline-flex';
+        headerBadge.textContent = activeCount;
+      } else {
+        headerBadge.style.display = 'none';
+      }
+    }
 
-    const activeCount = Object.values(filters).filter(v => v !== 'all').length;
-
-    if (activeCount > 0) {
-      badge.style.display = 'inline-flex';
-      badge.textContent = activeCount;
-    } else {
-      badge.style.display = 'none';
+    if (stickyBadge) {
+      if (activeCount > 0) {
+        stickyBadge.style.display = 'inline-flex';
+        stickyBadge.textContent = activeCount;
+      } else {
+        stickyBadge.style.display = 'none';
+      }
     }
   }
 
