@@ -1,15 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import StatsBar from '../components/StatsBar.astro';
 import CTASection from '../components/CTASection.astro';
-
-const stats = [
-    { value: '$2B+', label: 'Combined ARR' },
-    { value: '44', label: 'Industries' },
-    { value: '12+', label: 'Global Markets' },
-    { value: '4', label: 'Year Span' },
-];
 ---
 
 <BaseLayout
@@ -22,12 +14,10 @@ const stats = [
         description="Technical diligence, integration planning, and value creation execution for high-stakes transactions."
     />
 
-    <StatsBar stats={stats} />
-
     <CTASection
         title="Let's discuss your next challenge"
         description="Schedule a confidential consultation to discuss your objectives."
         buttonText="BOOK_CALENDAR_SLOT()"
-        buttonAction="mailto:contact@globalstrategic.tech"
+        calendlyUrl="https://calendly.com/globalstrategictech"
     />
 </BaseLayout>
