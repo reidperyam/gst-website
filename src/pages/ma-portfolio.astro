@@ -11,11 +11,15 @@ const typedProjects = projects as Project[];
 
 // Calculate statistics
 const uniqueIndustries = new Set(typedProjects.map(p => p.industry)).size;
+const minYear = Math.min(...typedProjects.map(p => p.year));
+const maxYear = Math.max(...typedProjects.map(p => p.year));
+const yearSpan = maxYear - minYear;
 
 const stats: Stat[] = [
   { label: 'Combined ARR', value: '$2B+' },
   { label: 'Industries', value: uniqueIndustries.toString() },
   { label: 'Global Markets', value: '12+' },
+  { label: 'Year Span', value: yearSpan.toString() },
 ];
 
 // Pass the portfolio type to header
