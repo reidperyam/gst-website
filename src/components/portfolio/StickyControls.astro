@@ -821,10 +821,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
             drawer.classList.remove('open');
             overlay.classList.remove('open');
             toggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
           } else {
             drawer.classList.add('open');
             overlay.classList.add('open');
             toggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
           }
         }
       }
@@ -838,6 +840,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         if (toggle2) {
           toggle2.setAttribute('aria-expanded', 'false');
         }
+        document.body.style.overflow = '';
       }
 
       if (overlayClick && drawer && overlay) {
@@ -849,6 +852,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         if (toggle2) {
           toggle2.setAttribute('aria-expanded', 'false');
         }
+        document.body.style.overflow = '';
       }
     });
   }
