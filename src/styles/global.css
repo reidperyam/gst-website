@@ -492,6 +492,8 @@ footer {
     padding: 4rem 0 2rem 0;
     background: #eeeeee;
     border-top: 4px solid #05cd99;
+    position: relative;
+    z-index: 0;
 }
 
 .footer-content {
