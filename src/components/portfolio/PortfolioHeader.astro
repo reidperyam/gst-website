@@ -2,12 +2,11 @@
 import type { Stat, Project } from '../../types/portfolio';
 
 interface Props {
-  stats: Stat[];
   portfolioType?: string;
   projects?: Project[];
 }
 
-const { stats, portfolioType = 'standard', projects = [] } = Astro.props;
+const { portfolioType = 'standard', projects = [] } = Astro.props;
 
 const title = portfolioType === 'ma' ? 'CLIENT M&A ENGAGEMENTS' : 'CLIENT ENGAGEMENTS';
 
@@ -66,15 +65,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
             <span class="filter-badge" aria-live="polite"></span>
           </button>
         </div>
-      </div>
-
-      <div class="portfolio-stats">
-        {stats.map((stat) => (
-          <div class="portfolio-stat">
-            <div class="portfolio-stat-value">{stat.value}</div>
-            <div class="portfolio-stat-label">{stat.label}</div>
-          </div>
-        ))}
       </div>
     </div>
   </div>
@@ -469,34 +459,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     pointer-events: auto;
   }
 
-  /* Portfolio Stats */
-  .portfolio-stats {
-    display: flex;
-    gap: 3rem;
-    font-size: 0.875rem;
-    white-space: nowrap;
-  }
-
-  .portfolio-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .portfolio-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #05cd99;
-    letter-spacing: -0.02em;
-  }
-
-  .portfolio-stat-label {
-    font-size: 0.75rem;
-    color: rgba(26, 26, 26, 0.65);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
   /* Dark Theme */
   :global(body.dark-theme) .portfolio-header {
     background: #0a0a0a;
@@ -604,10 +566,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     border-color: #05cd99;
   }
 
-  :global(body.dark-theme) .portfolio-stat-label {
-    color: rgba(200, 200, 200, 0.65);
-  }
-
   /* Responsive */
   @media (max-width: 768px) {
     .portfolio-header-content {
@@ -669,27 +627,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     .portfolio-filter-drawer.open {
       right: 0;
-    }
-
-    .portfolio-stats {
-      display: flex;
-      gap: 2rem;
-      width: 100%;
-      font-size: 0.75rem;
-      justify-content: space-between;
-      white-space: normal;
-    }
-
-    .portfolio-stat {
-      align-items: flex-start;
-    }
-
-    .portfolio-stat-value {
-      font-size: 1.25rem;
-    }
-
-    .portfolio-stat-label {
-      font-size: 0.65rem;
     }
   }
 
@@ -801,20 +738,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .portfolio-stats {
-      gap: 1rem;
-      font-size: 0.65rem;
-    }
-
-    .portfolio-stat-value {
-      font-size: 1rem;
-    }
-
-    .portfolio-stat-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.03em;
     }
   }
 </style>
