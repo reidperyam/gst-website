@@ -129,8 +129,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     pointer-events: none;
   }
 
-  .sticky-controls-overlay > div,
-  .sticky-controls-overlay > div > * {
+  .sticky-controls-overlay * {
     pointer-events: auto;
   }
 
@@ -167,6 +166,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     border-bottom: 2px solid #05cd99;
     padding: 0.625rem 1.5rem 0.625rem 0;
     width: fit-content;
+    pointer-events: auto;
   }
 
   .search-box {
@@ -229,6 +229,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     white-space: nowrap;
     position: relative;
     min-height: 38px;
+    pointer-events: auto;
   }
 
   .filter-toggle:hover {
@@ -866,32 +867,39 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   function attachDrawerListeners() {
-    const toggle = document.getElementById('filter-toggle');
-    const closeBtn = document.getElementById('drawer-close');
-    const overlay = document.getElementById('filter-overlay');
-    const clearBtn = document.getElementById('clear-filters');
+    // Use event delegation on the document for click events
+    document.addEventListener('click', (e) => {
+      const toggle = e.target.closest('#filter-toggle');
+      const closeBtn = e.target.closest('#drawer-close');
+      const overlay = e.target.closest('#filter-overlay');
+      const clearBtn = e.target.closest('#clear-filters');
 
-    if (toggle) {
-      toggle.addEventListener('click', () => {
+      if (toggle) {
+        e.preventDefault();
+        e.stopPropagation();
         const drawer = document.getElementById('filter-drawer');
         if (drawer && drawer.classList.contains('open')) {
           closeFilterDrawer();
         } else {
           openFilterDrawer();
         }
-      });
-    }
+      }
 
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeFilterDrawer);
-    }
+      if (closeBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeFilterDrawer();
+      }
 
-    if (overlay) {
-      overlay.addEventListener('click', closeFilterDrawer);
-    }
+      if (overlay) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeFilterDrawer();
+      }
 
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
+      if (clearBtn) {
+        e.preventDefault();
+        e.stopPropagation();
         filters.search = '';
         filters.stage = 'all';
         filters.theme = 'all';
@@ -905,8 +913,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
         filterProjects();
         updateFilterBadge();
-      });
-    }
+      }
+    });
   }
 
   function init() {
