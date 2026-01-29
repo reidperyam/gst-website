@@ -29,3 +29,7 @@ pnpm-debug.log*
 # claude code and agents
 .claude/
 agents/
+
+# playwright test results and reports
+test-results/
+playwright-report/
