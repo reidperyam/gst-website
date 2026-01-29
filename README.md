@@ -45,6 +45,11 @@ All commands are run from the root of the project:
 | `npm run build`           | Build production site to `./dist/`               |
 | `npm run preview`         | Preview production build locally                 |
 | `npm run astro ...`       | Run Astro CLI commands                           |
+| `npm run test`            | Run tests in watch mode                          |
+| `npm run test:run`        | Run all tests once                               |
+| `npm run test:coverage`   | Run tests with coverage report                   |
+| `npm run test:e2e`        | Run end-to-end tests                             |
+| `npm run test:all`        | Run all tests (unit + integration + e2e)         |
 
 ## 🔧 Development
 
@@ -83,13 +88,64 @@ The site is configured to deploy to Vercel as a static site.
 **Build Command:** `npm run build`
 **Output Directory:** `dist`
 
-## 📝 Content Management
+## 📝 Content & Data Management
 
-Currently, content is hardcoded in the Astro components. To make it dynamic, consider:
+### Portfolio Data
+Portfolio project data is stored in `src/data/projects.json` as the single source of truth:
+
+- **51 active projects** with validated schema
+- Fields: id, codeName, industry, theme, summary, arr, arrNumeric, currency, growthStage, year, technologies
+- **Validated automatically** with 20 unit tests covering schema integrity and data quality
+- **Auto-validated on commit** via CI/CD pipeline
+
+To update portfolio data:
+1. Edit `src/data/projects.json` directly
+2. Commit changes to GitHub
+3. CI/CD tests validate data integrity automatically
+4. Push triggers Vercel deployment
+
+### Page Content
+Page content is hardcoded in Astro components. To make it dynamic, consider:
 
 - Using **Markdown files** in `src/pages/` for content pages
 - Integrating a **CMS** (Contentful, Strapi, etc.)
 - Using **Astro Content Collections** for organized content
+
+## ✅ Testing
+
+The project includes comprehensive automated tests to ensure code quality and data integrity:
+
+### Test Coverage
+- **Unit Tests** (68 tests, 100% coverage):
+  - Data validation: 20 tests verifying schema, integrity, and uniqueness
+  - Utility functions: 48 tests covering abbreviation, sorting, and data transformations
+
+- **Integration Tests** (in development): Component interactions and user workflows
+- **E2E Tests** (in development): Critical user journeys across browsers
+
+### Running Tests
+```bash
+# Run all tests once
+npm run test:run
+
+# Run tests in watch mode (rerun on file changes)
+npm run test
+
+# Generate coverage report
+npm run test:coverage
+
+# Run E2E tests
+npm run test:e2e
+
+# Run full test suite (unit + integration + e2e)
+npm run test:all
+```
+
+### CI/CD Integration
+- Tests run automatically on every push and pull request
+- Coverage reports uploaded to Codecov
+- Test failures block PR merges (branch protection)
+- See [TESTING_AND_CI_CD_README.md](./TESTING_AND_CI_CD_README.md) for detailed testing strategy
 
 ## 🎨 Design System
 

@@ -1,4 +1,4 @@
-import { expect, afterEach, vi } from 'vitest';
+import { expect, vi } from 'vitest';
 
 // Mock window.matchMedia if in browser environment
 if (typeof window !== 'undefined') {
@@ -19,8 +19,3 @@ if (typeof window !== 'undefined') {
 
 // Add custom matchers if needed
 expect.extend({});
-
-// Cleanup after each test
-afterEach(() => {
-  vi.clearAllMocks();
-});
