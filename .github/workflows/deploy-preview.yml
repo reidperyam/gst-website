@@ -2,7 +2,7 @@ name: PR Preview & Checks
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   pr-status:
