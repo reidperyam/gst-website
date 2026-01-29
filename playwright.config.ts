@@ -1,11 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
-
-// Check if there are any E2E test files
-const e2eDir = './tests/e2e';
-const hasE2ETests = fs.existsSync(e2eDir) &&
-  fs.readdirSync(e2eDir).some(file => file.endsWith('.test.ts'));
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -36,11 +29,12 @@ export default defineConfig({
     },
   ],
 
-  // Only start webServer if there are E2E tests to run
-  webServer: hasE2ETests ? {
+  // Start dev server for E2E tests
+  webServer: {
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  } : undefined,
+    timeout: 180 * 1000,  // 3 minutes - increased for CI environment
+    ignoreHTTPSErrors: true,
+  },
 });
