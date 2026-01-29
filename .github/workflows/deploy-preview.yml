@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   pr-status:
     name: PR Test Results
