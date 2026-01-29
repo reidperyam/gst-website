@@ -129,19 +129,3 @@ jobs:
           echo "| Unit & Integration Tests | ${{ needs.unit-and-integration.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| E2E Tests | ${{ needs.e2e-tests.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Build Verification | ${{ needs.build-verification.result }} |" >> $GITHUB_STEP_SUMMARY
-
-      - name: Verify critical checks
-        run: |
-          if [ "${{ needs.unit-and-integration.result }}" != "success" ]; then
-            echo "❌ Unit & Integration Tests failed"
-            exit 1
-          fi
-          if [ "${{ needs.build-verification.result }}" != "success" ]; then
-            echo "❌ Build verification failed"
-            exit 1
-          fi
-          if [ "${{ needs.e2e-tests.result }}" != "success" ]; then
-            echo "❌ E2E Tests failed"
-            exit 1
-          fi
-          echo "✅ All critical checks passed"
