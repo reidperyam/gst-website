@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Portfolio Discovery Journey', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/ma-portfolio', { waitUntil: 'networkidle' });
     // Wait for content to load
     await page.waitForLoadState('domcontentloaded');
   });
@@ -18,12 +18,15 @@ test.describe('Portfolio Discovery Journey', () => {
   });
 
   test('should display project cards', async ({ page }) => {
-    // Find project cards (might use button role or div)
-    const projectCards = page.locator('[data-testid^="project-card-"], .project-card, [role="button"][class*="card"]');
-    const count = await projectCards.count();
+    // Find project cards - check multiple selectors
+    const byTestId = page.locator('[data-testid^="project-card-"]');
+    const byClass = page.locator('.project-card');
+    const byTestIdCount = await byTestId.count();
+    const byClassCount = await byClass.count();
+    const totalCount = Math.max(byTestIdCount, byClassCount);
 
     // Should have at least one project card
-    expect(count).toBeGreaterThanOrEqual(1);
+    expect(totalCount).toBeGreaterThanOrEqual(1);
   });
 
   test('should have search functionality accessible', async ({ page }) => {

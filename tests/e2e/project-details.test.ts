@@ -2,14 +2,17 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Project Details Viewing Journey', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/ma-portfolio', { waitUntil: 'networkidle' });
     await page.waitForLoadState('domcontentloaded');
   });
 
   test('should have interactive project elements', async ({ page }) => {
-    // Find project cards (various selectors)
-    const cards = page.locator('[data-testid*="project-card"], .project-card, [role="button"][class*="card"]');
-    const cardCount = await cards.count();
+    // Find project cards using multiple selectors
+    const byTestId = page.locator('[data-testid*="project-card"]');
+    const byClass = page.locator('.project-card');
+    const byTestIdCount = await byTestId.count();
+    const byClassCount = await byClass.count();
+    const cardCount = Math.max(byTestIdCount, byClassCount);
 
     // Should have at least one clickable project element
     expect(cardCount).toBeGreaterThanOrEqual(1);
@@ -99,8 +102,11 @@ test.describe('Project Details Viewing Journey', () => {
 
   test('should display consistent information format', async ({ page }) => {
     // Projects should have consistent structure
-    const projectElements = page.locator('[data-testid*="project"], .project');
-    const count = await projectElements.count();
+    const byTestId = page.locator('[data-testid*="project"]');
+    const byClass = page.locator('.project-card');
+    const byTestIdCount = await byTestId.count();
+    const byClassCount = await byClass.count();
+    const count = Math.max(byTestIdCount, byClassCount);
 
     // Should have multiple consistent project elements
     expect(count).toBeGreaterThanOrEqual(1);
