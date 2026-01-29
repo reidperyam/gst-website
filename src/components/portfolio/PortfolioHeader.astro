@@ -52,17 +52,18 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
               class="search-input"
               placeholder="Search by project name, technology, or industry..."
               aria-label="Search projects"
+              data-testid="portfolio-search-input"
             />
           </div>
 
-          <button id="filter-toggle" class="filter-toggle" aria-label="Open filters" aria-expanded="false">
+          <button id="filter-toggle" class="filter-toggle" aria-label="Open filters" aria-expanded="false" data-testid="portfolio-filter-toggle">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="4" y1="6" x2="20" y2="6"></line>
               <line x1="4" y1="12" x2="20" y2="12"></line>
               <line x1="4" y1="18" x2="20" y2="18"></line>
             </svg>
             <span class="filter-text">Filters</span>
-            <span id="filter-badge-header" class="filter-badge" aria-live="polite"></span>
+            <span id="filter-badge-header" class="filter-badge" aria-live="polite" data-testid="portfolio-filter-badge"></span>
           </button>
         </div>
       </div>
@@ -70,7 +71,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   </div>
 
   <!-- Filter Drawer (Slide-out) -->
-  <div id="filter-drawer" class="portfolio-filter-drawer">
+  <div id="filter-drawer" class="portfolio-filter-drawer" data-testid="portfolio-filter-drawer">
     <div class="drawer-header">
       <h2 class="drawer-title">FILTERS</h2>
       <button id="drawer-close" class="drawer-close" aria-label="Close filters">
@@ -82,11 +83,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     </div>
 
     <div class="drawer-content">
-      <button id="clear-filters" class="clear-filters-btn">Clear All Filters</button>
+      <button id="clear-filters" class="clear-filters-btn" data-testid="clear-filters-button">Clear All Filters</button>
 
       <div class="filter-section">
         <div class="filter-label">Company Growth Stage</div>
-        <div class="filter-chips" id="stage-chips">
+        <div class="filter-chips" id="stage-chips" data-testid="stage-filter-chips">
           <div class="chip active" data-value="all">All Stages</div>
           <div class="chip" data-value="growth-category">Growth Stage</div>
           <div class="chip" data-value="mature-category">Mature Stage</div>
@@ -95,7 +96,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
       <div class="filter-section">
         <div class="filter-label">Theme</div>
-        <div class="filter-chips" id="theme-chips">
+        <div class="filter-chips" id="theme-chips" data-testid="theme-filter-chips">
           <div class="chip active" data-value="all">All Themes</div>
           {uniqueThemes.map(theme => (
             <div class="chip" data-value={theme}>{theme}</div>
@@ -105,7 +106,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
       <div class="filter-section">
         <div class="filter-label">Year</div>
-        <div class="filter-chips" id="year-chips">
+        <div class="filter-chips" id="year-chips" data-testid="year-filter-chips">
           <div class="chip active" data-value="all">All Years</div>
           {uniqueYears.map(year => (
             <div class="chip" data-value={year.toString()}>{year}</div>
@@ -115,7 +116,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
       <div class="filter-section">
         <div class="filter-label">Client Engagement</div>
-        <div class="filter-chips" id="engagement-chips">
+        <div class="filter-chips" id="engagement-chips" data-testid="engagement-filter-chips">
           <div class="chip active" data-value="all">All Types</div>
           <div class="chip" data-value="value-creation">Value Creation</div>
           <div class="chip" data-value="technical-diligence">Technical Diligence</div>
@@ -125,7 +126,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   </div>
 
   <!-- Drawer Overlay (Mobile & Desktop) -->
-  <div id="filter-overlay" class="portfolio-filter-overlay"></div>
+  <div id="filter-overlay" class="portfolio-filter-overlay" data-testid="portfolio-filter-overlay"></div>
 </div>
 
 <style>

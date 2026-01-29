@@ -10,9 +10,9 @@ const { projects } = Astro.props;
 
 <div class="portfolio-grid-container">
   <div class="container">
-    <div class="grid">
+    <div class="grid" data-testid="portfolio-grid">
       {projects.map((project) => (
-        <div class="project-card" data-project-id={project.id} role="button" tabindex="0">
+        <div class="project-card" data-project-id={project.id} data-testid={`project-card-${project.id}`} role="button" tabindex="0">
           <div class="card-header">
             <div>
               <h3 class="project-title">{project.codeName}</h3>
@@ -49,9 +49,9 @@ const { projects } = Astro.props;
   </div>
 
   <!-- Project Details Modal -->
-  <dialog id="project-modal-2" class="project-modal">
+  <dialog id="project-modal-2" class="project-modal" data-testid="project-modal">
     <div class="modal-content">
-      <button id="modal-close-2" class="modal-close" aria-label="Close modal">
+      <button id="modal-close-2" class="modal-close" aria-label="Close modal" data-testid="project-modal-close">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -60,54 +60,54 @@ const { projects } = Astro.props;
 
       <div class="modal-header">
         <div>
-          <h2 id="modal-title-2" class="modal-title">Project Title</h2>
-          <p id="modal-industry-2" class="modal-industry">Industry</p>
+          <h2 id="modal-title-2" class="modal-title" data-testid="project-modal-title">Project Title</h2>
+          <p id="modal-industry-2" class="modal-industry" data-testid="project-modal-industry">Industry</p>
         </div>
       </div>
 
       <div class="modal-metrics">
         <div class="modal-metric">
           <div class="metric-label">ARR</div>
-          <div id="modal-arr-2" class="metric-value arr">$0M</div>
+          <div id="modal-arr-2" class="metric-value arr" data-testid="project-modal-arr">$0M</div>
         </div>
         <div class="modal-metric">
           <div class="metric-label">Growth Stage</div>
-          <div id="modal-stage-2" class="metric-value">Stage</div>
+          <div id="modal-stage-2" class="metric-value" data-testid="project-modal-stage">Stage</div>
         </div>
         <div class="modal-metric">
           <div class="metric-label">Theme</div>
-          <div id="modal-theme-2" class="metric-value">Theme</div>
+          <div id="modal-theme-2" class="metric-value" data-testid="project-modal-theme">Theme</div>
         </div>
         <div class="modal-metric">
           <div class="metric-label">Year</div>
-          <div id="modal-year-2" class="metric-value year">2024</div>
+          <div id="modal-year-2" class="metric-value year" data-testid="project-modal-year">2024</div>
         </div>
       </div>
 
       <div class="modal-section">
         <h3 class="modal-section-title">Engagement Type</h3>
-        <p id="modal-engagement-type-2" class="modal-engagement-type">Engagement Type</p>
-        <p id="modal-engagement-description-2" class="modal-text">Engagement description goes here.</p>
+        <p id="modal-engagement-type-2" class="modal-engagement-type" data-testid="project-modal-engagement-type">Engagement Type</p>
+        <p id="modal-engagement-description-2" class="modal-text" data-testid="project-modal-engagement-description">Engagement description goes here.</p>
       </div>
 
       <div class="modal-section">
         <h3 class="modal-section-title">Summary</h3>
-        <p id="modal-summary-2" class="modal-text">Project summary goes here.</p>
+        <p id="modal-summary-2" class="modal-text" data-testid="project-modal-summary">Project summary goes here.</p>
       </div>
 
-      <div class="modal-section" id="modal-challenge-section" style="display: none;">
+      <div class="modal-section" id="modal-challenge-section" style="display: none;" data-testid="project-modal-challenge-section">
         <h3 class="modal-section-title">Challenge</h3>
-        <p id="modal-challenge-2" class="modal-text">Challenge description goes here.</p>
+        <p id="modal-challenge-2" class="modal-text" data-testid="project-modal-challenge">Challenge description goes here.</p>
       </div>
 
-      <div class="modal-section" id="modal-solution-section" style="display: none;">
+      <div class="modal-section" id="modal-solution-section" style="display: none;" data-testid="project-modal-solution-section">
         <h3 class="modal-section-title">Solution</h3>
-        <p id="modal-solution-2" class="modal-text">Solution description goes here.</p>
+        <p id="modal-solution-2" class="modal-text" data-testid="project-modal-solution">Solution description goes here.</p>
       </div>
 
       <div class="modal-section">
         <h3 class="modal-section-title">Technologies</h3>
-        <div id="modal-tech-tags-2" class="modal-tech-tags">
+        <div id="modal-tech-tags-2" class="modal-tech-tags" data-testid="project-modal-tech-tags">
           <!-- Tech tags will be inserted here -->
         </div>
       </div>
