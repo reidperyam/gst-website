@@ -140,4 +140,8 @@ jobs:
             echo "❌ Build verification failed"
             exit 1
           fi
+          if [ "${{ needs.e2e-tests.result }}" != "success" ]; then
+            echo "❌ E2E Tests failed"
+            exit 1
+          fi
           echo "✅ All critical checks passed"
