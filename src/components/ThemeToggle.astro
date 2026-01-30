@@ -1,5 +1,6 @@
 ---
 // ThemeToggle.astro - Theme switcher component
+import { trackThemeToggle } from '../utils/analytics';
 ---
 
 <button class="theme-toggle" id="themeToggle" title="Toggle dark theme" aria-label="Toggle dark theme">
@@ -9,6 +10,8 @@
 </button>
 
 <script>
+    import { trackThemeToggle } from '../utils/analytics';
+
     const themeToggle = document.getElementById('themeToggle');
     const htmlElement = document.documentElement;
 
@@ -23,6 +26,9 @@
             document.body.classList.toggle('dark-theme');
             const isDark = document.body.classList.contains('dark-theme');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+            // Track theme toggle in analytics
+            trackThemeToggle(isDark ? 'dark' : 'light');
         });
     }
 </script>

@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeEach } from 'vitest';
+
 describe('Theme Toggle', () => {
   let state: any;
   let storage: any;

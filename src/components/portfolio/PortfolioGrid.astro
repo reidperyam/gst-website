@@ -458,6 +458,17 @@ const { projects } = Astro.props;
     window.projectModal.open(projectId, window.portfolioState.allProjects);
   }
 
+  function trackFilterApplication(filterType, filterValue) {
+    // Track filter actions in analytics
+    if (window.gtag) {
+      window.gtag('event', 'filter_applied', {
+        event_category: 'portfolio',
+        filter_type: filterType,
+        filter_value: filterValue
+      });
+    }
+  }
+
   function initPortfolioGrid() {
     const cards = document.querySelectorAll('.project-card');
 
@@ -493,8 +504,12 @@ const { projects } = Astro.props;
     initPortfolioGrid();
   }
 
-  // Listen for filter updates from Portfolio2Controls
-  window.addEventListener('portfolioFiltered', () => {
+  // Listen for filter updates and track them
+  window.addEventListener('portfolioFiltered', (e) => {
+    // Track the filter application
+    if (e.detail && e.detail.filterType && e.detail.filterValue) {
+      trackFilterApplication(e.detail.filterType, e.detail.filterValue);
+    }
     initPortfolioGrid();
   });
 
