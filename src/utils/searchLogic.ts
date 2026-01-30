@@ -2,12 +2,18 @@ import type { Project } from '../types/portfolio';
 import { createSearchableText } from './filterLogic';
 
 /**
- * Performs a debounced search on projects
+ * Performs case-insensitive search across project data
+ * Searches across code name, industry, summary, and technologies
+ * Returns all projects if search term is empty or whitespace
  * @param projects - Array of projects to search
- * @param searchTerm - The search term to look for
+ * @param searchTerm - The search term to look for (case-insensitive)
  * @returns Filtered array of projects matching the search term
+ * @example
+ * performSearch(projects, 'React') // returns projects using React
+ * performSearch(projects, '') // returns all projects
  */
 export function performSearch(projects: Project[], searchTerm: string): Project[] {
+  // Return all projects if search term is empty or only whitespace
   if (!searchTerm.trim()) {
     return projects;
   }
@@ -73,12 +79,18 @@ export function highlightSearchTerm(text: string, searchTerm: string): string {
 }
 
 /**
- * Gets relevance score for a project based on search term
+ * Calculates relevance score for a project based on search term matches
+ * Scoring hierarchy: exact name match (100) > partial name (50) > industry (30) > technology (25) > summary (10)
+ * Returns 0 for empty search terms
  * @param project - Project to score
- * @param searchTerm - Search term
- * @returns Relevance score (higher = more relevant)
+ * @param searchTerm - Search term to match against
+ * @returns Relevance score where higher values indicate better matches (0 = no match)
+ * @example
+ * getSearchRelevance(project, 'Tech Corp') // returns 100 if exact name match
+ * getSearchRelevance(project, 'Tech') // returns 50 if partial name match
  */
 export function getSearchRelevance(project: Project, searchTerm: string): number {
+  // Return 0 for empty search terms
   if (!searchTerm.trim()) {
     return 0;
   }
@@ -86,19 +98,21 @@ export function getSearchRelevance(project: Project, searchTerm: string): number
   const searchLower = searchTerm.toLowerCase();
   let score = 0;
 
-  // Exact match in codeName is most relevant
+  // Exact match in code name - highest priority (100 points)
   if (project.codeName.toLowerCase() === searchLower) {
     score += 100;
-  } else if (project.codeName.toLowerCase().includes(searchLower)) {
+  }
+  // Partial match in code name - high priority (50 points)
+  else if (project.codeName.toLowerCase().includes(searchLower)) {
     score += 50;
   }
 
-  // Match in industry
+  // Match in industry - medium priority (30 points)
   if (project.industry.toLowerCase().includes(searchLower)) {
     score += 30;
   }
 
-  // Match in technologies
+  // Match in technologies - medium-low priority (25 points)
   if (Array.isArray(project.technologies)) {
     if (
       project.technologies.some(t =>
@@ -109,7 +123,7 @@ export function getSearchRelevance(project: Project, searchTerm: string): number
     }
   }
 
-  // Match in summary
+  // Match in summary - lowest priority (10 points)
   if (project.summary.toLowerCase().includes(searchLower)) {
     score += 10;
   }

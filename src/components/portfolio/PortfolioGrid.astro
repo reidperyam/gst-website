@@ -41,7 +41,7 @@ const { projects } = Astro.props;
             <div class="tag theme">{project.theme}</div>
           </div>
 
-          <button class="cta-button" aria-label={`View details for ${project.codeName}`}>
+          <button class="cta-button" aria-label={`View details for ${project.codeName}`} data-testid={`project-card-cta-${project.id}`}>
             View Project Details
           </button>
         </div>

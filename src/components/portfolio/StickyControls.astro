@@ -42,17 +42,18 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
           class="search-input"
           placeholder="Search by project name, technology, or industry..."
           aria-label="Search projects"
+          data-testid="sticky-search-input"
         />
       </div>
 
-      <button id="filter-toggle-sticky" class="filter-button" aria-label="Open filters" aria-expanded="false">
+      <button id="filter-toggle-sticky" class="filter-button" aria-label="Open filters" aria-expanded="false" data-testid="sticky-filter-toggle">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="4" y1="6" x2="20" y2="6"></line>
           <line x1="4" y1="12" x2="20" y2="12"></line>
           <line x1="4" y1="18" x2="20" y2="18"></line>
         </svg>
         <span class="filter-text">Filters</span>
-        <span id="filter-badge-sticky" class="filter-badge" aria-live="polite"></span>
+        <span id="filter-badge-sticky" class="filter-badge" aria-live="polite" data-testid="sticky-filter-badge"></span>
       </button>
     </div>
   </div>

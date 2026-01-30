@@ -74,7 +74,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   <div id="filter-drawer" class="filter-drawer portfolio-filter-drawer" data-testid="portfolio-filter-drawer">
     <div class="drawer-header">
       <h2 class="drawer-title">FILTERS</h2>
-      <button id="drawer-close" class="drawer-close" aria-label="Close filters">
+      <button id="drawer-close" class="drawer-close" aria-label="Close filters" data-testid="portfolio-drawer-close">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -88,18 +88,18 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       <div class="filter-section">
         <div class="filter-label">Company Growth Stage</div>
         <div class="filter-chips" id="stage-chips" data-testid="stage-filter-chips">
-          <div class="filter-chip active" data-value="all">All Stages</div>
-          <div class="filter-chip" data-value="growth-category">Growth Stage</div>
-          <div class="filter-chip" data-value="mature-category">Mature Stage</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-stage-all">All Stages</div>
+          <div class="filter-chip" data-value="growth-category" data-testid="filter-chip-stage-growth">Growth Stage</div>
+          <div class="filter-chip" data-value="mature-category" data-testid="filter-chip-stage-mature">Mature Stage</div>
         </div>
       </div>
 
       <div class="filter-section">
         <div class="filter-label">Theme</div>
         <div class="filter-chips" id="theme-chips" data-testid="theme-filter-chips">
-          <div class="filter-chip active" data-value="all">All Themes</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-theme-all">All Themes</div>
           {uniqueThemes.map(theme => (
-            <div class="filter-chip" data-value={theme}>{theme}</div>
+            <div class="filter-chip" data-value={theme} data-testid={`filter-chip-theme-${theme.toLowerCase().replace(/\s+/g, '-')}`}>{theme}</div>
           ))}
         </div>
       </div>
@@ -107,9 +107,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       <div class="filter-section">
         <div class="filter-label">Year</div>
         <div class="filter-chips" id="year-chips" data-testid="year-filter-chips">
-          <div class="filter-chip active" data-value="all">All Years</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-year-all">All Years</div>
           {uniqueYears.map(year => (
-            <div class="filter-chip" data-value={year.toString()}>{year}</div>
+            <div class="filter-chip" data-value={year.toString()} data-testid={`filter-chip-year-${year}`}>{year}</div>
           ))}
         </div>
       </div>
@@ -117,9 +117,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       <div class="filter-section">
         <div class="filter-label">Client Engagement</div>
         <div class="filter-chips" id="engagement-chips" data-testid="engagement-filter-chips">
-          <div class="filter-chip active" data-value="all">All Types</div>
-          <div class="filter-chip" data-value="value-creation">Value Creation</div>
-          <div class="filter-chip" data-value="technical-diligence">Technical Diligence</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-engagement-all">All Types</div>
+          <div class="filter-chip" data-value="value-creation" data-testid="filter-chip-engagement-value-creation">Value Creation</div>
+          <div class="filter-chip" data-value="technical-diligence" data-testid="filter-chip-engagement-technical-diligence">Technical Diligence</div>
         </div>
       </div>
     </div>

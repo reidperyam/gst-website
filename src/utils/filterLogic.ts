@@ -55,42 +55,57 @@ export interface FilterCriteria {
 }
 
 /**
- * Categorizes a growth stage string into growth, mature, or other
+ * Categorizes a growth stage string into growth, mature, or other categories
+ * Uses keyword matching to identify company maturity level
  * @param stage - The growth stage string to categorize
- * @returns 'growth' | 'mature' | 'other'
+ * @returns 'growth' for early-stage companies, 'mature' for established companies, 'other' for unknown
+ * @example
+ * categorizeGrowthStage('Early-Stage Growth') // returns 'growth'
+ * categorizeGrowthStage('Mature Enterprise') // returns 'mature'
  */
 export function categorizeGrowthStage(stage: string): 'growth' | 'mature' | 'other' {
   const stageLower = stage.toLowerCase();
 
+  // Check for growth stage indicators
   if (GROWTH_KEYWORDS.some(keyword => stageLower.includes(keyword))) {
     return 'growth';
   }
 
+  // Check for mature stage indicators
   if (MATURE_KEYWORDS.some(keyword => stageLower.includes(keyword))) {
     return 'mature';
   }
 
+  // Unknown or unclassified stage
   return 'other';
 }
 
 /**
- * Categorizes an engagement type into its category
- * @param engagementType - The engagement type to categorize
- * @returns 'value-creation' | 'technical-diligence' | 'other'
+ * Categorizes an engagement type into predefined categories
+ * Maps specific engagement types to broader categories for filtering
+ * @param engagementType - The engagement type to categorize (may be undefined)
+ * @returns 'value-creation' for growth engagements, 'technical-diligence' for assessment engagements, 'other' for unknown
+ * @example
+ * categorizeEngagementType('Value Creation - Growth') // returns 'value-creation'
+ * categorizeEngagementType('Early Stage Assessment') // returns 'technical-diligence'
  */
 export function categorizeEngagementType(
   engagementType: string | undefined
 ): 'value-creation' | 'technical-diligence' | 'other' {
+  // Handle undefined or null engagement types
   if (!engagementType) return 'other';
 
+  // Check if this is a value creation engagement
   if (ENGAGEMENT_CATEGORIES.valueCreation.includes(engagementType as any)) {
     return 'value-creation';
   }
 
+  // Check if this is a technical diligence engagement
   if (ENGAGEMENT_CATEGORIES.technicalDiligence.includes(engagementType as any)) {
     return 'technical-diligence';
   }
 
+  // Unknown engagement type
   return 'other';
 }
 
