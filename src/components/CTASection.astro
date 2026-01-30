@@ -1,4 +1,6 @@
 ---
+import { trackCTA } from '../utils/analytics';
+
 interface Props {
     title: string;
     description: string;
@@ -19,7 +21,14 @@ const {
         <div class="cta-box">
             <h2>{title}</h2>
             <p>{description}</p>
-            <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" class="cta-button">{buttonText}</a>
+            <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" class="cta-button" onclick="trackCTA('calendly', 'cta-section')">{buttonText}</a>
         </div>
     </div>
 </section>
+
+<script>
+    import { trackCTA } from '../utils/analytics';
+
+    // Make trackCTA available to inline onclick handlers
+    (window as any).trackCTA = trackCTA;
+</script>

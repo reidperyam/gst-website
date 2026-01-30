@@ -335,6 +335,16 @@
       const project = projects.find(p => p.id === projectId);
       if (!project) return;
 
+      // Track project view in analytics
+      if (window.gtag) {
+        window.gtag('event', 'portfolio_view_details', {
+          event_category: 'portfolio',
+          project_id: projectId,
+          project_name: project.codeName,
+          industry: project.industry
+        });
+      }
+
       // Populate modal
       document.getElementById('modal-title-2').textContent = project.codeName;
       document.getElementById('modal-industry-2').textContent = project.industry;
@@ -383,6 +393,12 @@
     close: function() {
       const modal = document.getElementById('project-modal-2');
       if (modal) {
+        // Track modal close in analytics
+        if (window.gtag) {
+          window.gtag('event', 'portfolio_close_modal', {
+            event_category: 'portfolio'
+          });
+        }
         modal.close();
       }
     },

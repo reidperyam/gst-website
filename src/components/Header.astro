@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import { trackNavigation } from '../utils/analytics';
 
 interface Props {
     currentPath?: string;
@@ -11,13 +12,20 @@ const { currentPath = '/' } = Astro.props;
 <header>
     <div class="container">
         <nav>
-            <a href="/" class="logo">G<span>S</span>T</a>
+            <a href="/" class="logo" onclick="trackNavigation('/', 'Logo')">G<span>S</span>T</a>
             <ul>
-                <li><a href="/#services">Services</a></li>
-                <li><a href="/ma-portfolio" class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a></li>
-                <li><a href="/#about">About</a></li>
-                <li><a href="/#contact">Contact</a></li>
+                <li><a href="/#services" onclick="trackNavigation('/#services', 'Services')">Services</a></li>
+                <li><a href="/ma-portfolio" onclick="trackNavigation('/ma-portfolio', 'M&A Portfolio')" class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a></li>
+                <li><a href="/#about" onclick="trackNavigation('/#about', 'About')">About</a></li>
+                <li><a href="/#contact" onclick="trackNavigation('/#contact', 'Contact')">Contact</a></li>
             </ul>
         </nav>
     </div>
 </header>
+
+<script>
+    import { trackNavigation } from '../utils/analytics';
+
+    // Make trackNavigation available to inline onclick handlers
+    (window as any).trackNavigation = trackNavigation;
+</script>

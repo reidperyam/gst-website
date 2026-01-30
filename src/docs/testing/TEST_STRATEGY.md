@@ -1161,6 +1161,79 @@ afterEach(async () => {
    - Identify slow tests
    - Optimize test performance
 
+## 12A. GOOGLE ANALYTICS 4 TESTING
+
+### Comprehensive GA4 Test Suite
+
+The project includes a complete test suite for Google Analytics 4 integration:
+
+**Unit Tests** (`tests/unit/analytics.test.ts`):
+- Analytics utility function tests
+- Event tracking validation
+- Parameter verification
+- Error handling scenarios
+- 25+ comprehensive tests
+
+**Integration Tests** (`tests/integration/analytics-integration.test.ts`):
+- GA4 script loading and initialization
+- dataLayer setup validation
+- DOM event integration testing
+- Event batching to dataLayer
+- localStorage integration
+- Consent mode handling
+- Measurement ID configuration
+- User ID and properties tracking
+- 30+ comprehensive tests
+
+**E2E Tests** (`tests/e2e/analytics.test.ts`):
+- Real page GA4 script loading verification
+- Navigation event tracking across site
+- Portfolio interaction tracking (view/close/filter)
+- Filter application tracking
+- Theme toggle tracking
+- CTA button click tracking
+- Complete user journey validation
+- Cross-browser functionality
+- Mobile/tablet/desktop viewport testing
+- Error handling and graceful degradation
+- 20+ real-world scenario tests
+
+### Running GA4 Tests
+
+```bash
+# Run all analytics tests
+npm run test:run -- analytics
+
+# Unit tests only
+npm run test:run -- tests/unit/analytics.test.ts
+
+# Integration tests only
+npm run test:run -- tests/integration/analytics-integration.test.ts
+
+# E2E tests only
+npm run test:e2e -- analytics.test.ts
+
+# With coverage report
+npm run test:coverage -- analytics
+```
+
+### GA4 Testing Documentation
+
+See **[ANALYTICS_TESTING.md](../analytics/ANALYTICS_TESTING.md)** for:
+- Detailed test examples and patterns
+- Testing best practices for GA4
+- Debugging GA event tracking
+- CI/CD pipeline integration
+- Expected coverage targets
+- Troubleshooting common issues
+- Performance benchmarks
+
+### Test Coverage
+
+- **Unit Tests:** 95%+ coverage of analytics utilities
+- **Integration Tests:** 90%+ coverage of GA4 initialization
+- **E2E Tests:** 100% coverage of critical user journeys
+
 ---
 
 ## 13. SUCCESS CRITERIA

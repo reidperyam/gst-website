@@ -33,6 +33,7 @@ A modern, high-performance static site for GST built with Astro and deployed to 
 - **Fast** - Static site generation with Astro
 - **Accessible** - WCAG-compliant with focus states and semantic HTML
 - **Vercel Ready** - Pre-configured for static deployment
+- **Analytics** - Google Analytics 4 integration for user engagement tracking
 
 ## 🧞 Commands
 
@@ -155,8 +156,28 @@ npm run test:all
 - **Font:** Helvetica Neue, Arial, sans-serif
 - **Grid:** 50px checkerboard pattern background
 
+## 📊 Analytics
+
+This website includes Google Analytics 4 integration for tracking user engagement and understanding portfolio interaction patterns.
+
+**See [GOOGLE_ANALYTICS.md](./src/docs/analytics/GOOGLE_ANALYTICS.md) for:**
+- GA4 architecture and integration points
+- Complete event documentation (6 tracked event types)
+- Component integration details
+- Setting up GA4 dashboard and reports
+- Testing and troubleshooting guide
+
+**Tracked Events:**
+- Navigation clicks
+- Portfolio project views
+- Portfolio filter applications
+- Call-to-action (Calendly) clicks
+- Theme toggle (light/dark mode)
+- Modal interactions
+
 ## 📚 Learn More
 
 - [Astro Documentation](https://docs.astro.build)
 - [Vercel Documentation](https://vercel.com/docs)
 - [@astrojs/vercel](https://docs.astro.build/en/guides/integrations-guide/vercel/)
+- [Google Analytics 4 Documentation](https://support.google.com/analytics/topic/12154439)
