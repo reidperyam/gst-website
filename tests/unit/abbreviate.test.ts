@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { abbreviateARR } from '@/utils/abbreviate';
 
 describe('Abbreviate ARR Utility', () => {

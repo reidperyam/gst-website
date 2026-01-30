@@ -1,23 +1,12 @@
-import { getViteConfig } from 'astro/config';
+import { defineConfig } from 'vitest/config';
 import path from 'path';
 
-export default getViteConfig({
+export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    setupFiles: ['./tests/setup.ts'],
-    include: ['tests/unit/**/*.test.ts', 'tests/integration/**/*.test.ts'],
+    include: ['tests/**/*.test.ts'],
     exclude: ['tests/e2e/**'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html', 'json-summary'],
-      exclude: [
-        'node_modules/',
-        'dist/',
-        '.astro/',
-        'tests/',
-      ],
-    },
   },
   resolve: {
     alias: {

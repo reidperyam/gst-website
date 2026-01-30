@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { sortProjectsByYear, sortProjectsByARR, sortProjectsByName } from '@/utils/sort';
 
 interface Project {
