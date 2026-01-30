@@ -1,0 +1,438 @@
+---
+// ProjectModal Component
+// Extracted from PortfolioGrid for reusability and separation of concerns
+---
+
+<!-- Project Details Modal -->
+<dialog id="project-modal-2" class="project-modal" data-testid="project-modal">
+  <div class="modal-content">
+    <button id="modal-close-2" class="modal-close" aria-label="Close modal" data-testid="project-modal-close">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="modal-header">
+      <div>
+        <h2 id="modal-title-2" class="modal-title" data-testid="project-modal-title">Project Title</h2>
+        <p id="modal-industry-2" class="modal-industry" data-testid="project-modal-industry">Industry</p>
+      </div>
+    </div>
+
+    <div class="modal-metrics">
+      <div class="modal-metric">
+        <div class="metric-label">ARR</div>
+        <div id="modal-arr-2" class="metric-value arr" data-testid="project-modal-arr">$0M</div>
+      </div>
+      <div class="modal-metric">
+        <div class="metric-label">Growth Stage</div>
+        <div id="modal-stage-2" class="metric-value" data-testid="project-modal-stage">Stage</div>
+      </div>
+      <div class="modal-metric">
+        <div class="metric-label">Theme</div>
+        <div id="modal-theme-2" class="metric-value" data-testid="project-modal-theme">Theme</div>
+      </div>
+      <div class="modal-metric">
+        <div class="metric-label">Year</div>
+        <div id="modal-year-2" class="metric-value year" data-testid="project-modal-year">2024</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h3 class="modal-section-title">Engagement Type</h3>
+      <p id="modal-engagement-type-2" class="modal-engagement-type" data-testid="project-modal-engagement-type">Engagement Type</p>
+      <p id="modal-engagement-description-2" class="modal-text" data-testid="project-modal-engagement-description">Engagement description goes here.</p>
+    </div>
+
+    <div class="modal-section">
+      <h3 class="modal-section-title">Summary</h3>
+      <p id="modal-summary-2" class="modal-text" data-testid="project-modal-summary">Project summary goes here.</p>
+    </div>
+
+    <div class="modal-section" id="modal-challenge-section" style="display: none;" data-testid="project-modal-challenge-section">
+      <h3 class="modal-section-title">Challenge</h3>
+      <p id="modal-challenge-2" class="modal-text" data-testid="project-modal-challenge">Challenge description goes here.</p>
+    </div>
+
+    <div class="modal-section" id="modal-solution-section" style="display: none;" data-testid="project-modal-solution-section">
+      <h3 class="modal-section-title">Solution</h3>
+      <p id="modal-solution-2" class="modal-text" data-testid="project-modal-solution">Solution description goes here.</p>
+    </div>
+
+    <div class="modal-section">
+      <h3 class="modal-section-title">Technologies</h3>
+      <div id="modal-tech-tags-2" class="modal-tech-tags" data-testid="project-modal-tech-tags">
+        <!-- Tech tags will be inserted here -->
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  /* Modal Styles */
+  .project-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    padding: 2rem;
+    background: #ffffff;
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    border-radius: 0;
+    clip-path: polygon(
+      2.5% 0%, 97.5% 0%,
+      100% 2.5%, 100% 97.5%,
+      97.5% 100%, 2.5% 100%,
+      0% 97.5%, 0% 2.5%
+    );
+    z-index: 1000;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+  }
+
+  .project-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+    color: rgba(26, 26, 26, 0.6);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .modal-close:hover {
+    color: #05cd99;
+    background: rgba(5, 205, 153, 0.08);
+  }
+
+  .modal-close:active {
+    transform: scale(0.95);
+  }
+
+  .modal-close:focus-visible {
+    outline: 2px solid #05cd99;
+    outline-offset: 2px;
+    background: rgba(5, 205, 153, 0.08);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: rgba(26, 26, 26, 0.95);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-industry {
+    font-size: 0.875rem;
+    color: rgba(26, 26, 26, 0.6);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .modal-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+  }
+
+  .modal-metric {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-section-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 26, 26, 0.65);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .modal-text {
+    font-size: 0.9375rem;
+    color: rgba(26, 26, 26, 0.7);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  :global(.modal-tech-tags) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  :global(.modal-tech-tags .tech-tag) {
+    background: rgba(26, 26, 26, 0.08);
+    color: rgba(26, 26, 26, 0.7);
+    padding: 0.35rem 0.65rem;
+    border-radius: 0;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .modal-engagement-type {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #05cd99;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* Dark theme modal */
+  :global(body.dark-theme) .project-modal {
+    background: #1a1a1a;
+    border-color: rgba(5, 205, 153, 0.2);
+  }
+
+  :global(body.dark-theme) .modal-close {
+    color: rgba(200, 200, 200, 0.6);
+  }
+
+  :global(body.dark-theme) .modal-close:hover {
+    color: #05cd99;
+    background: rgba(5, 205, 153, 0.12);
+  }
+
+  :global(body.dark-theme) .modal-close:focus-visible {
+    background: rgba(5, 205, 153, 0.12);
+  }
+
+  :global(body.dark-theme) .modal-title {
+    color: rgba(245, 245, 245, 0.95);
+  }
+
+  :global(body.dark-theme) .modal-industry {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .modal-metrics {
+    border-bottom-color: rgba(5, 205, 153, 0.2);
+  }
+
+  :global(body.dark-theme) .modal-section-title {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(body.dark-theme) .modal-text {
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) :global(.modal-tech-tags .tech-tag) {
+    background: rgba(5, 205, 153, 0.1);
+    color: rgba(200, 200, 200, 0.8);
+  }
+
+  :global(body.dark-theme) .modal-engagement-type {
+    color: #05cd99;
+  }
+
+  @media (max-width: 768px) {
+    .project-modal {
+      width: 95%;
+      max-height: 90vh;
+      padding: 1.5rem;
+    }
+
+    .modal-close {
+      top: 0.75rem;
+      right: 0.75rem;
+    }
+
+    .modal-metrics {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-modal {
+      width: 100%;
+      max-width: none;
+      max-height: 100vh;
+      padding: 1rem;
+      transform: translate(0, 0);
+      top: 0;
+      left: 0;
+      border-radius: 0;
+      clip-path: none;
+    }
+
+    .project-modal::backdrop {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-close {
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.5rem;
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+    }
+
+    .modal-metrics {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .modal-section-title {
+      font-size: 0.75rem;
+    }
+
+    .modal-text {
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Export modal utility functions for use in PortfolioGrid
+  window.projectModal = {
+    open: function(projectId, projects) {
+      const project = projects.find(p => p.id === projectId);
+      if (!project) return;
+
+      // Populate modal
+      document.getElementById('modal-title-2').textContent = project.codeName;
+      document.getElementById('modal-industry-2').textContent = project.industry;
+      document.getElementById('modal-year-2').textContent = project.year.toString();
+      document.getElementById('modal-arr-2').textContent = project.arr === 'Not in source' ? '--' : project.arr;
+      document.getElementById('modal-stage-2').textContent = project.growthStage;
+      document.getElementById('modal-theme-2').textContent = project.theme;
+      document.getElementById('modal-engagement-type-2').textContent = project.engagementType || 'N/A';
+      document.getElementById('modal-engagement-description-2').textContent = project.engagementTypeDescription || '';
+      document.getElementById('modal-summary-2').textContent = project.summary;
+
+      // Handle Challenge section (show only if present)
+      const challengeSection = document.getElementById('modal-challenge-section');
+      if (project.challenge) {
+        document.getElementById('modal-challenge-2').textContent = project.challenge;
+        challengeSection.style.display = 'block';
+      } else {
+        challengeSection.style.display = 'none';
+      }
+
+      // Handle Solution section (show only if present)
+      const solutionSection = document.getElementById('modal-solution-section');
+      if (project.solution) {
+        document.getElementById('modal-solution-2').textContent = project.solution;
+        solutionSection.style.display = 'block';
+      } else {
+        solutionSection.style.display = 'none';
+      }
+
+      // Render technologies
+      const techs = Array.isArray(project.technologies)
+        ? project.technologies
+        : (typeof project.technologies === 'string'
+            ? project.technologies.split(',').map(t => t.trim())
+            : []);
+
+      const techTagsContainer = document.getElementById('modal-tech-tags-2');
+      techTagsContainer.innerHTML = techs
+        .map(tech => `<span class="tech-tag">${window.projectModal.escapeHtml(tech)}</span>`)
+        .join('');
+
+      // Show modal
+      document.getElementById('project-modal-2').showModal();
+    },
+
+    close: function() {
+      const modal = document.getElementById('project-modal-2');
+      if (modal) {
+        modal.close();
+      }
+    },
+
+    init: function() {
+      const modal = document.getElementById('project-modal-2');
+      const closeBtn = document.getElementById('modal-close-2');
+
+      // Modal close button
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          window.projectModal.close();
+        });
+      }
+
+      // Close modal on backdrop click
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            window.projectModal.close();
+          }
+        });
+
+        // Close on Escape key
+        modal.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            window.projectModal.close();
+          }
+        });
+      }
+    },
+
+    escapeHtml: function(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+  };
+
+  // Initialize modal on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.projectModal.init();
+    });
+  } else {
+    window.projectModal.init();
+  }
+</script>

@@ -56,7 +56,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
             />
           </div>
 
-          <button id="filter-toggle" class="filter-toggle" aria-label="Open filters" aria-expanded="false" data-testid="portfolio-filter-toggle">
+          <button id="filter-toggle" class="filter-button" aria-label="Open filters" aria-expanded="false" data-testid="portfolio-filter-toggle">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="4" y1="6" x2="20" y2="6"></line>
               <line x1="4" y1="12" x2="20" y2="12"></line>
@@ -71,10 +71,10 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   </div>
 
   <!-- Filter Drawer (Slide-out) -->
-  <div id="filter-drawer" class="portfolio-filter-drawer" data-testid="portfolio-filter-drawer">
+  <div id="filter-drawer" class="filter-drawer portfolio-filter-drawer" data-testid="portfolio-filter-drawer">
     <div class="drawer-header">
       <h2 class="drawer-title">FILTERS</h2>
-      <button id="drawer-close" class="drawer-close" aria-label="Close filters">
+      <button id="drawer-close" class="drawer-close" aria-label="Close filters" data-testid="portfolio-drawer-close">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -83,23 +83,23 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     </div>
 
     <div class="drawer-content">
-      <button id="clear-filters" class="clear-filters-btn" data-testid="clear-filters-button">Clear All Filters</button>
+      <button id="clear-filters" class="clear-filters-button" data-testid="clear-filters-button">Clear All Filters</button>
 
       <div class="filter-section">
         <div class="filter-label">Company Growth Stage</div>
         <div class="filter-chips" id="stage-chips" data-testid="stage-filter-chips">
-          <div class="chip active" data-value="all">All Stages</div>
-          <div class="chip" data-value="growth-category">Growth Stage</div>
-          <div class="chip" data-value="mature-category">Mature Stage</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-stage-all">All Stages</div>
+          <div class="filter-chip" data-value="growth-category" data-testid="filter-chip-stage-growth">Growth Stage</div>
+          <div class="filter-chip" data-value="mature-category" data-testid="filter-chip-stage-mature">Mature Stage</div>
         </div>
       </div>
 
       <div class="filter-section">
         <div class="filter-label">Theme</div>
         <div class="filter-chips" id="theme-chips" data-testid="theme-filter-chips">
-          <div class="chip active" data-value="all">All Themes</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-theme-all">All Themes</div>
           {uniqueThemes.map(theme => (
-            <div class="chip" data-value={theme}>{theme}</div>
+            <div class="filter-chip" data-value={theme} data-testid={`filter-chip-theme-${theme.toLowerCase().replace(/\s+/g, '-')}`}>{theme}</div>
           ))}
         </div>
       </div>
@@ -107,9 +107,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       <div class="filter-section">
         <div class="filter-label">Year</div>
         <div class="filter-chips" id="year-chips" data-testid="year-filter-chips">
-          <div class="chip active" data-value="all">All Years</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-year-all">All Years</div>
           {uniqueYears.map(year => (
-            <div class="chip" data-value={year.toString()}>{year}</div>
+            <div class="filter-chip" data-value={year.toString()} data-testid={`filter-chip-year-${year}`}>{year}</div>
           ))}
         </div>
       </div>
@@ -117,19 +117,20 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       <div class="filter-section">
         <div class="filter-label">Client Engagement</div>
         <div class="filter-chips" id="engagement-chips" data-testid="engagement-filter-chips">
-          <div class="chip active" data-value="all">All Types</div>
-          <div class="chip" data-value="value-creation">Value Creation</div>
-          <div class="chip" data-value="technical-diligence">Technical Diligence</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-engagement-all">All Types</div>
+          <div class="filter-chip" data-value="value-creation" data-testid="filter-chip-engagement-value-creation">Value Creation</div>
+          <div class="filter-chip" data-value="technical-diligence" data-testid="filter-chip-engagement-technical-diligence">Technical Diligence</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Drawer Overlay (Mobile & Desktop) -->
-  <div id="filter-overlay" class="portfolio-filter-overlay" data-testid="portfolio-filter-overlay"></div>
+  <div id="filter-overlay" class="filter-overlay portfolio-filter-overlay" data-testid="portfolio-filter-overlay"></div>
 </div>
 
 <style>
+  /* Component-Specific Overrides */
   .portfolio-header {
     background: #ffffff;
     border-bottom: none;
@@ -158,7 +159,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     white-space: nowrap;
   }
 
-  /* Sticky Search/Filter Controls */
   .portfolio-controls-sticky {
     background: #ffffff;
     border-bottom: none;
@@ -218,67 +218,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     height: 18px;
   }
 
-  .search-input {
-    width: 100%;
-    padding: 0.625rem 0.875rem 0.625rem 2.25rem;
-    border: 1px solid rgba(26, 26, 26, 0.1);
-    background: rgba(26, 26, 26, 0.02);
-    color: rgba(26, 26, 26, 0.85);
-    font-size: 0.8125rem;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    transition: all 0.2s;
-    min-height: 38px;
-  }
-
-  .search-input:focus {
-    outline: none;
-    border-color: #05cd99;
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.1);
-  }
-
-  .search-input::placeholder {
-    color: rgba(26, 26, 26, 0.5);
-  }
-
-  /* Filter Toggle Button */
-  .filter-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.625rem 0.875rem;
-    margin-right: 0rem;
-    background: rgba(26, 26, 26, 0.05);
-    border: 1px solid rgba(26, 26, 26, 0.1);
-    color: rgba(26, 26, 26, 0.7);
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
-    position: relative;
-    min-height: 38px;
-    display: flex;
-    align-items: center;
-  }
-
-  .filter-toggle:hover {
-    background: rgba(26, 26, 26, 0.08);
-    border-color: #05cd99;
-    color: #05cd99;
-  }
-
-  .filter-toggle:focus-visible {
-    outline: 2px solid #05cd99;
-    outline-offset: 2px;
-  }
-
-  .filter-text {
-    display: inline;
-  }
-
   .filter-badge {
     display: none;
     position: absolute;
@@ -300,25 +239,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     100% { transform: scale(1); }
   }
 
-  /* Filter Drawer */
-  .portfolio-filter-drawer {
-    position: fixed;
-    right: -400px;
-    top: 133px;
-    width: 350px;
-    height: calc(100vh - 133px);
-    background: #ffffff;
-    border-left: 2px solid #05cd99;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1001;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .portfolio-filter-drawer.open {
-    right: 0;
+  .filter-text {
+    display: inline;
   }
 
   .drawer-header {
@@ -388,81 +310,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     gap: 0.75rem;
   }
 
-  .chip {
-    padding: 0.5rem 1rem;
-    background: rgba(26, 26, 26, 0.05);
-    color: rgba(26, 26, 26, 0.7);
-    border: 1px solid rgba(26, 26, 26, 0.1);
-    cursor: pointer;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    user-select: none;
-  }
-
-  .chip:hover {
-    background: rgba(26, 26, 26, 0.08);
-    border-color: #05cd99;
-    color: #05cd99;
-  }
-
-  .chip.active {
-    background: #05cd99;
-    color: #ffffff;
-    border-color: #05cd99;
-  }
-
-  /* Clear Filters Button */
-  .clear-filters-btn {
+  .clear-filters-button {
     width: calc(100% - 3rem);
     margin: 0 1.5rem 1.5rem 1.5rem;
-    padding: 0.875rem 1rem;
-    background: transparent;
-    color: rgba(26, 26, 26, 0.6);
-    border: 2px solid rgba(26, 26, 26, 0.1);
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 0;
   }
 
-  .clear-filters-btn:hover {
-    color: #05cd99;
-    border-color: #05cd99;
-  }
-
-  .clear-filters-btn:focus-visible {
-    outline: 2px solid #05cd99;
-    outline-offset: 2px;
-  }
-
-  /* Filter Overlay */
-  .portfolio-filter-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0);
-    z-index: 1000;
-    display: none;
-    transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-  }
-
-  .portfolio-filter-overlay.open {
-    display: block;
-    background: rgba(0, 0, 0, 0.3);
-    pointer-events: auto;
-  }
-
-  /* Dark Theme */
+  /* Dark Theme Component Overrides */
   :global(body.dark-theme) .portfolio-header {
     background: #0a0a0a;
   }
@@ -483,36 +336,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     color: rgba(245, 245, 245, 0.95);
   }
 
-  :global(body.dark-theme) .search-input {
-    background: rgba(5, 205, 153, 0.05);
-    border-color: rgba(5, 205, 153, 0.2);
-    color: rgba(245, 245, 245, 0.85);
-  }
-
-  :global(body.dark-theme) .search-input:focus {
-    background: #1a1a1a;
-    border-color: #05cd99;
-    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.15);
-  }
-
-  :global(body.dark-theme) .search-input::placeholder {
-    color: rgba(200, 200, 200, 0.5);
-  }
-
   :global(body.dark-theme) .search-icon {
     color: rgba(200, 200, 200, 0.5);
-  }
-
-  :global(body.dark-theme) .filter-toggle {
-    background: rgba(5, 205, 153, 0.1);
-    border-color: rgba(5, 205, 153, 0.2);
-    color: rgba(200, 200, 200, 0.8);
-  }
-
-  :global(body.dark-theme) .filter-toggle:hover {
-    background: rgba(5, 205, 153, 0.15);
-    border-color: #05cd99;
-    color: #05cd99;
   }
 
   :global(body.dark-theme) .portfolio-filter-drawer {
@@ -539,34 +364,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
   :global(body.dark-theme) .filter-label {
     color: rgba(200, 200, 200, 0.7);
-  }
-
-  :global(body.dark-theme) .chip {
-    background: rgba(5, 205, 153, 0.1);
-    border-color: rgba(5, 205, 153, 0.2);
-    color: rgba(200, 200, 200, 0.8);
-  }
-
-  :global(body.dark-theme) .chip:hover {
-    background: rgba(5, 205, 153, 0.15);
-    border-color: #05cd99;
-    color: #05cd99;
-  }
-
-  :global(body.dark-theme) .chip.active {
-    background: #05cd99;
-    color: #0a0a0a;
-    border-color: #05cd99;
-  }
-
-  :global(body.dark-theme) .clear-filters-btn {
-    color: rgba(200, 200, 200, 0.6);
-    border-color: rgba(5, 205, 153, 0.2);
-  }
-
-  :global(body.dark-theme) .clear-filters-btn:hover {
-    color: #05cd99;
-    border-color: #05cd99;
   }
 
   /* Responsive */
@@ -601,22 +398,10 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       min-width: 270px;
     }
 
-    .search-input {
-      padding: 0.625rem 0.875rem 0.625rem 2.25rem;
-      font-size: 0.75rem;
-      min-height: 38px;
-    }
-
     .search-icon {
       left: 0.75rem;
       width: 16px;
       height: 16px;
-    }
-
-    .filter-toggle {
-      padding: 0.625rem 0.875rem;
-      font-size: 0.7rem;
-      min-height: 38px;
     }
 
     .portfolio-filter-drawer {
@@ -678,36 +463,10 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       align-items: center;
     }
 
-    .search-input {
-      padding: 0.625rem 0.75rem 0.625rem 2.25rem;
-      font-size: 0.75rem;
-      min-height: 38px;
-      border-radius: 4px;
-    }
-
     .search-icon {
       width: 16px;
       height: 16px;
       left: 0.65rem;
-    }
-
-    .filter-toggle {
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      min-width: unset;
-      min-height: unset;
-      background: rgba(26, 26, 26, 0.05);
-      border: 1px solid rgba(26, 26, 26, 0.1);
-    }
-
-    .filter-toggle svg {
-      width: 18px;
-      height: 18px;
     }
 
     .filter-text {
@@ -740,15 +499,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     .filter-chips {
       gap: 0.625rem;
-    }
-
-    .chip {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.75rem;
-      min-height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
   }
 </style>
