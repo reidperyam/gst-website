@@ -24,8 +24,6 @@
 ## Available Commands
 
 ```bash
-# All these are already configured and ready to use
-
 # Run tests
 npm test                # Watch mode (re-runs on file changes)
 npm run test:run       # Single run (unit + integration)
@@ -33,9 +31,10 @@ npm run test:coverage  # With coverage report
 npm run test:e2e       # E2E tests only
 npm run test:all       # Everything (unit + integration + E2E)
 
-# E2E debugging
-npm run test:e2e:ui    # Visual test UI
-npm run test:e2e:debug # Step through E2E tests
+# Interactive UI - browse test results in browser
+npm run test:ui        # Vitest UI → http://localhost:XXXX/__vitest__/
+npm run test:e2e:ui    # Playwright UI → interactive test dashboard
+npm run test:e2e:debug # Playwright debug → step through E2E tests
 ```
 
 ## Development Workflow
@@ -173,6 +172,43 @@ test.describe('User Journey', () => {
 <div data-testid="sticky-controls" />
 ```
 
+## Accessing Test UIs
+
+### Vitest UI (Unit/Integration Tests)
+```bash
+npm run test:ui
+# Opens interactive dashboard at http://localhost:XXXX/__vitest__/
+# Shows:
+# - 174 unit and integration tests
+# - Real-time pass/fail status
+# - Test file tree
+# - Individual test details
+# - Auto-reload when files change
+```
+
+### Playwright UI (E2E Tests)
+```bash
+npm run test:e2e:ui
+# Opens interactive test dashboard
+# Shows:
+# - 207 E2E tests
+# - Video playback of each test
+# - Network traces
+# - Screenshots on failure
+# - Can filter by test name or status
+```
+
+### Playwright Debug (Step Through Tests)
+```bash
+npm run test:e2e:debug
+# Opens Playwright Inspector
+# Shows:
+# - Step through each action
+# - Inspect DOM at each step
+# - Resume/pause execution
+# - Great for debugging flaky tests
+```
+
 ## Local Testing (Before Push)
 
 Run these commands locally before pushing:
@@ -204,12 +240,25 @@ npm run test:all
 
 ## Viewing Results
 
-| Where | How | What |
-|-------|-----|------|
-| **Terminal Output** | `npm run test:all` | Test logs, results |
-| **Coverage Report** | `coverage/index.html` | Line-by-line coverage |
-| **E2E Reports** | `test-results/` | Screenshots, traces, logs |
-| **Watch Mode** | `npm test` | Live test results |
+### Command Line
+| Command | Shows |
+|---------|-------|
+| `npm run test:run` | Unit/integration test results in terminal |
+| `npm run test:e2e` | E2E test results + Playwright report URL |
+| `npm run test:all` | Both combined |
+
+### Browser UI (Interactive)
+| Command | Opens Browser | Shows |
+|---------|--------------|-------|
+| `npm run test:ui` | http://localhost:XXXX/__vitest__/ | 174 unit/integration tests, live reload |
+| `npm run test:e2e:ui` | Playwright UI | 207 E2E tests, video playback, traces |
+| `npm run test:e2e:debug` | Playwright Inspector | Step through E2E tests one action at a time |
+
+### Reports
+| File/Folder | Access | Shows |
+|-------------|--------|-------|
+| `coverage/index.html` | Open in browser | Line-by-line code coverage |
+| `test-results/` | Playwright report URL | Screenshots, video, traces (after E2E run) |
 
 ## Troubleshooting
 
