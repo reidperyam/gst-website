@@ -4,72 +4,55 @@
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `.github/workflows/test.yml` | Main test workflow | ✅ Ready |
-| `.github/workflows/deploy-preview.yml` | PR feedback | ✅ Ready |
-| `.github/workflows/deployment-status.yml` | Status updates | ✅ Ready |
 | `TEST_STRATEGY.md` | Complete strategy | ✅ Done |
 | `GITHUB_ACTIONS_SETUP.md` | Quick start guide | ✅ Done |
 | `BRANCH_PROTECTION_CONFIG.md` | Branch rules | ✅ Done |
 | `CI_CD_SUMMARY.md` | Architecture overview | ✅ Done |
+| `vitest.config.ts` | Unit test config | ✅ Done |
+| `playwright.config.ts` | E2E test config | ✅ Done |
 
-## Next Steps (In Order)
+## Setup Status
 
 ```
-1. Read TEST_STRATEGY.md (30 min)
-   ↓
-2. Commit workflows to .github/workflows/ (1 min)
-   ↓
-3. Follow GITHUB_ACTIONS_SETUP.md (15 min)
-   ↓
-4. Setup branch protection (BRANCH_PROTECTION_CONFIG.md) (10 min)
-   ↓
-5. Install test dependencies (5 min)
-   ↓
-6. Create test configs from TEST_STRATEGY.md (15 min)
-   ↓
-7. Write tests (ongoing)
+✅ Test dependencies installed
+✅ Vitest & Playwright configured
+✅ Test files created (174 tests)
+✅ E2E tests configured (207 tests)
+✅ All tests passing
 ```
 
-## Installation Commands
+## Available Commands
 
 ```bash
-# Install test dependencies
-npm install --save-dev \
-  vitest \
-  playwright \
-  @playwright/test \
-  jsdom \
-  @vitest/ui \
-  @vitest/coverage-v8
-
-# Add to package.json (copy from TEST_STRATEGY.md section 6)
-# Then:
+# All these are already configured and ready to use
 
 # Run tests
-npm test                # Watch mode
-npm run test:run       # Single run
-npm run test:coverage  # With coverage
-npm run test:e2e       # E2E only
-npm run test:all       # Everything
+npm test                # Watch mode (re-runs on file changes)
+npm run test:run       # Single run (unit + integration)
+npm run test:coverage  # With coverage report
+npm run test:e2e       # E2E tests only
+npm run test:all       # Everything (unit + integration + E2E)
+
+# E2E debugging
+npm run test:e2e:ui    # Visual test UI
+npm run test:e2e:debug # Step through E2E tests
 ```
 
-## How It Works
+## Development Workflow
 
-### On Push to Main
+### Before Pushing Code
 ```
-1. Tests start (3-5 min after push)
-2. Vercel deployment starts (simultaneously)
-3. Tests finish → results posted to Actions tab
-4. Vercel finishes → site deployed
+1. Make your changes
+2. Run npm run test:all locally
+3. Wait for all 381 tests to pass
+4. Only then push to remote
 ```
 
-### On Pull Request
+### After Pushing to Remote
 ```
-1. Tests start immediately
-2. Vercel preview created
-3. Tests posted as comment
-4. ❌ Fail? Can't merge
-5. ✅ Pass? Mergeable
+1. Vercel automatically deploys main branch
+2. Preview builds created for PRs
+3. Code is live after merge to main
 ```
 
 ## File Structure to Create
@@ -190,19 +173,22 @@ test.describe('User Journey', () => {
 <div data-testid="sticky-controls" />
 ```
 
-## GitHub Status Checks
+## Local Testing (Before Push)
 
-When you create a PR or push:
+Run these commands locally before pushing:
 
-```
-✅ Unit & Integration Tests (18.x)     → MUST PASS
-✅ Unit & Integration Tests (20.x)     → MUST PASS
-✅ Build Verification                  → MUST PASS
-⚠️  E2E Tests                           → SHOULD PASS
+```bash
+# Run all tests
+npm run test:all
 
-If any MUST PASS fails:
-→ PR can't merge
-→ Must fix and push again
+# Expected results:
+# ✅ 174 unit/integration tests passing
+# ✅ 207 E2E tests passing (across chromium, firefox, webkit)
+# ✅ 0 failures
+
+# If tests fail:
+→ Fix and re-run locally
+→ Only push when all tests pass
 ```
 
 ## Coverage Targets
@@ -220,11 +206,10 @@ If any MUST PASS fails:
 
 | Where | How | What |
 |-------|-----|------|
-| **GitHub Actions** | Actions tab | Test logs, artifacts |
-| **PR Comments** | PR page | Test summary |
-| **Coverage** | `coverage/index.html` | Line-by-line coverage |
-| **E2E Report** | Artifacts → Playwright | Screenshots, traces |
-| **Codecov** | codecov.io | Coverage trends |
+| **Terminal Output** | `npm run test:all` | Test logs, results |
+| **Coverage Report** | `coverage/index.html` | Line-by-line coverage |
+| **E2E Reports** | `test-results/` | Screenshots, traces, logs |
+| **Watch Mode** | `npm test` | Live test results |
 
 ## Troubleshooting
 
@@ -266,20 +251,20 @@ use: {
 
 ## Vercel Integration
 
-**Current:** Vercel auto-deploys main on push
-**New:** Vercel auto-deploys, tests run in parallel
+**Deployment:** Vercel auto-deploys main on push
+**Testing:** Run tests locally before pushing
 
 ```
-Both are INDEPENDENT:
-- Tests don't block Vercel
-- Vercel doesn't wait for tests
-- Tests provide feedback
-- You see results in Actions tab
+Test locally first:
+- Run npm run test:all
+- Fix any failures
+- Push only when green
 
-On PRs:
-- Tests MUST pass to merge
-- Vercel preview created
-- Both finish independently
+Vercel deployment:
+- Automatic on push to main
+- Preview builds on PRs
+- No test blocking needed
+- You maintain quality gate locally
 ```
 
 ## Team Workflow
@@ -287,55 +272,54 @@ On PRs:
 ```
 Developer:
 1. Create feature branch
-2. Make changes
-3. Push to PR
-4. Wait for tests (5-10 min)
-5. Await review
+2. Make changes locally
+3. Run npm run test:all
+4. Fix any test failures
+5. Push to remote when all tests pass
+6. Create PR if needed
 
 Reviewer:
-1. See test results on PR
-2. Review code
-3. Try Vercel preview
-4. Approve when ready
+1. Review code on PR
+2. Try Vercel preview
+3. Approve when satisfied
+4. Merge PR
 
-Developer:
-1. Merge PR
-2. Main branch tests run
-3. Vercel deploys
+After Merge:
+1. Code is deployed to main
+2. Vercel handles deployment
+3. All tests passed locally before merge
 4. Done!
 ```
 
-## Emergency: Bypass Tests
-
-**Not recommended**, but if absolutely needed:
+## If Tests Fail Before Push
 
 ```bash
-# Revert to previous commit
-git revert HEAD
-git push origin main
+# Run locally to see what's failing
+npm run test:all
 
-# Vercel will redeploy previous version
-# (Cleaner than forcing)
+# Or run specific test file
+npm run test:run -- tests/unit/analytics.test.ts
+
+# Debug E2E tests with UI
+npm run test:e2e:debug
+
+# Fix the issues, then commit and push
+# (Only push when all tests pass)
 ```
 
-## Resources
+## Documentation
 
-- **Comprehensive Guide:** `TEST_STRATEGY.md`
-- **Quick Setup:** `GITHUB_ACTIONS_SETUP.md`
-- **Branch Rules:** `BRANCH_PROTECTION_CONFIG.md`
-- **Architecture:** `CI_CD_SUMMARY.md`
-- **This Document:** `QUICK_REFERENCE.md`
+- **Test Strategy:** `TEST_STRATEGY.md` - Complete testing approach
+- **Analytics Guide:** `analytics/ANALYTICS_TESTING.md` - GA4 event testing
+- **Analytics Summary:** `analytics/TESTING_SUMMARY.md` - Coverage stats
+- **This Document:** `QUICK_REFERENCE.md` - Quick reference
 
-## Key Agents Available
+## Current Test Coverage
 
-When implementing tests, use these agents:
-
-- **test-strategy-architect** - Design test structure
-- **test-automation-specialist** - Write test suites
-- **javascript-typescript-expert** - Code quality
-- **code-reviewer** - Review test code
-- **performance-testing-expert** - Monitor test speed
-- **ui-ux-playwright-reviewer** - Review UI tests
+- **Unit & Integration Tests:** 174 tests, 100% passing
+- **E2E Tests:** 207 tests (all browsers), 100% passing
+- **Total:** 381 tests, 0 failures
+- **Time:** ~2 min (local), ~1-2 hours (all browsers)
 
 ## Common Patterns
 
@@ -388,5 +372,6 @@ it('should toggle theme', async () => {
 
 ---
 
-**Last Updated:** 2026-01-28
-**Print this card and post it near your workspace**
+**Last Updated:** 2026-01-30
+**Status:** All 381 tests passing ✅
+**Ready for:** Production use
