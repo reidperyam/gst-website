@@ -4,13 +4,52 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { setupAnalyticsMocking } from './helpers/analytics';
 
 test.describe('Google Analytics E2E Tests', () => {
+  // Helper function to setup gtag wrapping after page load
+  async function setupAnalyticsMocking(page: any) {
+    await page.evaluate(() => {
+      // Initialize event tracking arrays
+      (window as any).gtagEvents = [];
+      (window as any).gtagCalls = [];
+
+      // Store the original gtag function
+      const originalGtag = (window as any).gtag;
+
+      // Create wrapped gtag function
+      (window as any).gtag = function(...args: any[]) {
+        // Record all gtag calls
+        (window as any).gtagCalls.push({
+          timestamp: new Date().toISOString(),
+          args: JSON.parse(JSON.stringify(args)),
+        });
+
+        // Record event calls specifically
+        if (args[0] === 'event') {
+          (window as any).gtagEvents.push({
+            eventName: args[1],
+            eventData: args[2] || {},
+            timestamp: new Date().toISOString(),
+          });
+        }
+
+        // Call original gtag
+        if (typeof originalGtag === 'function') {
+          return originalGtag.apply(this, args);
+        }
+      };
+    });
+  }
+
   // Setup for each test
   test.beforeEach(async ({ page }) => {
-    // Setup analytics mocking to prevent real GA requests
-    await setupAnalyticsMocking(page);
+    // Setup route interception for GA requests BEFORE page load
+    await page.route('**/googletagmanager.com/**', route => {
+      route.abort();
+    });
+    await page.route('**/google-analytics.com/**', route => {
+      route.abort();
+    });
 
     // Intercept and log GA events for verification
     await page.on('console', msg => {
@@ -20,9 +59,18 @@ test.describe('Google Analytics E2E Tests', () => {
     });
   });
 
+  // Helper to setup mocking after navigation
+  async function gotoAndSetupAnalytics(page: any, url: string) {
+    await page.goto(url);
+    await page.waitForFunction(() => {
+      return typeof window.gtag === 'function';
+    }, { timeout: 10000 });
+    await setupAnalyticsMocking(page);
+  }
+
   test.describe('GA4 Script Loading', () => {
     test('should initialize gtag function', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -37,7 +85,7 @@ test.describe('Google Analytics E2E Tests', () => {
       ];
 
       for (const { url } of pages) {
-        await page.goto(url);
+        await gotoAndSetupAnalytics(page, url);
 
         const gtagExists = await page.evaluate(() => {
           return typeof window.gtag === 'function';
@@ -49,7 +97,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('Navigation Event Tracking', () => {
     test('should track navigation link clicks', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Wait for gtag to be available
       await page.waitForFunction(() => {
@@ -68,7 +116,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track multiple navigation actions', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Wait for gtag to be available
       await page.waitForFunction(() => {
@@ -100,7 +148,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('Portfolio Interaction Tracking', () => {
     test('should track project card clicks', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
       // Click first project card
       const firstCard = page.locator('[data-testid="project-card"]').first();
@@ -122,7 +170,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track modal close action', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
       // Open modal
       const firstCard = page.locator('[data-testid="project-card"]').first();
@@ -145,7 +193,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track project view with details', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
       // Open project modal
       const firstCard = page.locator('[data-testid="project-card"]').first();
@@ -170,10 +218,10 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('Filter Tracking', () => {
     test('should track filter application', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
-      // Find filter controls
-      const filterButton = page.locator('[data-testid="filter-toggle"], button:has-text("Filter")').first();
+      // Use specific header filter toggle selector, not generic button selector
+      const filterButton = page.locator('[data-testid="portfolio-filter-toggle"]');
 
       // If filter controls exist, test them
       if (await filterButton.isVisible({ timeout: 3000 }).catch(() => false)) {
@@ -197,7 +245,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('Theme Toggle Tracking', () => {
     test('should track theme toggle clicks', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Click theme toggle
       const themeToggle = page.locator('[data-testid="theme-toggle"]');
@@ -227,7 +275,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track theme preference changes', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Get initial theme
       const initialTheme = await page.evaluate(() => {
@@ -254,7 +302,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('CTA Tracking', () => {
     test('should track CTA button clicks', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Prevent navigation to external site
       await page.route('**/calendly.com/**', route => route.abort());
@@ -315,7 +363,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track events independently of page navigation', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const events: string[] = [];
 
@@ -339,7 +387,7 @@ test.describe('Google Analytics E2E Tests', () => {
   test.describe('Cross-Browser GA Functionality', () => {
     test('should initialize GA on mobile viewport', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -349,7 +397,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
     test('should initialize GA on tablet viewport', async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -359,7 +407,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
     test('should initialize GA on desktop viewport', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -376,7 +424,7 @@ test.describe('Google Analytics E2E Tests', () => {
       });
 
       // Page should still load successfully
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Check page is functional
       const title = page.locator('h1, h2');
@@ -384,7 +432,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should continue tracking if gtag is temporarily unavailable', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Make gtag temporarily unavailable
       await page.evaluate(() => {

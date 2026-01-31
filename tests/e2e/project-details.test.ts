@@ -139,16 +139,21 @@ test.describe('Project Details Viewing Journey', () => {
   });
 
   test('should maintain page responsiveness during interaction', async ({ page }) => {
-    // Perform interactions
-    const buttons = page.locator('button');
-    const buttonCount = await buttons.count();
+    // Use project cards for interaction testing instead of generic buttons
+    // to avoid accidentally targeting hidden sticky controls
+    const cards = page.locator('[data-testid="project-card"]');
+    const cardCount = await cards.count();
 
-    expect(buttonCount).toBeGreaterThan(0);
+    expect(cardCount).toBeGreaterThan(0);
 
-    // Click first button
-    const firstButton = buttons.first();
-    await expect(firstButton).toBeVisible();
-    await firstButton.click();
+    // Click first project card
+    const firstCard = cards.first();
+    await expect(firstCard).toBeVisible();
+    await firstCard.click();
+
+    // Modal should open
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Page should still respond to scroll
     await page.evaluate(() => window.scrollBy(0, 100));

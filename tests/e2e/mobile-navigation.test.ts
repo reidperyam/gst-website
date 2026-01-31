@@ -159,14 +159,16 @@ test.describe('Mobile Navigation Journey', () => {
   });
 
   test('should maintain functionality with touch gestures', async ({ page }) => {
-    // Find interactive button
-    const buttons = page.locator('button');
-    const firstButton = buttons.first();
+    // Interact with project card via touch
+    const card = page.locator('[data-testid="project-card"]').first();
+    await expect(card).toBeVisible();
 
-    await expect(firstButton).toBeVisible();
+    // Tap card to open modal
+    await card.tap();
 
-    // Tap button
-    await firstButton.tap();
+    // Modal should open and be visible
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Page should still be functional
     const body = page.locator('body');
@@ -189,11 +191,11 @@ test.describe('Mobile Navigation Journey', () => {
   });
 
   test('should have readable text on mobile', async ({ page }) => {
-    // Check font size is reasonable on first button
-    const firstButton = page.locator('button').first();
-    await expect(firstButton).toBeVisible();
+    // Check font size is reasonable on project cards
+    const card = page.locator('[data-testid="project-card"]').first();
+    await expect(card).toBeVisible();
 
-    const fontSize = await firstButton.evaluate(el => {
+    const fontSize = await card.evaluate(el => {
       return window.getComputedStyle(el).fontSize;
     });
 
