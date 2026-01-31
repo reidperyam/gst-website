@@ -3,7 +3,7 @@
  * Tests real user journeys and event tracking across the website
  */
 
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { setupAnalyticsMocking } from './helpers/analytics';
 
 test.describe('Google Analytics E2E Tests', () => {
