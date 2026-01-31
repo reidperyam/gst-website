@@ -18,49 +18,49 @@ The GA4 testing suite consists of three levels:
 
 ```bash
 # Run all unit tests
-npm run test:run
+npm run test
 
 # Run analytics tests only
 npm run test -- analytics.test.ts
 
 # Run with coverage
-npm run test:coverage
+npm run test -- --coverage
 ```
 
 ### Test Coverage
 
 Unit tests cover:
-- ✅ `trackEvent()` - Basic event firing with parameters
-- ✅ `trackNavigation()` - Navigation click tracking
-- ✅ `trackPortfolioInteraction()` - Project view/close tracking
-- ✅ `trackCTA()` - Call-to-action click tracking
-- ✅ `trackFilterAction()` - Portfolio filter tracking
-- ✅ `trackThemeToggle()` - Theme preference tracking
-- ✅ Error handling and edge cases
-- ✅ Multiple rapid event firing
-- ✅ Custom parameter handling
+- ✅ `trackEvent()` - Verifies gtag is called with correct event structure
+- ✅ `trackNavigation()` - Verifies navigation_click event with parameters
+- ✅ `trackPortfolioInteraction()` - Verifies portfolio_view_details, portfolio_close_modal, portfolio_apply_filter events
+- ✅ `trackCTA()` - Verifies cta_click event with type and location
+- ✅ `trackFilterAction()` - Verifies filter_applied event with filter details
+- ✅ `trackThemeToggle()` - Verifies theme_toggle event with theme value
+- ✅ Error handling - Graceful handling when gtag unavailable
+- ✅ Event categories - Proper category assignment for each event type
+- ✅ Parameter mapping - Correct transformation of event data to gtag format
 
 ### Unit Test Examples
 
 ```typescript
-// Test basic event tracking
-it('should call window.gtag with correct event structure', () => {
-  const eventData: AnalyticsEvent = {
-    event: 'test_event',
-    category: 'navigation',
-    label: 'test',
-  };
+// Test that trackEvent calls gtag with correct format
+it('should call gtag with event command and parameters', () => {
+  const mockGtag = vi.fn();
+  (global as any).window = { gtag: mockGtag };
 
-  trackEvent(eventData);
+  trackEvent({ event: 'test_event', category: 'navigation', label: 'Test' });
 
   expect(mockGtag).toHaveBeenCalledWith('event', 'test_event', {
     event_category: 'navigation',
-    label: 'test',
+    label: 'Test',
   });
 });
 
-// Test navigation tracking
-it('should track navigation click with correct parameters', () => {
+// Test navigation tracking with destination
+it('should track navigation click with destination URL', () => {
+  const mockGtag = vi.fn();
+  (global as any).window = { gtag: mockGtag };
+
   trackNavigation('/ma-portfolio', 'M&A Portfolio');
 
   expect(mockGtag).toHaveBeenCalledWith('event', 'navigation_click', {
@@ -69,89 +69,52 @@ it('should track navigation click with correct parameters', () => {
     destination: '/ma-portfolio',
   });
 });
+
+// Test error handling when gtag unavailable
+it('should not throw if gtag is not available', () => {
+  (global as any).window = {}; // No gtag
+
+  expect(() => {
+    trackEvent({ event: 'test', category: 'navigation' });
+  }).not.toThrow();
+});
 ```
 
 ## Integration Tests
 
-**Location:** `tests/integration/analytics-integration.test.ts`
+**Location:** `tests/integration/*.test.ts`
+
+**Note:** Integration tests currently test business logic (filtering, searching, sorting) in isolation. Full component integration testing is handled by E2E tests.
 
 ### Running Integration Tests
 
 ```bash
 # Run all integration tests
-npm run test:run tests/integration/
+npm run test tests/integration/
 
-# Run analytics integration tests
-npm run test -- analytics-integration.test.ts
+# Run specific integration tests
+npm run test -- portfolio-filtering.test.ts
 
 # With coverage
-npm run test:coverage
+npm run test -- --coverage
 ```
 
-### Test Coverage
+### Integration Test Coverage
 
-Integration tests cover:
-- ✅ GA4 script loading and initialization
-- ✅ dataLayer initialization
-- ✅ gtag function creation
-- ✅ Event firing with DOM interactions
-- ✅ Link click tracking
-- ✅ Button click tracking
-- ✅ localStorage integration
-- ✅ Event batching to dataLayer
-- ✅ Page view tracking
-- ✅ Custom parameters
-- ✅ Consent mode
-- ✅ Error recovery
-- ✅ Measurement ID handling
-- ✅ User ID and properties
-
-### Integration Test Examples
-
-```typescript
-// Test GA4 initialization
-it('should initialize dataLayer on window', () => {
-  window.dataLayer = [];
-  const dataLayerPush = vi.spyOn(window.dataLayer, 'push');
-
-  window.gtag = function() {
-    window.dataLayer!.push(arguments as any);
-  };
-
-  expect(window.dataLayer).toBeDefined();
-  expect(Array.isArray(window.dataLayer)).toBe(true);
-});
-
-// Test DOM event tracking
-it('should track click events on navigation links', () => {
-  const nav = document.createElement('nav');
-  const link = document.createElement('a');
-  link.href = '/ma-portfolio';
-  link.textContent = 'M&A Portfolio';
-  nav.appendChild(link);
-  document.body.appendChild(nav);
-
-  link.addEventListener('click', () => {
-    window.gtag!('event', 'navigation_click', {
-      event_category: 'navigation',
-      label: 'M&A Portfolio',
-      destination: '/ma-portfolio',
-    });
-  });
-
-  link.click();
-
-  expect(window.gtag).toHaveBeenCalledWith('event', 'navigation_click', {
-    event_category: 'navigation',
-    label: 'M&A Portfolio',
-    destination: '/ma-portfolio',
-  });
-});
-```
+- ✅ Portfolio filtering logic with multiple filter types
+- ✅ Search logic with debouncing and relevance
+- ✅ Project sorting (by date, name, impact)
+- ✅ Theme preference storage
+- ✅ Component state management
+- ✅ Edge cases and data validation
 
 ## End-to-End Tests
 
-**Location:** `tests/e2e/analytics.test.ts`
+**Location:**
+- `tests/e2e/analytics.test.ts` - GA4 event tracking
+- `tests/e2e/mobile-navigation.test.ts` - Mobile interactions
+- `tests/e2e/project-details.test.ts` - Project card interactions
+- `tests/e2e/theme-toggle.test.ts` - Theme toggle functionality
 
 ### Running E2E Tests
 
@@ -162,71 +125,92 @@ npm run test:e2e
 # Run analytics E2E tests only
 npm run test:e2e -- analytics.test.ts
 
-# Run with UI
-npm run test:e2e:ui
+# Run with UI (visual debugging)
+npm run test:e2e -- --ui
 
-# Debug mode
+# Debug mode (runs one browser, opens inspector)
 npm run test:e2e:debug
 ```
 
 ### Test Coverage
 
-E2E tests cover:
-- ✅ GA4 script loads on real pages
+**Analytics Tests:**
 - ✅ gtag function initialized globally
-- ✅ Navigation link tracking
-- ✅ Portfolio card clicks tracked
-- ✅ Modal open/close tracked
-- ✅ Project details tracked
-- ✅ Filter applications tracked
-- ✅ Theme toggle tracked
-- ✅ CTA button tracking
-- ✅ Complete user journeys
-- ✅ Cross-browser functionality
-- ✅ Mobile/tablet/desktop viewports
-- ✅ Error handling and graceful degradation
+- ✅ Portfolio card clicks fire `portfolio_view_details` event
+- ✅ Modal close fires `portfolio_close_modal` event
+- ✅ Theme toggle fires `theme_toggle` event with correct value
+- ✅ CTA clicks fire `cta_click` event with type and location
+- ✅ Filter applications fire `filter_applied` event
+- ✅ Complete user journeys tracked correctly
+- ✅ Cross-browser functionality (chromium, firefox, webkit)
+
+**User Interaction Tests:**
+- ✅ Mobile navigation (touch gestures, responsive layout)
+- ✅ Project details (modal opening, closing, keyboard navigation)
+- ✅ Theme toggle (button functionality, persistence)
+- ✅ All interactive elements properly visible and enabled
 
 ### E2E Test Examples
 
 ```typescript
-// Test GA script loading
-test('should load GA4 script on homepage', async ({ page }) => {
+// Test GA4 initialization
+test('should initialize gtag function', async ({ page }) => {
   await page.goto('/');
 
-  const gtagScripts = await page.locator('script[src*="googletagmanager.com"]').count();
-  expect(gtagScripts).toBeGreaterThan(0);
-
-  const dataLayerExists = await page.evaluate(() => {
-    return typeof window.dataLayer !== 'undefined';
+  const gtagExists = await page.evaluate(() => {
+    return typeof window.gtag === 'function';
   });
-  expect(dataLayerExists).toBe(true);
+  expect(gtagExists).toBe(true);
 });
 
-// Test real user journey
-test('should track full portfolio discovery journey', async ({ page }) => {
+// Test portfolio_view_details event tracking
+test('should track project card clicks', async ({ page }) => {
+  await page.goto('/ma-portfolio');
+
+  // Click first project card
+  const firstCard = page.locator('[data-testid="project-card"]').first();
+  await expect(firstCard).toBeVisible();
+  await firstCard.click();
+
+  // Wait for modal
+  const modal = page.locator('[data-testid="project-modal"]');
+  await expect(modal).toBeVisible({ timeout: 5000 });
+
+  // Verify portfolio_view_details event was tracked
+  const events = await page.evaluate(() => (window as any).gtagEvents || []);
+  const viewDetailsEvent = events.find(
+    (e: any) => e.eventName === 'portfolio_view_details'
+  );
+  expect(viewDetailsEvent).toBeDefined();
+  expect(viewDetailsEvent?.eventData).toBeDefined();
+});
+
+// Test theme_toggle event tracking
+test('should track theme toggle clicks', async ({ page }) => {
   await page.goto('/');
 
-  // Navigate to portfolio
-  await page.locator('a:has-text("M&A")').click();
-  await page.waitForURL('/ma-portfolio');
-
-  // View a project
-  const firstCard = page.locator('[data-testid="project-card"]').first();
-  if (await firstCard.isVisible()) {
-    await firstCard.click();
-
-    const modal = page.locator('[data-testid="project-modal"]');
-    await expect(modal).toBeVisible();
-
-    // Close modal
-    await page.locator('[data-testid="project-modal-close"]').click();
-  }
-
-  // Verify events were tracked
-  const eventLog = await page.evaluate(() => {
-    return (window as any).recordedEvents.length;
+  // Get initial theme
+  const initialTheme = await page.evaluate(() => {
+    return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
   });
-  expect(eventLog).toBeGreaterThan(0);
+
+  // Click theme toggle
+  const themeToggle = page.locator('[data-testid="theme-toggle"]');
+  await expect(themeToggle).toBeVisible();
+  await themeToggle.click();
+
+  // Wait for theme to change
+  await page.waitForFunction((theme) => {
+    const isDark = document.body.classList.contains('dark-theme');
+    const newTheme = isDark ? 'dark' : 'light';
+    return newTheme !== theme;
+  }, initialTheme);
+
+  // Verify theme_toggle event was tracked
+  const events = await page.evaluate(() => (window as any).gtagEvents || []);
+  const toggleEvent = events.find((e: any) => e.eventName === 'theme_toggle');
+  expect(toggleEvent).toBeDefined();
+  expect(['light', 'dark']).toContain(toggleEvent?.eventData.theme);
 });
 ```
 
@@ -238,36 +222,45 @@ Always mock `window.gtag` to verify correct function calls:
 
 ```typescript
 const mockGtag = vi.fn();
-(window as any).gtag = mockGtag;
+(global as any).window = { gtag: mockGtag };
 
 trackEvent(eventData);
 
 expect(mockGtag).toHaveBeenCalledWith('event', eventName, eventParams);
 ```
 
-### 2. Test Event Parameters
+### 2. Verify Specific Events in E2E Tests
 
-Verify all event parameters are correct:
+Use the helper functions to verify actual events were tracked:
 
 ```typescript
-it('should include project details in event', () => {
-  trackPortfolioInteraction('view_details', 'proj-1', 'TechCorp');
-
-  expect(mockGtag).toHaveBeenCalledWith('event', 'portfolio_view_details', {
-    event_category: 'portfolio',
-    project_id: 'proj-1',
-    project_name: 'TechCorp',
-  });
-});
+const events = await page.evaluate(() => (window as any).gtagEvents || []);
+const viewEvent = events.find((e: any) => e.eventName === 'portfolio_view_details');
+expect(viewEvent).toBeDefined();
+expect(viewEvent?.eventData.project_name).toBeTruthy();
 ```
 
-### 3. Test Error Handling
+### 3. Use Proper Async Assertions
+
+Don't use `.catch(() => false)` to hide failures - use proper assertions:
+
+```typescript
+// ❌ BAD - hides failures
+const isVisible = await button.isVisible().catch(() => false);
+if (isVisible) { ... }
+
+// ✅ GOOD - fails if button not visible
+await expect(button).toBeVisible();
+await button.click();
+```
+
+### 4. Test Error Handling
 
 Verify graceful handling when gtag is unavailable:
 
 ```typescript
 it('should not throw if gtag is not available', () => {
-  delete (window as any).gtag;
+  (global as any).window = {}; // No gtag
 
   expect(() => {
     trackEvent({ event: 'test', category: 'navigation' });
@@ -275,29 +268,54 @@ it('should not throw if gtag is not available', () => {
 });
 ```
 
-### 4. Test Complete User Journeys
+### 5. Test Complete User Journeys
 
-Combine multiple events to test realistic user flows:
+Combine multiple interactions to test realistic user flows:
 
 ```typescript
-it('should track user journey: navigation -> view -> filter -> cta', () => {
-  trackNavigation('/ma-portfolio', 'M&A Portfolio');
-  trackPortfolioInteraction('view_details', 'proj-1', 'TechCorp');
-  trackFilterAction('theme', 'AI');
-  trackCTA('calendly', 'cta-section');
+test('should track full journey', async ({ page }) => {
+  // 1. Navigate
+  await page.locator('a:has-text("M&A")').click();
+  await page.waitForURL('/ma-portfolio');
 
-  expect(mockGtag).toHaveBeenCalledTimes(4);
+  // 2. View project
+  const card = page.locator('[data-testid="project-card"]').first();
+  await card.click();
+  await expect(page.locator('[data-testid="project-modal"]')).toBeVisible();
+
+  // 3. Verify events
+  const events = await page.evaluate(() => (window as any).gtagEvents || []);
+  expect(events.find(e => e.eventName === 'navigation_click')).toBeDefined();
+  expect(events.find(e => e.eventName === 'portfolio_view_details')).toBeDefined();
 });
 ```
 
-### 5. Use data-testid for E2E Selectors
+### 6. Use data-testid for Stable Selectors
 
-Reference components by data-testid in E2E tests:
+Reference components by data-testid in E2E tests - don't use fragile selectors:
 
 ```typescript
-const firstCard = page.locator('[data-testid="project-card"]').first();
+// ✅ GOOD - stable selector
+const card = page.locator('[data-testid="project-card"]').first();
 const modal = page.locator('[data-testid="project-modal"]');
-const themeToggle = page.locator('[data-testid="theme-toggle"]');
+const toggle = page.locator('[data-testid="theme-toggle"]');
+
+// ❌ AVOID - fragile selectors
+const card = page.locator('.project-card, [role="button"]'); // Guessing at selectors
+const modal = page.locator('dialog, .modal'); // Multiple variations
+```
+
+### 7. Wait for Conditions, Not Time
+
+Always wait for specific conditions instead of arbitrary timeouts:
+
+```typescript
+// ❌ BAD - arbitrary wait
+await page.waitForTimeout(1000);
+
+// ✅ GOOD - wait for condition
+await expect(modal).toBeVisible({ timeout: 5000 });
+await page.waitForURL('/ma-portfolio');
 ```
 
 ## Testing Checklist
@@ -334,51 +352,60 @@ const themeToggle = page.locator('[data-testid="theme-toggle"]');
 
 ## Debugging GA Events
 
-### View Raw Events in Tests
+### View Recorded Events in Tests
+
+The analytics helper automatically records events to `window.gtagEvents`:
 
 ```typescript
-// Record events for inspection
-await page.evaluateHandle(() => {
-  const originalGtag = window.gtag;
-  (window as any).recordedEvents = [];
-  window.gtag = function() {
-    (window as any).recordedEvents.push(arguments);
-    return originalGtag.apply(this, arguments as any);
-  };
-});
+// Events are automatically recorded by setupAnalyticsMocking
+const events = await page.evaluate(() => (window as any).gtagEvents || []);
 
-// Later, inspect events
-const recordedEvents = await page.evaluate(() => {
-  return (window as any).recordedEvents;
+// Each event has: eventName, eventData, timestamp
+events.forEach(event => {
+  console.log('Event:', event.eventName);
+  console.log('Data:', event.eventData);
+  console.log('Time:', event.timestamp);
 });
-console.log('Recorded events:', recordedEvents);
 ```
 
-### Verify Event Parameters
+### Find Specific Events
 
 ```typescript
-const portfolioViewEvent = recordedEvents.find((args: any) =>
-  args[0] === 'event' && args[1] === 'portfolio_view_details'
+const portfolioViewEvent = events.find((e: any) =>
+  e.eventName === 'portfolio_view_details'
 );
 
-console.log('Portfolio view event:', portfolioViewEvent);
-// Expected: ['event', 'portfolio_view_details', {
-//   event_category: 'portfolio',
-//   project_id: '...',
-//   project_name: '...'
-// }]
+if (portfolioViewEvent) {
+  console.log('Project ID:', portfolioViewEvent.eventData.project_id);
+  console.log('Project Name:', portfolioViewEvent.eventData.project_name);
+}
 ```
 
-### Monitor Network Requests
+### Use Helper Functions
+
+The analytics testing helpers provide convenient methods:
 
 ```typescript
-// Log GA requests in E2E tests
-await page.on('request', request => {
-  if (request.url().includes('google-analytics') ||
-      request.url().includes('googletagmanager')) {
-    console.log('GA request:', request.url());
-  }
+import {
+  setupAnalyticsMocking,
+  getRecordedEvents,
+  expectEventTracked,
+  waitForEvent
+} from './helpers/analytics';
+
+// Setup mocking in beforeEach
+await setupAnalyticsMocking(page);
+
+// Get all recorded events
+const events = await getRecordedEvents(page);
+
+// Verify specific event was tracked
+await expectEventTracked(page, 'theme_toggle', {
+  theme: 'dark'
 });
+
+// Wait for specific event
+const event = await waitForEvent(page, 'cta_click', 5000);
 ```
 
 ## CI/CD Integration
@@ -448,25 +475,51 @@ await page.waitForFunction(() => {
 ### Events not being tracked in E2E
 
 **Cause:** Element not visible or selector incorrect
-**Solution:** Use `data-testid` attributes and wait for visibility
+**Solution:** Use `data-testid` attributes and proper assertions
 
 ```typescript
+// ✅ GOOD - wait for visibility, then verify event
 const element = page.locator('[data-testid="my-element"]');
 await expect(element).toBeVisible();
 await element.click();
+
+// Verify event was tracked
+const events = await page.evaluate(() => (window as any).gtagEvents || []);
+const event = events.find(e => e.eventName === 'expected_event');
+expect(event).toBeDefined();
 ```
 
 ### Flaky E2E tests
 
-**Cause:** Timing issues with event firing
-**Solution:** Use proper wait conditions
+**Cause:** Timing issues or defensive coding hiding failures
+**Solution:** Use proper wait conditions and remove defensive code
 
 ```typescript
-// Instead of: page.waitForTimeout(1000)
-// Use: wait for specific condition
+// ❌ BAD - defensive code
+const isVisible = await element.isVisible().catch(() => false);
+if (isVisible) { ... }
+
+// ✅ GOOD - proper waits
+await expect(element).toBeVisible({ timeout: 5000 });
+await element.click();
+
+// Wait for specific condition
 await page.waitForFunction(() => {
-  return (window as any).recordedEvents?.length > 0;
+  return (window as any).gtagEvents?.length > 0;
 });
+```
+
+### Test passes when it shouldn't
+
+**Cause:** `|| true` or `.catch(() => false)` patterns
+**Solution:** Remove defensive code and use proper assertions
+
+```typescript
+// ❌ BAD - always passes
+expect(isVisible || true).toBeTruthy();
+
+// ✅ GOOD - actual assertion
+await expect(element).toBeVisible();
 ```
 
 ## Resources
