@@ -8,20 +8,15 @@ interface Props {
 const { projects } = Astro.props;
 
 import {
-  getUniqueGrowthStages,
   getGrowthStageProjects,
   getMatureStageProjects,
-  getUniqueThemes,
-  getUniqueYears,
   getUniqueEngagementTypes,
   ENGAGEMENT_CATEGORIES
 } from '../../utils/filterLogic';
 
 // Use centralized filter logic
-const growthStages = getGrowthStageProjects(projects).map(p => p.growthStage);
-const matureStages = getMatureStageProjects(projects).map(p => p.growthStage);
-const uniqueThemes = getUniqueThemes(projects);
-const uniqueYears = getUniqueYears(projects);
+const growthStages = getGrowthStageProjects(projects);
+const matureStages = getMatureStageProjects(projects);
 const uniqueEngagementTypes = getUniqueEngagementTypes(projects);
 const valueCreationEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.valueCreation.includes(e as any)).sort();
 const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.technicalDiligence.includes(e as any)).sort();
@@ -117,7 +112,15 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     margin-left: 0.75rem;
   }
 
-
+  .search-icon {
+    position: absolute;
+    left: 0.875rem;
+    width: 18px;
+    height: 18px;
+    color: rgba(26, 26, 26, 0.5);
+    pointer-events: none;
+    z-index: 1;
+  }
 
   .filter-button {
     margin-right: 0.75rem;
@@ -330,7 +333,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     border-bottom-color: #05cd99;
   }
 
-
+  :global(body.dark-theme) .search-icon {
+    color: rgba(200, 200, 200, 0.5);
+  }
 
   :global(body.dark-theme) .portfolio-filter-drawer {
     background: #1a1a1a;
