@@ -10,6 +10,7 @@ interface Props {
     description?: string;
 }
 
+const isProduction = import.meta.env.PROD;
 const { title, description = 'Global Strategic Technologies - Technology Advisory & Leadership' } = Astro.props;
 ---
 
@@ -29,6 +30,6 @@ const { title, description = 'Global Strategic Technologies - Technology Advisor
             <slot />
         </main>
         <Footer />
-        <SpeedInsights />
+        {isProduction && <SpeedInsights />}
     </body>
 </html>
