@@ -26,7 +26,13 @@ const matureStages = uniqueStages.filter(s => matureKeywords.some(k => s.toLower
 const valueCreationTypes = ['Value Creation - Growth', 'Value Creation - Integration', 'Value Creation - Modernization', 'Value Creation - Turnaround'];
 const technicalDiligenceTypes = ['Early Stage Assessment', 'Technical Assessment', 'Buy-Side Technical Diligence'];
 
-const uniqueEngagementTypes = [...new Set(projects.map(p => p.engagementType).filter((e): e is string => e !== undefined))].sort();
+const uniqueEngagementTypes = [
+  ...new Set(
+    projects
+      .map(p => p.engagementType)
+      .filter((e): e is Exclude<typeof e, undefined> => e !== undefined)
+  )
+].sort();
 const valueCreationEngagements = uniqueEngagementTypes.filter(e => valueCreationTypes.includes(e)).sort();
 const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technicalDiligenceTypes.includes(e)).sort();
 ---
@@ -453,20 +459,40 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     .controls-wrapper {
       width: 100%;
       padding: 0;
+      gap: 0.5rem;
     }
 
     .search-box {
       flex: 1;
-      min-width: 300px;
+      min-width: 0;
       min-height: 38px;
       display: flex;
       align-items: center;
+    }
+
+    .search-input {
+      min-width: 0;
     }
 
     .search-icon {
       width: 16px;
       height: 16px;
       left: 0.65rem;
+    }
+
+    .filter-button {
+      flex-shrink: 0;
+      min-width: 44px;
+      height: 38px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .filter-button svg {
+      width: 20px;
+      height: 20px;
     }
 
     .filter-text {
@@ -825,9 +851,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
 <script>
   function initStickyControls() {
-    const controlsElement = document.querySelector('.portfolio-controls-sticky');
-    const headerElement = document.querySelector('.portfolio-header');
-    const navHeader = document.querySelector('header');
+    const controlsElement = document.querySelector('.portfolio-controls-sticky') as HTMLElement | null;
+    const headerElement = document.querySelector('.portfolio-header') as HTMLElement | null;
+    const navHeader = document.querySelector('header') as HTMLElement | null;
 
     if (!controlsElement || !headerElement) {
       return;
@@ -836,6 +862,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     let isSticky = false;
 
     function handleScroll() {
+      if (!controlsElement || !headerElement) return;
+
       const headerRect = headerElement.getBoundingClientRect();
       const shouldBeSticky = headerRect.bottom <= 0;
 

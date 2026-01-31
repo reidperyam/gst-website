@@ -14,6 +14,9 @@ body {
     color: rgba(26, 26, 26, 0.85);
     line-height: 1.5;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Sega Genesis-style checkerboard grid with dark lines on light background */
@@ -489,11 +492,11 @@ a:hover {
 
 /* Footer */
 footer {
-    padding: 2rem 0 1rem 0;
+    padding: 1.25rem 0 0 0;
     background: #eeeeee;
     border-top: 4px solid #05cd99;
     position: relative;
-    z-index: 0;
+    z-index: 1;
 }
 
 .footer-content {
@@ -944,7 +947,7 @@ body.dark-theme .cta-box p {
     }
 
     .hero h1 {
-        font-size: 1.85rem;
+        font-size: 2em;
         line-height: 1.1;
         margin-bottom: 1.25rem;
     }
@@ -1135,10 +1138,25 @@ body.dark-theme .cta-box p {
     }
 }
 
+/* Tablet (480px - 768px) */
+@media (min-width: 480px) and (max-width: 767px) {
+    footer {
+        padding: 1.5rem 0 0.375rem 0;
+    }
+}
+
+/* Desktop (768px+) */
+@media (min-width: 768px) {
+    footer {
+        padding: 2rem 0 0.5rem 0;
+    }
+}
+
 /* Portfolio Page Styles */
 main {
     position: relative;
     z-index: 1;
+    flex: 1;
 }
 
 .sr-only {
