@@ -13,6 +13,26 @@ import ThemeToggle from './ThemeToggle.astro';
         </div>
         <div class="footer-bottom">
             <p>© 2026 Global Strategic Technologies</p>
+            <div class="footer-delta-icon">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 88" aria-hidden="true">
+                    <text x="24" y="60" font-family="serif" font-size="72" fill="currentColor" text-anchor="middle">Δ</text>
+                </svg>
+            </div>
         </div>
     </div>
 </footer>
+
+<style>
+    .footer-delta-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(26, 26, 26, 0.4);
+        flex-shrink: 0;
+        font-size: 32px;
+    }
+
+    :global(body.dark-theme) .footer-delta-icon {
+        color: rgba(200, 200, 200, 0.4);
+    }
+</style>
