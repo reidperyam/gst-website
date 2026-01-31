@@ -15,11 +15,10 @@ export interface AnalyticsEvent {
 
 /**
  * Track a custom event in Google Analytics
- * Only fires in production environments
  * @param eventData - The event data to track
  */
 export function trackEvent(eventData: AnalyticsEvent): void {
-  if (typeof window !== 'undefined' && window.gtag && import.meta.env.PROD) {
+  if (typeof window !== 'undefined' && window.gtag) {
     const { event, category, ...params } = eventData;
     window.gtag('event', event, {
       event_category: category,

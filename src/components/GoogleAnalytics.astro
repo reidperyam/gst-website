@@ -1,11 +1,15 @@
 ---
 // Google Analytics 4 Component
 // Initializes GA4 tracking for the entire website
-// Only loads in production environments
+// Loads in production and test environments (test requests are mocked)
 // Measurement ID should be provided via environment variable
 
 const isProduction = import.meta.env.PROD;
-const enableAnalytics = isProduction && import.meta.env.PUBLIC_ENABLE_ANALYTICS !== 'false';
+const isTest = import.meta.env.MODE === 'test' ||
+               typeof process !== 'undefined' && process.env.VITEST;
+const enableAnalytics = (isProduction || isTest) &&
+                       import.meta.env.PUBLIC_ENABLE_ANALYTICS !== 'false';
+const loadExternalScript = isProduction; // Only load GA script in production
 const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-WTGM9Y1YB0';
 ---
 
@@ -26,10 +30,12 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-WTGM9Y1YB0'
       window.gtag = gtag;
     </script>
 
-    <script
-      async
-      is:inline
-      src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-    ></script>
+    {loadExternalScript && (
+      <script
+        async
+        is:inline
+        src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+      ></script>
+    )}
   </>
 )}
