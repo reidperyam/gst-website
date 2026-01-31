@@ -170,7 +170,7 @@ a:hover {
     color: rgba(26, 26, 26, 0.95);
     text-transform: uppercase;
     letter-spacing: -0.04em;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 .hero h1 .line {
@@ -184,8 +184,8 @@ a:hover {
 .hero-content {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
-    gap: 4rem;
-    margin-top: 1.5rem;
+    gap: 2rem;
+    margin-top: 0.5rem;
 }
 
 .hero p {
@@ -876,8 +876,8 @@ body.dark-theme .cta-box p {
 
     .hero-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
-        margin-top: 2rem;
+        gap: 1rem;
+        margin-top: 0.5rem;
     }
 
     .hero p {
@@ -949,13 +949,13 @@ body.dark-theme .cta-box p {
     .hero h1 {
         font-size: 2em;
         line-height: 1.1;
-        margin-bottom: 1.25rem;
+        margin-bottom: 0.25rem;
     }
 
     .hero-content {
         grid-template-columns: 1fr;
-        gap: 1rem;
-        margin-top: 1rem;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
     }
 
     .hero p {
