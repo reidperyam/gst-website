@@ -11,11 +11,39 @@ import ThemeToggle from './ThemeToggle.astro';
             </div>
             <ThemeToggle />
         </div>
-        <div class="footer-bottom">
-            <p>© 2026 Global Strategic Technologies</p>
-        </div>
     </div>
 </footer>
 
 <style>
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .footer-links a {
+        color: rgba(26, 26, 26, 0.7);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+        color: #05cd99;
+    }
+
+    :global(body.dark-theme) .footer-links a {
+        color: rgba(200, 200, 200, 0.7);
+    }
+
+    :global(body.dark-theme) .footer-links a:hover {
+        color: #05cd99;
+    }
+
 </style>
