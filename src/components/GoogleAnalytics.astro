@@ -1,27 +1,35 @@
 ---
 // Google Analytics 4 Component
 // Initializes GA4 tracking for the entire website
+// Only loads in production environments
 // Measurement ID should be provided via environment variable
 
+const isProduction = import.meta.env.PROD;
+const enableAnalytics = isProduction && import.meta.env.PUBLIC_ENABLE_ANALYTICS !== 'false';
 const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-WTGM9Y1YB0';
 ---
 
-<script define:vars={{ measurementId }} is:inline>
-  // Load Google Analytics
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag('js', new Date());
-  gtag('config', measurementId, {
-    send_page_view: true,
-  });
+{enableAnalytics && (
+  <>
+    <script define:vars={{ measurementId }} is:inline>
+      // Load Google Analytics
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', measurementId, {
+        send_page_view: true,
+      });
 
-  // Expose gtag globally for event tracking
-  window.gtag = gtag;
-</script>
+      // Expose gtag globally for event tracking
+      window.gtag = gtag;
+    </script>
 
-<script
-  async
-  src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-></script>
+    <script
+      async
+      is:inline
+      src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+    ></script>
+  </>
+)}
