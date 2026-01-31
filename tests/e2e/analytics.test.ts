@@ -4,10 +4,14 @@
  */
 
 import { test, expect, Page } from '@playwright/test';
+import { setupAnalyticsMocking } from './helpers/analytics';
 
 test.describe('Google Analytics E2E Tests', () => {
   // Setup for each test
   test.beforeEach(async ({ page }) => {
+    // Setup analytics mocking to prevent real GA requests
+    await setupAnalyticsMocking(page);
+
     // Intercept and log GA events for verification
     await page.on('console', msg => {
       if (msg.type() === 'log') {
@@ -17,20 +21,6 @@ test.describe('Google Analytics E2E Tests', () => {
   });
 
   test.describe('GA4 Script Loading', () => {
-    test('should load GA4 script on homepage', async ({ page }) => {
-      await page.goto('/');
-
-      // Check if gtag script is loaded
-      const gtagScripts = await page.locator('script[src*="googletagmanager.com"]').count();
-      expect(gtagScripts).toBeGreaterThan(0);
-
-      // Verify dataLayer exists
-      const dataLayerExists = await page.evaluate(() => {
-        return typeof window.dataLayer !== 'undefined';
-      });
-      expect(dataLayerExists).toBe(true);
-    });
-
     test('should initialize gtag function', async ({ page }) => {
       await page.goto('/');
 

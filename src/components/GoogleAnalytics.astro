@@ -5,18 +5,15 @@
 // Measurement ID should be provided via environment variable
 
 const isProduction = import.meta.env.PROD;
-const isTest = import.meta.env.MODE === 'test' ||
-               typeof process !== 'undefined' && process.env.VITEST;
-const enableAnalytics = (isProduction || isTest) &&
-                       import.meta.env.PUBLIC_ENABLE_ANALYTICS !== 'false';
-const loadExternalScript = isProduction; // Only load GA script in production
+const enableAnalytics = import.meta.env.PUBLIC_ENABLE_ANALYTICS !== 'false';
 const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-WTGM9Y1YB0';
 ---
 
 {enableAnalytics && (
   <>
     <script define:vars={{ measurementId }} is:inline>
-      // Load Google Analytics
+      // Initialize Google Analytics
+      // Always initialize gtag function for both production and testing
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
@@ -30,7 +27,7 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-WTGM9Y1YB0'
       window.gtag = gtag;
     </script>
 
-    {loadExternalScript && (
+    {isProduction && (
       <script
         async
         is:inline

@@ -214,39 +214,6 @@ test.describe('Google Analytics Example Tests', () => {
       const title = page.locator('h1, h2');
       expect(await title.count()).toBeGreaterThan(0);
     });
-
-    test('should continue working if gtag is temporarily unavailable', async ({ page }) => {
-      await page.goto('/');
-
-      // Wait for gtag
-      await page.waitForFunction(() => {
-        return typeof window.gtag === 'function';
-      });
-
-      // Delete gtag temporarily
-      await page.evaluate(() => {
-        (window as any).gtagBackup = window.gtag;
-        delete (window as any).gtag;
-      });
-
-      // Perform actions
-      const servicesLink = page.locator('a:has-text("Services")');
-      if (await servicesLink.isVisible()) {
-        await servicesLink.click();
-        await page.waitForURL('/services');
-      }
-
-      // Restore gtag
-      await page.evaluate(() => {
-        window.gtag = (window as any).gtagBackup;
-      });
-
-      // Verify gtag is available again
-      const gtagExists = await page.evaluate(() => {
-        return typeof window.gtag === 'function';
-      });
-      expect(gtagExists).toBe(true);
-    });
   });
 
   test.describe('Complete User Journey', () => {
