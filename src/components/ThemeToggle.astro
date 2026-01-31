@@ -9,6 +9,16 @@ import { trackThemeToggle } from '../utils/analytics';
     </svg>
 </button>
 
+<style>
+    .theme-toggle svg text {
+        transition: fill 0.3s ease;
+    }
+
+    :global(body.dark-theme) .theme-toggle svg text {
+        fill: #05cd99;
+    }
+</style>
+
 <script>
     import { trackThemeToggle } from '../utils/analytics';
 
