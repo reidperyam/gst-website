@@ -11,7 +11,7 @@ import {
   trackCTA,
   trackFilterAction,
   trackThemeToggle,
-} from '../../src/utils/analytics';
+} from '@/utils/analytics';
 
 describe('Analytics Utility Functions', () => {
   let gtagMock: any;

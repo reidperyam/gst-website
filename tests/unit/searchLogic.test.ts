@@ -6,8 +6,8 @@ import {
   highlightSearchTerm,
   getSearchRelevance,
   sortBySearchRelevance
-} from '../../src/utils/searchLogic';
-import type { Project } from '../../src/types/portfolio';
+} from '@/utils/searchLogic';
+import type { Project } from '@/types/portfolio';
 
 // Mock project data
 const mockProjects: Project[] = [

@@ -14,8 +14,8 @@ import {
   createSearchableText,
   filterProjects,
   type FilterCriteria
-} from '../../src/utils/filterLogic';
-import type { Project } from '../../src/types/portfolio';
+} from '@/utils/filterLogic';
+import type { Project } from '@/types/portfolio';
 
 // Mock project data
 const mockProjects: Project[] = [
