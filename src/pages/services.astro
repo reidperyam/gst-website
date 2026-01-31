@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CTASection from '../components/CTASection.astro';
+---
+
+<BaseLayout
+    title="Services | Strategic Advisory & Implementation"
+    description="Explore our comprehensive technology advisory, M&A services, and strategic implementation offerings designed to drive value creation and business acceleration."
+>
+    <Hero
+        title="Our Services"
+        subtitle="Strategic Advisory & Implementation"
+        description="Comprehensive solutions for value creation, risk management, and business acceleration"
+    />
+
+    <section class="services-overview">
+        <div class="container">
+            <div class="overview-content">
+                <h2>What We Offer</h2>
+                <p>Global Strategic Technologies provides specialized advisory services across mergers & acquisitions, technology strategy, and business transformation. We combine deep industry expertise with operational excellence to deliver measurable results.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-grid">
+        <div class="container">
+            <div class="grid">
+                <div class="service-card">
+                    <h3>M&A Advisory</h3>
+                    <p>End-to-end support for buy-side and sell-side transactions including technical diligence, portfolio company preparation, and post-acquisition value creation initiatives.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Technology Strategy</h3>
+                    <p>Strategic guidance on technology investments, digital transformation roadmaps, and technology-enabled business acceleration across all industries.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Business Optimization</h3>
+                    <p>Operational improvement initiatives focused on reducing costs, improving efficiency, and accelerating business objectives while managing risk.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Leadership Advisory</h3>
+                    <p>Executive-level guidance on strategic challenges, market expansion, organizational transformation, and enterprise risk management.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <CTASection
+        title="Let's discuss your next challenge"
+        description="Schedule a confidential consultation to discuss your objectives."
+        buttonText="BOOK_CALENDAR_SLOT()"
+        calendlyUrl="https://calendly.com/globalstrategictech"
+    />
+</BaseLayout>
+
+<style>
+    .services-overview {
+        padding: 3rem 0;
+        background: rgba(5, 205, 153, 0.05);
+        border-bottom: 1px solid rgba(5, 205, 153, 0.1);
+    }
+
+    .overview-content {
+        max-width: 900px;
+    }
+
+    .services-overview h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1.5rem;
+    }
+
+    .services-overview p {
+        font-size: 1.1rem;
+        color: rgba(26, 26, 26, 0.75);
+        line-height: 1.8;
+    }
+
+    :global(body.dark-theme) .services-overview {
+        background: rgba(5, 205, 153, 0.08);
+        border-bottom-color: rgba(5, 205, 153, 0.15);
+    }
+
+    :global(body.dark-theme) .services-overview h2 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    :global(body.dark-theme) .services-overview p {
+        color: rgba(200, 200, 200, 0.75);
+    }
+
+    .services-grid {
+        padding: 4rem 0;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .service-card {
+        padding: 2rem;
+        background: rgba(5, 205, 153, 0.03);
+        border: 1px solid rgba(5, 205, 153, 0.1);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+        background: rgba(5, 205, 153, 0.08);
+        border-color: rgba(5, 205, 153, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .service-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+        font-size: 1rem;
+        color: rgba(26, 26, 26, 0.75);
+        line-height: 1.6;
+    }
+
+    :global(body.dark-theme) .service-card {
+        background: rgba(5, 205, 153, 0.05);
+        border-color: rgba(5, 205, 153, 0.15);
+    }
+
+    :global(body.dark-theme) .service-card:hover {
+        background: rgba(5, 205, 153, 0.12);
+        border-color: rgba(5, 205, 153, 0.25);
+    }
+
+    :global(body.dark-theme) .service-card h3 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    :global(body.dark-theme) .service-card p {
+        color: rgba(200, 200, 200, 0.75);
+    }
+
+    @media (max-width: 768px) {
+        .services-overview {
+            padding: 2rem 0;
+        }
+
+        .services-overview h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .services-overview p {
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            padding: 2rem 0;
+        }
+
+        .grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            padding: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.1rem;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .services-overview {
+            padding: 1.5rem 0;
+        }
+
+        .services-overview h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .services-overview p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .services-grid {
+            padding: 1.5rem 0;
+        }
+
+        .grid {
+            gap: 1rem;
+        }
+
+        .service-card {
+            padding: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+            font-size: 0.9rem;
+        }
+    }
+</style>
