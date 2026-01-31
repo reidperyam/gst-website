@@ -100,6 +100,20 @@ export function trackThemeToggle(theme: 'light' | 'dark'): void {
   });
 }
 
+/**
+ * Track page views
+ * @param pageName - The name of the page being viewed
+ * @param pageTitle - The full title of the page
+ */
+export function trackPageView(pageName: string, pageTitle: string): void {
+  trackEvent({
+    event: 'page_view',
+    category: 'navigation',
+    page_name: pageName,
+    page_title: pageTitle,
+  });
+}
+
 // Declare gtag on window for TypeScript
 declare global {
   interface Window {

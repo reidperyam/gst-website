@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CTASection from '../components/CTASection.astro';
+import { trackPageView } from '../utils/analytics';
+
+// Track page view
+trackPageView('home', 'technology Advisory & Leadership');
 ---
 
 <BaseLayout

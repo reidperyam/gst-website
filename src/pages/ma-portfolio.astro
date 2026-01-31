@@ -5,8 +5,12 @@ import PortfolioGrid from '../components/portfolio/PortfolioGrid.astro';
 import StickyControls from '../components/portfolio/StickyControls.astro';
 import StatsBar from '../components/StatsBar.astro';
 import PortfolioSummary from '../components/PortfolioSummary.astro';
+import { trackPageView } from '../utils/analytics';
 import projects from '../data/projects.json';
 import type { Project, Stat } from '../types/portfolio';
+
+// Track page view
+trackPageView('ma-portfolio', 'M&A Portfolio | Strategic Advisory & Implementation');
 
 const typedProjects = projects as Project[];
 
