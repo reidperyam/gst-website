@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import {
   ENGAGEMENT_CATEGORIES,
   GROWTH_KEYWORDS,

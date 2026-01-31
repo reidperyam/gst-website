@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Portfolio Filtering', () => {
   let state: any;

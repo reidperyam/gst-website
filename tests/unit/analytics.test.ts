@@ -3,7 +3,6 @@
  * Tests the analytics utility functions
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   trackEvent,
   trackNavigation,
