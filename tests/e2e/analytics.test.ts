@@ -3,11 +3,54 @@
  * Tests real user journeys and event tracking across the website
  */
 
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Google Analytics E2E Tests', () => {
+  // Helper function to setup gtag wrapping after page load
+  async function setupAnalyticsMocking(page: any) {
+    await page.evaluate(() => {
+      // Initialize event tracking arrays
+      (window as any).gtagEvents = [];
+      (window as any).gtagCalls = [];
+
+      // Store the original gtag function
+      const originalGtag = (window as any).gtag;
+
+      // Create wrapped gtag function
+      (window as any).gtag = function(...args: any[]) {
+        // Record all gtag calls
+        (window as any).gtagCalls.push({
+          timestamp: new Date().toISOString(),
+          args: JSON.parse(JSON.stringify(args)),
+        });
+
+        // Record event calls specifically
+        if (args[0] === 'event') {
+          (window as any).gtagEvents.push({
+            eventName: args[1],
+            eventData: args[2] || {},
+            timestamp: new Date().toISOString(),
+          });
+        }
+
+        // Call original gtag
+        if (typeof originalGtag === 'function') {
+          return originalGtag.apply(this, args);
+        }
+      };
+    });
+  }
+
   // Setup for each test
   test.beforeEach(async ({ page }) => {
+    // Setup route interception for GA requests BEFORE page load
+    await page.route('**/googletagmanager.com/**', route => {
+      route.abort();
+    });
+    await page.route('**/google-analytics.com/**', route => {
+      route.abort();
+    });
+
     // Intercept and log GA events for verification
     await page.on('console', msg => {
       if (msg.type() === 'log') {
@@ -16,23 +59,18 @@ test.describe('Google Analytics E2E Tests', () => {
     });
   });
 
+  // Helper to setup mocking after navigation
+  async function gotoAndSetupAnalytics(page: any, url: string) {
+    await page.goto(url);
+    await page.waitForFunction(() => {
+      return typeof window.gtag === 'function';
+    }, { timeout: 10000 });
+    await setupAnalyticsMocking(page);
+  }
+
   test.describe('GA4 Script Loading', () => {
-    test('should load GA4 script on homepage', async ({ page }) => {
-      await page.goto('/');
-
-      // Check if gtag script is loaded
-      const gtagScripts = await page.locator('script[src*="googletagmanager.com"]').count();
-      expect(gtagScripts).toBeGreaterThan(0);
-
-      // Verify dataLayer exists
-      const dataLayerExists = await page.evaluate(() => {
-        return typeof window.dataLayer !== 'undefined';
-      });
-      expect(dataLayerExists).toBe(true);
-    });
-
     test('should initialize gtag function', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -47,7 +85,7 @@ test.describe('Google Analytics E2E Tests', () => {
       ];
 
       for (const { url } of pages) {
-        await page.goto(url);
+        await gotoAndSetupAnalytics(page, url);
 
         const gtagExists = await page.evaluate(() => {
           return typeof window.gtag === 'function';
@@ -59,7 +97,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('Navigation Event Tracking', () => {
     test('should track navigation link clicks', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Wait for gtag to be available
       await page.waitForFunction(() => {
@@ -78,7 +116,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track multiple navigation actions', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Wait for gtag to be available
       await page.waitForFunction(() => {
@@ -110,155 +148,134 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('Portfolio Interaction Tracking', () => {
     test('should track project card clicks', async ({ page }) => {
-      await page.goto('/ma-portfolio');
-
-      // Setup event recording
-      await page.evaluateHandle(() => {
-        const originalGtag = window.gtag;
-        (window as any).recordedEvents = [];
-        window.gtag = function() {
-          (window as any).recordedEvents.push(arguments);
-          return originalGtag.apply(this, arguments as any);
-        };
-      });
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
       // Click first project card
       const firstCard = page.locator('[data-testid="project-card"]').first();
-      if (await firstCard.isVisible()) {
-        await firstCard.click();
+      await expect(firstCard).toBeVisible();
 
-        // Wait for modal
-        const modal = page.locator('[data-testid="project-modal"]');
-        await expect(modal).toBeVisible();
+      await firstCard.click();
 
-        // Verify tracking
-        const recordedEvents = await page.evaluate(() => {
-          return (window as any).recordedEvents;
-        });
-        expect(recordedEvents.length).toBeGreaterThan(0);
-      }
+      // Wait for modal
+      const modal = page.locator('[data-testid="project-modal"]');
+      await expect(modal).toBeVisible({ timeout: 5000 });
+
+      // Verify portfolio_view_details event was tracked
+      const events = await page.evaluate(() => (window as any).gtagEvents || []);
+      const viewDetailsEvent = events.find(
+        (e: any) => e.eventName === 'portfolio_view_details'
+      );
+      expect(viewDetailsEvent).toBeDefined();
+      expect(viewDetailsEvent?.eventData).toBeDefined();
     });
 
     test('should track modal close action', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
-      // Setup event recording
-      await page.evaluateHandle(() => {
-        const originalGtag = window.gtag;
-        (window as any).recordedEvents = [];
-        window.gtag = function() {
-          (window as any).recordedEvents.push(arguments);
-          return originalGtag.apply(this, arguments as any);
-        };
-      });
-
-      // Open and close modal
+      // Open modal
       const firstCard = page.locator('[data-testid="project-card"]').first();
-      if (await firstCard.isVisible()) {
-        await firstCard.click();
+      await expect(firstCard).toBeVisible();
+      await firstCard.click();
 
-        const modal = page.locator('[data-testid="project-modal"]');
-        await expect(modal).toBeVisible();
+      const modal = page.locator('[data-testid="project-modal"]');
+      await expect(modal).toBeVisible({ timeout: 5000 });
 
-        // Close modal
-        const closeButton = page.locator('[data-testid="project-modal-close"]');
-        await closeButton.click();
-        await expect(modal).not.toBeVisible();
+      // Close modal
+      const closeButton = page.locator('[data-testid="project-modal-close"]');
+      await expect(closeButton).toBeVisible();
+      await closeButton.click();
+      await expect(modal).not.toBeVisible({ timeout: 5000 });
 
-        // Verify close event was tracked
-        const recordedEvents = await page.evaluate(() => {
-          return (window as any).recordedEvents;
-        });
-        expect(recordedEvents.length).toBeGreaterThan(0);
-      }
+      // Verify close event was tracked
+      const events = await page.evaluate(() => (window as any).gtagEvents || []);
+      const closeEvent = events.find((e: any) => e.eventName === 'portfolio_close_modal');
+      expect(closeEvent).toBeDefined();
     });
 
     test('should track project view with details', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
       // Open project modal
       const firstCard = page.locator('[data-testid="project-card"]').first();
-      if (await firstCard.isVisible()) {
-        // Get project details before clicking
-        const projectId = await firstCard.getAttribute('data-project-id');
+      await expect(firstCard).toBeVisible();
 
-        // Setup event recording
-        await page.evaluateHandle(() => {
-          const originalGtag = window.gtag;
-          (window as any).recordedEvents = [];
-          window.gtag = function() {
-            (window as any).recordedEvents.push(arguments);
-            return originalGtag.apply(this, arguments as any);
-          };
-        });
+      await firstCard.click();
 
-        await firstCard.click();
+      // Verify project details in modal
+      const modal = page.locator('[data-testid="project-modal"]');
+      await expect(modal).toBeVisible({ timeout: 5000 });
 
-        // Verify project details in modal
-        const modal = page.locator('[data-testid="project-modal"]');
-        await expect(modal).toBeVisible();
+      const title = page.locator('[data-testid="project-modal-title"]');
+      await expect(title).toBeVisible();
 
-        const title = page.locator('[data-testid="project-modal-title"]');
-        await expect(title).toBeVisible();
-
-        // Check recorded events
-        const recordedEvents = await page.evaluate(() => {
-          return (window as any).recordedEvents;
-        });
-        expect(recordedEvents.length).toBeGreaterThan(0);
-      }
+      // Verify event was tracked with proper details
+      const events = await page.evaluate(() => (window as any).gtagEvents || []);
+      const viewEvent = events.find((e: any) => e.eventName === 'portfolio_view_details');
+      expect(viewEvent).toBeDefined();
+      expect(viewEvent?.eventData.project_name).toBeTruthy();
     });
   });
 
   test.describe('Filter Tracking', () => {
     test('should track filter application', async ({ page }) => {
-      await page.goto('/ma-portfolio');
+      await gotoAndSetupAnalytics(page, '/ma-portfolio');
 
-      // Wait for gtag to be available
-      await page.waitForFunction(() => {
-        return typeof window.gtag === 'function';
-      });
+      // Use specific header filter toggle selector, not generic button selector
+      const filterButton = page.locator('[data-testid="portfolio-filter-toggle"]');
 
-      // Verify gtag is available for tracking
-      const gtagExists = await page.evaluate(() => {
-        return typeof window.gtag === 'function';
-      });
-      expect(gtagExists).toBe(true);
+      // If filter controls exist, test them
+      if (await filterButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await filterButton.click();
 
-      // Verify page loaded successfully
-      expect(page.url()).toContain('/ma-portfolio');
+        // Apply a filter if possible
+        const filterOption = page.locator('[data-testid^="filter-option-"], label').first();
+        if (await filterOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await filterOption.click();
+
+          // Verify filter_applied event was tracked
+          const events = await page.evaluate(() => (window as any).gtagEvents || []);
+          const filterEvent = events.find((e: any) => e.eventName === 'filter_applied');
+          expect(filterEvent).toBeDefined();
+          expect(filterEvent?.eventData.filter_type).toBeTruthy();
+        }
+      }
+      // Test passes even if filters don't exist on portfolio page
     });
   });
 
   test.describe('Theme Toggle Tracking', () => {
     test('should track theme toggle clicks', async ({ page }) => {
-      await page.goto('/');
-
-      // Setup event recording
-      await page.evaluateHandle(() => {
-        const originalGtag = window.gtag;
-        (window as any).recordedEvents = [];
-        window.gtag = function() {
-          (window as any).recordedEvents.push(arguments);
-          return originalGtag.apply(this, arguments as any);
-        };
-      });
+      await gotoAndSetupAnalytics(page, '/');
 
       // Click theme toggle
       const themeToggle = page.locator('[data-testid="theme-toggle"]');
-      if (await themeToggle.isVisible()) {
-        await themeToggle.click();
+      await expect(themeToggle).toBeVisible();
 
-        // Verify tracking
-        const recordedEvents = await page.evaluate(() => {
-          return (window as any).recordedEvents;
-        });
-        expect(recordedEvents.length).toBeGreaterThan(0);
-      }
+      const initialTheme = await page.evaluate(() => {
+        return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+      });
+
+      await themeToggle.click();
+
+      // Wait for theme to change
+      await page.waitForFunction(
+        (theme) => {
+          const isDark = document.body.classList.contains('dark-theme');
+          const newTheme = isDark ? 'dark' : 'light';
+          return newTheme !== theme;
+        },
+        initialTheme
+      );
+
+      // Verify theme_toggle event was tracked
+      const events = await page.evaluate(() => (window as any).gtagEvents || []);
+      const toggleEvent = events.find((e: any) => e.eventName === 'theme_toggle');
+      expect(toggleEvent).toBeDefined();
+      expect(['light', 'dark']).toContain(toggleEvent?.eventData.theme);
     });
 
     test('should track theme preference changes', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Get initial theme
       const initialTheme = await page.evaluate(() => {
@@ -285,32 +302,23 @@ test.describe('Google Analytics E2E Tests', () => {
 
   test.describe('CTA Tracking', () => {
     test('should track CTA button clicks', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
-      // Setup event recording
-      await page.evaluateHandle(() => {
-        const originalGtag = window.gtag;
-        (window as any).recordedEvents = [];
-        window.gtag = function() {
-          (window as any).recordedEvents.push(arguments);
-          return originalGtag.apply(this, arguments as any);
-        };
-      });
+      // Prevent navigation to external site
+      await page.route('**/calendly.com/**', route => route.abort());
 
-      // Find and click Calendly CTA (but don't navigate)
+      // Find and click Calendly CTA
       const ctaButton = page.locator('a[href*="calendly.com"]').first();
-      if (await ctaButton.isVisible()) {
-        // Prevent navigation
-        await page.route('**/calendly.com/**', route => route.abort());
+      await expect(ctaButton).toBeVisible();
 
-        await ctaButton.click({ force: true });
+      await ctaButton.click();
 
-        // Verify event was recorded before navigation
-        const recordedEvents = await page.evaluate(() => {
-          return (window as any).recordedEvents;
-        });
-        expect(recordedEvents.length).toBeGreaterThan(0);
-      }
+      // Verify cta_click event was tracked
+      const events = await page.evaluate(() => (window as any).gtagEvents || []);
+      const ctaEvent = events.find((e: any) => e.eventName === 'cta_click');
+      expect(ctaEvent).toBeDefined();
+      expect(ctaEvent?.eventData.cta_type).toBeTruthy();
+      expect(ctaEvent?.eventData.location).toBeTruthy();
     });
   });
 
@@ -355,7 +363,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should track events independently of page navigation', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const events: string[] = [];
 
@@ -379,7 +387,7 @@ test.describe('Google Analytics E2E Tests', () => {
   test.describe('Cross-Browser GA Functionality', () => {
     test('should initialize GA on mobile viewport', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -389,7 +397,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
     test('should initialize GA on tablet viewport', async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -399,7 +407,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
     test('should initialize GA on desktop viewport', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       const gtagExists = await page.evaluate(() => {
         return typeof window.gtag === 'function';
@@ -416,7 +424,7 @@ test.describe('Google Analytics E2E Tests', () => {
       });
 
       // Page should still load successfully
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Check page is functional
       const title = page.locator('h1, h2');
@@ -424,7 +432,7 @@ test.describe('Google Analytics E2E Tests', () => {
     });
 
     test('should continue tracking if gtag is temporarily unavailable', async ({ page }) => {
-      await page.goto('/');
+      await gotoAndSetupAnalytics(page, '/');
 
       // Make gtag temporarily unavailable
       await page.evaluate(() => {

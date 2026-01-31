@@ -2,16 +2,20 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CTASection from '../components/CTASection.astro';
+import { trackPageView } from '../utils/analytics';
+
+// Track page view
+trackPageView('home', 'technology Advisory & Leadership');
 ---
 
 <BaseLayout
-    title="Strategic Advisory & Implementation"
-    description="Technical diligence, integration planning, and value creation execution for high-stakes transactions."
+    title="technology Advisory & Leadership"
+    description="value creation, risk management, and business acceleration."
 >
     <Hero
-        title="Strategic Advisory"
-        subtitle="& Implementation"
-        description="Technical diligence, integration planning, and value creation execution for high-stakes transactions."
+        title="technology advisory"
+        subtitle="& Leadership"
+        description="for value creation, risk management, and business acceleration"
     />
 
     <CTASection

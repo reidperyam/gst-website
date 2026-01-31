@@ -1,18 +1,12 @@
 import { sortProjectsByYear, sortProjectsByARR, sortProjectsByName } from '@/utils/sort';
-
-interface Project {
-  id: string;
-  codeName: string;
-  year: number;
-  arrNumeric: number;
-}
+import type { Project } from '@/types/portfolio';
 
 describe('Sort Projects Utility', () => {
   const mockProjects: Project[] = [
-    { id: '1', codeName: 'Project Alpha', year: 2022, arrNumeric: 50000000 },
-    { id: '2', codeName: 'Project Beta', year: 2024, arrNumeric: 100000000 },
-    { id: '3', codeName: 'Project Gamma', year: 2023, arrNumeric: 75000000 },
-    { id: '4', codeName: 'Project Delta', year: 2025, arrNumeric: 150000000 },
+    { id: '1', codeName: 'Project Alpha', year: 2022, arrNumeric: 50000000, industry: '', theme: '', summary: '', arr: '', currency: 'USD', growthStage: '', technologies: [], engagementType: undefined },
+    { id: '2', codeName: 'Project Beta', year: 2024, arrNumeric: 100000000, industry: '', theme: '', summary: '', arr: '', currency: 'USD', growthStage: '', technologies: [], engagementType: undefined },
+    { id: '3', codeName: 'Project Gamma', year: 2023, arrNumeric: 75000000, industry: '', theme: '', summary: '', arr: '', currency: 'USD', growthStage: '', technologies: [], engagementType: undefined },
+    { id: '4', codeName: 'Project Delta', year: 2025, arrNumeric: 150000000, industry: '', theme: '', summary: '', arr: '', currency: 'USD', growthStage: '', technologies: [], engagementType: undefined },
   ];
 
   describe('sortProjectsByYear', () => {

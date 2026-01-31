@@ -1,0 +1,249 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CTASection from '../components/CTASection.astro';
+import { trackPageView } from '../utils/analytics';
+
+// Track page view
+trackPageView('services', 'Services | Strategic Advisory & Implementation');
+---
+
+<BaseLayout
+    title="Services | Strategic Advisory & Leadership"
+    description="Explore our technology advisory, M&A services, and leadership offerings to create value and accelerate business objectives."
+>
+    <Hero
+        title="Our Services"
+        subtitle="Strategic Advisory & Leadership"
+        description="Comprehensive solutions for value creation, risk management, and business acceleration"
+    />
+
+    <section class="services-overview">
+        <div class="container">
+            <div class="overview-content">
+                <h2>What We Offer</h2>
+                <p>GST provides specialized technology advisory services and leadership. We combine deep industry expertise with operational experience to deliver results.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="container">
+            <div class="services-cards">
+                <div class="service-card">
+                    <h3>M&A Advisory</h3>
+                    <p>We deliver comprehensive advisory services for buy-side and sell-side transactions. From technical diligence and vendor assessments to portfolio company preparation and post-acquisition integration, we help you maximize value creation while minimizing risk throughout the transaction lifecycle.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Product Development</h3>
+                    <p>Our product leadership expertise spans strategy, roadmapping, and execution. We guide teams through complex product challenges, accelerate time-to-market, optimize go-to-market strategies, and build scalable products that drive competitive advantage and sustainable business growth.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Technical Leadership</h3>
+                    <p>We provide executive-level technical guidance on architecture decisions, technology stack optimization, and digital transformation initiatives. Our advisors help organizations navigate rapid scaling, legacy system modernization, and talent development to achieve their strategic technology objectives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <CTASection
+        title="Let's discuss your next challenge"
+        description="Schedule a confidential consultation to discuss your objectives."
+        buttonText="BOOK_CALENDAR_SLOT()"
+        calendlyUrl="https://calendly.com/globalstrategictech"
+    />
+</BaseLayout>
+
+<style>
+    .services-overview {
+        padding: 3rem 0;
+        background: rgba(5, 205, 153, 0.05);
+        border-bottom: 1px solid rgba(5, 205, 153, 0.1);
+    }
+
+    .overview-content {
+        max-width: 900px;
+    }
+
+    .services-overview h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1.5rem;
+    }
+
+    .services-overview p {
+        font-size: 1.1rem;
+        color: rgba(26, 26, 26, 0.75);
+        line-height: 1.8;
+    }
+
+    :global(body.dark-theme) .services-overview {
+        background: rgba(5, 205, 153, 0.08);
+        border-bottom-color: rgba(5, 205, 153, 0.15);
+    }
+
+    :global(body.dark-theme) .services-overview h2 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    :global(body.dark-theme) .services-overview p {
+        color: rgba(200, 200, 200, 0.75);
+    }
+
+    .services-section {
+        padding: 5rem 0;
+    }
+
+    .services-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+    }
+
+    .service-card {
+        padding: 2.5rem;
+        background: rgba(5, 205, 153, 0.03);
+        border: 1px solid rgba(5, 205, 153, 0.1);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .service-card:hover {
+        background: rgba(5, 205, 153, 0.08);
+        border-color: rgba(5, 205, 153, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
+    }
+
+    .service-card h3 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .service-card p {
+        font-size: 1.05rem;
+        color: rgba(26, 26, 26, 0.75);
+        line-height: 1.7;
+    }
+
+    :global(body.dark-theme) .service-card {
+        background: rgba(5, 205, 153, 0.05);
+        border-color: rgba(5, 205, 153, 0.15);
+    }
+
+    :global(body.dark-theme) .service-card:hover {
+        background: rgba(5, 205, 153, 0.12);
+        border-color: rgba(5, 205, 153, 0.25);
+    }
+
+    :global(body.dark-theme) .service-card h3 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    :global(body.dark-theme) .service-card p {
+        color: rgba(200, 200, 200, 0.75);
+    }
+
+    @media (max-width: 1024px) {
+        .services-cards {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.75rem;
+        }
+
+        .service-card {
+            padding: 1.75rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .services-overview {
+            padding: 2rem 0;
+        }
+
+        .services-overview h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .services-overview p {
+            font-size: 1rem;
+        }
+
+        .services-section {
+            padding: 2.5rem 0;
+        }
+
+        .services-cards {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            padding: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .services-overview {
+            padding: 1.5rem 0;
+        }
+
+        .services-overview h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .services-overview p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .services-section {
+            padding: 2rem 0;
+        }
+
+        .services-cards {
+            gap: 1.25rem;
+        }
+
+        .service-card {
+            padding: 1.25rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-card p {
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+    }
+</style>
