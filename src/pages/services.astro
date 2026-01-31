@@ -27,9 +27,9 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
         </div>
     </section>
 
-    <section class="services-grid">
-        <div class="services-container">
-            <div class="grid">
+    <section class="services-section">
+        <div class="container">
+            <div class="services-cards">
                 <div class="service-card">
                     <h3>M&A Advisory</h3>
                     <p>We deliver comprehensive advisory services for buy-side and sell-side transactions. From technical diligence and vendor assessments to portfolio company preparation and post-acquisition integration, we help you maximize value creation while minimizing risk throughout the transaction lifecycle.</p>
@@ -93,19 +93,11 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
         color: rgba(200, 200, 200, 0.75);
     }
 
-    .services-grid {
+    .services-section {
         padding: 5rem 0;
-        width: 100%;
     }
 
-    .services-container {
-        max-width: 1600px;
-        margin: 0 auto;
-        padding: 0 3rem;
-        width: 100%;
-    }
-
-    .grid {
+    .services-cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 2.5rem;
@@ -162,7 +154,7 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
     }
 
     @media (max-width: 1024px) {
-        .grid {
+        .services-cards {
             grid-template-columns: repeat(2, 1fr);
             gap: 1.75rem;
         }
@@ -194,15 +186,11 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
             font-size: 1rem;
         }
 
-        .services-grid {
+        .services-section {
             padding: 2.5rem 0;
         }
 
-        .services-container {
-            padding: 0 1.5rem;
-        }
-
-        .grid {
+        .services-cards {
             grid-template-columns: 1fr;
             gap: 1.5rem;
         }
@@ -236,15 +224,11 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
             line-height: 1.6;
         }
 
-        .services-grid {
+        .services-section {
             padding: 2rem 0;
         }
 
-        .services-container {
-            padding: 0 1rem;
-        }
-
-        .grid {
+        .services-cards {
             gap: 1.25rem;
         }
 
