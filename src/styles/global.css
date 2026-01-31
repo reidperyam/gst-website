@@ -14,6 +14,9 @@ body {
     color: rgba(26, 26, 26, 0.85);
     line-height: 1.5;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Sega Genesis-style checkerboard grid with dark lines on light background */
@@ -493,7 +496,7 @@ footer {
     background: #eeeeee;
     border-top: 4px solid #05cd99;
     position: relative;
-    z-index: 0;
+    z-index: 1;
 }
 
 .footer-content {
@@ -944,7 +947,7 @@ body.dark-theme .cta-box p {
     }
 
     .hero h1 {
-        font-size: 1.85rem;
+        font-size: 2em;
         line-height: 1.1;
         margin-bottom: 1.25rem;
     }
@@ -1139,6 +1142,7 @@ body.dark-theme .cta-box p {
 main {
     position: relative;
     z-index: 1;
+    flex: 1;
 }
 
 .sr-only {
