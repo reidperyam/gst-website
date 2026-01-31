@@ -7,46 +7,45 @@ test.describe('Project Details Viewing Journey', () => {
   });
 
   test('should have interactive project elements', async ({ page }) => {
-    // Find project cards using multiple selectors
-    const byTestId = page.locator('[data-testid*="project-card"]');
-    const byClass = page.locator('.project-card');
-    const byTestIdCount = await byTestId.count();
-    const byClassCount = await byClass.count();
-    const cardCount = Math.max(byTestIdCount, byClassCount);
+    // Find project cards
+    const cards = page.locator('[data-testid="project-card"]');
+    const cardCount = await cards.count();
 
-    // Should have at least one clickable project element
-    expect(cardCount).toBeGreaterThanOrEqual(1);
+    // Should have at least one project card
+    expect(cardCount).toBeGreaterThan(0);
   });
 
-  test('should open modal-like element on project interaction', async ({ page }) => {
-    // Find first project card
-    const firstCard = page.locator('[data-testid*="project-card"], .project-card, [role="button"][class*="card"]').first();
-    const isVisible = await firstCard.isVisible().catch(() => false);
+  test('should open modal on project interaction', async ({ page }) => {
+    // Find and click first project card
+    const firstCard = page.locator('[data-testid="project-card"]').first();
+    await expect(firstCard).toBeVisible();
 
-    if (isVisible) {
-      // Click card
-      await firstCard.click();
+    await firstCard.click();
 
-      // Look for modal or dialog element
-      const modal = page.locator('dialog, [role="dialog"], .modal, [class*="modal"]');
-      const modalVisible = await modal.isVisible().catch(() => false);
-
-      // Either modal opened or page changed
-      expect(modalVisible || true).toBeTruthy();
-    }
+    // Modal should open
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
   });
 
   test('should display project information sections', async ({ page }) => {
-    // Look for common project information
+    // Open a project to see details
+    const firstCard = page.locator('[data-testid="project-card"]').first();
+    await expect(firstCard).toBeVisible();
+    await firstCard.click();
+
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
+    // Check for project metadata
     const page_content = await page.content();
 
-    // Should have industry, arr, stage info (text content)
+    // Should have industry, stage, or theme info
     const hasProjectInfo = (
       page_content.includes('ARR') || page_content.includes('Industry') ||
       page_content.includes('Stage') || page_content.includes('Theme')
     );
 
-    expect(hasProjectInfo || true).toBeTruthy();
+    expect(hasProjectInfo).toBe(true);
   });
 
   test('should have technology information displayed', async ({ page }) => {
@@ -60,65 +59,83 @@ test.describe('Project Details Viewing Journey', () => {
       content.includes('Node') ||
       content.includes('Python');
 
-    expect(hasTechInfo || true).toBeTruthy();
+    expect(hasTechInfo).toBe(true);
   });
 
   test('should support keyboard interaction for details', async ({ page }) => {
-    // Find card and tab to it
-    const card = page.locator('[data-testid*="project-card"], .project-card').first();
-    const isVisible = await card.isVisible().catch(() => false);
+    // Find and focus card
+    const card = page.locator('[data-testid="project-card"]').first();
+    await expect(card).toBeVisible();
 
-    if (isVisible) {
-      // Focus card
-      await card.focus();
+    await card.focus();
 
-      // Should be able to interact with keyboard
-      const isFocused = await card.evaluate(el => el === document.activeElement);
-      expect(isFocused || true).toBeTruthy();
+    // Should be focused
+    const isFocused = await card.evaluate(el => el === document.activeElement);
+    expect(isFocused).toBe(true);
 
-      // Try Enter key
-      await card.press('Enter').catch(() => {
-        // Might not trigger action, that's ok
-      });
-    }
+    // Press Enter to interact
+    await card.press('Enter');
+
+    // Modal should open
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
   });
 
   test('should handle rapid interaction', async ({ page }) => {
-    const cards = page.locator('[data-testid*="project-card"], .project-card').all();
-    const cardElements = await cards;
+    const cards = page.locator('[data-testid="project-card"]');
+    const cardCount = await cards.count();
 
-    // Interact with up to 3 cards
-    for (let i = 0; i < Math.min(cardElements.length, 3); i++) {
-      const card = cardElements[i];
-      await card.click().catch(() => {
-        // Click might not work on all cards
-      });
+    // Interact with up to 2 cards
+    for (let i = 0; i < Math.min(cardCount, 2); i++) {
+      const card = cards.nth(i);
+      await expect(card).toBeVisible();
+      await card.click();
 
-      // Page should still be responsive
-      const body = page.locator('body');
-      await expect(body).toBeVisible();
+      // Modal should appear
+      const modal = page.locator('[data-testid="project-modal"]');
+      await expect(modal).toBeVisible({ timeout: 5000 });
+
+      // Close modal for next iteration
+      const closeBtn = page.locator('[data-testid="project-modal-close"]');
+      if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await closeBtn.click();
+      }
     }
+
+    // Page should still be responsive
+    const body = page.locator('body');
+    await expect(body).toBeVisible();
   });
 
   test('should display consistent information format', async ({ page }) => {
     // Projects should have consistent structure
-    const byTestId = page.locator('[data-testid*="project"]');
-    const byClass = page.locator('.project-card');
-    const byTestIdCount = await byTestId.count();
-    const byClassCount = await byClass.count();
-    const count = Math.max(byTestIdCount, byClassCount);
+    const cards = page.locator('[data-testid="project-card"]');
+    const count = await cards.count();
 
-    // Should have multiple consistent project elements
-    expect(count).toBeGreaterThanOrEqual(1);
+    // Should have multiple project cards
+    expect(count).toBeGreaterThan(0);
+
+    // Each card should be clickable
+    const firstCard = cards.first();
+    await expect(firstCard).toBeVisible();
   });
 
   test('should allow closing details view', async ({ page }) => {
-    // Find close button
-    const closeBtn = page.locator('button:has-text("×"), button[aria-label*="lose"], button[aria-label*="back"]').first();
-    const isVisible = await closeBtn.isVisible().catch(() => false);
+    // Open a project
+    const card = page.locator('[data-testid="project-card"]').first();
+    await expect(card).toBeVisible();
+    await card.click();
 
-    // Closing button might not always be visible
-    expect(typeof isVisible).toBe('boolean');
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
+    // Find and click close button
+    const closeBtn = page.locator('[data-testid="project-modal-close"]');
+    await expect(closeBtn).toBeVisible();
+    await closeBtn.click();
+
+    // Modal should close
+    await expect(modal).not.toBeVisible({ timeout: 5000 });
   });
 
   test('should maintain page responsiveness during interaction', async ({ page }) => {
@@ -126,18 +143,16 @@ test.describe('Project Details Viewing Journey', () => {
     const buttons = page.locator('button');
     const buttonCount = await buttons.count();
 
-    if (buttonCount > 0) {
-      // Click a few buttons
-      for (let i = 0; i < Math.min(2, buttonCount); i++) {
-        await buttons.nth(i).click().catch(() => {
-          // Click might not work on all buttons
-        });
-      }
-    }
+    expect(buttonCount).toBeGreaterThan(0);
+
+    // Click first button
+    const firstButton = buttons.first();
+    await expect(firstButton).toBeVisible();
+    await firstButton.click();
 
     // Page should still respond to scroll
     await page.evaluate(() => window.scrollBy(0, 100));
     const scrollPos = await page.evaluate(() => window.scrollY);
-    expect(typeof scrollPos).toBe('number');
+    expect(scrollPos).toBeGreaterThan(0);
   });
 });
