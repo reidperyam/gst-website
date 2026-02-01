@@ -16,7 +16,7 @@ const { currentPath = '/' } = Astro.props;
             <ul>
                 <li><a href="/services" onclick="trackNavigation('/services', 'Services')">Services</a></li>
                 <li><a href="/ma-portfolio" onclick="trackNavigation('/ma-portfolio', 'M&A Portfolio')" class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a></li>
-                <li><a href="/#about" onclick="trackNavigation('/#about', 'About')">About</a></li>
+                <li><a href="/about" onclick="trackNavigation('/about', 'About')">About</a></li>
                 <li><a href="/#contact" onclick="trackNavigation('/#contact', 'Contact')">Contact</a></li>
             </ul>
         </nav>
