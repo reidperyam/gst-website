@@ -345,33 +345,49 @@
         });
       }
 
-      // Populate modal
-      document.getElementById('modal-title-2').textContent = project.codeName;
-      document.getElementById('modal-industry-2').textContent = project.industry;
-      document.getElementById('modal-year-2').textContent = project.year.toString();
-      document.getElementById('modal-arr-2').textContent = project.arr === 'Not in source' ? '--' : project.arr;
-      document.getElementById('modal-stage-2').textContent = project.growthStage;
-      document.getElementById('modal-theme-2').textContent = project.theme;
-      document.getElementById('modal-engagement-type-2').textContent = project.engagementType || 'N/A';
-      document.getElementById('modal-engagement-description-2').textContent = project.engagementTypeDescription || '';
-      document.getElementById('modal-summary-2').textContent = project.summary;
+      // Populate modal with null checks
+      const modalTitle = document.getElementById('modal-title-2');
+      const modalIndustry = document.getElementById('modal-industry-2');
+      const modalYear = document.getElementById('modal-year-2');
+      const modalArr = document.getElementById('modal-arr-2');
+      const modalStage = document.getElementById('modal-stage-2');
+      const modalTheme = document.getElementById('modal-theme-2');
+      const modalEngagementType = document.getElementById('modal-engagement-type-2');
+      const modalEngagementDesc = document.getElementById('modal-engagement-description-2');
+      const modalSummary = document.getElementById('modal-summary-2');
+
+      if (modalTitle) modalTitle.textContent = project.codeName;
+      if (modalIndustry) modalIndustry.textContent = project.industry;
+      if (modalYear) modalYear.textContent = project.year.toString();
+      if (modalArr) modalArr.textContent = project.arr === 'Not in source' ? '--' : project.arr;
+      if (modalStage) modalStage.textContent = project.growthStage;
+      if (modalTheme) modalTheme.textContent = project.theme;
+      if (modalEngagementType) modalEngagementType.textContent = project.engagementType || 'N/A';
+      if (modalEngagementDesc) modalEngagementDesc.textContent = project.engagementTypeDescription || '';
+      if (modalSummary) modalSummary.textContent = project.summary;
 
       // Handle Challenge section (show only if present)
       const challengeSection = document.getElementById('modal-challenge-section');
-      if (project.challenge) {
-        document.getElementById('modal-challenge-2').textContent = project.challenge;
-        challengeSection.style.display = 'block';
-      } else {
-        challengeSection.style.display = 'none';
+      const modalChallenge = document.getElementById('modal-challenge-2');
+      if (challengeSection && modalChallenge) {
+        if (project.challenge) {
+          modalChallenge.textContent = project.challenge;
+          challengeSection.style.display = 'block';
+        } else {
+          challengeSection.style.display = 'none';
+        }
       }
 
       // Handle Solution section (show only if present)
       const solutionSection = document.getElementById('modal-solution-section');
-      if (project.solution) {
-        document.getElementById('modal-solution-2').textContent = project.solution;
-        solutionSection.style.display = 'block';
-      } else {
-        solutionSection.style.display = 'none';
+      const modalSolution = document.getElementById('modal-solution-2');
+      if (solutionSection && modalSolution) {
+        if (project.solution) {
+          modalSolution.textContent = project.solution;
+          solutionSection.style.display = 'block';
+        } else {
+          solutionSection.style.display = 'none';
+        }
       }
 
       // Render technologies
@@ -382,12 +398,15 @@
             : []);
 
       const techTagsContainer = document.getElementById('modal-tech-tags-2');
-      techTagsContainer.innerHTML = techs
-        .map(tech => `<span class="tech-tag">${window.projectModal.escapeHtml(tech)}</span>`)
-        .join('');
+      if (techTagsContainer) {
+        techTagsContainer.innerHTML = techs
+          .map(tech => `<span class="tech-tag">${window.projectModal.escapeHtml(tech)}</span>`)
+          .join('');
+      }
 
       // Show modal
-      document.getElementById('project-modal-2').showModal();
+      const modal = document.getElementById('project-modal-2');
+      if (modal) modal.showModal();
     },
 
     close: function() {

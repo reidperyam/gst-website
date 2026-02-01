@@ -532,8 +532,16 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 <script is:inline define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages, valueCreationList: valueCreationEngagements, technicalDiligenceList: technicalDiligenceEngagements }}>
   // Initialize global state if it doesn't exist
   if (!window.portfolioState) {
+    let allProjects = [];
+    try {
+      allProjects = JSON.parse(projectsData);
+    } catch (e) {
+      console.error('Failed to parse projects data:', e);
+      allProjects = [];
+    }
+
     window.portfolioState = {
-      allProjects: JSON.parse(projectsData),
+      allProjects: allProjects,
       filteredProjects: [],
       filters: {
         search: '',
@@ -643,9 +651,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         message.className = 'no-results-message';
         message.textContent = 'No projects match your filters. Try adjusting your search or filters.';
         const grid = document.querySelector('.grid');
-        if (grid) grid.parentElement.insertBefore(message, grid);
+        if (grid && grid.parentElement) {
+          grid.parentElement.insertBefore(message, grid);
+        }
       }
-      message.style.display = 'block';
+      if (message) message.style.display = 'block';
     } else {
       if (message) message.style.display = 'none';
     }
@@ -814,7 +824,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         filters.engagement = 'all';
         window.portfolioState.filters = { ...filters };
 
-        document.getElementById('search-input-2').value = '';
+        const searchInput = document.getElementById('search-input-2');
+        if (searchInput) searchInput.value = '';
         document.querySelectorAll('.chip.active').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('[data-value="all"]').forEach(c => c.classList.add('active'));
 

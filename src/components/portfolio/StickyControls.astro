@@ -507,8 +507,16 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 <script define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages, valueCreationList: valueCreationEngagements, technicalDiligenceList: technicalDiligenceEngagements }}>
   // Initialize global state
   if (!window.portfolioState) {
+    let allProjects = [];
+    try {
+      allProjects = JSON.parse(projectsData);
+    } catch (e) {
+      console.error('Failed to parse projects data:', e);
+      allProjects = [];
+    }
+
     window.portfolioState = {
-      allProjects: JSON.parse(projectsData),
+      allProjects: allProjects,
       filteredProjects: [],
       filters: {
         search: '',
@@ -618,9 +626,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
         message.className = 'no-results-message';
         message.textContent = 'No projects match your filters. Try adjusting your search or filters.';
         const grid = document.querySelector('.grid');
-        if (grid) grid.parentElement.insertBefore(message, grid);
+        if (grid && grid.parentElement) {
+          grid.parentElement.insertBefore(message, grid);
+        }
       }
-      message.style.display = 'block';
+      if (message) message.style.display = 'block';
     } else {
       if (message) message.style.display = 'none';
     }
