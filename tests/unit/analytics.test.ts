@@ -10,6 +10,7 @@ import {
   trackCTA,
   trackFilterAction,
   trackThemeToggle,
+  trackFounderProfileClick,
 } from '@/utils/analytics';
 
 describe('Analytics Utility Functions', () => {
@@ -170,6 +171,40 @@ describe('Analytics Utility Functions', () => {
         event_category: 'ui',
         theme: 'light',
       });
+    });
+  });
+
+  describe('trackFounderProfileClick', () => {
+    it('should track founder_profile_click event', () => {
+      trackFounderProfileClick('https://www.linkedin.com/in/reidperyam/');
+
+      expect(gtagMock).toHaveBeenCalledWith('event', 'founder_profile_click', {
+        event_category: 'engagement',
+        destination: 'https://www.linkedin.com/in/reidperyam/',
+      });
+    });
+
+    it('should include destination URL in event data', () => {
+      const linkedinUrl = 'https://www.linkedin.com/in/reidperyam/';
+      trackFounderProfileClick(linkedinUrl);
+
+      const callArgs = gtagMock.mock.calls[0];
+      expect(callArgs[2].destination).toBe(linkedinUrl);
+    });
+
+    it('should use engagement category for founder profile clicks', () => {
+      trackFounderProfileClick('https://www.linkedin.com/in/reidperyam/');
+
+      const callArgs = gtagMock.mock.calls[0];
+      expect(callArgs[2].event_category).toBe('engagement');
+    });
+
+    it('should not throw if gtag is not available', () => {
+      (global as any).window = {};
+
+      expect(() => {
+        trackFounderProfileClick('https://www.linkedin.com/in/reidperyam/');
+      }).not.toThrow();
     });
   });
 
