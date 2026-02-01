@@ -114,6 +114,18 @@ export function trackPageView(pageName: string, pageTitle: string): void {
   });
 }
 
+/**
+ * Track founder profile link clicks
+ * @param destination - The URL being navigated to
+ */
+export function trackFounderProfileClick(destination: string): void {
+  trackEvent({
+    event: 'founder_profile_click',
+    category: 'engagement',
+    destination,
+  });
+}
+
 // Declare gtag on window for TypeScript
 declare global {
   interface Window {
