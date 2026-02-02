@@ -55,6 +55,9 @@ test.describe('Mobile Navigation Journey', () => {
   });
 
   test('should open filter drawer on mobile', async ({ page }) => {
+    // Wait for portfolio to be fully initialized
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
     // Click filter toggle
     const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
     await expect(filterToggle).toBeVisible();

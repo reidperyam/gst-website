@@ -348,7 +348,7 @@ test.describe('About Page - Founder Section', () => {
 
       // Hover over link
       await founderLink.hover();
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(400);
 
       // Get hover opacity
       const hoverOpacity = await founderLink.evaluate(el => {

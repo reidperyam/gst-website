@@ -841,6 +841,10 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     attachDrawerListeners();
     filterProjects();
     updateFilterBadge();
+
+    // Signal that portfolio is ready for interaction
+    window.__portfolioInitialized = true;
+    window.dispatchEvent(new CustomEvent('portfolioReady'));
   }
 
   if (document.readyState === 'loading') {
