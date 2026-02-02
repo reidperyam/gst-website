@@ -12,7 +12,15 @@ const { currentPath = '/' } = Astro.props;
 <header>
     <div class="container">
         <nav>
-            <a href="/" class="logo" onclick="trackNavigation('/', 'Logo')">G<span>S</span>T</a>
+            <div class="logo-wrapper">
+                <img
+                    src="/images/logo/gst-delta-icon-teal-stroke-thick.svg"
+                    alt=""
+                    class="delta-icon"
+                    aria-hidden="true"
+                />
+                <a href="/" class="logo" onclick="trackNavigation('/', 'Logo')">G<span>S</span>T</a>
+            </div>
             <ul>
                 <li><a href="/services" onclick="trackNavigation('/services', 'Services')">Services</a></li>
                 <li><a href="/ma-portfolio" onclick="trackNavigation('/ma-portfolio', 'M&A Portfolio')" class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a></li>

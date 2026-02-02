@@ -4,18 +4,19 @@ import { trackThemeToggle } from '../utils/analytics';
 ---
 
 <button class="theme-toggle" id="themeToggle" data-testid="theme-toggle" title="Toggle dark theme" aria-label="Toggle dark theme">
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 88" aria-hidden="true">
-        <text x="24" y="60" font-family="serif" font-size="57.6" fill="currentColor" text-anchor="middle">Δ</text>
-    </svg>
+    <img
+        src="/images/logo/gst-delta-icon-teal-stroke-thick.svg"
+        alt=""
+        class="theme-toggle-icon"
+        aria-hidden="true"
+    />
 </button>
 
 <style>
-    .theme-toggle svg text {
-        transition: fill 0.3s ease;
-    }
-
-    :global(body.dark-theme) .theme-toggle svg text {
-        fill: #05cd99;
+    .theme-toggle-icon {
+        width: 0.67em;
+        height: 0.67em;
+        display: block;
     }
 </style>
 

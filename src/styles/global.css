@@ -61,6 +61,20 @@ nav {
     align-items: center;
 }
 
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.delta-icon {
+    width: 1em;
+    height: 1em;
+    display: block;
+    flex-shrink: 0;
+    font-size: 2rem;
+}
+
 .logo {
     font-size: 2rem;
     font-weight: 900;
