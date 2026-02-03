@@ -160,7 +160,7 @@ a:hover {
 
 /* Hero */
 .hero {
-    padding: 4rem 0;
+    padding: 2rem 0;
     background: linear-gradient(180deg, var(--bg-light-alt) 0%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
     position: relative;
 }
