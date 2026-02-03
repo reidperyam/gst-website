@@ -69,6 +69,47 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
   --shadow-lg: -4px 0 20px rgba(0, 0, 0, 0.15);
+
+  /* Section Backgrounds */
+  --services-bg: #eeeeee;
+  --footer-bg: #eeeeee;
+  --cta-box-bg: var(--bg-light);
+  --service-card-bg: var(--bg-dark);
+  --filter-drawer-bg: var(--bg-light);
+
+  /* Accent & UI Elements (Light Theme) */
+  --filter-chip-bg: rgba(26, 26, 26, 0.05);
+  --filter-chip-bg-hover: rgba(26, 26, 26, 0.08);
+  --filter-chip-border: rgba(26, 26, 26, 0.1);
+  --filter-button-bg: rgba(26, 26, 26, 0.05);
+  --filter-button-bg-hover: rgba(26, 26, 26, 0.08);
+  --filter-button-border: rgba(26, 26, 26, 0.1);
+  --search-input-bg: rgba(26, 26, 26, 0.02);
+  --search-input-border: rgba(26, 26, 26, 0.1);
+  --search-input-focus-bg: var(--bg-light);
+  --search-input-focus-shadow: rgba(5, 205, 153, 0.1);
+  --clear-filters-border: rgba(26, 26, 26, 0.1);
+
+  /* Text Colors (Light Theme) */
+  --filter-chip-text: rgba(26, 26, 26, 0.7);
+  --filter-button-text: rgba(26, 26, 26, 0.7);
+  --clear-filters-text: rgba(26, 26, 26, 0.6);
+  --search-input-text: rgba(26, 26, 26, 0.85);
+  --search-input-placeholder: rgba(26, 26, 26, 0.5);
+  --service-card-text: #b0b0b0;
+  --service-card-heading: var(--bg-light);
+  --footer-text: rgba(26, 26, 26, 0.85);
+  --footer-border: rgba(26, 26, 26, 0.1);
+  --cta-box-text: rgba(26, 26, 26, 0.85);
+  --stat-item-border: var(--color-primary);
+
+  /* Misc */
+  --checkerboard-line: rgba(0, 0, 0, 0.08);
+  --theme-toggle-color: rgba(74, 74, 74, 0.8);
+  --service-card-border: var(--bg-dark-secondary);
+  --about-image-bg: var(--bg-dark-tertiary);
+  --about-image-border: var(--bg-dark-secondary);
+  --about-image-text: #404040;
 }
 
 /* Dark Theme Overrides */
@@ -79,6 +120,47 @@ body.dark-theme {
   --text-light-secondary: var(--text-dark-secondary);
   --text-light-muted: var(--text-dark-muted);
   --text-light-faded: var(--text-dark-faded);
+
+  /* Section Backgrounds */
+  --services-bg: var(--bg-dark-tertiary);
+  --footer-bg: var(--bg-dark-tertiary);
+  --cta-box-bg: var(--bg-dark-secondary);
+  --service-card-bg: var(--bg-dark-secondary);
+  --filter-drawer-bg: var(--bg-dark-secondary);
+
+  /* Accent & UI Elements */
+  --filter-chip-bg: rgba(5, 205, 153, 0.1);
+  --filter-chip-bg-hover: rgba(5, 205, 153, 0.15);
+  --filter-chip-border: rgba(5, 205, 153, 0.2);
+  --filter-button-bg: rgba(5, 205, 153, 0.1);
+  --filter-button-bg-hover: rgba(5, 205, 153, 0.15);
+  --filter-button-border: rgba(5, 205, 153, 0.2);
+  --search-input-bg: rgba(5, 205, 153, 0.05);
+  --search-input-border: rgba(5, 205, 153, 0.2);
+  --search-input-focus-bg: var(--bg-dark-secondary);
+  --search-input-focus-shadow: rgba(5, 205, 153, 0.15);
+  --clear-filters-border: rgba(5, 205, 153, 0.2);
+
+  /* Text Colors */
+  --filter-chip-text: rgba(200, 200, 200, 0.8);
+  --filter-button-text: rgba(200, 200, 200, 0.8);
+  --clear-filters-text: rgba(200, 200, 200, 0.6);
+  --search-input-text: rgba(245, 245, 245, 0.85);
+  --search-input-placeholder: rgba(200, 200, 200, 0.5);
+  --service-card-text: #d0d0d0;
+  --service-card-heading: var(--bg-light);
+  --footer-text: rgba(153, 153, 153, 0.85);
+  --footer-border: rgba(153, 153, 153, 0.15);
+  --cta-box-text: rgba(200, 200, 200, 0.8);
+  --stat-item-border: rgba(5, 205, 153, 0.2);
+
+  /* Misc */
+  --checkerboard-line: rgba(255, 255, 255, 0.08);
+  --theme-toggle-color: rgba(200, 200, 200, 0.8);
+  --service-card-border: #2a2a2a;
+  --about-image-bg: var(--bg-dark-secondary);
+  --about-image-border: #2a2a2a;
+  --about-image-text: #808080;
 }
 
 /* Utility Classes for Common Patterns */
