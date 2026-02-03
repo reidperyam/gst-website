@@ -1,4 +1,6 @@
 @import './variables.css';
+@import './typography.css';
+@import './interactions.css';
 
 * {
     margin: 0;
@@ -121,13 +123,13 @@ nav ul {
 }
 
 nav a {
-    color: rgba(26, 26, 26, 0.85);
+    color: var(--text-light-secondary);
     text-decoration: none;
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    transition: color 0.2s, border-bottom 0.2s;
+    transition: color var(--transition-fast), border-bottom var(--transition-fast);
     position: relative;
     padding-bottom: 0.25rem;
     border-bottom: 2px solid transparent;
@@ -253,13 +255,13 @@ a:hover {
 }
 
 .contact-info {
-    color: rgba(26, 26, 26, 0.85);
+    color: var(--text-light-secondary);
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     text-decoration: none;
-    transition: color 0.2s, border-bottom 0.2s;
+    transition: color var(--transition-fast), border-bottom var(--transition-fast);
     position: relative;
     padding-bottom: 0.25rem;
     border-bottom: 2px solid transparent;
@@ -551,13 +553,13 @@ footer p {
 }
 
 .footer-links a {
-    color: rgba(26, 26, 26, 0.85);
+    color: var(--text-light-secondary);
     text-decoration: none;
     font-size: 0.85rem;
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    transition: color 0.2s, border-bottom 0.2s;
+    transition: color var(--transition-fast), border-bottom var(--transition-fast);
     position: relative;
     padding-bottom: 0.25rem;
     border-bottom: 2px solid transparent;
@@ -1214,6 +1216,7 @@ main {
     background: var(--color-primary);
     color: var(--bg-light);
     border-color: var(--color-primary);
+    transition: all var(--transition-normal);
 }
 
 /* Search Input - Base Styles */
@@ -1264,6 +1267,7 @@ main {
     background: rgba(26, 26, 26, 0.08);
     border-color: var(--color-primary);
     color: var(--color-primary);
+    transition: all var(--transition-normal);
 }
 
 .filter-button:focus-visible {
@@ -1290,6 +1294,7 @@ main {
 .clear-filters-button:hover {
     color: var(--color-primary);
     border-color: var(--color-primary);
+    transition: all var(--transition-normal);
 }
 
 .clear-filters-button:focus-visible {
