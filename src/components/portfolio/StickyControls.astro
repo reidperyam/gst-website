@@ -1,5 +1,6 @@
 ---
 import type { Project } from '../../types/portfolio';
+import '../../styles/portfolio-controls.css';
 
 interface Props {
   projects: Project[];
@@ -93,15 +94,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     opacity: 1;
   }
 
-  .controls-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-bottom: 2px solid #05cd99;
-    padding: 0.625rem 0 0.625rem 0;
-    width: fit-content;
-    pointer-events: auto;
-  }
 
   .search-box {
     position: relative;
