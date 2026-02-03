@@ -180,7 +180,7 @@ test.describe('About Page - Founder Section', () => {
       // Verify light signature container exists
       const lightSig = page.locator('.founder-signature-light');
       const lightCount = await lightSig.count();
-      expect(lightCount).toBeGreaterThanOrEqual(0);
+      expect(lightCount).toBeGreaterThan(0);
     });
 
     test('should switch to dark signature in dark theme', async ({ page }) => {

@@ -35,7 +35,7 @@ test.describe('Portfolio Discovery Journey', () => {
     const inputCount = await inputs.count();
 
     // Should have at least one input element
-    expect(inputCount).toBeGreaterThanOrEqual(0);
+    expect(inputCount).toBeGreaterThan(0);
   });
 
   test('should have interactive buttons', async ({ page }) => {
@@ -68,7 +68,7 @@ test.describe('Portfolio Discovery Journey', () => {
 
     // Button should be focused
     const isFocused = await button.evaluate(el => el === document.activeElement);
-    expect(isFocused || true).toBeTruthy(); // Allow for focus not working in all contexts
+    expect(isFocused).toBe(true);
   });
 
   test('should have visible header/navigation area', async ({ page }) => {
@@ -167,15 +167,23 @@ test.describe('Portfolio Discovery Journey', () => {
     // Growth Stage chip should now be active
     await expect(growthStageChip).toHaveClass(/active/);
 
-    // Wait for filter to apply
-    await page.waitForTimeout(500);
+    // All Stages should no longer be active
+    const allStagesChip = page.locator('[data-testid="filter-chip-stage-all"]');
+    await expect(allStagesChip).not.toHaveClass(/active/);
 
-    // Get filtered project count (may be different from initial)
+    // Wait for filter to actually apply to displayed cards
+    await page.waitForFunction(() => {
+      const state = (window as any).portfolioState;
+      return state && state.filters && state.filters.stage === 'growth-category';
+    }, { timeout: 5000 });
+
+    // Get filtered project count - should be different or page should have data
     const filteredCards = page.locator('[data-testid^="project-card-"]');
     const filteredCount = await filteredCards.count();
 
-    // Either count changes or stays same (depending on data), but filter should be applied
-    expect(growthStageChip).toHaveClass(/active/);
+    // Verify filter is actually active (state changed)
+    const filterState = await page.evaluate(() => (window as any).portfolioState?.filters?.stage);
+    expect(filterState).toBe('growth-category');
   });
 
   test('should apply theme filter when clicked', async ({ page }) => {

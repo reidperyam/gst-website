@@ -336,7 +336,12 @@ test.describe('Mobile Navigation Journey', () => {
 
     // Grid should still be visible and interactive
     const gridCards = page.locator('[data-testid^="project-card-"]');
-    expect(await gridCards.count()).toBeGreaterThanOrEqual(0);
+    const gridCardCount = await gridCards.count();
+    expect(gridCardCount).toBeGreaterThanOrEqual(0);
+
+    // Verify filter state was applied
+    const filterState = await page.evaluate(() => (window as any).portfolioState?.filters?.stage);
+    expect(filterState).toBe('growth-category');
   });
 
   test('should allow clearing filters on mobile', async ({ page }) => {

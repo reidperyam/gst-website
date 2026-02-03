@@ -37,19 +37,31 @@ test.describe('Theme Toggle Journey', () => {
     const body = page.locator('body');
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
 
-    // Get initial theme
-    const initialHasDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    // Get initial theme and color
+    const initialState = await body.evaluate(el => ({
+      hasDarkClass: el.classList.contains('dark-theme'),
+      bgColor: window.getComputedStyle(el).backgroundColor
+    }));
 
     // Click theme toggle
     await expect(themeToggle).toBeVisible();
     await themeToggle.click();
 
-    // Wait for theme to change
-    await page.waitForTimeout(100);
+    // Wait for actual CSS to change, not just timeout
+    await page.waitForFunction((initialBgColor: string) => {
+      const el = document.body;
+      const newBg = window.getComputedStyle(el).backgroundColor;
+      return newBg !== initialBgColor;
+    }, initialState.bgColor, { timeout: 5000 });
 
-    // Theme should have changed
-    const newHasDark = await body.evaluate(el => el.classList.contains('dark-theme'));
-    expect(newHasDark).not.toBe(initialHasDark);
+    // Theme should have changed (both class and actual color)
+    const newState = await body.evaluate(el => ({
+      hasDarkClass: el.classList.contains('dark-theme'),
+      bgColor: window.getComputedStyle(el).backgroundColor
+    }));
+
+    expect(newState.hasDarkClass).not.toBe(initialState.hasDarkClass);
+    expect(newState.bgColor).not.toBe(initialState.bgColor);
   });
 
   test('should maintain theme across navigation', async ({ page }) => {
@@ -76,8 +88,8 @@ test.describe('Theme Toggle Journey', () => {
 
       // Check if theme persisted (check localStorage or class)
       const isDark = await body.evaluate(el => el.classList.contains('dark-theme'));
-      // Theme should be remembered (true if we set it to dark)
-      expect(typeof isDark).toBe('boolean');
+      // Theme should be remembered (should match what we set before reload)
+      expect(isDark).toBe(initialWasDark);
     }
   });
 
