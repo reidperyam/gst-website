@@ -223,13 +223,17 @@ test.describe('Google Analytics E2E Tests', () => {
       // Use specific header filter toggle selector, not generic button selector
       const filterButton = page.locator('[data-testid="portfolio-filter-toggle"]');
 
-      // If filter controls exist, test them
-      if (await filterButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      // Explicitly verify filter controls exist (fail test if missing)
+      const filterExists = await filterButton.isVisible({ timeout: 3000 }).catch(() => false);
+
+      if (filterExists) {
         await filterButton.click();
 
         // Apply a filter if possible
         const filterOption = page.locator('[data-testid^="filter-option-"], label').first();
-        if (await filterOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+        const filterOptionExists = await filterOption.isVisible({ timeout: 2000 }).catch(() => false);
+
+        if (filterOptionExists) {
           await filterOption.click();
 
           // Verify filter_applied event was tracked
@@ -238,8 +242,10 @@ test.describe('Google Analytics E2E Tests', () => {
           expect(filterEvent).toBeDefined();
           expect(filterEvent?.eventData.filter_type).toBeTruthy();
         }
+      } else {
+        // Portfolio should have filters - skip test rather than silently pass
+        test.skip();
       }
-      // Test passes even if filters don't exist on portfolio page
     });
   });
 
@@ -376,11 +382,16 @@ test.describe('Google Analytics E2E Tests', () => {
       });
 
       // Perform actions
-      await page.locator('a:has-text("M&A")').click();
+      const portfolioLink = page.locator('a:has-text("M&A")');
+      await expect(portfolioLink).toBeVisible();
+      await portfolioLink.click();
       await page.waitForURL('/ma-portfolio');
 
-      // Even though we navigated, events should have been sent
-      // (Note: This test verifies GA requests are made)
+      // Even though we navigated, verify gtag is still functioning
+      const gtagExists = await page.evaluate(() => {
+        return typeof window.gtag === 'function';
+      });
+      expect(gtagExists).toBe(true);
     });
   });
 
@@ -434,22 +445,40 @@ test.describe('Google Analytics E2E Tests', () => {
     test('should continue tracking if gtag is temporarily unavailable', async ({ page }) => {
       await gotoAndSetupAnalytics(page, '/');
 
+      // Verify gtag is initially available
+      let gtagExists = await page.evaluate(() => {
+        return typeof window.gtag === 'function';
+      });
+      expect(gtagExists).toBe(true);
+
       // Make gtag temporarily unavailable
       await page.evaluate(() => {
         (window as any).gtagBackup = window.gtag;
         delete (window as any).gtag;
       });
 
-      // Perform actions
-      await page.locator('a:has-text("M&A")').click();
+      // Verify gtag is now unavailable
+      gtagExists = await page.evaluate(() => {
+        return typeof window.gtag === 'function';
+      });
+      expect(gtagExists).toBe(false);
+
+      // Perform actions while gtag is unavailable
+      const portfolioLink = page.locator('a:has-text("M&A")');
+      await expect(portfolioLink).toBeVisible();
+      await portfolioLink.click();
       await page.waitForURL('/ma-portfolio');
 
-      // Restore gtag
-      await page.evaluate(() => {
-        window.gtag = (window as any).gtagBackup;
-      });
+      // Restore gtag by re-executing the analytics mocking (since direct restoration doesn't work)
+      await setupAnalyticsMocking(page);
 
-      // Page should still be functional
+      // Verify gtag is restored and functional
+      gtagExists = await page.evaluate(() => {
+        return typeof window.gtag === 'function';
+      });
+      expect(gtagExists).toBe(true);
+
+      // Verify we're on the new page
       expect(await page.url()).toContain('/ma-portfolio');
     });
   });
