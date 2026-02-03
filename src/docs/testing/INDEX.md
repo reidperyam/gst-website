@@ -13,7 +13,7 @@ Navigation guide to all testing and continuous integration documentation.
 → [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#available-commands) - Commands section
 
 ### "Tests failed, I need to fix them"
-→ [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#troubleshooting) - Troubleshooting section
+→ [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Complete troubleshooting guide
 
 ### "I want to understand the CI/CD pipeline"
 → [GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md) - Complete setup guide
@@ -35,7 +35,8 @@ Navigation guide to all testing and continuous integration documentation.
 | File | Purpose | Read Time | Audience |
 |------|---------|-----------|----------|
 | [README.md](./README.md) | Overview & quick facts | 5 min | Everyone |
-| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) | Commands & troubleshooting | 5 min | Developers |
+| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) | Commands & common tasks | 5 min | Developers |
+| [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) | Solutions to common issues | 15 min | Developers with problems |
 | [TEST_STRATEGY.md](./TEST_STRATEGY.md) | Testing approach & patterns | 30 min | Architects, test writers |
 | [TEST_BEST_PRACTICES.md](./TEST_BEST_PRACTICES.md) | E2E patterns & anti-patterns | 15 min | E2E test writers |
 | [GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md) | CI/CD pipeline setup | 10 min | DevOps, maintainers |

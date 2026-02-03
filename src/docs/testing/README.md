@@ -10,6 +10,7 @@ Start with one of these based on your needs:
 - **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - One-page cheat sheet for common tasks
 - **[TEST_STRATEGY.md](./TEST_STRATEGY.md)** - Comprehensive testing approach and patterns
 - **[GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md)** - How to set up CI/CD pipeline
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Solutions to common testing and CI/CD issues
 - **[BRANCH_PROTECTION_CONFIG.md](./BRANCH_PROTECTION_CONFIG.md)** - GitHub branch protection rules
 - **[TEST_BEST_PRACTICES.md](./TEST_BEST_PRACTICES.md)** - E2E testing best practices and red flags
 
@@ -55,7 +56,7 @@ npm run test:coverage         # With coverage metrics
 | How do I run tests? | [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#available-commands) |
 | How does CI/CD work? | [GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md) |
 | How do I write tests? | [TEST_STRATEGY.md](./TEST_STRATEGY.md) |
-| Tests are failing, what do I do? | [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#troubleshooting) |
+| Tests are failing, what do I do? | [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) |
 | How do branch protection rules work? | [BRANCH_PROTECTION_CONFIG.md](./BRANCH_PROTECTION_CONFIG.md) |
 | What are E2E best practices? | [TEST_BEST_PRACTICES.md](./TEST_BEST_PRACTICES.md) |
 
