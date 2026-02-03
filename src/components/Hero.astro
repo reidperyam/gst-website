@@ -3,9 +3,25 @@ interface Props {
     title: string;
     subtitle?: string;
     description: string;
+    primaryCTA?: {
+        text: string;
+        href: string;
+    };
+    secondaryCTA?: {
+        text: string;
+        href: string;
+    };
+    trustLine?: string;
 }
 
-const { title, subtitle, description } = Astro.props;
+const {
+    title,
+    subtitle,
+    description,
+    primaryCTA,
+    secondaryCTA,
+    trustLine
+} = Astro.props;
 ---
 
 <section class="hero">
@@ -21,6 +37,23 @@ const { title, subtitle, description } = Astro.props;
                     <p>{description}</p>
                 </div>
                 <div class="hero-action">
+                    {(primaryCTA || secondaryCTA) && (
+                        <div class="cta-group">
+                            {primaryCTA && (
+                                <a href={primaryCTA.href} class="cta-button primary">
+                                    {primaryCTA.text}
+                                </a>
+                            )}
+                            {secondaryCTA && (
+                                <a href={secondaryCTA.href} class="cta-button secondary">
+                                    {secondaryCTA.text}
+                                </a>
+                            )}
+                        </div>
+                    )}
+                    {trustLine && (
+                        <p class="trust-line">{trustLine}</p>
+                    )}
                 </div>
             </div>
         </div>
