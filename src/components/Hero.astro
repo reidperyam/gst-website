@@ -27,14 +27,9 @@ const {
 
 // Helper function to split text and highlight specific portions
 function renderHighlightedText(text: string, highlight?: string) {
-    if (!highlight) {
-        return text;
-    }
-
+    if (!highlight) return [text];
     const regex = new RegExp(`(${highlight})`, 'gi');
-    const parts = text.split(regex);
-
-    return parts;
+    return text.split(regex);
 }
 ---
 
