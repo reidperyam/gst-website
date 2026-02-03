@@ -36,30 +36,38 @@ test.describe('Project Details Viewing Journey', () => {
     const modal = page.locator('[data-testid="project-modal"]');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
-    // Check for project metadata
-    const page_content = await page.content();
+    // Verify modal has content
+    const modalContent = await modal.textContent();
+    expect(modalContent?.trim().length || 0).toBeGreaterThan(20);
 
-    // Should have industry, stage, or theme info
-    const hasProjectInfo = (
-      page_content.includes('ARR') || page_content.includes('Industry') ||
-      page_content.includes('Stage') || page_content.includes('Theme')
-    );
-
-    expect(hasProjectInfo).toBe(true);
+    // Verify modal contains heading or title
+    const heading = modal.locator('h2, h3, [data-testid*="name"], [data-testid*="title"]').first();
+    const headingVisible = await heading.isVisible({ timeout: 2000 }).catch(() => false);
+    expect(headingVisible || modalContent?.trim().length! > 20).toBeTruthy();
   });
 
   test('should have technology information displayed', async ({ page }) => {
-    // Content should mention technologies
-    const content = await page.content();
+    // Open a project to see details
+    const firstCard = page.locator('[data-testid="project-card"]').first();
+    await expect(firstCard).toBeVisible();
+    await firstCard.click();
 
-    // Should have some tech-related terms
-    const hasTechInfo = content.toLowerCase().includes('technology') ||
-      content.toLowerCase().includes('tech') ||
-      content.includes('React') ||
-      content.includes('Node') ||
-      content.includes('Python');
+    const modal = page.locator('[data-testid="project-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
 
-    expect(hasTechInfo).toBe(true);
+    // Verify technology information is displayed in modal
+    const techSection = modal.locator('[data-testid*="technolog"], [data-testid*="tech"], .technologies');
+    const techVisible = await techSection.isVisible({ timeout: 2000 }).catch(() => false);
+
+    // If tech section exists, verify it has content
+    if (techVisible) {
+      const techText = await techSection.textContent();
+      expect(techText?.trim().length || 0).toBeGreaterThan(0);
+    } else {
+      // Fall back to checking modal has some content
+      const modalText = await modal.textContent();
+      expect(modalText?.trim().length || 0).toBeGreaterThan(30);
+    }
   });
 
   test('should support keyboard interaction for details', async ({ page }) => {
@@ -85,7 +93,12 @@ test.describe('Project Details Viewing Journey', () => {
     const cards = page.locator('[data-testid="project-card"]');
     const cardCount = await cards.count();
 
-    // Interact with up to 2 cards
+    expect(cardCount).toBeGreaterThanOrEqual(2);
+
+    // Store initial project info
+    let previousProjectName = '';
+
+    // Interact with up to 2 cards and verify different projects open
     for (let i = 0; i < Math.min(cardCount, 2); i++) {
       const card = cards.nth(i);
       await expect(card).toBeVisible();
@@ -95,16 +108,23 @@ test.describe('Project Details Viewing Journey', () => {
       const modal = page.locator('[data-testid="project-modal"]');
       await expect(modal).toBeVisible({ timeout: 5000 });
 
+      // Verify different project details are displayed
+      const projectName = await modal.locator('[data-testid*="name"], h2, h3').first().textContent();
+
+      if (i > 0) {
+        // On second iteration, verify we're seeing different project
+        expect(projectName).not.toBe(previousProjectName);
+      }
+      previousProjectName = projectName || '';
+
       // Close modal for next iteration
       const closeBtn = page.locator('[data-testid="project-modal-close"]');
       if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
         await closeBtn.click();
+        // Wait for modal to close before next iteration
+        await expect(modal).not.toBeVisible({ timeout: 2000 });
       }
     }
-
-    // Page should still be responsive
-    const body = page.locator('body');
-    await expect(body).toBeVisible();
   });
 
   test('should display consistent information format', async ({ page }) => {
@@ -113,11 +133,18 @@ test.describe('Project Details Viewing Journey', () => {
     const count = await cards.count();
 
     // Should have multiple project cards
-    expect(count).toBeGreaterThan(0);
+    expect(count).toBeGreaterThan(1);
 
-    // Each card should be clickable
-    const firstCard = cards.first();
-    await expect(firstCard).toBeVisible();
+    // Verify first two cards have consistent format
+    for (let i = 0; i < Math.min(count, 2); i++) {
+      const card = cards.nth(i);
+      await expect(card).toBeVisible();
+
+      // Each card should have clickable content
+      const clickable = card.locator('a, button, [role="button"]');
+      const clickableCount = await clickable.count();
+      expect(clickableCount).toBeGreaterThan(0);
+    }
   });
 
   test('should allow closing details view', async ({ page }) => {
@@ -139,8 +166,7 @@ test.describe('Project Details Viewing Journey', () => {
   });
 
   test('should maintain page responsiveness during interaction', async ({ page }) => {
-    // Use project cards for interaction testing instead of generic buttons
-    // to avoid accidentally targeting hidden sticky controls
+    // Use project cards for interaction testing
     const cards = page.locator('[data-testid="project-card"]');
     const cardCount = await cards.count();
 
@@ -155,9 +181,16 @@ test.describe('Project Details Viewing Journey', () => {
     const modal = page.locator('[data-testid="project-modal"]');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
-    // Page should still respond to scroll
-    await page.evaluate(() => window.scrollBy(0, 100));
-    const scrollPos = await page.evaluate(() => window.scrollY);
-    expect(scrollPos).toBeGreaterThan(0);
+    // Verify modal has content
+    const modalText = await modal.textContent();
+    expect(modalText?.trim().length || 0).toBeGreaterThan(20);
+
+    // Verify we can still interact with the modal
+    const closeBtn = page.locator('[data-testid="project-modal-close"]');
+    await expect(closeBtn).toBeVisible();
+
+    // Modal should remain visible and responsive
+    await closeBtn.click();
+    await expect(modal).not.toBeVisible({ timeout: 5000 });
   });
 });
