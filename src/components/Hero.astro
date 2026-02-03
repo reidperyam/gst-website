@@ -1,4 +1,6 @@
 ---
+import { trackCTA } from '../utils/analytics';
+
 interface Props {
     subtitle?: string;
     description: string;
@@ -40,12 +42,20 @@ const {
                     {(primaryCTA || secondaryCTA) && (
                         <div class="cta-group">
                             {primaryCTA && (
-                                <a href={primaryCTA.href} class="cta-button primary">
+                                <a
+                                    href={primaryCTA.href}
+                                    class="cta-button primary"
+                                    onclick="trackCTA('calendly', 'hero')"
+                                >
                                     {primaryCTA.text}
                                 </a>
                             )}
                             {secondaryCTA && (
-                                <a href={secondaryCTA.href} class="cta-button secondary">
+                                <a
+                                    href={secondaryCTA.href}
+                                    class="cta-button secondary"
+                                    onclick="trackCTA('services', 'hero')"
+                                >
                                     {secondaryCTA.text}
                                 </a>
                             )}
@@ -59,3 +69,10 @@ const {
         </div>
     </div>
 </section>
+
+<script>
+    import { trackCTA } from '../utils/analytics';
+
+    // Make trackCTA available to inline onclick handlers
+    (window as any).trackCTA = trackCTA;
+</script>
