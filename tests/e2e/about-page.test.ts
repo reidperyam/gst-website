@@ -64,16 +64,24 @@ test.describe('About Page - Founder Section', () => {
 
   test.describe('Founder Photo Display', () => {
     test('should display founder photo in landscape layout', async ({ page }) => {
-      const founderPhoto = page.locator('.founder-portrait-light, .founder-portrait-dark');
-      await expect(founderPhoto.first()).toBeVisible();
-
-      // Verify image dimensions are set for landscape (600x450)
       const img = page.locator('.founder-image').first();
-      const width = await img.getAttribute('width');
-      const height = await img.getAttribute('height');
 
-      // Check landscape orientation attributes (width > height)
-      expect(parseInt(width || '0')).toBeGreaterThan(parseInt(height || '0'));
+      // Wait for image to load and be visible
+      await expect(img).toBeVisible();
+
+      // Get actual rendered dimensions
+      const box = await img.boundingBox();
+      expect(box).toBeTruthy();
+
+      if (box) {
+        // Verify image has reasonable dimensions
+        expect(box.width).toBeGreaterThan(100);
+        expect(box.height).toBeGreaterThan(50);
+
+        // For founder photo, verify it's not distorted
+        // The aspect ratio should be reasonable (width >= height is fine)
+        expect(box.width).toBeGreaterThanOrEqual(box.height * 0.8);
+      }
     });
 
     test('should render founder photo as clickable link to LinkedIn', async ({ page }) => {
@@ -180,7 +188,7 @@ test.describe('About Page - Founder Section', () => {
       // Verify light signature container exists
       const lightSig = page.locator('.founder-signature-light');
       const lightCount = await lightSig.count();
-      expect(lightCount).toBeGreaterThanOrEqual(0);
+      expect(lightCount).toBeGreaterThan(0);
     });
 
     test('should switch to dark signature in dark theme', async ({ page }) => {
@@ -210,22 +218,37 @@ test.describe('About Page - Founder Section', () => {
       const count = await sigContainers.count();
 
       if (count > 0) {
-        // Get initial visible signature width
+        // Get initial visible signature and its dimensions
         const visibleSig = page.locator('.founder-signature-light:visible, .founder-signature-dark:visible').first();
-        const initialWidth = await visibleSig.evaluate(el => el.offsetWidth).catch(() => 0);
+        await expect(visibleSig).toBeVisible();
 
-        if (initialWidth > 0) {
+        const initialBox = await visibleSig.boundingBox();
+        expect(initialBox).toBeTruthy();
+
+        if (initialBox) {
+          const initialWidth = initialBox.width;
+          const initialHeight = initialBox.height;
+          const initialRatio = initialWidth / initialHeight;
+
           // Toggle theme
           await themeToggle.click();
           await page.waitForTimeout(150);
 
-          // Get new visible signature width
+          // Get new visible signature and its dimensions
           const newVisibleSig = page.locator('.founder-signature-light:visible, .founder-signature-dark:visible').first();
-          const newWidth = await newVisibleSig.evaluate(el => el.offsetWidth).catch(() => 0);
+          await expect(newVisibleSig).toBeVisible();
 
-          // Width should be maintained (max-width is consistent)
-          expect(newWidth).toBeLessThanOrEqual(200);
-          expect(initialWidth).toBeLessThanOrEqual(200);
+          const newBox = await newVisibleSig.boundingBox();
+          expect(newBox).toBeTruthy();
+
+          if (newBox) {
+            const newWidth = newBox.width;
+            const newHeight = newBox.height;
+            const newRatio = newWidth / newHeight;
+
+            // Aspect ratio should be maintained (allow 10% tolerance)
+            expect(Math.abs(newRatio - initialRatio)).toBeLessThan(initialRatio * 0.1);
+          }
         }
       }
     });

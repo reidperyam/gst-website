@@ -24,20 +24,9 @@ import { trackThemeToggle } from '../utils/analytics';
     import { trackThemeToggle } from '../utils/analytics';
 
     const themeToggle = document.getElementById('themeToggle');
-    const htmlElement = document.documentElement;
 
-    // Check for saved theme preference or default to light
-    let currentTheme = 'light';
-    try {
-        currentTheme = localStorage.getItem('theme') || 'light';
-    } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        currentTheme = 'light';
-    }
-
-    if (currentTheme === 'dark') {
-        document.body.classList.add('dark-theme');
-    }
+    // Theme initialization is now handled synchronously in BaseLayout.astro
+    // This script only handles the toggle interaction
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {

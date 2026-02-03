@@ -246,7 +246,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     gap: 0.75rem;
   }
 
-  .chip {
+  .filter-chip {
     padding: 0.5rem 1rem;
     background: rgba(26, 26, 26, 0.05);
     color: rgba(26, 26, 26, 0.7);
@@ -260,13 +260,13 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     user-select: none;
   }
 
-  .chip:hover {
+  .filter-chip:hover {
     background: rgba(26, 26, 26, 0.08);
     border-color: #05cd99;
     color: #05cd99;
   }
 
-  .chip.active {
+  .filter-chip.active {
     background: #05cd99;
     color: #ffffff;
     border-color: #05cd99;
@@ -363,19 +363,19 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     color: rgba(200, 200, 200, 0.7);
   }
 
-  :global(body.dark-theme) .chip {
+  :global(body.dark-theme) .filter-chip {
     background: rgba(5, 205, 153, 0.1);
     border-color: rgba(5, 205, 153, 0.2);
     color: rgba(200, 200, 200, 0.8);
   }
 
-  :global(body.dark-theme) .chip:hover {
+  :global(body.dark-theme) .filter-chip:hover {
     background: rgba(5, 205, 153, 0.15);
     border-color: #05cd99;
     color: #05cd99;
   }
 
-  :global(body.dark-theme) .chip.active {
+  :global(body.dark-theme) .filter-chip.active {
     background: #05cd99;
     color: #0a0a0a;
     border-color: #05cd99;
@@ -493,7 +493,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
       gap: 0.625rem;
     }
 
-    .chip {
+    .filter-chip {
       padding: 0.5rem 0.75rem;
       font-size: 0.75rem;
       min-height: 36px;
@@ -643,9 +643,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     const engagementChipsContainer = document.getElementById('engagement-chips');
 
     if (stageChipsContainer && !stageChipsContainer.hasListener) {
-      stageChipsContainer.querySelectorAll('.chip').forEach(chip => {
+      stageChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
         chip.addEventListener('click', function() {
-          stageChipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          stageChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
           this.classList.add('active');
           filters.stage = chip.dataset.value;
           window.portfolioState.filters.stage = filters.stage;
@@ -656,9 +656,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     }
 
     if (themeChipsContainer && !themeChipsContainer.hasListener) {
-      themeChipsContainer.querySelectorAll('.chip').forEach(chip => {
+      themeChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
         chip.addEventListener('click', function() {
-          themeChipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          themeChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
           this.classList.add('active');
           filters.theme = chip.dataset.value;
           window.portfolioState.filters.theme = filters.theme;
@@ -669,9 +669,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     }
 
     if (yearChipsContainer && !yearChipsContainer.hasListener) {
-      yearChipsContainer.querySelectorAll('.chip').forEach(chip => {
+      yearChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
         chip.addEventListener('click', function() {
-          yearChipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          yearChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
           this.classList.add('active');
           filters.year = chip.dataset.value;
           window.portfolioState.filters.year = filters.year;
@@ -682,9 +682,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     }
 
     if (engagementChipsContainer && !engagementChipsContainer.hasListener) {
-      engagementChipsContainer.querySelectorAll('.chip').forEach(chip => {
+      engagementChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
         chip.addEventListener('click', function() {
-          engagementChipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          engagementChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
           this.classList.add('active');
           filters.engagement = chip.dataset.value;
           window.portfolioState.filters.engagement = filters.engagement;

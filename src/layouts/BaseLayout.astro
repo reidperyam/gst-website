@@ -26,6 +26,20 @@ const { title, description = 'Global Strategic Technologies - Technology Advisor
         <!-- Preconnect to Google Analytics to reduce critical path latency -->
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+        <!-- Initialize theme synchronously to prevent FOUC and race conditions in E2E tests -->
+        <script is:inline>
+            try {
+                const theme = localStorage.getItem('theme');
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                }
+            } catch (e) {
+                // localStorage not available (e.g., private browsing)
+                // Default to light theme silently
+            }
+        </script>
+
         <GoogleAnalytics />
     </head>
     <body>
