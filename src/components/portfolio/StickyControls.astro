@@ -22,9 +22,9 @@ const valueCreationEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CA
 const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.technicalDiligence.includes(e as any)).sort();
 ---
 
-<!-- Sticky Controls - Positioned independently at viewport level -->
+<!-- Fixed Controls - Positioned independently at viewport level -->
 <div class="sticky-controls-overlay">
-  <div class="portfolio-controls-sticky">
+  <div class="portfolio-controls-fixed">
     <div class="controls-wrapper">
       <div class="search-box">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -33,7 +33,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
         </svg>
         <input
           type="search"
-          id="search-input"
+          id="search-input-sticky"
           class="search-input"
           placeholder="Search by project name, technology, or industry..."
           aria-label="Search projects"
@@ -66,8 +66,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     pointer-events: auto;
   }
 
-  /* Sticky Search/Filter Controls */
-  .portfolio-controls-sticky {
+  /* Fixed Search/Filter Controls */
+  .portfolio-controls-fixed {
     background: #ffffff;
     border-bottom: none;
     padding: 0;
@@ -88,7 +88,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     opacity: 0;
   }
 
-  .portfolio-controls-sticky.sticky-active {
+  .portfolio-controls-fixed.sticky-active {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
@@ -325,7 +325,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   /* Dark Theme */
-  :global(body.dark-theme) .portfolio-controls-sticky {
+  :global(body.dark-theme) .portfolio-controls-fixed {
     background: #1a1a1a;
   }
 
@@ -393,7 +393,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
   /* Responsive */
   @media (max-width: 768px) {
-    .portfolio-controls-sticky {
+    .portfolio-controls-fixed {
       max-width: calc(100% - 2rem);
     }
 
@@ -415,7 +415,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   @media (max-width: 480px) {
-    .portfolio-controls-sticky {
+    .portfolio-controls-fixed {
       max-width: calc(100% - 0.5rem);
     }
 
@@ -696,7 +696,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   function attachSearchListener() {
-    const searchInput = document.getElementById('search-input');
+    const searchInput = document.getElementById('search-input-sticky');
     if (searchInput) {
       let searchTimeout;
       if (!searchInput.hasListener) {
@@ -811,7 +811,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   // Sticky behavior
   function handleStickyScroll() {
     const headerElement = document.querySelector('.portfolio-header');
-    const controlsElement = document.querySelector('.portfolio-controls-sticky');
+    const controlsElement = document.querySelector('.portfolio-controls-fixed');
     const navHeader = document.querySelector('header');
 
     if (!headerElement || !controlsElement || !navHeader) return;
