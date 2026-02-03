@@ -669,9 +669,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     if (stageChipsContainer && !stageChipsContainer.hasListener) {
       stageChipsContainer.addEventListener('click', (e) => {
-        const chip = e.target.closest('.chip');
+        const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#stage-chips .chip').forEach(c => c.classList.remove('active'));
+          document.querySelectorAll('#stage-chips .filter-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
           filters.stage = chip.dataset.value;
           window.portfolioState.filters.stage = filters.stage;
@@ -683,9 +683,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     if (themeChipsContainer && !themeChipsContainer.hasListener) {
       themeChipsContainer.addEventListener('click', (e) => {
-        const chip = e.target.closest('.chip');
+        const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#theme-chips .chip').forEach(c => c.classList.remove('active'));
+          document.querySelectorAll('#theme-chips .filter-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
           filters.theme = chip.dataset.value;
           window.portfolioState.filters.theme = filters.theme;
@@ -697,9 +697,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     if (yearChipsContainer && !yearChipsContainer.hasListener) {
       yearChipsContainer.addEventListener('click', (e) => {
-        const chip = e.target.closest('.chip');
+        const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#year-chips .chip').forEach(c => c.classList.remove('active'));
+          document.querySelectorAll('#year-chips .filter-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
           filters.year = chip.dataset.value;
           window.portfolioState.filters.year = filters.year;
@@ -711,9 +711,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
     if (engagementChipsContainer && !engagementChipsContainer.hasListener) {
       engagementChipsContainer.addEventListener('click', (e) => {
-        const chip = e.target.closest('.chip');
+        const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#engagement-chips .chip').forEach(c => c.classList.remove('active'));
+          document.querySelectorAll('#engagement-chips .filter-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
           filters.engagement = chip.dataset.value;
           window.portfolioState.filters.engagement = filters.engagement;
@@ -826,7 +826,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
         const searchInput = document.getElementById('search-input-2');
         if (searchInput) searchInput.value = '';
-        document.querySelectorAll('.chip.active').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('[data-value="all"]').forEach(c => c.classList.add('active'));
 
         filterProjects();

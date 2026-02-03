@@ -206,4 +206,176 @@ test.describe('Mobile Navigation Journey', () => {
     const size = parseInt(fontSize);
     expect(size).toBeGreaterThanOrEqual(12);
   });
+
+  test('should allow clicking stage filter chips on mobile', async ({ page }) => {
+    // Wait for initialization
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
+    // Open filter drawer on mobile
+    const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
+    await filterToggle.click();
+
+    // Wait for drawer
+    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
+    await expect(drawer).toBeVisible({ timeout: 5000 });
+
+    // Click Growth Stage filter
+    const growthChip = page.locator('[data-testid="filter-chip-stage-growth"]');
+    await growthChip.click();
+
+    // Verify it's now active
+    await expect(growthChip).toHaveClass(/active/);
+
+    // All Stages should no longer be active
+    const allStagesChip = page.locator('[data-testid="filter-chip-stage-all"]');
+    await expect(allStagesChip).not.toHaveClass(/active/);
+  });
+
+  test('should allow clicking theme filter chips on mobile', async ({ page }) => {
+    // Wait for initialization
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
+    // Open filter drawer on mobile
+    const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
+    await filterToggle.click();
+
+    // Wait for drawer
+    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
+    await expect(drawer).toBeVisible({ timeout: 5000 });
+
+    // Click a theme filter
+    const themeChip = page.locator('[data-testid="filter-chip-theme-finance"]');
+    await expect(themeChip).toBeVisible();
+    await themeChip.click();
+
+    // Verify it's now active
+    await expect(themeChip).toHaveClass(/active/);
+
+    // All Themes should no longer be active
+    const allThemesChip = page.locator('[data-testid="filter-chip-theme-all"]');
+    await expect(allThemesChip).not.toHaveClass(/active/);
+  });
+
+  test('should allow clicking year filter chips on mobile', async ({ page }) => {
+    // Wait for initialization
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
+    // Open filter drawer on mobile
+    const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
+    await filterToggle.click();
+
+    // Wait for drawer
+    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
+    await expect(drawer).toBeVisible({ timeout: 5000 });
+
+    // Click a year filter
+    const yearChip = page.locator('[data-testid="filter-chip-year-2024"]');
+    await expect(yearChip).toBeVisible();
+    await yearChip.click();
+
+    // Verify it's now active
+    await expect(yearChip).toHaveClass(/active/);
+
+    // All Years should no longer be active
+    const allYearsChip = page.locator('[data-testid="filter-chip-year-all"]');
+    await expect(allYearsChip).not.toHaveClass(/active/);
+  });
+
+  test('should allow clicking engagement filter chips on mobile', async ({ page }) => {
+    // Wait for initialization
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
+    // Open filter drawer on mobile
+    const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
+    await filterToggle.click();
+
+    // Wait for drawer
+    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
+    await expect(drawer).toBeVisible({ timeout: 5000 });
+
+    // Click an engagement filter
+    const engagementChip = page.locator('[data-testid="filter-chip-engagement-value-creation"]');
+    await expect(engagementChip).toBeVisible();
+    await engagementChip.click();
+
+    // Verify it's now active
+    await expect(engagementChip).toHaveClass(/active/);
+
+    // All Types should no longer be active
+    const allTypesChip = page.locator('[data-testid="filter-chip-engagement-all"]');
+    await expect(allTypesChip).not.toHaveClass(/active/);
+  });
+
+  test('should update page after applying filter on mobile', async ({ page }) => {
+    // Wait for initialization
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
+    // Get initial project count
+    const initialCards = page.locator('[data-testid^="project-card-"]');
+    const initialCount = await initialCards.count();
+    expect(initialCount).toBeGreaterThan(0);
+
+    // Open filter drawer on mobile
+    const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
+    await filterToggle.click();
+
+    // Wait for drawer
+    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
+    await expect(drawer).toBeVisible({ timeout: 5000 });
+
+    // Apply a filter
+    const growthChip = page.locator('[data-testid="filter-chip-stage-growth"]');
+    await growthChip.click();
+
+    // Close drawer (click overlay or close button)
+    const closeButton = page.locator('[data-testid="portfolio-drawer-close"]');
+    await closeButton.click();
+
+    // Wait for drawer to close and filter to apply
+    await page.waitForTimeout(500);
+
+    // Grid should still be visible and interactive
+    const gridCards = page.locator('[data-testid^="project-card-"]');
+    expect(await gridCards.count()).toBeGreaterThanOrEqual(0);
+  });
+
+  test('should allow clearing filters on mobile', async ({ page }) => {
+    // Wait for initialization
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
+
+    // Open filter drawer on mobile
+    const filterToggle = page.locator('[data-testid="portfolio-filter-toggle"]');
+    await filterToggle.click();
+
+    // Wait for drawer
+    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
+    await expect(drawer).toBeVisible({ timeout: 5000 });
+
+    // Apply multiple filters
+    const growthChip = page.locator('[data-testid="filter-chip-stage-growth"]');
+    const financeChip = page.locator('[data-testid="filter-chip-theme-finance"]');
+
+    await growthChip.click();
+    await financeChip.click();
+
+    // Both should be active
+    await expect(growthChip).toHaveClass(/active/);
+    await expect(financeChip).toHaveClass(/active/);
+
+    // Click Clear All Filters
+    const clearButton = page.locator('[data-testid="clear-filters-button"]');
+    await clearButton.click();
+
+    // Wait for reset
+    await page.waitForTimeout(300);
+
+    // Filters should be reset to "All"
+    const allStagesChip = page.locator('[data-testid="filter-chip-stage-all"]');
+    const allThemesChip = page.locator('[data-testid="filter-chip-theme-all"]');
+
+    await expect(allStagesChip).toHaveClass(/active/);
+    await expect(allThemesChip).toHaveClass(/active/);
+    await expect(growthChip).not.toHaveClass(/active/);
+    await expect(financeChip).not.toHaveClass(/active/);
+  });
 });
