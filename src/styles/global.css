@@ -199,6 +199,14 @@ a:hover {
     color: var(--color-primary);
 }
 
+.hero h1 .highlight {
+    color: var(--color-primary);
+}
+
+body.dark-theme .hero h1 .highlight {
+    color: var(--color-primary);
+}
+
 .hero-content {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
@@ -211,6 +219,15 @@ a:hover {
     color: rgba(26, 26, 26, 0.85);
     line-height: 1.6;
     font-weight: 400;
+}
+
+.hero p .highlight {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+body.dark-theme .hero p .highlight {
+    color: var(--color-primary);
 }
 
 .hero-action {
