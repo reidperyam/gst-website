@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import WhoWeSupport from '../components/WhoWeSupport.astro';
 import CTASection from '../components/CTASection.astro';
 import { trackPageView } from '../utils/analytics';
 
@@ -24,6 +25,8 @@ trackPageView('home', 'technology Advisory & Execution');
         }}
         trustLine="Vendor-neutral. Executive-ready outputs. Built for high-stakes decisions."
     />
+
+    <WhoWeSupport />
 
     <CTASection
         title="Let's discuss your next challenge"
