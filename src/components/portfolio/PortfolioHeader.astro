@@ -44,8 +44,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         <h1 class="portfolio-title">{title}</h1>
       </div>
 
-      <!-- Search and Filter Controls (Sticky) -->
-      <div class="portfolio-controls-sticky">
+      <!-- Search and Filter Controls (Fixed) -->
+      <div class="portfolio-controls-fixed">
         <div class="controls-wrapper">
           <div class="search-box">
             <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -54,7 +54,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
             </svg>
             <input
               type="search"
-              id="search-input-2"
+              id="search-input-fixed"
               class="search-input"
               placeholder="Search by project name, technology, or industry..."
               aria-label="Search projects"
@@ -165,7 +165,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     white-space: nowrap;
   }
 
-  .portfolio-controls-sticky {
+  .portfolio-controls-fixed {
     background: #ffffff;
     border-bottom: none;
     padding: 0;
@@ -176,7 +176,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     transition: position 0.2s ease-out, top 0.2s ease-out;
   }
 
-  .portfolio-controls-sticky.sticky-active {
+  .portfolio-controls-fixed.sticky-active {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
@@ -186,7 +186,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
-  .portfolio-controls-sticky .container {
+  .portfolio-controls-fixed .container {
     width: fit-content;
     padding: 0;
     display: flex;
@@ -326,11 +326,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     background: #0a0a0a;
   }
 
-  :global(body.dark-theme) .portfolio-controls-sticky {
+  :global(body.dark-theme) .portfolio-controls-fixed {
     background: #1a1a1a;
   }
 
-  :global(body.dark-theme) .portfolio-controls-sticky .container {
+  :global(body.dark-theme) .portfolio-controls-fixed .container {
     background: #1a1a1a;
   }
 
@@ -383,11 +383,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       letter-spacing: -0.01em;
     }
 
-    .portfolio-controls-sticky {
+    .portfolio-controls-fixed {
       padding: 0.625rem 0;
     }
 
-    .portfolio-controls-sticky.sticky-active {
+    .portfolio-controls-fixed.sticky-active {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
@@ -396,7 +396,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       z-index: 1002;
     }
 
-    .portfolio-controls-sticky .container {
+    .portfolio-controls-fixed .container {
       padding: 0.625rem 1rem;
     }
 
@@ -435,13 +435,13 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       font-size: 1.1rem;
     }
 
-    .portfolio-controls-sticky {
+    .portfolio-controls-fixed {
       padding: 0.625rem 0;
       height: auto;
       width: 100%;
     }
 
-    .portfolio-controls-sticky.sticky-active {
+    .portfolio-controls-fixed.sticky-active {
       position: fixed;
       left: 0;
       right: 0;
@@ -451,7 +451,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       z-index: 1002;
     }
 
-    .portfolio-controls-sticky .container {
+    .portfolio-controls-fixed .container {
       padding: 0 1.5rem;
       width: 100%;
     }
@@ -725,7 +725,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   function attachSearchListener() {
-    const searchInput = document.getElementById('search-input-2');
+    const searchInput = document.getElementById('search-input-fixed');
     if (searchInput) {
       let searchTimeout;
       if (!searchInput.hasListener) {
@@ -824,7 +824,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         filters.engagement = 'all';
         window.portfolioState.filters = { ...filters };
 
-        const searchInput = document.getElementById('search-input-2');
+        const searchInput = document.getElementById('search-input-fixed');
         if (searchInput) searchInput.value = '';
         document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('[data-value="all"]').forEach(c => c.classList.add('active'));
@@ -866,7 +866,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
 <script>
   function initStickyControls() {
-    const controlsElement = document.querySelector('.portfolio-controls-sticky') as HTMLElement | null;
+    const controlsElement = document.querySelector('.portfolio-controls-fixed') as HTMLElement | null;
     const headerElement = document.querySelector('.portfolio-header') as HTMLElement | null;
     const navHeader = document.querySelector('header') as HTMLElement | null;
 
