@@ -16,9 +16,9 @@
 ```
 ✅ Test dependencies installed
 ✅ Vitest & Playwright configured
-✅ Test files created (174 tests)
-✅ E2E tests configured (207 tests)
-✅ All tests passing
+✅ Unit/Integration tests (180 tests across 10 files)
+✅ E2E tests (372 tests across 3 browsers)
+✅ All 552 tests passing
 ```
 
 ## Available Commands
@@ -43,7 +43,7 @@ npm run test:e2e:debug # Playwright debug → step through E2E tests
 ```
 1. Make your changes
 2. Run npm run test:all locally
-3. Wait for all 381 tests to pass
+3. Wait for all 552 tests to pass
 4. Only then push to remote
 ```
 
