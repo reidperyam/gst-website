@@ -1,9 +1,7 @@
 ---
 interface Props {
-    title: string;
     subtitle?: string;
     description: string;
-    highlightText?: string;
     primaryCTA?: {
         text: string;
         href: string;
@@ -16,21 +14,12 @@ interface Props {
 }
 
 const {
-    title,
     subtitle,
     description,
-    highlightText,
     primaryCTA,
     secondaryCTA,
     trustLine
 } = Astro.props;
-
-// Helper function to split text and highlight specific portions
-function renderHighlightedText(text: string, highlight?: string) {
-    if (!highlight) return [text];
-    const regex = new RegExp(`(${highlight})`, 'gi');
-    return text.split(regex);
-}
 ---
 
 <section class="hero">
@@ -38,36 +27,14 @@ function renderHighlightedText(text: string, highlight?: string) {
         <div class="hero-layout">
             <h1>
                 <span class="line">
-                    {highlightText ? (
-                        renderHighlightedText(title, highlightText).map((part: string, index: number) =>
-                            part.toLowerCase() === highlightText.toLowerCase() ? (
-                                <span key={index} class="highlight">{part}</span>
-                            ) : (
-                                part
-                            )
-                        )
-                    ) : (
-                        title
-                    )}
+                    Technology Advisory for <span class="highlight">Investors, Founders, and Companies</span>
                 </span>
                 {subtitle && <span class="line"><span class="accent">{subtitle}</span></span>}
             </h1>
 
             <div class="hero-content">
                 <div>
-                    <p>
-                        {highlightText ? (
-                            renderHighlightedText(description, highlightText).map((part: string, index: number) =>
-                                part.toLowerCase() === highlightText.toLowerCase() ? (
-                                    <span key={index} class="highlight">{part}</span>
-                                ) : (
-                                    part
-                                )
-                            )
-                        ) : (
-                            description
-                        )}
-                    </p>
+                    <p>{description}</p>
                 </div>
                 <div class="hero-action">
                     {(primaryCTA || secondaryCTA) && (
