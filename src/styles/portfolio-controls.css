@@ -1,11 +1,13 @@
+@import './variables.css';
+
 /* Shared Portfolio Controls Styling */
 
 .controls-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  border-bottom: 2px solid #05cd99;
-  padding: 0.625rem 0;
+  gap: var(--gap-normal);
+  border-bottom: 2px solid var(--color-primary);
+  padding: var(--spacing-md) 0;
   width: fit-content;
   pointer-events: auto;
 }
@@ -19,12 +21,12 @@
 @media (max-width: 480px) {
   .controls-wrapper {
     width: 100%;
-    padding: 0.625rem 0;
-    gap: 0.5rem;
+    padding: var(--spacing-md) 0;
+    gap: var(--gap-tight);
   }
 }
 
 /* Dark Theme */
 :global(body.dark-theme) .controls-wrapper {
-  border-bottom-color: #05cd99;
+  border-bottom-color: var(--color-primary);
 }
