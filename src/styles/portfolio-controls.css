@@ -27,6 +27,6 @@
 }
 
 /* Dark Theme */
-:global(body.dark-theme) .controls-wrapper {
+:global(html.dark-theme) .controls-wrapper {
   border-bottom-color: var(--color-primary);
 }

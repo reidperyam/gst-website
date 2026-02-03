@@ -71,42 +71,42 @@
 }
 
 /* Dark Theme Interaction States */
-body.dark-theme .interactive:hover {
+html.dark-theme .interactive:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
 }
 
-body.dark-theme .interactive:focus-visible {
+html.dark-theme .interactive:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-body.dark-theme .link-interactive:hover {
+html.dark-theme .link-interactive:hover {
   color: var(--color-primary);
   border-bottom-color: var(--color-primary);
 }
 
-body.dark-theme .link-interactive:focus-visible {
+html.dark-theme .link-interactive:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 0.25rem;
 }
 
-body.dark-theme .control-hover {
+html.dark-theme .control-hover {
   background: rgba(5, 205, 153, 0.15);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
-body.dark-theme .control-active {
+html.dark-theme .control-active {
   background: var(--color-primary);
   color: var(--bg-dark);
   border-color: var(--color-primary);
 }
 
-body.dark-theme .accent-light-bg {
+html.dark-theme .accent-light-bg {
   background: rgba(5, 205, 153, 0.1);
 }
 
-body.dark-theme .accent-light-bg-hover {
+html.dark-theme .accent-light-bg-hover {
   background: rgba(5, 205, 153, 0.15);
 }

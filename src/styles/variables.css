@@ -113,7 +113,7 @@
 }
 
 /* Dark Theme Overrides */
-body.dark-theme {
+html.dark-theme {
   --bg-light: #0a0a0a;
   --bg-light-alt: #141414;
   --text-light-primary: var(--text-dark-primary);
@@ -192,7 +192,7 @@ body.dark-theme {
   color: var(--text-light-muted);
 }
 
-body.dark-theme .text-label {
+html.dark-theme .text-label {
   color: var(--text-dark-muted);
 }
 

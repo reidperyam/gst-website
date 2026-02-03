@@ -13,8 +13,9 @@ test.describe('Theme Toggle Journey', () => {
   });
 
   test('should start in light mode by default', async ({ page }) => {
-    const body = page.locator('body');
-    const isDarkMode = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const isDarkMode = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
 
     // Initial state should be light (no dark-theme class)
     expect(isDarkMode).toBe(false);
@@ -34,13 +35,12 @@ test.describe('Theme Toggle Journey', () => {
   });
 
   test('should toggle between light and dark modes', async ({ page }) => {
-    const body = page.locator('body');
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
 
     // Get initial theme and color
-    const initialState = await body.evaluate(el => ({
-      hasDarkClass: el.classList.contains('dark-theme'),
-      bgColor: window.getComputedStyle(el).backgroundColor
+    const initialState = await page.evaluate(() => ({
+      hasDarkClass: document.documentElement.classList.contains('dark-theme'),
+      bgColor: window.getComputedStyle(document.body).backgroundColor
     }));
 
     // Click theme toggle
@@ -49,15 +49,14 @@ test.describe('Theme Toggle Journey', () => {
 
     // Wait for actual CSS to change, not just timeout
     await page.waitForFunction((initialBgColor: string) => {
-      const el = document.body;
-      const newBg = window.getComputedStyle(el).backgroundColor;
+      const newBg = window.getComputedStyle(document.body).backgroundColor;
       return newBg !== initialBgColor;
     }, initialState.bgColor, { timeout: 5000 });
 
     // Theme should have changed (both class and actual color)
-    const newState = await body.evaluate(el => ({
-      hasDarkClass: el.classList.contains('dark-theme'),
-      bgColor: window.getComputedStyle(el).backgroundColor
+    const newState = await page.evaluate(() => ({
+      hasDarkClass: document.documentElement.classList.contains('dark-theme'),
+      bgColor: window.getComputedStyle(document.body).backgroundColor
     }));
 
     expect(newState.hasDarkClass).not.toBe(initialState.hasDarkClass);
@@ -70,13 +69,20 @@ test.describe('Theme Toggle Journey', () => {
     const body = page.locator('body');
 
     // Get initial state
-    const initialIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const initialIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
 
-    // Click to toggle if not dark
+    // Toggle to dark if not already dark
     if (!initialIsDark) {
       await themeToggle.click();
       await page.waitForTimeout(100);
     }
+
+    // Capture the theme state AFTER toggle
+    const themeAfterToggle = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
 
     // Navigate to another page
     const link = page.locator('a').first();
@@ -86,10 +92,13 @@ test.describe('Theme Toggle Journey', () => {
       await link.click();
       await page.waitForLoadState('networkidle');
 
-      // Check if theme persisted (check localStorage or class)
-      const isDark = await body.evaluate(el => el.classList.contains('dark-theme'));
-      // Theme should be remembered (should match what we set before reload)
-      expect(isDark).toBe(initialIsDark);
+      // Check if theme persisted - should match AFTER toggle state
+      const isDarkAfterNav = await page.evaluate(() =>
+        document.documentElement.classList.contains('dark-theme')
+      );
+
+      // Theme should match what it was AFTER the toggle, not the initial state
+      expect(isDarkAfterNav).toBe(themeAfterToggle);
     }
   });
 
@@ -103,23 +112,27 @@ test.describe('Theme Toggle Journey', () => {
     expect(isFocused).toBe(true);
 
     // Press Enter to activate
-    const body = page.locator('body');
-    const initialIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const initialIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
 
     await themeToggle.press('Enter');
     await page.waitForTimeout(100);
 
     // Theme should have changed
-    const newIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const newIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
     expect(newIsDark).not.toBe(initialIsDark);
   });
 
   test('should persist theme on page reload', async ({ page }) => {
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
-    const body = page.locator('body');
 
     // Toggle to dark mode
-    const initialIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const initialIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
     if (!initialIsDark) {
       await themeToggle.click();
       await page.waitForTimeout(100);
@@ -181,11 +194,12 @@ test.describe('Theme Toggle Journey', () => {
 
   test('should handle rapid theme toggles', async ({ page }) => {
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
-    const body = page.locator('body');
     await expect(themeToggle).toBeVisible();
 
     // Get initial theme state
-    const initialIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const initialIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
 
     // Rapidly toggle theme 5 times
     for (let i = 0; i < 5; i++) {
@@ -194,11 +208,13 @@ test.describe('Theme Toggle Journey', () => {
     }
 
     // After 5 toggles (odd number), theme should be opposite of initial
-    const finalIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const finalIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
     expect(finalIsDark).not.toBe(initialIsDark);
 
     // Verify CSS actually changed too
-    const finalBgColor = await body.evaluate(el => window.getComputedStyle(el).backgroundColor);
+    const finalBgColor = await page.evaluate(() => window.getComputedStyle(document.body).backgroundColor);
     const expectedThemeSwitched = true;
     expect(expectedThemeSwitched).toBe(true); // If we reached here, theme toggling worked
   });
@@ -226,13 +242,14 @@ test.describe('Theme Toggle Journey', () => {
     await expect(themeToggle).toBeVisible();
 
     // Get initial theme
-    const body = page.locator('body');
-    const initialIsDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+    const initialIsDark = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark-theme')
+    );
 
     // Toggle theme
     await themeToggle.click();
     await page.waitForFunction((initial) => {
-      const isDark = document.body.classList.contains('dark-theme');
+      const isDark = document.documentElement.classList.contains('dark-theme');
       return isDark !== initial;
     }, initialIsDark, { timeout: 5000 });
 
