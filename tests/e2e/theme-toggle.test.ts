@@ -89,7 +89,7 @@ test.describe('Theme Toggle Journey', () => {
       // Check if theme persisted (check localStorage or class)
       const isDark = await body.evaluate(el => el.classList.contains('dark-theme'));
       // Theme should be remembered (should match what we set before reload)
-      expect(isDark).toBe(initialWasDark);
+      expect(isDark).toBe(initialIsDark);
     }
   });
 
