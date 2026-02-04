@@ -1,0 +1,201 @@
+---
+// EngagementFlow component - displays 4-step engagement process
+---
+
+<section class="engagement-flow">
+    <div class="container">
+        <div class="flow-content">
+            <h2 class="heading-lg">How Engagements Typically Work</h2>
+
+            <div class="flow-steps">
+                <div class="step">
+                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">1</text>
+                    </svg>
+                    <p class="step-text">Intro call to align on objectives, stakeholders and constraints</p>
+                </div>
+                <div class="step">
+                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">2</text>
+                    </svg>
+                    <p class="step-text">Focused scope</p>
+                </div>
+                <div class="step">
+                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">3</text>
+                    </svg>
+                    <p class="step-text">Findings, recommendations, and decision-ready next steps</p>
+                </div>
+                <div class="step">
+                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">4</text>
+                    </svg>
+                    <p class="step-text">Optional ongoing advisory or execution support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .engagement-flow {
+        padding: var(--spacing-3xl) 0;
+        background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, var(--bg-light-alt) 15%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
+        position: relative;
+    }
+
+    .flow-content {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .heading-lg {
+        margin-bottom: var(--spacing-2xl);
+        text-align: center;
+    }
+
+    .flow-steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    .step {
+        padding: var(--spacing-xl);
+        background: var(--bg-light-primary);
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .step:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .step-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-bottom: var(--spacing-md);
+        flex-shrink: 0;
+        color: var(--color-primary);
+    }
+
+    .step-number {
+        font-size: 1.2rem;
+        font-weight: 700;
+        fill: var(--text-light-primary);
+    }
+
+    .step-text {
+        font-size: var(--text-base);
+        color: var(--text-light-primary);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Dark theme support */
+    :global(html.dark-theme) .engagement-flow {
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
+    }
+
+    :global(html.dark-theme) .step {
+        background: var(--bg-dark-alt);
+        border-color: var(--border-dark);
+    }
+
+    :global(html.dark-theme) .step:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.15);
+    }
+
+    :global(html.dark-theme) .step-text {
+        color: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .step-icon {
+        color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .step-number {
+        fill: var(--text-dark-primary);
+    }
+
+    /* Responsive design */
+    @media (max-width: 1024px) {
+        .flow-steps {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+
+        .step {
+            padding: var(--spacing-lg);
+        }
+
+        .step-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+        }
+
+        .step-number {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .engagement-flow {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .flow-steps {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .heading-lg {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .step {
+            padding: var(--spacing-lg);
+        }
+
+        .step-icon {
+            width: 2rem;
+            height: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .step-number {
+            font-size: 0.95rem;
+        }
+
+        .step-text {
+            font-size: var(--text-small);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .engagement-flow {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .step {
+            padding: var(--spacing-md);
+        }
+
+        .step-text {
+            font-size: var(--text-small);
+            line-height: 1.5;
+        }
+    }
+</style>

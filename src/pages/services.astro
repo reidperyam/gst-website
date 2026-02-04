@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CTASection from '../components/CTASection.astro';
+import EngagementFlow from '../components/EngagementFlow.astro';
 import { trackPageView } from '../utils/analytics';
 
 // Track page view
@@ -36,6 +37,8 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
             </div>
         </div>
     </section>
+
+    <EngagementFlow />
 
     <CTASection
         title="Let's discuss your next challenge"
