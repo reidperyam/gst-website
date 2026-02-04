@@ -5,35 +5,48 @@
 <section class="engagement-flow">
     <div class="container">
         <div class="flow-content">
-            <h2 class="heading-lg">How Engagements Typically Work</h2>
+            <h2 class="heading-lg">Typical Engagement Model</h2>
+            <p class="tagline">Engagements are intentionally focused to drive outcomes.</p>
 
             <div class="flow-steps">
                 <div class="step">
-                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
-                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">1</text>
-                    </svg>
-                    <p class="step-text">Intro call to align on objectives, stakeholders and constraints</p>
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">1</text>
+                        </svg>
+                        <span class="step-label">Align</span>
+                    </div>
+                    <p class="step-text">Introductory discussion to clarify objectives, decision context, and constraints</p>
                 </div>
                 <div class="step">
-                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
-                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">2</text>
-                    </svg>
-                    <p class="step-text">Focused scope</p>
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">2</text>
+                        </svg>
+                        <span class="step-label">Define</span>
+                    </div>
+                    <p class="step-text">Focused scope aligned to decision-critical priorities</p>
                 </div>
                 <div class="step">
-                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
-                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">3</text>
-                    </svg>
-                    <p class="step-text">Findings, recommendations, and decision-ready next steps</p>
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">3</text>
+                        </svg>
+                        <span class="step-label">Deliver</span>
+                    </div>
+                    <p class="step-text">Clear findings, prioritized recommendations, and implementation-ready path forward</p>
                 </div>
                 <div class="step">
-                    <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
-                        <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">4</text>
-                    </svg>
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">4</text>
+                        </svg>
+                        <span class="step-label">Guide</span>
+                    </div>
                     <p class="step-text">Optional ongoing advisory or execution support</p>
                 </div>
             </div>
@@ -54,8 +67,19 @@
     }
 
     .heading-lg {
-        margin-bottom: var(--spacing-2xl);
+        margin-bottom: var(--spacing-lg);
         text-align: center;
+    }
+
+    .tagline {
+        text-align: center;
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        margin-bottom: var(--spacing-2xl);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .flow-steps {
@@ -82,18 +106,33 @@
         transform: translateY(-2px);
     }
 
-    .step-icon {
-        width: 2.5rem;
-        height: 2.5rem;
+    .step-icon-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
         margin-bottom: var(--spacing-md);
+    }
+
+    .step-icon {
+        width: 4.6875rem;
+        height: 4.6875rem;
         flex-shrink: 0;
         color: var(--color-primary);
     }
 
     .step-number {
-        font-size: 1.2rem;
+        font-size: 1.44rem;
         font-weight: 700;
         fill: var(--text-light-primary);
+    }
+
+    .step-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-light-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
     .step-text {
@@ -130,6 +169,14 @@
         fill: var(--text-dark-primary);
     }
 
+    :global(html.dark-theme) .tagline {
+        color: var(--text-dark-secondary);
+    }
+
+    :global(html.dark-theme) .step-label {
+        color: var(--text-dark-secondary);
+    }
+
     /* Responsive design */
     @media (max-width: 1024px) {
         .flow-steps {
@@ -142,12 +189,16 @@
         }
 
         .step-icon {
-            width: 2.25rem;
-            height: 2.25rem;
+            width: 4.21875rem;
+            height: 4.21875rem;
         }
 
         .step-number {
-            font-size: 1.1rem;
+            font-size: 1.32rem;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
         }
     }
 
@@ -162,6 +213,11 @@
         }
 
         .heading-lg {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .tagline {
+            font-size: var(--text-small);
             margin-bottom: var(--spacing-lg);
         }
 
@@ -170,13 +226,16 @@
         }
 
         .step-icon {
-            width: 2rem;
-            height: 2rem;
-            margin-bottom: var(--spacing-sm);
+            width: 3.75rem;
+            height: 3.75rem;
         }
 
         .step-number {
-            font-size: 0.95rem;
+            font-size: 1.14rem;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
         }
 
         .step-text {
