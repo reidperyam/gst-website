@@ -45,7 +45,7 @@
 
     .services-content {
         max-width: 900px;
-        margin: 0 0 0 auto;
+        margin: 0 auto;
         text-align: right;
     }
 
@@ -87,6 +87,12 @@
         margin-top: var(--spacing-2xl);
         padding-top: var(--spacing-2xl);
         border-top: 1px solid var(--border-light);
+    }
+
+    .closing-text::before {
+        content: '// ';
+        color: var(--color-primary);
+        font-weight: 900;
     }
 
     /* Dark theme support */
