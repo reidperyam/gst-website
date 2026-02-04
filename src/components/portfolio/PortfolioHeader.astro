@@ -9,7 +9,7 @@ interface Props {
 
 const { portfolioType = 'standard', projects = [] } = Astro.props;
 
-const title = portfolioType === 'ma' ? 'CLIENT M&A ENGAGEMENTS' : 'CLIENT ENGAGEMENTS';
+const title = portfolioType === 'ma' ? 'PORTFOLIO M&A ENGAGEMENTS' : 'CLIENT ENGAGEMENTS';
 
 // Extract unique values for filters
 const uniqueThemes = [...new Set(projects.map(p => p.theme))].sort();
