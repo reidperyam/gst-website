@@ -2,16 +2,28 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import SEO from '../components/SEO.astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 import '../styles/global.css';
 
 interface Props {
     title: string;
     description?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
+    ogUrl?: string;
 }
 
 const isProduction = import.meta.env.PROD;
-const { title, description = 'Global Strategic Technologies - Technology Advisory & Execution' } = Astro.props;
+const {
+    title,
+    description = 'Global Strategic Technologies - Technology Advisory & Execution',
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogUrl
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -20,7 +32,17 @@ const { title, description = 'Global Strategic Technologies - Technology Advisor
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content={description} />
-        <title>{title} | GST</title>
+        <title>{title}</title>
+
+        <!-- SEO Component (JSON-LD, Open Graph, Meta Tags) -->
+        <SEO
+            title={title}
+            description={description}
+            ogTitle={ogTitle}
+            ogDescription={ogDescription}
+            ogImage={ogImage}
+            ogUrl={ogUrl}
+        />
 
         <!-- Favicons and Icons -->
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
