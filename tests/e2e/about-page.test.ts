@@ -146,7 +146,6 @@ test.describe('About Page - Founder Section', () => {
 
     test('should switch photos when toggling between light and dark themes', async ({ page }) => {
       const themeToggle = page.locator('[data-testid="theme-toggle"]');
-      const body = page.locator('body');
 
       // Toggle theme 3 times and verify correct photo displays each time
       for (let i = 0; i < 3; i++) {
@@ -154,7 +153,7 @@ test.describe('About Page - Founder Section', () => {
         await page.waitForTimeout(150);
 
         // Check which theme is active
-        const isDark = await body.evaluate(el => el.classList.contains('dark-theme'));
+        const isDark = await page.evaluate(() => document.documentElement.classList.contains('dark-theme'));
 
         if (isDark) {
           const darkPhoto = page.locator('.founder-portrait-dark');

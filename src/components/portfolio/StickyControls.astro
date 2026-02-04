@@ -1,5 +1,6 @@
 ---
 import type { Project } from '../../types/portfolio';
+import '../../styles/portfolio-controls.css';
 
 interface Props {
   projects: Project[];
@@ -22,9 +23,9 @@ const valueCreationEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CA
 const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.technicalDiligence.includes(e as any)).sort();
 ---
 
-<!-- Sticky Controls - Positioned independently at viewport level -->
+<!-- Fixed Controls - Positioned independently at viewport level -->
 <div class="sticky-controls-overlay">
-  <div class="portfolio-controls-sticky">
+  <div class="portfolio-controls-fixed">
     <div class="controls-wrapper">
       <div class="search-box">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -33,9 +34,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
         </svg>
         <input
           type="search"
-          id="search-input"
+          id="search-input-sticky"
           class="search-input"
-          placeholder="Search by project name, technology, or industry..."
+          placeholder="Name, industry, or technology..."
           aria-label="Search projects"
           data-testid="sticky-search-input"
         />
@@ -66,8 +67,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     pointer-events: auto;
   }
 
-  /* Sticky Search/Filter Controls */
-  .portfolio-controls-sticky {
+  /* Fixed Search/Filter Controls */
+  .portfolio-controls-fixed {
     background: #ffffff;
     border-bottom: none;
     padding: 0;
@@ -88,20 +89,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     opacity: 0;
   }
 
-  .portfolio-controls-sticky.sticky-active {
+  .portfolio-controls-fixed.sticky-active {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
 
-  .controls-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-bottom: 2px solid #05cd99;
-    padding: 0.625rem 0 0.625rem 0;
-    width: fit-content;
-    pointer-events: auto;
-  }
 
   .search-box {
     position: relative;
@@ -325,75 +317,75 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   /* Dark Theme */
-  :global(body.dark-theme) .portfolio-controls-sticky {
+  :global(html.dark-theme) .portfolio-controls-fixed {
     background: #1a1a1a;
   }
 
-  :global(body.dark-theme) .controls-wrapper {
+  :global(html.dark-theme) .controls-wrapper {
     border-bottom-color: #05cd99;
   }
 
-  :global(body.dark-theme) .search-icon {
+  :global(html.dark-theme) .search-icon {
     color: rgba(200, 200, 200, 0.5);
   }
 
-  :global(body.dark-theme) .portfolio-filter-drawer {
+  :global(html.dark-theme) .portfolio-filter-drawer {
     background: #1a1a1a;
     border-left-color: #05cd99;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
   }
 
-  :global(body.dark-theme) .drawer-header {
+  :global(html.dark-theme) .drawer-header {
     border-bottom-color: rgba(5, 205, 153, 0.2);
   }
 
-  :global(body.dark-theme) .drawer-title {
+  :global(html.dark-theme) .drawer-title {
     color: rgba(245, 245, 245, 0.95);
   }
 
-  :global(body.dark-theme) .drawer-close {
+  :global(html.dark-theme) .drawer-close {
     color: rgba(200, 200, 200, 0.6);
   }
 
-  :global(body.dark-theme) .drawer-close:hover {
+  :global(html.dark-theme) .drawer-close:hover {
     color: #05cd99;
   }
 
-  :global(body.dark-theme) .filter-label {
+  :global(html.dark-theme) .filter-label {
     color: rgba(200, 200, 200, 0.7);
   }
 
-  :global(body.dark-theme) .filter-chip {
+  :global(html.dark-theme) .filter-chip {
     background: rgba(5, 205, 153, 0.1);
     border-color: rgba(5, 205, 153, 0.2);
     color: rgba(200, 200, 200, 0.8);
   }
 
-  :global(body.dark-theme) .filter-chip:hover {
+  :global(html.dark-theme) .filter-chip:hover {
     background: rgba(5, 205, 153, 0.15);
     border-color: #05cd99;
     color: #05cd99;
   }
 
-  :global(body.dark-theme) .filter-chip.active {
+  :global(html.dark-theme) .filter-chip.active {
     background: #05cd99;
     color: #0a0a0a;
     border-color: #05cd99;
   }
 
-  :global(body.dark-theme) .clear-filters-btn {
+  :global(html.dark-theme) .clear-filters-btn {
     color: rgba(200, 200, 200, 0.6);
     border-color: rgba(5, 205, 153, 0.2);
   }
 
-  :global(body.dark-theme) .clear-filters-btn:hover {
+  :global(html.dark-theme) .clear-filters-btn:hover {
     color: #05cd99;
     border-color: #05cd99;
   }
 
   /* Responsive */
   @media (max-width: 768px) {
-    .portfolio-controls-sticky {
+    .portfolio-controls-fixed {
       max-width: calc(100% - 2rem);
     }
 
@@ -415,7 +407,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   @media (max-width: 480px) {
-    .portfolio-controls-sticky {
+    .portfolio-controls-fixed {
       max-width: calc(100% - 0.5rem);
     }
 
@@ -696,7 +688,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   function attachSearchListener() {
-    const searchInput = document.getElementById('search-input');
+    const searchInput = document.getElementById('search-input-sticky');
     if (searchInput) {
       let searchTimeout;
       if (!searchInput.hasListener) {
@@ -811,7 +803,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   // Sticky behavior
   function handleStickyScroll() {
     const headerElement = document.querySelector('.portfolio-header');
-    const controlsElement = document.querySelector('.portfolio-controls-sticky');
+    const controlsElement = document.querySelector('.portfolio-controls-fixed');
     const navHeader = document.querySelector('header');
 
     if (!headerElement || !controlsElement || !navHeader) return;

@@ -130,6 +130,36 @@ describe('Analytics Utility Functions', () => {
       expect(callArgs[2].cta_type).toBe('email');
       expect(callArgs[2].location).toBe('footer');
     });
+
+    it('should track hero primary CTA (calendly type)', () => {
+      trackCTA('calendly', 'hero');
+
+      expect(gtagMock).toHaveBeenCalledWith('event', 'cta_click', {
+        event_category: 'engagement',
+        cta_type: 'calendly',
+        location: 'hero',
+      });
+    });
+
+    it('should track hero secondary CTA (services type)', () => {
+      trackCTA('services', 'hero');
+
+      expect(gtagMock).toHaveBeenCalledWith('event', 'cta_click', {
+        event_category: 'engagement',
+        cta_type: 'services',
+        location: 'hero',
+      });
+    });
+
+    it('should use engagement category for all CTA clicks', () => {
+      trackCTA('calendly', 'hero');
+      trackCTA('services', 'hero');
+      trackCTA('calendly', 'cta-section');
+
+      expect(gtagMock.mock.calls[0][2].event_category).toBe('engagement');
+      expect(gtagMock.mock.calls[1][2].event_category).toBe('engagement');
+      expect(gtagMock.mock.calls[2][2].event_category).toBe('engagement');
+    });
   });
 
   describe('trackFilterAction', () => {

@@ -1,0 +1,157 @@
+@import './variables.css';
+
+/* Typography Utility Classes */
+
+/* Heading Styles */
+.heading-xl {
+  font-size: 2.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-light-primary);
+}
+
+.heading-lg {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-light-primary);
+}
+
+.heading-md {
+  font-size: 1.35rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-light-primary);
+}
+
+.heading-sm {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-light-primary);
+}
+
+/* Text Styles */
+.text-base {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-light-secondary);
+}
+
+.text-small {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-light-secondary);
+}
+
+.text-tiny {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-light-muted);
+}
+
+/* Label/Badge Styles */
+.label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-light-muted);
+}
+
+.label-small {
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light-muted);
+}
+
+/* Navigation/Link Styles */
+.nav-link {
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-light-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast), border-bottom var(--transition-fast);
+  position: relative;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.nav-link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 0.25rem;
+}
+
+.nav-link.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Button Text Styles */
+.button-text {
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-family);
+}
+
+.button-text-lg {
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-family);
+}
+
+/* Dark Theme Text Overrides */
+html.dark-theme .heading-xl,
+html.dark-theme .heading-lg,
+html.dark-theme .heading-md,
+html.dark-theme .heading-sm {
+  color: var(--text-dark-primary);
+}
+
+html.dark-theme .text-base {
+  color: var(--text-dark-secondary);
+}
+
+html.dark-theme .text-small {
+  color: var(--text-dark-secondary);
+}
+
+html.dark-theme .text-tiny {
+  color: var(--text-dark-muted);
+}
+
+html.dark-theme .label {
+  color: var(--text-dark-muted);
+}
+
+html.dark-theme .label-small {
+  color: var(--text-dark-muted);
+}
+
+html.dark-theme .nav-link {
+  color: var(--text-dark-secondary);
+}
+
+html.dark-theme .nav-link:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+html.dark-theme .nav-link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 0.25rem;
+}
+
+html.dark-theme .nav-link.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}

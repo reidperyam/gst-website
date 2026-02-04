@@ -1,18 +1,35 @@
 ---
+import { trackCTA } from '../utils/analytics';
+
 interface Props {
-    title: string;
     subtitle?: string;
     description: string;
+    primaryCTA?: {
+        text: string;
+        href: string;
+    };
+    secondaryCTA?: {
+        text: string;
+        href: string;
+    };
+    trustLine?: string;
 }
 
-const { title, subtitle, description } = Astro.props;
+const {
+    subtitle,
+    description,
+    primaryCTA,
+    secondaryCTA,
+    trustLine
+} = Astro.props;
 ---
 
 <section class="hero">
     <div class="container">
         <div class="hero-layout">
             <h1>
-                <span class="line">{title}</span>
+                <span class="line">Technology Advisory</span>
+                <span class="line"><span class="highlight">& Execution</span></span>
                 {subtitle && <span class="line"><span class="accent">{subtitle}</span></span>}
             </h1>
 
@@ -21,8 +38,40 @@ const { title, subtitle, description } = Astro.props;
                     <p>{description}</p>
                 </div>
                 <div class="hero-action">
+                    {(primaryCTA || secondaryCTA) && (
+                        <div class="cta-group">
+                            {primaryCTA && (
+                                <a
+                                    href={primaryCTA.href}
+                                    class="cta-button primary"
+                                    onclick="trackCTA('calendly', 'hero')"
+                                >
+                                    {primaryCTA.text}
+                                </a>
+                            )}
+                            {secondaryCTA && (
+                                <a
+                                    href={secondaryCTA.href}
+                                    class="cta-button secondary"
+                                    onclick="trackCTA('services', 'hero')"
+                                >
+                                    {secondaryCTA.text}
+                                </a>
+                            )}
+                        </div>
+                    )}
+                    {trustLine && (
+                        <p class="trust-line">{trustLine}</p>
+                    )}
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    import { trackCTA } from '../utils/analytics';
+
+    // Make trackCTA available to inline onclick handlers
+    (window as any).trackCTA = trackCTA;
+</script>

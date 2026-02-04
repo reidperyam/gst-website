@@ -1,0 +1,209 @@
+/* Design System Variables - Single Source of Truth */
+
+:root {
+  /* Primary Colors */
+  --color-primary: #05cd99;
+  --color-primary-dark: #04a87a;
+
+  /* Backgrounds */
+  --bg-light: #ffffff;
+  --bg-light-alt: #f5f5f5;
+  --bg-dark: #0a0a0a;
+  --bg-dark-secondary: #1a1a1a;
+  --bg-dark-tertiary: #141414;
+
+  /* Text Colors - Light Theme */
+  --text-light-primary: rgba(26, 26, 26, 0.95);
+  --text-light-secondary: rgba(26, 26, 26, 0.7);
+  --text-light-muted: rgba(26, 26, 26, 0.6);
+  --text-light-faded: rgba(26, 26, 26, 0.5);
+
+  /* Text Colors - Dark Theme */
+  --text-dark-primary: rgba(245, 245, 245, 0.95);
+  --text-dark-secondary: rgba(200, 200, 200, 0.8);
+  --text-dark-muted: rgba(200, 200, 200, 0.6);
+  --text-dark-faded: rgba(200, 200, 200, 0.5);
+
+  /* Borders & Accents */
+  --border-light: rgba(26, 26, 26, 0.1);
+  --border-dark: rgba(5, 205, 153, 0.2);
+  --accent-light-bg: rgba(5, 205, 153, 0.08);
+  --accent-light-bg-hover: rgba(5, 205, 153, 0.15);
+  --accent-dark-bg: rgba(5, 205, 153, 0.1);
+
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.5rem;
+  --spacing-2xl: 2rem;
+  --spacing-3xl: 3rem;
+
+  /* Gap Patterns */
+  --gap-tight: 0.5rem;
+  --gap-normal: 0.75rem;
+  --gap-wide: 1.5rem;
+  --gap-extra-wide: 2rem;
+
+  /* Typography */
+  --font-family: 'Helvetica Neue', Arial, sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Text Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.1rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease-out;
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: -4px 0 20px rgba(0, 0, 0, 0.15);
+
+  /* Section Backgrounds */
+  --services-bg: #eeeeee;
+  --footer-bg: #eeeeee;
+  --cta-box-bg: var(--bg-light);
+  --service-card-bg: var(--bg-dark);
+  --filter-drawer-bg: var(--bg-light);
+
+  /* Accent & UI Elements (Light Theme) */
+  --filter-chip-bg: rgba(26, 26, 26, 0.05);
+  --filter-chip-bg-hover: rgba(26, 26, 26, 0.08);
+  --filter-chip-border: rgba(26, 26, 26, 0.1);
+  --filter-button-bg: rgba(26, 26, 26, 0.05);
+  --filter-button-bg-hover: rgba(26, 26, 26, 0.08);
+  --filter-button-border: rgba(26, 26, 26, 0.1);
+  --search-input-bg: rgba(26, 26, 26, 0.02);
+  --search-input-border: rgba(26, 26, 26, 0.1);
+  --search-input-focus-bg: var(--bg-light);
+  --search-input-focus-shadow: rgba(5, 205, 153, 0.1);
+  --clear-filters-border: rgba(26, 26, 26, 0.1);
+
+  /* Text Colors (Light Theme) */
+  --filter-chip-text: rgba(26, 26, 26, 0.7);
+  --filter-button-text: rgba(26, 26, 26, 0.7);
+  --clear-filters-text: rgba(26, 26, 26, 0.6);
+  --search-input-text: rgba(26, 26, 26, 0.85);
+  --search-input-placeholder: rgba(26, 26, 26, 0.5);
+  --service-card-text: #b0b0b0;
+  --service-card-heading: var(--bg-light);
+  --footer-text: rgba(26, 26, 26, 0.85);
+  --footer-border: rgba(26, 26, 26, 0.1);
+  --cta-box-text: rgba(26, 26, 26, 0.85);
+  --stat-item-border: var(--color-primary);
+
+  /* Misc */
+  --checkerboard-line: rgba(0, 0, 0, 0.08);
+  --theme-toggle-color: rgba(74, 74, 74, 0.8);
+  --service-card-border: var(--bg-dark-secondary);
+  --about-image-bg: var(--bg-dark-tertiary);
+  --about-image-border: var(--bg-dark-secondary);
+  --about-image-text: #404040;
+}
+
+/* Dark Theme Overrides */
+html.dark-theme {
+  --bg-light: #0a0a0a;
+  --bg-light-alt: #141414;
+  --text-light-primary: var(--text-dark-primary);
+  --text-light-secondary: var(--text-dark-secondary);
+  --text-light-muted: var(--text-dark-muted);
+  --text-light-faded: var(--text-dark-faded);
+
+  /* Section Backgrounds */
+  --services-bg: var(--bg-dark-tertiary);
+  --footer-bg: var(--bg-dark-tertiary);
+  --cta-box-bg: var(--bg-dark-secondary);
+  --service-card-bg: var(--bg-dark-secondary);
+  --filter-drawer-bg: var(--bg-dark-secondary);
+
+  /* Accent & UI Elements */
+  --filter-chip-bg: rgba(5, 205, 153, 0.1);
+  --filter-chip-bg-hover: rgba(5, 205, 153, 0.15);
+  --filter-chip-border: rgba(5, 205, 153, 0.2);
+  --filter-button-bg: rgba(5, 205, 153, 0.1);
+  --filter-button-bg-hover: rgba(5, 205, 153, 0.15);
+  --filter-button-border: rgba(5, 205, 153, 0.2);
+  --search-input-bg: rgba(5, 205, 153, 0.05);
+  --search-input-border: rgba(5, 205, 153, 0.2);
+  --search-input-focus-bg: var(--bg-dark-secondary);
+  --search-input-focus-shadow: rgba(5, 205, 153, 0.15);
+  --clear-filters-border: rgba(5, 205, 153, 0.2);
+
+  /* Text Colors */
+  --filter-chip-text: rgba(200, 200, 200, 0.8);
+  --filter-button-text: rgba(200, 200, 200, 0.8);
+  --clear-filters-text: rgba(200, 200, 200, 0.6);
+  --search-input-text: rgba(245, 245, 245, 0.85);
+  --search-input-placeholder: rgba(200, 200, 200, 0.5);
+  --service-card-text: #d0d0d0;
+  --service-card-heading: var(--bg-light);
+  --footer-text: rgba(153, 153, 153, 0.85);
+  --footer-border: rgba(153, 153, 153, 0.15);
+  --cta-box-text: rgba(200, 200, 200, 0.8);
+  --stat-item-border: rgba(5, 205, 153, 0.2);
+
+  /* Misc */
+  --checkerboard-line: rgba(255, 255, 255, 0.08);
+  --theme-toggle-color: rgba(200, 200, 200, 0.8);
+  --service-card-border: #2a2a2a;
+  --about-image-bg: var(--bg-dark-secondary);
+  --about-image-border: #2a2a2a;
+  --about-image-text: #808080;
+}
+
+/* Utility Classes for Common Patterns */
+
+.interactive-element {
+  transition: all var(--transition-normal);
+}
+
+.interactive-element:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.interactive-focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.text-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-light-muted);
+}
+
+html.dark-theme .text-label {
+  color: var(--text-dark-muted);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

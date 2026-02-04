@@ -102,8 +102,8 @@ test.describe('Google Analytics Example Tests', () => {
       // Clear any initialization events
       await clearRecordedEvents(page);
 
-      // Click navigation link
-      const servicesLink = page.locator('a:has-text("Services")');
+      // Click navigation link (in header, not the hero CTA)
+      const servicesLink = page.locator('nav a:has-text("Services")');
       if (await servicesLink.isVisible()) {
         await servicesLink.click();
         await page.waitForURL('/services');
@@ -228,8 +228,8 @@ test.describe('Google Analytics Example Tests', () => {
       // Clear initialization events
       await clearRecordedEvents(page);
 
-      // Step 2: Navigate to services
-      const servicesLink = page.locator('a:has-text("Services")');
+      // Step 2: Navigate to services (use header nav link, not hero CTA)
+      const servicesLink = page.locator('nav a:has-text("Services")');
       if (await servicesLink.isVisible()) {
         await servicesLink.click();
         await page.waitForURL('/services');

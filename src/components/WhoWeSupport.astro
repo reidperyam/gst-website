@@ -1,0 +1,150 @@
+---
+// WhoWeSupport section - displays target audience segments with SVG bullet indicators
+---
+
+<section class="who-we-support">
+    <div class="container">
+        <div class="support-content">
+            <h2 class="heading-lg">Who We Support</h2>
+            <p class="intro-text">We partner with leaders who need clarity, confidence, and credible technical direction.</p>
+
+            <ul class="support-list">
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Private equity & investment teams</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Founders and executive leadership</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>SaaS and technology-enabled businesses</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Security- or compliance-sensitive organizations</span>
+                </li>
+            </ul>
+
+            <p class="closing-text">Engagements range from buy-side pre-investment diligence, post-close execution, integration, value creation, sell-side preparation, and continual advisory.</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Component styles following design system patterns */
+    .who-we-support {
+        padding: var(--spacing-3xl) 0;
+        background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, var(--bg-light-alt) 15%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
+        position: relative;
+    }
+
+    .support-content {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .heading-lg {
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .intro-text {
+        font-size: var(--text-lg);
+        color: var(--text-light-secondary);
+        margin-bottom: var(--spacing-2xl);
+        line-height: 1.7;
+    }
+
+    .support-list {
+        list-style: none;
+        margin-bottom: var(--spacing-2xl);
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-wide);
+    }
+
+    .support-list li {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-lg);
+    }
+
+    .bullet-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .support-list li span {
+        font-size: var(--text-base);
+        color: var(--text-light-primary);
+        line-height: 1.6;
+    }
+
+    .closing-text {
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        line-height: 1.8;
+        margin-top: var(--spacing-2xl);
+        padding-top: var(--spacing-2xl);
+        border-top: 1px solid var(--border-light);
+    }
+
+    /* Dark theme support */
+    :global(html.dark-theme) .who-we-support {
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
+    }
+
+    :global(html.dark-theme) .intro-text {
+        color: var(--text-dark-secondary);
+    }
+
+    :global(html.dark-theme) .support-list li span {
+        color: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .closing-text {
+        color: var(--text-dark-secondary);
+        border-top-color: var(--border-dark);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .who-we-support {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .intro-text {
+            font-size: var(--text-base);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .support-list {
+            gap: var(--gap-normal);
+        }
+
+        .bullet-icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .support-list li span {
+            font-size: var(--text-small);
+        }
+
+        .closing-text {
+            font-size: var(--text-small);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .who-we-support {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .support-list li {
+            gap: var(--spacing-md);
+        }
+    }
+</style>

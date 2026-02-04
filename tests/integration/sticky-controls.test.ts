@@ -1,5 +1,5 @@
 
-describe('Sticky Controls', () => {
+describe('Fixed Controls', () => {
   let state: any;
 
   beforeEach(() => {
@@ -34,17 +34,17 @@ describe('Sticky Controls', () => {
     expect(state.scrollPos).toBe(100);
   });
 
-  it('should not be sticky below threshold', () => {
+  it('should not be fixed below threshold', () => {
     state.updateScroll(500);
     expect(state.isSticky).toBe(false);
   });
 
-  it('should become sticky at threshold', () => {
+  it('should become fixed at threshold', () => {
     state.updateScroll(600);
     expect(state.isSticky).toBe(true);
   });
 
-  it('should become sticky above threshold', () => {
+  it('should become fixed above threshold', () => {
     state.updateScroll(700);
     expect(state.isSticky).toBe(true);
   });

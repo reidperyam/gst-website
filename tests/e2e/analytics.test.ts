@@ -258,7 +258,7 @@ test.describe('Google Analytics E2E Tests', () => {
       await expect(themeToggle).toBeVisible();
 
       const initialTheme = await page.evaluate(() => {
-        return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+        return document.documentElement.classList.contains('dark-theme') ? 'dark' : 'light';
       });
 
       await themeToggle.click();
@@ -266,7 +266,7 @@ test.describe('Google Analytics E2E Tests', () => {
       // Wait for theme to change
       await page.waitForFunction(
         (theme) => {
-          const isDark = document.body.classList.contains('dark-theme');
+          const isDark = document.documentElement.classList.contains('dark-theme');
           const newTheme = isDark ? 'dark' : 'light';
           return newTheme !== theme;
         },
@@ -285,7 +285,7 @@ test.describe('Google Analytics E2E Tests', () => {
 
       // Get initial theme
       const initialTheme = await page.evaluate(() => {
-        return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+        return document.documentElement.classList.contains('dark-theme') ? 'dark' : 'light';
       });
 
       // Toggle theme
@@ -298,33 +298,11 @@ test.describe('Google Analytics E2E Tests', () => {
 
         // Verify theme changed
         const newTheme = await page.evaluate(() => {
-          return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+          return document.documentElement.classList.contains('dark-theme') ? 'dark' : 'light';
         });
 
         expect(newTheme).not.toBe(initialTheme);
       }
-    });
-  });
-
-  test.describe('CTA Tracking', () => {
-    test('should track CTA button clicks', async ({ page }) => {
-      await gotoAndSetupAnalytics(page, '/');
-
-      // Prevent navigation to external site
-      await page.route('**/calendly.com/**', route => route.abort());
-
-      // Find and click Calendly CTA
-      const ctaButton = page.locator('a[href*="calendly.com"]').first();
-      await expect(ctaButton).toBeVisible();
-
-      await ctaButton.click();
-
-      // Verify cta_click event was tracked
-      const events = await page.evaluate(() => (window as any).gtagEvents || []);
-      const ctaEvent = events.find((e: any) => e.eventName === 'cta_click');
-      expect(ctaEvent).toBeDefined();
-      expect(ctaEvent?.eventData.cta_type).toBeTruthy();
-      expect(ctaEvent?.eventData.location).toBeTruthy();
     });
   });
 

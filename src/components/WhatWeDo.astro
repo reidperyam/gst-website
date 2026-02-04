@@ -1,0 +1,137 @@
+---
+// WhatWeDo section - displays core service offerings with SVG bullet indicators
+---
+
+<section class="what-we-do">
+    <div class="container">
+        <div class="services-content">
+            <h2 class="heading-lg">What We Do</h2>
+
+            <ul class="services-list">
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Buy-side and sell-side technical diligence</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Architecture and platform assessments</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Security, compliance, and operational risk evaluation</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Product development, modernization and execution roadmaps</span>
+                </li>
+                <li>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
+                    <span>Independent advisory for executives and boards</span>
+                </li>
+            </ul>
+
+            <p class="closing-text">Clear findings. Decision-ready outputs. Practical next steps.</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Component styles following design system patterns */
+    .what-we-do {
+        padding: var(--spacing-3xl) 0;
+        background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, var(--bg-light-alt) 15%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
+        position: relative;
+    }
+
+    .services-content {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .heading-lg {
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .services-list {
+        list-style: none;
+        margin-bottom: var(--spacing-2xl);
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-wide);
+    }
+
+    .services-list li {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-lg);
+    }
+
+    .bullet-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .services-list li span {
+        font-size: var(--text-base);
+        color: var(--text-light-primary);
+        line-height: 1.6;
+    }
+
+    .closing-text {
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        line-height: 1.8;
+        margin-top: var(--spacing-2xl);
+        padding-top: var(--spacing-2xl);
+        border-top: 1px solid var(--border-light);
+    }
+
+    /* Dark theme support */
+    :global(html.dark-theme) .what-we-do {
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
+    }
+
+    :global(html.dark-theme) .services-list li span {
+        color: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .closing-text {
+        color: var(--text-dark-secondary);
+        border-top-color: var(--border-dark);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .what-we-do {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .services-list {
+            gap: var(--gap-normal);
+        }
+
+        .bullet-icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .services-list li span {
+            font-size: var(--text-small);
+        }
+
+        .closing-text {
+            font-size: var(--text-small);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .what-we-do {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .services-list li {
+            gap: var(--spacing-md);
+        }
+    }
+</style>

@@ -1,0 +1,260 @@
+---
+// EngagementFlow component - displays 4-step engagement process
+---
+
+<section class="engagement-flow">
+    <div class="container">
+        <div class="flow-content">
+            <h2 class="heading-lg">Typical Engagement Model</h2>
+            <p class="tagline">Engagements are intentionally focused to drive outcomes.</p>
+
+            <div class="flow-steps">
+                <div class="step">
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">1</text>
+                        </svg>
+                        <span class="step-label">Align</span>
+                    </div>
+                    <p class="step-text">Introductory discussion to clarify objectives, decision context, and constraints</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">2</text>
+                        </svg>
+                        <span class="step-label">Define</span>
+                    </div>
+                    <p class="step-text">Focused scope aligned to decision-critical priorities</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">3</text>
+                        </svg>
+                        <span class="step-label">Deliver</span>
+                    </div>
+                    <p class="step-text">Clear findings, prioritized recommendations, and implementation-ready path forward</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon-container">
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                            <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="step-number">4</text>
+                        </svg>
+                        <span class="step-label">Guide</span>
+                    </div>
+                    <p class="step-text">Optional ongoing advisory or execution support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .engagement-flow {
+        padding: var(--spacing-3xl) 0;
+        background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, var(--bg-light-alt) 15%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
+        position: relative;
+    }
+
+    .flow-content {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .heading-lg {
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+    }
+
+    .tagline {
+        text-align: center;
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        margin-bottom: var(--spacing-2xl);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .flow-steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    .step {
+        padding: var(--spacing-xl);
+        background: var(--bg-light-primary);
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .step:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .step-icon-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .step-icon {
+        width: 5.25rem;
+        height: 5.25rem;
+        flex-shrink: 0;
+        color: var(--color-primary);
+    }
+
+    .step-number {
+        font-size: 1.28rem;
+        font-weight: 700;
+        fill: var(--text-light-primary);
+    }
+
+    .step-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-light-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .step-text {
+        font-size: var(--text-base);
+        color: var(--text-light-primary);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Dark theme support */
+    :global(html.dark-theme) .engagement-flow {
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
+    }
+
+    :global(html.dark-theme) .step {
+        background: var(--bg-dark-alt);
+        border-color: var(--border-dark);
+    }
+
+    :global(html.dark-theme) .step:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.15);
+    }
+
+    :global(html.dark-theme) .step-text {
+        color: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .step-icon {
+        color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .step-number {
+        fill: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .tagline {
+        color: var(--text-dark-secondary);
+    }
+
+    :global(html.dark-theme) .step-label {
+        color: var(--text-dark-secondary);
+    }
+
+    /* Responsive design */
+    @media (max-width: 1024px) {
+        .flow-steps {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+
+        .step {
+            padding: var(--spacing-lg);
+        }
+
+        .step-icon {
+            width: 4.72rem;
+            height: 4.72rem;
+        }
+
+        .step-number {
+            font-size: 1.18rem;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .engagement-flow {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .flow-steps {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .heading-lg {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .tagline {
+            font-size: var(--text-small);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .step {
+            padding: var(--spacing-lg);
+        }
+
+        .step-icon {
+            width: 4.2rem;
+            height: 4.2rem;
+        }
+
+        .step-number {
+            font-size: 1.02rem;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+        }
+
+        .step-text {
+            font-size: var(--text-small);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .engagement-flow {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .step {
+            padding: var(--spacing-md);
+        }
+
+        .step-text {
+            font-size: var(--text-small);
+            line-height: 1.5;
+        }
+    }
+</style>

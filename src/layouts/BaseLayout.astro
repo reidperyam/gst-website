@@ -32,7 +32,7 @@ const { title, description = 'Global Strategic Technologies - Technology Advisor
             try {
                 const theme = localStorage.getItem('theme');
                 if (theme === 'dark') {
-                    document.body.classList.add('dark-theme');
+                    document.documentElement.classList.add('dark-theme');
                 }
             } catch (e) {
                 // localStorage not available (e.g., private browsing)

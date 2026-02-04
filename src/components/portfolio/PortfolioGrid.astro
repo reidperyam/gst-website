@@ -79,7 +79,7 @@ const { projects } = Astro.props;
     font-size: 1rem;
   }
 
-  :global(body.dark-theme) .no-results-message {
+  :global(html.dark-theme) .no-results-message {
     color: rgba(200, 200, 200, 0.65);
   }
 
@@ -260,55 +260,55 @@ const { projects } = Astro.props;
   }
 
   /* Dark theme */
-  :global(body.dark-theme) .portfolio-grid-container {
+  :global(html.dark-theme) .portfolio-grid-container {
     background: #0a0a0a;
   }
 
-  :global(body.dark-theme) .project-card {
+  :global(html.dark-theme) .project-card {
     background: #1a1a1a;
     border-color: rgba(5, 205, 153, 0.2);
   }
 
-  :global(body.dark-theme) .project-card:hover {
+  :global(html.dark-theme) .project-card:hover {
     border-color: #05cd99;
     box-shadow: 0 10px 30px rgba(5, 205, 153, 0.2);
   }
 
-  :global(body.dark-theme) .project-title {
+  :global(html.dark-theme) .project-title {
     color: rgba(245, 245, 245, 0.95);
   }
 
-  :global(body.dark-theme) .project-industry {
+  :global(html.dark-theme) .project-industry {
     color: rgba(200, 200, 200, 0.7);
   }
 
-  :global(body.dark-theme) .year-badge {
+  :global(html.dark-theme) .year-badge {
     background: rgba(5, 205, 153, 0.1);
     color: rgba(200, 200, 200, 0.8);
   }
 
-  :global(body.dark-theme) .metrics {
+  :global(html.dark-theme) .metrics {
     background: rgba(5, 205, 153, 0.05);
     border-left-color: #05cd99;
   }
 
-  :global(body.dark-theme) .metric-label {
+  :global(html.dark-theme) .metric-label {
     color: rgba(200, 200, 200, 0.6);
   }
 
-  :global(body.dark-theme) .metric-value {
+  :global(html.dark-theme) .metric-value {
     color: rgba(245, 245, 245, 0.95);
   }
 
-  :global(body.dark-theme) .metric-value.arr {
+  :global(html.dark-theme) .metric-value.arr {
     color: #05cd99;
   }
 
-  :global(body.dark-theme) .summary {
+  :global(html.dark-theme) .summary {
     color: rgba(200, 200, 200, 0.8);
   }
 
-  :global(body.dark-theme) .tag {
+  :global(html.dark-theme) .tag {
     background: rgba(5, 205, 153, 0.15);
     color: #05cd99;
   }

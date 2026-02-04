@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import WhoWeSupport from '../components/WhoWeSupport.astro';
+import WhatWeDo from '../components/WhatWeDo.astro';
+import WhyClientsTrustUs from '../components/WhyClientsTrustUs.astro';
 import CTASection from '../components/CTASection.astro';
 import { trackPageView } from '../utils/analytics';
 
@@ -10,13 +13,26 @@ trackPageView('home', 'technology Advisory & Execution');
 
 <BaseLayout
     title="technology Advisory & Execution"
-    description="value creation, risk management, and business acceleration."
+    description="We help technology-focused investors, founders, & executives scale with confidence to create value, manage risks and accelerate their business."
 >
     <Hero
-        title="technology advisory"
-        subtitle="& Execution"
-        description="for value creation, risk management, and business acceleration"
+        description="We help technology-focused investors, founders, & executives scale with confidence to create value, manage risks and accelerate their business."
+        primaryCTA={{
+            text: "Request an Intro Call",
+            href: "https://calendly.com/globalstrategictech"
+        }}
+        secondaryCTA={{
+            text: "View Advisory Services",
+            href: "/services"
+        }}
+        trustLine="Vendor-neutral. Executive-ready outputs. Built for high-stakes decisions."
     />
+
+    <WhoWeSupport />
+
+    <WhatWeDo />
+
+    <WhyClientsTrustUs />
 
     <CTASection
         title="Let's discuss your next challenge"
