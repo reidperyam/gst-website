@@ -1,0 +1,187 @@
+---
+// WhyClientsTrustUs section - displays core credibility drivers with 2x2 card grid
+---
+
+<section class="why-clients-trust-us">
+    <div class="container">
+        <div class="trust-content">
+            <h2 class="heading-lg">Why Clients Trust Us</h2>
+
+            <div class="trust-cards">
+                <div class="trust-card">
+                    <h3>Independent, vendor-neutral guidance</h3>
+                    <p>No technology bias, no vendor relationships, no hidden agendas. Our recommendations are grounded in your strategic objectives and technical realities, not product portfolio incentives.</p>
+                </div>
+                <div class="trust-card">
+                    <h3>Deep technical expertise translated into business risk and opportunity</h3>
+                    <p>We bridge the gap between technical architecture and business impact. Complex systems become clear. Trade-offs get quantified. Risk becomes actionable.</p>
+                </div>
+                <div class="trust-card">
+                    <h3>Executive-ready communication for leadership and investors</h3>
+                    <p>Technical findings translated for boards and C-suite. No jargon. Clear implications. Decision-ready context that informs strategy and allocation.</p>
+                </div>
+                <div class="trust-card">
+                    <h3>Practical shovel-ready initiatives given real operational constraints</h3>
+                    <p>Every recommendation accounts for budget, timeline, and team capacity. Roadmaps that actually happen. Next steps teams can execute.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Component styles following design system patterns */
+    .why-clients-trust-us {
+        padding: var(--spacing-3xl) 0;
+        background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, var(--bg-light-alt) 15%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
+        position: relative;
+    }
+
+    .trust-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .heading-lg {
+        margin-bottom: var(--spacing-2xl);
+        text-align: center;
+    }
+
+    .trust-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--gap-extra-wide);
+    }
+
+    .trust-card {
+        padding: var(--spacing-2xl);
+        background: rgba(5, 205, 153, 0.03);
+        border: 1px solid rgba(5, 205, 153, 0.1);
+        border-radius: 8px;
+        transition: all var(--transition-normal);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .trust-card:hover {
+        background: rgba(5, 205, 153, 0.08);
+        border-color: rgba(5, 205, 153, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
+    }
+
+    .trust-card h3 {
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        margin-bottom: var(--spacing-md);
+        line-height: 1.4;
+    }
+
+    .trust-card p {
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        flex-grow: 1;
+    }
+
+    /* Dark theme support */
+    :global(html.dark-theme) .why-clients-trust-us {
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
+    }
+
+    :global(html.dark-theme) .trust-card {
+        background: rgba(5, 205, 153, 0.05);
+        border-color: rgba(5, 205, 153, 0.15);
+    }
+
+    :global(html.dark-theme) .trust-card:hover {
+        background: rgba(5, 205, 153, 0.12);
+        border-color: rgba(5, 205, 153, 0.25);
+    }
+
+    :global(html.dark-theme) .trust-card h3 {
+        color: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .trust-card p {
+        color: var(--text-dark-secondary);
+    }
+
+    /* Responsive design */
+    @media (max-width: 1024px) {
+        .trust-cards {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--gap-wide);
+        }
+
+        .trust-card {
+            padding: var(--spacing-xl);
+        }
+
+        .trust-card h3 {
+            font-size: var(--text-base);
+        }
+
+        .trust-card p {
+            font-size: var(--text-small);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .why-clients-trust-us {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .heading-lg {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .trust-cards {
+            grid-template-columns: 1fr;
+            gap: var(--gap-normal);
+        }
+
+        .trust-card {
+            padding: var(--spacing-lg);
+        }
+
+        .trust-card h3 {
+            font-size: var(--text-base);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .trust-card p {
+            font-size: var(--text-small);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .why-clients-trust-us {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .heading-lg {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .trust-cards {
+            gap: var(--gap-normal);
+        }
+
+        .trust-card {
+            padding: var(--spacing-md);
+        }
+
+        .trust-card h3 {
+            font-size: var(--text-small);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .trust-card p {
+            font-size: var(--text-tiny);
+            line-height: 1.6;
+        }
+    }
+</style>
