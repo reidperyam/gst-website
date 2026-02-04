@@ -2,6 +2,7 @@
 import { trackCTA } from '../utils/analytics';
 
 interface Props {
+    title?: string;
     subtitle?: string;
     description: string;
     primaryCTA?: {
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const {
+    title,
     subtitle,
     description,
     primaryCTA,
@@ -28,8 +30,14 @@ const {
     <div class="container">
         <div class="hero-layout">
             <h1>
-                <span class="line">Technology Advisory</span>
-                <span class="line"><span class="highlight">& Execution</span></span>
+                {title ? (
+                    <span class="line">{title}</span>
+                ) : (
+                    <>
+                        <span class="line">Technology Advisory</span>
+                        <span class="line"><span class="highlight">& Execution</span></span>
+                    </>
+                )}
                 {subtitle && <span class="line"><span class="accent">{subtitle}</span></span>}
             </h1>
 
