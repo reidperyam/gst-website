@@ -1,0 +1,438 @@
+# SEO Component Technical Documentation
+
+Detailed technical guide for the reusable Astro SEO component.
+
+## Table of Contents
+
+1. [Component Overview](#component-overview)
+2. [Usage](#usage)
+3. [Props Interface](#props-interface)
+4. [Output](#output)
+5. [Examples](#examples)
+6. [Troubleshooting](#troubleshooting)
+
+## Component Overview
+
+### Location
+`src/components/SEO.astro`
+
+### Purpose
+Provides a reusable, composable component that injects comprehensive SEO metadata into any Astro page.
+
+### Features
+- JSON-LD structured data (ProfessionalService + Person schemas)
+- Open Graph (OG) tags for social sharing
+- Twitter Card tags
+- Standard meta tags (title, description, keywords, author, robots)
+- Canonical URL support
+- Props-based customization
+- Sensible defaults for homepage
+
+## Usage
+
+### Basic Implementation (in layout or page)
+
+```astro
+---
+import SEO from '../components/SEO.astro';
+---
+
+<html>
+  <head>
+    <SEO
+      title="Page Title | Site Name"
+      description="Page description for search results"
+    />
+  </head>
+  <body>
+    <!-- Page content -->
+  </body>
+</html>
+```
+
+### With BaseLayout (Recommended)
+
+The component is already integrated into `BaseLayout.astro`. Pass SEO props through the layout:
+
+```astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About Reid Peryam | Global Strategic Technology"
+  description="Learn about Reid Peryam's background in technology strategy..."
+  ogTitle="Meet Reid Peryam"
+  ogDescription="20+ year veteran in M&A technical advisory"
+  ogImage="https://globalstrategic.tech/reid-photo.jpg"
+  ogUrl="https://globalstrategic.tech/about"
+>
+  <!-- Page content -->
+</BaseLayout>
+```
+
+## Props Interface
+
+### TypeScript Definition
+
+```typescript
+interface Props {
+    title?: string;
+    description?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
+    ogType?: string;
+    ogUrl?: string;
+    canonicalUrl?: string;
+}
+```
+
+### Props Reference
+
+| Prop | Type | Default | Purpose |
+|------|------|---------|---------|
+| `title` | string | "Global Strategic Technology \| M&A Strategic Technology Advisory" | Page `<title>` tag content |
+| `description` | string | Full expert advisory description | Meta description tag |
+| `ogTitle` | string | "Global Strategic Technology \| Strategic Tech Advisory" | og:title for social sharing |
+| `ogDescription` | string | "Specialized technical diligence..." | og:description for social sharing |
+| `ogImage` | string | "https://globalstrategic.tech/og-image.jpg" | og:image URL for social sharing |
+| `ogType` | string | "website" | og:type (website, article, etc.) |
+| `ogUrl` | string | "https://globalstrategic.tech" | og:url (page URL) |
+| `canonicalUrl` | string | "https://globalstrategic.tech" | Canonical URL for duplicate prevention |
+
+### Props Details
+
+#### `title`
+- Displayed in browser tab and search results
+- Target: 50-60 characters
+- Include primary keyword and brand name
+- Example: "Buy-Side M&A Due Diligence Guide | Global Strategic Technology"
+
+#### `description`
+- Displayed in search results below title
+- Target: 150-160 characters
+- Should summarize page content
+- Include 1-2 primary keywords
+- Example: "Expert buy-side technical due diligence strategies for software acquisitions. Led by Reid Peryam with 20+ years M&A experience."
+
+#### `ogTitle`
+- Displayed when shared on LinkedIn, Twitter, Facebook
+- Can differ from `title` (usually shorter and punchier)
+- Target: 40-50 characters
+- Example: "M&A Technical Diligence | Strategic Tech Advisory"
+
+#### `ogDescription`
+- Displayed when shared on social platforms
+- Target: 85-97 characters
+- Should entice click-through from social feed
+- Example: "Strategic technical diligence for your next acquisition."
+
+#### `ogImage`
+- Image displayed when link is shared
+- Recommended: 1200x630px for best appearance
+- Must be absolute URL (not relative)
+- Supported formats: JPG, PNG, GIF, WebP
+- Fallback: Site favicon
+
+#### `ogType`
+- Must be valid Open Graph type
+- Common values: `website`, `article`, `business.business`
+- Default for GST: `website`
+
+#### `ogUrl`
+- The canonical URL of the page
+- Should match what user sees in address bar
+- Important for tracking shares per page
+- Example: "https://globalstrategic.tech/services"
+
+#### `canonicalUrl`
+- Prevents duplicate content penalties
+- Should match your preferred URL version
+- Often the same as `ogUrl`
+- Use when page has multiple URLs that should be consolidated
+
+## Output
+
+### Generated HTML Output
+
+The SEO component generates the following HTML:
+
+```html
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Global Strategic Technology",
+  ...
+}
+</script>
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="..." />
+<meta property="og:description" content="..." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="..." />
+<meta property="og:image" content="..." />
+
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="..." />
+<meta name="twitter:description" content="..." />
+<meta name="twitter:image" content="..." />
+
+<!-- Canonical URL -->
+<link rel="canonical" href="..." />
+
+<!-- Additional SEO Tags -->
+<meta name="keywords" content="M&A technical due diligence, technology advisory, ..." />
+<meta name="author" content="Reid Peryam" />
+<meta name="robots" content="index, follow" />
+```
+
+### Where Output Appears
+
+The component outputs into the `<head>` of your HTML document:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Standard meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Component Output (all meta tags, JSON-LD, etc.) -->
+    <title>...</title>
+    <script type="application/ld+json">...</script>
+    <meta property="og:*" ... />
+    <!-- etc. -->
+  </head>
+  <body>
+    <!-- Page content -->
+  </body>
+</html>
+```
+
+## Examples
+
+### Example 1: Homepage (Default Props)
+
+```astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Global Strategic Technology | M&A Strategic Technology Advisory"
+  description="Expert strategic technology advisory for M&A buy-side and sell-side technical due diligence..."
+>
+  <!-- Content -->
+</BaseLayout>
+```
+
+**Output**:
+- Title: "Global Strategic Technology | M&A Strategic Technology Advisory"
+- OG Image: Default og-image.jpg
+- Canonical: https://globalstrategic.tech
+
+### Example 2: Services Page
+
+```astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Our Services | M&A Technical Advisory | Global Strategic Technology"
+  description="Comprehensive M&A technical advisory services including buy-side and sell-side due diligence, platform assessments, and integration planning."
+  ogTitle="M&A Technical Advisory Services"
+  ogDescription="Buy-side & sell-side diligence, platform assessments, integration planning"
+  ogUrl="https://globalstrategic.tech/services"
+>
+  <!-- Services content -->
+</BaseLayout>
+```
+
+**Output**:
+- Title: "Our Services | M&A Technical Advisory | Global Strategic Technology"
+- Description: Full services description
+- OG Title: "M&A Technical Advisory Services"
+- OG URL: https://globalstrategic.tech/services
+- Canonical: https://globalstrategic.tech/services
+
+### Example 3: Blog Article
+
+```astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Platform Modernization in M&A | Global Strategic Technology"
+  description="How to assess platform modernization opportunities during technical due diligence. Real-world case studies and frameworks."
+  ogTitle="Platform Modernization in M&A"
+  ogDescription="Assessment frameworks and case studies for M&A platform modernization"
+  ogImage="https://globalstrategic.tech/images/platform-modernization.jpg"
+  ogType="article"
+  ogUrl="https://globalstrategic.tech/blog/platform-modernization"
+>
+  <!-- Article content -->
+</BaseLayout>
+```
+
+**Output**:
+- Type: article (for rich preview on LinkedIn)
+- OG Image: Custom article image
+- Proper LinkedIn article schema
+
+## Troubleshooting
+
+### Issue: JSON-LD Not Rendering
+
+**Symptom**: Google Structured Data Testing Tool shows no data found
+
+**Cause**: JSON-LD script tag not in `<head>` before component
+
+**Solution**:
+```astro
+<head>
+  <!-- Ensure SEO component is early in head -->
+  <SEO ... />
+  <!-- Other head content -->
+</head>
+```
+
+### Issue: Open Graph Tags Not Showing in Social Preview
+
+**Symptom**: Social platforms showing old/generic preview
+
+**Cause**: Social platforms cache OG tags (usually 1-24 hours)
+
+**Solution**:
+1. Update tags in component
+2. Use platform's cache clearing tool:
+   - [Facebook Debugger](https://developers.facebook.com/tools/debug/og/object/)
+   - [LinkedIn Inspector](https://www.linkedin.com/post-inspector/)
+   - [Twitter Card Validator](https://cards-dev.twitter.com/validator)
+3. Wait for re-crawl (up to 24 hours)
+
+### Issue: Meta Description Not Showing in Search Results
+
+**Symptom**: Google shows different description or truncates text
+
+**Cause**: Description too long or not relevant to content
+
+**Solutions**:
+1. Ensure description is 150-160 characters
+2. Move important keywords to front of description
+3. Avoid keyword stuffing
+4. Make description match page content
+
+**Example**:
+```astro
+<!-- Too long (182 chars) -->
+description="We help organizations navigate complex M&A technical challenges including..."
+
+<!-- Better (156 chars) -->
+description="Expert M&A technical advisory: due diligence, platform assessment, integration planning."
+```
+
+### Issue: Canonical URL Being Ignored
+
+**Symptom**: Google Search Console shows canonical as different URL
+
+**Cause**: Conflicting canonical tags or improper URL format
+
+**Solutions**:
+1. Use absolute URLs only (not relative)
+2. Ensure URL matches actual page location
+3. Verify no other canonical tags on page
+4. Check domain casing (gst-website.com vs GST-Website.com)
+
+### Issue: Component Props Not Working
+
+**Symptom**: Changes to props not appearing in output
+
+**Cause**: Astro build cache issue
+
+**Solution**:
+```bash
+# Clear Astro cache
+rm -rf .astro
+
+# Rebuild
+npm run build
+
+# Or full reset
+npm run clean
+npm run build
+```
+
+### Issue: JSON-LD Appears in Rendered HTML but Not in Meta Tags
+
+**Symptom**: Script tag visible in page content (shouldn't be)
+
+**Cause**: `set:html` directive issue or script not rendering
+
+**Solution**:
+Verify component has proper Astro directives:
+```astro
+<!-- Correct -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdData)} />
+
+<!-- Wrong (will render as text) -->
+<script type="application/ld+json">{JSON.stringify(jsonLdData)}</script>
+```
+
+### Issue: OG Image Not Displaying
+
+**Symptom**: Social platforms show broken image or generic thumbnail
+
+**Causes**:
+1. Image URL is invalid or inaccessible
+2. Image size too small (< 200x200px)
+3. Image in unsupported format
+4. CORS issues
+
+**Solutions**:
+1. Verify image URL is accessible and public
+2. Use image at least 1200x630px for best display
+3. Use standard formats: JPG, PNG, GIF, WebP
+4. Test with Facebook Debugger tool
+
+```astro
+<!-- Good OG image URL -->
+ogImage="https://globalstrategic.tech/images/og-image-1200x630.jpg"
+
+<!-- Avoid -->
+ogImage="/images/og-image.jpg"  <!-- Relative URL won't work -->
+ogImage="https://example.com/image.webp"  <!-- Wrong domain -->
+```
+
+## Performance Considerations
+
+### Build Performance
+- Component has no runtime cost (all static generation)
+- JSON-LD generation happens at build time
+- No performance impact on page load
+
+### Runtime Performance
+- All SEO tags are static HTML
+- No JavaScript execution required
+- No blocking resources
+- Minimal HTML size increase (~2-3KB per page)
+
+### Optimization Tips
+
+1. **Reuse descriptions**: Similar pages can share descriptions
+2. **Use concise titles**: Shorter = faster parsing
+3. **Optimize OG images**: Use appropriate size (1200x630px)
+4. **Lazy load images**: Keep og:image on CDN
+
+---
+
+**Last Updated**: February 4, 2026
+**Component Version**: 1.0
+**Status**: Production Ready ✓
