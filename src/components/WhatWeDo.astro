@@ -9,24 +9,24 @@
 
             <ul class="services-list">
                 <li>
-                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                     <span>Buy-side and sell-side technical diligence</span>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                 </li>
                 <li>
-                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                     <span>Architecture and platform assessments</span>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                 </li>
                 <li>
-                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                     <span>Security, compliance, and operational risk evaluation</span>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                 </li>
                 <li>
-                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                     <span>Product development, modernization and execution roadmaps</span>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                 </li>
                 <li>
-                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                     <span>Independent advisory for executives and boards</span>
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" />
                 </li>
             </ul>
 
@@ -46,6 +46,7 @@
     .services-content {
         max-width: 900px;
         margin: 0 auto;
+        text-align: right;
     }
 
     .heading-lg {
@@ -64,6 +65,7 @@
         display: flex;
         align-items: center;
         gap: var(--spacing-lg);
+        justify-content: flex-end;
     }
 
     .bullet-icon {
@@ -85,6 +87,12 @@
         margin-top: var(--spacing-2xl);
         padding-top: var(--spacing-2xl);
         border-top: 1px solid var(--border-light);
+    }
+
+    .closing-text::before {
+        content: '// ';
+        color: var(--color-primary);
+        font-weight: 900;
     }
 
     /* Dark theme support */
