@@ -162,31 +162,33 @@ All credentials follow the `EducationalOccupationalCredential` schema:
   "@type": "EducationalOccupationalCredential",
   "name": "Credential Name",
   "credentialCategory": "Professional Certification" | "Executive Education",
-  "issuedBy": {
+  "publisher": {
     "@type": "Organization" | "CollegeOrUniversity",
     "name": "Issuing Organization Name"
   },
-  "dateIssued": "YYYY-MM",
-  "dateExpires": "YYYY-MM",  // Optional: omit if non-expiring
-  "credentialId": "UNIQUE_CREDENTIAL_ID",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"]
+  "datePublished": "YYYY-MM",
+  "expires": "YYYY-MM",  // Optional: omit if non-expiring
+  "identifier": "UNIQUE_CREDENTIAL_ID",
+  "competencyRequired": "Skill 1, Skill 2, Skill 3"
 }
 ```
 
-### Field Descriptions
+### Field Descriptions (Schema.org Compliant)
 
 | Field | Type | Purpose | Required |
 |-------|------|---------|----------|
 | `@type` | String | Always "EducationalOccupationalCredential" | Yes |
 | `name` | String | Full credential name | Yes |
 | `credentialCategory` | String | Type of credential | Yes |
-| `issuedBy` | Organization | Issuing body | Yes |
-| `dateIssued` | Date | Issue date (YYYY-MM format) | Yes |
-| `dateExpires` | Date | Expiration date (YYYY-MM format) | No* |
-| `credentialId` | String | Credential ID for verification | Yes |
-| `skills` | Array[String] | Skills associated with credential | Recommended |
+| `publisher` | Organization | Organization that issued the credential (from CreativeWork) | Yes |
+| `datePublished` | Date | Issue date in YYYY-MM format (from CreativeWork) | Yes |
+| `expires` | Date | Expiration date in YYYY-MM format (from CreativeWork) | No* |
+| `identifier` | String | Credential ID for verification (from CreativeWork) | Yes |
+| `competencyRequired` | String | Comma-separated skills string (specific to this type) | Recommended |
 
-*`dateExpires` is optional. Omit for non-expiring credentials (degrees, permanent certifications).
+*`expires` is optional. Omit for non-expiring credentials (degrees, permanent certifications).
+
+**⚠️ Property Name Changes**: These are the official Schema.org property names verified against the official documentation. Properties like `publisher`, `datePublished`, `expires`, and `identifier` are inherited from CreativeWork (the parent type). Previous versions used non-standard names (`issuedBy`, `offeredBy`, `dateIssued`, `dateExpires`, `validUntil`, `credentialId`, `skills` array) which caused validation errors.
 
 ### Current Credentials (18 Total)
 

@@ -2,6 +2,14 @@
 
 Complete reference for Reid Peryam's professional credentials and how they're documented in the SEO schema.
 
+> **⚠️ Schema.org Compliance Update (February 2026)**
+> All credential properties have been updated to use Schema.org-compliant property names:
+> - `issuedBy` → `publisher` (who published/issued the credential)
+> - `dateIssued` → `datePublished` (when credential was issued)
+> - `dateExpires` → `expires` (expiration date)
+> - `credentialId` → `identifier` (unique credential ID)
+> - `skills` (array) → `competencyRequired` (comma-separated string of skills)
+
 ## Table of Contents
 
 1. [Credentials Overview](#credentials-overview)
@@ -268,16 +276,23 @@ Collect the following:
   "@type": "EducationalOccupationalCredential",
   "name": "Exact Credential Name",
   "credentialCategory": "Professional Certification",
-  "issuedBy": {
+  "publisher": {
     "@type": "Organization",
     "name": "Issuing Organization"
   },
-  "dateIssued": "2024-06",
-  "dateExpires": "2026-06",
-  "credentialId": "CREDENTIAL_ID_HERE",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"]
+  "datePublished": "2024-06",
+  "expires": "2026-06",
+  "identifier": "CREDENTIAL_ID_HERE",
+  "competencyRequired": "Skill 1, Skill 2, Skill 3"
 }
 ```
+
+**Property Notes (Schema.org Compliant)**:
+- Use `publisher` (not `issuedBy`) - Organization that issued the credential (inherited from CreativeWork)
+- Use `datePublished` (not `dateIssued`) - issue date in YYYY-MM format (inherited from CreativeWork)
+- Use `expires` (not `dateExpires` or `validUntil`) - expiration date (optional, omit if no expiration, inherited from CreativeWork)
+- Use `identifier` (not `credentialId`) - credential ID or verification code (inherited from CreativeWork)
+- Use `competencyRequired` (not `skills`) - comma-separated string of skills (specific to EducationalOccupationalCredential)
 
 #### Step 3: Add to SEO Component
 
@@ -329,14 +344,14 @@ git push
   "@type": "EducationalOccupationalCredential",
   "name": "Microsoft Certified: Azure Administrator Associate",
   "credentialCategory": "Professional Certification",
-  "issuedBy": {
+  "publisher": {
     "@type": "Organization",
     "name": "Microsoft"
   },
-  "dateIssued": "2024-11",
-  "dateExpires": "2026-11",
-  "credentialId": "AZ-104-CERT-ID",
-  "skills": ["Microsoft Azure", "Azure Administration", "Cloud Management", "Infrastructure Automation"]
+  "datePublished": "2024-11",
+  "expires": "2026-11",
+  "identifier": "AZ-104-CERT-ID",
+  "competencyRequired": "Microsoft Azure, Azure Administration, Cloud Management, Infrastructure Automation"
 }
 ```
 
@@ -359,10 +374,10 @@ When renewing a certification:
 
 ```typescript
 // Before (expiring soon)
-"dateExpires": "2026-05"
+"expires": "2026-05"
 
 // After (renewed)
-"dateExpires": "2028-05"
+"expires": "2028-05"
 ```
 
 #### Updating Skills
@@ -371,10 +386,10 @@ If credential skills have changed:
 
 ```typescript
 // Before
-"skills": ["Old Skill", "Another Skill"]
+"competencyRequired": "Old Skill, Another Skill"
 
 // After
-"skills": ["New Skill", "Updated Skill", "Added Skill"]
+"competencyRequired": "New Skill, Updated Skill, Added Skill"
 ```
 
 #### Removing a Credential
