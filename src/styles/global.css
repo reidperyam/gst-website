@@ -171,7 +171,7 @@ a:hover {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 40px;
     background: none;
 }
 
@@ -1005,7 +1005,11 @@ html.dark-theme .cta-box p {
     }
 
     .hero {
-        padding: var(--spacing-2xl) 0;
+        padding: var(--spacing-2xl) 0 var(--spacing-sm) 0;
+    }
+
+    .hero::after {
+        height: 0;
     }
 
     .hero h1 {
