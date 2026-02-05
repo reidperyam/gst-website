@@ -171,6 +171,22 @@
     flex-direction: column;
   }
 
+  .metric-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 26, 26, 0.65);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .metric-value {
+    font-size: 0.9375rem;
+    color: rgba(26, 26, 26, 0.7);
+    line-height: 1.6;
+    margin: 0;
+  }
+
   .modal-section {
     margin-bottom: 1.5rem;
   }
@@ -245,6 +261,14 @@
 
   :global(html.dark-theme) .modal-metrics {
     border-bottom-color: rgba(5, 205, 153, 0.2);
+  }
+
+  :global(html.dark-theme) .metric-label {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  :global(html.dark-theme) .metric-value {
+    color: rgba(200, 200, 200, 0.8);
   }
 
   :global(html.dark-theme) .modal-section-title {
