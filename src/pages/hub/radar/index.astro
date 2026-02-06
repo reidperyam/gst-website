@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { trackPageView } from '../../../utils/analytics';
+
+trackPageView('hub-radar', 'The Radar - Perspectives | GST');
+---
+
+<BaseLayout
+    title="The Radar | Strategic Intelligence Hub"
+    description="Rapid-response analysis of emerging technology shifts, AI developments, and M&A market dynamics."
+    ogTitle="The Radar - Perspectives | GST"
+    ogDescription="Analysis of emerging technology shifts, AI developments, and M&A market dynamics."
+    ogImage="/og-image.png"
+    ogUrl="https://globalstrategic.tech/hub/radar"
+>
+    <section class="placeholder-hero">
+        <div class="container">
+            <span class="section-label">Perspectives</span>
+            <h1>The Radar</h1>
+            <p class="placeholder-description">Coming soon. Strategic intelligence for emerging technology shifts and M&A market dynamics.</p>
+            <a href="/hub" class="cta-button secondary">Return to Hub</a>
+        </div>
+    </section>
+</BaseLayout>
+
+<style>
+    .placeholder-hero {
+        padding: 5rem 0;
+        text-align: center;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+        display: block;
+    }
+
+    .placeholder-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    :global(html.dark-theme) .placeholder-hero h1 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    .placeholder-description {
+        font-size: 1.1rem;
+        color: rgba(26, 26, 26, 0.7);
+        line-height: 1.8;
+        max-width: 600px;
+        margin: 0 auto var(--spacing-3xl);
+    }
+
+    :global(html.dark-theme) .placeholder-description {
+        color: rgba(200, 200, 200, 0.7);
+    }
+
+    @media (max-width: 768px) {
+        .placeholder-hero {
+            padding: 3rem 0;
+        }
+
+        .placeholder-hero h1 {
+            font-size: 1.75rem;
+        }
+
+        .placeholder-description {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .placeholder-hero {
+            padding: 2rem 0;
+        }
+
+        .placeholder-hero h1 {
+            font-size: 1.5rem;
+        }
+
+        .placeholder-description {
+            font-size: 0.9rem;
+        }
+    }
+</style>
