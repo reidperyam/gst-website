@@ -14,6 +14,14 @@ interface Props {
     ogType?: string;
     ogUrl?: string;
     canonicalUrl?: string;
+    // Enhanced social media meta tags
+    ogImageAlt?: string;
+    ogImageWidth?: number;
+    ogImageHeight?: number;
+    ogImageType?: string;
+    ogSiteName?: string;
+    ogLocale?: string;
+    twitterSite?: string;
 }
 
 const {
@@ -21,11 +29,32 @@ const {
     description = 'Expert strategic technology advisory for M&A buy-side and sell-side technical due diligence, post-acquisition integration, value creation, and platform modernization. Led by Reid Peryam, 20-year veteran in technology strategy execution.',
     ogTitle = 'Global Strategic Technology | Strategic Tech Advisory',
     ogDescription = 'Specialized technical diligence and AI strategy for organizations navigating complex product transitions.',
-    ogImage = 'https://globalstrategic.tech/og-image.jpg',
+    ogImage = '/og-image.png',
     ogType = 'website',
-    ogUrl = 'https://globalstrategic.tech',
-    canonicalUrl = 'https://globalstrategic.tech'
+    ogUrl,
+    canonicalUrl,
+    // Enhanced social media meta tags
+    ogImageAlt = 'Global Strategic Technology - M&A Strategic Technology Advisory and Technical Due Diligence',
+    ogImageWidth = 1200,
+    ogImageHeight = 630,
+    ogImageType = 'image/png',
+    ogSiteName = 'Global Strategic Technology',
+    ogLocale = 'en_US',
+    twitterSite = '@globalstrategic',
 } = Astro.props;
+
+// Dynamic URL generation using Astro.url
+const currentUrl = Astro.url.href;
+const baseUrl = `${Astro.url.protocol}//${Astro.url.host}`;
+
+// Use provided URLs or auto-generate from current page
+const finalCanonicalUrl = canonicalUrl || currentUrl;
+const finalOgUrl = ogUrl || currentUrl;
+
+// Convert relative image paths to absolute URLs
+const absoluteOgImage = ogImage.startsWith('http')
+    ? ogImage
+    : `${baseUrl}${ogImage.startsWith('/') ? ogImage : '/' + ogImage}`;
 
 const jsonLdData = {
     '@context': 'https://schema.org',
@@ -301,21 +330,29 @@ const jsonLdData = {
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(jsonLdData)} />
 
-<!-- Meta Tags -->
+<!-- Open Graph Meta Tags -->
 <meta property="og:title" content={ogTitle} />
 <meta property="og:description" content={ogDescription} />
 <meta property="og:type" content={ogType} />
-<meta property="og:url" content={ogUrl} />
-<meta property="og:image" content={ogImage} />
+<meta property="og:url" content={finalOgUrl} />
+<meta property="og:image" content={absoluteOgImage} />
+<meta property="og:image:width" content={ogImageWidth.toString()} />
+<meta property="og:image:height" content={ogImageHeight.toString()} />
+<meta property="og:image:type" content={ogImageType} />
+<meta property="og:image:alt" content={ogImageAlt} />
+<meta property="og:site_name" content={ogSiteName} />
+<meta property="og:locale" content={ogLocale} />
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={twitterSite} />
 <meta name="twitter:title" content={ogTitle} />
 <meta name="twitter:description" content={ogDescription} />
-<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image" content={absoluteOgImage} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
 
 <!-- Canonical URL -->
-<link rel="canonical" href={canonicalUrl} />
+<link rel="canonical" href={finalCanonicalUrl} />
 
 <!-- Additional SEO Meta Tags -->
 <meta name="keywords" content="M&A technical due diligence, technology advisory, platform modernization, AI strategy, technical diligence" />

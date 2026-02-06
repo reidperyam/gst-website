@@ -13,6 +13,11 @@ interface Props {
     ogDescription?: string;
     ogImage?: string;
     ogUrl?: string;
+    // Enhanced social media meta tags
+    ogImageAlt?: string;
+    ogImageWidth?: number;
+    ogImageHeight?: number;
+    twitterSite?: string;
 }
 
 const isProduction = import.meta.env.PROD;
@@ -22,7 +27,11 @@ const {
     ogTitle,
     ogDescription,
     ogImage,
-    ogUrl
+    ogUrl,
+    ogImageAlt,
+    ogImageWidth,
+    ogImageHeight,
+    twitterSite
 } = Astro.props;
 ---
 
@@ -42,6 +51,10 @@ const {
             ogDescription={ogDescription}
             ogImage={ogImage}
             ogUrl={ogUrl}
+            ogImageAlt={ogImageAlt}
+            ogImageWidth={ogImageWidth}
+            ogImageHeight={ogImageHeight}
+            twitterSite={twitterSite}
         />
 
         <!-- Favicons and Icons -->

@@ -24,6 +24,9 @@ The GST website implements a comprehensive SEO foundation designed to maximize s
 - 2 LinkedIn profiles linked
 - Full sitemap and robots.txt coverage
 - Single `<h1>` on homepage with proper heading hierarchy
+- **17 social media meta tags** (11 Open Graph + 6 Twitter Card)
+- **Dynamic URL generation** for all environments
+- **Enhanced image metadata** with alt text and dimensions
 
 ## Architecture
 
@@ -55,6 +58,14 @@ interface Props {
     ogType?: string;
     ogUrl?: string;
     canonicalUrl?: string;
+    // Enhanced social media meta tags (February 2026)
+    ogImageAlt?: string;
+    ogImageWidth?: number;
+    ogImageHeight?: number;
+    ogImageType?: string;
+    ogSiteName?: string;
+    ogLocale?: string;
+    twitterSite?: string;
 }
 ```
 
@@ -63,10 +74,17 @@ interface Props {
 - `description`: "Expert strategic technology advisory for M&A buy-side and sell-side technical due diligence..."
 - `ogTitle`: "Global Strategic Technology | Strategic Tech Advisory"
 - `ogDescription`: "Specialized technical diligence and AI strategy for organizations navigating complex product transitions."
-- `ogImage`: "https://globalstrategic.tech/og-image.jpg"
+- `ogImage`: "/og-image.png" (auto-converted to absolute URL)
 - `ogType`: "website"
-- `ogUrl`: "https://globalstrategic.tech"
-- `canonicalUrl`: "https://globalstrategic.tech"
+- `ogUrl`: Auto-generated from Astro.url
+- `canonicalUrl`: Auto-generated from Astro.url
+- **`ogImageAlt`**: "Global Strategic Technology - M&A Strategic Technology Advisory and Technical Due Diligence"
+- **`ogImageWidth`**: 1200 (pixels)
+- **`ogImageHeight`**: 630 (pixels)
+- **`ogImageType`**: "image/png"
+- **`ogSiteName`**: "Global Strategic Technology"
+- **`ogLocale`**: "en_US"
+- **`twitterSite`**: "@globalstrategic"
 
 ## JSON-LD Structured Data
 
@@ -225,22 +243,32 @@ The following expertise areas are indexed for semantic search:
 
 Open Graph tags control how the site appears when shared on social platforms. Essential for professional networks like LinkedIn.
 
-### Implemented Tags
+### Implemented Tags (Enhanced February 2026)
 
 ```html
-<!-- Primary OG Tags -->
+<!-- Open Graph Tags (11 tags) -->
 <meta property="og:title" content="Global Strategic Technology | Strategic Tech Advisory" />
 <meta property="og:description" content="Specialized technical diligence and AI strategy for organizations navigating complex product transitions." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://globalstrategic.tech" />
-<meta property="og:image" content="https://globalstrategic.tech/og-image.jpg" />
+<meta property="og:url" content="https://globalstrategic.tech/" />
+<meta property="og:image" content="https://globalstrategic.tech/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content="Global Strategic Technology - M&A Strategic Technology Advisory and Technical Due Diligence" />
+<meta property="og:site_name" content="Global Strategic Technology" />
+<meta property="og:locale" content="en_US" />
 
-<!-- Twitter Card Tags -->
+<!-- Twitter Card Tags (6 tags) -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@globalstrategic" />
 <meta name="twitter:title" content="Global Strategic Technology | Strategic Tech Advisory" />
 <meta name="twitter:description" content="Specialized technical diligence and AI strategy for organizations navigating complex product transitions." />
-<meta name="twitter:image" content="https://globalstrategic.tech/og-image.jpg" />
+<meta name="twitter:image" content="https://globalstrategic.tech/og-image.png" />
+<meta name="twitter:image:alt" content="Global Strategic Technology - M&A Strategic Technology Advisory and Technical Due Diligence" />
 ```
+
+**Total**: 17 meta tags (up from 9 before February 2026 enhancement)
 
 ### Platform-Specific Rendering
 
@@ -517,7 +545,61 @@ The SEO implementation has **zero negative performance impact**:
 - ✅ Sitemap and robots.txt are static files
 - ✅ All 432 tests pass with no performance regression
 
+## Enhanced Social Media Features (February 2026)
+
+### Dynamic URL Generation
+
+The SEO component now automatically generates correct URLs for all environments using `Astro.url`:
+
+**Development**:
+```html
+<meta property="og:url" content="http://localhost:4321/">
+<link rel="canonical" href="http://localhost:4321/">
+```
+
+**Production**:
+```html
+<meta property="og:url" content="https://globalstrategic.tech/">
+<link rel="canonical" href="https://globalstrategic.tech/">
+```
+
+No manual URL specification required unless overriding the current page URL.
+
+### Enhanced Image Metadata
+
+All social platforms receive comprehensive image information:
+- **Width & Height**: 1200x630px (optimal for all major platforms)
+- **Type**: image/png or image/jpeg
+- **Alt Text**: Accessibility-compliant descriptions
+- **Automatic URL Conversion**: Relative paths → absolute URLs
+
+### Platform Optimizations
+
+**LinkedIn**:
+- `og:site_name` for brand attribution
+- Optimized 1.91:1 aspect ratio images
+- Alt text for accessibility
+
+**Twitter/X**:
+- `twitter:site` handle for profile linking
+- `twitter:image:alt` for accessibility
+- `summary_large_image` card type
+
+**Facebook/Instagram**:
+- Complete Open Graph specification
+- `og:locale` for content targeting
+- Full image metadata
+
+### Verification
+
+Test your social media previews:
+- **LinkedIn**: https://www.linkedin.com/post-inspector/
+- **Facebook**: https://developers.facebook.com/tools/debug/
+- **Twitter**: https://cards-dev.twitter.com/validator
+- **General OG**: https://www.opengraph.xyz/
+
 ---
 
-**Last Updated**: February 4, 2026
+**Last Updated**: February 5, 2026
+**Component Version**: 2.0 (Enhanced Social Media)
 **Implementation Status**: Production Ready ✓
