@@ -22,9 +22,73 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
             <article class="teaser-card">
                 <div class="teaser-header">
                     <h2>The Diligentizer</h2>
-                    <span class="badge">Launching Q1 2026</span>
                 </div>
-                <p>Generate customized technical diligence checklists based on transaction parameters, tech stack, and risk profile.</p>
+                <ul class="tool-features">
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Customized checklists based on transaction parameters and tech stack</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Prioritized by risk profile across infrastructure, security, operations</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Executive-ready scope estimates with resource and timeline models</li>
+                </ul>
+                <span class="badge">Launching Q1 2026</span>
+            </article>
+
+            <article class="teaser-card">
+                <div class="teaser-header">
+                    <h2>The Tech Debt Cost Calculator</h2>
+                </div>
+                <ul class="tool-features">
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Input: team size, maintenance burden %, average salary</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Output: monthly cost of technical debt in dollars</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Quantifies ROI for modernization investment</li>
+                </ul>
+                <span class="badge">Planned</span>
+            </article>
+
+            <article class="teaser-card">
+                <div class="teaser-header">
+                    <h2>The Cloud Spend Lens</h2>
+                </div>
+                <ul class="tool-features">
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Diagnostic questionnaire on cloud hygiene and resource policies</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Maturity score plus PDF checklist of immediate cost optimizations</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Targets fast-growing companies with inefficient cloud spend</li>
+                </ul>
+                <span class="badge">Planned</span>
+            </article>
+
+            <article class="teaser-card">
+                <div class="teaser-header">
+                    <h2>Acquisition Integration Priority Matrix</h2>
+                </div>
+                <ul class="tool-features">
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Map tech stacks of two merging companies via drag-and-drop</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Red-Yellow-Green compatibility report identifies friction points</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Reveals Day 2 integration challenges before deal close</li>
+                </ul>
+                <span class="badge">Planned</span>
+            </article>
+
+            <article class="teaser-card">
+                <div class="teaser-header">
+                    <h2>The AI Readiness Assessment</h2>
+                </div>
+                <ul class="tool-features">
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Evaluates documentation, test coverage, and architectural modularity</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />"Vibe-Ready" score determines AI-agent refactoring feasibility</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Signals expertise in modern AI-augmented development workflows</li>
+                </ul>
+                <span class="badge">Planned</span>
+            </article>
+
+            <article class="teaser-card">
+                <div class="teaser-header">
+                    <h2>Security & Compliance "Gap Finder"</h2>
+                </div>
+                <ul class="tool-features">
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Industry-tailored checklist: SOC2, HIPAA, GDPR, PCI-DSS</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Radar chart visualizes security and compliance gaps</li>
+                    <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />De-risks exits and funding rounds with compliance readiness</li>
+                </ul>
+                <span class="badge">Planned</span>
             </article>
 
             <a href="/hub" class="cta-button secondary">Return to Hub</a>
@@ -89,11 +153,7 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
     }
 
     .teaser-header {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
-        flex-wrap: wrap;
+        margin-bottom: var(--spacing-md);
     }
 
     .teaser-card h2 {
@@ -117,17 +177,39 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
         color: var(--color-primary);
         border-radius: 4px;
         border: 1px solid rgba(5, 205, 153, 0.2);
+        display: inline-block;
+        margin-top: var(--spacing-md);
     }
 
     .teaser-card p {
-        font-size: 1rem;
-        color: rgba(26, 26, 26, 0.7);
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
         line-height: 1.7;
         margin: 0;
     }
 
-    :global(html.dark-theme) .teaser-card p {
-        color: rgba(200, 200, 200, 0.7);
+    .tool-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .tool-features li {
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        display: flex;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .bullet-icon {
+        flex-shrink: 0;
+        margin-top: 0.35em;
+        opacity: 0.8;
     }
 
     @media (max-width: 768px) {
