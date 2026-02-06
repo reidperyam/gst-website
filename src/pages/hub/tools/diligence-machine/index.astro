@@ -1,0 +1,1247 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
+import { trackPageView } from '../../../../utils/analytics';
+
+trackPageView('diligence-machine', 'The Diligence Machine | GST');
+---
+
+<BaseLayout
+    title="The Diligence Machine | Strategic Intelligence Hub"
+    description="Generate a prescriptive technology due diligence agenda customized to your target's profile. 15-20 high-impact questions organized by meeting track."
+    ogTitle="The Diligence Machine | GST"
+    ogDescription="Customize a technology diligence checklist by target parameters. Risk-prioritized, executive-ready."
+    ogImage="/og-image.png"
+    ogUrl="https://globalstrategic.tech/hub/tools/diligence-machine"
+>
+    <section class="diligence-machine">
+        <div class="container">
+            <!-- Header -->
+            <header class="dm-header">
+                <span class="section-label">Tools</span>
+                <h1>The Diligence Machine</h1>
+                <p class="dm-subtitle">Generate a prescriptive technology due diligence agenda customized to your target's profile.</p>
+            </header>
+
+            <!-- Wizard Container -->
+            <div class="wizard-container" id="wizardContainer">
+                <!-- Progress Bar -->
+                <div class="wizard-progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Wizard progress">
+                    {WIZARD_STEPS.map((step, index) => (
+                        <div class={`progress-segment ${index === 0 ? 'active' : ''}`} data-step-indicator={index + 1}>
+                            <span class="progress-number">{index + 1}</span>
+                            <span class="progress-label">{step.title}</span>
+                        </div>
+                    ))}
+                </div>
+
+                <!-- Steps -->
+                <div class="wizard-steps">
+                    {WIZARD_STEPS.map((step, index) => (
+                        <div
+                            class={`wizard-step ${index === 0 ? 'active' : ''}`}
+                            data-step={index + 1}
+                            data-step-id={step.id}
+                            data-input-type={step.inputType}
+                        >
+                            <h2 class="step-title">{step.title}</h2>
+                            <p class="step-subtitle">{step.subtitle}</p>
+
+                            {step.inputType === 'single-select' && step.options && (
+                                <div class="options-grid">
+                                    {step.options.map((option) => (
+                                        <button
+                                            class="option-card"
+                                            data-option-id={option.id}
+                                            data-step-id={step.id}
+                                            type="button"
+                                            aria-pressed="false"
+                                        >
+                                            <span class="option-label">{option.label}</span>
+                                            {option.description && (
+                                                <span class="option-description">{option.description}</span>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+                            {step.inputType === 'multi-select' && step.options && (
+                                <div class="options-grid">
+                                    {step.options.map((option) => (
+                                        <button
+                                            class="option-card"
+                                            data-option-id={option.id}
+                                            data-step-id={step.id}
+                                            type="button"
+                                            aria-pressed="false"
+                                        >
+                                            <span class="option-label">{option.label}</span>
+                                            {option.description && (
+                                                <span class="option-description">{option.description}</span>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+                            {step.inputType === 'compound' && step.fields && (
+                                <div class="compound-fields">
+                                    {step.fields.map((field) => (
+                                        <div class="compound-field">
+                                            <label class="field-label" for={`field-${field.id}`}>{field.label}</label>
+                                            <select class="field-select" id={`field-${field.id}`} data-field-id={field.id}>
+                                                <option value="">Select...</option>
+                                                {field.options.map((opt) => (
+                                                    <option value={opt.id}>{opt.label}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                <!-- Navigation -->
+                <div class="wizard-nav">
+                    <button class="cta-button secondary" id="btnBack" type="button" disabled>Back</button>
+                    <button class="cta-button primary" id="btnNext" type="button" disabled>Next</button>
+                    <button class="cta-button primary" id="btnGenerate" type="button" style="display:none;">Generate Script</button>
+                </div>
+            </div>
+
+            <!-- Output Container -->
+            <div class="output-container" id="outputContainer" style="display:none;">
+                <div class="output-header">
+                    <h2>The Inquisitor's Script</h2>
+                    <p class="output-summary" id="outputSummary"></p>
+                </div>
+
+                <!-- Risk Anchors -->
+                <div class="risk-anchors-section" id="riskAnchorsSection" style="display:none;">
+                    <h3 class="risk-anchors-title">
+                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                        Predictive Risk Anchors
+                    </h3>
+                    <div class="risk-anchors-grid" id="riskAnchorsGrid"></div>
+                </div>
+
+                <!-- Tracks -->
+                <div class="script-tracks" id="scriptTracks"></div>
+
+                <!-- Actions -->
+                <div class="output-actions">
+                    <button class="cta-button secondary" id="btnCopy" type="button">Copy to Clipboard</button>
+                    <button class="cta-button secondary" id="btnPrint" type="button">Print</button>
+                    <button class="cta-button secondary" id="btnRestart" type="button">Start Over</button>
+                </div>
+            </div>
+
+            <a href="/hub/tools" class="back-link" id="backToTools">
+                <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="10" height="10" />
+                Back to The Workbench
+            </a>
+        </div>
+    </section>
+</BaseLayout>
+
+<script>
+    import { generateScript } from '../../../../utils/diligence-engine';
+    import { getOptionLabel } from '../../../../data/diligence-machine/wizard-config';
+    import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
+
+    const STORAGE_KEY = 'diligence-machine-state';
+    const STORAGE_VERSION = 1;
+
+    interface SavedState {
+        version: number;
+        currentStep: number;
+        inputs: Partial<UserInputs>;
+    }
+
+    // ─── STATE ────────────────────────────────────────────────────────────
+
+    let currentStep = 1;
+    const totalSteps = 5;
+    let inputs: Partial<UserInputs> = {
+        geographies: [],
+    };
+
+    // ─── DOM REFERENCES ──────────────────────────────────────────────────
+
+    const wizardContainer = document.getElementById('wizardContainer')!;
+    const outputContainer = document.getElementById('outputContainer')!;
+    const btnBack = document.getElementById('btnBack') as HTMLButtonElement;
+    const btnNext = document.getElementById('btnNext') as HTMLButtonElement;
+    const btnGenerate = document.getElementById('btnGenerate') as HTMLButtonElement;
+    const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
+    const btnPrint = document.getElementById('btnPrint') as HTMLButtonElement;
+    const btnRestart = document.getElementById('btnRestart') as HTMLButtonElement;
+    const outputSummary = document.getElementById('outputSummary')!;
+    const riskAnchorsSection = document.getElementById('riskAnchorsSection')!;
+    const riskAnchorsGrid = document.getElementById('riskAnchorsGrid')!;
+    const scriptTracks = document.getElementById('scriptTracks')!;
+
+    // ─── LOCAL STORAGE ───────────────────────────────────────────────────
+
+    function saveState(): void {
+        try {
+            const state: SavedState = {
+                version: STORAGE_VERSION,
+                currentStep,
+                inputs: { ...inputs },
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch {
+            // localStorage may be unavailable in private browsing
+        }
+    }
+
+    function loadState(): SavedState | null {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            const state = JSON.parse(raw) as SavedState;
+            if (state.version !== STORAGE_VERSION) return null;
+            return state;
+        } catch {
+            return null;
+        }
+    }
+
+    function clearState(): void {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+        } catch {
+            // Ignore
+        }
+    }
+
+    // ─── STEP NAVIGATION ─────────────────────────────────────────────────
+
+    function showStep(step: number): void {
+        currentStep = step;
+
+        // Update step panels
+        document.querySelectorAll('.wizard-step').forEach((el) => {
+            const stepEl = el as HTMLElement;
+            stepEl.classList.toggle('active', stepEl.dataset.step === String(step));
+        });
+
+        // Update progress indicators
+        document.querySelectorAll('.progress-segment').forEach((el) => {
+            const segEl = el as HTMLElement;
+            const segStep = Number(segEl.dataset.stepIndicator);
+            segEl.classList.toggle('active', segStep === step);
+            segEl.classList.toggle('completed', segStep < step);
+        });
+
+        // Update progress bar aria
+        const progressBar = document.querySelector('.wizard-progress') as HTMLElement;
+        if (progressBar) progressBar.setAttribute('aria-valuenow', String(step));
+
+        // Update navigation buttons
+        btnBack.disabled = step === 1;
+        btnBack.style.display = '';
+
+        if (step === totalSteps) {
+            btnNext.style.display = 'none';
+            btnGenerate.style.display = '';
+        } else {
+            btnNext.style.display = '';
+            btnGenerate.style.display = 'none';
+        }
+
+        updateNextButtonState();
+        saveState();
+    }
+
+    function isStepValid(step: number): boolean {
+        const stepEl = document.querySelector(`.wizard-step[data-step="${step}"]`) as HTMLElement;
+        if (!stepEl) return false;
+        const inputType = stepEl.dataset.inputType;
+        const stepId = stepEl.dataset.stepId!;
+
+        if (inputType === 'single-select') {
+            const key = stepIdToInputKey(stepId);
+            return key ? !!(inputs as Record<string, unknown>)[key] : false;
+        }
+
+        if (inputType === 'multi-select') {
+            return (inputs.geographies?.length ?? 0) > 0;
+        }
+
+        if (inputType === 'compound') {
+            return !!(inputs.headcount && inputs.revenueRange && inputs.growthStage && inputs.companyAge);
+        }
+
+        return false;
+    }
+
+    function updateNextButtonState(): void {
+        const valid = isStepValid(currentStep);
+        if (currentStep === totalSteps) {
+            btnGenerate.disabled = !valid;
+        } else {
+            btnNext.disabled = !valid;
+        }
+    }
+
+    function stepIdToInputKey(stepId: string): keyof UserInputs | null {
+        const map: Record<string, keyof UserInputs> = {
+            'transaction-type': 'transactionType',
+            'product-type': 'productType',
+            'tech-archetype': 'techArchetype',
+        };
+        return map[stepId] ?? null;
+    }
+
+    // ─── OPTION SELECTION ─────────────────────────────────────────────────
+
+    function handleOptionClick(card: HTMLButtonElement): void {
+        const optionId = card.dataset.optionId!;
+        const stepId = card.dataset.stepId!;
+        const stepEl = card.closest('.wizard-step') as HTMLElement;
+        const inputType = stepEl.dataset.inputType;
+
+        if (inputType === 'single-select') {
+            // Deselect siblings
+            stepEl.querySelectorAll('.option-card').forEach((el) => {
+                el.classList.remove('selected');
+                el.setAttribute('aria-pressed', 'false');
+            });
+            card.classList.add('selected');
+            card.setAttribute('aria-pressed', 'true');
+
+            const key = stepIdToInputKey(stepId);
+            if (key) {
+                (inputs as Record<string, unknown>)[key] = optionId;
+            }
+        } else if (inputType === 'multi-select') {
+            const isSelected = card.classList.toggle('selected');
+            card.setAttribute('aria-pressed', String(isSelected));
+
+            if (!inputs.geographies) inputs.geographies = [];
+            if (isSelected) {
+                if (!inputs.geographies.includes(optionId)) {
+                    inputs.geographies.push(optionId);
+                }
+            } else {
+                inputs.geographies = inputs.geographies.filter((g) => g !== optionId);
+            }
+        }
+
+        updateNextButtonState();
+        saveState();
+    }
+
+    function handleFieldChange(select: HTMLSelectElement): void {
+        const fieldId = select.dataset.fieldId!;
+        const value = select.value;
+
+        const fieldMap: Record<string, keyof UserInputs> = {
+            headcount: 'headcount',
+            'revenue-range': 'revenueRange',
+            'growth-stage': 'growthStage',
+            'company-age': 'companyAge',
+        };
+
+        const key = fieldMap[fieldId];
+        if (key) {
+            (inputs as Record<string, unknown>)[key] = value || undefined;
+        }
+
+        updateNextButtonState();
+        saveState();
+    }
+
+    // ─── OUTPUT RENDERING ─────────────────────────────────────────────────
+
+    function escapeHtml(text: string): string {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function renderOutput(script: GeneratedScript): void {
+        // Hide wizard, show output
+        wizardContainer.style.display = 'none';
+        outputContainer.style.display = '';
+
+        // Build summary
+        const summary = buildInputSummary();
+        outputSummary.innerHTML = summary;
+
+        // Render risk anchors
+        if (script.riskAnchors.length > 0) {
+            riskAnchorsSection.style.display = '';
+            riskAnchorsGrid.innerHTML = script.riskAnchors
+                .map(
+                    (anchor) => `
+                    <div class="risk-anchor-card severity-${escapeHtml(anchor.severity)}">
+                        <div class="risk-anchor-header">
+                            <span class="risk-severity-badge">${escapeHtml(anchor.severity)}</span>
+                            <h4>${escapeHtml(anchor.title)}</h4>
+                        </div>
+                        <p>${escapeHtml(anchor.description)}</p>
+                    </div>
+                `
+                )
+                .join('');
+        } else {
+            riskAnchorsSection.style.display = 'none';
+        }
+
+        // Render tracks
+        scriptTracks.innerHTML = script.tracks
+            .map(
+                (track, trackIndex) => `
+                <div class="track-section">
+                    <div class="track-header">
+                        <span class="track-number">Track ${trackIndex + 1}</span>
+                        <h3>${escapeHtml(track.trackLabel)}</h3>
+                        <span class="track-audience">${escapeHtml(track.audienceLevel)}</span>
+                    </div>
+                    <div class="track-questions">
+                        ${track.questions
+                            .map(
+                                (q, qIndex) => `
+                                <div class="question-card">
+                                    <div class="question-number">${trackIndex + 1}.${qIndex + 1}</div>
+                                    <div class="question-content">
+                                        <p class="question-text">${escapeHtml(q.text)}</p>
+                                        <p class="question-rationale">${escapeHtml(q.rationale)}</p>
+                                        <span class="question-priority priority-${escapeHtml(q.priority)}">${escapeHtml(q.priority)}</span>
+                                    </div>
+                                </div>
+                            `
+                            )
+                            .join('')}
+                    </div>
+                </div>
+            `
+            )
+            .join('');
+
+        saveState();
+    }
+
+    function buildInputSummary(): string {
+        const parts: string[] = [];
+
+        if (inputs.transactionType) {
+            parts.push(`<strong>Transaction:</strong> ${escapeHtml(getOptionLabel('transaction-type', inputs.transactionType))}`);
+        }
+        if (inputs.productType) {
+            parts.push(`<strong>Product:</strong> ${escapeHtml(getOptionLabel('product-type', inputs.productType))}`);
+        }
+        if (inputs.techArchetype) {
+            parts.push(`<strong>Stack:</strong> ${escapeHtml(getOptionLabel('tech-archetype', inputs.techArchetype))}`);
+        }
+        if (inputs.headcount) {
+            parts.push(`<strong>Size:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.headcount))} employees`);
+        }
+        if (inputs.revenueRange) {
+            parts.push(`<strong>Revenue:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.revenueRange))}`);
+        }
+        if (inputs.growthStage) {
+            parts.push(`<strong>Stage:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.growthStage))}`);
+        }
+        if (inputs.companyAge) {
+            parts.push(`<strong>Age:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.companyAge))}`);
+        }
+        if (inputs.geographies && inputs.geographies.length > 0) {
+            const geoLabels = inputs.geographies.map((g) => escapeHtml(getOptionLabel('geography', g)));
+            parts.push(`<strong>Geography:</strong> ${geoLabels.join(', ')}`);
+        }
+
+        return parts.join(' &middot; ');
+    }
+
+    // ─── COPY TO CLIPBOARD ───────────────────────────────────────────────
+
+    function copyToClipboard(): void {
+        const trackSections = scriptTracks.querySelectorAll('.track-section');
+        let text = 'THE INQUISITOR\'S SCRIPT\n';
+        text += '═══════════════════════\n\n';
+
+        // Input summary
+        if (inputs.transactionType) text += `Transaction: ${getOptionLabel('transaction-type', inputs.transactionType)}\n`;
+        if (inputs.productType) text += `Product: ${getOptionLabel('product-type', inputs.productType)}\n`;
+        if (inputs.techArchetype) text += `Stack: ${getOptionLabel('tech-archetype', inputs.techArchetype)}\n`;
+        text += '\n';
+
+        trackSections.forEach((section, trackIdx) => {
+            const header = section.querySelector('h3');
+            const audience = section.querySelector('.track-audience');
+            text += `TRACK ${trackIdx + 1}: ${header?.textContent?.toUpperCase() ?? ''}\n`;
+            text += `Audience: ${audience?.textContent ?? ''}\n`;
+            text += '───────────────────────\n\n';
+
+            const questions = section.querySelectorAll('.question-card');
+            questions.forEach((qCard, qIdx) => {
+                const qText = qCard.querySelector('.question-text');
+                const qRationale = qCard.querySelector('.question-rationale');
+                text += `${trackIdx + 1}.${qIdx + 1}  ${qText?.textContent ?? ''}\n`;
+                text += `    WHY: ${qRationale?.textContent ?? ''}\n\n`;
+            });
+        });
+
+        navigator.clipboard.writeText(text).then(() => {
+            btnCopy.textContent = 'Copied!';
+            setTimeout(() => { btnCopy.textContent = 'Copy to Clipboard'; }, 2000);
+        }).catch(() => {
+            btnCopy.textContent = 'Copy failed';
+            setTimeout(() => { btnCopy.textContent = 'Copy to Clipboard'; }, 2000);
+        });
+    }
+
+    // ─── RESTART ──────────────────────────────────────────────────────────
+
+    function restart(): void {
+        inputs = { geographies: [] };
+        clearState();
+
+        // Reset all option cards
+        document.querySelectorAll('.option-card').forEach((el) => {
+            el.classList.remove('selected');
+            el.setAttribute('aria-pressed', 'false');
+        });
+
+        // Reset all selects
+        document.querySelectorAll<HTMLSelectElement>('.field-select').forEach((el) => {
+            el.value = '';
+        });
+
+        // Reset output
+        outputContainer.style.display = 'none';
+        wizardContainer.style.display = '';
+        riskAnchorsGrid.innerHTML = '';
+        scriptTracks.innerHTML = '';
+
+        showStep(1);
+    }
+
+    // ─── RESTORE STATE ───────────────────────────────────────────────────
+
+    function restoreState(): void {
+        const saved = loadState();
+        if (!saved) return;
+
+        inputs = { geographies: [], ...saved.inputs };
+
+        // Restore single-select options
+        for (const [stepId, key] of Object.entries({
+            'transaction-type': 'transactionType',
+            'product-type': 'productType',
+            'tech-archetype': 'techArchetype',
+        })) {
+            const value = (inputs as Record<string, unknown>)[key] as string | undefined;
+            if (value) {
+                const card = document.querySelector(
+                    `.option-card[data-step-id="${stepId}"][data-option-id="${value}"]`
+                );
+                if (card) {
+                    card.classList.add('selected');
+                    card.setAttribute('aria-pressed', 'true');
+                }
+            }
+        }
+
+        // Restore multi-select (geography)
+        if (inputs.geographies && inputs.geographies.length > 0) {
+            for (const geo of inputs.geographies) {
+                const card = document.querySelector(
+                    `.option-card[data-step-id="geography"][data-option-id="${geo}"]`
+                );
+                if (card) {
+                    card.classList.add('selected');
+                    card.setAttribute('aria-pressed', 'true');
+                }
+            }
+        }
+
+        // Restore compound selects
+        const fieldMap: Record<string, string> = {
+            headcount: 'headcount',
+            'revenue-range': 'revenueRange',
+            'growth-stage': 'growthStage',
+            'company-age': 'companyAge',
+        };
+        for (const [fieldId, key] of Object.entries(fieldMap)) {
+            const value = (inputs as Record<string, unknown>)[key] as string | undefined;
+            if (value) {
+                const select = document.getElementById(`field-${fieldId}`) as HTMLSelectElement | null;
+                if (select) select.value = value;
+            }
+        }
+
+        showStep(saved.currentStep);
+    }
+
+    // ─── EVENT BINDING ────────────────────────────────────────────────────
+
+    // Option card clicks
+    document.querySelectorAll('.option-card').forEach((card) => {
+        card.addEventListener('click', () => handleOptionClick(card as HTMLButtonElement));
+    });
+
+    // Compound field changes
+    document.querySelectorAll('.field-select').forEach((select) => {
+        select.addEventListener('change', () => handleFieldChange(select as HTMLSelectElement));
+    });
+
+    // Navigation
+    btnBack.addEventListener('click', () => {
+        if (currentStep > 1) showStep(currentStep - 1);
+    });
+
+    btnNext.addEventListener('click', () => {
+        if (currentStep < totalSteps && isStepValid(currentStep)) {
+            showStep(currentStep + 1);
+        }
+    });
+
+    btnGenerate.addEventListener('click', () => {
+        if (!isStepValid(currentStep)) return;
+
+        const fullInputs: UserInputs = {
+            transactionType: inputs.transactionType!,
+            productType: inputs.productType!,
+            techArchetype: inputs.techArchetype!,
+            headcount: inputs.headcount!,
+            revenueRange: inputs.revenueRange!,
+            growthStage: inputs.growthStage!,
+            companyAge: inputs.companyAge!,
+            geographies: inputs.geographies ?? [],
+        };
+
+        const script = generateScript(fullInputs);
+        renderOutput(script);
+    });
+
+    btnCopy.addEventListener('click', copyToClipboard);
+    btnPrint.addEventListener('click', () => window.print());
+    btnRestart.addEventListener('click', restart);
+
+    // ─── INITIALIZE ───────────────────────────────────────────────────────
+
+    restoreState();
+</script>
+
+<style>
+    /* ─── LAYOUT ───────────────────────────────────────────────────────── */
+
+    .diligence-machine {
+        padding: var(--spacing-3xl) 0;
+        min-height: 80vh;
+    }
+
+    .dm-header {
+        text-align: center;
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .section-label {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+        display: block;
+    }
+
+    .dm-header h1 {
+        font-size: var(--text-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin: 0 0 var(--spacing-xl) 0;
+    }
+
+    .dm-subtitle {
+        font-size: var(--text-lg);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* ─── PROGRESS BAR ─────────────────────────────────────────────────── */
+
+    .wizard-progress {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-xs);
+        margin-bottom: var(--spacing-3xl);
+        flex-wrap: wrap;
+    }
+
+    .progress-segment {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-xs);
+        flex: 1;
+        max-width: 160px;
+        min-width: 60px;
+        opacity: 0.4;
+        transition: opacity var(--transition-normal);
+    }
+
+    .progress-segment.active,
+    .progress-segment.completed {
+        opacity: 1;
+    }
+
+    .progress-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-bold);
+        border: 2px solid var(--border-light);
+        color: var(--text-light-muted);
+        transition: all var(--transition-normal);
+    }
+
+    .progress-segment.active .progress-number {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background: rgba(5, 205, 153, 0.08);
+    }
+
+    .progress-segment.completed .progress-number {
+        border-color: var(--color-primary);
+        background: var(--color-primary);
+        color: var(--bg-light);
+    }
+
+    .progress-label {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-light-muted);
+        text-align: center;
+    }
+
+    .progress-segment.active .progress-label {
+        color: var(--text-light-primary);
+    }
+
+    /* ─── WIZARD STEPS ─────────────────────────────────────────────────── */
+
+    .wizard-step {
+        display: none;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .wizard-step.active {
+        display: block;
+    }
+
+    .step-title {
+        font-size: var(--text-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        text-align: center;
+        margin: 0 0 var(--spacing-sm) 0;
+    }
+
+    .step-subtitle {
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        text-align: center;
+        margin: 0 0 var(--spacing-2xl) 0;
+        line-height: 1.6;
+    }
+
+    /* ─── OPTION CARDS ─────────────────────────────────────────────────── */
+
+    .options-grid {
+        display: grid;
+        gap: var(--spacing-md);
+    }
+
+    .option-card {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-xl);
+        background: rgba(5, 205, 153, 0.03);
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all var(--transition-normal);
+        text-align: left;
+        font-family: var(--font-family);
+        color: var(--text-light-primary);
+    }
+
+    .option-card:hover {
+        border-color: var(--color-primary);
+        background: rgba(5, 205, 153, 0.06);
+    }
+
+    .option-card:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    .option-card.selected {
+        border-color: var(--color-primary);
+        background: rgba(5, 205, 153, 0.1);
+        box-shadow: inset 0 0 0 1px var(--color-primary);
+    }
+
+    :global(html.dark-theme) .option-card {
+        background: rgba(5, 205, 153, 0.04);
+        border-color: var(--border-dark);
+    }
+
+    :global(html.dark-theme) .option-card:hover {
+        background: rgba(5, 205, 153, 0.08);
+    }
+
+    :global(html.dark-theme) .option-card.selected {
+        background: rgba(5, 205, 153, 0.12);
+    }
+
+    .option-label {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+    }
+
+    .option-description {
+        font-size: var(--text-sm);
+        color: var(--text-light-muted);
+        line-height: 1.5;
+    }
+
+    /* ─── COMPOUND FIELDS ──────────────────────────────────────────────── */
+
+    .compound-fields {
+        display: grid;
+        gap: var(--spacing-xl);
+    }
+
+    .compound-field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .field-label {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .field-select {
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: 1px solid var(--border-light);
+        border-radius: 6px;
+        background: var(--bg-light);
+        color: var(--text-light-primary);
+        font-family: var(--font-family);
+        font-size: var(--text-base);
+        transition: border-color var(--transition-fast);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2305cd99'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right var(--spacing-lg) center;
+        padding-right: var(--spacing-3xl);
+    }
+
+    .field-select:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.1);
+    }
+
+    :global(html.dark-theme) .field-select {
+        background-color: var(--bg-dark-secondary);
+        border-color: var(--border-dark);
+        color: var(--text-dark-primary);
+    }
+
+    /* ─── NAVIGATION ───────────────────────────────────────────────────── */
+
+    .wizard-nav {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-3xl);
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .wizard-nav .cta-button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* ─── OUTPUT ────────────────────────────────────────────────────────── */
+
+    .output-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .output-header {
+        text-align: center;
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .output-header h2 {
+        font-size: var(--text-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin: 0 0 var(--spacing-lg) 0;
+    }
+
+    .output-summary {
+        font-size: var(--text-sm);
+        color: var(--text-light-secondary);
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    /* ─── RISK ANCHORS ─────────────────────────────────────────────────── */
+
+    .risk-anchors-section {
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .risk-anchors-title {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 var(--spacing-xl) 0;
+    }
+
+    .risk-anchors-grid {
+        display: grid;
+        gap: var(--spacing-lg);
+    }
+
+    .risk-anchor-card {
+        padding: var(--spacing-xl);
+        border-radius: 6px;
+        border-left: 4px solid var(--color-primary);
+        background: rgba(5, 205, 153, 0.03);
+    }
+
+    .risk-anchor-card.severity-high {
+        border-left-color: #e74c3c;
+        background: rgba(231, 76, 60, 0.04);
+    }
+
+    .risk-anchor-card.severity-medium {
+        border-left-color: #f39c12;
+        background: rgba(243, 156, 18, 0.04);
+    }
+
+    .risk-anchor-card.severity-low {
+        border-left-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .risk-anchor-card {
+        background: rgba(5, 205, 153, 0.05);
+    }
+
+    :global(html.dark-theme) .risk-anchor-card.severity-high {
+        background: rgba(231, 76, 60, 0.08);
+    }
+
+    :global(html.dark-theme) .risk-anchor-card.severity-medium {
+        background: rgba(243, 156, 18, 0.06);
+    }
+
+    .risk-anchor-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .risk-anchor-header h4 {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        margin: 0;
+    }
+
+    .risk-severity-badge {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 2px var(--spacing-sm);
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .severity-high .risk-severity-badge {
+        background: rgba(231, 76, 60, 0.15);
+        color: #e74c3c;
+    }
+
+    .severity-medium .risk-severity-badge {
+        background: rgba(243, 156, 18, 0.15);
+        color: #f39c12;
+    }
+
+    .severity-low .risk-severity-badge {
+        background: rgba(5, 205, 153, 0.15);
+        color: var(--color-primary);
+    }
+
+    .risk-anchor-card p {
+        font-size: var(--text-sm);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* ─── TRACK SECTIONS ───────────────────────────────────────────────── */
+
+    .track-section {
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .track-header {
+        padding-bottom: var(--spacing-lg);
+        border-bottom: 2px solid var(--color-primary);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .track-number {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        display: block;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .track-header h3 {
+        font-size: var(--text-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        margin: 0 0 var(--spacing-xs) 0;
+    }
+
+    .track-audience {
+        font-size: var(--text-sm);
+        color: var(--text-light-muted);
+        font-style: italic;
+    }
+
+    .track-questions {
+        display: grid;
+        gap: var(--spacing-xl);
+    }
+
+    .question-card {
+        display: flex;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-xl);
+        background: rgba(5, 205, 153, 0.02);
+        border: 1px solid var(--border-light);
+        border-radius: 6px;
+    }
+
+    :global(html.dark-theme) .question-card {
+        background: rgba(5, 205, 153, 0.04);
+        border-color: var(--border-dark);
+    }
+
+    .question-number {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        flex-shrink: 0;
+        padding-top: 2px;
+        min-width: 28px;
+    }
+
+    .question-content {
+        flex: 1;
+    }
+
+    .question-text {
+        font-size: var(--text-base);
+        color: var(--text-light-primary);
+        line-height: 1.7;
+        margin: 0 0 var(--spacing-sm) 0;
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .question-rationale {
+        font-size: var(--text-sm);
+        color: var(--text-light-muted);
+        line-height: 1.6;
+        margin: 0 0 var(--spacing-sm) 0;
+        font-style: italic;
+    }
+
+    .question-priority {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 2px var(--spacing-sm);
+        border-radius: 3px;
+        display: inline-block;
+    }
+
+    .priority-critical {
+        background: rgba(231, 76, 60, 0.12);
+        color: #e74c3c;
+    }
+
+    .priority-high {
+        background: rgba(243, 156, 18, 0.12);
+        color: #f39c12;
+    }
+
+    .priority-standard {
+        background: rgba(5, 205, 153, 0.12);
+        color: var(--color-primary);
+    }
+
+    /* ─── OUTPUT ACTIONS ───────────────────────────────────────────────── */
+
+    .output-actions {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-3xl);
+        flex-wrap: wrap;
+    }
+
+    /* ─── BACK LINK ────────────────────────────────────────────────────── */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-3xl);
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-muted);
+        text-decoration: none;
+        transition: color var(--transition-fast);
+    }
+
+    .back-link:hover {
+        color: var(--color-primary);
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────────────── */
+
+    @media (min-width: 768px) {
+        .diligence-machine {
+            padding: 5rem 0;
+        }
+
+        .dm-header h1 {
+            font-size: 2.5rem;
+        }
+
+        .compound-fields {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .diligence-machine {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .dm-header h1 {
+            font-size: var(--text-xl);
+        }
+
+        .wizard-progress {
+            gap: var(--spacing-xs);
+        }
+
+        .progress-label {
+            display: none;
+        }
+
+        .option-card {
+            padding: var(--spacing-lg);
+        }
+
+        .question-card {
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .wizard-nav {
+            flex-direction: column;
+        }
+
+        .output-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    /* ─── PRINT ────────────────────────────────────────────────────────── */
+
+    @media print {
+        .wizard-container,
+        .wizard-nav,
+        .output-actions,
+        .back-link,
+        .dm-header .section-label {
+            display: none !important;
+        }
+
+        .diligence-machine {
+            padding: 0;
+        }
+
+        .output-container {
+            display: block !important;
+            max-width: 100%;
+        }
+
+        .track-section {
+            break-inside: avoid;
+        }
+
+        .question-card {
+            break-inside: avoid;
+        }
+
+        .risk-anchor-card {
+            break-inside: avoid;
+        }
+    }
+</style>

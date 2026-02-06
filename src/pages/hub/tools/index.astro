@@ -20,7 +20,7 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
             <p class="placeholder-description">Coming soon. Strategic intelligence for quantifying risk and value in technology investments.</p>
             <p class="content-type-label">Interactive tools</p>
 
-            <article class="teaser-card">
+            <article class="teaser-card teaser-card--live">
                 <div class="teaser-header">
                     <h2>The Diligence Machine</h2>
                 </div>
@@ -29,7 +29,7 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
                     <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Prioritized by risk profile across infrastructure, security, operations</li>
                     <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Executive-ready scope estimates with resource and timeline models</li>
                 </ul>
-                <span class="badge">Launching Q1 2026</span>
+                <a href="/hub/tools/diligence-machine" class="cta-button primary tool-launch-button">Launch Tool</a>
             </article>
 
             <article class="teaser-card">
@@ -246,6 +246,15 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
         .teaser-card h2 {
             font-size: 1.15rem;
         }
+    }
+
+    .teaser-card--live {
+        border-color: rgba(5, 205, 153, 0.3);
+    }
+
+    .tool-launch-button {
+        margin-top: var(--spacing-lg);
+        display: inline-block;
     }
 
     @media (max-width: 480px) {
