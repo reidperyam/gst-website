@@ -18,6 +18,7 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
             <span class="section-label">Tools</span>
             <h1>The Workbench</h1>
             <p class="placeholder-description">Coming soon. Strategic intelligence for quantifying risk and value in technology investments.</p>
+            <p class="content-type-label">Content Type: Interactive tools (Diligentizer, Tech Debt Calc).</p>
 
             <article class="teaser-card">
                 <div class="teaser-header">
@@ -130,11 +131,24 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
         color: rgba(26, 26, 26, 0.7);
         line-height: 1.8;
         max-width: 600px;
-        margin: 0 auto var(--spacing-3xl);
+        margin: 0 auto var(--spacing-lg);
     }
 
     :global(html.dark-theme) .placeholder-description {
         color: rgba(200, 200, 200, 0.7);
+    }
+
+    .content-type-label {
+        font-size: 0.9rem;
+        color: rgba(26, 26, 26, 0.6);
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto var(--spacing-3xl);
+        font-style: italic;
+    }
+
+    :global(html.dark-theme) .content-type-label {
+        color: rgba(200, 200, 200, 0.6);
     }
 
     .teaser-card {

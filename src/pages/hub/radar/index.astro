@@ -18,6 +18,7 @@ trackPageView('hub-radar', 'The Radar - Perspectives | GST');
             <span class="section-label">Perspectives</span>
             <h1>The Radar</h1>
             <p class="placeholder-description">Coming soon. Strategic intelligence for emerging technology shifts and M&A market dynamics.</p>
+            <p class="content-type-label">Content Type: Short-form perspectives on "Vibe Coding," AI-shift, and M&A trends.</p>
             <a href="/hub" class="cta-button secondary">Return to Hub</a>
         </div>
     </section>
@@ -57,11 +58,24 @@ trackPageView('hub-radar', 'The Radar - Perspectives | GST');
         color: rgba(26, 26, 26, 0.7);
         line-height: 1.8;
         max-width: 600px;
-        margin: 0 auto var(--spacing-3xl);
+        margin: 0 auto var(--spacing-lg);
     }
 
     :global(html.dark-theme) .placeholder-description {
         color: rgba(200, 200, 200, 0.7);
+    }
+
+    .content-type-label {
+        font-size: 0.9rem;
+        color: rgba(26, 26, 26, 0.6);
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto var(--spacing-3xl);
+        font-style: italic;
+    }
+
+    :global(html.dark-theme) .content-type-label {
+        color: rgba(200, 200, 200, 0.6);
     }
 
     @media (max-width: 768px) {
