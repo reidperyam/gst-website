@@ -21,10 +21,13 @@ Provides a reusable, composable component that injects comprehensive SEO metadat
 
 ### Features
 - JSON-LD structured data (ProfessionalService + Person schemas)
-- Open Graph (OG) tags for social sharing
-- Twitter Card tags
+- Enhanced Open Graph (OG) tags for social sharing (11 tags)
+- Enhanced Twitter Card tags (6 tags)
+- Dynamic URL generation using Astro.url
+- Image metadata (width, height, type, alt text)
+- Site-level metadata (site name, locale)
 - Standard meta tags (title, description, keywords, author, robots)
-- Canonical URL support
+- Canonical URL support with automatic generation
 - Props-based customization
 - Sensible defaults for homepage
 
@@ -85,6 +88,14 @@ interface Props {
     ogType?: string;
     ogUrl?: string;
     canonicalUrl?: string;
+    // Enhanced social media meta tags
+    ogImageAlt?: string;
+    ogImageWidth?: number;
+    ogImageHeight?: number;
+    ogImageType?: string;
+    ogSiteName?: string;
+    ogLocale?: string;
+    twitterSite?: string;
 }
 ```
 
@@ -96,10 +107,17 @@ interface Props {
 | `description` | string | Full expert advisory description | Meta description tag |
 | `ogTitle` | string | "Global Strategic Technology \| Strategic Tech Advisory" | og:title for social sharing |
 | `ogDescription` | string | "Specialized technical diligence..." | og:description for social sharing |
-| `ogImage` | string | "https://globalstrategic.tech/og-image.jpg" | og:image URL for social sharing |
+| `ogImage` | string | "/og-image.png" | og:image URL for social sharing |
 | `ogType` | string | "website" | og:type (website, article, etc.) |
-| `ogUrl` | string | "https://globalstrategic.tech" | og:url (page URL) |
-| `canonicalUrl` | string | "https://globalstrategic.tech" | Canonical URL for duplicate prevention |
+| `ogUrl` | string | Auto-generated from Astro.url | og:url (page URL) - dynamically generated |
+| `canonicalUrl` | string | Auto-generated from Astro.url | Canonical URL - dynamically generated |
+| **`ogImageAlt`** | string | "Global Strategic Technology - M&A..." | Alt text for social preview image (accessibility) |
+| **`ogImageWidth`** | number | 1200 | Image width in pixels |
+| **`ogImageHeight`** | number | 630 | Image height in pixels |
+| **`ogImageType`** | string | "image/png" | MIME type of image |
+| **`ogSiteName`** | string | "Global Strategic Technology" | Site name for social cards |
+| **`ogLocale`** | string | "en_US" | Locale for content |
+| **`twitterSite`** | string | "@globalstrategic" | Twitter/X handle for attribution |
 
 ### Props Details
 
@@ -130,10 +148,42 @@ interface Props {
 
 #### `ogImage`
 - Image displayed when link is shared
-- Recommended: 1200x630px for best appearance
-- Must be absolute URL (not relative)
+- **Default**: `/og-image.png` (1200x630px)
+- Automatically converted to absolute URL in development and production
+- Recommended: 1200x630px for optimal display on all platforms
 - Supported formats: JPG, PNG, GIF, WebP
-- Fallback: Site favicon
+- Can be relative (`/og-image.png`) or absolute (`https://example.com/image.png`)
+
+#### `ogImageAlt` (NEW)
+- Alt text for social preview image
+- **Important for accessibility** and WCAG compliance
+- Target: 125 characters or less
+- Descriptive text for screen readers and when image fails to load
+- Example: "Global Strategic Technology - M&A Strategic Technology Advisory"
+
+#### `ogImageWidth` / `ogImageHeight` (NEW)
+- Dimensions of social preview image in pixels
+- **Default**: 1200x630px (optimal for LinkedIn, Twitter, Facebook)
+- Helps social platforms render image correctly
+- Should match actual image dimensions
+
+#### `ogImageType` (NEW)
+- MIME type of the social preview image
+- **Default**: `image/png`
+- Common values: `image/jpeg`, `image/png`, `image/webp`
+- Must match actual image format
+
+#### `ogSiteName` (NEW)
+- Site name displayed in social cards
+- **Default**: "Global Strategic Technology"
+- Provides brand attribution on social platforms
+- Typically your organization or brand name
+
+#### `ogLocale` (NEW)
+- Language and region code for content
+- **Default**: `en_US`
+- Format: language_TERRITORY (e.g., `en_US`, `es_ES`, `fr_FR`)
+- Helps social platforms display content appropriately
 
 #### `ogType`
 - Must be valid Open Graph type
@@ -142,15 +192,25 @@ interface Props {
 
 #### `ogUrl`
 - The canonical URL of the page
-- Should match what user sees in address bar
+- **Auto-generated** from `Astro.url` if not provided
+- Development: `http://localhost:4321/page`
+- Production: `https://globalstrategic.tech/page`
 - Important for tracking shares per page
-- Example: "https://globalstrategic.tech/services"
+- Only override if you need a different URL than the current page
 
 #### `canonicalUrl`
 - Prevents duplicate content penalties
+- **Auto-generated** from `Astro.url` if not provided
 - Should match your preferred URL version
 - Often the same as `ogUrl`
 - Use when page has multiple URLs that should be consolidated
+
+#### `twitterSite` (NEW)
+- Twitter/X handle for site attribution
+- **Default**: `@globalstrategic` (update with actual handle)
+- Format: `@username` (include the @ symbol)
+- Displays "by @username" on Twitter cards
+- Links to your Twitter profile when card is shared
 
 ## Output
 
@@ -169,18 +229,26 @@ The SEO component generates the following HTML:
 }
 </script>
 
-<!-- Open Graph Meta Tags -->
+<!-- Open Graph Meta Tags (11 tags) -->
 <meta property="og:title" content="..." />
 <meta property="og:description" content="..." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="..." />
 <meta property="og:image" content="..." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content="..." />
+<meta property="og:site_name" content="Global Strategic Technology" />
+<meta property="og:locale" content="en_US" />
 
-<!-- Twitter Card Tags -->
+<!-- Twitter Card Tags (6 tags) -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@globalstrategic" />
 <meta name="twitter:title" content="..." />
 <meta name="twitter:description" content="..." />
 <meta name="twitter:image" content="..." />
+<meta name="twitter:image:alt" content="..." />
 
 <!-- Canonical URL -->
 <link rel="canonical" href="..." />
@@ -234,8 +302,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 **Output**:
 - Title: "Global Strategic Technology | M&A Strategic Technology Advisory"
-- OG Image: Default og-image.jpg
-- Canonical: https://globalstrategic.tech
+- OG Image: Default og-image.png (1200x630px)
+- OG URL: Auto-generated from current page
+- Canonical: Auto-generated from current page
+- 17 total meta tags (11 OG + 6 Twitter)
 
 ### Example 2: Services Page
 
@@ -249,7 +319,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="Comprehensive M&A technical advisory services including buy-side and sell-side due diligence, platform assessments, and integration planning."
   ogTitle="M&A Technical Advisory Services"
   ogDescription="Buy-side & sell-side diligence, platform assessments, integration planning"
-  ogUrl="https://globalstrategic.tech/services"
+  ogImage="/og-image.png"
+  ogImageAlt="Global Strategic Technology Services - M&A Advisory and Technical Leadership"
 >
   <!-- Services content -->
 </BaseLayout>
@@ -259,8 +330,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 - Title: "Our Services | M&A Technical Advisory | Global Strategic Technology"
 - Description: Full services description
 - OG Title: "M&A Technical Advisory Services"
-- OG URL: https://globalstrategic.tech/services
-- Canonical: https://globalstrategic.tech/services
+- OG Image: /og-image.png with alt text
+- OG URL: Auto-generated (https://globalstrategic.tech/services in production)
+- Canonical: Auto-generated (https://globalstrategic.tech/services in production)
+- Enhanced meta tags: image dimensions, type, alt text, site name, locale, Twitter handle
 
 ### Example 3: Blog Article
 
@@ -274,9 +347,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="How to assess platform modernization opportunities during technical due diligence. Real-world case studies and frameworks."
   ogTitle="Platform Modernization in M&A"
   ogDescription="Assessment frameworks and case studies for M&A platform modernization"
-  ogImage="https://globalstrategic.tech/images/platform-modernization.jpg"
+  ogImage="/images/blog/platform-modernization-1200x630.png"
+  ogImageAlt="Platform Modernization in M&A Transactions - Strategic Framework"
+  ogImageWidth={1200}
+  ogImageHeight={630}
   ogType="article"
-  ogUrl="https://globalstrategic.tech/blog/platform-modernization"
 >
   <!-- Article content -->
 </BaseLayout>
@@ -284,7 +359,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 **Output**:
 - Type: article (for rich preview on LinkedIn)
-- OG Image: Custom article image
+- OG Image: Custom article image (1200x630px) with alt text
+- OG URL: Auto-generated from current page
+- All enhanced meta tags including image metadata
 - Proper LinkedIn article schema
 
 ## Troubleshooting
@@ -403,13 +480,17 @@ Verify component has proper Astro directives:
 4. Test with Facebook Debugger tool
 
 ```astro
-<!-- Good OG image URL -->
-ogImage="https://globalstrategic.tech/images/og-image-1200x630.jpg"
+<!-- Good OG image URLs (all work now!) -->
+ogImage="/og-image.png"  <!-- Relative - auto-converted to absolute -->
+ogImage="https://globalstrategic.tech/images/og-image.png"  <!-- Absolute -->
+ogImage="/images/custom-1200x630.png"  <!-- Relative path - auto-converted -->
 
 <!-- Avoid -->
-ogImage="/images/og-image.jpg"  <!-- Relative URL won't work -->
 ogImage="https://example.com/image.webp"  <!-- Wrong domain -->
+ogImage="image.png"  <!-- Missing leading slash -->
 ```
+
+**Note**: As of February 2026, the component **automatically converts relative URLs to absolute URLs** using `Astro.url`, so you can use relative paths like `/og-image.png` and they'll work correctly in both development and production.
 
 ## Performance Considerations
 
@@ -422,7 +503,8 @@ ogImage="https://example.com/image.webp"  <!-- Wrong domain -->
 - All SEO tags are static HTML
 - No JavaScript execution required
 - No blocking resources
-- Minimal HTML size increase (~2-3KB per page)
+- Minimal HTML size increase (~3-4KB per page with enhanced tags)
+- Dynamic URL generation happens at build time (zero runtime cost)
 
 ### Optimization Tips
 
@@ -431,8 +513,60 @@ ogImage="https://example.com/image.webp"  <!-- Wrong domain -->
 3. **Optimize OG images**: Use appropriate size (1200x630px)
 4. **Lazy load images**: Keep og:image on CDN
 
+## Enhanced Social Media Features (February 2026)
+
+### Dynamic URL Generation
+
+The SEO component now uses `Astro.url` to automatically generate correct URLs for all environments:
+
+**Development**:
+```html
+<meta property="og:url" content="http://localhost:4321/services/">
+<link rel="canonical" href="http://localhost:4321/services/">
+```
+
+**Production**:
+```html
+<meta property="og:url" content="https://globalstrategic.tech/services/">
+<link rel="canonical" href="https://globalstrategic.tech/services/">
+```
+
+You no longer need to manually specify `ogUrl` or `canonicalUrl` unless you need to override the current page URL.
+
+### Enhanced Image Metadata
+
+All social platforms now receive comprehensive image metadata:
+
+- **Dimensions**: `og:image:width` and `og:image:height` (1200x630px)
+- **Type**: `og:image:type` (image/png or image/jpeg)
+- **Alt Text**: `og:image:alt` for accessibility
+- **Automatic URL conversion**: Relative paths become absolute URLs
+
+### Platform-Specific Optimizations
+
+**LinkedIn**:
+- Receives `og:site_name` for proper brand attribution
+- Image dimensions optimized for LinkedIn's 1.91:1 aspect ratio
+- Alt text improves accessibility and engagement
+
+**Twitter/X**:
+- `twitter:site` handle for attribution and linking
+- `twitter:image:alt` for accessibility
+- `summary_large_image` card type for maximum impact
+
+**Facebook/Instagram**:
+- Full Open Graph specification support
+- `og:locale` for proper content targeting
+- Image metadata for optimal rendering
+
+### Total Meta Tag Count
+
+- **Before**: 9 meta tags (5 OG + 4 Twitter)
+- **After**: 17 meta tags (11 OG + 6 Twitter)
+- **New tags**: 8 additional tags for enhanced social sharing
+
 ---
 
-**Last Updated**: February 4, 2026
-**Component Version**: 1.0
+**Last Updated**: February 5, 2026
+**Component Version**: 2.0 (Enhanced Social Media)
 **Status**: Production Ready ✓
