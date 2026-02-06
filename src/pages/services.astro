@@ -60,6 +60,28 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
         </div>
     </section>
 
+    <section class="audience-section">
+        <div class="container">
+            <div class="audience-content">
+                <h2 class="heading-lg">Who Is GST For?</h2>
+                <div class="audience-cards">
+                    <div class="audience-card">
+                        <h3>Private Equity & Investment Teams</h3>
+                        <p>Evaluating targets with complex legacy systems or scaling potential. We quantify what's under the hood so you can price risk accurately and build a credible value creation plan before close.</p>
+                    </div>
+                    <div class="audience-card">
+                        <h3>SaaS Founders & Executives</h3>
+                        <p>Navigating the Series B scaling plateau or the build vs. buy crossroads. We help you make the architectural and organizational calls that determine whether growth compounds or stalls.</p>
+                    </div>
+                    <div class="audience-card">
+                        <h3>Performance-Conscious Organizations</h3>
+                        <p>Needing an independent, vendor-neutral audit of their technical posture. We tell you what your internal teams and existing vendors won't: where the real exposure is and what to do about it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <EngagementFlow />
 
     <CTASection
@@ -197,6 +219,98 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
 
     :global(html.dark-theme) .service-list li {
         color: rgba(200, 200, 200, 0.75);
+    }
+
+    .audience-section {
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .audience-content {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .audience-content .heading-lg {
+        margin-bottom: var(--spacing-2xl);
+        text-align: center;
+    }
+
+    .audience-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+    }
+
+    .audience-card {
+        padding: 2rem;
+        border-left: 3px solid var(--color-primary);
+    }
+
+    .audience-card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        margin-bottom: var(--spacing-md);
+        line-height: 1.3;
+    }
+
+    .audience-card p {
+        font-size: 0.95rem;
+        color: rgba(26, 26, 26, 0.7);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    :global(html.dark-theme) .audience-card h3 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    :global(html.dark-theme) .audience-card p {
+        color: rgba(200, 200, 200, 0.7);
+    }
+
+    @media (max-width: 1024px) {
+        .audience-cards {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.75rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .audience-section {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .audience-cards {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .audience-card {
+            padding: 1.5rem;
+        }
+
+        .audience-card h3 {
+            font-size: 1.05rem;
+        }
+
+        .audience-card p {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .audience-card {
+            padding: 1.25rem;
+        }
+
+        .audience-card h3 {
+            font-size: 1rem;
+        }
+
+        .audience-card p {
+            font-size: 0.85rem;
+        }
     }
 
     @media (max-width: 1024px) {
