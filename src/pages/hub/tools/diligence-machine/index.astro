@@ -29,7 +29,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 <div class="wizard-progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Wizard progress">
                     {WIZARD_STEPS.map((step, index) => (
                         <div class={`progress-segment ${index === 0 ? 'active' : ''}`} data-step-indicator={index + 1}>
-                            <span class="progress-number">{index + 1}</span>
+                            <svg class="progress-number" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                                <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="progress-number-text">{index + 1}</text>
+                            </svg>
                             <span class="progress-label">{step.title}</span>
                         </div>
                     ))}
@@ -699,29 +702,35 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .progress-number {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        font-size: var(--text-sm);
-        font-weight: var(--font-weight-bold);
-        border: 2px solid var(--border-light);
-        color: var(--text-light-muted);
-        transition: all var(--transition-normal);
+        width: 3rem;
+        height: 3rem;
+        flex-shrink: 0;
+        color: var(--border-light);
+        transition: color var(--transition-normal);
     }
 
     .progress-segment.active .progress-number {
-        border-color: var(--color-primary);
         color: var(--color-primary);
-        background: rgba(5, 205, 153, 0.08);
     }
 
-    .progress-segment.completed .progress-number {
-        border-color: var(--color-primary);
-        background: var(--color-primary);
-        color: var(--bg-light);
+    .progress-segment.completed .progress-number path {
+        fill: var(--color-primary);
+        stroke: var(--color-primary);
+    }
+
+    .progress-number-text {
+        font-size: 1.1rem;
+        font-weight: var(--font-weight-bold);
+        fill: var(--text-light-muted);
+        transition: fill var(--transition-normal);
+    }
+
+    .progress-segment.active .progress-number-text {
+        fill: var(--text-light-primary);
+    }
+
+    .progress-segment.completed .progress-number-text {
+        fill: var(--bg-light);
     }
 
     .progress-label {
@@ -735,6 +744,18 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     .progress-segment.active .progress-label {
         color: var(--text-light-primary);
+    }
+
+    :global(html.dark-theme) .progress-number-text {
+        fill: var(--text-dark-muted);
+    }
+
+    :global(html.dark-theme) .progress-segment.active .progress-number-text {
+        fill: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .progress-segment.completed .progress-number-text {
+        fill: var(--bg-dark);
     }
 
     /* ─── WIZARD STEPS ─────────────────────────────────────────────────── */
@@ -843,6 +864,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         font-size: var(--text-sm);
         color: var(--text-light-muted);
         line-height: 1.5;
+        margin-left: calc(10px + var(--spacing-sm));
     }
 
     /* ─── COMPOUND FIELDS ──────────────────────────────────────────────── */
