@@ -135,28 +135,80 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
             <!-- Output Container -->
             <div class="output-container" id="outputContainer" style="display:none;">
-                <div class="output-header">
-                    <h2>The Inquisitor's Script</h2>
-                    <p class="output-summary" id="outputSummary"></p>
+
+                <!-- Floating Action Bar -->
+                <div class="doc-action-bar" id="docActionBar">
+                    <button class="doc-action-btn" id="btnCopy" type="button" aria-label="Copy to clipboard">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span id="btnCopyLabel">Copy</span>
+                    </button>
+                    <button class="doc-action-btn" id="btnPrint" type="button" aria-label="Print document">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M4 6V1h8v5M4 12H2V7h12v5h-2" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <rect x="4" y="10" width="8" height="4" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        Print
+                    </button>
+                    <button class="doc-action-btn" id="btnRestart" type="button" aria-label="Start over">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M2 8a6 6 0 1011.5-2.5M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Restart
+                    </button>
                 </div>
 
-                <!-- Risk Anchors -->
-                <div class="risk-anchors-section" id="riskAnchorsSection" style="display:none;">
-                    <h3 class="risk-anchors-title">
-                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
-                        Predictive Risk Anchors
-                    </h3>
-                    <div class="risk-anchors-grid" id="riskAnchorsGrid"></div>
-                </div>
+                <!-- The Document -->
+                <div class="doc-page" id="docPage">
 
-                <!-- Tracks -->
-                <div class="script-tracks" id="scriptTracks"></div>
+                    <!-- Document Header -->
+                    <header class="doc-header">
+                        <div class="doc-brand">
+                            <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="doc-brand-icon" width="24" height="24" />
+                            <span class="doc-brand-name">Global Strategic Technologies</span>
+                        </div>
+                        <h1 class="doc-title">The Inquisitor's Script</h1>
+                        <p class="doc-generation-date" id="docDate"></p>
+                    </header>
 
-                <!-- Actions -->
-                <div class="output-actions">
-                    <button class="cta-button secondary" id="btnCopy" type="button">Copy to Clipboard</button>
-                    <button class="cta-button secondary" id="btnPrint" type="button">Print</button>
-                    <button class="cta-button secondary" id="btnRestart" type="button">Start Over</button>
+                    <hr class="doc-divider doc-divider--heavy" />
+
+                    <!-- Metadata Block -->
+                    <section class="doc-meta" id="docMeta" aria-label="Input parameters"></section>
+
+                    <hr class="doc-divider" />
+
+                    <!-- Table of Contents -->
+                    <section class="doc-toc" id="docToc" aria-label="Table of contents"></section>
+
+                    <hr class="doc-divider" />
+
+                    <!-- Risk Anchors -->
+                    <section class="doc-risk-anchors" id="riskAnchorsSection" style="display:none;" aria-label="Risk anchors">
+                        <h2 class="doc-section-heading">
+                            <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                            Predictive Risk Anchors
+                        </h2>
+                        <div class="doc-risk-grid" id="riskAnchorsGrid"></div>
+                    </section>
+
+                    <!-- Track Sections -->
+                    <div class="doc-tracks" id="scriptTracks"></div>
+
+                    <!-- Document Footer -->
+                    <footer class="doc-footer">
+                        <hr class="doc-divider" />
+                        <div class="doc-footer-content">
+                            <div class="doc-footer-brand">
+                                <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="12" height="12" />
+                                <span>Global Strategic Technologies</span>
+                            </div>
+                            <span class="doc-footer-url">globalstrategic.tech</span>
+                        </div>
+                        <p class="doc-footer-disclaimer">This script is a starting framework. Customize questions based on findings during the diligence process.</p>
+                    </footer>
                 </div>
             </div>
 
@@ -189,6 +241,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     let inputs: Partial<UserInputs> = {
         geographies: [],
     };
+    let lastGeneratedScript: GeneratedScript | null = null;
 
     // ─── DOM REFERENCES ──────────────────────────────────────────────────
 
@@ -200,7 +253,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
     const btnPrint = document.getElementById('btnPrint') as HTMLButtonElement;
     const btnRestart = document.getElementById('btnRestart') as HTMLButtonElement;
-    const outputSummary = document.getElementById('outputSummary')!;
     const riskAnchorsSection = document.getElementById('riskAnchorsSection')!;
     const riskAnchorsGrid = document.getElementById('riskAnchorsGrid')!;
     const scriptTracks = document.getElementById('scriptTracks')!;
@@ -399,29 +451,40 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     function renderOutput(script: GeneratedScript): void {
+        lastGeneratedScript = script;
+
         // Hide wizard, show output
         wizardContainer.style.display = 'none';
         outputContainer.style.display = '';
 
-        // Build summary
-        const summary = buildInputSummary();
-        outputSummary.innerHTML = summary;
+        // Generation date
+        const docDate = document.getElementById('docDate')!;
+        const now = new Date();
+        docDate.textContent = `Generated ${now.toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        })} at ${now.toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit'
+        })}`;
+
+        // Metadata block
+        renderMetaBlock();
+
+        // Table of contents
+        renderToc(script);
 
         // Render risk anchors
         if (script.riskAnchors.length > 0) {
             riskAnchorsSection.style.display = '';
             riskAnchorsGrid.innerHTML = script.riskAnchors
-                .map(
-                    (anchor) => `
-                    <div class="risk-anchor-card severity-${escapeHtml(anchor.severity)}">
-                        <div class="risk-anchor-header">
-                            <span class="risk-severity-badge">${escapeHtml(anchor.severity)}</span>
-                            <h4>${escapeHtml(anchor.title)}</h4>
+                .map((anchor) => `
+                    <div class="doc-risk-card severity-${escapeHtml(anchor.severity)}">
+                        <div class="doc-risk-header">
+                            <span class="doc-risk-badge">${escapeHtml(anchor.severity)}</span>
+                            <span class="doc-risk-title">${escapeHtml(anchor.title)}</span>
                         </div>
-                        <p>${escapeHtml(anchor.description)}</p>
+                        <p class="doc-risk-desc">${escapeHtml(anchor.description)}</p>
                     </div>
-                `
-                )
+                `)
                 .join('');
         } else {
             riskAnchorsSection.style.display = 'none';
@@ -429,105 +492,180 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         // Render tracks
         scriptTracks.innerHTML = script.tracks
-            .map(
-                (track, trackIndex) => `
-                <div class="track-section">
-                    <div class="track-header">
-                        <span class="track-number">Track ${trackIndex + 1}</span>
-                        <h3>${escapeHtml(track.trackLabel)}</h3>
-                        <span class="track-audience">${escapeHtml(track.audienceLevel)}</span>
+            .map((track, trackIndex) => `
+                <section class="doc-track" id="track-${trackIndex + 1}">
+                    <div class="doc-track-header">
+                        <div class="doc-track-label-row">
+                            <span class="doc-track-number">Track ${trackIndex + 1} of ${script.tracks.length}</span>
+                            <span class="doc-track-qcount">${track.questions.length} question${track.questions.length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <h2 class="doc-track-title">${escapeHtml(track.trackLabel)}</h2>
+                        <p class="doc-track-audience">Target audience: ${escapeHtml(track.audienceLevel)}</p>
                     </div>
-                    <div class="track-questions">
-                        ${track.questions
-                            .map(
-                                (q, qIndex) => `
-                                <div class="question-card">
-                                    <div class="question-number">${trackIndex + 1}.${qIndex + 1}</div>
-                                    <div class="question-content">
-                                        <p class="question-text">${escapeHtml(q.text)}</p>
-                                        <p class="question-rationale">${escapeHtml(q.rationale)}</p>
-                                        <span class="question-priority priority-${escapeHtml(q.priority)}">${escapeHtml(q.priority)}</span>
-                                    </div>
+                    <ol class="doc-questions">
+                        ${track.questions.map((q, qIndex) => `
+                            <li class="doc-question priority-${escapeHtml(q.priority)}">
+                                <div class="doc-q-header">
+                                    <span class="doc-q-number">${trackIndex + 1}.${qIndex + 1}</span>
+                                    <span class="doc-q-priority">${escapeHtml(q.priority)}</span>
                                 </div>
-                            `
-                            )
-                            .join('')}
-                    </div>
-                </div>
-            `
-            )
+                                <p class="doc-q-text">${escapeHtml(q.text)}</p>
+                                <p class="doc-q-rationale">${escapeHtml(q.rationale)}</p>
+                            </li>
+                        `).join('')}
+                    </ol>
+                </section>
+            `)
             .join('');
 
+        // Scroll to top of output
+        outputContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         saveState();
     }
 
-    function buildInputSummary(): string {
-        const parts: string[] = [];
+    function renderMetaBlock(): void {
+        const docMeta = document.getElementById('docMeta')!;
+        const fields: { label: string; value: string }[] = [];
 
         if (inputs.transactionType) {
-            parts.push(`<strong>Transaction:</strong> ${escapeHtml(getOptionLabel('transaction-type', inputs.transactionType))}`);
+            fields.push({ label: 'Transaction Type', value: getOptionLabel('transaction-type', inputs.transactionType) });
         }
         if (inputs.productType) {
-            parts.push(`<strong>Product:</strong> ${escapeHtml(getOptionLabel('product-type', inputs.productType))}`);
+            fields.push({ label: 'Product Type', value: getOptionLabel('product-type', inputs.productType) });
         }
         if (inputs.techArchetype) {
-            parts.push(`<strong>Stack:</strong> ${escapeHtml(getOptionLabel('tech-archetype', inputs.techArchetype))}`);
+            fields.push({ label: 'Tech Stack', value: getOptionLabel('tech-archetype', inputs.techArchetype) });
         }
         if (inputs.headcount) {
-            parts.push(`<strong>Size:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.headcount))} employees`);
+            fields.push({ label: 'Company Size', value: getOptionLabel('company-profile', inputs.headcount) + ' employees' });
         }
         if (inputs.revenueRange) {
-            parts.push(`<strong>Revenue:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.revenueRange))}`);
+            fields.push({ label: 'Revenue', value: getOptionLabel('company-profile', inputs.revenueRange) });
         }
         if (inputs.growthStage) {
-            parts.push(`<strong>Stage:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.growthStage))}`);
+            fields.push({ label: 'Growth Stage', value: getOptionLabel('company-profile', inputs.growthStage) });
         }
         if (inputs.companyAge) {
-            parts.push(`<strong>Age:</strong> ${escapeHtml(getOptionLabel('company-profile', inputs.companyAge))}`);
+            fields.push({ label: 'Company Age', value: getOptionLabel('company-profile', inputs.companyAge) });
         }
         if (inputs.geographies && inputs.geographies.length > 0) {
-            const geoLabels = inputs.geographies.map((g) => escapeHtml(getOptionLabel('geography', g)));
-            parts.push(`<strong>Geography:</strong> ${geoLabels.join(', ')}`);
+            fields.push({
+                label: 'Geography',
+                value: inputs.geographies.map((g) => getOptionLabel('geography', g)).join(', '),
+            });
         }
 
-        return parts.join(' &middot; ');
+        docMeta.innerHTML = `
+            <h2 class="doc-section-heading">Target Parameters</h2>
+            <dl class="doc-meta-grid">
+                ${fields.map((f) => `
+                    <div class="doc-meta-item">
+                        <dt>${escapeHtml(f.label)}</dt>
+                        <dd>${escapeHtml(f.value)}</dd>
+                    </div>
+                `).join('')}
+            </dl>
+        `;
+    }
+
+    function renderToc(script: GeneratedScript): void {
+        const docToc = document.getElementById('docToc')!;
+        const totalQ = script.tracks.reduce((sum, t) => sum + t.questions.length, 0);
+
+        docToc.innerHTML = `
+            <h2 class="doc-section-heading">Contents</h2>
+            <p class="doc-toc-summary">${totalQ} questions across ${script.tracks.length} tracks</p>
+            <ol class="doc-toc-list">
+                ${script.tracks.map((track, i) => `
+                    <li>
+                        <a href="#track-${i + 1}" class="doc-toc-link">
+                            <span class="doc-toc-track-name">Track ${i + 1}: ${escapeHtml(track.trackLabel)}</span>
+                            <span class="doc-toc-track-count">${track.questions.length}q</span>
+                        </a>
+                    </li>
+                `).join('')}
+            </ol>
+        `;
+
+        // Wire up smooth-scroll click handlers
+        docToc.querySelectorAll('.doc-toc-link').forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = (link as HTMLAnchorElement).getAttribute('href')!;
+                document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
     }
 
     // ─── COPY TO CLIPBOARD ───────────────────────────────────────────────
 
     function copyToClipboard(): void {
-        const trackSections = scriptTracks.querySelectorAll('.track-section');
-        let text = 'THE INQUISITOR\'S SCRIPT\n';
-        text += '═══════════════════════\n\n';
+        if (!lastGeneratedScript) return;
+        const script = lastGeneratedScript;
 
-        // Input summary
-        if (inputs.transactionType) text += `Transaction: ${getOptionLabel('transaction-type', inputs.transactionType)}\n`;
-        if (inputs.productType) text += `Product: ${getOptionLabel('product-type', inputs.productType)}\n`;
-        if (inputs.techArchetype) text += `Stack: ${getOptionLabel('tech-archetype', inputs.techArchetype)}\n`;
-        text += '\n';
+        const lines: string[] = [];
+        lines.push('THE INQUISITOR\'S SCRIPT');
+        lines.push('Global Strategic Technologies');
+        lines.push(`Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+        lines.push('');
+        lines.push('\u2550'.repeat(60));
+        lines.push('TARGET PARAMETERS');
+        lines.push('\u2550'.repeat(60));
+        lines.push('');
 
-        trackSections.forEach((section, trackIdx) => {
-            const header = section.querySelector('h3');
-            const audience = section.querySelector('.track-audience');
-            text += `TRACK ${trackIdx + 1}: ${header?.textContent?.toUpperCase() ?? ''}\n`;
-            text += `Audience: ${audience?.textContent ?? ''}\n`;
-            text += '───────────────────────\n\n';
+        if (inputs.transactionType) lines.push(`Transaction Type:  ${getOptionLabel('transaction-type', inputs.transactionType)}`);
+        if (inputs.productType) lines.push(`Product Type:      ${getOptionLabel('product-type', inputs.productType)}`);
+        if (inputs.techArchetype) lines.push(`Tech Stack:        ${getOptionLabel('tech-archetype', inputs.techArchetype)}`);
+        if (inputs.headcount) lines.push(`Company Size:      ${getOptionLabel('company-profile', inputs.headcount)} employees`);
+        if (inputs.revenueRange) lines.push(`Revenue:           ${getOptionLabel('company-profile', inputs.revenueRange)}`);
+        if (inputs.growthStage) lines.push(`Growth Stage:      ${getOptionLabel('company-profile', inputs.growthStage)}`);
+        if (inputs.companyAge) lines.push(`Company Age:       ${getOptionLabel('company-profile', inputs.companyAge)}`);
+        if (inputs.geographies && inputs.geographies.length > 0) {
+            lines.push(`Geography:         ${inputs.geographies.map((g) => getOptionLabel('geography', g)).join(', ')}`);
+        }
+        lines.push('');
 
-            const questions = section.querySelectorAll('.question-card');
-            questions.forEach((qCard, qIdx) => {
-                const qText = qCard.querySelector('.question-text');
-                const qRationale = qCard.querySelector('.question-rationale');
-                text += `${trackIdx + 1}.${qIdx + 1}  ${qText?.textContent ?? ''}\n`;
-                text += `    WHY: ${qRationale?.textContent ?? ''}\n\n`;
-            });
-        });
+        // Risk anchors
+        if (script.riskAnchors.length > 0) {
+            lines.push('\u2550'.repeat(60));
+            lines.push('PREDICTIVE RISK ANCHORS');
+            lines.push('\u2550'.repeat(60));
+            lines.push('');
+            for (const anchor of script.riskAnchors) {
+                lines.push(`[${anchor.severity.toUpperCase()}] ${anchor.title}`);
+                lines.push(`  ${anchor.description}`);
+                lines.push('');
+            }
+        }
+
+        // Tracks
+        for (const [trackIndex, track] of script.tracks.entries()) {
+            lines.push('\u2550'.repeat(60));
+            lines.push(`TRACK ${trackIndex + 1}: ${track.trackLabel.toUpperCase()}`);
+            lines.push(`Audience: ${track.audienceLevel}`);
+            lines.push('\u2550'.repeat(60));
+            lines.push('');
+
+            for (const [qIndex, q] of track.questions.entries()) {
+                lines.push(`${trackIndex + 1}.${qIndex + 1} [${q.priority.toUpperCase()}] ${q.text}`);
+                lines.push(`    Rationale: ${q.rationale}`);
+                lines.push('');
+            }
+        }
+
+        lines.push('\u2500'.repeat(60));
+        lines.push('Global Strategic Technologies | globalstrategic.tech');
+
+        const text = lines.join('\n');
 
         navigator.clipboard.writeText(text).then(() => {
-            btnCopy.textContent = 'Copied!';
-            setTimeout(() => { btnCopy.textContent = 'Copy to Clipboard'; }, 2000);
+            const label = document.getElementById('btnCopyLabel')!;
+            label.textContent = 'Copied!';
+            setTimeout(() => { label.textContent = 'Copy'; }, 2000);
         }).catch(() => {
-            btnCopy.textContent = 'Copy failed';
-            setTimeout(() => { btnCopy.textContent = 'Copy to Clipboard'; }, 2000);
+            const label = document.getElementById('btnCopyLabel')!;
+            label.textContent = 'Failed';
+            setTimeout(() => { label.textContent = 'Copy'; }, 2000);
         });
     }
 
@@ -553,6 +691,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         wizardContainer.style.display = '';
         riskAnchorsGrid.innerHTML = '';
         scriptTracks.innerHTML = '';
+        lastGeneratedScript = null;
+
+        // Clear document sections
+        const docMeta = document.getElementById('docMeta');
+        if (docMeta) docMeta.innerHTML = '';
+        const docToc = document.getElementById('docToc');
+        if (docToc) docToc.innerHTML = '';
 
         showStep(1);
     }
@@ -986,130 +1131,320 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         cursor: not-allowed;
     }
 
-    /* ─── OUTPUT ────────────────────────────────────────────────────────── */
+    /* ─── DOCUMENT ACTION BAR ──────────────────────────────────────────── */
+
+    .doc-action-bar {
+        position: sticky;
+        top: 60px;
+        z-index: 5;
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) 0;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .doc-action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-semibold);
+        font-family: var(--font-family);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-light-secondary);
+        background: var(--bg-light);
+        border: 1px solid var(--border-light);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .doc-action-btn:hover {
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .doc-action-btn {
+        background: var(--bg-dark-secondary);
+        border-color: var(--border-dark);
+        color: var(--text-dark-secondary);
+    }
+
+    :global(html.dark-theme) .doc-action-btn:hover {
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    /* ─── DOCUMENT PAGE ────────────────────────────────────────────────── */
 
     .output-container {
         max-width: 800px;
         margin: 0 auto;
     }
 
-    .output-header {
-        text-align: center;
-        margin-bottom: var(--spacing-3xl);
+    .doc-page {
+        background: var(--bg-light);
+        border: 1px solid var(--border-light);
+        border-radius: 2px;
+        box-shadow: var(--shadow-md);
+        padding: var(--spacing-3xl);
     }
 
-    .output-header h2 {
+    .doc-page,
+    .doc-page * {
+        user-select: text;
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+    }
+
+    :global(html.dark-theme) .doc-page {
+        background: var(--bg-dark-secondary);
+        border-color: var(--border-dark);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ─── DOCUMENT HEADER ──────────────────────────────────────────────── */
+
+    .doc-header {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .doc-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .doc-brand-icon {
+        flex-shrink: 0;
+    }
+
+    .doc-brand-name {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-light-muted);
+    }
+
+    .doc-title {
         font-size: var(--text-2xl);
         font-weight: var(--font-weight-bold);
         color: var(--text-light-primary);
         text-transform: uppercase;
-        letter-spacing: 0.02em;
-        margin: 0 0 var(--spacing-lg) 0;
+        letter-spacing: 0.04em;
+        margin: 0 0 var(--spacing-sm) 0;
     }
 
-    .output-summary {
-        font-size: var(--text-sm);
-        color: var(--text-light-secondary);
-        line-height: 1.8;
+    .doc-generation-date {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
         margin: 0;
     }
 
-    /* ─── RISK ANCHORS ─────────────────────────────────────────────────── */
+    /* ─── DIVIDERS ─────────────────────────────────────────────────────── */
 
-    .risk-anchors-section {
-        margin-bottom: var(--spacing-3xl);
+    .doc-divider {
+        border: none;
+        border-top: 1px solid var(--border-light);
+        margin: var(--spacing-xl) 0;
     }
 
-    .risk-anchors-title {
+    .doc-divider--heavy {
+        border-top-width: 3px;
+        border-top-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .doc-divider {
+        border-top-color: var(--border-dark);
+    }
+
+    :global(html.dark-theme) .doc-divider--heavy {
+        border-top-color: var(--color-primary);
+    }
+
+    /* ─── SECTION HEADINGS ─────────────────────────────────────────────── */
+
+    .doc-section-heading {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
-        font-size: var(--text-lg);
+        font-size: var(--text-sm);
         font-weight: var(--font-weight-bold);
-        color: var(--text-light-primary);
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin: 0 0 var(--spacing-xl) 0;
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        margin: 0 0 var(--spacing-lg) 0;
     }
 
-    .risk-anchors-grid {
+    /* ─── METADATA BLOCK ───────────────────────────────────────────────── */
+
+    .doc-meta-grid {
         display: grid;
-        gap: var(--spacing-lg);
-    }
-
-    .risk-anchor-card {
-        padding: var(--spacing-xl);
-        border-radius: 6px;
-        border-left: 4px solid var(--color-primary);
-        background: rgba(5, 205, 153, 0.03);
-    }
-
-    .risk-anchor-card.severity-high {
-        border-left-color: #e74c3c;
-        background: rgba(231, 76, 60, 0.04);
-    }
-
-    .risk-anchor-card.severity-medium {
-        border-left-color: #f39c12;
-        background: rgba(243, 156, 18, 0.04);
-    }
-
-    .risk-anchor-card.severity-low {
-        border-left-color: var(--color-primary);
-    }
-
-    :global(html.dark-theme) .risk-anchor-card {
-        background: rgba(5, 205, 153, 0.05);
-    }
-
-    :global(html.dark-theme) .risk-anchor-card.severity-high {
-        background: rgba(231, 76, 60, 0.08);
-    }
-
-    :global(html.dark-theme) .risk-anchor-card.severity-medium {
-        background: rgba(243, 156, 18, 0.06);
-    }
-
-    .risk-anchor-header {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-md);
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .risk-anchor-header h4 {
-        font-size: var(--text-base);
-        font-weight: var(--font-weight-bold);
-        color: var(--text-light-primary);
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md) var(--spacing-2xl);
         margin: 0;
     }
 
-    .risk-severity-badge {
+    .doc-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .doc-meta-item dt {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        padding: 2px var(--spacing-sm);
-        border-radius: 3px;
+        color: var(--text-light-muted);
+    }
+
+    .doc-meta-item dd {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        margin: 0;
+    }
+
+    /* ─── TABLE OF CONTENTS ────────────────────────────────────────────── */
+
+    .doc-toc-summary {
+        font-size: var(--text-sm);
+        color: var(--text-light-secondary);
+        margin: 0 0 var(--spacing-md) 0;
+    }
+
+    .doc-toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .doc-toc-list li {
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .doc-toc-list li:last-child {
+        border-bottom: none;
+    }
+
+    :global(html.dark-theme) .doc-toc-list li {
+        border-bottom-color: var(--border-dark);
+    }
+
+    .doc-toc-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-sm) 0;
+        text-decoration: none;
+        color: var(--text-light-primary);
+        transition: color var(--transition-fast);
+    }
+
+    .doc-toc-link:hover {
+        color: var(--color-primary);
+    }
+
+    .doc-toc-track-name {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .doc-toc-track-count {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+        font-weight: var(--font-weight-bold);
+    }
+
+    /* ─── RISK ANCHORS ─────────────────────────────────────────────────── */
+
+    .doc-risk-anchors {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .doc-risk-grid {
+        display: grid;
+        gap: var(--spacing-md);
+    }
+
+    .doc-risk-card {
+        padding: var(--spacing-lg);
+        border-left: 4px solid var(--color-primary);
+        background: rgba(5, 205, 153, 0.03);
+        border-radius: 2px;
+    }
+
+    .doc-risk-card.severity-high {
+        border-left-color: #e74c3c;
+        background: rgba(231, 76, 60, 0.04);
+    }
+
+    .doc-risk-card.severity-medium {
+        border-left-color: #f39c12;
+        background: rgba(243, 156, 18, 0.04);
+    }
+
+    :global(html.dark-theme) .doc-risk-card {
+        background: rgba(5, 205, 153, 0.06);
+    }
+
+    :global(html.dark-theme) .doc-risk-card.severity-high {
+        background: rgba(231, 76, 60, 0.08);
+    }
+
+    :global(html.dark-theme) .doc-risk-card.severity-medium {
+        background: rgba(243, 156, 18, 0.06);
+    }
+
+    .doc-risk-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .doc-risk-badge {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 1px var(--spacing-sm);
+        border-radius: 2px;
         flex-shrink: 0;
     }
 
-    .severity-high .risk-severity-badge {
+    .severity-high .doc-risk-badge {
         background: rgba(231, 76, 60, 0.15);
         color: #e74c3c;
     }
 
-    .severity-medium .risk-severity-badge {
+    .severity-medium .doc-risk-badge {
         background: rgba(243, 156, 18, 0.15);
         color: #f39c12;
     }
 
-    .severity-low .risk-severity-badge {
+    .severity-low .doc-risk-badge {
         background: rgba(5, 205, 153, 0.15);
         color: var(--color-primary);
     }
 
-    .risk-anchor-card p {
+    .doc-risk-title {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+    }
+
+    .doc-risk-desc {
         font-size: var(--text-sm);
         color: var(--text-light-secondary);
         line-height: 1.7;
@@ -1118,120 +1453,183 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     /* ─── TRACK SECTIONS ───────────────────────────────────────────────── */
 
-    .track-section {
-        margin-bottom: var(--spacing-3xl);
+    .doc-track {
+        margin-top: var(--spacing-3xl);
     }
 
-    .track-header {
+    .doc-track-header {
         padding-bottom: var(--spacing-lg);
         border-bottom: 2px solid var(--color-primary);
         margin-bottom: var(--spacing-xl);
     }
 
-    .track-number {
+    .doc-track-label-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .doc-track-number {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: var(--color-primary);
-        display: block;
-        margin-bottom: var(--spacing-xs);
     }
 
-    .track-header h3 {
+    .doc-track-qcount {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .doc-track-title {
         font-size: var(--text-xl);
         font-weight: var(--font-weight-bold);
         color: var(--text-light-primary);
         margin: 0 0 var(--spacing-xs) 0;
     }
 
-    .track-audience {
+    .doc-track-audience {
         font-size: var(--text-sm);
         color: var(--text-light-muted);
         font-style: italic;
+        margin: 0;
     }
 
-    .track-questions {
+    /* ─── QUESTIONS ────────────────────────────────────────────────────── */
+
+    .doc-questions {
+        list-style: none;
+        padding: 0;
+        margin: 0;
         display: grid;
         gap: var(--spacing-xl);
     }
 
-    .question-card {
-        display: flex;
-        gap: var(--spacing-lg);
-        padding: var(--spacing-xl);
-        background: rgba(5, 205, 153, 0.02);
+    .doc-question {
+        padding: var(--spacing-lg);
         border: 1px solid var(--border-light);
-        border-radius: 6px;
+        border-radius: 2px;
+        border-left: 3px solid var(--border-light);
     }
 
-    :global(html.dark-theme) .question-card {
-        background: rgba(5, 205, 153, 0.04);
+    .doc-question.priority-critical {
+        border-left-color: #e74c3c;
+    }
+
+    .doc-question.priority-high {
+        border-left-color: #f39c12;
+    }
+
+    .doc-question.priority-standard {
+        border-left-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .doc-question {
         border-color: var(--border-dark);
     }
 
-    .question-number {
+    :global(html.dark-theme) .doc-question.priority-critical {
+        border-left-color: #e74c3c;
+    }
+
+    :global(html.dark-theme) .doc-question.priority-high {
+        border-left-color: #f39c12;
+    }
+
+    :global(html.dark-theme) .doc-question.priority-standard {
+        border-left-color: var(--color-primary);
+    }
+
+    .doc-q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .doc-q-number {
         font-size: var(--text-sm);
         font-weight: var(--font-weight-bold);
         color: var(--color-primary);
-        flex-shrink: 0;
-        padding-top: 2px;
-        min-width: 28px;
     }
 
-    .question-content {
-        flex: 1;
-    }
-
-    .question-text {
-        font-size: var(--text-base);
-        color: var(--text-light-primary);
-        line-height: 1.7;
-        margin: 0 0 var(--spacing-sm) 0;
-        font-weight: var(--font-weight-semibold);
-    }
-
-    .question-rationale {
-        font-size: var(--text-sm);
-        color: var(--text-light-muted);
-        line-height: 1.6;
-        margin: 0 0 var(--spacing-sm) 0;
-        font-style: italic;
-    }
-
-    .question-priority {
+    .doc-q-priority {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        padding: 2px var(--spacing-sm);
-        border-radius: 3px;
-        display: inline-block;
+        padding: 1px var(--spacing-sm);
+        border-radius: 2px;
     }
 
-    .priority-critical {
+    .priority-critical .doc-q-priority {
         background: rgba(231, 76, 60, 0.12);
         color: #e74c3c;
     }
 
-    .priority-high {
+    .priority-high .doc-q-priority {
         background: rgba(243, 156, 18, 0.12);
         color: #f39c12;
     }
 
-    .priority-standard {
+    .priority-standard .doc-q-priority {
         background: rgba(5, 205, 153, 0.12);
         color: var(--color-primary);
     }
 
-    /* ─── OUTPUT ACTIONS ───────────────────────────────────────────────── */
+    .doc-q-text {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        line-height: 1.7;
+        margin: 0 0 var(--spacing-sm) 0;
+    }
 
-    .output-actions {
-        display: flex;
-        justify-content: center;
-        gap: var(--spacing-lg);
+    .doc-q-rationale {
+        font-size: var(--text-sm);
+        color: var(--text-light-muted);
+        line-height: 1.6;
+        font-style: italic;
+        margin: 0;
+    }
+
+    /* ─── DOCUMENT FOOTER ──────────────────────────────────────────────── */
+
+    .doc-footer {
         margin-top: var(--spacing-3xl);
-        flex-wrap: wrap;
+    }
+
+    .doc-footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .doc-footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-light-muted);
+    }
+
+    .doc-footer-url {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+    }
+
+    .doc-footer-disclaimer {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+        line-height: 1.5;
+        margin: 0;
     }
 
     /* ─── BACK LINK ────────────────────────────────────────────────────── */
@@ -1340,29 +1738,57 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: 0.8rem;
         }
 
-        .question-card {
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-
         .wizard-nav {
             flex-direction: column;
         }
 
-        .output-actions {
+        /* Document output mobile overrides */
+        .doc-page {
+            padding: var(--spacing-xl) var(--spacing-lg);
+        }
+
+        .doc-title {
+            font-size: var(--text-xl);
+        }
+
+        .doc-meta-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .doc-action-bar {
+            flex-wrap: wrap;
+        }
+
+        .doc-action-btn {
+            flex: 1 1 auto;
+        }
+
+        .doc-track-label-row {
             flex-direction: column;
-            align-items: stretch;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+        }
+
+        .doc-q-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+        }
+
+        .doc-footer-content {
+            flex-direction: column;
+            text-align: center;
         }
     }
 
     /* ─── PRINT ────────────────────────────────────────────────────────── */
 
     @media print {
+        .dm-header,
         .wizard-container,
         .wizard-nav,
-        .output-actions,
-        .back-link,
-        .dm-header .section-label {
+        .doc-action-bar,
+        .back-link {
             display: none !important;
         }
 
@@ -1375,16 +1801,30 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             max-width: 100%;
         }
 
-        .track-section {
+        .doc-page {
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            background: white;
+        }
+
+        .doc-track {
             break-inside: avoid;
         }
 
-        .question-card {
+        .doc-question {
             break-inside: avoid;
         }
 
-        .risk-anchor-card {
+        .doc-risk-card {
             break-inside: avoid;
+        }
+
+        .doc-header,
+        .doc-divider--heavy,
+        .doc-track-title,
+        .doc-q-number {
+            color: var(--color-primary);
         }
     }
 </style>
