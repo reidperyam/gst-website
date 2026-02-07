@@ -8,7 +8,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
 <BaseLayout
     title="The Diligence Machine | Strategic Intelligence Hub"
-    description="Generate a prescriptive technology due diligence agenda customized to your target's profile. 15-20 high-impact questions organized by meeting topic."
+    description="Generate a simple technology due diligence agenda customized to your target's profile. 15-20 high-impact questions organized by topic."
     ogTitle="The Diligence Machine | GST"
     ogDescription="Customize a technology diligence checklist by target parameters. Risk-prioritized, executive-ready."
     ogImage="/og-image.png"
@@ -176,7 +176,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="doc-brand-icon" width="24" height="24" />
                             <span class="doc-brand-name">Global Strategic Technologies</span>
                         </div>
-                        <h1 class="doc-title">The Inquisitor's Script</h1>
+                        <h1 class="doc-title">Overview and Agenda</h1>
                         <p class="doc-generation-date" id="docDate"></p>
                     </header>
 
@@ -633,7 +633,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         const script = lastGeneratedScript;
 
         const lines: string[] = [];
-        lines.push('THE INQUISITOR\'S SCRIPT');
+        lines.push('OVERVIEW AND AGENDA');
         lines.push('Global Strategic Technologies');
         lines.push(`Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
         lines.push('');
@@ -870,7 +870,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: var(--color-primary);
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-xs);
         display: block;
     }
 
@@ -880,7 +880,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--text-light-primary);
         text-transform: uppercase;
         letter-spacing: 0.02em;
-        margin: 0 0 var(--spacing-xl) 0;
+        margin: 0 0 var(--spacing-sm) 0;
     }
 
     .dm-subtitle {
@@ -1261,7 +1261,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         align-items: center;
         justify-content: center;
         gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-xs);
     }
 
     .doc-brand-icon {
@@ -1282,13 +1282,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--text-light-primary);
         text-transform: uppercase;
         letter-spacing: 0.04em;
-        margin: 0 0 var(--spacing-sm) 0;
+        margin: 0 0 var(--spacing-xs) 0;
     }
 
     .doc-generation-date {
         font-size: var(--text-xs);
         color: var(--text-light-muted);
         margin: 0;
+        margin-top: var(--spacing-xs);
     }
 
     /* ─── DIVIDERS ─────────────────────────────────────────────────────── */
@@ -1942,6 +1943,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     /* ─── PRINT ────────────────────────────────────────────────────────── */
 
     @media print {
+        /* Page setup */
+        html, body {
+            height: auto;
+        }
+
         .dm-header,
         .wizard-container,
         .wizard-nav,
@@ -1962,35 +1968,311 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .doc-page {
             border: none;
             box-shadow: none;
-            padding: 0;
+            padding: 40px;
             background: white;
+            page-break-after: avoid;
         }
 
-        .doc-topics :global(.doc-topic) {
-            break-inside: avoid;
+        /* Document header - keep tight */
+        .doc-header {
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            page-break-after: avoid;
         }
 
-        .doc-topics :global(.doc-question) {
-            break-inside: avoid;
+        .doc-title {
+            margin: 0 0 4px 0;
+            font-size: 20px;
+            page-break-after: avoid;
         }
 
-        .doc-risk-grid :global(.doc-risk-card) {
-            break-inside: avoid;
+        .doc-generation-date {
+            margin: 0;
+            font-size: 11px;
         }
 
-        .doc-header,
+        /* Dividers - reduce spacing */
+        .doc-divider {
+            margin: 16px 0;
+            border-top-color: var(--color-primary);
+        }
+
         .doc-divider--heavy {
-            color: var(--color-primary);
+            margin: 12px 0;
+            border-top-color: var(--color-primary);
+            page-break-after: avoid;
         }
 
-        .doc-topics :global(.doc-topic-title),
-        .doc-topics :global(.doc-q-number) {
-            color: var(--color-primary);
+        /* Metadata grid - compact */
+        .doc-meta :global(.doc-meta-grid) {
+            gap: 8px;
+            margin: 0;
+            padding-left: 0;
+            page-break-after: avoid;
+        }
+
+        .doc-meta :global(.doc-meta-card) {
+            gap: 2px;
+            padding: 6px 0;
+            page-break-inside: avoid;
+        }
+
+        .doc-meta :global(.doc-meta-label) {
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+
+        .doc-meta :global(.doc-meta-value) {
+            font-size: 13px;
+            line-height: 1.2;
         }
 
         .doc-meta :global(.doc-meta-identifier-input) {
             border: none !important;
             padding: 0 !important;
+            font-size: 13px;
+        }
+
+        /* TOC and Risk Anchors - force page break after */
+        .doc-toc-risk-row {
+            page-break-after: always;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .doc-toc :global(.doc-section-heading),
+        .doc-risk-anchors :global(.doc-section-heading) {
+            font-size: 12px;
+            margin: 0 0 8px 0;
+            page-break-after: avoid;
+        }
+
+        .doc-toc :global(.doc-toc-list) {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            page-break-inside: avoid;
+        }
+
+        .doc-toc :global(.doc-toc-list li) {
+            margin: 2px 0;
+            page-break-inside: avoid;
+        }
+
+        .doc-toc :global(.doc-toc-list li + li::before) {
+            display: none;
+        }
+
+        .doc-toc :global(.doc-toc-link) {
+            padding: 3px 0;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .doc-toc :global(.doc-toc-topic-name) {
+            font-size: 12px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        /* Risk anchors - compact cards */
+        .doc-risk-grid {
+            gap: 8px;
+            padding-left: 0;
+            page-break-inside: avoid;
+        }
+
+        .doc-risk-grid :global(.doc-risk-card) {
+            padding: 12px;
+            border-left: 2px solid var(--color-primary);
+            break-inside: avoid;
+        }
+
+        .doc-risk-grid :global(.doc-risk-card.severity-high) {
+            border-left-color: #e74c3c;
+        }
+
+        .doc-risk-grid :global(.doc-risk-card.severity-medium) {
+            border-left-color: #f39c12;
+        }
+
+        .doc-risk-grid :global(.doc-risk-header) {
+            display: block;
+            page-break-inside: avoid;
+        }
+
+        .doc-risk-grid :global(.doc-risk-badge) {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .doc-risk-grid :global(.doc-risk-title) {
+            font-size: 13px;
+            font-weight: var(--font-weight-bold);
+            margin: 0 0 2px 0;
+            color: var(--color-primary);
+        }
+
+        .doc-risk-grid :global(.doc-risk-divider) {
+            display: none;
+        }
+
+        .doc-risk-grid :global(.doc-risk-desc) {
+            font-size: 11px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Topics - one per page, ultra-condensed */
+        .doc-topics :global(.doc-topic) {
+            page-break-before: always;
+            margin-top: 0;
+            margin-bottom: 0;
+            break-inside: avoid;
+        }
+
+        .doc-topics :global(.doc-topic-header) {
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--color-primary);
+            margin-bottom: 8px;
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-topic-label-row) {
+            margin-bottom: 2px;
+            gap: 12px;
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-topic-number) {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .doc-topics :global(.doc-topic-qcount) {
+            font-size: 10px;
+        }
+
+        .doc-topics :global(.doc-topic-title) {
+            font-size: 16px;
+            font-weight: var(--font-weight-bold);
+            margin: 0 0 2px 0;
+            color: var(--color-primary);
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-topic-audience) {
+            font-size: 10px;
+            margin: 0;
+            font-style: italic;
+            page-break-after: avoid;
+        }
+
+        /* Questions - ultra-tight spacing */
+        .doc-topics :global(.doc-questions) {
+            gap: 6px;
+            margin: 0;
+            padding: 0;
+            page-break-inside: avoid;
+        }
+
+        .doc-topics :global(.doc-question) {
+            padding: 8px;
+            border: 0.5px solid #ccc;
+            border-left: 2px solid var(--color-primary);
+            margin: 0;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .doc-topics :global(.doc-question.priority-critical) {
+            border-left-color: #e74c3c;
+        }
+
+        .doc-topics :global(.doc-question.priority-high) {
+            border-left-color: #f39c12;
+        }
+
+        .doc-topics :global(.doc-q-header) {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3px;
+            gap: 8px;
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-q-number) {
+            font-size: 11px;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            flex-shrink: 0;
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-q-priority) {
+            font-size: 8px;
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            padding: 1px 4px;
+            border-radius: 1px;
+            flex-shrink: 0;
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-q-text) {
+            font-size: 12px;
+            font-weight: var(--font-weight-semibold);
+            line-height: 1.3;
+            margin: 0 0 2px 0;
+            color: var(--color-primary);
+            page-break-after: avoid;
+        }
+
+        .doc-topics :global(.doc-q-rationale) {
+            font-size: 10px;
+            line-height: 1.3;
+            margin: 0;
+            font-style: italic;
+            color: #333;
+            page-break-after: avoid;
+        }
+
+        /* Footer - minimal */
+        .doc-footer {
+            margin-top: 16px;
+            opacity: 0.6;
+            font-size: 9px;
+            page-break-before: avoid;
+        }
+
+        .doc-footer .doc-divider {
+            margin: 0 0 4px 0;
+        }
+
+        .doc-footer-content {
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .doc-footer-brand {
+            gap: 2px;
+            font-size: 9px;
+        }
+
+        .doc-footer-disclaimer {
+            font-size: 9px;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        /* Section headings */
+        .doc-page :global(.doc-section-heading) {
+            font-size: 11px;
+            margin: 0 0 6px 0;
+            page-break-after: avoid;
         }
     }
 </style>
