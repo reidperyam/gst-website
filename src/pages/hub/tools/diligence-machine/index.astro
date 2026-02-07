@@ -1236,15 +1236,51 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: 2.5rem;
         }
 
-        .field-options-grid {
+        /* Expand wizard step width on tablet+ for better multi-column layout */
+        .wizard-step {
+            max-width: 700px;
+        }
+
+        /* Headcount (4 options): 2 columns in 2x2 grid */
+        .field-options-grid[data-field-id="headcount"] {
             grid-template-columns: repeat(2, 1fr);
         }
 
-        /* Growth Stage (3 options): single column centered */
+        /* Revenue Range (4 options): 2 columns in 2x2 grid */
+        .field-options-grid[data-field-id="revenue-range"] {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Growth Stage (3 options): 3 columns in single row */
         .field-options-grid[data-field-id="growth-stage"] {
-            grid-template-columns: 1fr;
-            max-width: 50%;
-            margin: 0 auto;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* Company Age (5 options): 3 columns (2-2-1 layout) */
+        .field-options-grid[data-field-id="company-age"] {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        /* Desktop: even wider for optimal spacing */
+        .wizard-step {
+            max-width: 800px;
+        }
+
+        /* Headcount (4 options): 4 columns in single row */
+        .field-options-grid[data-field-id="headcount"] {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* Revenue Range (4 options): 4 columns in single row */
+        .field-options-grid[data-field-id="revenue-range"] {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* Company Age (5 options): 5 columns in single row */
+        .field-options-grid[data-field-id="company-age"] {
+            grid-template-columns: repeat(5, 1fr);
         }
     }
 
