@@ -54,6 +54,8 @@ header {
     padding: 1.275rem 0;
     background: var(--bg-light-alt);
     border-bottom: 4px solid var(--color-primary);
+    position: relative;
+    z-index: 1;
 }
 
 nav {
