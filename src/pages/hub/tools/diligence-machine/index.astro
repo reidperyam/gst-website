@@ -138,6 +138,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
                 <!-- Floating Action Bar -->
                 <div class="doc-action-bar" id="docActionBar">
+                    <button class="doc-action-btn" id="btnGoBack" type="button" aria-label="Go back to wizard">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Back
+                    </button>
                     <button class="doc-action-btn" id="btnCopy" type="button" aria-label="Copy to clipboard">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                             <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
@@ -154,7 +160,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     </button>
                     <button class="doc-action-btn" id="btnRestart" type="button" aria-label="Start over">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <path d="M2 8a6 6 0 1011.5-2.5M14 2v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2.5 2.5v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2.5 6.5A5.5 5.5 0 1 1 3 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                         Restart
                     </button>
@@ -250,6 +257,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     const btnBack = document.getElementById('btnBack') as HTMLButtonElement;
     const btnNext = document.getElementById('btnNext') as HTMLButtonElement;
     const btnGenerate = document.getElementById('btnGenerate') as HTMLButtonElement;
+    const btnGoBack = document.getElementById('btnGoBack') as HTMLButtonElement;
     const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
     const btnPrint = document.getElementById('btnPrint') as HTMLButtonElement;
     const btnRestart = document.getElementById('btnRestart') as HTMLButtonElement;
@@ -583,7 +591,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <li>
                         <a href="#track-${i + 1}" class="doc-toc-link">
                             <span class="doc-toc-track-name">Track ${i + 1}: ${escapeHtml(track.trackLabel)}</span>
-                            <span class="doc-toc-track-count">${track.questions.length}q</span>
                         </a>
                     </li>
                 `).join('')}
@@ -808,6 +815,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         renderOutput(script);
     });
 
+    btnGoBack.addEventListener('click', () => {
+        outputContainer.style.display = 'none';
+        wizardContainer.style.display = '';
+        showStep(totalSteps);
+    });
     btnCopy.addEventListener('click', copyToClipboard);
     btnPrint.addEventListener('click', () => window.print());
     btnRestart.addEventListener('click', restart);
@@ -1166,6 +1178,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         box-shadow: var(--shadow-sm);
     }
 
+    #btnGoBack {
+        margin-right: auto;
+    }
+
     .doc-action-btn:hover {
         color: var(--color-primary);
         border-color: var(--color-primary);
@@ -1287,7 +1303,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     :global(html.dark-theme) .doc-meta-label {
-        color: var(--text-dark-muted);
+        color: var(--color-primary);
+        opacity: 0.6;
     }
 
     :global(html.dark-theme) .doc-meta-value {
@@ -1296,7 +1313,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     /* ─── SECTION HEADINGS ─────────────────────────────────────────────── */
 
-    .doc-section-heading {
+    .doc-page :global(.doc-section-heading) {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
@@ -1310,17 +1327,18 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     /* ─── METADATA BLOCK ───────────────────────────────────────────────── */
 
-    .doc-meta-grid {
+    .doc-meta :global(.doc-meta-grid) {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-md);
         margin: 0;
+        padding-left: var(--spacing-xl);
     }
 
-    .doc-meta-card {
+    .doc-meta :global(.doc-meta-card) {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
         padding: var(--spacing-md) var(--spacing-lg);
         background: rgba(5, 205, 153, 0.03);
         border: 1px solid rgba(5, 205, 153, 0.12);
@@ -1329,53 +1347,57 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         transition: var(--transition-fast);
     }
 
-    .doc-meta-card:hover {
+    .doc-meta :global(.doc-meta-card:hover) {
         background: rgba(5, 205, 153, 0.06);
         border-color: rgba(5, 205, 153, 0.2);
         border-left-color: var(--color-primary);
     }
 
-    .doc-meta-label {
-        font-size: var(--text-xs);
+    .doc-meta :global(.doc-meta-label) {
+        font-size: 0.65rem;
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--text-light-muted);
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        opacity: 0.7;
     }
 
-    .doc-meta-value {
-        font-size: var(--text-sm);
+    .doc-meta :global(.doc-meta-value) {
+        font-size: var(--text-base);
         font-weight: var(--font-weight-semibold);
         color: var(--text-light-primary);
+        line-height: 1.4;
     }
 
     /* ─── TABLE OF CONTENTS ────────────────────────────────────────────── */
 
-    .doc-toc-summary {
+    .doc-toc :global(.doc-toc-summary) {
         font-size: var(--text-sm);
         color: var(--text-light-secondary);
         margin: 0 0 var(--spacing-md) 0;
+        padding-left: var(--spacing-xl);
     }
 
-    .doc-toc-list {
+    .doc-toc :global(.doc-toc-list) {
         list-style: none;
-        padding: 0;
+        padding: 0 0 0 var(--spacing-xl);
         margin: 0;
+        max-width: 50%;
     }
 
-    .doc-toc-list li {
+    .doc-toc :global(.doc-toc-list li) {
         border-bottom: 1px solid var(--border-light);
     }
 
-    .doc-toc-list li:last-child {
+    .doc-toc :global(.doc-toc-list li:last-child) {
         border-bottom: none;
     }
 
-    :global(html.dark-theme) .doc-toc-list li {
+    :global(html.dark-theme) .doc-toc :global(.doc-toc-list li) {
         border-bottom-color: var(--border-dark);
     }
 
-    .doc-toc-link {
+    .doc-toc :global(.doc-toc-link) {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -1385,19 +1407,21 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         transition: color var(--transition-fast);
     }
 
-    .doc-toc-link:hover {
+    .doc-toc :global(.doc-toc-link:hover) {
         color: var(--color-primary);
     }
 
-    .doc-toc-track-name {
-        font-size: var(--text-sm);
-        font-weight: var(--font-weight-semibold);
+    :global(html.dark-theme) .doc-toc :global(.doc-toc-link) {
+        color: var(--text-dark-primary);
     }
 
-    .doc-toc-track-count {
-        font-size: var(--text-xs);
-        color: var(--text-light-muted);
-        font-weight: var(--font-weight-bold);
+    :global(html.dark-theme) .doc-toc :global(.doc-toc-link:hover) {
+        color: var(--color-primary);
+    }
+
+    .doc-toc :global(.doc-toc-track-name) {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
     }
 
     /* ─── RISK ANCHORS ─────────────────────────────────────────────────── */
@@ -1409,6 +1433,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     .doc-risk-grid {
         display: grid;
         gap: var(--spacing-md);
+        padding-left: var(--spacing-xl);
     }
 
     .doc-risk-card {
@@ -1785,8 +1810,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: var(--text-xl);
         }
 
-        .doc-meta-grid {
+        .doc-meta :global(.doc-meta-grid) {
             grid-template-columns: 1fr;
+            padding-left: var(--spacing-md);
+        }
+
+        .doc-toc :global(.doc-toc-summary),
+        .doc-toc :global(.doc-toc-list) {
+            padding-left: var(--spacing-md);
+            max-width: 100%;
+        }
+
+        .doc-risk-grid {
+            padding-left: var(--spacing-md);
         }
 
         .doc-action-bar {
