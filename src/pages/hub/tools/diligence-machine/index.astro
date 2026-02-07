@@ -89,16 +89,34 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             )}
 
                             {step.inputType === 'compound' && step.fields && (
-                                <div class="compound-fields">
+                                <div class="compound-fields-grid">
                                     {step.fields.map((field) => (
-                                        <div class="compound-field">
-                                            <label class="field-label" for={`field-${field.id}`}>{field.label}</label>
-                                            <select class="field-select" id={`field-${field.id}`} data-field-id={field.id}>
-                                                <option value="">Select...</option>
+                                        <div class="compound-field-section">
+                                            <h3 class="field-section-label">{field.label}</h3>
+                                            <div class="field-options-grid" data-field-id={field.id}>
                                                 {field.options.map((opt) => (
-                                                    <option value={opt.id}>{opt.label}</option>
+                                                    <button
+                                                        class="option-card compound-option"
+                                                        data-option-id={opt.id}
+                                                        data-field-id={field.id}
+                                                        data-step-id={step.id}
+                                                        type="button"
+                                                        aria-pressed="false"
+                                                    >
+                                                        <span class="option-label">
+                                                            <img
+                                                                src="/images/gst-delta-icon-teal-stroke-thick.svg"
+                                                                alt=""
+                                                                aria-hidden="true"
+                                                                class="option-icon"
+                                                                width="10"
+                                                                height="10"
+                                                            />
+                                                            {opt.label}
+                                                        </span>
+                                                    </button>
                                                 ))}
-                                            </select>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -340,12 +358,24 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         saveState();
     }
 
-    function handleFieldChange(select: HTMLSelectElement): void {
-        const fieldId = select.dataset.fieldId!;
-        const value = select.value;
+    function handleCompoundOptionClick(card: HTMLButtonElement): void {
+        const optionId = card.dataset.optionId!;
+        const fieldId = card.dataset.fieldId!;
+        const fieldGrid = card.closest('.field-options-grid') as HTMLElement;
 
+        // Deselect all cards in this field's grid (single-select)
+        fieldGrid.querySelectorAll('.option-card').forEach((el) => {
+            el.classList.remove('selected');
+            el.setAttribute('aria-pressed', 'false');
+        });
+
+        // Select clicked card
+        card.classList.add('selected');
+        card.setAttribute('aria-pressed', 'true');
+
+        // Update state (same field mapping as handleFieldChange)
         const fieldMap: Record<string, keyof UserInputs> = {
-            headcount: 'headcount',
+            'headcount': 'headcount',
             'revenue-range': 'revenueRange',
             'growth-stage': 'growthStage',
             'company-age': 'companyAge',
@@ -353,7 +383,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         const key = fieldMap[fieldId];
         if (key) {
-            (inputs as Record<string, unknown>)[key] = value || undefined;
+            (inputs as Record<string, unknown>)[key] = optionId;
         }
 
         updateNextButtonState();
@@ -566,18 +596,23 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             }
         }
 
-        // Restore compound selects
-        const fieldMap: Record<string, string> = {
-            headcount: 'headcount',
+        // Restore compound field option cards
+        const compoundFieldMap: Record<string, string> = {
+            'headcount': 'headcount',
             'revenue-range': 'revenueRange',
             'growth-stage': 'growthStage',
             'company-age': 'companyAge',
         };
-        for (const [fieldId, key] of Object.entries(fieldMap)) {
+        for (const [fieldId, key] of Object.entries(compoundFieldMap)) {
             const value = (inputs as Record<string, unknown>)[key] as string | undefined;
             if (value) {
-                const select = document.getElementById(`field-${fieldId}`) as HTMLSelectElement | null;
-                if (select) select.value = value;
+                const card = document.querySelector(
+                    `.option-card.compound-option[data-field-id="${fieldId}"][data-option-id="${value}"]`
+                );
+                if (card) {
+                    card.classList.add('selected');
+                    card.setAttribute('aria-pressed', 'true');
+                }
             }
         }
 
@@ -591,9 +626,9 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         card.addEventListener('click', () => handleOptionClick(card as HTMLButtonElement));
     });
 
-    // Compound field changes
-    document.querySelectorAll('.field-select').forEach((select) => {
-        select.addEventListener('change', () => handleFieldChange(select as HTMLSelectElement));
+    // Compound field option cards
+    document.querySelectorAll('.option-card.compound-option').forEach((card) => {
+        card.addEventListener('click', () => handleCompoundOptionClick(card as HTMLButtonElement));
     });
 
     // Navigation
@@ -867,53 +902,44 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin-left: calc(10px + var(--spacing-sm));
     }
 
-    /* ─── COMPOUND FIELDS ──────────────────────────────────────────────── */
+    /* ─── COMPOUND FIELD SECTIONS ────────────────────────────────────────── */
 
-    .compound-fields {
+    .compound-fields-grid {
         display: grid;
-        gap: var(--spacing-xl);
+        gap: var(--spacing-3xl);
     }
 
-    .compound-field {
+    .compound-field-section {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-md);
     }
 
-    .field-label {
+    .field-section-label {
         font-size: var(--text-sm);
         font-weight: var(--font-weight-semibold);
         color: var(--text-light-primary);
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        margin: 0;
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 2px solid rgba(5, 205, 153, 0.2);
     }
 
-    .field-select {
-        padding: var(--spacing-md) var(--spacing-lg);
-        border: 1px solid var(--border-light);
-        border-radius: 6px;
-        background: var(--bg-light);
-        color: var(--text-light-primary);
-        font-family: var(--font-family);
-        font-size: var(--text-base);
-        transition: border-color var(--transition-fast);
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2305cd99'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right var(--spacing-lg) center;
-        padding-right: var(--spacing-3xl);
+    .field-options-grid {
+        display: grid;
+        gap: var(--spacing-md);
+        grid-template-columns: 1fr; /* Mobile-first: 1 column */
     }
 
-    .field-select:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.1);
+    .option-card.compound-option {
+        min-height: 52px; /* Ensure WCAG touch target */
+        justify-content: center;
     }
 
-    :global(html.dark-theme) .field-select {
-        background-color: var(--bg-dark-secondary);
-        border-color: var(--border-dark);
+    :global(html.dark-theme) .field-section-label {
         color: var(--text-dark-primary);
+        border-bottom-color: rgba(5, 205, 153, 0.3);
     }
 
     /* ─── NAVIGATION ───────────────────────────────────────────────────── */
@@ -1210,8 +1236,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: 2.5rem;
         }
 
-        .compound-fields {
-            grid-template-columns: 1fr 1fr;
+        .field-options-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Growth Stage (3 options): single column centered */
+        .field-options-grid[data-field-id="growth-stage"] {
+            grid-template-columns: 1fr;
+            max-width: 50%;
+            margin: 0 auto;
         }
     }
 
@@ -1234,6 +1267,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         .option-card {
             padding: var(--spacing-lg);
+        }
+
+        .compound-fields-grid {
+            gap: var(--spacing-2xl);
+        }
+
+        .field-section-label {
+            font-size: 0.8rem;
         }
 
         .question-card {
