@@ -45,9 +45,9 @@ export const WIZARD_STEPS: WizardStep[] = [
         description: 'Controlling interest with existing ownership retained',
       },
       {
-        id: 'venture-series',
-        label: 'Venture Series A/B',
-        description: 'Growth-stage equity investment round',
+        id: 'business-integration',
+        label: 'Portfolio Company Integration',
+        description: 'Merging operations of two existing entities',
       },
       {
         id: 'carve-out',
@@ -55,9 +55,9 @@ export const WIZARD_STEPS: WizardStep[] = [
         description: 'Separation of a business unit from a parent company',
       },
       {
-        id: 'business-integration',
-        label: 'Business Integration',
-        description: 'Merging operations of two existing entities',
+        id: 'venture-series',
+        label: 'Venture Series A/B',
+        description: 'Growth-stage equity investment round',
       },
     ],
   },
