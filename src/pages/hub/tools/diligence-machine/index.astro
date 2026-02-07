@@ -239,6 +239,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         version: number;
         currentStep: number;
         inputs: Partial<UserInputs>;
+        targetIdentifier?: string;
     }
 
     // ─── STATE ────────────────────────────────────────────────────────────
@@ -248,6 +249,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     let inputs: Partial<UserInputs> = {
         geographies: [],
     };
+    let targetIdentifier = 'Target';
     let lastGeneratedScript: GeneratedScript | null = null;
 
     // ─── DOM REFERENCES ──────────────────────────────────────────────────
@@ -273,6 +275,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 version: STORAGE_VERSION,
                 currentStep,
                 inputs: { ...inputs },
+                targetIdentifier,
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         } catch {
@@ -569,6 +572,17 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 Target Parameters
             </h2>
             <div class="doc-meta-grid">
+                <div class="doc-meta-card doc-meta-card--identifier">
+                    <span class="doc-meta-label">Target / Project Identifier</span>
+                    <input
+                        type="text"
+                        class="doc-meta-identifier-input"
+                        id="targetIdentifierInput"
+                        value="${escapeHtml(targetIdentifier)}"
+                        maxlength="80"
+                        aria-label="Target or project identifier"
+                    />
+                </div>
                 ${fields.map((f) => `
                     <div class="doc-meta-card">
                         <span class="doc-meta-label">${escapeHtml(f.label)}</span>
@@ -577,6 +591,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 `).join('')}
             </div>
         `;
+
+        // Wire up identifier input
+        const identifierInput = document.getElementById('targetIdentifierInput') as HTMLInputElement;
+        identifierInput.addEventListener('input', () => {
+            targetIdentifier = identifierInput.value || 'Target';
+            saveState();
+        });
     }
 
     function renderToc(script: GeneratedScript): void {
@@ -590,7 +611,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 ${script.topics.map((topic, i) => `
                     <li>
                         <a href="#topic-${i + 1}" class="doc-toc-link">
-                            <span class="doc-toc-topic-name">Topic ${i + 1}: ${escapeHtml(topic.topicLabel)}</span>
+                            <span class="doc-toc-topic-name">${escapeHtml(topic.topicLabel)}</span>
                         </a>
                     </li>
                 `).join('')}
@@ -622,6 +643,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         lines.push('TARGET PARAMETERS');
         lines.push('\u2550'.repeat(60));
         lines.push('');
+        lines.push(`Identifier:        ${targetIdentifier}`);
 
         if (inputs.transactionType) lines.push(`Transaction Type:  ${getOptionLabel('transaction-type', inputs.transactionType)}`);
         if (inputs.productType) lines.push(`Product Type:      ${getOptionLabel('product-type', inputs.productType)}`);
@@ -683,6 +705,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     function restart(): void {
         inputs = { geographies: [] };
+        targetIdentifier = 'Target';
         clearState();
 
         // Reset all option cards
@@ -719,6 +742,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         if (!saved) return;
 
         inputs = { geographies: [], ...saved.inputs };
+        if (saved.targetIdentifier) targetIdentifier = saved.targetIdentifier;
 
         // Restore single-select options
         for (const [stepId, key] of Object.entries({
@@ -1369,6 +1393,43 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         line-height: 1.4;
     }
 
+    .doc-meta :global(.doc-meta-card--identifier) {
+        grid-column: span 1;
+    }
+
+    .doc-meta :global(.doc-meta-identifier-input) {
+        font-family: inherit;
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        line-height: 1.4;
+        background: transparent;
+        border: 1px solid transparent;
+        border-bottom: 1px dashed rgba(5, 205, 153, 0.3);
+        padding: 2px 0;
+        width: 100%;
+        outline: none;
+        transition: border-color var(--transition-fast);
+    }
+
+    .doc-meta :global(.doc-meta-identifier-input:focus) {
+        border-bottom-color: var(--color-primary);
+    }
+
+    .doc-meta :global(.doc-meta-identifier-input::placeholder) {
+        color: var(--text-light-muted);
+        font-weight: var(--font-weight-normal);
+    }
+
+    :global(html.dark-theme) .doc-meta :global(.doc-meta-identifier-input) {
+        color: var(--text-dark-primary);
+        border-bottom-color: rgba(5, 205, 153, 0.2);
+    }
+
+    :global(html.dark-theme) .doc-meta :global(.doc-meta-identifier-input:focus) {
+        border-bottom-color: var(--color-primary);
+    }
+
     /* ─── TABLE OF CONTENTS ────────────────────────────────────────────── */
 
     .doc-toc :global(.doc-toc-summary) {
@@ -1895,6 +1956,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .doc-topic-title,
         .doc-q-number {
             color: var(--color-primary);
+        }
+
+        .doc-meta-identifier-input {
+            border: none !important;
+            padding: 0 !important;
         }
     }
 </style>
