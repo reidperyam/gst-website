@@ -50,7 +50,7 @@ body::before {
 }
 
 /* Header */
-header {
+.site-header {
     padding: 1.275rem 0;
     background: var(--bg-light-alt);
     border-bottom: 4px solid var(--color-primary);
@@ -684,7 +684,7 @@ footer p {
 }
 
 /* Dark Theme - Header */
-html.dark-theme header {
+html.dark-theme .site-header {
     background: var(--bg-dark);
     border-bottom-color: var(--color-primary);
 }
@@ -907,7 +907,7 @@ html.dark-theme .cta-box p {
         padding: 0 1.5rem;
     }
 
-    header {
+    .site-header {
         padding: 1rem 0;
     }
 
@@ -987,7 +987,7 @@ html.dark-theme .cta-box p {
         padding: 0 1rem;
     }
 
-    header {
+    .site-header {
         padding: 0.75rem 0;
     }
 
