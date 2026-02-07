@@ -31,7 +31,7 @@ function makeQuestion(
   return {
     id: overrides.id ?? 'test-q',
     topic: overrides.topic ?? 'architecture',
-    topicLabel: overrides.topicLabel ?? 'Architecture & Scalability',
+    topicLabel: overrides.topicLabel ?? 'Architecture',
     audienceLevel: overrides.audienceLevel ?? 'CTO',
     text: overrides.text ?? 'Test question text that is long enough',
     rationale: overrides.rationale ?? 'Test rationale that is long enough',
@@ -624,7 +624,7 @@ describe('groupByTopic', () => {
     const topics = groupByTopic(questions);
 
     const archTopic = topics.find(t => t.topicId === 'architecture');
-    expect(archTopic?.topicLabel).toBe('Architecture & Scalability');
+    expect(archTopic?.topicLabel).toBe('Architecture');
     expect(archTopic?.audienceLevel).toBe('CTO / VP Engineering');
   });
 

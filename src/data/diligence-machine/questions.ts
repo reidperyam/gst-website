@@ -38,7 +38,7 @@ export interface DiligenceQuestion {
 
 export const TOPIC_META = {
   architecture: {
-    label: 'Architecture & Scalability',
+    label: 'Architecture',
     audience: 'CTO / VP Engineering',
     order: 1,
   },
@@ -65,9 +65,9 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-01',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
-    text: 'Describe the current system architecture. Is it monolithic, service-oriented, or microservices-based — and what is the roadmap for decomposition if monolithic?',
+    text: 'Describe the current system architecture. Is it monolithic, service-oriented, or microservices-based, and what is the roadmap for decomposition if monolithic?',
     rationale: 'Monolithic architectures in scaling companies create deployment bottlenecks and single points of failure that directly impact velocity and reliability.',
     priority: 'critical',
     conditions: {},
@@ -75,9 +75,9 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-02',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
-    text: 'What is the database scaling strategy? Are you using read replicas, sharding, or partitioning — and what is the current headroom before the next scaling event?',
+    text: 'What is the database scaling strategy? Are you using read replicas, sharding, or partitioning, and what is the current headroom before the next scaling event?',
     rationale: 'Database capacity constraints are the most common hidden bottleneck in growing platforms. Understanding headroom prevents post-acquisition surprises.',
     priority: 'high',
     conditions: {
@@ -87,7 +87,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-03',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'Is the platform single-tenant or multi-tenant? If single-tenant, what is the cost and timeline to migrate to a multi-tenant architecture?',
     rationale: 'Single-tenant B2B SaaS architectures create linear infrastructure cost scaling that erodes margins as the customer base grows.',
@@ -99,7 +99,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-04',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'How mature is your Infrastructure-as-Code practice? Can the entire production environment be reproduced from version-controlled templates?',
     rationale: 'IaC maturity directly correlates with disaster recovery capability, environment parity, and the speed of scaling infrastructure.',
@@ -111,7 +111,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-05',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'What are the horizontal and vertical scaling limits of the current infrastructure? At what load factor do you anticipate needing architectural changes?',
     rationale: 'Scaling ceilings on self-managed or colocated infrastructure require capital expenditure planning that differs fundamentally from elastic cloud models.',
@@ -123,10 +123,10 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-06',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'Is there a documented cloud migration plan? What is the estimated timeline, cost, and risk profile for transitioning from current infrastructure to a cloud-native deployment?',
-    rationale: 'Cloud migration is a multi-year capital project. Understanding whether a plan exists — and its fidelity — reveals strategic infrastructure thinking.',
+    rationale: 'Cloud migration is a multi-year capital project. Understanding whether a plan exists, and its fidelity, reveals strategic infrastructure thinking.',
     priority: 'critical',
     conditions: {
       techArchetypes: ['self-managed-infra', 'datacenter-colocation'],
@@ -135,7 +135,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-07',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'Describe the API versioning strategy. How are breaking changes communicated to consumers, and what is the deprecation lifecycle?',
     rationale: 'Poor API governance creates integration fragility for customers and partners, increasing churn risk and support burden.',
@@ -147,9 +147,9 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-08',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
-    text: 'What is the data pipeline architecture? How is data ingested, transformed, and served — and what is the latency from raw input to actionable output?',
+    text: 'What is the data pipeline architecture? How is data ingested, transformed, and served, and what is the latency from raw input to actionable output?',
     rationale: 'Deep-tech and IP-driven companies derive value from data processing pipelines. Architectural weaknesses here undermine the core value proposition.',
     priority: 'high',
     conditions: {
@@ -159,7 +159,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-09',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'What are the disaster recovery and business continuity architectures? What are the documented RPO and RTO targets, and have they been validated through testing?',
     rationale: 'Disaster recovery capability is directly proportional to revenue protection. Untested DR plans are functionally equivalent to no plan.',
@@ -171,7 +171,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-10',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'What is the coupling between legacy systems and core business logic? Are there integration layers, or is business logic directly embedded in legacy codebases?',
     rationale: 'Tight coupling to legacy systems creates refactoring risk and constrains the pace of innovation. Understanding the coupling depth informs modernization cost.',
@@ -184,17 +184,17 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'arch-11',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'Do architecture decision records (ADRs) exist? How are significant technical decisions documented, communicated, and revisited?',
-    rationale: 'ADRs indicate engineering maturity and reduce knowledge loss risk. Their absence suggests decisions live in individual memories — a key-person dependency.',
+    rationale: 'ADRs indicate engineering maturity and reduce knowledge loss risk. Their absence suggests decisions live in individual memories, a key-person dependency.',
     priority: 'standard',
     conditions: {},
   },
   {
     id: 'arch-12',
     topic: 'architecture',
-    topicLabel: 'Architecture & Scalability',
+    topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'What are the current performance SLAs, and what is the historical adherence rate? Where are the most significant performance bottlenecks today?',
     rationale: 'SLA adherence history reveals operational reliability. Consistent breaches indicate systemic architectural issues rather than isolated incidents.',
@@ -280,7 +280,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topic: 'operations',
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Engineering',
-    text: 'What is the testing strategy? What is the ratio of unit, integration, and end-to-end tests — and what is the overall code coverage percentage?',
+    text: 'What is the testing strategy? What is the ratio of unit, integration, and end-to-end tests, and what is the overall code coverage percentage?',
     rationale: 'Test coverage and strategy reveal confidence in change safety. Low coverage in critical paths creates deployment risk and slows velocity.',
     priority: 'high',
     conditions: {},
@@ -314,7 +314,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Engineering',
     text: 'What engineering velocity metrics are tracked? How has sprint velocity or throughput trended over the past 12 months?',
-    rationale: 'Velocity trends reveal whether the team is accelerating, stable, or decelerating — a leading indicator of engineering health post-investment.',
+    rationale: 'Velocity trends reveal whether the team is accelerating, stable, or decelerating, a leading indicator of engineering health post-investment.',
     priority: 'standard',
     conditions: {
       transactionTypes: ['venture-series'],
@@ -412,7 +412,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topic: 'carveout-integration',
     topicLabel: 'Carve-out / Integration',
     audienceLevel: 'M&A Lead',
-    text: 'What is the technology stack overlap between the two entities? Where do platforms, languages, and tooling diverge — and what is the rationalization strategy?',
+    text: 'What is the technology stack overlap between the two entities? Where do platforms, languages, and tooling diverge, and what is the rationalization strategy?',
     rationale: 'Stack divergence creates long-term maintenance burden. A rationalization plan prevents the "two of everything" anti-pattern in merged organizations.',
     priority: 'high',
     conditions: {

@@ -46,7 +46,7 @@ export const WIZARD_STEPS: WizardStep[] = [
       },
       {
         id: 'business-integration',
-        label: 'Portfolio Company Integration',
+        label: 'Portfolio Integration',
         description: 'Merging operations of two existing entities',
       },
       {

@@ -1476,3 +1476,10 @@ html.dark-theme .filter-drawer {
     border-left-color: var(--color-primary);
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
 }
+
+/* ── Print ─────────────────────────────────────────── */
+@media print {
+    .site-header {
+        display: none !important;
+    }
+}
