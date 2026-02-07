@@ -464,7 +464,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Compliance gaps post-close can halt operations in regulated markets. Certification transfer timelines often exceed deal close timelines.',
     priority: 'high',
     conditions: {
-      geographies: ['eu', 'apac'],
+      geographies: ['eu', 'uk', 'apac', 'latam', 'africa'],
     },
   },
   {
@@ -545,7 +545,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'GDPR non-compliance carries fines of up to 4% of global revenue. Due diligence must verify compliance before transaction close.',
     priority: 'critical',
     conditions: {
-      geographies: ['eu'],
+      geographies: ['eu', 'uk'],
     },
   },
   {
@@ -613,7 +613,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Data sovereignty violations can block market access entirely. Multi-region operations require explicit data residency architectures.',
     priority: 'high',
     conditions: {
-      geographies: ['eu', 'apac'],
+      geographies: ['eu', 'uk', 'apac', 'latam', 'africa'],
     },
   },
   {
@@ -626,6 +626,42 @@ export const QUESTIONS: DiligenceQuestion[] = [
     priority: 'high',
     conditions: {
       revenueMin: '25-100m',
+    },
+  },
+  {
+    id: 'sec-13',
+    track: 'security-risk',
+    trackLabel: 'Security & Risk',
+    audienceLevel: 'CISO',
+    text: 'What is the UK GDPR and Data Protection Act 2018 compliance status post-Brexit? Are Standard Contractual Clauses (SCCs) in place for cross-border data transfers with the EU?',
+    rationale: 'Post-Brexit UK data protection divergence creates dual compliance requirements. Adequate data transfer mechanisms are essential for EU-UK data flows.',
+    priority: 'high',
+    conditions: {
+      geographies: ['uk'],
+    },
+  },
+  {
+    id: 'sec-14',
+    track: 'security-risk',
+    trackLabel: 'Security & Risk',
+    audienceLevel: 'CISO',
+    text: 'What are the LGPD (Brazil) or regional data protection compliance measures for Latin American operations? Is customer data localized within LATAM jurisdictions?',
+    rationale: 'Brazil\'s LGPD and other LATAM data protection frameworks impose strict data residency and consent requirements that affect operational architecture.',
+    priority: 'high',
+    conditions: {
+      geographies: ['latam'],
+    },
+  },
+  {
+    id: 'sec-15',
+    track: 'security-risk',
+    trackLabel: 'Security & Risk',
+    audienceLevel: 'CISO',
+    text: 'What regulatory frameworks govern data protection and cybersecurity in your African markets (e.g., POPIA in South Africa, Nigeria DPA)? Are data localization requirements met?',
+    rationale: 'African data protection regulations vary significantly by country. Non-compliance can result in operational restrictions and market access barriers.',
+    priority: 'high',
+    conditions: {
+      geographies: ['africa'],
     },
   },
 ];

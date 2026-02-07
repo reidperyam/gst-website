@@ -108,10 +108,10 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     id: 'risk-gdpr-multi',
     title: 'Cross-Border Data Compliance',
     description:
-      'Operations spanning EU and APAC regions require careful navigation of GDPR, local data residency laws, and cross-border data transfer mechanisms. Non-compliance creates material regulatory exposure.',
+      'Multi-region operations require careful navigation of GDPR (EU/UK), LGPD (LATAM), POPIA (Africa), APAC data residency laws, and cross-border data transfer mechanisms. Non-compliance creates material regulatory exposure and can block market access.',
     severity: 'high',
     conditions: {
-      geographies: ['eu', 'apac'],
+      geographies: ['eu', 'uk', 'apac', 'latam', 'africa'],
     },
   },
   {
@@ -123,6 +123,37 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     conditions: {
       productTypes: ['on-premise-enterprise'],
       companyAgeMin: '10-20yr',
+    },
+  },
+  {
+    id: 'risk-brexit-data',
+    title: 'Post-Brexit Data Transfer Risk',
+    description:
+      'UK operations require separate GDPR compliance (UK GDPR + DPA 2018) and Standard Contractual Clauses for EU data transfers. Regulatory divergence between UK and EU creates ongoing compliance overhead.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['uk'],
+    },
+  },
+  {
+    id: 'risk-latam-infra',
+    title: 'LATAM Infrastructure Maturity',
+    description:
+      'Latin American markets often face infrastructure challenges including inconsistent cloud service availability, connectivity issues, and varying levels of cybersecurity framework maturity. Budget for potential infrastructure upgrades.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['latam'],
+      techArchetypes: ['modern-cloud-native', 'hybrid-legacy'],
+    },
+  },
+  {
+    id: 'risk-africa-regulatory',
+    title: 'African Regulatory Fragmentation',
+    description:
+      'African markets have fragmented data protection and technology regulations across countries (POPIA, Nigeria DPA, Kenya DPA, etc.). Multi-country operations require jurisdiction-specific compliance strategies and local data residency planning.',
+    severity: 'high',
+    conditions: {
+      geographies: ['africa'],
     },
   },
 ];

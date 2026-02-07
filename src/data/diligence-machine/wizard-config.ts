@@ -191,6 +191,21 @@ export const WIZARD_STEPS: WizardStep[] = [
         description: 'EU member state operations',
       },
       {
+        id: 'uk',
+        label: 'United Kingdom',
+        description: 'UK operations (post-Brexit)',
+      },
+      {
+        id: 'latam',
+        label: 'Latin America',
+        description: 'LATAM regional operations',
+      },
+      {
+        id: 'africa',
+        label: 'Africa',
+        description: 'African continent operations',
+      },
+      {
         id: 'apac',
         label: 'Asia-Pacific',
         description: 'APAC regional operations',
