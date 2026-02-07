@@ -556,15 +556,18 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         }
 
         docMeta.innerHTML = `
-            <h2 class="doc-section-heading">Target Parameters</h2>
-            <dl class="doc-meta-grid">
+            <h2 class="doc-section-heading">
+                <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                Target Parameters
+            </h2>
+            <div class="doc-meta-grid">
                 ${fields.map((f) => `
-                    <div class="doc-meta-item">
-                        <dt>${escapeHtml(f.label)}</dt>
-                        <dd>${escapeHtml(f.value)}</dd>
+                    <div class="doc-meta-card">
+                        <span class="doc-meta-label">${escapeHtml(f.label)}</span>
+                        <span class="doc-meta-value">${escapeHtml(f.value)}</span>
                     </div>
                 `).join('')}
-            </dl>
+            </div>
         `;
     }
 
@@ -1271,6 +1274,26 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border-top-color: var(--color-primary);
     }
 
+    :global(html.dark-theme) .doc-meta-card {
+        background: rgba(5, 205, 153, 0.05);
+        border-color: rgba(5, 205, 153, 0.15);
+        border-left-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .doc-meta-card:hover {
+        background: rgba(5, 205, 153, 0.08);
+        border-color: rgba(5, 205, 153, 0.25);
+        border-left-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .doc-meta-label {
+        color: var(--text-dark-muted);
+    }
+
+    :global(html.dark-theme) .doc-meta-value {
+        color: var(--text-dark-primary);
+    }
+
     /* ─── SECTION HEADINGS ─────────────────────────────────────────────── */
 
     .doc-section-heading {
@@ -1290,29 +1313,40 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     .doc-meta-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: var(--spacing-md) var(--spacing-2xl);
+        gap: var(--spacing-md);
         margin: 0;
     }
 
-    .doc-meta-item {
+    .doc-meta-card {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 4px;
+        padding: var(--spacing-md) var(--spacing-lg);
+        background: rgba(5, 205, 153, 0.03);
+        border: 1px solid rgba(5, 205, 153, 0.12);
+        border-left: 3px solid var(--color-primary);
+        border-radius: 4px;
+        transition: var(--transition-fast);
     }
 
-    .doc-meta-item dt {
+    .doc-meta-card:hover {
+        background: rgba(5, 205, 153, 0.06);
+        border-color: rgba(5, 205, 153, 0.2);
+        border-left-color: var(--color-primary);
+    }
+
+    .doc-meta-label {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
         color: var(--text-light-muted);
     }
 
-    .doc-meta-item dd {
+    .doc-meta-value {
         font-size: var(--text-sm);
         font-weight: var(--font-weight-semibold);
         color: var(--text-light-primary);
-        margin: 0;
     }
 
     /* ─── TABLE OF CONTENTS ────────────────────────────────────────────── */
