@@ -6,7 +6,7 @@
  * Zero DOM dependencies — fully testable with Vitest.
  */
 
-import { QUESTIONS, TRACK_META } from '../data/diligence-machine/questions';
+import { QUESTIONS, TOPIC_META } from '../data/diligence-machine/questions';
 import { RISK_ANCHORS } from '../data/diligence-machine/risk-anchors';
 import { BRACKET_ORDER } from '../data/diligence-machine/wizard-config';
 import type { DiligenceQuestion, QuestionCondition } from '../data/diligence-machine/questions';
@@ -23,15 +23,15 @@ export interface UserInputs {
   geographies: string[];
 }
 
-export interface TrackOutput {
-  trackId: string;
-  trackLabel: string;
+export interface TopicOutput {
+  topicId: string;
+  topicLabel: string;
   audienceLevel: string;
   questions: DiligenceQuestion[];
 }
 
 export interface GeneratedScript {
-  tracks: TrackOutput[];
+  topics: TopicOutput[];
   riskAnchors: RiskAnchor[];
   metadata: {
     totalQuestions: number;
@@ -150,48 +150,48 @@ export function sortByPriority(questions: DiligenceQuestion[]): DiligenceQuestio
 }
 
 /**
- * Balance question selection across tracks while respecting a total cap.
- * Ensures minimum representation per track (3 if available), then fills
- * remaining slots by priority across all tracks.
+ * Balance question selection across topics while respecting a total cap.
+ * Ensures minimum representation per topic (3 if available), then fills
+ * remaining slots by priority across all topics.
  */
-export function balanceAcrossTracks(
+export function balanceAcrossTopics(
   questions: DiligenceQuestion[],
   minTotal: number,
   maxTotal: number
 ): DiligenceQuestion[] {
-  const trackIds = Object.keys(TRACK_META) as Array<keyof typeof TRACK_META>;
-  const byTrack: Record<string, DiligenceQuestion[]> = {};
+  const topicIds = Object.keys(TOPIC_META) as Array<keyof typeof TOPIC_META>;
+  const byTopic: Record<string, DiligenceQuestion[]> = {};
 
-  for (const id of trackIds) {
-    byTrack[id] = [];
+  for (const id of topicIds) {
+    byTopic[id] = [];
   }
 
   for (const q of questions) {
-    if (byTrack[q.track]) {
-      byTrack[q.track].push(q);
+    if (byTopic[q.topic]) {
+      byTopic[q.topic].push(q);
     }
   }
 
-  // Sort each track's questions by priority
-  for (const id of trackIds) {
-    byTrack[id] = sortByPriority(byTrack[id]);
+  // Sort each topic's questions by priority
+  for (const id of topicIds) {
+    byTopic[id] = sortByPriority(byTopic[id]);
   }
 
   const selected = new Set<string>();
   const result: DiligenceQuestion[] = [];
-  const minPerTrack = 3;
+  const minPerTopic = 3;
 
-  // Phase 1: Reserve minimum per track
-  for (const id of trackIds) {
-    const trackQuestions = byTrack[id];
-    const take = Math.min(minPerTrack, trackQuestions.length);
+  // Phase 1: Reserve minimum per topic
+  for (const id of topicIds) {
+    const topicQuestions = byTopic[id];
+    const take = Math.min(minPerTopic, topicQuestions.length);
     for (let i = 0; i < take; i++) {
-      selected.add(trackQuestions[i].id);
-      result.push(trackQuestions[i]);
+      selected.add(topicQuestions[i].id);
+      result.push(topicQuestions[i]);
     }
   }
 
-  // Phase 2: Fill remaining slots from all tracks by priority
+  // Phase 2: Fill remaining slots from all topics by priority
   if (result.length < maxTotal) {
     const remaining = questions
       .filter((q) => !selected.has(q.id));
@@ -208,29 +208,29 @@ export function balanceAcrossTracks(
 }
 
 /**
- * Group selected questions into track-ordered output sections.
+ * Group selected questions into topic-ordered output sections.
  */
-export function groupByTrack(questions: DiligenceQuestion[]): TrackOutput[] {
-  const trackIds = Object.keys(TRACK_META) as Array<keyof typeof TRACK_META>;
-  const tracks: TrackOutput[] = [];
+export function groupByTopic(questions: DiligenceQuestion[]): TopicOutput[] {
+  const topicIds = Object.keys(TOPIC_META) as Array<keyof typeof TOPIC_META>;
+  const topics: TopicOutput[] = [];
 
-  for (const id of trackIds) {
-    const meta = TRACK_META[id];
-    const trackQuestions = sortByPriority(
-      questions.filter((q) => q.track === id)
+  for (const id of topicIds) {
+    const meta = TOPIC_META[id];
+    const topicQuestions = sortByPriority(
+      questions.filter((q) => q.topic === id)
     );
 
-    if (trackQuestions.length > 0) {
-      tracks.push({
-        trackId: id,
-        trackLabel: meta.label,
+    if (topicQuestions.length > 0) {
+      topics.push({
+        topicId: id,
+        topicLabel: meta.label,
         audienceLevel: meta.audience,
-        questions: trackQuestions,
+        questions: topicQuestions,
       });
     }
   }
 
-  return tracks;
+  return topics;
 }
 
 /**
@@ -246,11 +246,11 @@ export function generateScript(inputs: UserInputs): GeneratedScript {
     matchesConditions(a.conditions, inputs)
   );
 
-  const selected = balanceAcrossTracks(matchedQuestions, 15, 20);
-  const tracks = groupByTrack(selected);
+  const selected = balanceAcrossTopics(matchedQuestions, 15, 20);
+  const topics = groupByTopic(selected);
 
   return {
-    tracks,
+    topics,
     riskAnchors: matchedAnchors,
     metadata: {
       totalQuestions: selected.length,

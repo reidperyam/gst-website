@@ -5,11 +5,11 @@
  * - Question bank data structure and content
  * - Risk anchor data structure and content
  * - Wizard configuration and bracket ordering
- * - Track metadata consistency
+ * - Topic metadata consistency
  */
 
 import { describe, it, expect } from 'vitest';
-import { QUESTIONS, TRACK_META } from '../../src/data/diligence-machine/questions';
+import { QUESTIONS, TOPIC_META } from '../../src/data/diligence-machine/questions';
 import { RISK_ANCHORS } from '../../src/data/diligence-machine/risk-anchors';
 import { WIZARD_STEPS, BRACKET_ORDER } from '../../src/data/diligence-machine/wizard-config';
 
@@ -24,8 +24,8 @@ describe('Question Bank Data Integrity', () => {
     it('should have all required fields on each question', () => {
       const requiredFields = [
         'id',
-        'track',
-        'trackLabel',
+        'topic',
+        'topicLabel',
         'audienceLevel',
         'text',
         'rationale',
@@ -47,30 +47,30 @@ describe('Question Bank Data Integrity', () => {
     });
   });
 
-  describe('track validation', () => {
-    it('should have all questions assigned to valid tracks', () => {
-      const validTracks = Object.keys(TRACK_META);
+  describe('topic validation', () => {
+    it('should have all questions assigned to valid topics', () => {
+      const validTopics = Object.keys(TOPIC_META);
       for (const q of QUESTIONS) {
-        expect(validTracks, `Question ${q.id} has invalid track: ${q.track}`).toContain(q.track);
+        expect(validTopics, `Question ${q.id} has invalid topic: ${q.topic}`).toContain(q.topic);
       }
     });
 
-    it('should have all four tracks represented', () => {
-      const tracks = new Set(QUESTIONS.map((q) => q.track));
-      expect(tracks.size).toBe(4);
-      expect(tracks).toContain('architecture');
-      expect(tracks).toContain('operations');
-      expect(tracks).toContain('carveout-integration');
-      expect(tracks).toContain('security-risk');
+    it('should have all four topics represented', () => {
+      const topics = new Set(QUESTIONS.map((q) => q.topic));
+      expect(topics.size).toBe(4);
+      expect(topics).toContain('architecture');
+      expect(topics).toContain('operations');
+      expect(topics).toContain('carveout-integration');
+      expect(topics).toContain('security-risk');
     });
 
-    it('should have at least 8 questions per track', () => {
-      const trackCounts: Record<string, number> = {};
+    it('should have at least 8 questions per topic', () => {
+      const topicCounts: Record<string, number> = {};
       for (const q of QUESTIONS) {
-        trackCounts[q.track] = (trackCounts[q.track] || 0) + 1;
+        topicCounts[q.topic] = (topicCounts[q.topic] || 0) + 1;
       }
-      for (const track of Object.keys(TRACK_META)) {
-        expect(trackCounts[track], `Track ${track} has fewer than 8 questions`).toBeGreaterThanOrEqual(8);
+      for (const topic of Object.keys(TOPIC_META)) {
+        expect(topicCounts[topic], `Topic ${topic} has fewer than 8 questions`).toBeGreaterThanOrEqual(8);
       }
     });
   });
@@ -83,17 +83,17 @@ describe('Question Bank Data Integrity', () => {
       }
     });
 
-    it('should have at least one critical question per track', () => {
-      const trackCriticalCounts: Record<string, number> = {};
+    it('should have at least one critical question per topic', () => {
+      const topicCriticalCounts: Record<string, number> = {};
 
       for (const q of QUESTIONS) {
         if (q.priority === 'critical') {
-          trackCriticalCounts[q.track] = (trackCriticalCounts[q.track] || 0) + 1;
+          topicCriticalCounts[q.topic] = (topicCriticalCounts[q.topic] || 0) + 1;
         }
       }
 
-      for (const track of Object.keys(TRACK_META)) {
-        expect(trackCriticalCounts[track], `Track ${track} has no critical questions`).toBeGreaterThanOrEqual(1);
+      for (const topic of Object.keys(TOPIC_META)) {
+        expect(topicCriticalCounts[topic], `Topic ${topic} has no critical questions`).toBeGreaterThanOrEqual(1);
       }
     });
 
@@ -132,10 +132,10 @@ describe('Question Bank Data Integrity', () => {
       }
     });
 
-    it('should have trackLabel matching track metadata', () => {
+    it('should have topicLabel matching topic metadata', () => {
       for (const q of QUESTIONS) {
-        const expectedLabel = TRACK_META[q.track as keyof typeof TRACK_META].label;
-        expect(q.trackLabel, `Question ${q.id} has incorrect trackLabel`).toBe(expectedLabel);
+        const expectedLabel = TOPIC_META[q.topic as keyof typeof TOPIC_META].label;
+        expect(q.topicLabel, `Question ${q.id} has incorrect topicLabel`).toBe(expectedLabel);
       }
     });
 
@@ -231,8 +231,8 @@ describe('Question Bank Data Integrity', () => {
   });
 
   describe('ID format validation', () => {
-    it('should have IDs matching track prefix pattern', () => {
-      const trackPrefixes: Record<string, string> = {
+    it('should have IDs matching topic prefix pattern', () => {
+      const topicPrefixes: Record<string, string> = {
         architecture: 'arch-',
         operations: 'ops-',
         'carveout-integration': 'ci-',
@@ -240,13 +240,13 @@ describe('Question Bank Data Integrity', () => {
       };
 
       for (const q of QUESTIONS) {
-        const expectedPrefix = trackPrefixes[q.track];
+        const expectedPrefix = topicPrefixes[q.topic];
         expect(q.id.startsWith(expectedPrefix), `Question ${q.id} doesn't start with ${expectedPrefix}`).toBe(true);
       }
     });
 
-    it('should have sequential numbering within tracks', () => {
-      const trackQuestions: Record<string, string[]> = {
+    it('should have sequential numbering within topics', () => {
+      const topicQuestions: Record<string, string[]> = {
         architecture: [],
         operations: [],
         'carveout-integration': [],
@@ -254,18 +254,18 @@ describe('Question Bank Data Integrity', () => {
       };
 
       for (const q of QUESTIONS) {
-        trackQuestions[q.track].push(q.id);
+        topicQuestions[q.topic].push(q.id);
       }
 
-      // Each track should have sequentially numbered IDs (no gaps)
-      for (const [track, ids] of Object.entries(trackQuestions)) {
+      // Each topic should have sequentially numbered IDs (no gaps)
+      for (const [topic, ids] of Object.entries(topicQuestions)) {
         const numbers = ids.map(id => {
           const match = id.match(/-(\d+)$/);
           return match ? parseInt(match[1]) : 0;
         }).sort((a, b) => a - b);
 
         // Check for sequential numbering starting from 01
-        expect(numbers[0], `Track ${track} doesn't start at 01`).toBe(1);
+        expect(numbers[0], `Topic ${topic} doesn't start at 01`).toBe(1);
       }
     });
   });
@@ -695,44 +695,44 @@ describe('Bracket Order Configuration', () => {
   });
 });
 
-// ─── DATA VALIDATION: TRACK METADATA ───────────────────────────────────────
+// ─── DATA VALIDATION: TOPIC METADATA ───────────────────────────────────────
 
-describe('Track Metadata Integrity', () => {
-  it('should have exactly 4 tracks defined', () => {
-    expect(Object.keys(TRACK_META).length).toBe(4);
+describe('Topic Metadata Integrity', () => {
+  it('should have exactly 4 topics defined', () => {
+    expect(Object.keys(TOPIC_META).length).toBe(4);
   });
 
-  it('should have expected track IDs', () => {
-    const trackIds = Object.keys(TRACK_META);
-    expect(trackIds).toContain('architecture');
-    expect(trackIds).toContain('operations');
-    expect(trackIds).toContain('carveout-integration');
-    expect(trackIds).toContain('security-risk');
+  it('should have expected topic IDs', () => {
+    const topicIds = Object.keys(TOPIC_META);
+    expect(topicIds).toContain('architecture');
+    expect(topicIds).toContain('operations');
+    expect(topicIds).toContain('carveout-integration');
+    expect(topicIds).toContain('security-risk');
   });
 
-  it('should have label and audience for each track', () => {
-    for (const [trackId, meta] of Object.entries(TRACK_META)) {
-      expect(meta, `Track ${trackId} missing label`).toHaveProperty('label');
-      expect(meta, `Track ${trackId} missing audience`).toHaveProperty('audience');
-      expect(meta.label.length, `Track ${trackId} has empty label`).toBeGreaterThan(0);
-      expect(meta.audience.length, `Track ${trackId} has empty audience`).toBeGreaterThan(0);
+  it('should have label and audience for each topic', () => {
+    for (const [topicId, meta] of Object.entries(TOPIC_META)) {
+      expect(meta, `Topic ${topicId} missing label`).toHaveProperty('label');
+      expect(meta, `Topic ${topicId} missing audience`).toHaveProperty('audience');
+      expect(meta.label.length, `Topic ${topicId} has empty label`).toBeGreaterThan(0);
+      expect(meta.audience.length, `Topic ${topicId} has empty audience`).toBeGreaterThan(0);
     }
   });
 
-  it('should have order property for each track', () => {
-    for (const [trackId, meta] of Object.entries(TRACK_META)) {
-      expect(meta, `Track ${trackId} missing order`).toHaveProperty('order');
-      expect(typeof meta.order, `Track ${trackId} order is not a number`).toBe('number');
+  it('should have order property for each topic', () => {
+    for (const [topicId, meta] of Object.entries(TOPIC_META)) {
+      expect(meta, `Topic ${topicId} missing order`).toHaveProperty('order');
+      expect(typeof meta.order, `Topic ${topicId} order is not a number`).toBe('number');
     }
   });
 
   it('should have unique order values', () => {
-    const orders = Object.values(TRACK_META).map(m => m.order);
+    const orders = Object.values(TOPIC_META).map(m => m.order);
     expect(new Set(orders).size).toBe(orders.length);
   });
 
   it('should have sequential order values starting from 1', () => {
-    const orders = Object.values(TRACK_META).map(m => m.order).sort((a, b) => a - b);
+    const orders = Object.values(TOPIC_META).map(m => m.order).sort((a, b) => a - b);
     expect(orders[0]).toBe(1);
     expect(orders[orders.length - 1]).toBe(4);
   });

@@ -8,7 +8,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
 <BaseLayout
     title="The Diligence Machine | Strategic Intelligence Hub"
-    description="Generate a prescriptive technology due diligence agenda customized to your target's profile. 15-20 high-impact questions organized by meeting track."
+    description="Generate a prescriptive technology due diligence agenda customized to your target's profile. 15-20 high-impact questions organized by meeting topic."
     ogTitle="The Diligence Machine | GST"
     ogDescription="Customize a technology diligence checklist by target parameters. Risk-prioritized, executive-ready."
     ogImage="/og-image.png"
@@ -201,8 +201,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         <div class="doc-risk-grid" id="riskAnchorsGrid"></div>
                     </section>
 
-                    <!-- Track Sections -->
-                    <div class="doc-tracks" id="scriptTracks"></div>
+                    <!-- Topic Sections -->
+                    <div class="doc-topics" id="scriptTopics"></div>
 
                     <!-- Document Footer -->
                     <footer class="doc-footer">
@@ -263,7 +263,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     const btnRestart = document.getElementById('btnRestart') as HTMLButtonElement;
     const riskAnchorsSection = document.getElementById('riskAnchorsSection')!;
     const riskAnchorsGrid = document.getElementById('riskAnchorsGrid')!;
-    const scriptTracks = document.getElementById('scriptTracks')!;
+    const scriptTopics = document.getElementById('scriptTopics')!;
 
     // ─── LOCAL STORAGE ───────────────────────────────────────────────────
 
@@ -498,23 +498,23 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             riskAnchorsSection.style.display = 'none';
         }
 
-        // Render tracks
-        scriptTracks.innerHTML = script.tracks
-            .map((track, trackIndex) => `
-                <section class="doc-track" id="track-${trackIndex + 1}">
-                    <div class="doc-track-header">
-                        <div class="doc-track-label-row">
-                            <span class="doc-track-number">Track ${trackIndex + 1} of ${script.tracks.length}</span>
-                            <span class="doc-track-qcount">${track.questions.length} question${track.questions.length !== 1 ? 's' : ''}</span>
+        // Render topics
+        scriptTopics.innerHTML = script.topics
+            .map((topic, topicIndex) => `
+                <section class="doc-topic" id="topic-${topicIndex + 1}">
+                    <div class="doc-topic-header">
+                        <div class="doc-topic-label-row">
+                            <span class="doc-topic-number">Topic ${topicIndex + 1} of ${script.topics.length}</span>
+                            <span class="doc-topic-qcount">${topic.questions.length} question${topic.questions.length !== 1 ? 's' : ''}</span>
                         </div>
-                        <h2 class="doc-track-title">${escapeHtml(track.trackLabel)}</h2>
-                        <p class="doc-track-audience">Target audience: ${escapeHtml(track.audienceLevel)}</p>
+                        <h2 class="doc-topic-title">${escapeHtml(topic.topicLabel)}</h2>
+                        <p class="doc-topic-audience">Target audience: ${escapeHtml(topic.audienceLevel)}</p>
                     </div>
                     <ol class="doc-questions">
-                        ${track.questions.map((q, qIndex) => `
+                        ${topic.questions.map((q, qIndex) => `
                             <li class="doc-question priority-${escapeHtml(q.priority)}">
                                 <div class="doc-q-header">
-                                    <span class="doc-q-number">${trackIndex + 1}.${qIndex + 1}</span>
+                                    <span class="doc-q-number">${topicIndex + 1}.${qIndex + 1}</span>
                                     <span class="doc-q-priority">${escapeHtml(q.priority)}</span>
                                 </div>
                                 <p class="doc-q-text">${escapeHtml(q.text)}</p>
@@ -581,16 +581,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     function renderToc(script: GeneratedScript): void {
         const docToc = document.getElementById('docToc')!;
-        const totalQ = script.tracks.reduce((sum, t) => sum + t.questions.length, 0);
+        const totalQ = script.topics.reduce((sum, t) => sum + t.questions.length, 0);
 
         docToc.innerHTML = `
             <h2 class="doc-section-heading">Contents</h2>
-            <p class="doc-toc-summary">${totalQ} questions across ${script.tracks.length} tracks</p>
+            <p class="doc-toc-summary">${totalQ} questions across ${script.topics.length} topics</p>
             <ol class="doc-toc-list">
-                ${script.tracks.map((track, i) => `
+                ${script.topics.map((topic, i) => `
                     <li>
-                        <a href="#track-${i + 1}" class="doc-toc-link">
-                            <span class="doc-toc-track-name">Track ${i + 1}: ${escapeHtml(track.trackLabel)}</span>
+                        <a href="#topic-${i + 1}" class="doc-toc-link">
+                            <span class="doc-toc-topic-name">Topic ${i + 1}: ${escapeHtml(topic.topicLabel)}</span>
                         </a>
                     </li>
                 `).join('')}
@@ -648,16 +648,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             }
         }
 
-        // Tracks
-        for (const [trackIndex, track] of script.tracks.entries()) {
+        // Topics
+        for (const [topicIndex, topic] of script.topics.entries()) {
             lines.push('\u2550'.repeat(60));
-            lines.push(`TRACK ${trackIndex + 1}: ${track.trackLabel.toUpperCase()}`);
-            lines.push(`Audience: ${track.audienceLevel}`);
+            lines.push(`TOPIC ${topicIndex + 1}: ${topic.topicLabel.toUpperCase()}`);
+            lines.push(`Audience: ${topic.audienceLevel}`);
             lines.push('\u2550'.repeat(60));
             lines.push('');
 
-            for (const [qIndex, q] of track.questions.entries()) {
-                lines.push(`${trackIndex + 1}.${qIndex + 1} [${q.priority.toUpperCase()}] ${q.text}`);
+            for (const [qIndex, q] of topic.questions.entries()) {
+                lines.push(`${topicIndex + 1}.${qIndex + 1} [${q.priority.toUpperCase()}] ${q.text}`);
                 lines.push(`    Rationale: ${q.rationale}`);
                 lines.push('');
             }
@@ -700,7 +700,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         outputContainer.style.display = 'none';
         wizardContainer.style.display = '';
         riskAnchorsGrid.innerHTML = '';
-        scriptTracks.innerHTML = '';
+        scriptTopics.innerHTML = '';
         lastGeneratedScript = null;
 
         // Clear document sections
@@ -1419,7 +1419,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--color-primary);
     }
 
-    .doc-toc :global(.doc-toc-track-name) {
+    .doc-toc :global(.doc-toc-topic-name) {
         font-size: var(--text-sm);
         font-weight: var(--font-weight-semibold);
     }
@@ -1510,26 +1510,26 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin: 0;
     }
 
-    /* ─── TRACK SECTIONS ───────────────────────────────────────────────── */
+    /* ─── TOPIC SECTIONS ───────────────────────────────────────────────── */
 
-    .doc-track {
+    .doc-topic {
         margin-top: var(--spacing-3xl);
     }
 
-    .doc-track-header {
+    .doc-topic-header {
         padding-bottom: var(--spacing-lg);
         border-bottom: 2px solid var(--color-primary);
         margin-bottom: var(--spacing-xl);
     }
 
-    .doc-track-label-row {
+    .doc-topic-label-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: var(--spacing-xs);
     }
 
-    .doc-track-number {
+    .doc-topic-number {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
@@ -1537,20 +1537,20 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--color-primary);
     }
 
-    .doc-track-qcount {
+    .doc-topic-qcount {
         font-size: var(--text-xs);
         color: var(--text-light-muted);
         font-weight: var(--font-weight-semibold);
     }
 
-    .doc-track-title {
+    .doc-topic-title {
         font-size: var(--text-xl);
         font-weight: var(--font-weight-bold);
         color: var(--text-light-primary);
         margin: 0 0 var(--spacing-xs) 0;
     }
 
-    .doc-track-audience {
+    .doc-topic-audience {
         font-size: var(--text-sm);
         color: var(--text-light-muted);
         font-style: italic;
@@ -1833,7 +1833,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             flex: 1 1 auto;
         }
 
-        .doc-track-label-row {
+        .doc-topic-label-row {
             flex-direction: column;
             align-items: flex-start;
             gap: var(--spacing-xs);
@@ -1878,7 +1878,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             background: white;
         }
 
-        .doc-track {
+        .doc-topic {
             break-inside: avoid;
         }
 
@@ -1892,7 +1892,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         .doc-header,
         .doc-divider--heavy,
-        .doc-track-title,
+        .doc-topic-title,
         .doc-q-number {
             color: var(--color-primary);
         }

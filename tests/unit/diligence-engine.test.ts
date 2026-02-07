@@ -5,8 +5,8 @@
  * - meetsMinimumBracket: Ordinal comparison logic
  * - matchesConditions: Condition matching with wildcards
  * - sortByPriority: Priority-based sorting
- * - balanceAcrossTracks: Track balancing algorithm
- * - groupByTrack: Track grouping and metadata
+ * - balanceAcrossTopics: Topic balancing algorithm
+ * - groupByTopic: Topic grouping and metadata
  * - generateScript: End-to-end script generation
  */
 
@@ -15,8 +15,8 @@ import {
   matchesConditions,
   meetsMinimumBracket,
   sortByPriority,
-  balanceAcrossTracks,
-  groupByTrack,
+  balanceAcrossTopics,
+  groupByTopic,
   generateScript,
 } from '../../src/utils/diligence-engine';
 import type { UserInputs } from '../../src/utils/diligence-engine';
@@ -30,8 +30,8 @@ function makeQuestion(
 ): DiligenceQuestion {
   return {
     id: overrides.id ?? 'test-q',
-    track: overrides.track ?? 'architecture',
-    trackLabel: overrides.trackLabel ?? 'Architecture & Scalability',
+    topic: overrides.topic ?? 'architecture',
+    topicLabel: overrides.topicLabel ?? 'Architecture & Scalability',
     audienceLevel: overrides.audienceLevel ?? 'CTO',
     text: overrides.text ?? 'Test question text that is long enough',
     rationale: overrides.rationale ?? 'Test rationale that is long enough',
@@ -409,28 +409,28 @@ describe('sortByPriority', () => {
   });
 });
 
-// ─── TESTS: balanceAcrossTracks ────────────────────────────────────────────
+// ─── TESTS: balanceAcrossTopics ────────────────────────────────────────────
 
-describe('balanceAcrossTracks', () => {
-  const archQ1 = makeQuestion({ id: 'arch-1', track: 'architecture', priority: 'critical' });
-  const archQ2 = makeQuestion({ id: 'arch-2', track: 'architecture', priority: 'high' });
-  const archQ3 = makeQuestion({ id: 'arch-3', track: 'architecture', priority: 'standard' });
-  const archQ4 = makeQuestion({ id: 'arch-4', track: 'architecture', priority: 'standard' });
+describe('balanceAcrossTopics', () => {
+  const archQ1 = makeQuestion({ id: 'arch-1', topic: 'architecture', priority: 'critical' });
+  const archQ2 = makeQuestion({ id: 'arch-2', topic: 'architecture', priority: 'high' });
+  const archQ3 = makeQuestion({ id: 'arch-3', topic: 'architecture', priority: 'standard' });
+  const archQ4 = makeQuestion({ id: 'arch-4', topic: 'architecture', priority: 'standard' });
 
-  const opsQ1 = makeQuestion({ id: 'ops-1', track: 'operations', priority: 'critical' });
-  const opsQ2 = makeQuestion({ id: 'ops-2', track: 'operations', priority: 'high' });
-  const opsQ3 = makeQuestion({ id: 'ops-3', track: 'operations', priority: 'standard' });
+  const opsQ1 = makeQuestion({ id: 'ops-1', topic: 'operations', priority: 'critical' });
+  const opsQ2 = makeQuestion({ id: 'ops-2', topic: 'operations', priority: 'high' });
+  const opsQ3 = makeQuestion({ id: 'ops-3', topic: 'operations', priority: 'standard' });
 
-  const ciQ1 = makeQuestion({ id: 'ci-1', track: 'carveout-integration', priority: 'critical' });
-  const ciQ2 = makeQuestion({ id: 'ci-2', track: 'carveout-integration', priority: 'high' });
-  const ciQ3 = makeQuestion({ id: 'ci-3', track: 'carveout-integration', priority: 'standard' });
+  const ciQ1 = makeQuestion({ id: 'ci-1', topic: 'carveout-integration', priority: 'critical' });
+  const ciQ2 = makeQuestion({ id: 'ci-2', topic: 'carveout-integration', priority: 'high' });
+  const ciQ3 = makeQuestion({ id: 'ci-3', topic: 'carveout-integration', priority: 'standard' });
 
-  const secQ1 = makeQuestion({ id: 'sec-1', track: 'security-risk', priority: 'critical' });
-  const secQ2 = makeQuestion({ id: 'sec-2', track: 'security-risk', priority: 'high' });
-  const secQ3 = makeQuestion({ id: 'sec-3', track: 'security-risk', priority: 'standard' });
+  const secQ1 = makeQuestion({ id: 'sec-1', topic: 'security-risk', priority: 'critical' });
+  const secQ2 = makeQuestion({ id: 'sec-2', topic: 'security-risk', priority: 'high' });
+  const secQ3 = makeQuestion({ id: 'sec-3', topic: 'security-risk', priority: 'standard' });
 
-  describe('minimum per track (3 questions)', () => {
-    it('should select minimum 3 per track when available', () => {
+  describe('minimum per topic (3 questions)', () => {
+    it('should select minimum 3 per topic when available', () => {
       const questions = [
         archQ1, archQ2, archQ3, archQ4,
         opsQ1, opsQ2, opsQ3,
@@ -438,13 +438,13 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
 
-      // Count questions per track
-      const archCount = result.filter(q => q.track === 'architecture').length;
-      const opsCount = result.filter(q => q.track === 'operations').length;
-      const ciCount = result.filter(q => q.track === 'carveout-integration').length;
-      const secCount = result.filter(q => q.track === 'security-risk').length;
+      // Count questions per topic
+      const archCount = result.filter(q => q.topic === 'architecture').length;
+      const opsCount = result.filter(q => q.topic === 'operations').length;
+      const ciCount = result.filter(q => q.topic === 'carveout-integration').length;
+      const secCount = result.filter(q => q.topic === 'security-risk').length;
 
       expect(archCount).toBeGreaterThanOrEqual(3);
       expect(opsCount).toBeGreaterThanOrEqual(3);
@@ -452,7 +452,7 @@ describe('balanceAcrossTracks', () => {
       expect(secCount).toBeGreaterThanOrEqual(3);
     });
 
-    it('should take fewer than 3 when track has less than 3 questions', () => {
+    it('should take fewer than 3 when topic has less than 3 questions', () => {
       const questions = [
         archQ1, archQ2, // Only 2 in architecture
         opsQ1, opsQ2, opsQ3,
@@ -460,9 +460,9 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
 
-      const archCount = result.filter(q => q.track === 'architecture').length;
+      const archCount = result.filter(q => q.topic === 'architecture').length;
       expect(archCount).toBe(2); // Takes all available (< 3)
     });
   });
@@ -476,7 +476,7 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
 
       expect(result.length).toBeLessThanOrEqual(20);
     });
@@ -489,18 +489,18 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 10, 10);
+      const result = balanceAcrossTopics(questions, 10, 10);
 
-      // balanceAcrossTracks aims for minPerTrack (3) * 4 tracks = 12 minimum
+      // balanceAcrossTopics aims for minPerTopic (3) * 4 topics = 12 minimum
       // but maxTotal of 10 means it will select at most 10
-      // Since the implementation prioritizes minimum per track, it may select 12
+      // Since the implementation prioritizes minimum per topic, it may select 12
       expect(result.length).toBeLessThanOrEqual(12);
       expect(result.length).toBeGreaterThanOrEqual(10);
     });
   });
 
   describe('priority-based filling after minimum', () => {
-    it('should fill remaining slots by priority across all tracks', () => {
+    it('should fill remaining slots by priority across all topics', () => {
       const questions = [
         archQ1, archQ2, archQ3, archQ4,
         opsQ1, opsQ2, opsQ3,
@@ -508,9 +508,9 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
 
-      // After taking 3 from each track (12 total), remaining slots
+      // After taking 3 from each topic (12 total), remaining slots
       // should be filled by highest priority questions
       expect(result.length).toBeGreaterThan(12);
       expect(result.length).toBeLessThanOrEqual(20);
@@ -525,7 +525,7 @@ describe('balanceAcrossTracks', () => {
         secQ3, secQ3, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
 
       // Should include the critical questions from arch and ops in phase 2
       const criticalIds = result.filter(q => q.priority === 'critical').map(q => q.id);
@@ -535,12 +535,12 @@ describe('balanceAcrossTracks', () => {
 
   describe('edge cases', () => {
     it('should handle empty input', () => {
-      const result = balanceAcrossTracks([], 15, 20);
+      const result = balanceAcrossTopics([], 15, 20);
       expect(result).toEqual([]);
     });
 
-    it('should handle maxTotal smaller than minPerTrack * trackCount', () => {
-      // 4 tracks * 3 minimum = 12, but maxTotal = 10
+    it('should handle maxTotal smaller than minPerTopic * topicCount', () => {
+      // 4 topics * 3 minimum = 12, but maxTotal = 10
       const questions = [
         archQ1, archQ2, archQ3,
         opsQ1, opsQ2, opsQ3,
@@ -548,17 +548,17 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 10);
+      const result = balanceAcrossTopics(questions, 15, 10);
 
-      // The implementation prioritizes minimum per track (3) over maxTotal
-      // So it will select 12 questions (3 per track) even though maxTotal is 10
+      // The implementation prioritizes minimum per topic (3) over maxTotal
+      // So it will select 12 questions (3 per topic) even though maxTotal is 10
       expect(result.length).toBeGreaterThanOrEqual(10);
       expect(result.length).toBeLessThanOrEqual(12);
     });
 
-    it('should handle single track with multiple questions', () => {
+    it('should handle single topic with multiple questions', () => {
       const questions = [archQ1, archQ2, archQ3, archQ4];
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
 
       expect(result.length).toBe(4); // Takes all available
     });
@@ -571,7 +571,7 @@ describe('balanceAcrossTracks', () => {
         secQ1, secQ2, secQ3,
       ];
 
-      const result = balanceAcrossTracks(questions, 15, 20);
+      const result = balanceAcrossTopics(questions, 15, 20);
       const ids = result.map(q => q.id);
       const uniqueIds = new Set(ids);
 
@@ -580,83 +580,83 @@ describe('balanceAcrossTracks', () => {
   });
 });
 
-// ─── TESTS: groupByTrack ───────────────────────────────────────────────────
+// ─── TESTS: groupByTopic ───────────────────────────────────────────────────
 
-describe('groupByTrack', () => {
-  const archQ1 = makeQuestion({ id: 'arch-1', track: 'architecture', priority: 'critical' });
-  const archQ2 = makeQuestion({ id: 'arch-2', track: 'architecture', priority: 'standard' });
+describe('groupByTopic', () => {
+  const archQ1 = makeQuestion({ id: 'arch-1', topic: 'architecture', priority: 'critical' });
+  const archQ2 = makeQuestion({ id: 'arch-2', topic: 'architecture', priority: 'standard' });
 
-  const opsQ1 = makeQuestion({ id: 'ops-1', track: 'operations', priority: 'high' });
+  const opsQ1 = makeQuestion({ id: 'ops-1', topic: 'operations', priority: 'high' });
 
-  const ciQ1 = makeQuestion({ id: 'ci-1', track: 'carveout-integration', priority: 'critical' });
-  const ciQ2 = makeQuestion({ id: 'ci-2', track: 'carveout-integration', priority: 'high' });
+  const ciQ1 = makeQuestion({ id: 'ci-1', topic: 'carveout-integration', priority: 'critical' });
+  const ciQ2 = makeQuestion({ id: 'ci-2', topic: 'carveout-integration', priority: 'high' });
 
-  const secQ1 = makeQuestion({ id: 'sec-1', track: 'security-risk', priority: 'standard' });
+  const secQ1 = makeQuestion({ id: 'sec-1', topic: 'security-risk', priority: 'standard' });
 
-  it('should group questions by track ID', () => {
+  it('should group questions by topic ID', () => {
     const questions = [archQ1, opsQ1, archQ2, ciQ1, secQ1, ciQ2];
-    const tracks = groupByTrack(questions);
+    const topics = groupByTopic(questions);
 
-    expect(tracks.length).toBe(4); // All 4 tracks represented
+    expect(topics.length).toBe(4); // All 4 topics represented
 
-    const archTrack = tracks.find(t => t.trackId === 'architecture');
-    const opsTrack = tracks.find(t => t.trackId === 'operations');
-    const ciTrack = tracks.find(t => t.trackId === 'carveout-integration');
-    const secTrack = tracks.find(t => t.trackId === 'security-risk');
+    const archTopic = topics.find(t => t.topicId === 'architecture');
+    const opsTopic = topics.find(t => t.topicId === 'operations');
+    const ciTopic = topics.find(t => t.topicId === 'carveout-integration');
+    const secTopic = topics.find(t => t.topicId === 'security-risk');
 
-    expect(archTrack?.questions).toHaveLength(2);
-    expect(opsTrack?.questions).toHaveLength(1);
-    expect(ciTrack?.questions).toHaveLength(2);
-    expect(secTrack?.questions).toHaveLength(1);
+    expect(archTopic?.questions).toHaveLength(2);
+    expect(opsTopic?.questions).toHaveLength(1);
+    expect(ciTopic?.questions).toHaveLength(2);
+    expect(secTopic?.questions).toHaveLength(1);
   });
 
-  it('should sort questions within each track by priority', () => {
+  it('should sort questions within each topic by priority', () => {
     const questions = [archQ2, archQ1]; // standard before critical
-    const tracks = groupByTrack(questions);
+    const topics = groupByTopic(questions);
 
-    const archTrack = tracks.find(t => t.trackId === 'architecture');
-    expect(archTrack?.questions[0].priority).toBe('critical');
-    expect(archTrack?.questions[1].priority).toBe('standard');
+    const archTopic = topics.find(t => t.topicId === 'architecture');
+    expect(archTopic?.questions[0].priority).toBe('critical');
+    expect(archTopic?.questions[1].priority).toBe('standard');
   });
 
-  it('should include track metadata (label and audience)', () => {
+  it('should include topic metadata (label and audience)', () => {
     const questions = [archQ1];
-    const tracks = groupByTrack(questions);
+    const topics = groupByTopic(questions);
 
-    const archTrack = tracks.find(t => t.trackId === 'architecture');
-    expect(archTrack?.trackLabel).toBe('Architecture & Scalability');
-    expect(archTrack?.audienceLevel).toBe('CTO / VP Engineering');
+    const archTopic = topics.find(t => t.topicId === 'architecture');
+    expect(archTopic?.topicLabel).toBe('Architecture & Scalability');
+    expect(archTopic?.audienceLevel).toBe('CTO / VP Engineering');
   });
 
-  it('should exclude tracks with 0 questions', () => {
+  it('should exclude topics with 0 questions', () => {
     const questions = [archQ1, opsQ1]; // No CI or Sec questions
-    const tracks = groupByTrack(questions);
+    const topics = groupByTopic(questions);
 
-    expect(tracks.length).toBe(2);
-    expect(tracks.map(t => t.trackId)).toEqual(['architecture', 'operations']);
+    expect(topics.length).toBe(2);
+    expect(topics.map(t => t.topicId)).toEqual(['architecture', 'operations']);
   });
 
-  it('should return tracks in correct order', () => {
+  it('should return topics in correct order', () => {
     const questions = [secQ1, archQ1, ciQ1, opsQ1];
-    const tracks = groupByTrack(questions);
+    const topics = groupByTopic(questions);
 
     // Expected order: architecture, operations, carveout-integration, security-risk
-    expect(tracks[0].trackId).toBe('architecture');
-    expect(tracks[1].trackId).toBe('operations');
-    expect(tracks[2].trackId).toBe('carveout-integration');
-    expect(tracks[3].trackId).toBe('security-risk');
+    expect(topics[0].topicId).toBe('architecture');
+    expect(topics[1].topicId).toBe('operations');
+    expect(topics[2].topicId).toBe('carveout-integration');
+    expect(topics[3].topicId).toBe('security-risk');
   });
 
   it('should handle empty array', () => {
-    const tracks = groupByTrack([]);
-    expect(tracks).toEqual([]);
+    const topics = groupByTopic([]);
+    expect(topics).toEqual([]);
   });
 
   it('should handle single question', () => {
-    const tracks = groupByTrack([archQ1]);
-    expect(tracks).toHaveLength(1);
-    expect(tracks[0].trackId).toBe('architecture');
-    expect(tracks[0].questions).toHaveLength(1);
+    const topics = groupByTopic([archQ1]);
+    expect(topics).toHaveLength(1);
+    expect(topics[0].topicId).toBe('architecture');
+    expect(topics[0].questions).toHaveLength(1);
   });
 });
 
@@ -666,19 +666,19 @@ describe('generateScript (Integration)', () => {
   it('should return valid GeneratedScript structure', () => {
     const script = generateScript(baseInputs);
 
-    expect(script).toHaveProperty('tracks');
+    expect(script).toHaveProperty('topics');
     expect(script).toHaveProperty('riskAnchors');
     expect(script).toHaveProperty('metadata');
 
-    expect(Array.isArray(script.tracks)).toBe(true);
+    expect(Array.isArray(script.topics)).toBe(true);
     expect(Array.isArray(script.riskAnchors)).toBe(true);
     expect(typeof script.metadata).toBe('object');
   });
 
   it('should include 15-20 total questions', () => {
     const script = generateScript(baseInputs);
-    const totalQuestions = script.tracks.reduce(
-      (sum, track) => sum + track.questions.length,
+    const totalQuestions = script.topics.reduce(
+      (sum, topic) => sum + topic.questions.length,
       0
     );
 
@@ -703,12 +703,12 @@ describe('generateScript (Integration)', () => {
     const script = generateScript(inputs);
 
     // All questions should match the input conditions
-    const allQuestions = script.tracks.flatMap(t => t.questions);
+    const allQuestions = script.topics.flatMap(t => t.questions);
     expect(allQuestions.length).toBeGreaterThan(0);
 
     // Check that carve-out specific questions are included
     const carveoutQuestions = allQuestions.filter(q =>
-      q.track === 'carveout-integration'
+      q.topic === 'carveout-integration'
     );
     expect(carveoutQuestions.length).toBeGreaterThan(0);
   });
@@ -759,17 +759,17 @@ describe('generateScript (Integration)', () => {
     });
   });
 
-  it('should group questions into tracks', () => {
+  it('should group questions into topics', () => {
     const script = generateScript(baseInputs);
 
-    expect(script.tracks.length).toBeGreaterThan(0);
+    expect(script.topics.length).toBeGreaterThan(0);
 
-    script.tracks.forEach(track => {
-      expect(track).toHaveProperty('trackId');
-      expect(track).toHaveProperty('trackLabel');
-      expect(track).toHaveProperty('audienceLevel');
-      expect(track).toHaveProperty('questions');
-      expect(Array.isArray(track.questions)).toBe(true);
+    script.topics.forEach(topic => {
+      expect(topic).toHaveProperty('topicId');
+      expect(topic).toHaveProperty('topicLabel');
+      expect(topic).toHaveProperty('audienceLevel');
+      expect(topic).toHaveProperty('questions');
+      expect(Array.isArray(topic.questions)).toBe(true);
     });
   });
 
@@ -781,11 +781,11 @@ describe('generateScript (Integration)', () => {
 
     const script = generateScript(ventureInputs);
 
-    expect(script.tracks.length).toBeGreaterThan(0);
+    expect(script.topics.length).toBeGreaterThan(0);
     expect(script.metadata.totalQuestions).toBeGreaterThanOrEqual(15);
 
     // Should NOT include carve-out specific questions
-    const allQuestions = script.tracks.flatMap(t => t.questions);
+    const allQuestions = script.topics.flatMap(t => t.questions);
     const carveoutQuestions = allQuestions.filter(
       q => q.conditions.transactionTypes?.includes('carve-out') &&
            !q.conditions.transactionTypes?.includes('venture-series')
@@ -802,7 +802,7 @@ describe('generateScript (Integration)', () => {
     const script = generateScript(deepTechInputs);
 
     // Should include deep-tech specific questions and risk anchors
-    const allQuestions = script.tracks.flatMap(t => t.questions);
+    const allQuestions = script.topics.flatMap(t => t.questions);
     expect(allQuestions.length).toBeGreaterThan(0);
 
     // Check for IP-related risk anchors
@@ -829,7 +829,7 @@ describe('generateScript (Integration)', () => {
     const script = generateScript(narrowInputs);
 
     // Should still generate a script with balanced questions
-    expect(script.tracks.length).toBeGreaterThan(0);
+    expect(script.topics.length).toBeGreaterThan(0);
     expect(script.metadata.totalQuestions).toBeGreaterThan(0);
   });
 
@@ -871,11 +871,11 @@ describe('generateScript (Integration)', () => {
     };
 
     const result = generateScript(inputs);
-    const carveoutTrack = result.tracks.find(
-      (t) => t.trackId === 'carveout-integration'
+    const carveoutTopic = result.topics.find(
+      (t) => t.topicId === 'carveout-integration'
     );
-    expect(carveoutTrack).toBeDefined();
-    expect(carveoutTrack!.questions.length).toBeGreaterThanOrEqual(3);
+    expect(carveoutTopic).toBeDefined();
+    expect(carveoutTopic!.questions.length).toBeGreaterThanOrEqual(3);
   });
 
   it('should include GDPR question for EU geography', () => {
@@ -885,7 +885,7 @@ describe('generateScript (Integration)', () => {
     };
 
     const result = generateScript(inputs);
-    const allQuestions = result.tracks.flatMap((t) => t.questions);
+    const allQuestions = result.topics.flatMap((t) => t.questions);
     const gdprQuestion = allQuestions.find((q) => q.id === 'sec-05');
     expect(gdprQuestion).toBeDefined();
   });
@@ -897,7 +897,7 @@ describe('generateScript (Integration)', () => {
     };
 
     const result = generateScript(inputs);
-    const allQuestions = result.tracks.flatMap((t) => t.questions);
+    const allQuestions = result.topics.flatMap((t) => t.questions);
     const serviceQuestion = allQuestions.find((q) => q.id === 'ops-06');
     expect(serviceQuestion).toBeDefined();
   });
