@@ -28,15 +28,55 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
             <div class="services-cards">
                 <div class="service-card">
                     <h3>M&A Advisory</h3>
-                    <p>GST offers comprehensive advisory services for buy-side and sell-side transactions. From technical diligence and vendor assessments to portfolio company preparation and post-acquisition integration, we help you maximize value creation while minimizing risk throughout the transaction lifecycle.</p>
+                    <span class="service-subtitle">Buy Side, Sell Side, Value Creation</span>
+                    <ul class="service-list">
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Buy-side: quantify the true costs, risks and opportunites before you sign</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Sell-side: prepare founders 6 to 3 months before exit to maximize valuation</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Buy-side & Sell-side: Identify hidden technical debt, security exposures, and compliance gaps that erode deal value</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Buy-side & Sell-side: Flag architecture challenges and opportunities, and harden security posture pre-transaction</span></li>
+                    </ul>
                 </div>
                 <div class="service-card">
                     <h3>Product Development</h3>
-                    <p>Engineering team guidance through every phase of the software development lifecycle. From business requirements, architecture design and cloud infrastructure planning to deployment and optimization. We help teams build robust, maintainable systems that leverage modern technologies for business value.</p>
+                    <span class="service-subtitle">Engineering Excellence</span>
+                    <ul class="service-list">
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Remediate legacy monolithic architectures into scalable, maintainable systems</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Multi-region cloud infrastructure and platform engineering</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>CI/CD pipeline acceleration and SDLC optimization</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Compress release cycles from quarters to weeks</span></li>
+                    </ul>
                 </div>
                 <div class="service-card">
                     <h3>Technical Leadership</h3>
-                    <p>Executive-level technical guidance on architecture decisions, technology stack optimization, and digital transformation initiatives. Our advisors help organizations navigate rapid scaling, legacy system modernization, and talent development to achieve their strategic technology objectives.</p>
+                    <span class="service-subtitle">Strategic Partnership</span>
+                    <ul class="service-list">
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Fractional CTO advisory for rapid scaling and platform migrations</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Board-level technical communication and reporting</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Bridge the gap between architecture decisions and business risk</span></li>
+                        <li><img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="bullet-icon" aria-hidden="true" /><span>Post-acquisition integration and technology strategy alignment</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="audience-section">
+        <div class="container">
+            <div class="audience-content">
+                <h2 class="heading-lg">Who Is GST For?</h2>
+                <div class="audience-cards">
+                    <div class="audience-card">
+                        <h3>Private Equity & Investment Teams</h3>
+                        <p>Evaluating targets with complex legacy systems or scaling potential. We quantify what's under the hood so you can price risk accurately and build a credible value creation plan before close.</p>
+                    </div>
+                    <div class="audience-card">
+                        <h3>SaaS Founders & Executives</h3>
+                        <p>Navigating the Series B scaling plateau or the build vs. buy crossroads. We help you make the architectural and organizational calls that determine whether growth compounds or stalls.</p>
+                    </div>
+                    <div class="audience-card">
+                        <h3>Performance-Conscious Organizations</h3>
+                        <p>Needing an independent, vendor-neutral audit of their technical posture. We tell you what your internal teams and existing vendors won't: where the real exposure is and what to do about it.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,14 +163,44 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
         font-size: 1.4rem;
         font-weight: 700;
         color: rgba(26, 26, 26, 0.95);
-        margin-bottom: 1rem;
+        margin-bottom: var(--spacing-sm);
         line-height: 1.3;
     }
 
-    .service-card p {
-        font-size: 1.05rem;
+    .service-subtitle {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-xl);
+        display: block;
+    }
+
+    .service-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .service-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+        font-size: 1rem;
         color: rgba(26, 26, 26, 0.75);
-        line-height: 1.7;
+        line-height: 1.6;
+    }
+
+    .service-list .bullet-icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        margin-top: 0.3em;
+        opacity: 0.7;
     }
 
     :global(html.dark-theme) .service-card {
@@ -147,8 +217,100 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
         color: rgba(245, 245, 245, 0.95);
     }
 
-    :global(html.dark-theme) .service-card p {
+    :global(html.dark-theme) .service-list li {
         color: rgba(200, 200, 200, 0.75);
+    }
+
+    .audience-section {
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .audience-content {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .audience-content .heading-lg {
+        margin-bottom: var(--spacing-2xl);
+        text-align: center;
+    }
+
+    .audience-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+    }
+
+    .audience-card {
+        padding: 2rem;
+        border-left: 3px solid var(--color-primary);
+    }
+
+    .audience-card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: rgba(26, 26, 26, 0.95);
+        margin-bottom: var(--spacing-md);
+        line-height: 1.3;
+    }
+
+    .audience-card p {
+        font-size: 0.95rem;
+        color: rgba(26, 26, 26, 0.7);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    :global(html.dark-theme) .audience-card h3 {
+        color: rgba(245, 245, 245, 0.95);
+    }
+
+    :global(html.dark-theme) .audience-card p {
+        color: rgba(200, 200, 200, 0.7);
+    }
+
+    @media (max-width: 1024px) {
+        .audience-cards {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.75rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .audience-section {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .audience-cards {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .audience-card {
+            padding: 1.5rem;
+        }
+
+        .audience-card h3 {
+            font-size: 1.05rem;
+        }
+
+        .audience-card p {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .audience-card {
+            padding: 1.25rem;
+        }
+
+        .audience-card h3 {
+            font-size: 1rem;
+        }
+
+        .audience-card p {
+            font-size: 0.85rem;
+        }
     }
 
     @media (max-width: 1024px) {
@@ -165,7 +327,7 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
             font-size: 1.2rem;
         }
 
-        .service-card p {
+        .service-list li {
             font-size: 0.95rem;
         }
     }
@@ -201,9 +363,8 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
             font-size: 1.15rem;
         }
 
-        .service-card p {
+        .service-list li {
             font-size: 0.95rem;
-            line-height: 1.7;
         }
     }
 
@@ -236,12 +397,15 @@ trackPageView('services', 'Services | Strategic Advisory & Implementation');
 
         .service-card h3 {
             font-size: 1.05rem;
-            margin-bottom: 0.75rem;
         }
 
-        .service-card p {
+        .service-list li {
             font-size: 0.9rem;
-            line-height: 1.65;
+        }
+
+        .service-list .bullet-icon {
+            width: 12px;
+            height: 12px;
         }
     }
 </style>

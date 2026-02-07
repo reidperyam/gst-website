@@ -18,6 +18,8 @@
                         <span class="step-label">Align</span>
                     </div>
                     <p class="step-text">Introductory discussion to clarify objectives, decision context, and constraints</p>
+                    <div class="step-divider"></div>
+                    <p class="step-detail">Confidential, no-commitment conversation. We assess fit, understand your timeline, and identify the highest-leverage questions to answer first. Typical duration: 30 to 60 minutes.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon-container">
@@ -28,6 +30,8 @@
                         <span class="step-label">Define</span>
                     </div>
                     <p class="step-text">Focused scope aligned to decision-critical priorities</p>
+                    <div class="step-divider"></div>
+                    <p class="step-detail">We design a work plan targeting your specific risk areas, whether that's a 2-week diligence sprint or a 90-day remediation roadmap. No boilerplate. Every deliverable maps to a decision you need to make.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon-container">
@@ -38,6 +42,8 @@
                         <span class="step-label">Deliver</span>
                     </div>
                     <p class="step-text">Clear findings, prioritized recommendations, and implementation-ready path forward</p>
+                    <div class="step-divider"></div>
+                    <p class="step-detail">Executive-ready outputs with quantified risk, concrete remediation steps, and priority-ranked recommendations. Every finding includes severity, business impact, and a clear next action.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon-container">
@@ -48,6 +54,8 @@
                         <span class="step-label">Guide</span>
                     </div>
                     <p class="step-text">Optional ongoing advisory or execution support</p>
+                    <div class="step-divider"></div>
+                    <p class="step-detail">Fractional engagement model: weekly or monthly cadence scaled to your needs. Board prep, architecture reviews, vendor evaluations, or hands-on execution alongside your team. Disengage anytime.</p>
                 </div>
             </div>
         </div>
@@ -142,6 +150,22 @@
         margin: 0;
     }
 
+    .step-divider {
+        width: 2rem;
+        height: 2px;
+        border: none;
+        background: var(--color-primary);
+        opacity: 0.4;
+        margin: var(--spacing-lg) 0;
+    }
+
+    .step-detail {
+        font-size: var(--text-small);
+        color: var(--text-light-muted);
+        line-height: 1.6;
+        margin: 0;
+    }
+
     /* Dark theme support */
     :global(html.dark-theme) .engagement-flow {
         background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
@@ -159,6 +183,10 @@
 
     :global(html.dark-theme) .step-text {
         color: var(--text-dark-primary);
+    }
+
+    :global(html.dark-theme) .step-detail {
+        color: var(--text-dark-muted);
     }
 
     :global(html.dark-theme) .step-icon {
@@ -240,6 +268,14 @@
 
         .step-text {
             font-size: var(--text-small);
+        }
+
+        .step-detail {
+            font-size: var(--text-tiny);
+        }
+
+        .step-divider {
+            margin: var(--spacing-md) 0;
         }
     }
 
