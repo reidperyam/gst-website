@@ -828,6 +828,30 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         gap: var(--spacing-md);
     }
 
+    /* Geography step: narrower region cards (66% reduction from full width) */
+    [data-step-id="geography"] .options-grid {
+        max-width: 100%; /* Mobile: full width for usability */
+        margin: 0 auto;
+    }
+
+    @media (min-width: 480px) {
+        [data-step-id="geography"] .options-grid {
+            max-width: 280px; /* ~34% of 700px tablet width */
+        }
+    }
+
+    @media (min-width: 768px) {
+        [data-step-id="geography"] .options-grid {
+            max-width: 240px; /* ~34% of 700px step width */
+        }
+    }
+
+    @media (min-width: 1024px) {
+        [data-step-id="geography"] .options-grid {
+            max-width: 270px; /* ~34% of 800px desktop width */
+        }
+    }
+
     .option-card {
         display: flex;
         flex-direction: column;
