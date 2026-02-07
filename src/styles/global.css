@@ -59,6 +59,10 @@ body::before {
     z-index: 10;
 }
 
+.site-header--static {
+    position: static;
+}
+
 nav {
     display: flex;
     justify-content: space-between;

@@ -4,12 +4,13 @@ import { trackNavigation } from '../utils/analytics';
 
 interface Props {
     currentPath?: string;
+    staticHeader?: boolean;
 }
 
-const { currentPath = '/' } = Astro.props;
+const { currentPath = '/', staticHeader = false } = Astro.props;
 ---
 
-<header class="site-header">
+<header class={`site-header${staticHeader ? ' site-header--static' : ''}`}>
     <div class="container">
         <nav>
             <div class="logo-wrapper">

@@ -33,6 +33,9 @@ const {
     ogImageHeight,
     twitterSite
 } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const isHubSubPage = currentPath.startsWith('/hub/') && currentPath !== '/hub/';
 ---
 
 <!DOCTYPE html>
@@ -86,7 +89,7 @@ const {
         <GoogleAnalytics />
     </head>
     <body>
-        <Header />
+        <Header currentPath={currentPath} staticHeader={isHubSubPage} />
         <main>
             <slot />
         </main>
