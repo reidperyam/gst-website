@@ -26,7 +26,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             <!-- Wizard Container -->
             <div class="wizard-container" id="wizardContainer">
                 <!-- Progress Bar -->
-                <div class="wizard-progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Wizard progress">
+                <div class="wizard-progress" role="progressbar" aria-valuemin="1" aria-valuemax={WIZARD_STEPS.length} aria-valuenow="1" aria-label="Wizard progress">
                     {WIZARD_STEPS.map((step, index) => (
                         <div class={`progress-segment ${index === 0 ? 'active' : ''}`} data-step-indicator={index + 1}>
                             <svg class="progress-number" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,6 +133,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 </div>
             </div>
 
+            <!-- Analyze Overlay -->
+            <div class="analyze-overlay" id="analyzeOverlay" style="display:none;">
+                <div class="analyze-content">
+                    <div class="analyze-spinner"></div>
+                    <p class="analyze-text">Analyzing Deal Parameters...</p>
+                </div>
+            </div>
+
             <!-- Output Container -->
             <div class="output-container" id="outputContainer" style="display:none;">
 
@@ -204,6 +212,20 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <!-- Topic Sections -->
                     <div class="doc-topics" id="scriptTopics"></div>
 
+                    <!-- Methodology Section -->
+                    <section class="doc-methodology" id="docMethodology">
+                        <h2 class="doc-section-heading">
+                            <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                            Methodology
+                        </h2>
+                        <p class="doc-methodology-text">
+                            This agenda was generated using The Diligence Machine, a deterministic question-selection engine
+                            that maps target parameters to a curated bank of due diligence questions. Questions are
+                            prioritized by enterprise value impact and balanced across technology assessment domains.
+                            The framework draws on patterns observed across 20+ years of technology-focused advisory experience.
+                        </p>
+                    </section>
+
                     <!-- Document Footer -->
                     <footer class="doc-footer">
                         <hr class="doc-divider" />
@@ -232,7 +254,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
     const STORAGE_KEY = 'diligence-machine-state';
-    const STORAGE_VERSION = 1;
+    const STORAGE_VERSION = 2;
 
     interface SavedState {
         version: number;
@@ -246,7 +268,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     let currentStep = 1;
     let highestStepReached = 1;
-    const totalSteps = 5;
+    const totalSteps = 10;
     let inputs: Partial<UserInputs> = {
         geographies: [],
     };
@@ -408,6 +430,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             'transaction-type': 'transactionType',
             'product-type': 'productType',
             'tech-archetype': 'techArchetype',
+            'business-model': 'businessModel',
+            'scale-intensity': 'scaleIntensity',
+            'transformation-state': 'transformationState',
+            'data-sensitivity': 'dataSensitivity',
+            'operating-model': 'operatingModel',
         };
         return map[stepId] ?? null;
     }
@@ -556,9 +583,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <li class="doc-question priority-${escapeHtml(q.priority)}">
                                 <div class="doc-q-header">
                                     <span class="doc-q-number">${topicIndex + 1}.${qIndex + 1}</span>
-                                    <span class="doc-q-priority">${escapeHtml(q.priority)}</span>
+                                    <div class="doc-q-badges">
+                                        ${q.exitImpact ? `<span class="doc-q-exit-impact exit-impact-${escapeHtml(q.exitImpact.toLowerCase().replace(/\\s+/g, '-'))}">${escapeHtml(q.exitImpact)}</span>` : ''}
+                                        <span class="doc-q-priority">${escapeHtml(q.priority)}</span>
+                                    </div>
                                 </div>
                                 <p class="doc-q-text">${escapeHtml(q.text)}</p>
+                                ${q.redFlagSignal ? `<p class="doc-q-red-flag"><strong>Red Flag:</strong> ${escapeHtml(q.redFlagSignal)}</p>` : ''}
                                 <p class="doc-q-rationale">${escapeHtml(q.rationale)}</p>
                             </li>
                         `).join('')}
@@ -602,6 +633,21 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 label: 'Geography',
                 value: inputs.geographies.map((g) => getOptionLabel('geography', g)).join(', '),
             });
+        }
+        if (inputs.businessModel) {
+            fields.push({ label: 'Business Model', value: getOptionLabel('business-model', inputs.businessModel) });
+        }
+        if (inputs.scaleIntensity) {
+            fields.push({ label: 'Scale Intensity', value: getOptionLabel('scale-intensity', inputs.scaleIntensity) });
+        }
+        if (inputs.transformationState) {
+            fields.push({ label: 'Transformation', value: getOptionLabel('transformation-state', inputs.transformationState) });
+        }
+        if (inputs.dataSensitivity) {
+            fields.push({ label: 'Data Sensitivity', value: getOptionLabel('data-sensitivity', inputs.dataSensitivity) });
+        }
+        if (inputs.operatingModel) {
+            fields.push({ label: 'Operating Model', value: getOptionLabel('operating-model', inputs.operatingModel) });
         }
 
         docMeta.innerHTML = `
@@ -694,6 +740,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         if (inputs.geographies && inputs.geographies.length > 0) {
             lines.push(`Geography:         ${inputs.geographies.map((g) => getOptionLabel('geography', g)).join(', ')}`);
         }
+        if (inputs.businessModel) lines.push(`Business Model:    ${getOptionLabel('business-model', inputs.businessModel)}`);
+        if (inputs.scaleIntensity) lines.push(`Scale Intensity:   ${getOptionLabel('scale-intensity', inputs.scaleIntensity)}`);
+        if (inputs.transformationState) lines.push(`Transform State:   ${getOptionLabel('transformation-state', inputs.transformationState)}`);
+        if (inputs.dataSensitivity) lines.push(`Data Sensitivity:  ${getOptionLabel('data-sensitivity', inputs.dataSensitivity)}`);
+        if (inputs.operatingModel) lines.push(`Operating Model:   ${getOptionLabel('operating-model', inputs.operatingModel)}`);
         lines.push('');
 
         // Risk anchors
@@ -718,7 +769,9 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             lines.push('');
 
             for (const [qIndex, q] of topic.questions.entries()) {
-                lines.push(`${topicIndex + 1}.${qIndex + 1} [${q.priority.toUpperCase()}] ${q.text}`);
+                const impactTag = q.exitImpact ? ` [${q.exitImpact}]` : '';
+                lines.push(`${topicIndex + 1}.${qIndex + 1} [${q.priority.toUpperCase()}]${impactTag} ${q.text}`);
+                if (q.redFlagSignal) lines.push(`    Red Flag: ${q.redFlagSignal}`);
                 lines.push(`    Rationale: ${q.rationale}`);
                 lines.push('');
             }
@@ -789,6 +842,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             'transaction-type': 'transactionType',
             'product-type': 'productType',
             'tech-archetype': 'techArchetype',
+            'business-model': 'businessModel',
+            'scale-intensity': 'scaleIntensity',
+            'transformation-state': 'transformationState',
+            'data-sensitivity': 'dataSensitivity',
+            'operating-model': 'operatingModel',
         })) {
             const value = (inputs as Record<string, unknown>)[key] as string | undefined;
             if (value) {
@@ -875,19 +933,33 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     btnGenerate.addEventListener('click', () => {
         if (!isStepValid(currentStep)) return;
 
-        const fullInputs: UserInputs = {
-            transactionType: inputs.transactionType!,
-            productType: inputs.productType!,
-            techArchetype: inputs.techArchetype!,
-            headcount: inputs.headcount!,
-            revenueRange: inputs.revenueRange!,
-            growthStage: inputs.growthStage!,
-            companyAge: inputs.companyAge!,
-            geographies: inputs.geographies ?? [],
-        };
+        // Show analyzing overlay
+        wizardContainer.style.display = 'none';
+        const analyzeOverlay = document.getElementById('analyzeOverlay')!;
+        analyzeOverlay.style.display = 'flex';
 
-        const script = generateScript(fullInputs);
-        renderOutput(script);
+        setTimeout(() => {
+            analyzeOverlay.style.display = 'none';
+
+            const fullInputs: UserInputs = {
+                transactionType: inputs.transactionType!,
+                productType: inputs.productType!,
+                techArchetype: inputs.techArchetype!,
+                headcount: inputs.headcount!,
+                revenueRange: inputs.revenueRange!,
+                growthStage: inputs.growthStage!,
+                companyAge: inputs.companyAge!,
+                geographies: inputs.geographies ?? [],
+                businessModel: inputs.businessModel!,
+                scaleIntensity: inputs.scaleIntensity!,
+                transformationState: inputs.transformationState!,
+                dataSensitivity: inputs.dataSensitivity!,
+                operatingModel: inputs.operatingModel!,
+            };
+
+            const script = generateScript(fullInputs);
+            renderOutput(script);
+        }, 2000);
     });
 
     btnGoBack.addEventListener('click', () => {
@@ -960,8 +1032,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         align-items: center;
         gap: var(--spacing-xs);
         flex: 1;
-        max-width: 160px;
-        min-width: 60px;
+        max-width: 100px;
+        min-width: 40px;
         opacity: 0.4;
         transition: opacity var(--transition-normal);
     }
@@ -1758,6 +1830,31 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border-left-color: var(--color-primary);
     }
 
+    :global(html.dark-theme) .doc-topics :global(.doc-q-red-flag) {
+        background: rgba(178, 34, 34, 0.1);
+        color: #e06060;
+    }
+
+    :global(html.dark-theme) .doc-topics :global(.exit-impact-multiple-expander) {
+        color: #4cba7a;
+    }
+
+    :global(html.dark-theme) .doc-topics :global(.exit-impact-valuation-drag) {
+        color: #d4923a;
+    }
+
+    :global(html.dark-theme) .doc-topics :global(.exit-impact-operational-risk) {
+        color: #e06060;
+    }
+
+    :global(html.dark-theme) .analyze-text {
+        color: var(--text-dark-secondary);
+    }
+
+    :global(html.dark-theme) .doc-methodology {
+        border-top-color: var(--border-dark);
+    }
+
     .doc-topics :global(.doc-q-header) {
         display: flex;
         justify-content: space-between;
@@ -1809,6 +1906,100 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         line-height: 1.6;
         font-style: italic;
         margin: 0;
+    }
+
+    /* ─── V2: EXIT IMPACT BADGES ──────────────────────────────────────── */
+
+    .doc-topics :global(.doc-q-badges) {
+        display: flex;
+        gap: var(--spacing-xs);
+        align-items: center;
+    }
+
+    .doc-topics :global(.doc-q-exit-impact) {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 1px var(--spacing-sm);
+        border-radius: 2px;
+    }
+
+    .doc-topics :global(.exit-impact-multiple-expander) {
+        background: rgba(46, 139, 87, 0.12);
+        color: #2e8b57;
+    }
+
+    .doc-topics :global(.exit-impact-valuation-drag) {
+        background: rgba(178, 102, 34, 0.12);
+        color: #b26622;
+    }
+
+    .doc-topics :global(.exit-impact-operational-risk) {
+        background: rgba(178, 34, 34, 0.12);
+        color: #b22222;
+    }
+
+    .doc-topics :global(.doc-q-red-flag) {
+        font-size: var(--text-sm);
+        color: #b22222;
+        line-height: 1.6;
+        margin: 0 0 var(--spacing-sm) 0;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        background: rgba(178, 34, 34, 0.05);
+        border-left: 2px solid rgba(178, 34, 34, 0.3);
+        border-radius: 0 2px 2px 0;
+    }
+
+    /* ─── V2: ANALYZE OVERLAY ─────────────────────────────────────────── */
+
+    .analyze-overlay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 300px;
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .analyze-content {
+        text-align: center;
+    }
+
+    .analyze-spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto var(--spacing-lg);
+        border: 3px solid rgba(5, 205, 153, 0.2);
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: dm-spin 0.8s linear infinite;
+    }
+
+    @keyframes dm-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .analyze-text {
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* ─── V2: METHODOLOGY SECTION ─────────────────────────────────────── */
+
+    .doc-methodology {
+        margin-top: var(--spacing-xl);
+        padding-top: var(--spacing-md);
+        border-top: 1px solid var(--border-light);
+    }
+
+    .doc-methodology-text {
+        font-size: var(--text-sm);
+        color: var(--text-light-muted);
+        line-height: 1.7;
+        margin: var(--spacing-sm) 0 0;
     }
 
     /* ─── DOCUMENT FOOTER ──────────────────────────────────────────────── */
@@ -2064,7 +2255,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .wizard-container,
         .wizard-nav,
         .doc-action-bar,
-        .back-link {
+        .back-link,
+        .analyze-overlay {
             display: none;
         }
 
@@ -2397,6 +2589,67 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: 11px;
             margin: 0 0 6px 0;
             page-break-after: avoid;
+        }
+
+        /* v2: Exit impact badges */
+        .doc-topics :global(.doc-q-badges) {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .doc-topics :global(.doc-q-exit-impact) {
+            font-size: 8px;
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            padding: 1px 4px;
+            border-radius: 1px;
+            flex-shrink: 0;
+        }
+
+        .doc-topics :global(.exit-impact-multiple-expander) {
+            background: rgba(46, 139, 87, 0.15);
+            color: #2e8b57;
+        }
+
+        .doc-topics :global(.exit-impact-valuation-drag) {
+            background: rgba(178, 102, 34, 0.15);
+            color: #b26622;
+        }
+
+        .doc-topics :global(.exit-impact-operational-risk) {
+            background: rgba(178, 34, 34, 0.15);
+            color: #b22222;
+        }
+
+        /* v2: Red flag signals */
+        .doc-topics :global(.doc-q-red-flag) {
+            font-size: 10px;
+            line-height: 1.3;
+            margin: 0 0 2px 0;
+            padding: 2px 6px;
+            color: #b22222;
+            background: rgba(178, 34, 34, 0.05);
+            border-left: 2px solid rgba(178, 34, 34, 0.3);
+            page-break-after: avoid;
+        }
+
+        /* v2: Methodology section */
+        .doc-methodology {
+            margin-top: 12px;
+            padding-top: 8px;
+            page-break-inside: avoid;
+        }
+
+        .doc-methodology-text {
+            font-size: 10px;
+            line-height: 1.3;
+            color: #333;
+        }
+
+        /* v2: Hide analyze overlay in print */
+        .analyze-overlay {
+            display: none !important;
         }
     }
 </style>

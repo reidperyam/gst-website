@@ -19,6 +19,8 @@ import {
   groupByTopic,
   generateScript,
   syncMultiRegion,
+  applyArchetypePivot,
+  applyMaturityOverrides,
 } from '../../src/utils/diligence-engine';
 import type { UserInputs } from '../../src/utils/diligence-engine';
 import type { DiligenceQuestion, QuestionCondition } from '../../src/data/diligence-machine/questions';
@@ -51,6 +53,11 @@ const baseInputs: UserInputs = {
   growthStage: 'scaling',
   companyAge: '5-10yr',
   geographies: ['us'],
+  businessModel: 'productized-platform',
+  scaleIntensity: 'moderate',
+  transformationState: 'stable',
+  dataSensitivity: 'moderate',
+  operatingModel: 'centralized-eng',
 };
 
 // ─── TESTS: meetsMinimumBracket ─────────────────────────────────────────────
@@ -626,7 +633,7 @@ describe('groupByTopic', () => {
 
     const archTopic = topics.find(t => t.topicId === 'architecture');
     expect(archTopic?.topicLabel).toBe('Architecture');
-    expect(archTopic?.audienceLevel).toBe('CTO / VP Engineering');
+    expect(archTopic?.audienceLevel).toBe('CTO / VP Engineering / Senior Architect');
   });
 
   it('should exclude topics with 0 questions', () => {
@@ -699,6 +706,11 @@ describe('generateScript (Integration)', () => {
       growthStage: 'scaling',
       companyAge: '2-5yr',
       geographies: ['us'],
+      businessModel: 'productized-platform',
+      scaleIntensity: 'moderate',
+      transformationState: 'stable',
+      dataSensitivity: 'moderate',
+      operatingModel: 'centralized-eng',
     };
 
     const script = generateScript(inputs);
@@ -724,6 +736,11 @@ describe('generateScript (Integration)', () => {
       growthStage: 'scaling',
       companyAge: '5-10yr',
       geographies: ['eu', 'uk'],
+      businessModel: 'productized-platform',
+      scaleIntensity: 'moderate',
+      transformationState: 'stable',
+      dataSensitivity: 'moderate',
+      operatingModel: 'centralized-eng',
     };
 
     const script = generateScript(inputs);
@@ -751,6 +768,11 @@ describe('generateScript (Integration)', () => {
       growthStage: 'scaling',
       companyAge: '10-20yr',
       geographies: ['eu', 'uk'],
+      businessModel: 'productized-platform',
+      scaleIntensity: 'moderate',
+      transformationState: 'stable',
+      dataSensitivity: 'moderate',
+      operatingModel: 'centralized-eng',
     };
 
     const script = generateScript(inputs);
@@ -793,6 +815,11 @@ describe('generateScript (Integration)', () => {
       growthStage: baseInputs.growthStage,
       companyAge: baseInputs.companyAge,
       geographies: baseInputs.geographies,
+      businessModel: baseInputs.businessModel,
+      scaleIntensity: baseInputs.scaleIntensity,
+      transformationState: baseInputs.transformationState,
+      dataSensitivity: baseInputs.dataSensitivity,
+      operatingModel: baseInputs.operatingModel,
     });
   });
 
@@ -861,6 +888,11 @@ describe('generateScript (Integration)', () => {
       growthStage: 'early',
       companyAge: 'under-2yr',
       geographies: ['apac'],
+      businessModel: 'ip-licensing',
+      scaleIntensity: 'low',
+      transformationState: 'stable',
+      dataSensitivity: 'low',
+      operatingModel: 'centralized-eng',
     };
 
     const script = generateScript(narrowInputs);
@@ -881,6 +913,11 @@ describe('generateScript (Integration)', () => {
       growthStage: 'mature',
       companyAge: '20yr+',
       geographies: ['us', 'eu', 'uk', 'apac'],
+      businessModel: 'productized-platform',
+      scaleIntensity: 'high',
+      transformationState: 'stable',
+      dataSensitivity: 'high',
+      operatingModel: 'product-aligned-teams',
     };
 
     const script = generateScript(broadInputs);
@@ -937,6 +974,248 @@ describe('generateScript (Integration)', () => {
     const allQuestions = result.topics.flatMap((t) => t.questions);
     const serviceQuestion = allQuestions.find((q) => q.id === 'ops-06');
     expect(serviceQuestion).toBeDefined();
+  });
+});
+
+// ─── TESTS: v2 condition dimensions ──────────────────────────────────────────
+
+describe('matchesConditions v2 dimensions', () => {
+  describe('businessModels matching', () => {
+    it('should return true when businessModel matches', () => {
+      const conditions: QuestionCondition = {
+        businessModels: ['productized-platform', 'usage-based'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+
+    it('should return false when businessModel does not match', () => {
+      const conditions: QuestionCondition = {
+        businessModels: ['services-led', 'ip-licensing'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(false);
+    });
+
+    it('should return true when businessModels is undefined (wildcard)', () => {
+      const conditions: QuestionCondition = {};
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+  });
+
+  describe('scaleIntensity matching', () => {
+    it('should return true when scaleIntensity matches', () => {
+      const conditions: QuestionCondition = {
+        scaleIntensity: ['moderate', 'high'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+
+    it('should return false when scaleIntensity does not match', () => {
+      const conditions: QuestionCondition = {
+        scaleIntensity: ['low'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(false);
+    });
+  });
+
+  describe('transformationStates matching', () => {
+    it('should return true when transformationState matches', () => {
+      const conditions: QuestionCondition = {
+        transformationStates: ['stable', 'recently-modernized'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+
+    it('should return false when transformationState does not match', () => {
+      const conditions: QuestionCondition = {
+        transformationStates: ['mid-migration'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(false);
+    });
+  });
+
+  describe('dataSensitivity matching', () => {
+    it('should return true when dataSensitivity matches', () => {
+      const conditions: QuestionCondition = {
+        dataSensitivity: ['moderate', 'high'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+
+    it('should return false when dataSensitivity does not match', () => {
+      const conditions: QuestionCondition = {
+        dataSensitivity: ['low'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(false);
+    });
+  });
+
+  describe('operatingModels matching', () => {
+    it('should return true when operatingModel matches', () => {
+      const conditions: QuestionCondition = {
+        operatingModels: ['centralized-eng', 'hybrid'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+
+    it('should return false when operatingModel does not match', () => {
+      const conditions: QuestionCondition = {
+        operatingModels: ['outsourced-heavy'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(false);
+    });
+  });
+
+  describe('combined v2 + v1 conditions', () => {
+    it('should match when all v1 and v2 conditions are met', () => {
+      const conditions: QuestionCondition = {
+        productTypes: ['b2b-saas'],
+        businessModels: ['productized-platform'],
+        scaleIntensity: ['moderate'],
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(true);
+    });
+
+    it('should fail when v2 condition fails even if v1 conditions match', () => {
+      const conditions: QuestionCondition = {
+        productTypes: ['b2b-saas'], // matches
+        businessModels: ['services-led'], // does NOT match
+      };
+      expect(matchesConditions(conditions, baseInputs)).toBe(false);
+    });
+  });
+});
+
+// ─── TESTS: applyArchetypePivot ─────────────────────────────────────────────
+
+describe('applyArchetypePivot', () => {
+  const cloudOnlyQ = makeQuestion({
+    id: 'cloud-only',
+    conditions: { techArchetypes: ['modern-cloud-native'] },
+  });
+  const mixedQ = makeQuestion({
+    id: 'mixed',
+    conditions: { techArchetypes: ['modern-cloud-native', 'hybrid-legacy'] },
+  });
+  const wildcardQ = makeQuestion({
+    id: 'wildcard',
+    conditions: {},
+  });
+  const selfManagedQ = makeQuestion({
+    id: 'self-managed',
+    conditions: { techArchetypes: ['self-managed-infra'] },
+  });
+
+  it('should filter out exclusively cloud-native questions for self-managed archetype', () => {
+    const inputs: UserInputs = { ...baseInputs, techArchetype: 'self-managed-infra' };
+    const result = applyArchetypePivot([cloudOnlyQ, mixedQ, wildcardQ, selfManagedQ], inputs);
+
+    expect(result.map(q => q.id)).not.toContain('cloud-only');
+    expect(result.map(q => q.id)).toContain('mixed');
+    expect(result.map(q => q.id)).toContain('wildcard');
+    expect(result.map(q => q.id)).toContain('self-managed');
+  });
+
+  it('should filter out exclusively cloud-native questions for datacenter-vendor archetype', () => {
+    const inputs: UserInputs = { ...baseInputs, techArchetype: 'datacenter-vendor' };
+    const result = applyArchetypePivot([cloudOnlyQ, wildcardQ], inputs);
+
+    expect(result.map(q => q.id)).not.toContain('cloud-only');
+    expect(result.map(q => q.id)).toContain('wildcard');
+  });
+
+  it('should filter for on-premise-enterprise product type', () => {
+    const inputs: UserInputs = { ...baseInputs, productType: 'on-premise-enterprise', techArchetype: 'hybrid-legacy' };
+    const result = applyArchetypePivot([cloudOnlyQ, wildcardQ], inputs);
+
+    expect(result.map(q => q.id)).not.toContain('cloud-only');
+    expect(result.map(q => q.id)).toContain('wildcard');
+  });
+
+  it('should pass through all questions for cloud-native archetype', () => {
+    const inputs: UserInputs = { ...baseInputs, techArchetype: 'modern-cloud-native' };
+    const result = applyArchetypePivot([cloudOnlyQ, mixedQ, wildcardQ], inputs);
+
+    expect(result).toHaveLength(3);
+  });
+
+  it('should not filter questions with empty techArchetypes array', () => {
+    const inputs: UserInputs = { ...baseInputs, techArchetype: 'self-managed-infra' };
+    const emptyArchQ = makeQuestion({ id: 'empty-arch', conditions: { techArchetypes: [] } });
+    const result = applyArchetypePivot([emptyArchQ, wildcardQ], inputs);
+
+    expect(result).toHaveLength(2);
+  });
+});
+
+// ─── TESTS: applyMaturityOverrides ──────────────────────────────────────────
+
+describe('applyMaturityOverrides', () => {
+  it('should inject manual-ops-masking anchor for high-revenue + low-headcount + mature', () => {
+    const inputs: UserInputs = {
+      ...baseInputs,
+      revenueRange: '25-100m',
+      headcount: '51-200',
+      growthStage: 'mature',
+    };
+    const result = applyMaturityOverrides([], inputs);
+
+    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(true);
+  });
+
+  it('should not inject for low-revenue companies', () => {
+    const inputs: UserInputs = {
+      ...baseInputs,
+      revenueRange: '5-25m',
+      headcount: '51-200',
+      growthStage: 'mature',
+    };
+    const result = applyMaturityOverrides([], inputs);
+
+    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(false);
+  });
+
+  it('should not inject for high-headcount companies', () => {
+    const inputs: UserInputs = {
+      ...baseInputs,
+      revenueRange: '100m+',
+      headcount: '201-500',
+      growthStage: 'mature',
+    };
+    const result = applyMaturityOverrides([], inputs);
+
+    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(false);
+  });
+
+  it('should not inject for non-mature growth stages', () => {
+    const inputs: UserInputs = {
+      ...baseInputs,
+      revenueRange: '25-100m',
+      headcount: '51-200',
+      growthStage: 'scaling',
+    };
+    const result = applyMaturityOverrides([], inputs);
+
+    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(false);
+  });
+
+  it('should not duplicate if anchor already present', () => {
+    const inputs: UserInputs = {
+      ...baseInputs,
+      revenueRange: '25-100m',
+      headcount: '1-50',
+      growthStage: 'mature',
+    };
+    const existing = [{
+      id: 'risk-manual-ops-masking',
+      title: 'Manual Operations Masking',
+      description: 'Already present',
+      relevance: 'high' as const,
+      conditions: {},
+    }];
+    const result = applyMaturityOverrides(existing, inputs);
+
+    const count = result.filter(a => a.id === 'risk-manual-ops-masking').length;
+    expect(count).toBe(1);
   });
 });
 

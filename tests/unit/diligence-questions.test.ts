@@ -17,8 +17,8 @@ import { WIZARD_STEPS, BRACKET_ORDER } from '../../src/data/diligence-machine/wi
 
 describe('Question Bank Data Integrity', () => {
   describe('basic structure validation', () => {
-    it('should have at least 40 questions', () => {
-      expect(QUESTIONS.length).toBeGreaterThanOrEqual(40);
+    it('should have at least 55 questions', () => {
+      expect(QUESTIONS.length).toBeGreaterThanOrEqual(55);
     });
 
     it('should have all required fields on each question', () => {
@@ -158,6 +158,13 @@ describe('Question Bank Data Integrity', () => {
       const validRevenues = BRACKET_ORDER['revenue-range'] as unknown as string[];
       const validAges = BRACKET_ORDER['company-age'] as unknown as string[];
 
+      // v2 wizard steps
+      const validBusinessModels = WIZARD_STEPS[5].options!.map((o) => o.id);
+      const validScaleIntensity = WIZARD_STEPS[6].options!.map((o) => o.id);
+      const validTransformationStates = WIZARD_STEPS[7].options!.map((o) => o.id);
+      const validDataSensitivity = WIZARD_STEPS[8].options!.map((o) => o.id);
+      const validOperatingModels = WIZARD_STEPS[9].options!.map((o) => o.id);
+
       for (const q of QUESTIONS) {
         const c = q.conditions;
         if (c.transactionTypes) {
@@ -194,6 +201,32 @@ describe('Question Bank Data Integrity', () => {
         if (c.companyAgeMin) {
           expect(validAges, `Question ${q.id} has invalid companyAgeMin: ${c.companyAgeMin}`).toContain(c.companyAgeMin);
         }
+        // v2 condition fields
+        if (c.businessModels) {
+          for (const t of c.businessModels) {
+            expect(validBusinessModels, `Question ${q.id} has invalid businessModel: ${t}`).toContain(t);
+          }
+        }
+        if (c.scaleIntensity) {
+          for (const t of c.scaleIntensity) {
+            expect(validScaleIntensity, `Question ${q.id} has invalid scaleIntensity: ${t}`).toContain(t);
+          }
+        }
+        if (c.transformationStates) {
+          for (const t of c.transformationStates) {
+            expect(validTransformationStates, `Question ${q.id} has invalid transformationState: ${t}`).toContain(t);
+          }
+        }
+        if (c.dataSensitivity) {
+          for (const t of c.dataSensitivity) {
+            expect(validDataSensitivity, `Question ${q.id} has invalid dataSensitivity: ${t}`).toContain(t);
+          }
+        }
+        if (c.operatingModels) {
+          for (const t of c.operatingModels) {
+            expect(validOperatingModels, `Question ${q.id} has invalid operatingModel: ${t}`).toContain(t);
+          }
+        }
       }
     });
 
@@ -225,6 +258,22 @@ describe('Question Bank Data Integrity', () => {
         }
         if (c.excludeTransactionTypes) {
           expect(c.excludeTransactionTypes.length, `Question ${q.id} has empty excludeTransactionTypes array`).toBeGreaterThan(0);
+        }
+        // v2 condition fields
+        if (c.businessModels) {
+          expect(c.businessModels.length, `Question ${q.id} has empty businessModels array`).toBeGreaterThan(0);
+        }
+        if (c.scaleIntensity) {
+          expect(c.scaleIntensity.length, `Question ${q.id} has empty scaleIntensity array`).toBeGreaterThan(0);
+        }
+        if (c.transformationStates) {
+          expect(c.transformationStates.length, `Question ${q.id} has empty transformationStates array`).toBeGreaterThan(0);
+        }
+        if (c.dataSensitivity) {
+          expect(c.dataSensitivity.length, `Question ${q.id} has empty dataSensitivity array`).toBeGreaterThan(0);
+        }
+        if (c.operatingModels) {
+          expect(c.operatingModels.length, `Question ${q.id} has empty operatingModels array`).toBeGreaterThan(0);
         }
       }
     });
@@ -269,14 +318,54 @@ describe('Question Bank Data Integrity', () => {
       }
     });
   });
+
+  describe('v2 strategic metadata validation', () => {
+    const validExitImpacts = ['Multiple Expander', 'Valuation Drag', 'Operational Risk'];
+    const validTracks = ['Architecture', 'Operations', 'Carve-out', 'Security'];
+
+    it('should have valid exitImpact values when present', () => {
+      for (const q of QUESTIONS) {
+        if (q.exitImpact) {
+          expect(validExitImpacts, `Question ${q.id} has invalid exitImpact: ${q.exitImpact}`).toContain(q.exitImpact);
+        }
+      }
+    });
+
+    it('should have valid track values when present', () => {
+      for (const q of QUESTIONS) {
+        if (q.track) {
+          expect(validTracks, `Question ${q.id} has invalid track: ${q.track}`).toContain(q.track);
+        }
+      }
+    });
+
+    it('should have non-empty redFlagSignal when present', () => {
+      for (const q of QUESTIONS) {
+        if (q.redFlagSignal !== undefined) {
+          expect(q.redFlagSignal.length, `Question ${q.id} has empty redFlagSignal`).toBeGreaterThan(0);
+          expect(q.redFlagSignal.trim(), `Question ${q.id} has whitespace-only redFlagSignal`).toBe(q.redFlagSignal);
+        }
+      }
+    });
+
+    it('should have at least some questions with v2 metadata fields', () => {
+      const withExitImpact = QUESTIONS.filter(q => q.exitImpact);
+      const withTrack = QUESTIONS.filter(q => q.track);
+      const withRedFlag = QUESTIONS.filter(q => q.redFlagSignal);
+
+      expect(withExitImpact.length, 'No questions have exitImpact').toBeGreaterThan(0);
+      expect(withTrack.length, 'No questions have track').toBeGreaterThan(0);
+      expect(withRedFlag.length, 'No questions have redFlagSignal').toBeGreaterThan(0);
+    });
+  });
 });
 
 // ─── DATA VALIDATION: RISK ANCHORS ─────────────────────────────────────────
 
 describe('Risk Anchors Data Integrity', () => {
   describe('basic structure validation', () => {
-    it('should have at least 8 risk anchors', () => {
-      expect(RISK_ANCHORS.length).toBeGreaterThanOrEqual(8);
+    it('should have at least 22 risk anchors', () => {
+      expect(RISK_ANCHORS.length).toBeGreaterThanOrEqual(22);
     });
 
     it('should have all required fields on each anchor', () => {
@@ -411,7 +500,9 @@ describe('Risk Anchors Data Integrity', () => {
         const c = r.conditions;
         const hasCondition = c.transactionTypes || c.productTypes || c.techArchetypes ||
                             c.growthStages || c.geographies || c.headcountMin ||
-                            c.revenueMin || c.companyAgeMin || c.excludeTransactionTypes;
+                            c.revenueMin || c.companyAgeMin || c.excludeTransactionTypes ||
+                            c.businessModels || c.scaleIntensity || c.transformationStates ||
+                            c.dataSensitivity || c.operatingModels;
 
         expect(hasCondition, `Anchor ${r.id} has no conditions (pure wildcard)`).toBeTruthy();
       }
@@ -438,8 +529,8 @@ describe('Risk Anchors Data Integrity', () => {
 
 describe('Wizard Configuration Integrity', () => {
   describe('step structure validation', () => {
-    it('should have exactly 5 wizard steps', () => {
-      expect(WIZARD_STEPS.length).toBe(5);
+    it('should have exactly 10 wizard steps', () => {
+      expect(WIZARD_STEPS.length).toBe(10);
     });
 
     it('should have all required fields on each step', () => {
@@ -464,6 +555,11 @@ describe('Wizard Configuration Integrity', () => {
         'tech-archetype',
         'company-profile',
         'geography',
+        'business-model',
+        'scale-intensity',
+        'transformation-state',
+        'data-sensitivity',
+        'operating-model',
       ];
 
       WIZARD_STEPS.forEach((step, index) => {

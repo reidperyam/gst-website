@@ -27,7 +27,7 @@ class WizardNavigationSimulator {
   storage: Record<string, string>;
   segmentClasses: Map<number, Set<string>>;
 
-  constructor(totalSteps: number = 5) {
+  constructor(totalSteps: number = 10) {
     this.currentStep = 1;
     this.highestStepReached = 1;
     this.totalSteps = totalSteps;
@@ -109,7 +109,7 @@ class WizardNavigationSimulator {
    */
   saveState(): void {
     const state: SavedState = {
-      version: 1,
+      version: 2,
       currentStep: this.currentStep,
       highestStepReached: this.highestStepReached,
       inputs: {},
@@ -151,7 +151,7 @@ describe('Wizard Progress Bar Navigation', () => {
   let wizard: WizardNavigationSimulator;
 
   beforeEach(() => {
-    wizard = new WizardNavigationSimulator(5);
+    wizard = new WizardNavigationSimulator(10);
   });
 
   describe('Initial State', () => {
@@ -191,19 +191,19 @@ describe('Wizard Progress Bar Navigation', () => {
     });
 
     it('should advance through all steps sequentially', () => {
-      for (let i = 1; i < 5; i++) {
+      for (let i = 1; i < 10; i++) {
         wizard.clickNext();
       }
-      expect(wizard.currentStep).toBe(5);
-      expect(wizard.highestStepReached).toBe(5);
+      expect(wizard.currentStep).toBe(10);
+      expect(wizard.highestStepReached).toBe(10);
     });
 
     it('should not advance beyond last step', () => {
-      for (let i = 1; i <= 10; i++) {
+      for (let i = 1; i <= 15; i++) {
         wizard.clickNext();
       }
-      expect(wizard.currentStep).toBe(5);
-      expect(wizard.highestStepReached).toBe(5);
+      expect(wizard.currentStep).toBe(10);
+      expect(wizard.highestStepReached).toBe(10);
     });
 
     it('should update highestStepReached when advancing', () => {
@@ -462,13 +462,12 @@ describe('Wizard Progress Bar Navigation', () => {
       expect(wizard.highestStepReached).toBe(4);
     });
 
-    it('should update highestStepReached when advancing to step 5', () => {
-      wizard.clickNext(); // Step 2
-      wizard.clickNext(); // Step 3
-      wizard.clickNext(); // Step 4
-      wizard.clickNext(); // Step 5
+    it('should update highestStepReached when advancing to last step', () => {
+      for (let i = 1; i < 10; i++) {
+        wizard.clickNext();
+      }
 
-      expect(wizard.highestStepReached).toBe(5);
+      expect(wizard.highestStepReached).toBe(10);
     });
   });
 
@@ -496,7 +495,7 @@ describe('Wizard Progress Bar Navigation', () => {
       wizard.clickNext(); // Step 3
       wizard.saveState();
 
-      const newWizard = new WizardNavigationSimulator(5);
+      const newWizard = new WizardNavigationSimulator(10);
       newWizard.storage = wizard.storage;
       newWizard.loadState();
 
@@ -510,7 +509,7 @@ describe('Wizard Progress Bar Navigation', () => {
       wizard.clickBack(); // Step 3
       wizard.saveState();
 
-      const newWizard = new WizardNavigationSimulator(5);
+      const newWizard = new WizardNavigationSimulator(10);
       newWizard.storage = wizard.storage;
       newWizard.loadState();
 
@@ -524,7 +523,7 @@ describe('Wizard Progress Bar Navigation', () => {
       wizard.clickSegment(2); // Back to step 2
       wizard.saveState();
 
-      const newWizard = new WizardNavigationSimulator(5);
+      const newWizard = new WizardNavigationSimulator(10);
       newWizard.storage = wizard.storage;
       newWizard.loadState();
 
@@ -537,14 +536,14 @@ describe('Wizard Progress Bar Navigation', () => {
     it('should fallback to currentStep if highestStepReached missing (backwards compatibility)', () => {
       // Simulate old state without highestStepReached
       const oldState: SavedState = {
-        version: 1,
+        version: 2,
         currentStep: 3,
         highestStepReached: 3, // Will be tested by setting to currentStep
         inputs: {},
       };
       wizard.storage['diligence-machine-state'] = JSON.stringify(oldState);
 
-      const newWizard = new WizardNavigationSimulator(5);
+      const newWizard = new WizardNavigationSimulator(10);
       newWizard.storage = wizard.storage;
       newWizard.loadState();
 
@@ -568,53 +567,49 @@ describe('Wizard Progress Bar Navigation', () => {
     });
 
     it('should handle jumping to first step from last step', () => {
-      wizard.clickNext(); // Step 2
-      wizard.clickNext(); // Step 3
-      wizard.clickNext(); // Step 4
-      wizard.clickNext(); // Step 5
+      for (let i = 1; i < 10; i++) {
+        wizard.clickNext();
+      }
 
       wizard.clickSegment(1);
       expect(wizard.currentStep).toBe(1);
 
-      // All steps 2-5 should be reachable
-      expect(wizard.segmentHasClass(2, 'reachable')).toBe(true);
-      expect(wizard.segmentHasClass(3, 'reachable')).toBe(true);
-      expect(wizard.segmentHasClass(4, 'reachable')).toBe(true);
-      expect(wizard.segmentHasClass(5, 'reachable')).toBe(true);
+      // All steps 2-10 should be reachable
+      for (let i = 2; i <= 10; i++) {
+        expect(wizard.segmentHasClass(i, 'reachable')).toBe(true);
+      }
     });
 
     it('should handle alternating forward clicks after initial advancement', () => {
-      wizard.clickNext(); // Step 2
-      wizard.clickNext(); // Step 3
-      wizard.clickNext(); // Step 4
-      wizard.clickNext(); // Step 5
+      for (let i = 1; i < 10; i++) {
+        wizard.clickNext();
+      }
 
       wizard.clickSegment(1); // Jump to step 1
-
-      wizard.clickSegment(3); // Jump to step 3
-      expect(wizard.currentStep).toBe(3);
 
       wizard.clickSegment(5); // Jump to step 5
       expect(wizard.currentStep).toBe(5);
 
-      wizard.clickSegment(2); // Jump to step 2
-      expect(wizard.currentStep).toBe(2);
+      wizard.clickSegment(10); // Jump to step 10
+      expect(wizard.currentStep).toBe(10);
+
+      wizard.clickSegment(3); // Jump to step 3
+      expect(wizard.currentStep).toBe(3);
     });
 
     it('should maintain reachable state through multiple back-and-forth navigations', () => {
       // Advance to end
-      wizard.clickNext(); // Step 2
-      wizard.clickNext(); // Step 3
-      wizard.clickNext(); // Step 4
-      wizard.clickNext(); // Step 5
+      for (let i = 1; i < 10; i++) {
+        wizard.clickNext();
+      }
 
       // Navigate back and forth multiple times
       for (let i = 0; i < 10; i++) {
         wizard.clickSegment(1);
-        expect(wizard.highestStepReached).toBe(5);
+        expect(wizard.highestStepReached).toBe(10);
 
-        wizard.clickSegment(5);
-        expect(wizard.highestStepReached).toBe(5);
+        wizard.clickSegment(10);
+        expect(wizard.highestStepReached).toBe(10);
       }
     });
 
@@ -662,7 +657,7 @@ describe('Wizard Progress Bar Navigation', () => {
     });
 
     it('should handle empty localStorage gracefully', () => {
-      const newWizard = new WizardNavigationSimulator(5);
+      const newWizard = new WizardNavigationSimulator(10);
       newWizard.loadState(); // No state in storage
 
       expect(newWizard.currentStep).toBe(1);

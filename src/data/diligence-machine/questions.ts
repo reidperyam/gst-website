@@ -23,6 +23,12 @@ export interface QuestionCondition {
   revenueMin?: string;
   companyAgeMin?: string;
   excludeTransactionTypes?: string[];
+  // v2 condition dimensions
+  businessModels?: string[];
+  scaleIntensity?: string[];
+  transformationStates?: string[];
+  dataSensitivity?: string[];
+  operatingModels?: string[];
 }
 
 export interface DiligenceQuestion {
@@ -34,6 +40,10 @@ export interface DiligenceQuestion {
   rationale: string;
   priority: 'high' | 'medium' | 'standard';
   conditions: QuestionCondition;
+  // v2 strategic metadata (optional for backward compat)
+  exitImpact?: 'Multiple Expander' | 'Valuation Drag' | 'Operational Risk';
+  redFlagSignal?: string;
+  track?: 'Architecture' | 'Operations' | 'Carve-out' | 'Security';
 }
 
 export const TOPIC_META = {
@@ -674,6 +684,263 @@ export const QUESTIONS: DiligenceQuestion[] = [
     priority: 'medium',
     conditions: {
       geographies: ['canada'],
+    },
+  },
+
+  // ─── V2 QUESTIONS ──────────────────────────────────────────────────────
+
+  // Doc 1: DR testing question
+  {
+    id: 'ops-13',
+    topic: 'operations',
+    topicLabel: 'Operations & Delivery',
+    audienceLevel: 'VP Engineering',
+    text: 'When was the last disaster recovery test executed end-to-end? What was the actual recovery time, and how did it compare to the documented RTO target?',
+    rationale: 'DR testing is the only reliable validation of recovery capability. Untested DR plans may provide false assurance that creates material risk exposure.',
+    priority: 'high',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If DR has never been tested or last test was 12+ months ago, recovery capability is unvalidated.',
+    track: 'Operations',
+    conditions: {
+      revenueMin: '5-25m',
+    },
+  },
+
+  // Doc 1: Automation ratio question
+  {
+    id: 'ops-14',
+    topic: 'operations',
+    topicLabel: 'Operations & Delivery',
+    audienceLevel: 'VP Engineering',
+    text: 'What is the automation-to-human ratio for core business processes? How has this ratio trended over the past 24 months?',
+    rationale: 'The automation ratio directly impacts margin scalability. Declining automation ratios in growing companies may indicate that growth is being achieved through headcount rather than leverage.',
+    priority: 'high',
+    exitImpact: 'Multiple Expander',
+    redFlagSignal: 'Inability to quantify how many new FTEs are required per $1M in revenue, or a declining automation ratio alongside revenue growth.',
+    track: 'Operations',
+    conditions: {
+      productTypes: ['tech-enabled-service'],
+    },
+  },
+
+  // Sovereignty trigger: EU AI Act
+  {
+    id: 'sec-17',
+    topic: 'security-risk',
+    topicLabel: 'Security, Compliance & Governance',
+    audienceLevel: 'CISO',
+    text: 'What is the EU AI Act compliance posture? If the target deploys AI systems within the EU, are risk classifications documented, and is there a conformity assessment plan for high-risk AI systems?',
+    rationale: 'The EU AI Act imposes tiered compliance requirements on AI systems. Non-compliance may result in fines up to 6% of global turnover and market access restrictions.',
+    priority: 'high',
+    exitImpact: 'Valuation Drag',
+    redFlagSignal: 'If AI systems are deployed in the EU without risk classification, compliance exposure is likely unquantified.',
+    track: 'Security',
+    conditions: {
+      geographies: ['eu'],
+    },
+  },
+
+  // Business model: customized deployments
+  {
+    id: 'ops-15',
+    topic: 'operations',
+    topicLabel: 'Operations & Delivery',
+    audienceLevel: 'VP Engineering',
+    text: 'What is the ratio of custom code to shared platform code across customer deployments? How is configuration drift between deployments managed?',
+    rationale: 'Customized deployment models can create a fragmented codebase where each customer instance diverges, increasing maintenance burden and deployment complexity.',
+    priority: 'medium',
+    exitImpact: 'Multiple Expander',
+    redFlagSignal: 'If custom code exceeds 30% per deployment or there is no drift detection mechanism.',
+    track: 'Operations',
+    conditions: {
+      businessModels: ['customized-deployments'],
+    },
+  },
+
+  // Business model: services-led
+  {
+    id: 'ops-16',
+    topic: 'operations',
+    topicLabel: 'Operations & Delivery',
+    audienceLevel: 'VP Product',
+    text: 'What percentage of revenue is derived from recurring product versus professional services? What is the trend over the past three years?',
+    rationale: 'Services-led businesses often face margin compression at scale. Understanding the product-to-services revenue mix informs valuation multiple expectations.',
+    priority: 'high',
+    exitImpact: 'Multiple Expander',
+    redFlagSignal: 'If services revenue is growing faster than product revenue, the business may be moving away from scalable economics.',
+    track: 'Operations',
+    conditions: {
+      businessModels: ['services-led'],
+    },
+  },
+
+  // Scale intensity: high
+  {
+    id: 'arch-13',
+    topic: 'architecture',
+    topicLabel: 'Architecture',
+    audienceLevel: 'CTO',
+    text: 'What observability and monitoring infrastructure is in place? Are distributed tracing, centralized logging, and real-time alerting operational at scale?',
+    rationale: 'High-scale systems require mature observability to detect and diagnose issues before they impact users. Gaps in monitoring at scale can lead to cascading failures.',
+    priority: 'high',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If monitoring is limited to basic health checks without distributed tracing or anomaly detection.',
+    track: 'Architecture',
+    conditions: {
+      scaleIntensity: ['high'],
+    },
+  },
+
+  // Scale intensity: high + architecture
+  {
+    id: 'arch-14',
+    topic: 'architecture',
+    topicLabel: 'Architecture',
+    audienceLevel: 'CTO',
+    text: 'What is the auto-scaling architecture? Are scaling policies reactive or predictive, and what is the cost profile during peak versus baseline load?',
+    rationale: 'High-scale platforms with reactive-only scaling may experience latency spikes and degraded user experience during traffic surges, impacting retention and SLA adherence.',
+    priority: 'medium',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If scaling is manual or requires engineering intervention for capacity changes.',
+    track: 'Architecture',
+    conditions: {
+      scaleIntensity: ['high'],
+    },
+  },
+
+  // Transformation state: mid-migration
+  {
+    id: 'arch-15',
+    topic: 'architecture',
+    topicLabel: 'Architecture',
+    audienceLevel: 'CTO',
+    text: 'What is the migration timeline and risk profile for the in-flight platform transition? Are there rollback capabilities at each migration stage?',
+    rationale: 'Mid-migration architectures carry compounded risk: both old and new systems must be maintained, and partial migrations can create data consistency and integration challenges.',
+    priority: 'high',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If the migration has no documented rollback plan or has already exceeded its original timeline.',
+    track: 'Architecture',
+    conditions: {
+      transformationStates: ['mid-migration'],
+    },
+  },
+
+  // Transformation state: actively-modernizing
+  {
+    id: 'arch-16',
+    topic: 'architecture',
+    topicLabel: 'Architecture',
+    audienceLevel: 'CTO',
+    text: 'What is the modernization roadmap and what percentage of the target architecture has been achieved? How is technical debt being retired versus accumulated during the modernization?',
+    rationale: 'Active modernization programs can consume significant engineering capacity. Understanding progress and debt accumulation rates helps assess post-close engineering velocity expectations.',
+    priority: 'medium',
+    exitImpact: 'Valuation Drag',
+    redFlagSignal: 'If modernization has been "in progress" for 2+ years with less than 50% completion.',
+    track: 'Architecture',
+    conditions: {
+      transformationStates: ['actively-modernizing'],
+    },
+  },
+
+  // Data sensitivity: high
+  {
+    id: 'sec-18',
+    topic: 'security-risk',
+    topicLabel: 'Security, Compliance & Governance',
+    audienceLevel: 'CISO',
+    text: 'What data classification framework is in place? How is highly sensitive data (PII, PHI, financial) segmented, encrypted, and access-controlled differently from standard operational data?',
+    rationale: 'High data sensitivity without a formal classification and segmentation framework creates regulatory and breach exposure that may not be visible in standard security assessments.',
+    priority: 'high',
+    exitImpact: 'Valuation Drag',
+    redFlagSignal: 'If all data is treated uniformly regardless of sensitivity level, or if there is no formal classification policy.',
+    track: 'Security',
+    conditions: {
+      dataSensitivity: ['high'],
+    },
+  },
+
+  // Data sensitivity: high + security
+  {
+    id: 'sec-19',
+    topic: 'security-risk',
+    topicLabel: 'Security, Compliance & Governance',
+    audienceLevel: 'CISO',
+    text: 'What is the data retention and purging policy? Are there automated mechanisms to enforce retention periods, and has the policy been validated against applicable regulatory requirements?',
+    rationale: 'Retaining sensitive data beyond regulatory requirements increases breach surface and compliance risk. Manual retention management is error-prone at scale.',
+    priority: 'medium',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If there is no automated purging or if data older than regulatory minimums is retained without justification.',
+    track: 'Security',
+    conditions: {
+      dataSensitivity: ['moderate', 'high'],
+    },
+  },
+
+  // Operating model: outsourced-heavy
+  {
+    id: 'ops-17',
+    topic: 'operations',
+    topicLabel: 'Operations & Delivery',
+    audienceLevel: 'VP Engineering',
+    text: 'What is the knowledge transfer and documentation posture between outsourced teams and internal stakeholders? Are there IP assignment agreements covering all outsourced work?',
+    rationale: 'Heavy outsourcing can create knowledge silos and IP ownership ambiguity. Post-acquisition, contractor transitions or terminations may disrupt critical capabilities.',
+    priority: 'high',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If outsourced teams hold undocumented institutional knowledge or if IP assignment clauses are incomplete.',
+    track: 'Operations',
+    conditions: {
+      operatingModels: ['outsourced-heavy'],
+    },
+  },
+
+  // Operating model: product-aligned-teams
+  {
+    id: 'ops-18',
+    topic: 'operations',
+    topicLabel: 'Operations & Delivery',
+    audienceLevel: 'VP Engineering',
+    text: 'How are cross-cutting concerns (security, infrastructure, data) governed across product-aligned teams? Is there a platform or enabling team that provides shared services?',
+    rationale: 'Product-aligned teams can optimize for local velocity but create inconsistency in security, infrastructure, and data practices without cross-cutting governance.',
+    priority: 'medium',
+    exitImpact: 'Operational Risk',
+    redFlagSignal: 'If each team independently manages security, infrastructure, or data with no shared standards or enabling function.',
+    track: 'Operations',
+    conditions: {
+      operatingModels: ['product-aligned-teams'],
+    },
+  },
+
+  // Usage-based business model
+  {
+    id: 'arch-17',
+    topic: 'architecture',
+    topicLabel: 'Architecture',
+    audienceLevel: 'CTO',
+    text: 'How is usage metering and billing instrumented? What is the accuracy and latency of the metering pipeline, and how are billing disputes resolved?',
+    rationale: 'Usage-based models depend on metering accuracy for revenue recognition. Metering gaps or latency can create revenue leakage and customer disputes.',
+    priority: 'high',
+    exitImpact: 'Multiple Expander',
+    redFlagSignal: 'If metering is not real-time or if there have been material billing adjustments in the past 12 months.',
+    track: 'Architecture',
+    conditions: {
+      businessModels: ['usage-based'],
+    },
+  },
+
+  // IP licensing business model
+  {
+    id: 'sec-20',
+    topic: 'security-risk',
+    topicLabel: 'Security, Compliance & Governance',
+    audienceLevel: 'CISO',
+    text: 'What is the IP protection strategy? Are patents, trade secrets, and proprietary algorithms documented, protected, and assignable in a transaction context?',
+    rationale: 'IP licensing models derive value from protectable intellectual property. Gaps in IP documentation, protection, or assignability can materially impact deal value.',
+    priority: 'high',
+    exitImpact: 'Valuation Drag',
+    redFlagSignal: 'If core IP is not patent-protected or if assignment clauses in employee/contractor agreements are incomplete.',
+    track: 'Security',
+    conditions: {
+      businessModels: ['ip-licensing'],
     },
   },
 ];

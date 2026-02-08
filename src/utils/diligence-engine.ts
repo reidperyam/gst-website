@@ -21,6 +21,12 @@ export interface UserInputs {
   growthStage: string;
   companyAge: string;
   geographies: string[];
+  // v2 dimensions
+  businessModel: string;
+  scaleIntensity: string;
+  transformationState: string;
+  dataSensitivity: string;
+  operatingModel: string;
 }
 
 export interface TopicOutput {
@@ -143,6 +149,42 @@ export function matchesConditions(
     return false;
   }
 
+  // v2 condition dimensions
+  if (
+    conditions.businessModels &&
+    !conditions.businessModels.includes(inputs.businessModel)
+  ) {
+    return false;
+  }
+
+  if (
+    conditions.scaleIntensity &&
+    !conditions.scaleIntensity.includes(inputs.scaleIntensity)
+  ) {
+    return false;
+  }
+
+  if (
+    conditions.transformationStates &&
+    !conditions.transformationStates.includes(inputs.transformationState)
+  ) {
+    return false;
+  }
+
+  if (
+    conditions.dataSensitivity &&
+    !conditions.dataSensitivity.includes(inputs.dataSensitivity)
+  ) {
+    return false;
+  }
+
+  if (
+    conditions.operatingModels &&
+    !conditions.operatingModels.includes(inputs.operatingModel)
+  ) {
+    return false;
+  }
+
   return true;
 }
 
@@ -240,24 +282,99 @@ export function groupByTopic(questions: DiligenceQuestion[]): TopicOutput[] {
 }
 
 /**
+ * Filter out questions that are exclusively cloud-native when the target
+ * is on-premise or self-managed infrastructure.
+ *
+ * Trigger: productType === 'on-premise-enterprise' OR
+ *          techArchetype in ['self-managed-infra', 'datacenter-vendor']
+ */
+export function applyArchetypePivot(
+  questions: DiligenceQuestion[],
+  inputs: UserInputs
+): DiligenceQuestion[] {
+  const isOnPrem =
+    inputs.productType === 'on-premise-enterprise' ||
+    inputs.techArchetype === 'self-managed-infra' ||
+    inputs.techArchetype === 'datacenter-vendor';
+
+  if (!isOnPrem) return questions;
+
+  return questions.filter((q) => {
+    // Remove questions whose conditions specify ONLY modern-cloud-native
+    if (
+      q.conditions.techArchetypes &&
+      q.conditions.techArchetypes.length > 0 &&
+      q.conditions.techArchetypes.every((a) => a === 'modern-cloud-native')
+    ) {
+      return false;
+    }
+    return true;
+  });
+}
+
+/**
+ * Inject computed risk anchors based on cross-field logic that cannot be
+ * expressed as simple condition arrays.
+ *
+ * Maturity Override: high-revenue + low headcount + mature growth →
+ * inject "Manual Operations Masking" anchor.
+ */
+export function applyMaturityOverrides(
+  anchors: RiskAnchor[],
+  inputs: UserInputs
+): RiskAnchor[] {
+  const isHighRevLowHead =
+    meetsMinimumBracket('revenue-range', inputs.revenueRange, '25-100m') &&
+    !meetsMinimumBracket('headcount', inputs.headcount, '201-500') &&
+    inputs.growthStage === 'mature';
+
+  if (!isHighRevLowHead) return anchors;
+
+  const alreadyPresent = anchors.some((a) => a.id === 'risk-manual-ops-masking');
+  if (alreadyPresent) return anchors;
+
+  return [
+    ...anchors,
+    {
+      id: 'risk-manual-ops-masking',
+      title: 'Manual Operations Masking',
+      description:
+        'High-revenue companies with low headcount growth may be masking manual operations behind a technology facade. Revenue per employee ratios that appear favorable may actually indicate process bottlenecks that limit scalability.',
+      relevance: 'high',
+      conditions: {},
+    },
+  ];
+}
+
+/**
  * Main engine function: takes user inputs, returns the generated script.
  * Pure function, no side effects, fully testable.
  */
 export function generateScript(inputs: UserInputs): GeneratedScript {
+  // 1. Filter questions by conditions
   const matchedQuestions = QUESTIONS.filter((q) =>
     matchesConditions(q.conditions, inputs)
   );
 
+  // 2. Apply archetype pivot (filter cloud-native Qs for on-prem targets)
+  const pivotedQuestions = applyArchetypePivot(matchedQuestions, inputs);
+
+  // 3. Balance across topics
+  const selected = balanceAcrossTopics(pivotedQuestions, 15, 20);
+  const topics = groupByTopic(selected);
+
+  // 4. Filter risk anchors by conditions
   const matchedAnchors = RISK_ANCHORS.filter((a) =>
     matchesConditions(a.conditions, inputs)
   );
 
-  const selected = balanceAcrossTopics(matchedQuestions, 15, 20);
-  const topics = groupByTopic(selected);
+  // 5. Apply maturity overrides (inject computed anchors)
+  const enrichedAnchors = applyMaturityOverrides(matchedAnchors, inputs);
 
   return {
     topics,
-    riskAnchors: [...matchedAnchors].sort(
+    // 6. Sort anchors by relevance
+    riskAnchors: [...enrichedAnchors].sort(
       (a, b) => (RELEVANCE_ORDER[a.relevance] ?? 2) - (RELEVANCE_ORDER[b.relevance] ?? 2)
     ),
     metadata: {
@@ -272,6 +389,11 @@ export function generateScript(inputs: UserInputs): GeneratedScript {
         growthStage: inputs.growthStage,
         companyAge: inputs.companyAge,
         geographies: inputs.geographies,
+        businessModel: inputs.businessModel,
+        scaleIntensity: inputs.scaleIntensity,
+        transformationState: inputs.transformationState,
+        dataSensitivity: inputs.dataSensitivity,
+        operatingModel: inputs.operatingModel,
       },
     },
   };

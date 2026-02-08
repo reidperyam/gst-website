@@ -222,6 +222,141 @@ export const WIZARD_STEPS: WizardStep[] = [
       },
     ],
   },
+  {
+    id: 'business-model',
+    title: 'Business Model',
+    subtitle: 'What is the primary delivery and monetization model?',
+    inputType: 'single-select',
+    options: [
+      {
+        id: 'productized-platform',
+        label: 'Productized Platform',
+        description: 'Self-serve product with platform economics',
+      },
+      {
+        id: 'customized-deployments',
+        label: 'Customized Deployments',
+        description: 'Tailored implementations for each customer',
+      },
+      {
+        id: 'services-led',
+        label: 'Services-Led',
+        description: 'Professional services as primary revenue driver',
+      },
+      {
+        id: 'usage-based',
+        label: 'Usage-Based',
+        description: 'Consumption-based pricing model',
+      },
+      {
+        id: 'ip-licensing',
+        label: 'IP Licensing',
+        description: 'Revenue from intellectual property licensing',
+      },
+    ],
+  },
+  {
+    id: 'scale-intensity',
+    title: 'Scale Intensity',
+    subtitle: 'What is the operational scale and user volume pressure?',
+    inputType: 'single-select',
+    options: [
+      {
+        id: 'low',
+        label: 'Low',
+        description: 'Internal tools or small user base',
+      },
+      {
+        id: 'moderate',
+        label: 'Moderate',
+        description: 'Thousands of users with steady growth',
+      },
+      {
+        id: 'high',
+        label: 'High',
+        description: 'Millions of users or high transaction volume',
+      },
+    ],
+  },
+  {
+    id: 'transformation-state',
+    title: 'Transformation State',
+    subtitle: 'What is the current state of technology modernization?',
+    inputType: 'single-select',
+    options: [
+      {
+        id: 'stable',
+        label: 'Stable',
+        description: 'No active modernization; current stack is maintained',
+      },
+      {
+        id: 'mid-migration',
+        label: 'Mid-Migration',
+        description: 'Actively transitioning between technology stacks',
+      },
+      {
+        id: 'actively-modernizing',
+        label: 'Actively Modernizing',
+        description: 'Systematic upgrade of architecture and tooling',
+      },
+      {
+        id: 'recently-modernized',
+        label: 'Recently Modernized',
+        description: 'Major modernization completed within past 12\u201318 months',
+      },
+    ],
+  },
+  {
+    id: 'data-sensitivity',
+    title: 'Data Sensitivity',
+    subtitle: 'What is the sensitivity level of the data the target handles?',
+    inputType: 'single-select',
+    options: [
+      {
+        id: 'low',
+        label: 'Low',
+        description: 'Non-sensitive operational data',
+      },
+      {
+        id: 'moderate',
+        label: 'Moderate',
+        description: 'Business-sensitive data with standard protection requirements',
+      },
+      {
+        id: 'high',
+        label: 'High',
+        description: 'PII, PHI, financial data, or regulated data categories',
+      },
+    ],
+  },
+  {
+    id: 'operating-model',
+    title: 'Operating Model',
+    subtitle: 'How is the engineering organization structured?',
+    inputType: 'single-select',
+    options: [
+      {
+        id: 'centralized-eng',
+        label: 'Centralized Engineering',
+        description: 'Single engineering org with unified leadership',
+      },
+      {
+        id: 'product-aligned-teams',
+        label: 'Product-Aligned Teams',
+        description: 'Autonomous squads aligned to product areas',
+      },
+      {
+        id: 'outsourced-heavy',
+        label: 'Outsourced-Heavy',
+        description: 'Significant reliance on external development partners',
+      },
+      {
+        id: 'hybrid',
+        label: 'Hybrid',
+        description: 'Mix of internal teams and outsourced capabilities',
+      },
+    ],
+  },
 ];
 
 /** Ordinal bracket ordering for comparative conditions */

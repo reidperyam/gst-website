@@ -216,4 +216,50 @@ export const RISK_ANCHORS: RiskAnchor[] = [
       geographies: ['multi-region'],
     },
   },
+
+  // ─── V2 RISK ANCHORS ───────────────────────────────────────────────────
+
+  {
+    id: 'risk-talent-calcification',
+    title: 'Talent Calcification',
+    description:
+      'Companies aged 10+ years in mature growth stages often exhibit talent calcification: long-tenured teams with deep institutional knowledge but limited exposure to modern practices. Post-acquisition modernization may require significant retraining or supplemental hiring.',
+    relevance: 'high',
+    conditions: {
+      companyAgeMin: '10-20yr',
+      growthStages: ['mature'],
+    },
+  },
+  {
+    id: 'risk-moat-erosion',
+    title: 'AI Commodity Risk (Moat Erosion)',
+    description:
+      'B2B SaaS products face increasing commoditization pressure from AI-native alternatives. Evaluate the defensibility of the product moat, the pace of competitive AI capabilities, and the cost to re-platform or integrate AI natively.',
+    relevance: 'high',
+    conditions: {
+      productTypes: ['b2b-saas'],
+    },
+  },
+  {
+    id: 'risk-shadow-it-sprawl',
+    title: 'Shadow IT Sprawl',
+    description:
+      'Large tech-enabled service companies (500+ employees) frequently develop shadow IT: unmanaged tools, scripts, and integrations that bypass centralized governance. This creates security, compliance, and integration risks during diligence.',
+    relevance: 'medium',
+    conditions: {
+      productTypes: ['tech-enabled-service'],
+      headcountMin: '500+',
+    },
+  },
+  {
+    id: 'risk-manual-ops-masking',
+    title: 'Manual Operations Masking',
+    description:
+      'High-revenue companies with low headcount growth may be masking manual operations behind a technology facade. Revenue per employee ratios that appear favorable may actually indicate process bottlenecks that limit scalability.',
+    relevance: 'high',
+    conditions: {
+      revenueMin: '25-100m',
+      growthStages: ['mature'],
+    },
+  },
 ];
