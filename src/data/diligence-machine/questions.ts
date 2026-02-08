@@ -39,7 +39,7 @@ export interface DiligenceQuestion {
 export const TOPIC_META = {
   architecture: {
     label: 'Architecture',
-    audience: 'CTO / VP Engineering',
+    audience: 'CTO / VP Engineering / Senior Architect',
     order: 1,
   },
   operations: {
@@ -49,12 +49,12 @@ export const TOPIC_META = {
   },
   'carveout-integration': {
     label: 'Carve-out / Integration',
-    audience: 'M&A / Corporate Development',
+    audience: 'CIO / COO / CTO / PE Leadership',
     order: 3,
   },
   'security-risk': {
     label: 'Security, Compliance & Governance',
-    audience: 'CISO / VP Security',
+    audience: 'CIO / CISO / VP Security',
     order: 4,
   },
 } as const;
