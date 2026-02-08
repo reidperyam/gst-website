@@ -180,8 +180,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         <p class="doc-generation-date" id="docDate"></p>
                     </header>
 
-                    <hr class="doc-divider doc-divider--heavy" />
-
                     <!-- Metadata Block -->
                     <section class="doc-meta" id="docMeta" aria-label="Input parameters"></section>
 
@@ -1287,6 +1285,9 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         background: var(--bg-light);
         border: 1px solid var(--border-light);
         border-radius: 2px;
@@ -2025,6 +2026,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         }
 
         .doc-page {
+            display: block;
+            min-height: auto;
             border: none;
             box-shadow: none;
             padding: 40px;
@@ -2296,10 +2299,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         /* Footer - minimal */
         .doc-footer {
-            margin-top: 16px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 40px;
+            margin-top: 0;
             opacity: 0.6;
             font-size: 9px;
-            page-break-before: avoid;
+            background: white;
+        }
+
+        @page {
+            margin-bottom: 60px;
         }
 
         .doc-footer .doc-divider {
