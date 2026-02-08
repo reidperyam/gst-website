@@ -156,4 +156,14 @@ export const RISK_ANCHORS: RiskAnchor[] = [
       geographies: ['africa'],
     },
   },
+  {
+    id: 'risk-canada-privacy',
+    title: 'Canadian Privacy Law Complexity',
+    description:
+      'Canadian operations face a layered privacy landscape with PIPEDA at the federal level and substantially similar provincial legislation in Quebec (Law 25), Alberta, and British Columbia. Quebec\'s Law 25 introduces GDPR-like requirements including privacy impact assessments, consent reforms, and data portability rights.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['canada'],
+    },
+  },
 ];

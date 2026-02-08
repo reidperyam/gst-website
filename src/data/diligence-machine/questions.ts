@@ -464,7 +464,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Compliance gaps post-close may halt operations in regulated markets. Certification transfer timelines often exceed deal close timelines.',
     priority: 'high',
     conditions: {
-      geographies: ['eu', 'uk', 'apac', 'latam', 'africa'],
+      geographies: ['eu', 'uk', 'canada', 'apac', 'latam', 'africa'],
     },
   },
   {
@@ -613,7 +613,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Data sovereignty violations may block market access. Multi-region operations typically require explicit data residency architectures.',
     priority: 'high',
     conditions: {
-      geographies: ['eu', 'uk', 'apac', 'latam', 'africa'],
+      geographies: ['eu', 'uk', 'canada', 'apac', 'latam', 'africa'],
     },
   },
   {
@@ -662,6 +662,18 @@ export const QUESTIONS: DiligenceQuestion[] = [
     priority: 'high',
     conditions: {
       geographies: ['africa'],
+    },
+  },
+  {
+    id: 'sec-16',
+    topic: 'security-risk',
+    topicLabel: 'Security & Risk',
+    audienceLevel: 'CISO',
+    text: 'What is the PIPEDA compliance posture for Canadian operations? Are there provincial privacy obligations (e.g., Quebec Law 25) that impose additional requirements beyond federal legislation, and how are cross-border data transfers with the US managed?',
+    rationale: 'Canada has a layered privacy landscape with PIPEDA at the federal level and substantially similar provincial legislation in Quebec, Alberta, and British Columbia. Quebec\'s Law 25 introduces GDPR-like requirements that may affect data handling practices.',
+    priority: 'high',
+    conditions: {
+      geographies: ['canada'],
     },
   },
 ];

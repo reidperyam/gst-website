@@ -186,6 +186,11 @@ export const WIZARD_STEPS: WizardStep[] = [
         description: 'North American operations',
       },
       {
+        id: 'canada',
+        label: 'Canada',
+        description: 'Canadian operations',
+      },
+      {
         id: 'eu',
         label: 'European Union',
         description: 'EU member state operations',
