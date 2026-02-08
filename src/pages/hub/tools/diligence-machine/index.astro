@@ -190,6 +190,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <!-- Table of Contents -->
                     <section class="doc-toc" id="docToc" aria-label="Table of contents"></section>
 
+                    <hr class="doc-divider doc-divider--post-toc" />
+
                     <!-- Attention Areas -->
                     <section class="doc-attention-anchors" id="riskAnchorsSection" style="display:none;" aria-label="Attention areas">
                         <h2 class="doc-section-heading">
@@ -619,12 +621,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         aria-label="Target or project identifier"
                     />
                 </div>
-                ${fields.map((f) => `
-                    <div class="doc-meta-card">
+                ${fields.map((f, i) => {
+                    const col = (i + 1) % 3; // 0=col1, 1=col2, 2=col3
+                    const colClass = col === 1 ? ' doc-meta-card--col2' : col === 2 ? ' doc-meta-card--col3' : '';
+                    return `
+                    <div class="doc-meta-card${colClass}">
                         <span class="doc-meta-label">${escapeHtml(f.label)}</span>
                         <span class="doc-meta-value">${escapeHtml(f.value)}</span>
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         `;
 
@@ -1367,6 +1372,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border-top-color: var(--color-primary);
     }
 
+    .doc-divider--post-toc {
+        display: block;
+    }
+
     :global(html.dark-theme) .doc-divider {
         border-top-color: var(--border-dark);
     }
@@ -1429,6 +1438,17 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         font-weight: var(--font-weight-semibold);
         color: var(--text-light-primary);
         line-height: 1.3;
+    }
+
+    /* Column alignment for 3-column grid */
+    .doc-meta :global(.doc-meta-card--col2) {
+        align-items: center;
+        text-align: center;
+    }
+
+    .doc-meta :global(.doc-meta-card--col3) {
+        align-items: flex-end;
+        text-align: right;
     }
 
     .doc-meta :global(.doc-meta-card--identifier) {
@@ -1981,8 +2001,17 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             width: 100%;
         }
 
+        /* Reset desktop column alignment for 2-col mobile grid */
+        .doc-meta :global(.doc-meta-card--col2),
+        .doc-meta :global(.doc-meta-card--col3) {
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        /* Right-align second column in 2-col grid */
         .doc-meta :global(.doc-meta-card:nth-child(2n + 1):not(.doc-meta-card--identifier)) {
             align-items: flex-end;
+            text-align: right;
         }
 
         .doc-toc :global(.doc-toc-list) {
@@ -2079,13 +2108,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         /* Dividers - reduce spacing */
         .doc-divider {
             margin: 16px 0;
-            border-top-color: var(--color-primary);
         }
 
         .doc-divider--heavy {
             margin: 0 0 12px 0;
             border-top-color: var(--color-primary);
             page-break-after: avoid;
+        }
+
+        .doc-divider--post-toc {
+            display: block;
         }
 
         /* Metadata grid - compact */
