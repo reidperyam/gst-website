@@ -235,6 +235,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     interface SavedState {
         version: number;
         currentStep: number;
+        highestStepReached: number;
         inputs: Partial<UserInputs>;
         targetIdentifier?: string;
     }
@@ -242,6 +243,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     // ─── STATE ────────────────────────────────────────────────────────────
 
     let currentStep = 1;
+    let highestStepReached = 1;
     const totalSteps = 5;
     let inputs: Partial<UserInputs> = {
         geographies: [],
@@ -271,6 +273,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             const state: SavedState = {
                 version: STORAGE_VERSION,
                 currentStep,
+                highestStepReached,
                 inputs: { ...inputs },
                 targetIdentifier,
             };
@@ -304,6 +307,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     function showStep(step: number): void {
         currentStep = step;
+        highestStepReached = Math.max(highestStepReached, step);
 
         // Update step panels
         document.querySelectorAll('.wizard-step').forEach((el) => {
@@ -317,6 +321,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             const segStep = Number(segEl.dataset.stepIndicator);
             segEl.classList.toggle('active', segStep === step);
             segEl.classList.toggle('completed', segStep < step);
+            segEl.classList.toggle('reachable', segStep > step && segStep <= highestStepReached);
         });
 
         // Update progress bar aria
@@ -772,6 +777,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         inputs = { geographies: [], ...saved.inputs };
         if (saved.targetIdentifier) targetIdentifier = saved.targetIdentifier;
+        highestStepReached = saved.highestStepReached ?? saved.currentStep;
 
         // Restore single-select options
         for (const [stepId, key] of Object.entries({
@@ -838,6 +844,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     // Compound field option cards
     document.querySelectorAll('.option-card.compound-option').forEach((card) => {
         card.addEventListener('click', () => handleCompoundOptionClick(card as HTMLButtonElement));
+    });
+
+    // Progress segment click navigation (back to completed steps or forward to previously reached steps)
+    document.querySelectorAll('.progress-segment').forEach((el) => {
+        el.addEventListener('click', () => {
+            const segStep = Number((el as HTMLElement).dataset.stepIndicator);
+            if (segStep !== currentStep && segStep <= highestStepReached) {
+                showStep(segStep);
+            }
+        });
     });
 
     // Navigation
@@ -946,8 +962,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .progress-segment.active,
-    .progress-segment.completed {
+    .progress-segment.completed,
+    .progress-segment.reachable {
         opacity: 1;
+    }
+
+    .progress-segment.completed,
+    .progress-segment.reachable {
+        cursor: pointer;
+    }
+
+    .progress-segment.completed:hover,
+    .progress-segment.reachable:hover {
+        opacity: 0.75;
     }
 
     .progress-number {
