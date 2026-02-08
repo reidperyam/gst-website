@@ -280,7 +280,7 @@ describe('Risk Anchors Data Integrity', () => {
     });
 
     it('should have all required fields on each anchor', () => {
-      const requiredFields = ['id', 'title', 'description', 'severity', 'conditions'];
+      const requiredFields = ['id', 'title', 'description', 'relevance', 'conditions'];
 
       RISK_ANCHORS.forEach((anchor) => {
         requiredFields.forEach(field => {
@@ -295,34 +295,34 @@ describe('Risk Anchors Data Integrity', () => {
     });
   });
 
-  describe('severity validation', () => {
-    it('should have valid severity values', () => {
-      const validSeverities = ['high', 'medium', 'low'];
+  describe('relevance validation', () => {
+    it('should have valid relevance values', () => {
+      const validRelevance = ['high', 'medium', 'low'];
       for (const r of RISK_ANCHORS) {
-        expect(validSeverities, `Anchor ${r.id} has invalid severity: ${r.severity}`).toContain(r.severity);
+        expect(validRelevance, `Anchor ${r.id} has invalid relevance: ${r.relevance}`).toContain(r.relevance);
       }
     });
 
-    it('should have at least 3 high-severity anchors', () => {
-      const highSeverityCount = RISK_ANCHORS.filter(r => r.severity === 'high').length;
-      expect(highSeverityCount).toBeGreaterThanOrEqual(3);
+    it('should have at least 3 high-relevance anchors', () => {
+      const highRelevanceCount = RISK_ANCHORS.filter(r => r.relevance === 'high').length;
+      expect(highRelevanceCount).toBeGreaterThanOrEqual(3);
     });
 
-    it('should have balanced severity distribution', () => {
-      const severityCounts = {
+    it('should have balanced relevance distribution', () => {
+      const relevanceCounts = {
         high: 0,
         medium: 0,
         low: 0,
       };
 
       for (const r of RISK_ANCHORS) {
-        severityCounts[r.severity]++;
+        relevanceCounts[r.relevance]++;
       }
 
-      // At least one of each severity level
-      expect(severityCounts.high).toBeGreaterThan(0);
-      expect(severityCounts.medium).toBeGreaterThan(0);
-      // Low severity may be 0, it's optional
+      // At least one of each relevance level
+      expect(relevanceCounts.high).toBeGreaterThan(0);
+      expect(relevanceCounts.medium).toBeGreaterThan(0);
+      // Low relevance may be 0, it's optional
     });
   });
 

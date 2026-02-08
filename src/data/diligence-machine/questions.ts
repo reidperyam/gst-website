@@ -53,7 +53,7 @@ export const TOPIC_META = {
     order: 3,
   },
   'security-risk': {
-    label: 'Security & Risk',
+    label: 'Security, Compliance & Governance',
     audience: 'CISO / VP Security',
     order: 4,
   },
@@ -138,7 +138,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'Describe the API versioning strategy. How are breaking changes communicated to consumers, and what is the deprecation lifecycle?',
-    rationale: 'API governance quality can affect integration stability for customers and partners, potentially impacting churn risk and support burden.',
+    rationale: 'API governance quality can affect integration stability for customers and partners, potentially impacting churn and support burden.',
     priority: 'standard',
     conditions: {
       productTypes: ['b2b-saas', 'b2c-marketplace'],
@@ -174,7 +174,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'What is the coupling between legacy systems and core business logic? Are there integration layers, or is business logic directly embedded in legacy codebases?',
-    rationale: 'Tight coupling to legacy systems can create refactoring risk and constrain the pace of innovation. Understanding the coupling depth helps inform modernization cost.',
+    rationale: 'Tight coupling to legacy systems can create refactoring challenges and constrain the pace of innovation. Understanding the coupling depth helps inform modernization cost.',
     priority: 'high',
     conditions: {
       techArchetypes: ['hybrid-legacy', 'self-managed-infra'],
@@ -187,7 +187,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Architecture',
     audienceLevel: 'CTO',
     text: 'Do architecture decision records (ADRs) exist? How are significant technical decisions documented, communicated, and revisited?',
-    rationale: 'ADRs can indicate engineering maturity and help reduce knowledge loss risk. Their absence may suggest decisions live in individual memories, creating key-person dependencies.',
+    rationale: 'ADRs can indicate engineering maturity and help reduce knowledge loss. Their absence may suggest decisions live in individual memories, creating key-person dependencies.',
     priority: 'standard',
     conditions: {},
   },
@@ -233,7 +233,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Engineering',
     text: 'What is the bus factor for critical systems? How many engineers can independently deploy, debug, and recover each major subsystem?',
-    rationale: 'Small teams with concentrated knowledge can represent operational risk. Post-acquisition attrition may disrupt critical systems.',
+    rationale: 'Small teams with concentrated knowledge can represent operational vulnerability. Post-acquisition attrition may disrupt critical systems.',
     priority: 'critical',
     conditions: {
       headcountMin: '1-50',
@@ -269,7 +269,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Product',
     text: 'What percentage of service delivery is automated via the proprietary platform versus manual intervention by the operations team?',
-    rationale: 'Tech-enabled service companies often derive margin from automation. A high ratio of manual processes may indicate scalability constraints and margin compression risk.',
+    rationale: 'Tech-enabled service companies often derive margin from automation. A high ratio of manual processes may indicate scalability constraints and margin compression potential.',
     priority: 'critical',
     conditions: {
       productTypes: ['tech-enabled-service'],
@@ -281,7 +281,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Engineering',
     text: 'What is the testing strategy? What is the ratio of unit, integration, and end-to-end tests, and what is the overall code coverage percentage?',
-    rationale: 'Test coverage and strategy can reveal confidence in change safety. Low coverage in critical paths may create deployment risk and slow velocity.',
+    rationale: 'Test coverage and strategy can reveal confidence in change safety. Low coverage in critical paths may create deployment challenges and slow velocity.',
     priority: 'high',
     conditions: {},
   },
@@ -301,7 +301,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Engineering',
     text: 'What is the ratio of outsourced to in-house engineering? Which systems or features are maintained by external contractors?',
-    rationale: 'Heavy reliance on outsourced engineering can create continuity risk post-acquisition, especially if contractor agreements are tied to the selling entity.',
+    rationale: 'Heavy reliance on outsourced engineering can create continuity challenges post-acquisition, especially if contractor agreements are tied to the selling entity.',
     priority: 'high',
     conditions: {
       productTypes: ['tech-enabled-service'],
@@ -365,7 +365,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Carve-out / Integration',
     audienceLevel: 'M&A Lead',
     text: 'What is the data separation plan? Can customer, operational, and analytical data be cleanly partitioned from the parent entity without data loss or integrity issues?',
-    rationale: 'Data entanglement can create regulatory, operational, and legal risk. Clean separation is typically important for standalone operations.',
+    rationale: 'Data entanglement can create regulatory, operational, and legal exposure. Clean separation is typically important for standalone operations.',
     priority: 'critical',
     conditions: {
       transactionTypes: ['carve-out'],
@@ -449,7 +449,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Carve-out / Integration',
     audienceLevel: 'M&A Lead',
     text: 'What is the customer data migration plan? How will customer accounts, configurations, and historical data be transferred without service disruption?',
-    rationale: 'Customer-facing data migration can be a high-risk operational event in transactions. Inadequate planning may lead to customer churn.',
+    rationale: 'Customer-facing data migration can be a high-stakes operational event in transactions. Inadequate planning may lead to customer churn.',
     priority: 'critical',
     conditions: {
       transactionTypes: ['full-acquisition', 'carve-out'],
@@ -485,19 +485,19 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topicLabel: 'Carve-out / Integration',
     audienceLevel: 'M&A Lead',
     text: 'What is the Day-1 readiness assessment? Which technology systems, processes, and integrations must be operational from the first day of standalone or combined operations?',
-    rationale: 'Day-1 failures can create operational risk and customer impact. A gap analysis helps ensure critical systems are prioritized in the transition plan.',
+    rationale: 'Day-1 failures can create operational disruption and customer impact. A gap analysis helps ensure critical systems are prioritized in the transition plan.',
     priority: 'critical',
     conditions: {
       transactionTypes: ['carve-out', 'business-integration'],
     },
   },
 
-  // ─── TOPIC 4: SECURITY & RISK ──────────────────────────────────────
+  // ─── TOPIC 4: SECURITY, COMPLIANCE & GOVERNANCE ────────────────────
 
   {
     id: 'sec-01',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What compliance certifications does the company currently hold (SOC 2, ISO 27001, etc.)? When were they last audited, and were there any material findings?',
     rationale: 'Compliance certifications are often expected by enterprise customers. Gaps or findings may indicate security program maturity issues that can affect deal value.',
@@ -507,7 +507,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-02',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What is the penetration testing cadence? When was the last external penetration test, and what is the remediation status of critical and high-severity findings?',
     rationale: 'Penetration testing frequency and finding remediation velocity can indicate how seriously the organization treats proactive security.',
@@ -517,7 +517,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-03',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'Describe the data encryption posture. Is data encrypted at rest and in transit? What key management solution is used, and who controls the encryption keys?',
     rationale: 'Encryption gaps can create regulatory liability and data breach exposure. Key management ownership is especially important in carve-out scenarios.',
@@ -527,10 +527,10 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-04',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'How is privileged access managed? Is there a PAM solution in place, and is the principle of least privilege enforced across production systems?',
-    rationale: 'Excessive privilege is a commonly exploited attack vector. Weak access controls in scaled organizations can represent systemic breach risk.',
+    rationale: 'Excessive privilege is a commonly exploited attack vector. Weak access controls in scaled organizations can represent systemic breach exposure.',
     priority: 'high',
     conditions: {
       headcountMin: '51-200',
@@ -539,7 +539,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-05',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What is the GDPR compliance posture? Are data processing agreements in place with all sub-processors, and is there a documented data subject rights fulfillment process?',
     rationale: 'GDPR non-compliance can carry fines of up to 4% of global revenue. Due diligence should verify compliance before transaction close.',
@@ -551,7 +551,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-06',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'Is there a Software Bill of Materials (SBOM)? What is the open-source license compliance posture, and are there any copyleft license contamination risks?',
     rationale: 'Open-source license violations may require code disclosure or re-architecture. SBOM absence can indicate blind spots in the software supply chain.',
@@ -563,7 +563,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-07',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'How are secrets, API keys, and credentials managed? Is there a centralized secrets management solution, or are credentials stored in code repositories or configuration files?',
     rationale: 'Credentials in code repositories are a leading cause of data breaches in technology companies. This question helps assess foundational security hygiene.',
@@ -573,7 +573,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-08',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'Describe any security incidents in the past 36 months. What was the root cause, blast radius, and what systemic changes were implemented as a result?',
     rationale: 'Incident history can reveal attack surface exposure and organizational learning capacity. Repeated incident types may indicate unresolved systemic weaknesses.',
@@ -583,7 +583,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-09',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'Have any third-party security assessments or vendor risk assessments been conducted in the past 24 months? What were the key findings and remediation outcomes?',
     rationale: 'External assessments provide independent validation of security posture. Their absence in revenue-significant companies may suggest underinvestment in security.',
@@ -595,7 +595,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-10',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'Is the platform PCI-DSS compliant? If payment processing is involved, describe the cardholder data environment scope and the last qualified security assessor (QSA) audit results.',
     rationale: 'PCI-DSS scope creep is common in marketplace and e-commerce platforms. Non-compliance can create financial and legal liability.',
@@ -607,7 +607,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-11',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What are the data residency and sovereignty requirements? Where is customer data physically stored, and does this comply with applicable local regulations?',
     rationale: 'Data sovereignty violations may block market access. Multi-region operations typically require explicit data residency architectures.',
@@ -619,7 +619,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-12',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What are the business continuity RPO and RTO targets? Have they been validated through tabletop exercises or live failover testing in the past 12 months?',
     rationale: 'Untested business continuity plans may provide false assurance. Revenue-significant platforms typically require validated recovery capabilities.',
@@ -631,7 +631,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-13',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What is the UK GDPR and Data Protection Act 2018 compliance status post-Brexit? Are Standard Contractual Clauses (SCCs) in place for cross-border data transfers with the EU?',
     rationale: 'Post-Brexit UK data protection divergence can create dual compliance requirements. Adequate data transfer mechanisms are important for EU-UK data flows.',
@@ -643,7 +643,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-14',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What are the LGPD (Brazil) or regional data protection compliance measures for Latin American operations? Is customer data localized within LATAM jurisdictions?',
     rationale: 'Brazil\'s LGPD and other LATAM data protection frameworks can impose strict data residency and consent requirements that may affect operational architecture.',
@@ -655,7 +655,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-15',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What regulatory frameworks govern data protection and cybersecurity in your African markets (e.g., POPIA in South Africa, Nigeria DPA)? Are data localization requirements met?',
     rationale: 'African data protection regulations vary significantly by country. Non-compliance may result in operational restrictions and market access barriers.',
@@ -667,7 +667,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
   {
     id: 'sec-16',
     topic: 'security-risk',
-    topicLabel: 'Security & Risk',
+    topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
     text: 'What is the PIPEDA compliance posture for Canadian operations? Are there provincial privacy obligations (e.g., Quebec Law 25) that impose additional requirements beyond federal legislation, and how are cross-border data transfers with the US managed?',
     rationale: 'Canada has a layered privacy landscape with PIPEDA at the federal level and substantially similar provincial legislation in Quebec, Alberta, and British Columbia. Quebec\'s Law 25 introduces GDPR-like requirements that may affect data handling practices.',

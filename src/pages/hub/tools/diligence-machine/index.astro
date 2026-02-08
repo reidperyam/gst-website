@@ -10,7 +10,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     title="The Diligence Machine | Strategic Intelligence Hub"
     description="Generate a simple technology due diligence agenda customized to your target's profile. 15-20 high-impact questions organized by topic."
     ogTitle="The Diligence Machine | GST"
-    ogDescription="Customize a technology diligence checklist by target parameters. Risk-prioritized, executive-ready."
+    ogDescription="Customize a technology diligence checklist by target parameters. Priority-weighted, executive-ready."
     ogImage="/og-image.png"
     ogUrl="https://globalstrategic.tech/hub/tools/diligence-machine"
 >
@@ -187,16 +187,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
                     <hr class="doc-divider" />
 
-                    <!-- Table of Contents & Risk Anchors Row -->
+                    <!-- Table of Contents & Attention Areas Row -->
                     <div class="doc-toc-risk-row">
                         <!-- Table of Contents -->
                         <section class="doc-toc" id="docToc" aria-label="Table of contents"></section>
 
-                        <!-- Risk Anchors -->
-                        <section class="doc-risk-anchors" id="riskAnchorsSection" style="display:none;" aria-label="Risk anchors">
+                        <!-- Attention Areas -->
+                        <section class="doc-risk-anchors" id="riskAnchorsSection" style="display:none;" aria-label="Attention areas">
                             <h2 class="doc-section-heading">
                                 <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
-                                Predictive Risk Anchors
+                                Attention Areas
                             </h2>
                             <div class="doc-risk-grid" id="riskAnchorsGrid"></div>
                         </section>
@@ -522,9 +522,9 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             riskAnchorsSection.style.display = '';
             riskAnchorsGrid.innerHTML = script.riskAnchors
                 .map((anchor) => `
-                    <div class="doc-risk-card severity-${escapeHtml(anchor.severity)}">
+                    <div class="doc-risk-card relevance-${escapeHtml(anchor.relevance)}">
                         <div class="doc-risk-header">
-                            <span class="doc-risk-badge">${escapeHtml(anchor.severity)}</span>
+                            <span class="doc-risk-badge">${escapeHtml(anchor.relevance)}</span>
                             <h3 class="doc-risk-title">${escapeHtml(anchor.title)}</h3>
                         </div>
                         <div class="doc-risk-divider"></div>
@@ -691,11 +691,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         // Risk anchors
         if (script.riskAnchors.length > 0) {
             lines.push('\u2550'.repeat(60));
-            lines.push('PREDICTIVE RISK ANCHORS');
+            lines.push('ATTENTION AREAS');
             lines.push('\u2550'.repeat(60));
             lines.push('');
             for (const anchor of script.riskAnchors) {
-                lines.push(`[${anchor.severity.toUpperCase()}] ${anchor.title}`);
+                lines.push(`[${anchor.relevance.toUpperCase()}] ${anchor.title}`);
                 lines.push(`  ${anchor.description}`);
                 lines.push('');
             }
@@ -1519,12 +1519,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border-radius: 4px;
     }
 
-    .doc-risk-grid :global(.doc-risk-card.severity-high) {
+    .doc-risk-grid :global(.doc-risk-card.relevance-high) {
         border-left-color: #e74c3c;
         background: rgba(231, 76, 60, 0.04);
     }
 
-    .doc-risk-grid :global(.doc-risk-card.severity-medium) {
+    .doc-risk-grid :global(.doc-risk-card.relevance-medium) {
         border-left-color: #f39c12;
         background: rgba(243, 156, 18, 0.04);
     }
@@ -1533,11 +1533,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         background: rgba(5, 205, 153, 0.06);
     }
 
-    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card.severity-high) {
+    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card.relevance-high) {
         background: rgba(231, 76, 60, 0.08);
     }
 
-    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card.severity-medium) {
+    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card.relevance-medium) {
         background: rgba(243, 156, 18, 0.06);
     }
 
@@ -1558,19 +1558,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         flex-shrink: 0;
     }
 
-    .doc-risk-grid :global(.severity-high .doc-risk-badge) {
+    .doc-risk-grid :global(.relevance-high .doc-risk-badge) {
         background: rgba(231, 76, 60, 0.15);
         color: #e74c3c;
         border: 1px solid rgba(231, 76, 60, 0.3);
     }
 
-    .doc-risk-grid :global(.severity-medium .doc-risk-badge) {
+    .doc-risk-grid :global(.relevance-medium .doc-risk-badge) {
         background: rgba(243, 156, 18, 0.15);
         color: #f39c12;
         border: 1px solid rgba(243, 156, 18, 0.3);
     }
 
-    .doc-risk-grid :global(.severity-low .doc-risk-badge) {
+    .doc-risk-grid :global(.relevance-low .doc-risk-badge) {
         background: rgba(5, 205, 153, 0.15);
         color: var(--color-primary);
         border: 1px solid rgba(5, 205, 153, 0.3);
@@ -1600,11 +1600,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         background: var(--color-primary);
     }
 
-    .doc-risk-grid :global(.severity-high .doc-risk-divider) {
+    .doc-risk-grid :global(.relevance-high .doc-risk-divider) {
         background: #e74c3c;
     }
 
-    .doc-risk-grid :global(.severity-medium .doc-risk-divider) {
+    .doc-risk-grid :global(.relevance-medium .doc-risk-divider) {
         background: #f39c12;
     }
 
@@ -2061,7 +2061,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: 13px;
         }
 
-        /* TOC and Risk Anchors - force page break after */
+        /* TOC and Attention Areas - force page break after */
         .doc-toc-risk-row {
             page-break-after: always;
             margin-bottom: 0;
@@ -2118,11 +2118,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             break-inside: avoid;
         }
 
-        .doc-risk-grid :global(.doc-risk-card.severity-high) {
+        .doc-risk-grid :global(.doc-risk-card.relevance-high) {
             border-left-color: #e74c3c;
         }
 
-        .doc-risk-grid :global(.doc-risk-card.severity-medium) {
+        .doc-risk-grid :global(.doc-risk-card.relevance-medium) {
             border-left-color: #f39c12;
         }
 
