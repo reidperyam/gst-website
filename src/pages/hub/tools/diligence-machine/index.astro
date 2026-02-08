@@ -460,6 +460,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             if (key) {
                 (inputs as Record<string, unknown>)[key] = optionId;
             }
+
+            updateNextButtonState();
+            saveState();
+
+            // Auto-advance to next step after brief delay for visual feedback
+            setTimeout(() => {
+                if (currentStep < totalSteps) {
+                    showStep(currentStep + 1);
+                }
+            }, 300);
         } else if (inputType === 'multi-select') {
             const isSelected = card.classList.toggle('selected');
             card.setAttribute('aria-pressed', String(isSelected));
@@ -480,10 +490,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 }
                 syncMultiRegionDOM();
             }
-        }
 
-        updateNextButtonState();
-        saveState();
+            updateNextButtonState();
+            saveState();
+        }
     }
 
     function handleCompoundOptionClick(card: HTMLButtonElement): void {
@@ -516,6 +526,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         updateNextButtonState();
         saveState();
+
+        // Auto-advance to next step if all compound fields are filled
+        setTimeout(() => {
+            if (isStepValid(currentStep) && currentStep < totalSteps) {
+                showStep(currentStep + 1);
+            }
+        }, 300);
     }
 
     // ─── OUTPUT RENDERING ─────────────────────────────────────────────────
