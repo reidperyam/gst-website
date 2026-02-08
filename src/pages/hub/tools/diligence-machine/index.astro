@@ -20,7 +20,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             <header class="dm-header">
                 <span class="section-label">Tools</span>
                 <h1>The Diligence Machine</h1>
-                <p class="dm-subtitle">Generate a prescriptive technology due diligence agenda customized to your target's profile.</p>
+                <p class="dm-subtitle">Generate a customized, prescriptive technology due diligence agenda.</p>
             </header>
 
             <!-- Wizard Container -->
@@ -33,7 +33,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                 <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
                                 <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="progress-number-text">{index + 1}</text>
                             </svg>
-                            <span class="progress-label">{step.title}</span>
+                            <span class="progress-label">{step.navLabel}</span>
                         </div>
                     ))}
                 </div>
@@ -1156,6 +1156,32 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     .options-grid {
         display: grid;
         gap: var(--spacing-md);
+    }
+
+    /* Single-column steps: constrain width to reduce whitespace */
+    [data-step-id="transaction-type"] .options-grid,
+    [data-step-id="product-type"] .options-grid,
+    [data-step-id="tech-archetype"] .options-grid,
+    [data-step-id="business-model"] .options-grid,
+    [data-step-id="scale-intensity"] .options-grid,
+    [data-step-id="transformation-state"] .options-grid,
+    [data-step-id="data-sensitivity"] .options-grid,
+    [data-step-id="operating-model"] .options-grid {
+        max-width: 50%;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+        [data-step-id="transaction-type"] .options-grid,
+        [data-step-id="product-type"] .options-grid,
+        [data-step-id="tech-archetype"] .options-grid,
+        [data-step-id="business-model"] .options-grid,
+        [data-step-id="scale-intensity"] .options-grid,
+        [data-step-id="transformation-state"] .options-grid,
+        [data-step-id="data-sensitivity"] .options-grid,
+        [data-step-id="operating-model"] .options-grid {
+            max-width: 100%;
+        }
     }
 
     /* Geography step: two-column layout for efficient whitespace usage */

@@ -21,6 +21,7 @@ export interface WizardField {
 export interface WizardStep {
   id: string;
   title: string;
+  navLabel: string;
   subtitle: string;
   inputType: 'single-select' | 'multi-select' | 'compound';
   options?: WizardOption[];
@@ -31,6 +32,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'transaction-type',
     title: 'Transaction Type',
+    navLabel: 'Transaction',
     subtitle: 'What type of deal is being evaluated?',
     inputType: 'single-select',
     options: [
@@ -64,6 +66,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'product-type',
     title: 'Product Type',
+    navLabel: 'Product',
     subtitle: 'What does the target company build or deliver?',
     inputType: 'single-select',
     options: [
@@ -97,6 +100,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'tech-archetype',
     title: 'Tech Stack Archetype',
+    navLabel: 'Tech Stack',
     subtitle: 'How is the technology infrastructure provisioned?',
     inputType: 'single-select',
     options: [
@@ -125,6 +129,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'company-profile',
     title: 'Company Profile',
+    navLabel: 'Company',
     subtitle: 'Describe the target company\'s scale and maturity.',
     inputType: 'compound',
     fields: [
@@ -177,6 +182,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'geography',
     title: 'Geography',
+    navLabel: 'Geography',
     subtitle: 'Where does the target operate? Select all that apply.',
     inputType: 'multi-select',
     options: [
@@ -225,6 +231,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'business-model',
     title: 'Business Model',
+    navLabel: 'Business',
     subtitle: 'What is the primary delivery and monetization model?',
     inputType: 'single-select',
     options: [
@@ -258,6 +265,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'scale-intensity',
     title: 'Scale Intensity',
+    navLabel: 'Scale',
     subtitle: 'What is the operational scale and user volume pressure?',
     inputType: 'single-select',
     options: [
@@ -281,6 +289,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'transformation-state',
     title: 'Transformation State',
+    navLabel: 'Change',
     subtitle: 'What is the current state of technology modernization?',
     inputType: 'single-select',
     options: [
@@ -309,6 +318,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'data-sensitivity',
     title: 'Data Sensitivity',
+    navLabel: 'Data',
     subtitle: 'What is the sensitivity level of the data the target handles?',
     inputType: 'single-select',
     options: [
@@ -332,6 +342,7 @@ export const WIZARD_STEPS: WizardStep[] = [
   {
     id: 'operating-model',
     title: 'Operating Model',
+    navLabel: 'Model',
     subtitle: 'How is the engineering organization structured?',
     inputType: 'single-select',
     options: [
