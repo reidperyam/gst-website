@@ -347,25 +347,25 @@ describe('matchesConditions', () => {
 // ─── TESTS: sortByPriority ─────────────────────────────────────────────────
 
 describe('sortByPriority', () => {
-  const criticalQ = makeQuestion({ id: 'q1', priority: 'critical' });
-  const highQ = makeQuestion({ id: 'q2', priority: 'high' });
+  const highQ = makeQuestion({ id: 'q1', priority: 'high' });
+  const mediumQ = makeQuestion({ id: 'q2', priority: 'medium' });
   const standardQ = makeQuestion({ id: 'q3', priority: 'standard' });
 
-  it('should sort critical before high before standard', () => {
-    const unsorted = [standardQ, highQ, criticalQ];
+  it('should sort high before medium before standard', () => {
+    const unsorted = [standardQ, mediumQ, highQ];
     const sorted = sortByPriority(unsorted);
 
-    expect(sorted[0].priority).toBe('critical');
-    expect(sorted[1].priority).toBe('high');
+    expect(sorted[0].priority).toBe('high');
+    expect(sorted[1].priority).toBe('medium');
     expect(sorted[2].priority).toBe('standard');
   });
 
   it('should preserve relative order within same priority', () => {
-    const critical1 = makeQuestion({ id: 'c1', priority: 'critical' });
-    const critical2 = makeQuestion({ id: 'c2', priority: 'critical' });
-    const critical3 = makeQuestion({ id: 'c3', priority: 'critical' });
+    const high1 = makeQuestion({ id: 'c1', priority: 'high' });
+    const high2 = makeQuestion({ id: 'c2', priority: 'high' });
+    const high3 = makeQuestion({ id: 'c3', priority: 'high' });
 
-    const unsorted = [critical2, critical1, critical3];
+    const unsorted = [high2, high1, high3];
     const sorted = sortByPriority(unsorted);
 
     // Stable sort should preserve original order for equal priority
@@ -378,7 +378,7 @@ describe('sortByPriority', () => {
   });
 
   it('should not mutate original array', () => {
-    const unsorted = [standardQ, highQ, criticalQ];
+    const unsorted = [standardQ, mediumQ, highQ];
     const original = [...unsorted];
     sortByPriority(unsorted);
 
@@ -386,25 +386,25 @@ describe('sortByPriority', () => {
   });
 
   it('should handle arrays with single item', () => {
-    const sorted = sortByPriority([criticalQ]);
+    const sorted = sortByPriority([highQ]);
     expect(sorted).toHaveLength(1);
-    expect(sorted[0]).toBe(criticalQ);
+    expect(sorted[0]).toBe(highQ);
   });
 
   it('should handle mixed priority questions', () => {
     const questions = [
       makeQuestion({ id: 's1', priority: 'standard' }),
-      makeQuestion({ id: 'c1', priority: 'critical' }),
       makeQuestion({ id: 'h1', priority: 'high' }),
+      makeQuestion({ id: 'm1', priority: 'medium' }),
       makeQuestion({ id: 's2', priority: 'standard' }),
-      makeQuestion({ id: 'c2', priority: 'critical' }),
+      makeQuestion({ id: 'h2', priority: 'high' }),
     ];
 
     const sorted = sortByPriority(questions);
 
-    expect(sorted[0].id).toBe('c1');
-    expect(sorted[1].id).toBe('c2');
-    expect(sorted[2].id).toBe('h1');
+    expect(sorted[0].id).toBe('h1');
+    expect(sorted[1].id).toBe('h2');
+    expect(sorted[2].id).toBe('m1');
     expect(sorted[3].id).toBe('s1');
     expect(sorted[4].id).toBe('s2');
   });
@@ -413,21 +413,21 @@ describe('sortByPriority', () => {
 // ─── TESTS: balanceAcrossTopics ────────────────────────────────────────────
 
 describe('balanceAcrossTopics', () => {
-  const archQ1 = makeQuestion({ id: 'arch-1', topic: 'architecture', priority: 'critical' });
-  const archQ2 = makeQuestion({ id: 'arch-2', topic: 'architecture', priority: 'high' });
+  const archQ1 = makeQuestion({ id: 'arch-1', topic: 'architecture', priority: 'high' });
+  const archQ2 = makeQuestion({ id: 'arch-2', topic: 'architecture', priority: 'medium' });
   const archQ3 = makeQuestion({ id: 'arch-3', topic: 'architecture', priority: 'standard' });
   const archQ4 = makeQuestion({ id: 'arch-4', topic: 'architecture', priority: 'standard' });
 
-  const opsQ1 = makeQuestion({ id: 'ops-1', topic: 'operations', priority: 'critical' });
-  const opsQ2 = makeQuestion({ id: 'ops-2', topic: 'operations', priority: 'high' });
+  const opsQ1 = makeQuestion({ id: 'ops-1', topic: 'operations', priority: 'high' });
+  const opsQ2 = makeQuestion({ id: 'ops-2', topic: 'operations', priority: 'medium' });
   const opsQ3 = makeQuestion({ id: 'ops-3', topic: 'operations', priority: 'standard' });
 
-  const ciQ1 = makeQuestion({ id: 'ci-1', topic: 'carveout-integration', priority: 'critical' });
-  const ciQ2 = makeQuestion({ id: 'ci-2', topic: 'carveout-integration', priority: 'high' });
+  const ciQ1 = makeQuestion({ id: 'ci-1', topic: 'carveout-integration', priority: 'high' });
+  const ciQ2 = makeQuestion({ id: 'ci-2', topic: 'carveout-integration', priority: 'medium' });
   const ciQ3 = makeQuestion({ id: 'ci-3', topic: 'carveout-integration', priority: 'standard' });
 
-  const secQ1 = makeQuestion({ id: 'sec-1', topic: 'security-risk', priority: 'critical' });
-  const secQ2 = makeQuestion({ id: 'sec-2', topic: 'security-risk', priority: 'high' });
+  const secQ1 = makeQuestion({ id: 'sec-1', topic: 'security-risk', priority: 'high' });
+  const secQ2 = makeQuestion({ id: 'sec-2', topic: 'security-risk', priority: 'medium' });
   const secQ3 = makeQuestion({ id: 'sec-3', topic: 'security-risk', priority: 'standard' });
 
   describe('minimum per topic (3 questions)', () => {
@@ -517,10 +517,10 @@ describe('balanceAcrossTopics', () => {
       expect(result.length).toBeLessThanOrEqual(20);
     });
 
-    it('should prioritize critical questions in phase 2 filling', () => {
-      // Create questions where critical questions exist beyond the first 3
+    it('should prioritize high questions in phase 2 filling', () => {
+      // Create questions where high questions exist beyond the first 3
       const questions = [
-        archQ3, archQ3, archQ3, archQ1, // 3 standard, 1 critical
+        archQ3, archQ3, archQ3, archQ1, // 3 standard, 1 high
         opsQ3, opsQ3, opsQ3, opsQ1,
         ciQ3, ciQ3, ciQ3,
         secQ3, secQ3, secQ3,
@@ -528,9 +528,9 @@ describe('balanceAcrossTopics', () => {
 
       const result = balanceAcrossTopics(questions, 15, 20);
 
-      // Should include the critical questions from arch and ops in phase 2
-      const criticalIds = result.filter(q => q.priority === 'critical').map(q => q.id);
-      expect(criticalIds.length).toBeGreaterThan(0);
+      // Should include the high questions from arch and ops in phase 2
+      const highIds = result.filter(q => q.priority === 'high').map(q => q.id);
+      expect(highIds.length).toBeGreaterThan(0);
     });
   });
 
@@ -584,13 +584,13 @@ describe('balanceAcrossTopics', () => {
 // ─── TESTS: groupByTopic ───────────────────────────────────────────────────
 
 describe('groupByTopic', () => {
-  const archQ1 = makeQuestion({ id: 'arch-1', topic: 'architecture', priority: 'critical' });
+  const archQ1 = makeQuestion({ id: 'arch-1', topic: 'architecture', priority: 'high' });
   const archQ2 = makeQuestion({ id: 'arch-2', topic: 'architecture', priority: 'standard' });
 
-  const opsQ1 = makeQuestion({ id: 'ops-1', topic: 'operations', priority: 'high' });
+  const opsQ1 = makeQuestion({ id: 'ops-1', topic: 'operations', priority: 'medium' });
 
-  const ciQ1 = makeQuestion({ id: 'ci-1', topic: 'carveout-integration', priority: 'critical' });
-  const ciQ2 = makeQuestion({ id: 'ci-2', topic: 'carveout-integration', priority: 'high' });
+  const ciQ1 = makeQuestion({ id: 'ci-1', topic: 'carveout-integration', priority: 'high' });
+  const ciQ2 = makeQuestion({ id: 'ci-2', topic: 'carveout-integration', priority: 'medium' });
 
   const secQ1 = makeQuestion({ id: 'sec-1', topic: 'security-risk', priority: 'standard' });
 
@@ -612,11 +612,11 @@ describe('groupByTopic', () => {
   });
 
   it('should sort questions within each topic by priority', () => {
-    const questions = [archQ2, archQ1]; // standard before critical
+    const questions = [archQ2, archQ1]; // standard before high
     const topics = groupByTopic(questions);
 
     const archTopic = topics.find(t => t.topicId === 'architecture');
-    expect(archTopic?.questions[0].priority).toBe('critical');
+    expect(archTopic?.questions[0].priority).toBe('high');
     expect(archTopic?.questions[1].priority).toBe('standard');
   });
 
@@ -739,6 +739,42 @@ describe('generateScript (Integration)', () => {
         anchor.id === 'risk-gdpr-multi' // eu/uk geographies
     );
     expect(hasRelevantRisk).toBe(true);
+  });
+
+  it('should sort risk anchors by relevance (high before medium before low)', () => {
+    const inputs: UserInputs = {
+      transactionType: 'carve-out',
+      productType: 'b2b-saas',
+      techArchetype: 'hybrid-legacy',
+      headcount: '51-200',
+      revenueRange: '5-25m',
+      growthStage: 'scaling',
+      companyAge: '10-20yr',
+      geographies: ['eu', 'uk'],
+    };
+
+    const script = generateScript(inputs);
+    expect(script.riskAnchors.length).toBeGreaterThan(1);
+
+    const relevanceOrder = { high: 0, medium: 1, low: 2 };
+    for (let i = 1; i < script.riskAnchors.length; i++) {
+      const prev = relevanceOrder[script.riskAnchors[i - 1].relevance];
+      const curr = relevanceOrder[script.riskAnchors[i].relevance];
+      expect(prev).toBeLessThanOrEqual(curr);
+    }
+  });
+
+  it('should sort questions within each topic by priority (high before medium before standard)', () => {
+    const script = generateScript(baseInputs);
+
+    const priorityOrder = { high: 0, medium: 1, standard: 2 };
+    for (const topic of script.topics) {
+      for (let i = 1; i < topic.questions.length; i++) {
+        const prev = priorityOrder[topic.questions[i - 1].priority as keyof typeof priorityOrder];
+        const curr = priorityOrder[topic.questions[i].priority as keyof typeof priorityOrder];
+        expect(prev).toBeLessThanOrEqual(curr);
+      }
+    }
   });
 
   it('should populate metadata correctly', () => {

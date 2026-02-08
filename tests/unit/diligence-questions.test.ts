@@ -77,30 +77,30 @@ describe('Question Bank Data Integrity', () => {
 
   describe('priority validation', () => {
     it('should have valid priority values', () => {
-      const validPriorities = ['critical', 'high', 'standard'];
+      const validPriorities = ['high', 'medium', 'standard'];
       for (const q of QUESTIONS) {
         expect(validPriorities, `Question ${q.id} has invalid priority: ${q.priority}`).toContain(q.priority);
       }
     });
 
-    it('should have at least one critical question per topic', () => {
-      const topicCriticalCounts: Record<string, number> = {};
+    it('should have at least one high question per topic', () => {
+      const topicHighCounts: Record<string, number> = {};
 
       for (const q of QUESTIONS) {
-        if (q.priority === 'critical') {
-          topicCriticalCounts[q.topic] = (topicCriticalCounts[q.topic] || 0) + 1;
+        if (q.priority === 'high') {
+          topicHighCounts[q.topic] = (topicHighCounts[q.topic] || 0) + 1;
         }
       }
 
       for (const topic of Object.keys(TOPIC_META)) {
-        expect(topicCriticalCounts[topic], `Topic ${topic} has no critical questions`).toBeGreaterThanOrEqual(1);
+        expect(topicHighCounts[topic], `Topic ${topic} has no high questions`).toBeGreaterThanOrEqual(1);
       }
     });
 
     it('should have a balanced priority distribution', () => {
       const priorityCounts = {
-        critical: 0,
         high: 0,
+        medium: 0,
         standard: 0,
       };
 
@@ -108,11 +108,11 @@ describe('Question Bank Data Integrity', () => {
         priorityCounts[q.priority]++;
       }
 
-      // At least 15% should be critical
-      expect(priorityCounts.critical).toBeGreaterThanOrEqual(Math.floor(QUESTIONS.length * 0.15));
+      // At least 15% should be high
+      expect(priorityCounts.high).toBeGreaterThanOrEqual(Math.floor(QUESTIONS.length * 0.15));
 
       // No single priority should dominate (> 60%)
-      const maxCount = Math.max(priorityCounts.critical, priorityCounts.high, priorityCounts.standard);
+      const maxCount = Math.max(priorityCounts.high, priorityCounts.medium, priorityCounts.standard);
       expect(maxCount).toBeLessThan(QUESTIONS.length * 0.6);
     });
   });

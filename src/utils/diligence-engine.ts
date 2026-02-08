@@ -41,9 +41,15 @@ export interface GeneratedScript {
 }
 
 const PRIORITY_ORDER: Record<string, number> = {
-  critical: 0,
-  high: 1,
+  high: 0,
+  medium: 1,
   standard: 2,
+};
+
+const RELEVANCE_ORDER: Record<string, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
 };
 
 /**
@@ -141,7 +147,7 @@ export function matchesConditions(
 }
 
 /**
- * Sort questions by priority (critical first, then high, then standard).
+ * Sort questions by priority (high first, then medium, then standard).
  */
 export function sortByPriority(questions: DiligenceQuestion[]): DiligenceQuestion[] {
   return [...questions].sort(
@@ -251,7 +257,9 @@ export function generateScript(inputs: UserInputs): GeneratedScript {
 
   return {
     topics,
-    riskAnchors: matchedAnchors,
+    riskAnchors: [...matchedAnchors].sort(
+      (a, b) => (RELEVANCE_ORDER[a.relevance] ?? 2) - (RELEVANCE_ORDER[b.relevance] ?? 2)
+    ),
     metadata: {
       totalQuestions: selected.length,
       generatedAt: new Date().toISOString(),
