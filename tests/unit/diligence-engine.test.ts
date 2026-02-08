@@ -18,6 +18,7 @@ import {
   balanceAcrossTopics,
   groupByTopic,
   generateScript,
+  syncMultiRegion,
 } from '../../src/utils/diligence-engine';
 import type { UserInputs } from '../../src/utils/diligence-engine';
 import type { DiligenceQuestion, QuestionCondition } from '../../src/data/diligence-machine/questions';
@@ -900,5 +901,62 @@ describe('generateScript (Integration)', () => {
     const allQuestions = result.topics.flatMap((t) => t.questions);
     const serviceQuestion = allQuestions.find((q) => q.id === 'ops-06');
     expect(serviceQuestion).toBeDefined();
+  });
+});
+
+// ─── syncMultiRegion ────────────────────────────────────────────────────────
+
+describe('syncMultiRegion', () => {
+  it('should auto-add multi-region when 2+ non-MR geographies are selected', () => {
+    expect(syncMultiRegion(['us', 'eu'])).toEqual(['us', 'eu', 'multi-region']);
+  });
+
+  it('should not duplicate multi-region if already present with 2+ non-MR geos', () => {
+    expect(syncMultiRegion(['us', 'eu', 'multi-region'])).toEqual(['us', 'eu', 'multi-region']);
+  });
+
+  it('should auto-remove multi-region when only 1 non-MR geography remains', () => {
+    expect(syncMultiRegion(['us', 'multi-region'])).toEqual(['us']);
+  });
+
+  it('should leave multi-region alone when it is the only selection', () => {
+    expect(syncMultiRegion(['multi-region'])).toEqual(['multi-region']);
+  });
+
+  it('should not add multi-region when only 1 geography is selected', () => {
+    expect(syncMultiRegion(['us'])).toEqual(['us']);
+  });
+
+  it('should handle empty array', () => {
+    expect(syncMultiRegion([])).toEqual([]);
+  });
+
+  it('should auto-add multi-region when exactly 2 non-MR geos are selected', () => {
+    expect(syncMultiRegion(['us', 'canada'])).toEqual(['us', 'canada', 'multi-region']);
+  });
+
+  it('should auto-add multi-region when many non-MR geos are selected', () => {
+    const result = syncMultiRegion(['us', 'eu', 'uk', 'apac']);
+    expect(result).toContain('multi-region');
+    expect(result).toHaveLength(5);
+  });
+
+  it('should preserve order of existing geographies when adding multi-region', () => {
+    const result = syncMultiRegion(['eu', 'us']);
+    expect(result[0]).toBe('eu');
+    expect(result[1]).toBe('us');
+    expect(result[2]).toBe('multi-region');
+  });
+
+  it('should not mutate the input array', () => {
+    const input = ['us', 'eu'];
+    syncMultiRegion(input);
+    expect(input).toEqual(['us', 'eu']);
+  });
+
+  it('should remove multi-region when dropping from 2 to 1 non-MR geo', () => {
+    // Simulates: user had ['us', 'eu', 'multi-region'], then deselected 'eu'
+    // After deselect, array is ['us', 'multi-region'] → sync → ['us']
+    expect(syncMultiRegion(['us', 'multi-region'])).toEqual(['us']);
   });
 });

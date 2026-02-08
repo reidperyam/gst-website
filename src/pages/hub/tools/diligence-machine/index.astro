@@ -228,7 +228,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 </BaseLayout>
 
 <script>
-    import { generateScript } from '../../../../utils/diligence-engine';
+    import { generateScript, syncMultiRegion, MULTI_REGION_ID } from '../../../../utils/diligence-engine';
     import { getOptionLabel } from '../../../../data/diligence-machine/wizard-config';
     import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
@@ -342,6 +342,32 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         saveState();
     }
 
+    /** Update the multi-region card's DOM state and sync the geographies array */
+    function syncMultiRegionDOM(): void {
+        if (!inputs.geographies) return;
+        const synced = syncMultiRegion(inputs.geographies);
+        const changed = synced.length !== inputs.geographies.length ||
+            !synced.every(g => inputs.geographies!.includes(g));
+        if (!changed) return;
+        inputs.geographies = synced;
+        const mrCard = document.querySelector(
+            `.option-card[data-step-id="geography"][data-option-id="${MULTI_REGION_ID}"]`
+        ) as HTMLElement | null;
+        if (mrCard) {
+            const shouldBeSelected = synced.includes(MULTI_REGION_ID);
+            mrCard.classList.toggle('selected', shouldBeSelected);
+            mrCard.setAttribute('aria-pressed', String(shouldBeSelected));
+        }
+    }
+
+    /** Deselect all geography cards in the DOM */
+    function clearAllGeographyCards(): void {
+        document.querySelectorAll('.option-card[data-step-id="geography"]').forEach((el) => {
+            el.classList.remove('selected');
+            el.setAttribute('aria-pressed', 'false');
+        });
+    }
+
     function isStepValid(step: number): boolean {
         const stepEl = document.querySelector(`.wizard-step[data-step="${step}"]`) as HTMLElement;
         if (!stepEl) return false;
@@ -408,12 +434,20 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             card.setAttribute('aria-pressed', String(isSelected));
 
             if (!inputs.geographies) inputs.geographies = [];
-            if (isSelected) {
-                if (!inputs.geographies.includes(optionId)) {
-                    inputs.geographies.push(optionId);
-                }
+
+            // User deselects Multi-Region → clear all geographies
+            if (optionId === MULTI_REGION_ID && !isSelected) {
+                inputs.geographies = [];
+                clearAllGeographyCards();
             } else {
-                inputs.geographies = inputs.geographies.filter((g) => g !== optionId);
+                if (isSelected) {
+                    if (!inputs.geographies.includes(optionId)) {
+                        inputs.geographies.push(optionId);
+                    }
+                } else {
+                    inputs.geographies = inputs.geographies.filter((g) => g !== optionId);
+                }
+                syncMultiRegionDOM();
             }
         }
 
@@ -770,6 +804,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     card.setAttribute('aria-pressed', 'true');
                 }
             }
+            syncMultiRegionDOM();
         }
 
         // Restore compound field option cards

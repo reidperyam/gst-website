@@ -268,3 +268,29 @@ export function generateScript(inputs: UserInputs): GeneratedScript {
     },
   };
 }
+
+export const MULTI_REGION_ID = 'multi-region';
+
+/**
+ * Synchronize 'multi-region' based on non-MR geography count.
+ * - 2+ non-MR geos → ensure MR is included
+ * - 1 non-MR geo → ensure MR is removed
+ * - 0 non-MR geos → no change (standalone MR allowed)
+ *
+ * Does NOT handle the "user deselects MR" clear-all case;
+ * that is a UI-level concern handled in the click handler.
+ *
+ * Returns a new array (does not mutate the input).
+ */
+export function syncMultiRegion(geographies: string[]): string[] {
+  const nonMR = geographies.filter(g => g !== MULTI_REGION_ID);
+  const hasMR = geographies.includes(MULTI_REGION_ID);
+
+  if (nonMR.length >= 2 && !hasMR) {
+    return [...geographies, MULTI_REGION_ID];
+  }
+  if (nonMR.length === 1 && hasMR) {
+    return nonMR;
+  }
+  return geographies;
+}
