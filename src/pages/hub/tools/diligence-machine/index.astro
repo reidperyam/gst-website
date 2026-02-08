@@ -527,12 +527,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         updateNextButtonState();
         saveState();
 
-        // Auto-advance to next step if all compound fields are filled
-        setTimeout(() => {
-            if (isStepValid(currentStep) && currentStep < totalSteps) {
-                showStep(currentStep + 1);
-            }
-        }, 300);
+        // Do not auto-advance for compound steps - user may want to review all selections
     }
 
     // ─── OUTPUT RENDERING ─────────────────────────────────────────────────
