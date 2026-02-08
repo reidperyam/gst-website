@@ -35,7 +35,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
       'Datacenter colocation deployments in mature companies often rely on aging hardware with limited vendor support. Assess the remaining useful life of physical assets and the existence of a documented migration plan.',
     severity: 'high',
     conditions: {
-      techArchetypes: ['datacenter-colocation'],
+      techArchetypes: ['datacenter-vendor'],
       companyAgeMin: '10-20yr',
     },
   },
@@ -90,7 +90,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
       'Self-managed infrastructure and datacenter colocations require specialized operations staff (network engineers, hardware technicians) that are increasingly scarce and expensive in the labor market.',
     severity: 'medium',
     conditions: {
-      techArchetypes: ['self-managed-infra', 'datacenter-colocation'],
+      techArchetypes: ['self-managed-infra', 'datacenter-vendor'],
     },
   },
   {

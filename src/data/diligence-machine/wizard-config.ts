@@ -116,8 +116,8 @@ export const WIZARD_STEPS: WizardStep[] = [
         description: 'On-premises servers owned and operated by the company',
       },
       {
-        id: 'datacenter-colocation',
-        label: 'Datacenter Co-location(s)',
+        id: 'datacenter-vendor',
+        label: 'Datacenter Vendor',
         description: 'Hardware housed in third-party data centers',
       },
     ],

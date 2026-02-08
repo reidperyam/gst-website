@@ -117,7 +117,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Scaling ceilings on self-managed or colocated infrastructure require capital expenditure planning that differs fundamentally from elastic cloud models.',
     priority: 'critical',
     conditions: {
-      techArchetypes: ['self-managed-infra', 'datacenter-colocation'],
+      techArchetypes: ['self-managed-infra', 'datacenter-vendor'],
     },
   },
   {
@@ -129,7 +129,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Cloud migration is a multi-year capital project. Understanding whether a plan exists, and its fidelity, reveals strategic infrastructure thinking.',
     priority: 'critical',
     conditions: {
-      techArchetypes: ['self-managed-infra', 'datacenter-colocation'],
+      techArchetypes: ['self-managed-infra', 'datacenter-vendor'],
     },
   },
   {

@@ -188,7 +188,7 @@ describe('matchesConditions', () => {
 
     it('should return false when techArchetype does not match', () => {
       const conditions: QuestionCondition = {
-        techArchetypes: ['self-managed-infra', 'datacenter-colocation'],
+        techArchetypes: ['self-managed-infra', 'datacenter-vendor'],
       };
       expect(matchesConditions(conditions, baseInputs)).toBe(false);
     });
