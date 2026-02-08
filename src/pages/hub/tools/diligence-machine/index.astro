@@ -193,12 +193,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         <section class="doc-toc" id="docToc" aria-label="Table of contents"></section>
 
                         <!-- Attention Areas -->
-                        <section class="doc-risk-anchors" id="riskAnchorsSection" style="display:none;" aria-label="Attention areas">
+                        <section class="doc-attention-anchors" id="riskAnchorsSection" style="display:none;" aria-label="Attention areas">
                             <h2 class="doc-section-heading">
                                 <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
                                 Attention Areas
                             </h2>
-                            <div class="doc-risk-grid" id="riskAnchorsGrid"></div>
+                            <div class="doc-attention-grid" id="riskAnchorsGrid"></div>
                         </section>
                     </div>
 
@@ -522,13 +522,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             riskAnchorsSection.style.display = '';
             riskAnchorsGrid.innerHTML = script.riskAnchors
                 .map((anchor) => `
-                    <div class="doc-risk-card relevance-${escapeHtml(anchor.relevance)}">
-                        <div class="doc-risk-header">
-                            <span class="doc-risk-badge">${escapeHtml(anchor.relevance)}</span>
-                            <h3 class="doc-risk-title">${escapeHtml(anchor.title)}</h3>
+                    <div class="doc-attention-card relevance-${escapeHtml(anchor.relevance)}">
+                        <div class="doc-attention-header">
+                            <span class="doc-attention-badge">${escapeHtml(anchor.relevance)}</span>
+                            <h3 class="doc-attention-title">${escapeHtml(anchor.title)}</h3>
                         </div>
-                        <div class="doc-risk-divider"></div>
-                        <p class="doc-risk-desc">${escapeHtml(anchor.description)}</p>
+                        <div class="doc-attention-divider"></div>
+                        <p class="doc-attention-desc">${escapeHtml(anchor.description)}</p>
                     </div>
                 `)
                 .join('');
@@ -1502,52 +1502,52 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     /* ─── RISK ANCHORS ─────────────────────────────────────────────────── */
 
-    .doc-risk-anchors {
+    .doc-attention-anchors {
         margin-bottom: 0;
     }
 
-    .doc-risk-grid {
+    .doc-attention-grid {
         display: grid;
         gap: var(--spacing-md);
         padding-left: 0;
     }
 
-    .doc-risk-grid :global(.doc-risk-card) {
+    .doc-attention-grid :global(.doc-attention-card) {
         padding: var(--spacing-xl);
         border-left: 3px solid var(--color-primary);
         background: rgba(5, 205, 153, 0.03);
         border-radius: 4px;
     }
 
-    .doc-risk-grid :global(.doc-risk-card.relevance-high) {
-        border-left-color: #e74c3c;
-        background: rgba(231, 76, 60, 0.04);
+    .doc-attention-grid :global(.doc-attention-card.relevance-high) {
+        border-left-color: #5b7a9d;
+        background: rgba(91, 122, 157, 0.04);
     }
 
-    .doc-risk-grid :global(.doc-risk-card.relevance-medium) {
-        border-left-color: #f39c12;
-        background: rgba(243, 156, 18, 0.04);
+    .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
+        border-left-color: #8c7a6b;
+        background: rgba(140, 122, 107, 0.04);
     }
 
-    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card) {
+    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card) {
         background: rgba(5, 205, 153, 0.06);
     }
 
-    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card.relevance-high) {
-        background: rgba(231, 76, 60, 0.08);
+    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card.relevance-high) {
+        background: rgba(91, 122, 157, 0.08);
     }
 
-    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-card.relevance-medium) {
-        background: rgba(243, 156, 18, 0.06);
+    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
+        background: rgba(140, 122, 107, 0.06);
     }
 
-    .doc-risk-grid :global(.doc-risk-header) {
+    .doc-attention-grid :global(.doc-attention-header) {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
     }
 
-    .doc-risk-grid :global(.doc-risk-badge) {
+    .doc-attention-grid :global(.doc-attention-badge) {
         display: inline-block;
         font-size: 0.7rem;
         font-weight: var(--font-weight-bold);
@@ -1558,25 +1558,25 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         flex-shrink: 0;
     }
 
-    .doc-risk-grid :global(.relevance-high .doc-risk-badge) {
-        background: rgba(231, 76, 60, 0.15);
-        color: #e74c3c;
-        border: 1px solid rgba(231, 76, 60, 0.3);
+    .doc-attention-grid :global(.relevance-high .doc-attention-badge) {
+        background: rgba(91, 122, 157, 0.15);
+        color: #5b7a9d;
+        border: 1px solid rgba(91, 122, 157, 0.3);
     }
 
-    .doc-risk-grid :global(.relevance-medium .doc-risk-badge) {
-        background: rgba(243, 156, 18, 0.15);
-        color: #f39c12;
-        border: 1px solid rgba(243, 156, 18, 0.3);
+    .doc-attention-grid :global(.relevance-medium .doc-attention-badge) {
+        background: rgba(140, 122, 107, 0.15);
+        color: #8c7a6b;
+        border: 1px solid rgba(140, 122, 107, 0.3);
     }
 
-    .doc-risk-grid :global(.relevance-low .doc-risk-badge) {
+    .doc-attention-grid :global(.relevance-low .doc-attention-badge) {
         background: rgba(5, 205, 153, 0.15);
         color: var(--color-primary);
         border: 1px solid rgba(5, 205, 153, 0.3);
     }
 
-    .doc-risk-grid :global(.doc-risk-title) {
+    .doc-attention-grid :global(.doc-attention-title) {
         font-size: var(--text-base);
         font-weight: var(--font-weight-bold);
         color: var(--text-light-primary);
@@ -1584,11 +1584,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin: 0;
     }
 
-    :global(html.dark-theme) .doc-risk-grid :global(.doc-risk-title) {
+    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-title) {
         color: var(--text-dark-primary);
     }
 
-    .doc-risk-grid :global(.doc-risk-divider) {
+    .doc-attention-grid :global(.doc-attention-divider) {
         width: 2rem;
         height: 2px;
         border: none;
@@ -1596,19 +1596,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin: var(--spacing-md) 0;
     }
 
-    .doc-risk-grid :global(.doc-risk-card .doc-risk-divider) {
+    .doc-attention-grid :global(.doc-attention-card .doc-attention-divider) {
         background: var(--color-primary);
     }
 
-    .doc-risk-grid :global(.relevance-high .doc-risk-divider) {
-        background: #e74c3c;
+    .doc-attention-grid :global(.relevance-high .doc-attention-divider) {
+        background: #5b7a9d;
     }
 
-    .doc-risk-grid :global(.relevance-medium .doc-risk-divider) {
-        background: #f39c12;
+    .doc-attention-grid :global(.relevance-medium .doc-attention-divider) {
+        background: #8c7a6b;
     }
 
-    .doc-risk-grid :global(.doc-risk-desc) {
+    .doc-attention-grid :global(.doc-attention-desc) {
         font-size: var(--text-sm);
         color: var(--text-light-secondary);
         line-height: 1.7;
@@ -1676,11 +1676,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-topics :global(.doc-question.priority-high) {
-        border-left-color: #e74c3c;
+        border-left-color: #5b7a9d;
     }
 
     .doc-topics :global(.doc-question.priority-medium) {
-        border-left-color: #f39c12;
+        border-left-color: #8c7a6b;
     }
 
     .doc-topics :global(.doc-question.priority-standard) {
@@ -1692,11 +1692,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     :global(html.dark-theme) .doc-topics :global(.doc-question.priority-high) {
-        border-left-color: #e74c3c;
+        border-left-color: #7a9dbd;
     }
 
     :global(html.dark-theme) .doc-topics :global(.doc-question.priority-medium) {
-        border-left-color: #f39c12;
+        border-left-color: #a89888;
     }
 
     :global(html.dark-theme) .doc-topics :global(.doc-question.priority-standard) {
@@ -1726,13 +1726,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-topics :global(.priority-high .doc-q-priority) {
-        background: rgba(231, 76, 60, 0.12);
-        color: #e74c3c;
+        background: rgba(91, 122, 157, 0.12);
+        color: #5b7a9d;
     }
 
     .doc-topics :global(.priority-medium .doc-q-priority) {
-        background: rgba(243, 156, 18, 0.12);
-        color: #f39c12;
+        background: rgba(140, 122, 107, 0.12);
+        color: #8c7a6b;
     }
 
     .doc-topics :global(.priority-standard .doc-q-priority) {
@@ -1938,7 +1938,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             max-width: 100%;
         }
 
-        .doc-risk-grid {
+        .doc-attention-grid {
             padding-left: var(--spacing-md);
         }
 
@@ -2069,7 +2069,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         }
 
         .doc-toc :global(.doc-section-heading),
-        .doc-risk-anchors :global(.doc-section-heading) {
+        .doc-attention-anchors :global(.doc-section-heading) {
             font-size: 12px;
             margin: 0 0 8px 0;
             page-break-after: avoid;
@@ -2106,50 +2106,52 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         }
 
         /* Risk anchors - compact cards */
-        .doc-risk-grid {
+        .doc-attention-grid {
             gap: 8px;
             padding-left: 0;
             page-break-inside: avoid;
         }
 
-        .doc-risk-grid :global(.doc-risk-card) {
+        .doc-attention-grid :global(.doc-attention-card) {
             padding: 12px;
             border-left: 2px solid var(--color-primary);
             break-inside: avoid;
         }
 
-        .doc-risk-grid :global(.doc-risk-card.relevance-high) {
-            border-left-color: #e74c3c;
+        .doc-attention-grid :global(.doc-attention-card.relevance-high) {
+            border-left-color: #5b7a9d;
         }
 
-        .doc-risk-grid :global(.doc-risk-card.relevance-medium) {
-            border-left-color: #f39c12;
+        .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
+            border-left-color: #8c7a6b;
         }
 
-        .doc-risk-grid :global(.doc-risk-header) {
-            display: block;
+        .doc-attention-grid :global(.doc-attention-header) {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             page-break-inside: avoid;
         }
 
-        .doc-risk-grid :global(.doc-risk-badge) {
+        .doc-attention-grid :global(.doc-attention-badge) {
             font-size: 0.6rem;
             padding: 1px 6px;
-            margin-bottom: 4px;
             display: inline-block;
+            flex-shrink: 0;
         }
 
-        .doc-risk-grid :global(.doc-risk-title) {
+        .doc-attention-grid :global(.doc-attention-title) {
             font-size: 13px;
             font-weight: var(--font-weight-bold);
             margin: 0 0 2px 0;
             color: var(--color-primary);
         }
 
-        .doc-risk-grid :global(.doc-risk-divider) {
+        .doc-attention-grid :global(.doc-attention-divider) {
             display: none;
         }
 
-        .doc-risk-grid :global(.doc-risk-desc) {
+        .doc-attention-grid :global(.doc-attention-desc) {
             font-size: 11px;
             line-height: 1.4;
             margin: 0;
@@ -2215,11 +2217,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         }
 
         .doc-topics :global(.doc-question.priority-high) {
-            border-left-color: #e74c3c;
+            border-left-color: #5b7a9d;
         }
 
         .doc-topics :global(.doc-question.priority-medium) {
-            border-left-color: #f39c12;
+            border-left-color: #8c7a6b;
         }
 
         .doc-topics :global(.doc-q-header) {
