@@ -262,4 +262,72 @@ export const RISK_ANCHORS: RiskAnchor[] = [
       growthStages: ['mature'],
     },
   },
+
+  // ─── V2 DIMENSION-DRIVEN RISK ANCHORS ──────────────────────────────────
+
+  {
+    id: 'risk-mid-migration-instability',
+    title: 'Mid-Migration Instability',
+    description:
+      'Companies actively migrating between technology stacks or infrastructure models face elevated operational risk. Dual-run architectures, incomplete data migrations, and split team expertise create performance degradation and incident surface area. Budget 20-30% contingency for migration delays and stabilization costs.',
+    relevance: 'high',
+    conditions: {
+      transformationStates: ['mid-migration'],
+    },
+  },
+  {
+    id: 'risk-services-margin-pressure',
+    title: 'Services-Led Margin Pressure',
+    description:
+      'Services-led business models in the $5-25M revenue range face structural margin challenges. High customer acquisition costs, project-based revenue volatility, and labor-intensive delivery limit EBITDA expansion. Assess pathway to productization or SaaS transition before assuming software-like multiples.',
+    relevance: 'high',
+    conditions: {
+      businessModels: ['services-led'],
+      revenueMin: '5-25m',
+    },
+  },
+  {
+    id: 'risk-sensitive-data-breach',
+    title: 'Sensitive Data Breach Liability',
+    description:
+      'Companies processing high-sensitivity data (PII, PHI, financial records) in the $5-25M revenue range often lack enterprise-grade breach preparedness. Cyber insurance coverage may be inadequate, incident response plans untested, and regulatory fines material relative to EBITDA. Validate security posture through penetration testing and breach simulation before close.',
+    relevance: 'high',
+    conditions: {
+      dataSensitivity: ['high'],
+      revenueMin: '5-25m',
+    },
+  },
+  {
+    id: 'risk-high-scale-architecture',
+    title: 'High-Scale Operational Complexity',
+    description:
+      'Modern cloud-native architectures under high scale intensity (high transaction volumes, large data pipelines, global user bases) introduce operational complexity that can outpace team maturity. Auto-scaling misconfigurations, cost overruns, and cascading failures become material risks. Verify observability tooling, runbook completeness, and on-call escalation processes.',
+    relevance: 'high',
+    conditions: {
+      scaleIntensity: ['high'],
+      techArchetypes: ['modern-cloud-native'],
+    },
+  },
+  {
+    id: 'risk-customization-debt',
+    title: 'Customization Debt Accumulation',
+    description:
+      'Customized deployment business models in mid-sized companies (51-200 employees) accumulate customer-specific code branches, configuration sprawl, and non-standard integrations. This technical debt limits velocity, complicates upgrades, and increases support costs. Assess the feasibility of platform consolidation or multi-tenant migration post-acquisition.',
+    relevance: 'medium',
+    conditions: {
+      businessModels: ['customized-deployments'],
+      headcountMin: '51-200',
+    },
+  },
+  {
+    id: 'risk-data-classification-gap',
+    title: 'Data Classification Maturity Gap',
+    description:
+      'Scaling-stage companies handling high-sensitivity data often have informal data classification and access control practices. Rapid headcount growth outpaces governance maturity, creating insider risk and compliance exposure. Validate data inventory completeness, access audit trails, and employee offboarding procedures.',
+    relevance: 'medium',
+    conditions: {
+      dataSensitivity: ['high'],
+      growthStages: ['scaling'],
+    },
+  },
 ];

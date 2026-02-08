@@ -364,8 +364,8 @@ describe('Question Bank Data Integrity', () => {
 
 describe('Risk Anchors Data Integrity', () => {
   describe('basic structure validation', () => {
-    it('should have at least 22 risk anchors', () => {
-      expect(RISK_ANCHORS.length).toBeGreaterThanOrEqual(22);
+    it('should have at least 28 risk anchors', () => {
+      expect(RISK_ANCHORS.length).toBeGreaterThanOrEqual(28);
     });
 
     it('should have all required fields on each anchor', () => {
