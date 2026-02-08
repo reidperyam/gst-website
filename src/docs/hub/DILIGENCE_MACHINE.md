@@ -36,7 +36,7 @@ v2 expands the wizard from 5 steps to 10, adds strategic metadata to questions, 
 |------|----|----|
 | Wizard steps | 5 | 10 (+5 context dimensions) |
 | Question bank | ~45 questions | ~68 questions (+15 v2 questions) |
-| Risk anchors | 18 anchors | 23 anchors (+4 v2 + 1 injected) |
+| Risk anchors | 18 anchors | 29 anchors (+10 v2 + 1 injected) |
 | Condition dimensions | 9 fields | 14 fields (+5 new) |
 | Question metadata | id, text, rationale, priority | + exitImpact, redFlagSignal, track |
 | Engine rules | Filter → Balance → Group | + Archetype Pivot, Maturity Override |
@@ -305,7 +305,7 @@ Questions are grouped by topic (Architecture → Operations → Carve-out → Se
 
 ## Attention Areas (Risk Anchors)
 
-23 risk anchors are filtered independently using the same condition system. They surface structural concerns that complement the question topics.
+29 risk anchors are filtered independently using the same condition system. They surface structural concerns that complement the question topics.
 
 ### Categories
 
@@ -314,6 +314,7 @@ Questions are grouped by topic (Architecture → Operations → Carve-out → Se
 - Colocation Hardware Lifecycle — datacenter + age 10–20yr
 - Technical Debt Accumulation — hybrid-legacy + age 5–10yr
 - Legacy Vendor Lock-in — on-premise + age 10–20yr
+- Mid-Migration Instability (v2) — mid-migration transformation state
 
 **Organizational**
 - Key-Person Dependencies — small teams + on-premise/self-managed
@@ -329,6 +330,15 @@ Questions are grouped by topic (Architecture → Operations → Carve-out → Se
 **Strategic / Market (v2)**
 - AI Commodity Risk (Moat Erosion) — B2B SaaS
 - Manual Operations Masking — revenue 25–100m+ + mature (also injected by maturity override)
+- Services-Led Margin Pressure (v2) — services-led business model + revenue 5–25m
+
+**Security & Data Governance (v2)**
+- Sensitive Data Breach Liability (v2) — high data sensitivity + revenue 5–25m
+- Data Classification Maturity Gap (v2) — high data sensitivity + scaling growth stage
+
+**Scale & Technical Complexity (v2)**
+- High-Scale Operational Complexity (v2) — high scale intensity + cloud-native
+- Customization Debt Accumulation (v2) — customized-deployments business model + headcount 51–200
 
 **Geographic / Regulatory**
 - Cross-Border Data Compliance — EU/UK/APAC/LATAM/Africa
@@ -384,14 +394,20 @@ Risk anchors are sorted by relevance in the output.
 | User Decision | Questions Affected | Risk Anchors Triggered |
 |---|---|---|
 | **Productized Platform** | Platform economics, deployment consistency | — |
-| **Customized Deployments** | Config drift, custom code ratio | — |
-| **Services-Led** | Services margin, product/services revenue ratio | — |
+| **Customized Deployments** | Config drift, custom code ratio | Customization Debt Accumulation (if 51–200 headcount) |
+| **Services-Led** | Services margin, product/services revenue ratio | Services-Led Margin Pressure (if revenue 5–25m) |
 | **Usage-Based** | Metering integrity, billing accuracy | — |
 | **IP Licensing** | IP protection, assignment clauses | — |
-| **High Scale Intensity** | Auto-scaling, elasticity assessment | — |
-| **Mid-Migration** | Migration risk, rollback plans | — |
+| **Low Scale Intensity** | Internal tools assessment | — |
+| **Moderate Scale Intensity** | Standard scalability assessment | — |
+| **High Scale Intensity** | Auto-scaling, elasticity assessment | High-Scale Operational Complexity (if cloud-native) |
+| **Stable** (transformation) | Maintenance posture evaluation | — |
+| **Mid-Migration** | Migration risk, rollback plans | Mid-Migration Instability |
 | **Actively Modernizing** | Modernization progress, stall indicators | — |
-| **High Data Sensitivity** | Data classification, retention policies | — |
+| **Recently Modernized** | Stabilization validation | — |
+| **Low Data Sensitivity** | Basic data handling review | — |
+| **Moderate Data Sensitivity** | Standard data protection assessment | — |
+| **High Data Sensitivity** | Data classification, retention policies | Sensitive Data Breach Liability (if revenue 5–25m), Data Classification Gap (if scaling) |
 | **Outsourced-Heavy** | IP ownership, institutional knowledge | — |
 | **Product-Aligned Teams** | Governance fragmentation, shared standards | — |
 
