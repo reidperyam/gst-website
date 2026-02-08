@@ -609,7 +609,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             </h2>
             <div class="doc-meta-grid">
                 <div class="doc-meta-card doc-meta-card--identifier">
-                    <span class="doc-meta-label">Target / Project Identifier</span>
+                    <span class="doc-meta-label">Target Identifier</span>
                     <input
                         type="text"
                         class="doc-meta-identifier-input"
@@ -1960,8 +1960,29 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         }
 
         .doc-meta :global(.doc-meta-grid) {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
             padding-left: var(--spacing-md);
+            gap: var(--spacing-xs);
+        }
+
+        .doc-meta :global(.doc-meta-card--identifier) {
+            grid-column: 1 / -1;
+            align-items: center;
+            text-align: center;
+        }
+
+        .doc-meta :global(.doc-meta-card--identifier .doc-meta-label) {
+            font-size: var(--text-sm);
+        }
+
+        .doc-meta :global(.doc-meta-identifier-input) {
+            text-align: center;
+            font-size: var(--text-xl);
+            width: 100%;
+        }
+
+        .doc-meta :global(.doc-meta-card:nth-child(2n + 1):not(.doc-meta-card--identifier)) {
+            align-items: flex-end;
         }
 
         .doc-toc :global(.doc-toc-list) {
