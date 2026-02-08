@@ -464,7 +464,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Compliance gaps post-close may halt operations in regulated markets. Certification transfer timelines often exceed deal close timelines.',
     priority: 'high',
     conditions: {
-      geographies: ['eu', 'uk', 'canada', 'apac', 'latam', 'africa'],
+      geographies: ['eu', 'uk', 'canada', 'apac', 'latam', 'africa', 'multi-region'],
     },
   },
   {
@@ -613,7 +613,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Data sovereignty violations may block market access. Multi-region operations typically require explicit data residency architectures.',
     priority: 'high',
     conditions: {
-      geographies: ['eu', 'uk', 'canada', 'apac', 'latam', 'africa'],
+      geographies: ['eu', 'uk', 'canada', 'apac', 'latam', 'africa', 'multi-region'],
     },
   },
   {

@@ -166,4 +166,54 @@ export const RISK_ANCHORS: RiskAnchor[] = [
       geographies: ['canada'],
     },
   },
+  {
+    id: 'risk-multi-data-transfer',
+    title: 'Cross-Border Data Transfer Complexity',
+    description:
+      'Operating across multiple jurisdictions creates overlapping data transfer obligations (SCCs, adequacy decisions, bilateral agreements). Compliance overhead can scale non-linearly with each additional region, and transfer mechanisms may be invalidated by regulatory or court decisions.',
+    severity: 'high',
+    conditions: {
+      geographies: ['multi-region'],
+    },
+  },
+  {
+    id: 'risk-multi-jurisdictional-conflict',
+    title: 'Jurisdictional Conflict Risk',
+    description:
+      'Different regions may impose contradictory requirements (e.g., law enforcement access obligations vs. data protection mandates, or data localization rules conflicting with centralized architecture). These conflicts can force architectural compromises or operational workarounds.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['multi-region'],
+    },
+  },
+  {
+    id: 'risk-multi-infra-cost',
+    title: 'Multi-Region Infrastructure Cost Multiplier',
+    description:
+      'Maintaining compliant infrastructure across regions often requires data residency architectures, regional failover, and localized deployments that can multiply infrastructure costs beyond simple scaling. Cloud region selection, latency optimization, and regional redundancy add layers of complexity.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['multi-region'],
+    },
+  },
+  {
+    id: 'risk-multi-vendor-fragmentation',
+    title: 'Fragmented Vendor and Contract Landscape',
+    description:
+      'Multi-region operations often accumulate region-specific vendors, contracts, and licensing terms. Post-acquisition rationalization of these overlapping vendor relationships can be time-consuming and may surface non-transferable or conflicting agreements.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['multi-region'],
+    },
+  },
+  {
+    id: 'risk-multi-regulatory-velocity',
+    title: 'Regulatory Change Velocity',
+    description:
+      'Operating across multiple regulatory environments increases exposure to legislative changes. A new privacy law, data localization requirement, or cybersecurity mandate in any one region can force architecture or process changes that ripple across the entire operation.',
+    severity: 'medium',
+    conditions: {
+      geographies: ['multi-region'],
+    },
+  },
 ];

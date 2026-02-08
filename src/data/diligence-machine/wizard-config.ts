@@ -215,6 +215,11 @@ export const WIZARD_STEPS: WizardStep[] = [
         label: 'Asia-Pacific',
         description: 'APAC regional operations',
       },
+      {
+        id: 'multi-region',
+        label: 'Multi-Region',
+        description: 'Operations spanning geographies',
+      },
     ],
   },
 ];
