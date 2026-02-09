@@ -4,6 +4,8 @@
   /* Primary Colors */
   --color-primary: #05cd99;
   --color-primary-dark: #04a87a;
+  --color-secondary: #CC8800;
+  --color-secondary-dark: #FFAA33;
 
   /* Backgrounds */
   --bg-light: #ffffff;
@@ -120,6 +122,7 @@ html.dark-theme {
   --text-light-secondary: var(--text-dark-secondary);
   --text-light-muted: var(--text-dark-muted);
   --text-light-faded: var(--text-dark-faded);
+  --color-secondary: var(--color-secondary-dark);
 
   /* Section Backgrounds */
   --services-bg: var(--bg-dark-tertiary);

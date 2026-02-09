@@ -25,6 +25,30 @@
         <priority>0.7</priority>
     </url>
     <url>
+        <loc>https://globalstrategic.tech/hub</loc>
+        <lastmod>2026-02-06</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://globalstrategic.tech/hub/tools</loc>
+        <lastmod>2026-02-06</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://globalstrategic.tech/hub/library</loc>
+        <lastmod>2026-02-06</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://globalstrategic.tech/hub/radar</loc>
+        <lastmod>2026-02-06</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
         <loc>https://globalstrategic.tech/privacy</loc>
         <lastmod>2026-02-05</lastmod>
         <changefreq>yearly</changefreq>
