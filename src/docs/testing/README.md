@@ -16,9 +16,10 @@ Start with one of these based on your needs:
 
 ## Quick Facts
 
-- **Total Tests**: 552 (all passing)
+- **Total Tests**: 573 (all passing)
   - Unit/Integration: 180 tests (Vitest)
-  - E2E: 372 tests (Playwright, cross-browser)
+  - E2E: 393 tests (Playwright, cross-browser)
+    - **NEW**: 21 tests for Diligence Machine (across 3 browsers = 63 test runs)
 - **Test Frameworks**: Vitest + Playwright
 - **CI/CD Platform**: GitHub Actions (test.yml)
 - **Coverage Target**: 70%+ (currently exceeding)
