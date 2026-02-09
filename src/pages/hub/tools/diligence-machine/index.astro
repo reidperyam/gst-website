@@ -591,7 +591,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                     </div>
                                 </div>
                                 <p class="doc-q-text">${escapeHtml(q.text)}</p>
-                                ${q.redFlagSignal ? `<p class="doc-q-red-flag"><strong>Red Flag:</strong> ${escapeHtml(q.redFlagSignal)}</p>` : ''}
+                                ${q.lookoutSignal ? `<p class="doc-q-red-flag">${escapeHtml(q.lookoutSignal)}</p>` : ''}
                                 <p class="doc-q-rationale">${escapeHtml(q.rationale)}</p>
                             </li>
                         `).join('')}
@@ -773,7 +773,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             for (const [qIndex, q] of topic.questions.entries()) {
                 const impactTag = q.exitImpact ? ` [${q.exitImpact}]` : '';
                 lines.push(`${topicIndex + 1}.${qIndex + 1} [${q.priority.toUpperCase()}]${impactTag} ${q.text}`);
-                if (q.redFlagSignal) lines.push(`    Red Flag: ${q.redFlagSignal}`);
+                if (q.lookoutSignal) lines.push(`    ${q.lookoutSignal}`);
                 lines.push(`    Rationale: ${q.rationale}`);
                 lines.push('');
             }
@@ -1497,7 +1497,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         font-weight: var(--font-weight-bold);
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: var(--color-primary);
+        color: var(--color-secondary);
         margin: 0 0 var(--spacing-lg) 0;
     }
 
@@ -1796,7 +1796,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     .doc-topics :global(.doc-topic-title) {
         font-size: var(--text-xl);
         font-weight: var(--font-weight-bold);
-        color: var(--text-light-primary);
+        color: var(--color-secondary);
         margin: 0 0 var(--spacing-xs) 0;
     }
 
@@ -2466,7 +2466,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             font-size: 16px;
             font-weight: var(--font-weight-bold);
             margin: 0 0 2px 0;
-            color: var(--color-primary);
+            color: var(--color-secondary);
             page-break-after: avoid;
         }
 
