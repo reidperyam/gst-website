@@ -42,7 +42,7 @@ export interface DiligenceQuestion {
   conditions: QuestionCondition;
   // v2 strategic metadata (optional for backward compat)
   exitImpact?: 'Multiple Expander' | 'Valuation Drag' | 'Operational Risk';
-  redFlagSignal?: string;
+  lookoutSignal?: string;
   track?: 'Architecture' | 'Operations' | 'Carve-out' | 'Security';
 }
 
@@ -80,7 +80,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     text: 'Describe the current system architecture. Is it monolithic, service-oriented, or microservices-based, and what is the roadmap for decomposition if monolithic?',
     rationale: 'While a monolith offers superior deployment simplicity and lower operational overhead for many scaling firms, it can become a \'velocity trap\' if modularity isn\'t maintained. The goal is to determine if the current structure is a strategic choice for speed or a legacy constraint hindering independent team scaling.',
     priority: 'high',
-    redFlagSignal: 'If the architecture requires a \'full-site\' deployment for minor logic changes, the deployment model has shifted from a benefit to an inhibitory risk.',
+    lookoutSignal: 'Watch out for architectures that require a \'full-site\' deployment for minor logic changes, as this indicates the deployment model has shifted from benefitting the software development lifecycle to inhibiting it.',
     conditions: {},
   },
   {
@@ -244,8 +244,8 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topic: 'operations',
     topicLabel: 'Operations & Delivery',
     audienceLevel: 'VP Engineering',
-    text: 'What is the bus factor for critical systems? How many engineers can independently deploy, debug, and recover each major subsystem?',
-    rationale: 'Small teams with concentrated knowledge can represent operational vulnerability. Post-acquisition attrition may disrupt critical systems.',
+    text: 'Are there key person dependencies on critical systems? For each major subsystem, how many engineers possess the knowledge to deploy, debug, and recover independently?',
+    rationale: 'Key person dependencies create organizational knowledge gaps that amplify attrition risk. When critical systems rely on one or two individuals, post-acquisition transitions expose the business to operational disruption and extended recovery timelines.',
     priority: 'high',
     conditions: {
       headcountMin: '1-50',
@@ -701,7 +701,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'DR capability is only \u201creal\u201d when it\u2019s tested under realistic conditions. Recent, documented tests reduce operational downside and shorten post-close stabilization work.',
     priority: 'high',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'No end-to-end DR test in the last 12 months, results not documented, or RTO/RPO not measured against stated targets.',
+    lookoutSignal: 'Be conscious that disaster recovery capability is only credible when tested. If no end-to-end DR test has occurred in 12+ months, the recovery capability relies on untested assumptions.',
     track: 'Operations',
     conditions: {
       revenueMin: '5-25m',
@@ -718,7 +718,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Automation level is a primary driver of scalable margins and delivery consistency. If growth requires disproportionate headcount, the model may face margin pressure and execution risk.',
     priority: 'high',
     exitImpact: 'Multiple Expander',
-    redFlagSignal: 'Inability to quantify cost-to-serve drivers (FTE per $ revenue / per customer), or automation ratio declining while volume/revenue grows.',
+    lookoutSignal: 'Watch out for businesses that cannot quantify cost-to-serve drivers (FTE per $ revenue or per customer). Also concerning: automation ratios declining as volume and revenue grow. Both signal margin compression risk.',
     track: 'Operations',
     conditions: {
       productTypes: ['tech-enabled-service'],
@@ -735,7 +735,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Regulatory friction is a double-edged sword: while it creates compliance costs, a target with a mature AI-Act posture can build a meaningful advantage over competitors who haven\'t addressed these hurdles. We are assessing whether they are ahead of the curve\u2014or exposed to delay, rework, and legal risk as requirements operationalize.',
     priority: 'high',
     exitImpact: 'Valuation Drag',
-    redFlagSignal: 'No inventory of AI use-cases/models, no risk classification approach, or unclear ownership for compliance obligations and required documentation.',
+    lookoutSignal: 'Be alert to organizations lacking an inventory of AI use-cases, a risk classification approach, or clear ownership for compliance obligations. These gaps indicate exposure to regulatory delays and potential rework.',
     track: 'Security',
     conditions: {
       geographies: ['eu'],
@@ -752,7 +752,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Customized deployment models can create a fragmented codebase where each customer instance diverges, increasing maintenance burden and deployment complexity.',
     priority: 'medium',
     exitImpact: 'Multiple Expander',
-    redFlagSignal: 'If custom code exceeds 30% per deployment or there is no drift detection mechanism.',
+    lookoutSignal: 'Watch out for deployments where custom code exceeds 30% per customer instance or drift detection mechanisms are absent. This creates unsustainable maintenance burden and deployment complexity.',
     track: 'Operations',
     conditions: {
       businessModels: ['customized-deployments'],
@@ -769,7 +769,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Services-led businesses often face margin compression at scale. Understanding the product-to-services revenue mix informs valuation multiple expectations.',
     priority: 'high',
     exitImpact: 'Multiple Expander',
-    redFlagSignal: 'If services revenue is growing faster than product revenue, the business may be moving away from scalable economics.',
+    lookoutSignal: 'Be conscious that when services revenue grows faster than product revenue, the business may be moving away from scalable software economics and toward lower-margin delivery models.',
     track: 'Operations',
     conditions: {
       businessModels: ['services-led'],
@@ -786,7 +786,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Observability maturity determines how quickly teams detect, triage, and resolve incidents \u2014 a major driver of reliability and operational cost at scale.',
     priority: 'high',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'No defined SLOs/error budgets, alerts are noisy/unowned, or incident RCA is inconsistent and not tied to engineering follow-through.',
+    lookoutSignal: 'Watch out for systems lacking defined SLOs, error budgets, or alert ownership. Also concerning: incident root cause analysis that isn\'t tied to engineering follow-through. These patterns undermine reliability at scale.',
     track: 'Architecture',
     conditions: {
       scaleIntensity: ['high'],
@@ -803,7 +803,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Scaling architecture affects unit economics and reliability under demand spikes. Predictable scaling reduces outage risk and cloud cost surprises.',
     priority: 'medium',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'Scaling behavior is not load-tested, capacity planning is ad hoc, or cloud spend shows repeated spike patterns tied to incidents.',
+    lookoutSignal: 'Be alert to platforms where scaling behavior is not load-tested and capacity planning is ad hoc. Cloud spend with repeated spike patterns tied to incidents indicates predictable reliability and cost issues.',
     track: 'Architecture',
     conditions: {
       scaleIntensity: ['high'],
@@ -820,7 +820,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'In-flight migrations add temporary complexity and risk (parallel systems, data consistency, integration seams). Clear rollback and stage gates reduce downside.',
     priority: 'high',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'No documented rollback per migration stage, or the migration has exceeded the baseline timeline without a revised plan and measurable milestones.',
+    lookoutSignal: 'Watch out for in-flight migrations lacking documented rollback capability per stage. Migrations exceeding baseline timelines without revised plans and measurable milestones create compounding execution risk.',
     track: 'Architecture',
     conditions: {
       transformationStates: ['mid-migration'],
@@ -837,7 +837,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Modernization progress is best assessed via measurable scope completion, not narrative. This directly affects post-close roadmap capacity and integration feasibility.',
     priority: 'medium',
     exitImpact: 'Valuation Drag',
-    redFlagSignal: '\u201cModernization\u201d has no defined target state, no milestone tracking, or repeated resets of the roadmap without delivered de-risking outcomes.',
+    lookoutSignal: 'Be conscious that "modernization" initiatives lacking defined target states or milestone tracking often represent chronic execution challenges rather than genuine progress. Repeated roadmap resets without delivered outcomes reinforce this pattern.',
     track: 'Architecture',
     conditions: {
       transformationStates: ['actively-modernizing'],
@@ -854,7 +854,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Data classification drives the right controls (retention, encryption, access governance). Weak classification increases breach exposure and compliance cost.',
     priority: 'high',
     exitImpact: 'Valuation Drag',
-    redFlagSignal: 'No consistent data inventory/classification, sensitive data locations unknown, or access is broad and not routinely reviewed.',
+    lookoutSignal: 'Watch out for organizations lacking consistent data inventory, classification frameworks, or routine access reviews. Unknown sensitive data locations amplify breach exposure and compliance liability.',
     track: 'Security',
     conditions: {
       dataSensitivity: ['high'],
@@ -871,7 +871,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Retention and deletion discipline reduces regulatory exposure, breach blast radius, and storage cost. It also signals mature governance.',
     priority: 'medium',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'No automated deletion, retention varies by team/system without policy, or legal hold processes are unclear/unpracticed.',
+    lookoutSignal: 'Be alert to data retention practices lacking automated deletion or consistent policies across teams and systems. Unclear or unpracticed legal hold processes increase regulatory exposure and storage costs.',
     track: 'Security',
     conditions: {
       dataSensitivity: ['moderate', 'high'],
@@ -888,7 +888,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Outsourcing risk isn\'t \u201coutsourcing\u201d \u2014 it\'s knowledge portability. If critical context lives outside the org, integration and remediation timelines slip.',
     priority: 'high',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'Vendor owns critical systems with limited internal docs, key runbooks missing, or onboarding a new engineer takes \u201cmonths\u201d due to tribal knowledge.',
+    lookoutSignal: 'Watch out for situations where vendors own critical systems with limited internal documentation or key runbooks are missing. Engineer onboarding that takes "months" due to tribal knowledge creates severe continuity risk.',
     track: 'Operations',
     conditions: {
       operatingModels: ['outsourced-heavy'],
@@ -905,7 +905,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Cross-cutting standards (security, infra, data) determine whether the org scales cleanly or fragments into inconsistent practices that drive risk and cost.',
     priority: 'medium',
     exitImpact: 'Operational Risk',
-    redFlagSignal: 'No shared standards/guardrails, exceptions are unmanaged, or teams deploy materially different tooling/process without central visibility.',
+    lookoutSignal: 'Be conscious that product-aligned teams without shared standards or guardrails will create fragmented practices. Unmanaged exceptions and materially different tooling deployed without central visibility drive risk and operational cost.',
     track: 'Operations',
     conditions: {
       operatingModels: ['product-aligned-teams'],
@@ -922,7 +922,7 @@ export const QUESTIONS: DiligenceQuestion[] = [
     rationale: 'Metering accuracy is revenue integrity. Weak instrumentation can create leakage, disputes, and delayed scaling of usage-based models.',
     priority: 'high',
     exitImpact: 'Multiple Expander',
-    redFlagSignal: 'No reconciliation between usage events and invoices, disputes are frequent, or billing fixes require manual back-office intervention.',
+    lookoutSignal: 'Watch out for usage-based models lacking reconciliation between usage events and invoices. Frequent billing disputes or fixes requiring manual back-office intervention indicate metering inaccuracy and revenue leakage.',
     track: 'Architecture',
     conditions: {
       businessModels: ['usage-based'],
@@ -935,11 +935,11 @@ export const QUESTIONS: DiligenceQuestion[] = [
     topic: 'security-risk',
     topicLabel: 'Security, Compliance & Governance',
     audienceLevel: 'CISO',
-    text: 'What is the IP protection strategy? Are patents, trade secrets, and proprietary algorithms documented, protected, and assignable in a transaction context?',
-    rationale: 'IP posture affects defensibility and deal risk (ownership chain, contributor agreements, leakage controls). Clear artifacts reduce legal friction in diligence.',
+    text: 'How is open source usage governed? Is there an inventory of open source components, license compliance tracking, and a process for vetting new dependencies?',
+    rationale: 'Open source governance mitigates license compliance risk, supply chain vulnerabilities, and transactional friction. Clear policies and automated scanning reduce legal exposure and streamline due diligence.',
     priority: 'high',
     exitImpact: 'Valuation Drag',
-    redFlagSignal: 'No inventor/assignment trail, OSS use not tracked, or core IP lives in environments without access controls/auditability.',
+    lookoutSignal: 'Be conscious that organizations lacking open source inventories or license tracking accumulate hidden compliance debt. Absence of dependency vetting processes exposes the business to supply chain attacks and incompatible license obligations that surface during diligence.',
     track: 'Security',
     conditions: {
       businessModels: ['ip-licensing'],

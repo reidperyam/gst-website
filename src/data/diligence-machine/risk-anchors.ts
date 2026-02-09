@@ -87,7 +87,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     id: 'risk-labor-specialist',
     title: 'Specialized Labor Dependencies',
     description:
-      'Self-managed infrastructure and datacenter colocations require specialized operations staff (network engineers, hardware technicians) that are increasingly scarce and expensive in the labor market.',
+      'Self-managed infrastructure and datacenter colocations require specialized operations staff or datacenter vendors (network engineers, hardware technicians) that are increasingly scarce and expensive in the labor market.',
     relevance: 'medium',
     conditions: {
       techArchetypes: ['self-managed-infra', 'datacenter-vendor'],
