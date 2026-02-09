@@ -949,33 +949,27 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     btnGenerate.addEventListener('click', () => {
         if (!isStepValid(currentStep)) return;
 
-        // Show analyzing overlay
+        // Hide wizard and generate output immediately
         wizardContainer.style.display = 'none';
-        const analyzeOverlay = document.getElementById('analyzeOverlay')!;
-        analyzeOverlay.style.display = 'flex';
 
-        setTimeout(() => {
-            analyzeOverlay.style.display = 'none';
+        const fullInputs: UserInputs = {
+            transactionType: inputs.transactionType!,
+            productType: inputs.productType!,
+            techArchetype: inputs.techArchetype!,
+            headcount: inputs.headcount!,
+            revenueRange: inputs.revenueRange!,
+            growthStage: inputs.growthStage!,
+            companyAge: inputs.companyAge!,
+            geographies: inputs.geographies ?? [],
+            businessModel: inputs.businessModel!,
+            scaleIntensity: inputs.scaleIntensity!,
+            transformationState: inputs.transformationState!,
+            dataSensitivity: inputs.dataSensitivity!,
+            operatingModel: inputs.operatingModel!,
+        };
 
-            const fullInputs: UserInputs = {
-                transactionType: inputs.transactionType!,
-                productType: inputs.productType!,
-                techArchetype: inputs.techArchetype!,
-                headcount: inputs.headcount!,
-                revenueRange: inputs.revenueRange!,
-                growthStage: inputs.growthStage!,
-                companyAge: inputs.companyAge!,
-                geographies: inputs.geographies ?? [],
-                businessModel: inputs.businessModel!,
-                scaleIntensity: inputs.scaleIntensity!,
-                transformationState: inputs.transformationState!,
-                dataSensitivity: inputs.dataSensitivity!,
-                operatingModel: inputs.operatingModel!,
-            };
-
-            const script = generateScript(fullInputs);
-            renderOutput(script);
-        }, 2000);
+        const script = generateScript(fullInputs);
+        renderOutput(script);
     });
 
     btnGoBack.addEventListener('click', () => {

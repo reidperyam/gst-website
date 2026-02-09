@@ -210,7 +210,7 @@ test.describe('Diligence Machine E2E', () => {
   });
 
   test.describe('7. Output Generation and Validation', () => {
-    test('should show analyzing overlay for ~2 seconds before output', async ({ page }) => {
+    test('should generate output immediately after clicking Generate', async ({ page }) => {
       // Complete all 10 steps
       await completeWizardToStep(page, 10, {
         transactionType: 'full-acquisition',
@@ -232,7 +232,6 @@ test.describe('Diligence Machine E2E', () => {
       await page.waitForTimeout(400);
 
       // Click Generate (use clickElement for WebKit stability)
-      const startTime = Date.now();
       await clickElement(page, '[data-testid="btn-generate"]');
 
       // Wizard should disappear immediately
@@ -241,29 +240,17 @@ test.describe('Diligence Machine E2E', () => {
         return wizard && window.getComputedStyle(wizard).display === 'none';
       }, { timeout: 500 });
 
-      // Analyzing overlay should appear
-      await expect(page.locator('[data-testid="analyze-overlay"]')).toBeVisible();
-      await expect(page.locator('[data-testid="analyze-spinner"]')).toBeVisible();
-      await expect(page.locator('[data-testid="analyze-text"]')).toHaveText('Analyzing Deal Parameters...');
-
-      // Wait for output to appear (should take ~2000ms)
+      // Output should appear immediately (no fake loading delay)
       await page.waitForFunction(() => {
         const output = document.querySelector('[data-testid="output-container"]');
         return output && window.getComputedStyle(output).display !== 'none';
-      }, { timeout: 3000 });
-
-      const endTime = Date.now();
-      const elapsed = endTime - startTime;
-
-      // Verify it took approximately 2 seconds (allow buffer for slower browsers)
-      expect(elapsed).toBeGreaterThan(1900);
-      expect(elapsed).toBeLessThan(3000);
-
-      // Overlay should now be hidden
-      await expect(page.locator('[data-testid="analyze-overlay"]')).not.toBeVisible();
+      }, { timeout: 1000 });
 
       // Output should be visible
       await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Wizard should be hidden
+      await expect(page.locator('[data-testid="wizard-container"]')).not.toBeVisible();
     });
 
     test('should render all required output sections', async ({ page }) => {

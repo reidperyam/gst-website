@@ -243,11 +243,11 @@ export async function completeWizardAndGenerate(
     return wizard && window.getComputedStyle(wizard).display === 'none';
   }, { timeout: 1000 });
 
-  // Wait for output to appear (after 2-second analyzing overlay)
+  // Wait for output to appear (should be immediate now)
   await page.waitForFunction(() => {
     const output = document.querySelector('[data-testid="output-container"]');
     return output && window.getComputedStyle(output).display !== 'none';
-  }, { timeout: 3500 }); // 2s overlay + 1.5s buffer
+  }, { timeout: 1000 });
 }
 
 /**
