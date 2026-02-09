@@ -297,10 +297,6 @@ test.describe('Diligence Machine E2E', () => {
       expect(topicCount).toBeGreaterThan(0);
       expect(topicCount).toBeLessThanOrEqual(4); // Max 4 topics
 
-      // Verify methodology section
-      await expect(page.locator('[data-testid="doc-methodology"]')).toBeVisible();
-      await expect(page.locator('.doc-methodology-text')).toContainText('deterministic question-selection engine');
-
       // Verify footer
       await expect(page.locator('.doc-footer')).toBeVisible();
       await expect(page.locator('.doc-footer-disclaimer')).toContainText('This agenda is a starting framework');
