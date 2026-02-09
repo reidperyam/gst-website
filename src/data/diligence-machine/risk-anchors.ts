@@ -21,7 +21,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     id: 'risk-hw-eol',
     title: 'Hardware End-of-Life Exposure',
     description:
-      'Self-managed infrastructure in companies over 10 years old frequently contains hardware approaching or past end-of-life. Budget for hardware refresh or cloud migration as a capital expenditure item in the deal model.',
+      'On-premise infrastructure can provide predictable cost and data-sovereignty control that cloud models often lack. However, in companies over 10 years old, it can also mask a \'silent\' CapEx cycle as hardware approaches end-of-life. Validate the asset inventory, vendor support status, and refresh/migration plan\u2014then quantify capex, downtime risk, and integration impact.',
     relevance: 'high',
     conditions: {
       techArchetypes: ['self-managed-infra'],
@@ -43,7 +43,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     id: 'risk-tech-debt',
     title: 'Technical Debt Accumulation',
     description:
-      'Hybrid legacy environments in companies aged 5-10+ years accumulate significant technical debt across integration layers. Expect modernization costs to exceed initial estimates by 40-60%.',
+      'Technical debt is a strategic tool\u2014it allows teams to ship fast. In mature targets, the question is whether that debt is managed (serviced regularly) or delinquent (stalling the roadmap). Delinquent debt forces Day 100 capital to shift from growth to foundational repairs; validate by reviewing roadmap slippage drivers, rework rates, and recurring reliability issues tied to legacy constraints.',
     relevance: 'medium',
     conditions: {
       techArchetypes: ['hybrid-legacy'],
@@ -234,7 +234,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     id: 'risk-moat-erosion',
     title: 'AI Commodity Risk (Moat Erosion)',
     description:
-      'B2B SaaS products face increasing commoditization pressure from AI-native alternatives. Evaluate the defensibility of the product moat, the pace of competitive AI capabilities, and the cost to re-platform or integrate AI natively.',
+      'Being an \'AI wrapper\' can be a valid GTM strategy for speed. The strategic risk is whether value is derived from proprietary data, workflow integration, and distribution\u2014or whether the company is effectively renting a moat from a larger model provider that could be diminished by pricing, policy, or API changes. Validate what is truly proprietary, how easily competitors can replicate the experience, and whether pricing power has changed over time.',
     relevance: 'high',
     conditions: {
       productTypes: ['b2b-saas'],
@@ -255,7 +255,7 @@ export const RISK_ANCHORS: RiskAnchor[] = [
     id: 'risk-manual-ops-masking',
     title: 'Manual Operations Masking',
     description:
-      'High-revenue companies with low headcount growth may be masking manual operations behind a technology facade. Revenue per employee ratios that appear favorable may actually indicate process bottlenecks that limit scalability.',
+      'High revenue with low headcount can signal elite efficiency\u2014or a fragile operating model dependent on concentrated tribal knowledge and manual intervention. If the latter, scaling breaks because the process isn\'t encoded in systems. Validate by tracing core workflows end-to-end, reviewing exception handling and staffing coverage, and confirming whether runbooks/telemetry exist to reduce person-dependency.',
     relevance: 'high',
     conditions: {
       revenueMin: '25-100m',
