@@ -38,7 +38,7 @@ v2 expands the wizard from 5 steps to 10, adds strategic metadata to questions, 
 | Question bank | ~45 questions | ~68 questions (+15 v2 questions) |
 | Risk anchors | 18 anchors | 29 anchors (+10 v2 + 1 injected) |
 | Condition dimensions | 9 fields | 14 fields (+5 new) |
-| Question metadata | id, text, rationale, priority | + exitImpact, redFlagSignal, track |
+| Question metadata | id, text, rationale, priority | + exitImpact, lookoutSignal, track |
 | Engine rules | Filter → Balance → Group | + Archetype Pivot, Maturity Override |
 | State version | `STORAGE_VERSION = 1` | `STORAGE_VERSION = 2` |
 | UX | Instant output | 2-second "Analyzing" overlay + methodology section |
@@ -243,7 +243,7 @@ conditions: {
 
   // v2 strategic metadata (optional — present on all 15 v2 questions)
   exitImpact?: 'Multiple Expander' | 'Valuation Drag' | 'Operational Risk';
-  redFlagSignal?: string;
+  lookoutSignal?: string;
   track?: 'Architecture' | 'Operations' | 'Carve-out' | 'Security';
 }
 ```
@@ -255,7 +255,7 @@ conditions: {
 - **Valuation Drag** — Issue could reduce enterprise value
 - **Operational Risk** — Concern affects post-close execution
 
-**`redFlagSignal`** — A specific, observable indicator that suggests elevated risk. Displayed in the output below the question text when present. Examples:
+**`lookoutSignal`** — A specific, observable indicator that suggests elevated risk. Displayed in the output below the question text when present. Examples:
 - _"If DR has never been tested or last test was 12+ months ago, recovery capability is unvalidated."_
 - _"If custom code exceeds 30% per deployment or there is no drift detection mechanism."_
 
@@ -428,7 +428,7 @@ interface GeneratedScript {
       priority: 'high' | 'medium' | 'standard';
       // v2 fields (optional)
       exitImpact?: 'Multiple Expander' | 'Valuation Drag' | 'Operational Risk';
-      redFlagSignal?: string;
+      lookoutSignal?: string;
       track?: 'Architecture' | 'Operations' | 'Carve-out' | 'Security';
     }[];
   }[];
@@ -492,9 +492,9 @@ v2 questions display colored badges next to the priority badge:
 - **Valuation Drag** — amber/yellow badge
 - **Operational Risk** — red-tinted badge
 
-### Red Flag Signals
+### Lookout Signals
 
-When a v2 question has a `redFlagSignal`, it appears as a distinct paragraph below the question text and above the rationale. Styled with a warning indicator.
+When a v2 question has a `lookoutSignal`, it appears as a distinct paragraph below the question text and above the rationale. Provides specific, observable indicators that suggest elevated risk. Styled with a warning indicator.
 
 ### Methodology Section
 
@@ -528,7 +528,7 @@ A static methodology section appears in the output after the risk anchors, expla
 
 | File | Purpose |
 |------|---------|
-| `src/pages/hub/tools/diligence-machine/index.astro` | Page component, 10-step wizard UI, output rendering (incl. exitImpact badges, redFlagSignal), analyze overlay, methodology section, print styles |
+| `src/pages/hub/tools/diligence-machine/index.astro` | Page component, 10-step wizard UI, output rendering (incl. exitImpact badges, lookoutSignal), analyze overlay, methodology section, print styles |
 | `src/utils/diligence-engine.ts` | Core engine: `generateScript()`, `matchesConditions()`, `balanceAcrossTopics()`, `applyArchetypePivot()`, `applyMaturityOverrides()`, `syncMultiRegion()` |
 | `src/data/diligence-machine/wizard-config.ts` | 10 step definitions, option labels, `BRACKET_ORDER`, `getOptionLabel()` helper |
 | `src/data/diligence-machine/questions.ts` | Question bank (~68 questions) with conditions, priorities, and v2 metadata |

@@ -339,11 +339,11 @@ describe('Question Bank Data Integrity', () => {
       }
     });
 
-    it('should have non-empty redFlagSignal when present', () => {
+    it('should have non-empty lookoutSignal when present', () => {
       for (const q of QUESTIONS) {
-        if (q.redFlagSignal !== undefined) {
-          expect(q.redFlagSignal.length, `Question ${q.id} has empty redFlagSignal`).toBeGreaterThan(0);
-          expect(q.redFlagSignal.trim(), `Question ${q.id} has whitespace-only redFlagSignal`).toBe(q.redFlagSignal);
+        if (q.lookoutSignal !== undefined) {
+          expect(q.lookoutSignal.length, `Question ${q.id} has empty lookoutSignal`).toBeGreaterThan(0);
+          expect(q.lookoutSignal.trim(), `Question ${q.id} has whitespace-only lookoutSignal`).toBe(q.lookoutSignal);
         }
       }
     });
@@ -351,11 +351,11 @@ describe('Question Bank Data Integrity', () => {
     it('should have at least some questions with v2 metadata fields', () => {
       const withExitImpact = QUESTIONS.filter(q => q.exitImpact);
       const withTrack = QUESTIONS.filter(q => q.track);
-      const withRedFlag = QUESTIONS.filter(q => q.redFlagSignal);
+      const withLookout = QUESTIONS.filter(q => q.lookoutSignal);
 
       expect(withExitImpact.length, 'No questions have exitImpact').toBeGreaterThan(0);
       expect(withTrack.length, 'No questions have track').toBeGreaterThan(0);
-      expect(withRedFlag.length, 'No questions have redFlagSignal').toBeGreaterThan(0);
+      expect(withLookout.length, 'No questions have lookoutSignal').toBeGreaterThan(0);
     });
   });
 });
