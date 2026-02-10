@@ -30,7 +30,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     {WIZARD_STEPS.map((step, index) => (
                         <div class={`progress-segment ${index === 0 ? 'active' : ''}`} data-step-indicator={index + 1} data-testid={`progress-segment-${index + 1}`}>
                             <svg class="progress-number" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                                <path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="miter" />
                                 <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="progress-number-text">{index + 1}</text>
                             </svg>
                             <span class="progress-label">{step.navLabel}</span>
@@ -1055,11 +1055,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         height: 3rem;
         flex-shrink: 0;
         color: var(--border-light);
-        transition: color var(--transition-normal);
+        transition: color var(--transition-normal), transform var(--transition-normal);
     }
 
     .progress-segment.active .progress-number {
         color: var(--color-primary);
+        transform: scale(1.15);
     }
 
     .progress-segment.completed .progress-number path {
