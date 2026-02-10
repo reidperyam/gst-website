@@ -210,6 +210,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
                             Attention Areas
                         </h2>
+                        <p class="doc-section-subtitle">Critical risk factors and complexity areas requiring focused investigation during diligence</p>
                         <div class="doc-attention-grid" id="riskAnchorsGrid"></div>
                     </section>
 
@@ -578,6 +579,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <span class="doc-topic-number">Topic ${topicIndex + 1} of ${script.topics.length}</span>
                         </div>
                         <h2 class="doc-topic-title">${escapeHtml(topic.topicLabel)}</h2>
+                        ${topic.subtitle ? `<p class="doc-section-subtitle">${escapeHtml(topic.subtitle)}</p>` : ''}
                         <p class="doc-topic-audience">Target audience: ${escapeHtml(topic.audienceLevel)}</p>
                     </div>
                     <ol class="doc-questions">
@@ -1502,6 +1504,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin: 0 0 var(--spacing-lg) 0;
     }
 
+    .doc-page :global(.doc-section-subtitle) {
+        font-size: var(--text-xs);
+        line-height: 1.5;
+        color: var(--text-secondary);
+        margin: calc(var(--spacing-sm) * -1) 0 var(--spacing-md) 0;
+        padding-left: var(--spacing-xl);
+        font-style: italic;
+    }
+
     /* ─── METADATA BLOCK ───────────────────────────────────────────────── */
 
     .doc-meta :global(.doc-meta-grid) {
@@ -1801,6 +1812,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin: 0 0 var(--spacing-xs) 0;
     }
 
+    .doc-topics :global(.doc-section-subtitle) {
+        margin: 0 0 var(--spacing-sm) 0;
+        padding-left: 0;
+    }
+
     .doc-topics :global(.doc-topic-audience) {
         font-size: var(--text-sm);
         color: var(--text-light-muted);
@@ -2045,6 +2061,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--text-light-muted);
         line-height: 1.4;
         margin: 0;
+        text-transform: none;
     }
 
     :global(html.dark-theme) .doc-footer-brand {
@@ -2172,6 +2189,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         .doc-title {
             font-size: var(--text-xl);
+        }
+
+        .doc-page :global(.doc-section-subtitle) {
+            padding-left: var(--spacing-md);
+            font-size: 0.7rem;
         }
 
         .doc-meta :global(.doc-meta-grid) {
@@ -2471,6 +2493,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             page-break-after: avoid;
         }
 
+        .doc-topics :global(.doc-section-subtitle) {
+            font-size: 9px;
+            margin: 0 0 4px 0;
+            padding-left: 0;
+            page-break-after: avoid;
+        }
+
         .doc-topics :global(.doc-topic-audience) {
             font-size: 10px;
             margin: 0;
@@ -2592,6 +2621,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .doc-page :global(.doc-section-heading) {
             font-size: 11px;
             margin: 0 0 6px 0;
+            page-break-after: avoid;
+        }
+
+        .doc-page :global(.doc-section-subtitle) {
+            font-size: 9px;
+            line-height: 1.4;
+            margin: -4px 0 6px 0;
+            padding-left: 0;
             page-break-after: avoid;
         }
 
