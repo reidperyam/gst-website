@@ -17,6 +17,15 @@ trackPageView('hub-radar', 'The Radar - Perspectives | GST');
         <div class="container">
             <span class="section-label">Perspectives</span>
             <h1>The Radar</h1>
+            <svg class="page-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="24" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+                <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                <line x1="24" y1="2" x2="24" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="24" y1="40" x2="24" y2="46" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="2" y1="24" x2="8" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="40" y1="24" x2="46" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             <p class="placeholder-description">Coming soon. Strategic intelligence for emerging technology shifts and M&A market dynamics.</p>
             <p class="content-type-label">Short-form perspectives on Security, AI-shift, technology and M&A trends</p>
             <a href="/hub" class="cta-button secondary">Return to Hub</a>
@@ -46,7 +55,13 @@ trackPageView('hub-radar', 'The Radar - Perspectives | GST');
         color: rgba(26, 26, 26, 0.95);
         text-transform: uppercase;
         letter-spacing: 0.02em;
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .page-icon {
+        color: var(--color-primary);
+        margin: 0 auto var(--spacing-xl);
+        display: block;
     }
 
     :global(html.dark-theme) .placeholder-hero h1 {

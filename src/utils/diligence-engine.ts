@@ -33,6 +33,7 @@ export interface TopicOutput {
   topicId: string;
   topicLabel: string;
   audienceLevel: string;
+  subtitle?: string;
   questions: DiligenceQuestion[];
 }
 
@@ -67,9 +68,9 @@ export function meetsMinimumBracket(
   userValue: string,
   minimumValue: string
 ): boolean {
-  const order = BRACKET_ORDER[bracketType];
-  const userIndex = order.indexOf(userValue as typeof order[number]);
-  const minIndex = order.indexOf(minimumValue as typeof order[number]);
+  const order = BRACKET_ORDER[bracketType] as readonly string[];
+  const userIndex = order.indexOf(userValue);
+  const minIndex = order.indexOf(minimumValue);
 
   // If either value is not found in the ordering, don't filter it out
   if (userIndex === -1 || minIndex === -1) return true;
@@ -273,6 +274,7 @@ export function groupByTopic(questions: DiligenceQuestion[]): TopicOutput[] {
         topicId: id,
         topicLabel: meta.label,
         audienceLevel: meta.audience,
+        subtitle: meta.subtitle,
         questions: topicQuestions,
       });
     }

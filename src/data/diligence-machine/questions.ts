@@ -50,21 +50,25 @@ export const TOPIC_META = {
   architecture: {
     label: 'Architecture',
     audience: 'CTO / VP Engineering / Senior Architect',
+    subtitle: 'System design, scalability patterns, and technical infrastructure foundation',
     order: 1,
   },
   operations: {
     label: 'Operations & Delivery',
     audience: 'VP Engineering / VP Product',
+    subtitle: 'Development processes, deployment practices, and operational excellence',
     order: 2,
   },
   'carveout-integration': {
     label: 'Carve-out / Integration',
     audience: 'CIO / COO / CTO / PE Leadership',
+    subtitle: 'Separation readiness, integration complexity, and dependency mapping',
     order: 3,
   },
   'security-risk': {
     label: 'Security, Compliance & Governance',
     audience: 'CIO / CISO / VP Security',
+    subtitle: 'Security posture, regulatory compliance, and risk management frameworks',
     order: 4,
   },
 } as const;

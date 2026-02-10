@@ -30,7 +30,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     {WIZARD_STEPS.map((step, index) => (
                         <div class={`progress-segment ${index === 0 ? 'active' : ''}`} data-step-indicator={index + 1} data-testid={`progress-segment-${index + 1}`}>
                             <svg class="progress-number" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+                                <path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="miter" />
                                 <text x="32" y="40" text-anchor="middle" dominant-baseline="middle" class="progress-number-text">{index + 1}</text>
                             </svg>
                             <span class="progress-label">{step.navLabel}</span>
@@ -210,6 +210,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
                             Attention Areas
                         </h2>
+                        <p class="doc-section-subtitle">Critical risk factors and complexity areas requiring focused investigation during diligence</p>
                         <div class="doc-attention-grid" id="riskAnchorsGrid"></div>
                     </section>
 
@@ -240,7 +241,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
 <script>
     import { generateScript, syncMultiRegion, MULTI_REGION_ID } from '../../../../utils/diligence-engine';
-    import { getOptionLabel } from '../../../../data/diligence-machine/wizard-config';
+    import { getOptionLabel, WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
     import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
     const STORAGE_KEY = 'diligence-machine-state';
@@ -578,6 +579,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <span class="doc-topic-number">Topic ${topicIndex + 1} of ${script.topics.length}</span>
                         </div>
                         <h2 class="doc-topic-title">${escapeHtml(topic.topicLabel)}</h2>
+                        ${topic.subtitle ? `<p class="doc-section-subtitle">${escapeHtml(topic.subtitle)}</p>` : ''}
                         <p class="doc-topic-audience">Target audience: ${escapeHtml(topic.audienceLevel)}</p>
                     </div>
                     <ol class="doc-questions">
@@ -607,49 +609,50 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     function renderMetaBlock(): void {
         const docMeta = document.getElementById('docMeta')!;
-        const fields: { label: string; value: string }[] = [];
+        const fields: { label: string; value: string; stepId: string }[] = [];
 
         if (inputs.transactionType) {
-            fields.push({ label: 'Transaction Type', value: getOptionLabel('transaction-type', inputs.transactionType) });
+            fields.push({ label: 'Transaction Type', value: getOptionLabel('transaction-type', inputs.transactionType), stepId: 'transaction-type' });
         }
         if (inputs.productType) {
-            fields.push({ label: 'Product Type', value: getOptionLabel('product-type', inputs.productType) });
+            fields.push({ label: 'Product Type', value: getOptionLabel('product-type', inputs.productType), stepId: 'product-type' });
         }
         if (inputs.techArchetype) {
-            fields.push({ label: 'Tech Stack', value: getOptionLabel('tech-archetype', inputs.techArchetype) });
+            fields.push({ label: 'Tech Stack', value: getOptionLabel('tech-archetype', inputs.techArchetype), stepId: 'tech-archetype' });
         }
         if (inputs.headcount) {
-            fields.push({ label: 'Company Size', value: getOptionLabel('company-profile', inputs.headcount) + ' employees' });
+            fields.push({ label: 'Company Size', value: getOptionLabel('company-profile', inputs.headcount) + ' employees', stepId: 'company-profile' });
         }
         if (inputs.revenueRange) {
-            fields.push({ label: 'Revenue', value: getOptionLabel('company-profile', inputs.revenueRange) });
+            fields.push({ label: 'Revenue', value: getOptionLabel('company-profile', inputs.revenueRange), stepId: 'company-profile' });
         }
         if (inputs.growthStage) {
-            fields.push({ label: 'Growth Stage', value: getOptionLabel('company-profile', inputs.growthStage) });
+            fields.push({ label: 'Growth Stage', value: getOptionLabel('company-profile', inputs.growthStage), stepId: 'company-profile' });
         }
         if (inputs.companyAge) {
-            fields.push({ label: 'Company Age', value: getOptionLabel('company-profile', inputs.companyAge) });
+            fields.push({ label: 'Company Age', value: getOptionLabel('company-profile', inputs.companyAge), stepId: 'company-profile' });
         }
         if (inputs.geographies && inputs.geographies.length > 0) {
             fields.push({
                 label: 'Geography',
                 value: inputs.geographies.map((g) => getOptionLabel('geography', g)).join(', '),
+                stepId: 'geography'
             });
         }
         if (inputs.businessModel) {
-            fields.push({ label: 'Business Model', value: getOptionLabel('business-model', inputs.businessModel) });
+            fields.push({ label: 'Business Model', value: getOptionLabel('business-model', inputs.businessModel), stepId: 'business-model' });
         }
         if (inputs.scaleIntensity) {
-            fields.push({ label: 'Scale Intensity', value: getOptionLabel('scale-intensity', inputs.scaleIntensity) });
+            fields.push({ label: 'Scale Intensity', value: getOptionLabel('scale-intensity', inputs.scaleIntensity), stepId: 'scale-intensity' });
         }
         if (inputs.transformationState) {
-            fields.push({ label: 'Transformation', value: getOptionLabel('transformation-state', inputs.transformationState) });
+            fields.push({ label: 'Transformation', value: getOptionLabel('transformation-state', inputs.transformationState), stepId: 'transformation-state' });
         }
         if (inputs.dataSensitivity) {
-            fields.push({ label: 'Data Sensitivity', value: getOptionLabel('data-sensitivity', inputs.dataSensitivity) });
+            fields.push({ label: 'Data Sensitivity', value: getOptionLabel('data-sensitivity', inputs.dataSensitivity), stepId: 'data-sensitivity' });
         }
         if (inputs.operatingModel) {
-            fields.push({ label: 'Operating Model', value: getOptionLabel('operating-model', inputs.operatingModel) });
+            fields.push({ label: 'Operating Model', value: getOptionLabel('operating-model', inputs.operatingModel), stepId: 'operating-model' });
         }
 
         docMeta.innerHTML = `
@@ -674,7 +677,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     const colClass = col === 1 ? ' doc-meta-card--col2' : col === 2 ? ' doc-meta-card--col3' : '';
                     return `
                     <div class="doc-meta-card${colClass}">
-                        <span class="doc-meta-label">${escapeHtml(f.label)}</span>
+                        <span class="doc-meta-label doc-meta-label--clickable" data-step-id="${escapeHtml(f.stepId)}">${escapeHtml(f.label)}</span>
                         <span class="doc-meta-value">${escapeHtml(f.value)}</span>
                     </div>
                 `}).join('')}
@@ -686,6 +689,29 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         identifierInput.addEventListener('input', () => {
             targetIdentifier = identifierInput.value || 'Target';
             saveState();
+        });
+
+        // Wire up clickable labels to navigate back to wizard steps
+        const clickableLabels = docMeta.querySelectorAll('.doc-meta-label--clickable');
+        clickableLabels.forEach((label) => {
+            const stepId = (label as HTMLElement).dataset.stepId;
+            if (!stepId) return;
+
+            // Find the step number (1-based) from the step ID
+            const stepIndex = WIZARD_STEPS.findIndex((s) => s.id === stepId);
+            if (stepIndex === -1) return;
+
+            const stepNumber = stepIndex + 1;
+
+            // Add click handler
+            label.addEventListener('click', () => {
+                // Hide output, show wizard
+                outputContainer.style.display = 'none';
+                wizardContainer.style.display = '';
+
+                // Navigate to the step
+                showStep(stepNumber);
+            });
         });
     }
 
@@ -1055,11 +1081,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         height: 3rem;
         flex-shrink: 0;
         color: var(--border-light);
-        transition: color var(--transition-normal);
+        transition: color var(--transition-normal), transform var(--transition-normal);
     }
 
     .progress-segment.active .progress-number {
         color: var(--color-primary);
+        transform: scale(1.15);
     }
 
     .progress-segment.completed .progress-number path {
@@ -1393,7 +1420,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border: 1px solid var(--border-light);
         border-radius: 2px;
         box-shadow: var(--shadow-md);
-        padding: var(--spacing-3xl);
+        padding: var(--spacing-xl);
     }
 
     .doc-page,
@@ -1483,6 +1510,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         opacity: 0.6;
     }
 
+    :global(html.dark-theme) .doc-meta-label--clickable:hover {
+        opacity: 1;
+    }
+
     :global(html.dark-theme) .doc-meta-value {
         color: var(--text-dark-primary);
     }
@@ -1499,6 +1530,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         letter-spacing: 0.1em;
         color: var(--color-secondary);
         margin: 0 0 var(--spacing-lg) 0;
+    }
+
+    .doc-page :global(.doc-section-subtitle) {
+        font-size: var(--text-xs);
+        line-height: 1.5;
+        color: var(--text-secondary);
+        margin: calc(var(--spacing-sm) * -1) 0 var(--spacing-md) 0;
+        padding-left: var(--spacing-xl);
+        font-style: italic;
     }
 
     /* ─── METADATA BLOCK ───────────────────────────────────────────────── */
@@ -1525,6 +1565,17 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         letter-spacing: 0.1em;
         color: var(--color-primary);
         opacity: 0.7;
+    }
+
+    .doc-meta :global(.doc-meta-label--clickable) {
+        cursor: pointer;
+        transition: opacity var(--transition-fast), color var(--transition-fast);
+    }
+
+    .doc-meta :global(.doc-meta-label--clickable:hover) {
+        opacity: 1;
+        color: var(--color-primary);
+        text-decoration: underline;
     }
 
     .doc-meta :global(.doc-meta-value) {
@@ -1800,6 +1851,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         margin: 0 0 var(--spacing-xs) 0;
     }
 
+    .doc-topics :global(.doc-section-subtitle) {
+        margin: 0 0 var(--spacing-sm) 0;
+        padding-left: 0;
+    }
+
     .doc-topics :global(.doc-topic-audience) {
         font-size: var(--text-sm);
         color: var(--text-light-muted);
@@ -2044,6 +2100,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--text-light-muted);
         line-height: 1.4;
         margin: 0;
+        text-transform: none;
     }
 
     :global(html.dark-theme) .doc-footer-brand {
@@ -2166,11 +2223,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         /* Document output mobile overrides */
         .doc-page {
-            padding: var(--spacing-xl) var(--spacing-lg);
+            padding: var(--spacing-md) var(--spacing-sm);
         }
 
         .doc-title {
             font-size: var(--text-xl);
+        }
+
+        .doc-page :global(.doc-section-subtitle) {
+            padding-left: var(--spacing-md);
+            font-size: 0.7rem;
         }
 
         .doc-meta :global(.doc-meta-grid) {
@@ -2470,6 +2532,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             page-break-after: avoid;
         }
 
+        .doc-topics :global(.doc-section-subtitle) {
+            font-size: 9px;
+            margin: 0 0 4px 0;
+            padding-left: 0;
+            page-break-after: avoid;
+        }
+
         .doc-topics :global(.doc-topic-audience) {
             font-size: 10px;
             margin: 0;
@@ -2591,6 +2660,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .doc-page :global(.doc-section-heading) {
             font-size: 11px;
             margin: 0 0 6px 0;
+            page-break-after: avoid;
+        }
+
+        .doc-page :global(.doc-section-subtitle) {
+            font-size: 9px;
+            line-height: 1.4;
+            margin: -4px 0 6px 0;
+            padding-left: 0;
             page-break-after: avoid;
         }
 
