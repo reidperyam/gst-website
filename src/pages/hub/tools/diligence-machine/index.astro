@@ -241,7 +241,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
 <script>
     import { generateScript, syncMultiRegion, MULTI_REGION_ID } from '../../../../utils/diligence-engine';
-    import { getOptionLabel } from '../../../../data/diligence-machine/wizard-config';
+    import { getOptionLabel, WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
     import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
     const STORAGE_KEY = 'diligence-machine-state';
@@ -609,49 +609,50 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     function renderMetaBlock(): void {
         const docMeta = document.getElementById('docMeta')!;
-        const fields: { label: string; value: string }[] = [];
+        const fields: { label: string; value: string; stepId: string }[] = [];
 
         if (inputs.transactionType) {
-            fields.push({ label: 'Transaction Type', value: getOptionLabel('transaction-type', inputs.transactionType) });
+            fields.push({ label: 'Transaction Type', value: getOptionLabel('transaction-type', inputs.transactionType), stepId: 'transaction-type' });
         }
         if (inputs.productType) {
-            fields.push({ label: 'Product Type', value: getOptionLabel('product-type', inputs.productType) });
+            fields.push({ label: 'Product Type', value: getOptionLabel('product-type', inputs.productType), stepId: 'product-type' });
         }
         if (inputs.techArchetype) {
-            fields.push({ label: 'Tech Stack', value: getOptionLabel('tech-archetype', inputs.techArchetype) });
+            fields.push({ label: 'Tech Stack', value: getOptionLabel('tech-archetype', inputs.techArchetype), stepId: 'tech-archetype' });
         }
         if (inputs.headcount) {
-            fields.push({ label: 'Company Size', value: getOptionLabel('company-profile', inputs.headcount) + ' employees' });
+            fields.push({ label: 'Company Size', value: getOptionLabel('company-profile', inputs.headcount) + ' employees', stepId: 'company-profile' });
         }
         if (inputs.revenueRange) {
-            fields.push({ label: 'Revenue', value: getOptionLabel('company-profile', inputs.revenueRange) });
+            fields.push({ label: 'Revenue', value: getOptionLabel('company-profile', inputs.revenueRange), stepId: 'company-profile' });
         }
         if (inputs.growthStage) {
-            fields.push({ label: 'Growth Stage', value: getOptionLabel('company-profile', inputs.growthStage) });
+            fields.push({ label: 'Growth Stage', value: getOptionLabel('company-profile', inputs.growthStage), stepId: 'company-profile' });
         }
         if (inputs.companyAge) {
-            fields.push({ label: 'Company Age', value: getOptionLabel('company-profile', inputs.companyAge) });
+            fields.push({ label: 'Company Age', value: getOptionLabel('company-profile', inputs.companyAge), stepId: 'company-profile' });
         }
         if (inputs.geographies && inputs.geographies.length > 0) {
             fields.push({
                 label: 'Geography',
                 value: inputs.geographies.map((g) => getOptionLabel('geography', g)).join(', '),
+                stepId: 'geography'
             });
         }
         if (inputs.businessModel) {
-            fields.push({ label: 'Business Model', value: getOptionLabel('business-model', inputs.businessModel) });
+            fields.push({ label: 'Business Model', value: getOptionLabel('business-model', inputs.businessModel), stepId: 'business-model' });
         }
         if (inputs.scaleIntensity) {
-            fields.push({ label: 'Scale Intensity', value: getOptionLabel('scale-intensity', inputs.scaleIntensity) });
+            fields.push({ label: 'Scale Intensity', value: getOptionLabel('scale-intensity', inputs.scaleIntensity), stepId: 'scale-intensity' });
         }
         if (inputs.transformationState) {
-            fields.push({ label: 'Transformation', value: getOptionLabel('transformation-state', inputs.transformationState) });
+            fields.push({ label: 'Transformation', value: getOptionLabel('transformation-state', inputs.transformationState), stepId: 'transformation-state' });
         }
         if (inputs.dataSensitivity) {
-            fields.push({ label: 'Data Sensitivity', value: getOptionLabel('data-sensitivity', inputs.dataSensitivity) });
+            fields.push({ label: 'Data Sensitivity', value: getOptionLabel('data-sensitivity', inputs.dataSensitivity), stepId: 'data-sensitivity' });
         }
         if (inputs.operatingModel) {
-            fields.push({ label: 'Operating Model', value: getOptionLabel('operating-model', inputs.operatingModel) });
+            fields.push({ label: 'Operating Model', value: getOptionLabel('operating-model', inputs.operatingModel), stepId: 'operating-model' });
         }
 
         docMeta.innerHTML = `
@@ -676,7 +677,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     const colClass = col === 1 ? ' doc-meta-card--col2' : col === 2 ? ' doc-meta-card--col3' : '';
                     return `
                     <div class="doc-meta-card${colClass}">
-                        <span class="doc-meta-label">${escapeHtml(f.label)}</span>
+                        <span class="doc-meta-label doc-meta-label--clickable" data-step-id="${escapeHtml(f.stepId)}">${escapeHtml(f.label)}</span>
                         <span class="doc-meta-value">${escapeHtml(f.value)}</span>
                     </div>
                 `}).join('')}
@@ -688,6 +689,29 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         identifierInput.addEventListener('input', () => {
             targetIdentifier = identifierInput.value || 'Target';
             saveState();
+        });
+
+        // Wire up clickable labels to navigate back to wizard steps
+        const clickableLabels = docMeta.querySelectorAll('.doc-meta-label--clickable');
+        clickableLabels.forEach((label) => {
+            const stepId = (label as HTMLElement).dataset.stepId;
+            if (!stepId) return;
+
+            // Find the step number (1-based) from the step ID
+            const stepIndex = WIZARD_STEPS.findIndex((s) => s.id === stepId);
+            if (stepIndex === -1) return;
+
+            const stepNumber = stepIndex + 1;
+
+            // Add click handler
+            label.addEventListener('click', () => {
+                // Hide output, show wizard
+                outputContainer.style.display = 'none';
+                wizardContainer.style.display = '';
+
+                // Navigate to the step
+                showStep(stepNumber);
+            });
         });
     }
 
@@ -1486,6 +1510,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         opacity: 0.6;
     }
 
+    :global(html.dark-theme) .doc-meta-label--clickable:hover {
+        opacity: 1;
+    }
+
     :global(html.dark-theme) .doc-meta-value {
         color: var(--text-dark-primary);
     }
@@ -1537,6 +1565,17 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         letter-spacing: 0.1em;
         color: var(--color-primary);
         opacity: 0.7;
+    }
+
+    .doc-meta :global(.doc-meta-label--clickable) {
+        cursor: pointer;
+        transition: opacity var(--transition-fast), color var(--transition-fast);
+    }
+
+    .doc-meta :global(.doc-meta-label--clickable:hover) {
+        opacity: 1;
+        color: var(--color-primary);
+        text-decoration: underline;
     }
 
     .doc-meta :global(.doc-meta-value) {
