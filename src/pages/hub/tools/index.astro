@@ -17,6 +17,11 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
         <div class="container">
             <span class="section-label">Tools</span>
             <h1>The Workbench</h1>
+            <svg class="page-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="4" y="8" width="40" height="32" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 20L18 26L12 32" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="22" y1="32" x2="36" y2="32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             <p class="placeholder-description">Coming soon. Strategic intelligence for quantifying risk and value in technology investments.</p>
             <p class="content-type-label">Interactive tools</p>
 
@@ -119,7 +124,13 @@ trackPageView('hub-tools', 'The Workbench - Tools | GST');
         color: rgba(26, 26, 26, 0.95);
         text-transform: uppercase;
         letter-spacing: 0.02em;
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .page-icon {
+        color: var(--color-primary);
+        margin: 0 auto var(--spacing-xl);
+        display: block;
     }
 
     :global(html.dark-theme) .placeholder-hero h1 {

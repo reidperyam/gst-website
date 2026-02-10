@@ -17,6 +17,13 @@ trackPageView('hub-library', 'The Library - Resources | GST');
         <div class="container">
             <span class="section-label">Resources</span>
             <h1>The Library</h1>
+            <svg class="page-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 6H32L40 14V42H8V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M32 6V14H40" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="16" y1="22" x2="32" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="16" y1="28" x2="32" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="16" y1="34" x2="28" y2="34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             <p class="placeholder-description">Coming soon. Strategic intelligence for technical due diligence frameworks and value creation blueprints.</p>
             <p class="content-type-label">Downloadable PDF resources, diligence checklists, and case studies</p>
             <a href="/hub" class="cta-button secondary">Return to Hub</a>
@@ -46,7 +53,13 @@ trackPageView('hub-library', 'The Library - Resources | GST');
         color: rgba(26, 26, 26, 0.95);
         text-transform: uppercase;
         letter-spacing: 0.02em;
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .page-icon {
+        color: var(--color-primary);
+        margin: 0 auto var(--spacing-xl);
+        display: block;
     }
 
     :global(html.dark-theme) .placeholder-hero h1 {
