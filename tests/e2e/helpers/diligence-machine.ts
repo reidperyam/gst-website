@@ -113,7 +113,8 @@ export async function completeWizardToStep(
 
       // Use evaluate() for WebKit stability (avoids "not stable" issues)
       await page.evaluate(([stepId, value]) => {
-        document.querySelector(`[data-testid="option-${stepId}-${value}"]`)?.click();
+        const element = document.querySelector(`[data-testid="option-${stepId}-${value}"]`);
+        if (element) (element as HTMLElement).click();
       }, [stepId, value]);
 
       // Wait for auto-advance (300ms delay + 100ms buffer)
@@ -140,10 +141,14 @@ export async function completeWizardToStep(
 
       // Select all 4 fields (use evaluate for WebKit stability)
       await page.evaluate((inputs) => {
-        document.querySelector(`[data-testid="compound-headcount-${inputs.headcount}"]`)?.click();
-        document.querySelector(`[data-testid="compound-revenue-range-${inputs.revenueRange}"]`)?.click();
-        document.querySelector(`[data-testid="compound-growth-stage-${inputs.growthStage}"]`)?.click();
-        document.querySelector(`[data-testid="compound-company-age-${inputs.companyAge}"]`)?.click();
+        const headcount = document.querySelector(`[data-testid="compound-headcount-${inputs.headcount}"]`);
+        const revenue = document.querySelector(`[data-testid="compound-revenue-range-${inputs.revenueRange}"]`);
+        const growth = document.querySelector(`[data-testid="compound-growth-stage-${inputs.growthStage}"]`);
+        const age = document.querySelector(`[data-testid="compound-company-age-${inputs.companyAge}"]`);
+        if (headcount) (headcount as HTMLElement).click();
+        if (revenue) (revenue as HTMLElement).click();
+        if (growth) (growth as HTMLElement).click();
+        if (age) (age as HTMLElement).click();
       }, {
         headcount: inputs.headcount,
         revenueRange: inputs.revenueRange,
@@ -184,7 +189,8 @@ export async function completeWizardToStep(
 
       await page.evaluate((geos) => {
         geos.forEach(geo => {
-          document.querySelector(`[data-testid="option-geography-${geo}"]`)?.click();
+          const element = document.querySelector(`[data-testid="option-geography-${geo}"]`);
+          if (element) (element as HTMLElement).click();
         });
       }, geosToSelect);
       await page.waitForTimeout(200); // Wait for all clicks to process
@@ -192,7 +198,8 @@ export async function completeWizardToStep(
       // Click Next (use evaluate for WebKit)
       await expect(page.locator('[data-testid="btn-next"]')).toBeEnabled();
       await page.evaluate(() => {
-        document.querySelector('[data-testid="btn-next"]')?.click();
+        const element = document.querySelector('[data-testid="btn-next"]');
+        if (element) (element as HTMLElement).click();
       });
 
       // Wait for next step
@@ -223,7 +230,8 @@ export async function completeWizardAndGenerate(
 
   // Select final step option (operating-model) - use evaluate for WebKit
   await page.evaluate((operatingModel) => {
-    document.querySelector(`[data-testid="option-operating-model-${operatingModel}"]`)?.click();
+    const element = document.querySelector(`[data-testid="option-operating-model-${operatingModel}"]`);
+    if (element) (element as HTMLElement).click();
   }, inputs.operatingModel);
 
   // Wait for auto-advance delay to complete
@@ -234,7 +242,8 @@ export async function completeWizardAndGenerate(
 
   // Click Generate (use evaluate for WebKit)
   await page.evaluate(() => {
-    document.querySelector('[data-testid="btn-generate"]')?.click();
+    const element = document.querySelector('[data-testid="btn-generate"]');
+    if (element) (element as HTMLElement).click();
   });
 
   // Wait for wizard to hide

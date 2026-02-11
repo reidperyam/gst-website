@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import type { UserInputs } from '../../src/utils/diligence-engine';
 import {
   completeWizardToStep,
   completeWizardAndGenerate,
@@ -468,7 +469,7 @@ test.describe('Diligence Machine E2E', () => {
     });
 
     test('should display all input parameters in metadata section', async ({ page }) => {
-      const testInputs = {
+      const testInputs: Required<UserInputs> = {
         transactionType: 'venture-series',
         productType: 'deep-tech-ip',
         techArchetype: 'self-managed-infra',
@@ -482,7 +483,7 @@ test.describe('Diligence Machine E2E', () => {
         transformationState: 'stable',
         dataSensitivity: 'low',
         operatingModel: 'centralized-eng',
-      } as const;
+      };
 
       await completeWizardAndGenerate(page, testInputs);
 
@@ -718,7 +719,318 @@ test.describe('Diligence Machine E2E', () => {
     });
   });
 
-  test.describe('10. Edge Cases and Error Scenarios', () => {
+  test.describe('10. Target Parameters Back-Navigation', () => {
+    test('should navigate to wizard step when clicking parameter label', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us'],
+        businessModel: 'productized-platform',
+        scaleIntensity: 'moderate',
+        transformationState: 'stable',
+        dataSensitivity: 'moderate',
+        operatingModel: 'centralized-eng',
+      });
+
+      // Verify output is visible
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Click on "Transaction Type" label in Target Parameters
+      const transactionTypeLabel = page.locator('.doc-meta-label--clickable[data-step-id="transaction-type"]');
+      await expect(transactionTypeLabel).toBeVisible();
+      await transactionTypeLabel.click();
+
+      // Wait for wizard to appear
+      await page.waitForFunction(() => {
+        const wizard = document.querySelector('[data-testid="wizard-container"]');
+        return wizard && window.getComputedStyle(wizard).display !== 'none';
+      }, { timeout: 1000 });
+
+      // Wizard should be visible
+      await expect(page.locator('[data-testid="wizard-container"]')).toBeVisible();
+
+      // Output should be hidden
+      await expect(page.locator('[data-testid="output-container"]')).not.toBeVisible();
+
+      // Should be on step 1 (Transaction Type)
+      await expectWizardOnStep(page, 1);
+
+      // Previous selection should be preserved
+      await verifyStepSelection(page, 'transaction-type', 'full-acquisition');
+    });
+
+    test('should navigate to compound step when clicking company size parameter', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'carve-out',
+        productType: 'on-premise-enterprise',
+        techArchetype: 'hybrid-legacy',
+        headcount: '201-500',
+        revenueRange: '25-100m',
+        growthStage: 'mature',
+        companyAge: '10-20yr',
+        geographies: ['eu'],
+        businessModel: 'customized-deployments',
+        scaleIntensity: 'high',
+        transformationState: 'mid-migration',
+        dataSensitivity: 'high',
+        operatingModel: 'product-aligned-teams',
+      });
+
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Click on "Company Size" label (maps to company-profile step)
+      const companySizeLabel = page.locator('.doc-meta-label--clickable[data-step-id="company-profile"]').first();
+      await expect(companySizeLabel).toBeVisible();
+      await companySizeLabel.click();
+
+      // Wait for wizard
+      await page.waitForFunction(() => {
+        const wizard = document.querySelector('[data-testid="wizard-container"]');
+        return wizard && window.getComputedStyle(wizard).display !== 'none';
+      });
+
+      // Should be on step 4 (Company Profile - compound step)
+      await expectWizardOnStep(page, 4);
+
+      // Verify compound selections are preserved
+      await verifyCompoundSelection(page, 'headcount', '201-500');
+      await verifyCompoundSelection(page, 'revenue-range', '25-100m');
+      await verifyCompoundSelection(page, 'growth-stage', 'mature');
+      await verifyCompoundSelection(page, 'company-age', '10-20yr');
+    });
+
+    test('should navigate to multi-select geography step when clicking geography parameter', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us', 'eu', 'uk'],
+        businessModel: 'productized-platform',
+        scaleIntensity: 'moderate',
+        transformationState: 'stable',
+        dataSensitivity: 'moderate',
+        operatingModel: 'centralized-eng',
+      });
+
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Click on "Geography" label
+      const geographyLabel = page.locator('.doc-meta-label--clickable[data-step-id="geography"]');
+      await expect(geographyLabel).toBeVisible();
+      await geographyLabel.click();
+
+      await page.waitForFunction(() => {
+        const wizard = document.querySelector('[data-testid="wizard-container"]');
+        return wizard && window.getComputedStyle(wizard).display !== 'none';
+      });
+
+      // Should be on step 5 (Geography)
+      await expectWizardOnStep(page, 5);
+
+      // Verify geography selections are preserved
+      await verifyStepSelection(page, 'geography', 'us');
+      await verifyStepSelection(page, 'geography', 'eu');
+      await verifyStepSelection(page, 'geography', 'uk');
+    });
+
+    test('should show hover effect on clickable parameter labels', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us'],
+        businessModel: 'productized-platform',
+        scaleIntensity: 'moderate',
+        transformationState: 'stable',
+        dataSensitivity: 'moderate',
+        operatingModel: 'centralized-eng',
+      });
+
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      const transactionTypeLabel = page.locator('.doc-meta-label--clickable[data-step-id="transaction-type"]');
+
+      // Get initial state
+      const before = await transactionTypeLabel.evaluate((el) => ({
+        cursor: window.getComputedStyle(el).cursor,
+        textDecoration: window.getComputedStyle(el).textDecoration,
+      }));
+
+      // Verify cursor is pointer
+      expect(before.cursor).toBe('pointer');
+
+      // Hover over label
+      await transactionTypeLabel.hover();
+
+      // Wait for CSS transition
+      await page.waitForTimeout(100);
+
+      // Get hover state
+      const after = await transactionTypeLabel.evaluate((el) => ({
+        textDecoration: window.getComputedStyle(el).textDecoration,
+      }));
+
+      // Verify text decoration changes on hover (underline)
+      expect(after.textDecoration).toContain('underline');
+    });
+
+    test('should preserve wizard state when navigating back from parameter label', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us'],
+        businessModel: 'productized-platform',
+        scaleIntensity: 'moderate',
+        transformationState: 'stable',
+        dataSensitivity: 'moderate',
+        operatingModel: 'centralized-eng',
+      });
+
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Click on "Product Type" label to navigate back
+      const productTypeLabel = page.locator('.doc-meta-label--clickable[data-step-id="product-type"]');
+      await productTypeLabel.click();
+
+      await page.waitForFunction(() => {
+        const wizard = document.querySelector('[data-testid="wizard-container"]');
+        return wizard && window.getComputedStyle(wizard).display !== 'none';
+      });
+
+      // Should be on step 2
+      await expectWizardOnStep(page, 2);
+
+      // Verify previous selection is preserved
+      await verifyStepSelection(page, 'product-type', 'b2b-saas');
+
+      // Verify we can navigate to other steps and selections remain
+      await clickElement(page, '[data-testid="btn-back"]');
+      await expectWizardOnStep(page, 1);
+      await verifyStepSelection(page, 'transaction-type', 'full-acquisition');
+
+      // Verify we can navigate forward
+      await clickElement(page, '[data-testid="btn-next"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '2';
+      }, { timeout: 2000 });
+      await expectWizardOnStep(page, 2);
+
+      // Verify highestStepReached is maintained (should be 10)
+      const state = await getLocalStorageState(page);
+      expect(state.highestStepReached).toBe(10);
+    });
+
+    test('should navigate back to wizard from output using different parameter labels', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us'],
+        businessModel: 'productized-platform',
+        scaleIntensity: 'moderate',
+        transformationState: 'stable',
+        dataSensitivity: 'moderate',
+        operatingModel: 'centralized-eng',
+      });
+
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Test navigating to step 6 via Business Model label
+      await page.locator('.doc-meta-label--clickable[data-step-id="business-model"]').click();
+      await page.waitForFunction(() => {
+        const wizard = document.querySelector('[data-testid="wizard-container"]');
+        return wizard && window.getComputedStyle(wizard).display !== 'none';
+      }, { timeout: 1000 });
+      await expectWizardOnStep(page, 6);
+      await verifyStepSelection(page, 'business-model', 'productized-platform');
+
+      // Verify we can still use progress bar navigation
+      await clickElement(page, '[data-testid="progress-segment-10"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '10';
+      }, { timeout: 2000 });
+      await expectWizardOnStep(page, 10);
+      await verifyStepSelection(page, 'operating-model', 'centralized-eng');
+    });
+
+    test('should have correct data-step-id attributes on all clickable labels', async ({ page }) => {
+      await completeWizardAndGenerate(page, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us', 'eu'],
+        businessModel: 'productized-platform',
+        scaleIntensity: 'moderate',
+        transformationState: 'stable',
+        dataSensitivity: 'moderate',
+        operatingModel: 'centralized-eng',
+      });
+
+      await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
+
+      // Verify all expected clickable labels exist with correct data-step-id
+      const expectedStepIds = [
+        'transaction-type',
+        'product-type',
+        'tech-archetype',
+        'company-profile', // Headcount, Revenue, Growth Stage, Company Age all map here
+        'geography',
+        'business-model',
+        'scale-intensity',
+        'transformation-state',
+        'data-sensitivity',
+        'operating-model',
+      ];
+
+      for (const stepId of expectedStepIds) {
+        const labels = page.locator(`.doc-meta-label--clickable[data-step-id="${stepId}"]`);
+        const count = await labels.count();
+
+        // company-profile step has 4 labels (headcount, revenue, growth, age)
+        if (stepId === 'company-profile') {
+          expect(count).toBe(4);
+        } else {
+          expect(count).toBeGreaterThanOrEqual(1);
+        }
+
+        // Verify all labels have clickable class
+        for (let i = 0; i < count; i++) {
+          const label = labels.nth(i);
+          await expect(label).toHaveClass(/doc-meta-label--clickable/);
+        }
+      }
+    });
+  });
+
+  test.describe('11. Edge Cases and Error Scenarios', () => {
     test('should prevent advancing without making selection', async ({ page }) => {
       // Next button should be disabled initially
       await expect(page.locator('[data-testid="btn-next"]')).toBeDisabled();
