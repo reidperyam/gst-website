@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Diligence Machine is a client-side wizard that generates a prescriptive technology due diligence agenda customized to a target company's profile. Users answer 10 steps of questions across deal structure, product profile, infrastructure, company scale, geography, and 5 contextual dimensions. The engine produces 15–20 high-impact questions organized by topic, plus contextual attention areas (risk anchors).
+The Diligence Machine is a client-side wizard that generates a prescriptive technology due diligence agenda customized to a target company's profile. Users answer 10 steps of questions across deal structure, product profile, infrastructure, company scale, geography, and 5 contextual dimensions. The engine produces 15–20 high-impact questions organized by topic, plus contextual attention areas.
 
 **Entry point**: `src/pages/hub/tools/diligence-machine/index.astro`
 
@@ -21,7 +21,7 @@ User (Wizard UI)
 │
 ├── src/data/diligence-machine/questions.ts        ← Question bank (~68 questions, 4 topics)
 │
-└── src/data/diligence-machine/risk-anchors.ts     ← Risk anchor definitions (23 anchors)
+└── src/data/diligence-machine/attention-areas.ts  ← Attention area definitions (23 areas)
 ```
 
 All logic runs client-side. No server calls. The engine is a pure function: `generateScript(UserInputs) → GeneratedScript`.
@@ -36,7 +36,7 @@ v2 expands the wizard from 5 steps to 10, adds strategic metadata to questions, 
 |------|----|----|
 | Wizard steps | 5 | 10 (+5 context dimensions) |
 | Question bank | ~45 questions | ~68 questions (+15 v2 questions) |
-| Risk anchors | 18 anchors | 29 anchors (+10 v2 + 1 injected) |
+| Attention areas | 18 areas | 29 areas (+10 v2 + 1 injected) |
 | Condition dimensions | 9 fields | 14 fields (+5 new) |
 | Question metadata | id, text, rationale, priority | + exitImpact, lookoutSignal, track |
 | Engine rules | Filter → Balance → Group | + Archetype Pivot, Maturity Override |
@@ -75,7 +75,7 @@ Determines product-specific architecture, compliance, and operations questions.
 
 #### Step 3: Tech Stack Archetype (`techArchetype`)
 
-Drives infrastructure risk anchors and architecture questions.
+Drives infrastructure attention areas and architecture questions.
 
 | Option | ID |
 |--------|----|
@@ -86,7 +86,7 @@ Drives infrastructure risk anchors and architecture questions.
 
 #### Step 4: Company Profile (compound — 4 fields)
 
-Scale influences operational questions, risk anchors, and minimum-threshold filtering.
+Scale influences operational questions, attention areas, and minimum-threshold filtering.
 
 **Headcount** (`headcount`): `1-50`, `51-200`, `201-500`, `500+`
 
@@ -98,7 +98,7 @@ Scale influences operational questions, risk anchors, and minimum-threshold filt
 
 #### Step 5: Geography (`geographies` — multi-select)
 
-Enables regulatory/compliance questions and region-specific risk anchors.
+Enables regulatory/compliance questions and region-specific attention areas.
 
 | Option | ID |
 |--------|----|
@@ -175,7 +175,7 @@ Engineering organization structure. Drives questions about team autonomy, outsou
 
 ## Conditional Matching System
 
-Every question and risk anchor has a `conditions` object:
+Every question and attention area has a `conditions` object:
 
 ```typescript
 conditions: {
@@ -293,19 +293,19 @@ Questions are grouped by topic (Architecture → Operations → Carve-out → Se
 
 ### 5. Maturity Override (v2)
 
-`applyMaturityOverrides()` injects computed risk anchors based on cross-field logic:
+`applyMaturityOverrides()` injects computed attention areas based on cross-field logic:
 
 **Trigger**: `revenueRange >= '25-100m'` AND `headcount < '201-500'` AND `growthStage === 'mature'`
 
-**Action**: Inject `risk-manual-ops-masking` anchor if not already present from condition matching.
+**Action**: Inject `attention-manual-ops-masking` area if not already present from condition matching.
 
 **Rationale**: High revenue with low headcount in a mature company may indicate manual processes masked behind a technology facade — a pattern that simple condition arrays can't express.
 
 ---
 
-## Attention Areas (Risk Anchors)
+## Attention Areas
 
-29 risk anchors are filtered independently using the same condition system. They surface structural concerns that complement the question topics.
+29 attention areas are filtered independently using the same condition system. They surface structural concerns that complement the question topics.
 
 ### Categories
 
@@ -360,7 +360,7 @@ Questions are grouped by topic (Architecture → Operations → Carve-out → Se
 - **medium** — Important considerations, not deal-breaking
 - **low** — Context-specific concerns
 
-Risk anchors are sorted by relevance in the output.
+Attention areas are sorted by relevance in the output.
 
 ---
 
@@ -368,7 +368,7 @@ Risk anchors are sorted by relevance in the output.
 
 ### v1 Dimensions
 
-| User Decision | Questions Affected | Risk Anchors Triggered |
+| User Decision | Questions Affected | Attention Areas Triggered |
 |---|---|---|
 | **Carve-out** | Carve-out/integration topic questions enabled | Carve-out entanglement (if hybrid-legacy) |
 | **B2B SaaS** | Multi-tenant architecture, SaaS ops | AI Commodity Risk / Moat Erosion (v2) |
@@ -387,11 +387,11 @@ Risk anchors are sorted by relevance in the output.
 | **LATAM** | LGPD compliance | LATAM infrastructure maturity |
 | **Africa** | POPIA, local DPA | African regulatory fragmentation |
 | **Canada** | PIPEDA, Quebec Law 25 | Canadian privacy complexity |
-| **Multi-Region** | All geographic compliance questions | 5 multi-region risk anchors |
+| **Multi-Region** | All geographic compliance questions | 5 multi-region attention areas |
 
 ### v2 Context Dimensions
 
-| User Decision | Questions Affected | Risk Anchors Triggered |
+| User Decision | Questions Affected | Attention Areas Triggered |
 |---|---|---|
 | **Productized Platform** | Platform economics, deployment consistency | — |
 | **Customized Deployments** | Config drift, custom code ratio | Customization Debt Accumulation (if 51–200 headcount) |
@@ -432,7 +432,7 @@ interface GeneratedScript {
       track?: 'Architecture' | 'Operations' | 'Carve-out' | 'Security';
     }[];
   }[];
-  riskAnchors: {
+  attentionAreas: {
     id: string;
     title: string;
     description: string;
@@ -471,9 +471,9 @@ interface GeneratedScript {
 2. Apply archetype pivot (filter cloud-native Qs when on-prem/self-managed)
 3. Balance across topics (15-20, min 3 per topic)
 4. Group by topic and sort by priority
-5. Filter risk anchors by matchesConditions()
-6. Apply maturity overrides (inject computed anchors)
-7. Sort anchors by relevance (high → medium → low)
+5. Filter attention areas by matchesConditions()
+6. Apply maturity overrides (inject computed areas)
+7. Sort areas by relevance (high → medium → low)
 8. Return GeneratedScript with 13-field metadata
 ```
 
@@ -498,7 +498,7 @@ When a v2 question has a `lookoutSignal`, it appears as a distinct paragraph bel
 
 ### Methodology Section
 
-A static methodology section appears in the output after the risk anchors, explaining the deterministic question-selection approach. Included in both screen and print output.
+A static methodology section appears in the output after the attention areas, explaining the deterministic question-selection approach. Included in both screen and print output.
 
 ---
 
@@ -517,7 +517,7 @@ A static methodology section appears in the output after the risk anchors, expla
 | Test File | Tests | Purpose |
 |-----------|-------|---------|
 | `tests/unit/diligence-engine.test.ts` | Engine logic | `matchesConditions()`, `meetsMinimumBracket()`, `sortByPriority()`, `balanceAcrossTopics()`, `groupByTopic()`, `generateScript()`, `syncMultiRegion()`, `applyArchetypePivot()`, `applyMaturityOverrides()`, v2 condition dimensions |
-| `tests/unit/diligence-questions.test.ts` | Data validation | Question/anchor structure, ID formats, condition validity against wizard options, v2 metadata validation, wizard config integrity |
+| `tests/unit/diligence-questions.test.ts` | Data validation | Question/area structure, ID formats, condition validity against wizard options, v2 metadata validation, wizard config integrity |
 | `tests/integration/diligence-wizard-navigation.test.ts` | Navigation | 10-step progress bar, forward/back/segment clicks, state persistence, edge cases |
 
 **Total**: 409 tests passing (all 3 files combined with broader test suite)
@@ -532,7 +532,7 @@ A static methodology section appears in the output after the risk anchors, expla
 | `src/utils/diligence-engine.ts` | Core engine: `generateScript()`, `matchesConditions()`, `balanceAcrossTopics()`, `applyArchetypePivot()`, `applyMaturityOverrides()`, `syncMultiRegion()` |
 | `src/data/diligence-machine/wizard-config.ts` | 10 step definitions, option labels, `BRACKET_ORDER`, `getOptionLabel()` helper |
 | `src/data/diligence-machine/questions.ts` | Question bank (~68 questions) with conditions, priorities, and v2 metadata |
-| `src/data/diligence-machine/risk-anchors.ts` | Risk anchor definitions (23 anchors) with conditions and relevance |
+| `src/data/diligence-machine/attention-areas.ts` | Attention area definitions (23 areas) with conditions and relevance |
 
 ---
 
@@ -542,9 +542,9 @@ The v1 design established the core architecture that v2 extends:
 
 - **5-step wizard**: Transaction type → Product type → Tech archetype → Company profile → Geography
 - **~45 questions** across 4 topics with priority-weighted selection
-- **18 risk anchors** filtered by the same condition system
+- **18 attention areas** filtered by the same condition system
 - **9 condition dimensions** (transactionTypes, productTypes, techArchetypes, growthStages, geographies, headcountMin, revenueMin, companyAgeMin, excludeTransactionTypes)
-- **Simple pipeline**: Filter → Balance → Group → Sort anchors
+- **Simple pipeline**: Filter → Balance → Group → Sort areas
 - **State version 1** (no highestStepReached tracking, no v2 inputs)
 
-All v1 questions, risk anchors, and conditions remain in the codebase unchanged. v2 is purely additive.
+All v1 questions, attention areas, and conditions remain in the codebase unchanged. v2 is purely additive.

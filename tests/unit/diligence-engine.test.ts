@@ -675,11 +675,11 @@ describe('generateScript (Integration)', () => {
     const script = generateScript(baseInputs);
 
     expect(script).toHaveProperty('topics');
-    expect(script).toHaveProperty('riskAnchors');
+    expect(script).toHaveProperty('attentionAreas');
     expect(script).toHaveProperty('metadata');
 
     expect(Array.isArray(script.topics)).toBe(true);
-    expect(Array.isArray(script.riskAnchors)).toBe(true);
+    expect(Array.isArray(script.attentionAreas)).toBe(true);
     expect(typeof script.metadata).toBe('object');
   });
 
@@ -726,7 +726,7 @@ describe('generateScript (Integration)', () => {
     expect(carveoutQuestions.length).toBeGreaterThan(0);
   });
 
-  it('should filter risk anchors by conditions', () => {
+  it('should filter attention areas by conditions', () => {
     const inputs: UserInputs = {
       transactionType: 'carve-out',
       productType: 'b2b-saas',
@@ -745,20 +745,20 @@ describe('generateScript (Integration)', () => {
 
     const script = generateScript(inputs);
 
-    // Should include risk anchors that match these conditions
-    expect(script.riskAnchors.length).toBeGreaterThan(0);
+    // Should include attention areas that match these conditions
+    expect(script.attentionAreas.length).toBeGreaterThan(0);
 
-    // Verify specific risk anchors based on conditions
-    const hasRelevantRisk = script.riskAnchors.some(
+    // Verify specific attention areas based on conditions
+    const hasRelevantAttention = script.attentionAreas.some(
       anchor =>
-        anchor.id === 'risk-tech-debt' || // hybrid-legacy + 5-10yr
-        anchor.id === 'risk-carveout-entangle' || // carve-out + hybrid-legacy
-        anchor.id === 'risk-gdpr-multi' // eu/uk geographies
+        anchor.id === 'attention-tech-debt' || // hybrid-legacy + 5-10yr
+        anchor.id === 'attention-carveout-entangle' || // carve-out + hybrid-legacy
+        anchor.id === 'attention-gdpr-multi' // eu/uk geographies
     );
-    expect(hasRelevantRisk).toBe(true);
+    expect(hasRelevantAttention).toBe(true);
   });
 
-  it('should sort risk anchors by relevance (high before medium before low)', () => {
+  it('should sort attention areas by relevance (high before medium before low)', () => {
     const inputs: UserInputs = {
       transactionType: 'carve-out',
       productType: 'b2b-saas',
@@ -776,12 +776,12 @@ describe('generateScript (Integration)', () => {
     };
 
     const script = generateScript(inputs);
-    expect(script.riskAnchors.length).toBeGreaterThan(1);
+    expect(script.attentionAreas.length).toBeGreaterThan(1);
 
     const relevanceOrder = { high: 0, medium: 1, low: 2 };
-    for (let i = 1; i < script.riskAnchors.length; i++) {
-      const prev = relevanceOrder[script.riskAnchors[i - 1].relevance];
-      const curr = relevanceOrder[script.riskAnchors[i].relevance];
+    for (let i = 1; i < script.attentionAreas.length; i++) {
+      const prev = relevanceOrder[script.attentionAreas[i - 1].relevance];
+      const curr = relevanceOrder[script.attentionAreas[i].relevance];
       expect(prev).toBeLessThanOrEqual(curr);
     }
   });
@@ -865,16 +865,16 @@ describe('generateScript (Integration)', () => {
 
     const script = generateScript(deepTechInputs);
 
-    // Should include deep-tech specific questions and risk anchors
+    // Should include deep-tech specific questions and attention areas
     const allQuestions = script.topics.flatMap(t => t.questions);
     expect(allQuestions.length).toBeGreaterThan(0);
 
-    // Check for IP-related risk anchors
-    const hasIPRisk = script.riskAnchors.some(
-      anchor => anchor.id === 'risk-ip-docs'
+    // Check for IP-related attention areas
+    const hasIPAttention = script.attentionAreas.some(
+      anchor => anchor.id === 'attention-ip-docs'
     );
     // May or may not be included depending on growth stage
-    expect(typeof hasIPRisk).toBe('boolean');
+    expect(typeof hasIPAttention).toBe('boolean');
   });
 
   it('should handle edge case: minimal matching questions', () => {
@@ -926,7 +926,7 @@ describe('generateScript (Integration)', () => {
     expect(script.metadata.totalQuestions).toBeLessThanOrEqual(20);
   });
 
-  it('should produce risk anchors for legacy infrastructure + old company', () => {
+  it('should produce attention areas for legacy infrastructure + old company', () => {
     const inputs: UserInputs = {
       ...baseInputs,
       techArchetype: 'self-managed-infra',
@@ -934,8 +934,8 @@ describe('generateScript (Integration)', () => {
     };
 
     const result = generateScript(inputs);
-    const anchorIds = result.riskAnchors.map((a) => a.id);
-    expect(anchorIds).toContain('risk-hw-eol');
+    const anchorIds = result.attentionAreas.map((a) => a.id);
+    expect(anchorIds).toContain('attention-hw-eol');
   });
 
   it('should include carve-out questions for carve-out transactions', () => {
@@ -1159,7 +1159,7 @@ describe('applyMaturityOverrides', () => {
     };
     const result = applyMaturityOverrides([], inputs);
 
-    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(true);
+    expect(result.some(a => a.id === 'attention-manual-ops-masking')).toBe(true);
   });
 
   it('should not inject for low-revenue companies', () => {
@@ -1171,7 +1171,7 @@ describe('applyMaturityOverrides', () => {
     };
     const result = applyMaturityOverrides([], inputs);
 
-    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(false);
+    expect(result.some(a => a.id === 'attention-manual-ops-masking')).toBe(false);
   });
 
   it('should not inject for high-headcount companies', () => {
@@ -1183,7 +1183,7 @@ describe('applyMaturityOverrides', () => {
     };
     const result = applyMaturityOverrides([], inputs);
 
-    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(false);
+    expect(result.some(a => a.id === 'attention-manual-ops-masking')).toBe(false);
   });
 
   it('should not inject for non-mature growth stages', () => {
@@ -1195,7 +1195,7 @@ describe('applyMaturityOverrides', () => {
     };
     const result = applyMaturityOverrides([], inputs);
 
-    expect(result.some(a => a.id === 'risk-manual-ops-masking')).toBe(false);
+    expect(result.some(a => a.id === 'attention-manual-ops-masking')).toBe(false);
   });
 
   it('should not duplicate if anchor already present', () => {
@@ -1206,7 +1206,7 @@ describe('applyMaturityOverrides', () => {
       growthStage: 'mature',
     };
     const existing = [{
-      id: 'risk-manual-ops-masking',
+      id: 'attention-manual-ops-masking',
       title: 'Manual Operations Masking',
       description: 'Already present',
       relevance: 'high' as const,
@@ -1214,7 +1214,7 @@ describe('applyMaturityOverrides', () => {
     }];
     const result = applyMaturityOverrides(existing, inputs);
 
-    const count = result.filter(a => a.id === 'risk-manual-ops-masking').length;
+    const count = result.filter(a => a.id === 'attention-manual-ops-masking').length;
     expect(count).toBe(1);
   });
 });

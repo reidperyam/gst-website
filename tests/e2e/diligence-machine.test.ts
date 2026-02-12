@@ -10,7 +10,7 @@ import {
   verifyOutputHasQuestions,
   waitForWizardReady,
   getQuestionCount,
-  getRiskAnchorCount,
+  getAttentionAreaCount,
   expectWizardOnStep,
   expectProgressSegmentState,
   clickElement,
@@ -207,6 +207,242 @@ test.describe('Diligence Machine E2E', () => {
       // No selections should be present
       const selectedCards = page.locator('.option-card.selected');
       expect(await selectedCards.count()).toBe(0);
+    });
+  });
+
+  test.describe('3. Progress Bar Click Navigation', () => {
+    test('should navigate to a completed step via progress bar click', async ({ page }) => {
+      // Advance to step 5
+      await completeWizardToStep(page, 5, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+      });
+
+      // Wait for step 5 to be active
+      await expectWizardOnStep(page, 5);
+
+      // Click progress segment 2 to navigate back
+      await clickElement(page, '[data-testid="progress-segment-2"]');
+
+      // Wait for navigation to complete
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '2';
+      }, { timeout: 2000 });
+
+      // Verify wizard is now on step 2
+      await expectWizardOnStep(page, 2);
+
+      // Verify step 2 selection is preserved
+      await verifyStepSelection(page, 'product-type', 'b2b-saas');
+
+      // Verify progress segment states updated correctly
+      await expectProgressSegmentState(page, 1, 'completed');
+      await expectProgressSegmentState(page, 2, 'active');
+      await expectProgressSegmentState(page, 3, 'reachable');
+      await expectProgressSegmentState(page, 4, 'reachable');
+    });
+
+    test('should navigate to a reachable future step via progress bar click', async ({ page }) => {
+      // Advance to step 5
+      await completeWizardToStep(page, 5, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+      });
+      await expectWizardOnStep(page, 5);
+
+      // Navigate back to step 2 via Back button
+      await clickElement(page, '[data-testid="btn-back"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '4';
+      }, { timeout: 2000 });
+      await clickElement(page, '[data-testid="btn-back"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '3';
+      }, { timeout: 2000 });
+      await clickElement(page, '[data-testid="btn-back"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '2';
+      }, { timeout: 2000 });
+      await expectWizardOnStep(page, 2);
+
+      // Click progress segment 4 (reachable, forward)
+      await clickElement(page, '[data-testid="progress-segment-4"]');
+
+      // Wait for navigation
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '4';
+      }, { timeout: 2000 });
+
+      // Verify wizard navigated to step 4
+      await expectWizardOnStep(page, 4);
+
+      // Verify compound selections are preserved
+      await verifyCompoundSelection(page, 'headcount', '51-200');
+      await verifyCompoundSelection(page, 'revenue-range', '5-25m');
+      await verifyCompoundSelection(page, 'growth-stage', 'scaling');
+      await verifyCompoundSelection(page, 'company-age', '2-5yr');
+    });
+
+    test('should not navigate to unreached steps', async ({ page }) => {
+      // Advance to step 3
+      await completeWizardToStep(page, 3, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+      });
+      await expectWizardOnStep(page, 3);
+
+      // Attempt to click unreached segment 7
+      await clickElement(page, '[data-testid="progress-segment-7"]');
+
+      // Wait briefly and verify we did NOT navigate
+      await page.waitForTimeout(300);
+      await expectWizardOnStep(page, 3);
+
+      // Verify unreached segment does not have pointer cursor
+      const cursor = await page.locator('[data-testid="progress-segment-7"]').evaluate(
+        (el) => window.getComputedStyle(el).cursor
+      );
+      expect(cursor).not.toBe('pointer');
+    });
+
+    test('should not navigate when clicking the active step', async ({ page }) => {
+      // Advance to step 3
+      await completeWizardToStep(page, 3, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+      });
+      await expectWizardOnStep(page, 3);
+
+      // Click the active segment (step 3)
+      await clickElement(page, '[data-testid="progress-segment-3"]');
+
+      // Wait briefly and verify no navigation occurred
+      await page.waitForTimeout(300);
+      await expectWizardOnStep(page, 3);
+
+      // Verify state unchanged in localStorage
+      const state = await getLocalStorageState(page);
+      expect(state.currentStep).toBe(3);
+    });
+
+    test('should update progress segment states correctly after navigation', async ({ page }) => {
+      // Advance to step 6
+      await completeWizardToStep(page, 6, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+        geographies: ['us'],
+      });
+      await expectWizardOnStep(page, 6);
+
+      // Navigate back to step 3 via progress bar
+      await clickElement(page, '[data-testid="progress-segment-3"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '3';
+      }, { timeout: 2000 });
+
+      // Verify all 10 segments have correct states
+      // Segments 1-2: completed (before current)
+      await expectProgressSegmentState(page, 1, 'completed');
+      await expectProgressSegmentState(page, 2, 'completed');
+
+      // Segment 3: active (current)
+      await expectProgressSegmentState(page, 3, 'active');
+
+      // Segments 4-6: reachable (between current and highestStepReached)
+      await expectProgressSegmentState(page, 4, 'reachable');
+      await expectProgressSegmentState(page, 5, 'reachable');
+      await expectProgressSegmentState(page, 6, 'reachable');
+
+      // Segments 7-10: unreached (beyond highestStepReached)
+      await expectProgressSegmentState(page, 7, 'unreached');
+      await expectProgressSegmentState(page, 8, 'unreached');
+      await expectProgressSegmentState(page, 9, 'unreached');
+      await expectProgressSegmentState(page, 10, 'unreached');
+    });
+
+    test('should update aria-valuenow on progress bar after click navigation', async ({ page }) => {
+      // Advance to step 5
+      await completeWizardToStep(page, 5, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+      });
+      await expectWizardOnStep(page, 5);
+
+      // Verify initial aria-valuenow
+      const progressBar = page.locator('[data-testid="wizard-progress"]');
+      await expect(progressBar).toHaveAttribute('aria-valuenow', '5');
+
+      // Click progress segment 2
+      await clickElement(page, '[data-testid="progress-segment-2"]');
+      await page.waitForFunction(() => {
+        const activeStep = document.querySelector('.wizard-step.active');
+        return activeStep?.getAttribute('data-step') === '2';
+      }, { timeout: 2000 });
+
+      // Verify aria-valuenow updated
+      await expect(progressBar).toHaveAttribute('aria-valuenow', '2');
+    });
+
+    test('should show pointer cursor on completed and reachable segments only', async ({ page }) => {
+      // Advance to step 4
+      await completeWizardToStep(page, 4, {
+        transactionType: 'full-acquisition',
+        productType: 'b2b-saas',
+        techArchetype: 'modern-cloud-native',
+        headcount: '51-200',
+        revenueRange: '5-25m',
+        growthStage: 'scaling',
+        companyAge: '2-5yr',
+      });
+      await expectWizardOnStep(page, 4);
+
+      // Verify completed segments (1-3) have pointer cursor
+      for (const seg of [1, 2, 3]) {
+        const cursor = await page.locator(`[data-testid="progress-segment-${seg}"]`).evaluate(
+          (el) => window.getComputedStyle(el).cursor
+        );
+        expect(cursor).toBe('pointer');
+      }
+
+      // Verify active segment (4) does NOT have pointer cursor
+      const activeCursor = await page.locator('[data-testid="progress-segment-4"]').evaluate(
+        (el) => window.getComputedStyle(el).cursor
+      );
+      expect(activeCursor).not.toBe('pointer');
+
+      // Verify unreached segments (5-10) do NOT have pointer cursor
+      for (const seg of [5, 6, 7, 8, 9, 10]) {
+        const cursor = await page.locator(`[data-testid="progress-segment-${seg}"]`).evaluate(
+          (el) => window.getComputedStyle(el).cursor
+        );
+        expect(cursor).not.toBe('pointer');
+      }
     });
   });
 
@@ -415,8 +651,8 @@ test.describe('Diligence Machine E2E', () => {
       }
     });
 
-    test('should display risk anchors based on input conditions', async ({ page }) => {
-      // Use inputs that trigger multiple risk anchors
+    test('should display attention areas based on input conditions', async ({ page }) => {
+      // Use inputs that trigger multiple attention areas
       await completeWizardAndGenerate(page, {
         transactionType: 'carve-out',
         productType: 'on-premise-enterprise',
@@ -436,10 +672,10 @@ test.describe('Diligence Machine E2E', () => {
       await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
 
       // Attention Areas section should be visible
-      await expect(page.locator('[data-testid="risk-anchors-section"]')).toBeVisible();
+      await expect(page.locator('[data-testid="attention-areas-section"]')).toBeVisible();
 
-      // Should have risk anchors
-      const anchorCount = await getRiskAnchorCount(page);
+      // Should have attention areas
+      const anchorCount = await getAttentionAreaCount(page);
       expect(anchorCount).toBeGreaterThan(0);
 
       // Verify first anchor structure

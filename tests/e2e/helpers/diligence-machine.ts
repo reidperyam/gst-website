@@ -268,9 +268,9 @@ export async function getQuestionCount(page: Page): Promise<number> {
 }
 
 /**
- * Get the number of risk anchors in the output
+ * Get the number of attention areas in the output
  */
-export async function getRiskAnchorCount(page: Page): Promise<number> {
+export async function getAttentionAreaCount(page: Page): Promise<number> {
   const anchors = page.locator('.doc-attention-card');
   return await anchors.count();
 }

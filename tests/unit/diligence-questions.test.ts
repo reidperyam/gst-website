@@ -3,14 +3,14 @@
  *
  * Validates the integrity of:
  * - Question bank data structure and content
- * - Risk anchor data structure and content
+ * - Attention area data structure and content
  * - Wizard configuration and bracket ordering
  * - Topic metadata consistency
  */
 
 import { describe, it, expect } from 'vitest';
 import { QUESTIONS, TOPIC_META } from '../../src/data/diligence-machine/questions';
-import { RISK_ANCHORS } from '../../src/data/diligence-machine/risk-anchors';
+import { ATTENTION_AREAS } from '../../src/data/diligence-machine/attention-areas';
 import { WIZARD_STEPS, BRACKET_ORDER } from '../../src/data/diligence-machine/wizard-config';
 
 // ─── DATA VALIDATION: QUESTION BANK ────────────────────────────────────────
@@ -360,26 +360,26 @@ describe('Question Bank Data Integrity', () => {
   });
 });
 
-// ─── DATA VALIDATION: RISK ANCHORS ─────────────────────────────────────────
+// ─── DATA VALIDATION: ATTENTION AREAS ─────────────────────────────────────────
 
-describe('Risk Anchors Data Integrity', () => {
+describe('Attention Areas Data Integrity', () => {
   describe('basic structure validation', () => {
-    it('should have at least 28 risk anchors', () => {
-      expect(RISK_ANCHORS.length).toBeGreaterThanOrEqual(28);
+    it('should have at least 28 attention areas', () => {
+      expect(ATTENTION_AREAS.length).toBeGreaterThanOrEqual(28);
     });
 
     it('should have all required fields on each anchor', () => {
       const requiredFields = ['id', 'title', 'description', 'relevance', 'conditions'];
 
-      RISK_ANCHORS.forEach((anchor) => {
+      ATTENTION_AREAS.forEach((anchor) => {
         requiredFields.forEach(field => {
           expect(anchor, `Anchor ${anchor.id} missing field: ${field}`).toHaveProperty(field);
         });
       });
     });
 
-    it('should have unique risk anchor IDs', () => {
-      const ids = RISK_ANCHORS.map((r) => r.id);
+    it('should have unique attention area IDs', () => {
+      const ids = ATTENTION_AREAS.map((r) => r.id);
       expect(new Set(ids).size).toBe(ids.length);
     });
   });
@@ -387,13 +387,13 @@ describe('Risk Anchors Data Integrity', () => {
   describe('relevance validation', () => {
     it('should have valid relevance values', () => {
       const validRelevance = ['high', 'medium', 'low'];
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         expect(validRelevance, `Anchor ${r.id} has invalid relevance: ${r.relevance}`).toContain(r.relevance);
       }
     });
 
     it('should have at least 3 high-relevance anchors', () => {
-      const highRelevanceCount = RISK_ANCHORS.filter(r => r.relevance === 'high').length;
+      const highRelevanceCount = ATTENTION_AREAS.filter(r => r.relevance === 'high').length;
       expect(highRelevanceCount).toBeGreaterThanOrEqual(3);
     });
 
@@ -404,7 +404,7 @@ describe('Risk Anchors Data Integrity', () => {
         low: 0,
       };
 
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         relevanceCounts[r.relevance]++;
       }
 
@@ -417,14 +417,14 @@ describe('Risk Anchors Data Integrity', () => {
 
   describe('content validation', () => {
     it('should have non-empty title', () => {
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         expect(r.title.length, `Anchor ${r.id} has title shorter than 5 chars`).toBeGreaterThan(5);
         expect(r.title.trim()).toBe(r.title); // No leading/trailing whitespace
       }
     });
 
     it('should have non-empty description', () => {
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         expect(r.description.length, `Anchor ${r.id} has description shorter than 20 chars`).toBeGreaterThan(20);
         expect(r.description.trim()).toBe(r.description); // No leading/trailing whitespace
       }
@@ -446,7 +446,7 @@ describe('Risk Anchors Data Integrity', () => {
       // but it's actually a product type. We'll skip validation for this specific case.
       const knownIssues = new Set(['on-premise-enterprise']);
 
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         const c = r.conditions;
 
         if (c.transactionTypes) {
@@ -489,14 +489,14 @@ describe('Risk Anchors Data Integrity', () => {
     });
 
     it('should have conditions object defined', () => {
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         expect(r.conditions, `Anchor ${r.id} has undefined conditions`).toBeDefined();
         expect(typeof r.conditions).toBe('object');
       }
     });
 
     it('should have meaningful conditions (not all wildcards)', () => {
-      for (const r of RISK_ANCHORS) {
+      for (const r of ATTENTION_AREAS) {
         const c = r.conditions;
         const hasCondition = c.transactionTypes || c.productTypes || c.techArchetypes ||
                             c.growthStages || c.geographies || c.headcountMin ||
@@ -510,15 +510,15 @@ describe('Risk Anchors Data Integrity', () => {
   });
 
   describe('ID format validation', () => {
-    it('should have IDs with risk- prefix', () => {
-      for (const r of RISK_ANCHORS) {
-        expect(r.id.startsWith('risk-'), `Anchor ${r.id} doesn't start with 'risk-'`).toBe(true);
+    it('should have IDs with attention- prefix', () => {
+      for (const r of ATTENTION_AREAS) {
+        expect(r.id.startsWith('attention-'), `Anchor ${r.id} doesn't start with 'attention-'`).toBe(true);
       }
     });
 
     it('should have kebab-case IDs', () => {
-      const kebabCasePattern = /^risk-[a-z0-9-]+$/;
-      for (const r of RISK_ANCHORS) {
+      const kebabCasePattern = /^attention-[a-z0-9-]+$/;
+      for (const r of ATTENTION_AREAS) {
         expect(r.id, `Anchor ${r.id} is not in kebab-case`).toMatch(kebabCasePattern);
       }
     });
