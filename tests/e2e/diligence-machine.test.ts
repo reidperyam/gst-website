@@ -10,7 +10,7 @@ import {
   verifyOutputHasQuestions,
   waitForWizardReady,
   getQuestionCount,
-  getRiskAnchorCount,
+  getAttentionAreaCount,
   expectWizardOnStep,
   expectProgressSegmentState,
   clickElement,
@@ -651,8 +651,8 @@ test.describe('Diligence Machine E2E', () => {
       }
     });
 
-    test('should display risk anchors based on input conditions', async ({ page }) => {
-      // Use inputs that trigger multiple risk anchors
+    test('should display attention areas based on input conditions', async ({ page }) => {
+      // Use inputs that trigger multiple attention areas
       await completeWizardAndGenerate(page, {
         transactionType: 'carve-out',
         productType: 'on-premise-enterprise',
@@ -672,10 +672,10 @@ test.describe('Diligence Machine E2E', () => {
       await expect(page.locator('[data-testid="output-container"]')).toBeVisible();
 
       // Attention Areas section should be visible
-      await expect(page.locator('[data-testid="risk-anchors-section"]')).toBeVisible();
+      await expect(page.locator('[data-testid="attention-areas-section"]')).toBeVisible();
 
-      // Should have risk anchors
-      const anchorCount = await getRiskAnchorCount(page);
+      // Should have attention areas
+      const anchorCount = await getAttentionAreaCount(page);
       expect(anchorCount).toBeGreaterThan(0);
 
       // Verify first anchor structure

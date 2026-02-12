@@ -205,13 +205,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <hr class="doc-divider doc-divider--post-toc" />
 
                     <!-- Attention Areas -->
-                    <section class="doc-attention-anchors" id="riskAnchorsSection" data-testid="risk-anchors-section" style="display:none;" aria-label="Attention areas">
+                    <section class="doc-attention-anchors" id="attentionAreasSection" data-testid="attention-areas-section" style="display:none;" aria-label="Attention areas">
                         <h2 class="doc-section-heading">
                             <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
                             Attention Areas
                         </h2>
                         <p class="doc-section-subtitle">Critical risk factors and complexity areas requiring focused investigation during diligence</p>
-                        <div class="doc-attention-grid" id="riskAnchorsGrid"></div>
+                        <div class="doc-attention-grid" id="attentionAreasGrid"></div>
                     </section>
 
                     <!-- Topic Sections -->
@@ -278,8 +278,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
     const btnPrint = document.getElementById('btnPrint') as HTMLButtonElement;
     const btnRestart = document.getElementById('btnRestart') as HTMLButtonElement;
-    const riskAnchorsSection = document.getElementById('riskAnchorsSection')!;
-    const riskAnchorsGrid = document.getElementById('riskAnchorsGrid')!;
+    const attentionAreasSection = document.getElementById('attentionAreasSection')!;
+    const attentionAreasGrid = document.getElementById('attentionAreasGrid')!;
     const scriptTopics = document.getElementById('scriptTopics')!;
 
     // ─── LOCAL STORAGE ───────────────────────────────────────────────────
@@ -552,23 +552,23 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         // Table of contents
         renderToc(script);
 
-        // Render risk anchors
-        if (script.riskAnchors.length > 0) {
-            riskAnchorsSection.style.display = '';
-            riskAnchorsGrid.innerHTML = script.riskAnchors
-                .map((anchor) => `
-                    <div class="doc-attention-card relevance-${escapeHtml(anchor.relevance)}">
+        // Render attention areas
+        if (script.attentionAreas.length > 0) {
+            attentionAreasSection.style.display = '';
+            attentionAreasGrid.innerHTML = script.attentionAreas
+                .map((area) => `
+                    <div class="doc-attention-card relevance-${escapeHtml(area.relevance)}">
                         <div class="doc-attention-header">
-                            <span class="doc-attention-badge">${escapeHtml(anchor.relevance)}</span>
-                            <h3 class="doc-attention-title">${escapeHtml(anchor.title)}</h3>
+                            <span class="doc-attention-badge">${escapeHtml(area.relevance)}</span>
+                            <h3 class="doc-attention-title">${escapeHtml(area.title)}</h3>
                         </div>
                         <div class="doc-attention-divider"></div>
-                        <p class="doc-attention-desc">${escapeHtml(anchor.description)}</p>
+                        <p class="doc-attention-desc">${escapeHtml(area.description)}</p>
                     </div>
                 `)
                 .join('');
         } else {
-            riskAnchorsSection.style.display = 'none';
+            attentionAreasSection.style.display = 'none';
         }
 
         // Render topics
@@ -796,15 +796,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         if (inputs.operatingModel) lines.push(`Operating Model:   ${getOptionLabel('operating-model', inputs.operatingModel)}`);
         lines.push('');
 
-        // Risk anchors
-        if (script.riskAnchors.length > 0) {
+        // Attention areas
+        if (script.attentionAreas.length > 0) {
             lines.push('\u2550'.repeat(60));
             lines.push('ATTENTION AREAS');
             lines.push('\u2550'.repeat(60));
             lines.push('');
-            for (const anchor of script.riskAnchors) {
-                lines.push(`[${anchor.relevance.toUpperCase()}] ${anchor.title}`);
-                lines.push(`  ${anchor.description}`);
+            for (const area of script.attentionAreas) {
+                lines.push(`[${area.relevance.toUpperCase()}] ${area.title}`);
+                lines.push(`  ${area.description}`);
                 lines.push('');
             }
         }
@@ -863,7 +863,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         // Reset output
         outputContainer.style.display = 'none';
         wizardContainer.style.display = '';
-        riskAnchorsGrid.innerHTML = '';
+        attentionAreasGrid.innerHTML = '';
         scriptTopics.innerHTML = '';
         lastGeneratedScript = null;
 
@@ -1736,7 +1736,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         font-weight: var(--font-weight-semibold);
     }
 
-    /* ─── RISK ANCHORS ─────────────────────────────────────────────────── */
+    /* ─── ATTENTION AREAS ──────────────────────────────────────────────── */
 
     .doc-attention-anchors {
         margin-bottom: 0;
@@ -2490,7 +2490,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             padding-bottom: 0;
         }
 
-        /* Risk anchors - compact cards */
+        /* Attention areas - compact cards */
         .doc-attention-grid {
             gap: 8px;
             padding-left: 0;

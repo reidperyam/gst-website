@@ -2,15 +2,15 @@
  * The Diligence Engine
  *
  * Pure-function module that maps user inputs to a prescriptive
- * "Inquisitor's Script" of due diligence questions and risk anchors.
+ * "Inquisitor's Script" of due diligence questions and attention areas.
  * Zero DOM dependencies — fully testable with Vitest.
  */
 
 import { QUESTIONS, TOPIC_META } from '../data/diligence-machine/questions';
-import { RISK_ANCHORS } from '../data/diligence-machine/risk-anchors';
+import { ATTENTION_AREAS } from '../data/diligence-machine/attention-areas';
 import { BRACKET_ORDER } from '../data/diligence-machine/wizard-config';
 import type { DiligenceQuestion, QuestionCondition } from '../data/diligence-machine/questions';
-import type { RiskAnchor } from '../data/diligence-machine/risk-anchors';
+import type { AttentionArea } from '../data/diligence-machine/attention-areas';
 
 export interface UserInputs {
   transactionType: string;
@@ -39,7 +39,7 @@ export interface TopicOutput {
 
 export interface GeneratedScript {
   topics: TopicOutput[];
-  riskAnchors: RiskAnchor[];
+  attentionAreas: AttentionArea[];
   metadata: {
     totalQuestions: number;
     generatedAt: string;
@@ -315,30 +315,30 @@ export function applyArchetypePivot(
 }
 
 /**
- * Inject computed risk anchors based on cross-field logic that cannot be
+ * Inject computed attention areas based on cross-field logic that cannot be
  * expressed as simple condition arrays.
  *
  * Maturity Override: high-revenue + low headcount + mature growth →
- * inject "Manual Operations Masking" anchor.
+ * inject "Manual Operations Masking" attention area.
  */
 export function applyMaturityOverrides(
-  anchors: RiskAnchor[],
+  areas: AttentionArea[],
   inputs: UserInputs
-): RiskAnchor[] {
+): AttentionArea[] {
   const isHighRevLowHead =
     meetsMinimumBracket('revenue-range', inputs.revenueRange, '25-100m') &&
     !meetsMinimumBracket('headcount', inputs.headcount, '201-500') &&
     inputs.growthStage === 'mature';
 
-  if (!isHighRevLowHead) return anchors;
+  if (!isHighRevLowHead) return areas;
 
-  const alreadyPresent = anchors.some((a) => a.id === 'risk-manual-ops-masking');
-  if (alreadyPresent) return anchors;
+  const alreadyPresent = areas.some((a) => a.id === 'attention-manual-ops-masking');
+  if (alreadyPresent) return areas;
 
   return [
-    ...anchors,
+    ...areas,
     {
-      id: 'risk-manual-ops-masking',
+      id: 'attention-manual-ops-masking',
       title: 'Manual Operations Masking',
       description:
         'High-revenue companies with low headcount growth may be masking manual operations behind a technology facade. Revenue per employee ratios that appear favorable may actually indicate process bottlenecks that limit scalability.',
@@ -365,18 +365,18 @@ export function generateScript(inputs: UserInputs): GeneratedScript {
   const selected = balanceAcrossTopics(pivotedQuestions, 15, 20);
   const topics = groupByTopic(selected);
 
-  // 4. Filter risk anchors by conditions
-  const matchedAnchors = RISK_ANCHORS.filter((a) =>
+  // 4. Filter attention areas by conditions
+  const matchedAreas = ATTENTION_AREAS.filter((a) =>
     matchesConditions(a.conditions, inputs)
   );
 
-  // 5. Apply maturity overrides (inject computed anchors)
-  const enrichedAnchors = applyMaturityOverrides(matchedAnchors, inputs);
+  // 5. Apply maturity overrides (inject computed attention areas)
+  const enrichedAreas = applyMaturityOverrides(matchedAreas, inputs);
 
   return {
     topics,
-    // 6. Sort anchors by relevance
-    riskAnchors: [...enrichedAnchors].sort(
+    // 6. Sort attention areas by relevance
+    attentionAreas: [...enrichedAreas].sort(
       (a, b) => (RELEVANCE_ORDER[a.relevance] ?? 2) - (RELEVANCE_ORDER[b.relevance] ?? 2)
     ),
     metadata: {
