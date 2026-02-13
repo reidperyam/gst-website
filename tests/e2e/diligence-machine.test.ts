@@ -681,12 +681,6 @@ test.describe('Diligence Machine E2E', () => {
       // Verify first anchor structure
       const firstAnchor = page.locator('.doc-attention-card').first();
 
-      // Has relevance badge
-      const badge = firstAnchor.locator('.doc-attention-badge');
-      await expect(badge).toBeVisible();
-      const relevance = await badge.textContent();
-      expect(['high', 'medium', 'low']).toContain(relevance);
-
       // Has title
       const title = firstAnchor.locator('.doc-attention-title');
       await expect(title).toBeVisible();

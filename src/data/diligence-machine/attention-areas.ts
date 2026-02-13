@@ -21,7 +21,7 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     id: 'attention-hw-eol',
     title: 'Hardware End-of-Life Exposure',
     description:
-      'On-premise infrastructure can provide predictable cost and data-sovereignty control that cloud models often lack. However, in companies over 10 years old, it can also mask a \'silent\' CapEx cycle as hardware approaches end-of-life. Validate the asset inventory, vendor support status, and refresh/migration plan—then quantify capex, downtime risk, and integration impact.',
+      'On-premise infrastructure can provide predictable cost and data-sovereignty control that cloud models often lack. However, in companies over 10 years old, it can also mask a \'silent\' CapEx cycle as hardware approaches end-of-life. Validate the asset inventory, vendor support status, and refresh/migration plan, then quantify capex, downtime risk, and integration impact.',
     relevance: 'high',
     conditions: {
       techArchetypes: ['self-managed-infra'],
@@ -43,7 +43,7 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     id: 'attention-tech-debt',
     title: 'Technical Debt Accumulation',
     description:
-      'Technical debt is a strategic tool—it allows teams to ship fast. In mature targets, the question is whether that debt is managed (serviced regularly) or delinquent (stalling the roadmap). Delinquent debt forces Day 100 capital to shift from growth to foundational repairs; validate by reviewing roadmap slippage drivers, rework rates, and recurring reliability issues tied to legacy constraints.',
+      'Technical debt is a strategic tool; it allows teams to ship fast. In mature targets, the question is whether that debt is managed (serviced regularly) or delinquent (stalling the roadmap). Delinquent debt forces Day 100 capital to shift from growth to foundational repairs; validate by reviewing roadmap slippage drivers, rework rates, and recurring reliability issues tied to legacy constraints.',
     relevance: 'medium',
     conditions: {
       techArchetypes: ['hybrid-legacy'],
@@ -54,7 +54,7 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     id: 'attention-key-person',
     title: 'Key-Person Technical Dependencies',
     description:
-      'Small engineering teams (under 50) in on-premise or self-managed environments often concentrate critical knowledge in 1-2 individuals. Assess bus factor and knowledge transfer exposure before close.',
+      'Small engineering teams (under 50) in on-premise or self-managed environments often concentrate critical knowledge in 1-2 individuals. Assess key person dependencies, risks and knowledge gaps before close.',
     relevance: 'high',
     conditions: {
       techArchetypes: ['on-premise-enterprise', 'self-managed-infra'],
@@ -234,7 +234,7 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     id: 'attention-moat-erosion',
     title: 'AI Commodity Risk (Moat Erosion)',
     description:
-      'Being an \'AI wrapper\' can be a valid GTM strategy for speed. The strategic risk is whether value is derived from proprietary data, workflow integration, and distribution—or whether the company is effectively renting a moat from a larger model provider that could be diminished by pricing, policy, or API changes. Validate what is truly proprietary, how easily competitors can replicate the experience, and whether pricing power has changed over time.',
+      'Being an \'AI wrapper\' can be a valid GTM strategy for speed. The strategic risk is whether value is derived from proprietary data, workflow integration, and distribution, or whether the company is effectively renting a moat from a larger model provider that could be diminished by pricing, policy, or API changes. Validate what is truly proprietary, how easily competitors can replicate the experience, and whether pricing power has changed over time.',
     relevance: 'high',
     conditions: {
       productTypes: ['b2b-saas'],
@@ -255,7 +255,7 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     id: 'attention-manual-ops-masking',
     title: 'Manual Operations Masking',
     description:
-      'High revenue with low headcount can signal elite efficiency—or a fragile operating model dependent on concentrated tribal knowledge and manual intervention. If the latter, scaling breaks because the process isn\'t encoded in systems. Validate by tracing core workflows end-to-end, reviewing exception handling and staffing coverage, and confirming whether runbooks/telemetry exist to reduce person-dependency.',
+      'High revenue with low headcount can signal elite efficiency, or a fragile operating model dependent on concentrated tribal knowledge and manual intervention. If the latter, scaling breaks because the process isn\'t encoded in systems. Validate by tracing core workflows end-to-end, reviewing exception handling and staffing coverage, and confirming whether runbooks/telemetry exist to reduce person-dependency.',
     relevance: 'high',
     conditions: {
       revenueMin: '25-100m',
