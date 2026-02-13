@@ -54,7 +54,7 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     id: 'attention-key-person',
     title: 'Key-Person Technical Dependencies',
     description:
-      'Small engineering teams (under 50) in on-premise or self-managed environments often concentrate critical knowledge in 1-2 individuals. Assess bus factor and knowledge transfer exposure before close.',
+      'Small engineering teams (under 50) in on-premise or self-managed environments often concentrate critical knowledge in 1-2 individuals. Assess key person dependencies, risks and knowledge gaps before close.',
     relevance: 'high',
     conditions: {
       techArchetypes: ['on-premise-enterprise', 'self-managed-infra'],
