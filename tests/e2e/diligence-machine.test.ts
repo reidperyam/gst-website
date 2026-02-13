@@ -536,7 +536,7 @@ test.describe('Diligence Machine E2E', () => {
 
       // Verify footer
       await expect(page.locator('.doc-footer')).toBeVisible();
-      await expect(page.locator('.doc-footer-disclaimer')).toContainText('This agenda is a starting framework');
+      await expect(page.locator('.doc-footer-disclaimer')).toContainText('These perspectives are presented from recurrent technology patterns');
     });
   });
 

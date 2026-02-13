@@ -226,7 +226,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                 <span>https://globalstrategic.tech</span>
                             </div>
                         </div>
-                        <p class="doc-footer-disclaimer">This agenda is a starting framework. Customize questions based on findings during the diligence process.</p>
+                        <p class="doc-footer-disclaimer">These perspectives are presented from recurrent technology patterns. Extend, revise and replace these with others gathered during your discovery process.</p>
                     </footer>
                 </div>
             </div>
@@ -1749,7 +1749,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-attention-grid :global(.doc-attention-card) {
-        padding: var(--spacing-xl);
+        padding: calc(var(--spacing-xl) * 0.5) var(--spacing-xl);
         border-left: 3px solid var(--color-primary);
         background: rgba(5, 205, 153, 0.03);
         border-radius: 4px;
@@ -2337,12 +2337,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             gap: var(--spacing-xs);
         }
 
-        .doc-topics :global(.doc-q-header) {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--spacing-xs);
-        }
-
         .doc-footer-content {
             flex-wrap: wrap;
             justify-content: center;
@@ -2494,7 +2488,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .doc-attention-grid {
             gap: 8px;
             padding-left: 0;
-            page-break-inside: avoid;
         }
 
         .doc-attention-grid :global(.doc-attention-card) {
@@ -2764,4 +2757,5 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             display: none !important;
         }
     }
+
 </style>
