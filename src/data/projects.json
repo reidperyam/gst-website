@@ -1,4 +1,58 @@
 [
+   {
+    "id": "project-atlas",
+    "codeName": "Project Atlas",
+    "industry": "Healthcare Revenue Cycle Management",
+    "theme": "Healthcare",
+    "summary": "Cloud-augmented platform providing accounts receivable management, medical revenue recovery, insurance follow-up, and collection services using core collections workflow system with modern peripheral integrations.",
+    "arr": "$67M",
+    "arrNumeric": 67000000,
+    "currency": "USD",
+    "growthStage": "Mature / Expansion",
+    "year": 2026,
+    "technologies": [
+      "FACS",
+      "Caché",
+      ".NET",
+      "C#",
+      "AWS",
+      "SQL Server",
+      "QuickBooks Online",
+      "Python",
+      "Fortra Automate RPA",
+      "VMware"
+    ],
+    "engagementType": "Buy-Side Technical Diligence",
+    "engagementTypeTag": "buy-side-diligence",
+    "engagementTypeDescription": "Pre-acquisition technology assessment for PE investors",
+    "challenge": "Assessing technology readiness for revenue growth and integration compatibility of a healthcare collections platform built on legacy FACS system.",
+    "solution": "Validated strong operational foundation with SOC 2 Type 2 compliance, efficient service delivery through pragmatic commercial platforms, and identified long-range platform transition planning needs while confirming scalability without disproportionate investment.",
+    "engagementCategory": "Buy-Side Technical Due Diligence"
+  },
+  {
+    "id": "atlas-arrow",
+    "codeName": "Atlas-Arrow",
+    "industry": "Healthcare Revenue Cycle Management",
+    "theme": "Healthcare",
+    "summary": "Post-acquisition integration combining two healthcare revenue cycle platforms to optimize margin through automation-driven insurance follow-up, consolidate bad debt operations, and unify foundational IT infrastructure.",
+    "arr": "$50M",
+    "arrNumeric": 50000000,
+    "currency": "USD",
+    "growthStage": "Mature",
+    "year": 2026,
+    "technologies": [
+      "AS-400",
+      "Azure AD",
+      "FACS",
+      ".NET"
+    ],
+    "engagementType": "Value Creation - Integration",
+    "engagementTypeTag": "value-creation-integration",
+    "engagementTypeDescription": "Post-acquisition platform and system integration",
+    "challenge": "Integrating two healthcare revenue cycle platforms while capturing margin opportunities through VARR automation and consolidating foundational IT operations.",
+    "solution": "Developed phased integration strategy prioritizing Insurance Follow-Up migration to Arrow for VARR automation, Bad Debt consolidation to Atlas for capacity optimization, and foundational IT consolidation for efficiency gains of $290-480k OTC and $250-375k annual savings.",
+    "engagementCategory": "Value Creation & Strategy"
+  },
   {
     "id": "project-eclipse",
     "codeName": "Project Eclipse",
