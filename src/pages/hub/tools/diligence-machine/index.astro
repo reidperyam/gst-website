@@ -559,7 +559,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 .map((area) => `
                     <div class="doc-attention-card relevance-${escapeHtml(area.relevance)}">
                         <div class="doc-attention-header">
-                            <span class="doc-attention-badge">${escapeHtml(area.relevance)}</span>
                             <h3 class="doc-attention-title">${escapeHtml(area.title)}</h3>
                         </div>
                         <div class="doc-attention-divider"></div>
@@ -1783,34 +1782,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         gap: var(--spacing-sm);
     }
 
-    .doc-attention-grid :global(.doc-attention-badge) {
-        display: inline-block;
-        font-size: 0.7rem;
-        font-weight: var(--font-weight-bold);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        padding: 2px var(--spacing-sm);
-        border-radius: 2px;
-        flex-shrink: 0;
-    }
-
-    .doc-attention-grid :global(.relevance-high .doc-attention-badge) {
-        background: rgba(91, 122, 157, 0.15);
-        color: #5b7a9d;
-        border: 1px solid rgba(91, 122, 157, 0.3);
-    }
-
-    .doc-attention-grid :global(.relevance-medium .doc-attention-badge) {
-        background: rgba(140, 122, 107, 0.15);
-        color: #8c7a6b;
-        border: 1px solid rgba(140, 122, 107, 0.3);
-    }
-
-    .doc-attention-grid :global(.relevance-low .doc-attention-badge) {
-        background: rgba(5, 205, 153, 0.15);
-        color: var(--color-primary);
-        border: 1px solid rgba(5, 205, 153, 0.3);
-    }
 
     .doc-attention-grid :global(.doc-attention-title) {
         font-size: var(--text-base);
@@ -2511,12 +2482,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             page-break-inside: avoid;
         }
 
-        .doc-attention-grid :global(.doc-attention-badge) {
-            font-size: 0.6rem;
-            padding: 1px 6px;
-            display: inline-block;
-            flex-shrink: 0;
-        }
 
         .doc-attention-grid :global(.doc-attention-title) {
             font-size: 13px;
