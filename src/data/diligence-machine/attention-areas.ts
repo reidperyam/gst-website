@@ -177,16 +177,6 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     },
   },
   {
-    id: 'attention-multi-jurisdictional-conflict',
-    title: 'Jurisdictional Conflict Exposure',
-    description:
-      'Different regions may impose contradictory requirements (e.g., law enforcement access obligations vs. data protection mandates, or data localization rules conflicting with centralized architecture). These conflicts can force architectural compromises or operational workarounds.',
-    relevance: 'medium',
-    conditions: {
-      geographies: ['multi-region'],
-    },
-  },
-  {
     id: 'attention-multi-infra-cost',
     title: 'Multi-Region Infrastructure Cost Multiplier',
     description:
