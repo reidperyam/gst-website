@@ -43,6 +43,7 @@
       <h3 class="modal-section-title">Engagement Type</h3>
       <p id="modal-engagement-type-2" class="modal-engagement-type" data-testid="project-modal-engagement-type">Engagement Type</p>
       <p id="modal-engagement-description-2" class="modal-text" data-testid="project-modal-engagement-description">Engagement description goes here.</p>
+      <p id="modal-engagement-industry-2" class="modal-engagement-industry" data-testid="project-modal-engagement-industry">Industry</p>
     </div>
 
     <div class="modal-section">
@@ -232,6 +233,13 @@
     letter-spacing: -0.01em;
   }
 
+  .modal-engagement-industry {
+    font-size: 0.8125rem;
+    color: rgba(26, 26, 26, 0.5);
+    margin: 0.5rem 0 0 0;
+    font-weight: 500;
+  }
+
   /* Dark theme modal */
   :global(html.dark-theme) .project-modal {
     background: #1a1a1a;
@@ -286,6 +294,10 @@
 
   :global(html.dark-theme) .modal-engagement-type {
     color: #05cd99;
+  }
+
+  :global(html.dark-theme) .modal-engagement-industry {
+    color: rgba(200, 200, 200, 0.5);
   }
 
   @media (max-width: 768px) {
@@ -388,6 +400,10 @@
       if (modalTheme) modalTheme.textContent = project.theme;
       if (modalEngagementType) modalEngagementType.textContent = project.engagementType || 'N/A';
       if (modalEngagementDesc) modalEngagementDesc.textContent = project.engagementTypeDescription || '';
+
+      const modalEngagementIndustry = document.getElementById('modal-engagement-industry-2');
+      if (modalEngagementIndustry) modalEngagementIndustry.textContent = project.industry || '';
+
       if (modalSummary) modalSummary.textContent = project.summary;
 
       // Handle Challenge section (show only if present)
