@@ -31,6 +31,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     <li><a href="#why-it-matters">Why VDR Structure Matters</a></li>
                     <li><a href="#folder-taxonomy">Recommended Folder Taxonomy</a></li>
                     <li><a href="#software-architecture">Software Architecture</a></li>
+                    <li><a href="#sdlc">Software Development Lifecycle</a></li>
                     <li><a href="#product">Product</a></li>
                     <li><a href="#infrastructure-operations">Infrastructure & Operations</a></li>
                     <li><a href="#people-organization">People & Organization</a></li>
@@ -78,26 +79,31 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                         </div>
                         <div class="vdr-folder-card">
                             <span class="vdr-folder-number">02</span>
+                            <h3 class="vdr-folder-name">SDLC</h3>
+                            <p class="vdr-folder-desc">Development methodology, branching strategy, code review, testing practices, and release process.</p>
+                        </div>
+                        <div class="vdr-folder-card">
+                            <span class="vdr-folder-number">03</span>
                             <h3 class="vdr-folder-name">Product</h3>
                             <p class="vdr-folder-desc">Roadmap, release history, feature analytics, UX research, and backlog health.</p>
                         </div>
                         <div class="vdr-folder-card">
-                            <span class="vdr-folder-number">03</span>
+                            <span class="vdr-folder-number">04</span>
                             <h3 class="vdr-folder-name">Infrastructure & Operations</h3>
                             <p class="vdr-folder-desc">Cloud architecture, CI/CD pipelines, monitoring, SLA history, and capacity planning.</p>
                         </div>
                         <div class="vdr-folder-card">
-                            <span class="vdr-folder-number">04</span>
+                            <span class="vdr-folder-number">05</span>
                             <h3 class="vdr-folder-name">People & Organization</h3>
                             <p class="vdr-folder-desc">Org charts, key personnel, headcount census, retention risk, and hiring plan.</p>
                         </div>
                         <div class="vdr-folder-card">
-                            <span class="vdr-folder-number">05</span>
+                            <span class="vdr-folder-number">06</span>
                             <h3 class="vdr-folder-name">Security</h3>
                             <p class="vdr-folder-desc">Security policies, pen test results, incident history, access controls, and BCP/DR plans.</p>
                         </div>
                         <div class="vdr-folder-card">
-                            <span class="vdr-folder-number">06</span>
+                            <span class="vdr-folder-number">07</span>
                             <h3 class="vdr-folder-name">Governance & Compliance</h3>
                             <p class="vdr-folder-desc">Certifications, audit reports, data privacy controls, regulatory correspondence, and licensing.</p>
                         </div>
@@ -120,6 +126,25 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Technical debt assessment or code quality reports (SonarQube, CodeClimate, etc.)</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Third-party dependency inventory with license types and update cadence</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Test coverage reports and QA process documentation</li>
+                    </ul>
+                </section>
+
+                <!-- Software Development Lifecycle -->
+                <section class="vdr-section" id="sdlc">
+                    <h2 class="vdr-section-heading">
+                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                        Software Development Lifecycle
+                    </h2>
+                    <p class="vdr-body">How software gets built reveals more about engineering maturity than the software itself. Buyers look for repeatable processes that will survive a change in ownership.</p>
+                    <ul class="vdr-list">
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Development methodology: Agile, Scrum, Kanban, or hybrid — including sprint cadence and ceremonies</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Branching and merging strategy: trunk-based, Gitflow, or feature-branch workflow</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Code review process: tooling, approval requirements, average review turnaround</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Testing strategy: unit, integration, end-to-end coverage targets and enforcement</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Release and deployment process: manual vs. automated, gating criteria, rollback procedures</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Environment management: development, staging, production parity and provisioning</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Incident and bug triage: severity classification, SLA targets, and escalation paths</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Developer onboarding: time-to-first-commit, documentation quality, and tooling setup</li>
                     </ul>
                 </section>
 
@@ -437,6 +462,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         font-weight: 700;
         color: var(--text-light-primary);
         margin: var(--spacing-xs) 0;
+        white-space: nowrap;
     }
 
     .vdr-folder-desc {
