@@ -41,6 +41,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     <li><a href="#corporate-it">Corporate IT</a></li>
                     <li><a href="#common-pitfalls">Common Pitfalls</a></li>
                     <li><a href="#best-practices">Best Practices</a></li>
+                    <li><a href="#vdr-platforms">VDR Platforms</a></li>
                 </ol>
             </nav>
 
@@ -331,6 +332,25 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     </ul>
                 </section>
 
+                <!-- VDR Platforms -->
+                <section class="vdr-section" id="vdr-platforms">
+                    <h2 class="vdr-section-heading">
+                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                        VDR Platforms
+                    </h2>
+                    <p class="vdr-body">Core VDR functionality is highly commoditized. Most providers offer the same baseline: secure document storage, granular permissions, Q&A workflows, audit trails, and watermarking. Each platform has its own niceties and annoyances. The following are listed alphabetically and do not represent an endorsement.</p>
+                    <ul class="vdr-list vdr-list--labeled">
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.ansarada.com" target="_blank" rel="noopener noreferrer">Ansarada</a></strong><span class="vdr-label-desc">AI-powered deal management platform with built-in bidder engagement scoring and workflow automation.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.box.com" target="_blank" rel="noopener noreferrer">Box</a></strong><span class="vdr-label-desc">Cloud content management platform with enterprise-grade security and broad third-party integrations.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.datasite.com" target="_blank" rel="noopener noreferrer">Datasite</a></strong><span class="vdr-label-desc">Purpose-built M&A platform (formerly Merrill DatasiteOne) with redaction, AI-assisted document organization, and deal analytics.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.dfsvenue.com" target="_blank" rel="noopener noreferrer">Venue (DFS)</a></strong><span class="vdr-label-desc">Deal-focused VDR with streamlined setup, granular permissions, and integrated Q&A tracking.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Google Drive</a></strong><span class="vdr-label-desc">General-purpose cloud storage often used for early-stage or lower-middle-market deals where dedicated VDR cost is not justified.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.intralinks.com" target="_blank" rel="noopener noreferrer">Intralinks</a></strong><span class="vdr-label-desc">Established M&A data room provider with strong compliance features and global deal network.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.microsoft.com/en-us/microsoft-365/sharepoint" target="_blank" rel="noopener noreferrer">SharePoint</a></strong><span class="vdr-label-desc">Microsoft ecosystem document management commonly used internally before migrating to a dedicated VDR for external diligence.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="vdr-label-group"><strong><a href="https://www.smartroom.com" target="_blank" rel="noopener noreferrer">SmartRoom</a></strong><span class="vdr-label-desc">Virtual data room with dynamic watermarking, fence view protection, and detailed user activity reporting.</span></span></li>
+                    </ul>
+                </section>
+
             </div>
 
             <div class="vdr-back-nav">
@@ -469,6 +489,17 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
     .vdr-list strong {
         color: var(--text-light-primary);
+    }
+
+    .vdr-list strong a {
+        color: var(--color-primary);
+        text-decoration: none;
+        transition: color var(--transition-fast);
+    }
+
+    .vdr-list strong a:hover {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
     }
 
     .vdr-list code {
