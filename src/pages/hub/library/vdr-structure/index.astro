@@ -38,6 +38,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     <li><a href="#security">Security</a></li>
                     <li><a href="#governance-compliance">Governance & Compliance</a></li>
                     <li><a href="#data-analytics-ai">Data, Analytics & AI</a></li>
+                    <li><a href="#corporate-it">Corporate IT</a></li>
                     <li><a href="#common-pitfalls">Common Pitfalls</a></li>
                     <li><a href="#best-practices">Best Practices</a></li>
                 </ol>
@@ -91,7 +92,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                         <div class="vdr-folder-card">
                             <span class="vdr-folder-number">04</span>
                             <h3 class="vdr-folder-name">Infrastructure & Operations</h3>
-                            <p class="vdr-folder-desc">Cloud architecture, CI/CD pipelines, monitoring, SLA history, and capacity planning.</p>
+                            <p class="vdr-folder-desc">Cloud architecture, monitoring, SLA history, and infrastructure capacity planning.</p>
                         </div>
                         <div class="vdr-folder-card">
                             <span class="vdr-folder-number">05</span>
@@ -112,6 +113,11 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                             <span class="vdr-folder-number">08</span>
                             <h3 class="vdr-folder-name">Data, Analytics & AI</h3>
                             <p class="vdr-folder-desc">Data architecture, pipeline inventory, analytics capabilities, ML/AI models, and data governance.</p>
+                        </div>
+                        <div class="vdr-folder-card">
+                            <span class="vdr-folder-number">09</span>
+                            <h3 class="vdr-folder-name">Corporate IT</h3>
+                            <p class="vdr-folder-desc">Enterprise systems, internal tools, endpoint management, identity providers, and IT operations.</p>
                         </div>
                     </div>
                 </section>
@@ -149,6 +155,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Testing strategy: unit, integration, end-to-end coverage targets and enforcement</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Release and deployment process: manual vs. automated, gating criteria, rollback procedures</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Environment management: development, staging, production parity and provisioning</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />CI/CD pipeline overview: build, test, and deployment automation</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Incident and bug triage: severity classification, SLA targets, and escalation paths</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Developer onboarding: time-to-first-commit, documentation quality, and tooling setup</li>
                     </ul>
@@ -183,11 +190,10 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     <ul class="vdr-list">
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Cloud infrastructure documentation: provider, account structure, and resource inventory</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Hosting and deployment architecture: environments, promotion workflow, and IaC coverage</li>
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />CI/CD pipeline overview: build, test, and deployment automation</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Monitoring and alerting setup: tools, coverage, on-call rotation, and escalation paths</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />SLA commitments and historical uptime data for the past 12-24 months</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Database architecture: engines, replication strategy, backup procedures, and data volumes</li>
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Capacity planning: current utilization, scaling triggers, and growth headroom</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Infrastructure capacity planning: current utilization, scaling triggers, and growth headroom</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Vendor and tool inventory: SaaS subscriptions, annual spend, and contract renewal dates</li>
                     </ul>
                 </section>
@@ -265,6 +271,25 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Data governance framework: ownership, data catalog, lineage tracking, and quality controls</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Data access and permissioning: role-based access, PII handling, and anonymization practices</li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Third-party data dependencies: licensed datasets, API integrations, and vendor lock-in risks</li>
+                    </ul>
+                </section>
+
+                <!-- Corporate IT -->
+                <section class="vdr-section" id="corporate-it">
+                    <h2 class="vdr-section-heading">
+                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                        Corporate IT
+                    </h2>
+                    <p class="vdr-body">Corporate IT covers the enterprise systems and technology that support internal operations. Buyers assess this area to understand integration complexity, hidden licensing costs, and operational dependencies that may not be visible in the product technology stack.</p>
+                    <ul class="vdr-list">
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Enterprise application inventory: ERP, CRM, HRIS, and other business-critical systems</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Identity and access management: directory services, SSO providers, and provisioning workflows</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Endpoint management: device inventory, MDM policies, OS standardization, and patching cadence</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Collaboration and communication tools: email, messaging, file storage, and video conferencing</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Network infrastructure: office connectivity, VPN, SD-WAN, and remote access architecture</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />IT support operations: helpdesk structure, ticketing system, SLA targets, and escalation paths</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />Software licensing: enterprise agreements, per-seat costs, renewal schedules, and compliance status</li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" />IT budget and spend allocation: headcount, infrastructure, licensing, and outsourced services</li>
                     </ul>
                 </section>
 
