@@ -400,6 +400,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
     /* Table of Contents */
     .vdr-toc {
+        display: block;
         max-width: 800px;
         margin: 0 auto var(--spacing-3xl);
         padding: var(--spacing-xl);
@@ -560,7 +561,6 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         font-weight: 700;
         color: var(--text-light-primary);
         margin: var(--spacing-xs) 0;
-        white-space: nowrap;
     }
 
     .vdr-folder-desc {
@@ -596,12 +596,43 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             font-size: 1rem;
         }
 
+        .vdr-toc {
+            padding: var(--spacing-lg);
+        }
+
+        .vdr-toc-list {
+            padding-left: var(--spacing-lg);
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .vdr-toc-list li {
+            margin-bottom: 0;
+        }
+
+        .vdr-toc-list a {
+            display: block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-size: var(--text-sm);
+        }
+
+        .vdr-toc-list a:hover {
+            background: rgba(5, 205, 153, 0.08);
+        }
+
         .vdr-folder-grid {
             grid-template-columns: 1fr;
         }
 
         .vdr-folder-card {
             padding: var(--spacing-lg);
+        }
+
+        .vdr-label-group {
+            gap: 0.3em;
         }
     }
 
@@ -618,8 +649,32 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             font-size: 0.9rem;
         }
 
+        .vdr-toc {
+            padding: var(--spacing-sm);
+        }
+
         .vdr-section-heading {
             font-size: 1.05rem;
+        }
+
+        .vdr-body {
+            line-height: 1.7;
+        }
+
+        .vdr-list li {
+            gap: var(--spacing-xs);
+        }
+
+        .bullet-icon {
+            margin-top: 0.3em;
+        }
+
+        .vdr-label-group {
+            gap: 0.35em;
+        }
+
+        .vdr-label-desc {
+            line-height: 1.7;
         }
     }
 </style>
