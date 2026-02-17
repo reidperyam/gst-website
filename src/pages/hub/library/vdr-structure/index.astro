@@ -29,16 +29,19 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                 <ol class="vdr-toc-list">
                     <li><a href="#what-this-is">What This Is</a></li>
                     <li><a href="#why-it-matters">Why VDR Structure Matters</a></li>
-                    <li><a href="#folder-taxonomy">Recommended Folder Taxonomy</a></li>
-                    <li><a href="#software-architecture">Software Architecture</a></li>
-                    <li><a href="#sdlc">Software Development Lifecycle</a></li>
-                    <li><a href="#product">Product</a></li>
-                    <li><a href="#infrastructure-operations">Infrastructure & Operations</a></li>
-                    <li><a href="#people-organization">People & Organization</a></li>
-                    <li><a href="#security">Security</a></li>
-                    <li><a href="#governance-compliance">Governance & Compliance</a></li>
-                    <li><a href="#data-analytics-ai">Data, Analytics & AI</a></li>
-                    <li><a href="#corporate-it">Corporate IT</a></li>
+                    <li><a href="#folder-taxonomy">Recommended Folder Taxonomy</a>
+                        <ol class="vdr-toc-sublist">
+                            <li><a href="#software-architecture">Software Architecture</a></li>
+                            <li><a href="#sdlc">Software Development Lifecycle</a></li>
+                            <li><a href="#product">Product</a></li>
+                            <li><a href="#infrastructure-operations">Infrastructure & Operations</a></li>
+                            <li><a href="#people-organization">People & Organization</a></li>
+                            <li><a href="#security">Security</a></li>
+                            <li><a href="#governance-compliance">Governance & Compliance</a></li>
+                            <li><a href="#data-analytics-ai">Data, Analytics & AI</a></li>
+                            <li><a href="#corporate-it">Corporate IT</a></li>
+                        </ol>
+                    </li>
                     <li><a href="#common-pitfalls">Common Pitfalls</a></li>
                     <li><a href="#best-practices">Best Practices</a></li>
                     <li><a href="#vdr-platforms">VDR Platforms</a></li>
@@ -434,6 +437,19 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         color: var(--color-primary);
     }
 
+    .vdr-toc-sublist {
+        padding-left: var(--spacing-xl);
+        margin-top: var(--spacing-sm);
+    }
+
+    .vdr-toc-sublist li {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .vdr-toc-sublist a {
+        font-size: var(--text-sm);
+    }
+
     /* Content */
     .vdr-content {
         max-width: 800px;
@@ -620,6 +636,22 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         }
 
         .vdr-toc-list a:hover {
+            background: rgba(5, 205, 153, 0.08);
+        }
+
+        .vdr-toc-sublist {
+            padding-left: var(--spacing-lg);
+            list-style: none;
+        }
+
+        .vdr-toc-sublist a {
+            display: block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-size: var(--text-sm);
+        }
+
+        .vdr-toc-sublist a:hover {
             background: rgba(5, 205, 153, 0.08);
         }
 
