@@ -445,11 +445,21 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         font-size: var(--text-base);
         color: var(--text-light-secondary);
         text-decoration: none;
-        transition: color var(--transition-fast);
+        transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+        display: inline-block;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: 4px;
+        border-left: 2px solid transparent;
     }
 
     .vdr-toc-list a:hover {
         color: var(--color-primary);
+        background: rgba(5, 205, 153, 0.06);
+        border-left-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .vdr-toc-list a:hover {
+        background: rgba(5, 205, 153, 0.08);
     }
 
     .vdr-toc-sublist {
@@ -463,6 +473,16 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
     .vdr-toc-sublist a {
         font-size: var(--text-sm);
+        display: inline-block;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: 4px;
+        border-left: 2px solid transparent;
+        transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .vdr-toc-sublist a:hover {
+        background: rgba(5, 205, 153, 0.06);
+        border-left-color: var(--color-primary);
     }
 
     /* Content */
@@ -473,10 +493,22 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
     .vdr-section {
         margin-bottom: var(--spacing-3xl);
+        padding: var(--spacing-xl);
+        border-radius: 8px;
     }
 
+    .vdr-section:nth-child(even) {
+        background: rgba(5, 205, 153, 0.02);
+    }
+
+    :global(html.dark-theme) .vdr-section:nth-child(even) {
+        background: rgba(5, 205, 153, 0.03);
+    }
+
+
+
     .vdr-section-heading {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: var(--text-light-primary);
         text-transform: uppercase;
@@ -485,6 +517,21 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         align-items: center;
         gap: var(--spacing-sm);
         margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-sm) var(--spacing-lg);
+        background: rgba(5, 205, 153, 0.04);
+        border-left: 3px solid var(--color-primary);
+    }
+
+    .vdr-section-heading img {
+        width: 20px;
+        height: 20px;
+        border-bottom: 1px solid rgba(5, 205, 153, 0.12);
+        border-radius: 4px 4px 0 0;
+    }
+
+    :global(html.dark-theme) .vdr-section-heading {
+        background: rgba(5, 205, 153, 0.06);
+        border-bottom-color: rgba(5, 205, 153, 0.15);
     }
 
     .vdr-body {
@@ -511,6 +558,9 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         display: flex;
         align-items: flex-start;
         gap: var(--spacing-sm);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: 4px;
+        transition: background var(--transition-fast);
     }
 
     .bullet-icon {
@@ -547,6 +597,21 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         gap: var(--spacing-lg);
     }
 
+    .vdr-list--labeled li {
+        padding: var(--spacing-lg);
+        background: rgba(5, 205, 153, 0.02);
+        border: 1px solid rgba(5, 205, 153, 0.08);
+        border-left: 3px solid rgba(5, 205, 153, 0.25);
+        border-radius: 6px;
+        transition: all var(--transition-normal);
+    }
+
+    :global(html.dark-theme) .vdr-list--labeled li {
+        background: rgba(5, 205, 153, 0.03);
+        border-color: rgba(5, 205, 153, 0.1);
+        border-left-color: rgba(5, 205, 153, 0.3);
+    }
+
     .vdr-label-group {
         display: flex;
         flex-direction: column;
@@ -571,20 +636,26 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         padding: var(--spacing-xl);
         background: rgba(5, 205, 153, 0.03);
         border: 1px solid rgba(5, 205, 153, 0.15);
+        border-left: 3px solid var(--color-primary);
         border-radius: 8px;
+        transition: all var(--transition-normal);
     }
 
     :global(html.dark-theme) .vdr-folder-card {
         background: rgba(5, 205, 153, 0.05);
         border-color: rgba(5, 205, 153, 0.2);
+        border-left-color: var(--color-primary);
     }
 
     .vdr-folder-number {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         font-weight: 700;
         color: var(--color-primary);
         text-transform: uppercase;
         letter-spacing: 0.1em;
+        font-family: monospace;
+        display: inline;
+        margin-right: var(--spacing-sm);
     }
 
     .vdr-folder-name {
@@ -592,6 +663,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         font-weight: 700;
         color: var(--text-light-primary);
         margin: var(--spacing-xs) 0;
+        display: inline;
     }
 
     .vdr-folder-desc {
@@ -605,6 +677,50 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
     .vdr-back-nav {
         text-align: center;
         margin-top: var(--spacing-3xl);
+        padding-top: var(--spacing-3xl);
+        border-top: 1px solid rgba(5, 205, 153, 0.15);
+    }
+
+    :global(html.dark-theme) .vdr-back-nav {
+        border-top-color: rgba(5, 205, 153, 0.2);
+    }
+
+    /* Hover effects (pointer devices only) */
+    @media (hover: hover) {
+        .vdr-folder-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(5, 205, 153, 0.12);
+            background: rgba(5, 205, 153, 0.06);
+            border-color: rgba(5, 205, 153, 0.3);
+            border-left-color: var(--color-primary);
+        }
+
+        :global(html.dark-theme) .vdr-folder-card:hover {
+            background: rgba(5, 205, 153, 0.1);
+            box-shadow: 0 6px 20px rgba(5, 205, 153, 0.18);
+            border-color: rgba(5, 205, 153, 0.35);
+            border-left-color: var(--color-primary);
+        }
+
+        .vdr-list li:hover {
+            background: rgba(5, 205, 153, 0.03);
+        }
+
+        :global(html.dark-theme) .vdr-list li:hover {
+            background: rgba(5, 205, 153, 0.05);
+        }
+
+        .vdr-list--labeled li:hover {
+            background: rgba(5, 205, 153, 0.05);
+            border-left-color: var(--color-primary);
+            box-shadow: 0 2px 8px rgba(5, 205, 153, 0.08);
+        }
+
+        :global(html.dark-theme) .vdr-list--labeled li:hover {
+            background: rgba(5, 205, 153, 0.07);
+            border-left-color: var(--color-primary);
+            box-shadow: 0 2px 8px rgba(5, 205, 153, 0.12);
+        }
     }
 
     /* Responsive */
@@ -678,6 +794,10 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             padding: var(--spacing-lg);
         }
 
+        .vdr-section {
+            padding: var(--spacing-lg);
+        }
+
         .vdr-label-group {
             gap: 0.3em;
         }
@@ -700,8 +820,13 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             padding: var(--spacing-sm);
         }
 
+        .vdr-section {
+            padding: var(--spacing-md);
+        }
+
         .vdr-section-heading {
             font-size: 1.05rem;
+            padding: var(--spacing-xs) var(--spacing-md);
         }
 
         .vdr-body {
@@ -710,6 +835,10 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
         .vdr-list li {
             gap: var(--spacing-xs);
+        }
+
+        .vdr-list--labeled li {
+            padding: var(--spacing-md);
         }
 
         .bullet-icon {
