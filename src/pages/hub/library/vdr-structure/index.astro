@@ -853,4 +853,92 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             line-height: 1.7;
         }
     }
+
+    /* Print layout */
+    @media print {
+        /* Reset page-level spacing */
+        .vdr-guide {
+            padding: 0;
+        }
+
+        .vdr-header {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .vdr-header h1 {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Hide TOC — not useful on paper */
+        .vdr-toc {
+            display: none;
+        }
+
+        /* Each section starts on a fresh page */
+        .vdr-section {
+            page-break-before: always;
+            break-before: page;
+            break-inside: avoid;
+            margin-bottom: 0;
+            padding: var(--spacing-md);
+        }
+
+        /* "What This Is" and "Why VDR Structure Matters" share the first page */
+        .vdr-section:nth-child(-n+2) {
+            page-break-before: auto;
+            break-before: auto;
+        }
+
+        /* Keep folder grid together */
+        .vdr-folder-grid {
+            break-inside: avoid;
+            margin-top: var(--spacing-md);
+            gap: var(--spacing-sm);
+        }
+
+        .vdr-folder-card {
+            break-inside: avoid;
+            padding: var(--spacing-sm);
+        }
+
+        /* Reduce list spacing */
+        .vdr-list {
+            gap: 2px;
+        }
+
+        .vdr-list li {
+            padding: 2px var(--spacing-xs);
+        }
+
+        .vdr-list--labeled {
+            gap: var(--spacing-sm);
+        }
+
+        .vdr-list--labeled li {
+            padding: var(--spacing-sm);
+            break-inside: avoid;
+        }
+
+        /* Tighten body text spacing */
+        .vdr-body {
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.5;
+        }
+
+        .vdr-section-heading {
+            margin-bottom: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
+        }
+
+        /* Remove back nav */
+        .vdr-back-nav {
+            display: none;
+        }
+
+        /* Remove hover-only visual effects */
+        .vdr-folder-card,
+        .vdr-list--labeled li {
+            box-shadow: none;
+        }
+    }
 </style>
