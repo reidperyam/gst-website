@@ -25,6 +25,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                 <p>Every technology decision is a business decision in disguise. The question isn't whether your organization has a technology architecture — it's whether anyone with P&amp;L responsibility understands it well enough to see the risks, the constraints, and the opportunities hiding inside it.</p>
             </blockquote>
 
+            <div class="arch-layout">
             <nav class="arch-toc" aria-label="Table of contents">
                 <h2 class="arch-section-heading">
                     <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
@@ -36,7 +37,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     <li><a href="#applying">Applying This Framework</a></li>
                     <li class="arch-toc-separator" aria-hidden="true"></li>
                     <li class="arch-toc-layer" data-layer="1">
-                        <a href="#layer-1">Software Architecture <span class="arch-toc-layer-sub">(The Foundation)</span></a>
+                        <a href="#layer-1">Software Architecture</a>
+                        <span class="arch-toc-layer-sub">(The Foundation)</span>
                         <ul class="arch-toc-sublist">
                             <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-principles">Principles That Translate to Business Risk</a></li>
                             <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-wellarchitected">What Well-Architected Software Looks Like</a></li>
@@ -44,7 +46,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         </ul>
                     </li>
                     <li class="arch-toc-layer" data-layer="2">
-                        <a href="#layer-2">Operational Architecture <span class="arch-toc-layer-sub">(Infrastructure)</span></a>
+                        <a href="#layer-2">Operational Architecture</a>
+                        <span class="arch-toc-layer-sub">(Infrastructure)</span>
                         <ul class="arch-toc-sublist">
                             <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-2-risk">Two Philosophies of Managing Risk</a></li>
                             <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-2-context">Why DevOps Is Harder in Some Contexts</a></li>
@@ -333,6 +336,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                 </section>
 
             </div>
+            </div>
 
             <div class="arch-back-nav">
                 <a href="/hub/library" class="cta-button secondary">Back to The Library</a>
@@ -404,6 +408,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
     /* Table of Contents */
     .arch-toc {
         display: block;
+        max-width: 800px;
         margin: 0 auto var(--spacing-3xl);
         padding: var(--spacing-xl);
         background: rgba(5, 205, 153, 0.03);
@@ -418,21 +423,18 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
     .arch-toc-list {
         list-style: none;
-        padding: 0;
+        padding-left: var(--spacing-xl);
         margin: 0;
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: var(--spacing-sm) var(--spacing-xl);
+        flex-direction: column;
+        gap: var(--spacing-sm);
     }
 
     .arch-toc-list > li {
-        margin-bottom: var(--spacing-sm);
-        text-align: left;
+        margin-bottom: 0;
     }
 
     .arch-toc-separator {
-        flex-basis: 100%;
         height: 0;
         margin: 0;
         padding: 0;
@@ -440,46 +442,19 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
         list-style: none;
     }
 
-    /* Layer cards in TOC */
-    .arch-toc-layer {
-        padding: var(--spacing-md) var(--spacing-lg);
-        background: rgba(5, 205, 153, 0.03);
-        border: 1px solid rgba(5, 205, 153, 0.12);
-        border-left: 3px solid var(--color-primary);
-        border-radius: 6px;
-        transition: all var(--transition-normal);
-    }
-
+    /* Layer items in TOC — plain list style matching VDR */
     .arch-toc-layer > a {
+        font-weight: 600;
         color: var(--text-light-primary);
-        border-left: none;
-        padding: 0 0 var(--spacing-xs) 0;
-        display: block;
     }
 
     .arch-toc-layer-sub {
+        display: block;
         font-weight: 400;
-        font-size: 0.85rem;
+        font-size: 0.85em;
         color: var(--text-light-muted);
+        padding-left: calc(2px + var(--spacing-sm));
     }
-
-    /* Opacity gradation per layer */
-    .arch-toc-layer[data-layer="1"] { border-left-color: rgba(5, 205, 153, 1); background: rgba(5, 205, 153, 0.05); }
-    .arch-toc-layer[data-layer="2"] { border-left-color: rgba(5, 205, 153, 0.85); background: rgba(5, 205, 153, 0.04); }
-    .arch-toc-layer[data-layer="3"] { border-left-color: rgba(5, 205, 153, 0.7); background: rgba(5, 205, 153, 0.035); }
-    .arch-toc-layer[data-layer="4"] { border-left-color: rgba(5, 205, 153, 0.55); background: rgba(5, 205, 153, 0.03); }
-    .arch-toc-layer[data-layer="5"] { border-left-color: rgba(5, 205, 153, 0.4); background: rgba(5, 205, 153, 0.025); }
-
-    :global(html.dark-theme) .arch-toc-layer {
-        background: rgba(5, 205, 153, 0.05);
-        border-color: rgba(5, 205, 153, 0.18);
-    }
-
-    :global(html.dark-theme) .arch-toc-layer[data-layer="1"] { border-left-color: rgba(5, 205, 153, 1); background: rgba(5, 205, 153, 0.08); }
-    :global(html.dark-theme) .arch-toc-layer[data-layer="2"] { border-left-color: rgba(5, 205, 153, 0.85); background: rgba(5, 205, 153, 0.07); }
-    :global(html.dark-theme) .arch-toc-layer[data-layer="3"] { border-left-color: rgba(5, 205, 153, 0.7); background: rgba(5, 205, 153, 0.06); }
-    :global(html.dark-theme) .arch-toc-layer[data-layer="4"] { border-left-color: rgba(5, 205, 153, 0.55); background: rgba(5, 205, 153, 0.05); }
-    :global(html.dark-theme) .arch-toc-layer[data-layer="5"] { border-left-color: rgba(5, 205, 153, 0.4); background: rgba(5, 205, 153, 0.04); }
 
     .arch-toc-list a {
         font-size: var(--text-base);
@@ -488,17 +463,13 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
         text-transform: none;
         letter-spacing: normal;
         transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
-        display: inline-block;
+        display: block;
         padding: var(--spacing-xs) var(--spacing-sm);
         border-radius: 4px;
         border-left: 2px solid transparent;
     }
 
-    /* Override generic link styles for layer title links — must come after .arch-toc-list a */
-    .arch-toc-list .arch-toc-layer > a {
-        font-size: 1.25rem;
-        font-weight: 700;
-    }
+    /* Layer title links inherit base .arch-toc-list a styles */
 
     .arch-toc-list a:hover {
         color: var(--color-primary);
@@ -512,7 +483,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
     .arch-toc-sublist {
         list-style: none;
-        padding: 0;
+        padding-left: var(--spacing-xl);
         margin-top: var(--spacing-sm);
         display: flex;
         flex-direction: column;
@@ -521,7 +492,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
     .arch-toc-sublist li {
         display: flex;
-        align-items: center;
+        align-items: baseline;
         gap: var(--spacing-xs);
     }
 
@@ -537,16 +508,17 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
         letter-spacing: normal;
         color: var(--text-light-secondary);
         text-decoration: none;
-        display: inline-block;
-        padding: 2px var(--spacing-xs);
+        display: block;
+        padding: var(--spacing-xs) var(--spacing-sm);
         border-radius: 4px;
-        border-left: none;
-        transition: color var(--transition-fast), background var(--transition-fast);
+        border-left: 2px solid transparent;
+        transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
     }
 
     .arch-toc-sublist a:hover {
         color: var(--color-primary);
         background: rgba(5, 205, 153, 0.06);
+        border-left-color: var(--color-primary);
     }
 
     /* Content */
@@ -825,15 +797,96 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
             border-left-color: var(--color-primary);
             box-shadow: 0 2px 8px rgba(5, 205, 153, 0.12);
         }
+    }
 
-        .arch-toc-layer:hover {
-            border-left-color: var(--color-primary);
-            box-shadow: 0 3px 12px rgba(5, 205, 153, 0.1);
-            transform: translateY(-2px);
+    /* Desktop sidebar layout */
+    @media (min-width: 1025px) {
+        .arch-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--spacing-2xl);
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: start;
         }
 
-        :global(html.dark-theme) .arch-toc-layer:hover {
-            box-shadow: 0 3px 12px rgba(5, 205, 153, 0.15);
+        .arch-toc {
+            position: sticky;
+            top: var(--spacing-xl);
+            max-width: none;
+            margin: 0;
+            max-height: calc(100vh - var(--spacing-2xl));
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(5, 205, 153, 0.2) transparent;
+        }
+
+        .arch-toc::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .arch-toc::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .arch-toc::-webkit-scrollbar-thumb {
+            background: rgba(5, 205, 153, 0.2);
+            border-radius: 2px;
+        }
+
+        .arch-toc::-webkit-scrollbar-thumb:hover {
+            background: rgba(5, 205, 153, 0.4);
+        }
+
+        .arch-toc .arch-section-heading {
+            font-size: 1rem;
+            padding: var(--spacing-xs) var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .arch-toc-list {
+            padding-left: var(--spacing-md);
+        }
+
+        .arch-toc-list a {
+            font-size: var(--text-sm);
+            padding: 3px var(--spacing-sm);
+        }
+
+        .arch-toc-separator {
+            display: none;
+        }
+
+        .arch-toc-layer-sub {
+            font-size: 0.75rem;
+        }
+
+        .arch-toc-sublist {
+            padding-left: var(--spacing-md);
+        }
+
+        .arch-toc-sublist a {
+            font-size: 0.8rem;
+            padding: 2px var(--spacing-xs);
+        }
+
+        .arch-content {
+            max-width: none;
+            margin: 0;
+        }
+
+        .arch-list--labeled {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+        }
+    }
+
+    /* Tablet: slightly wider content */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .arch-content {
+            max-width: 900px;
         }
     }
 
@@ -861,10 +914,6 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
         .arch-toc-list {
             padding-left: var(--spacing-lg);
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
         }
 
         .arch-toc-list li {
@@ -984,6 +1033,11 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
     /* Print layout */
     @media print {
+        /* Neutralize desktop grid for print */
+        .arch-layout {
+            display: block;
+        }
+
         .arch-guide {
             padding: 0;
         }
