@@ -21,6 +21,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                 <p class="vdr-subtitle">A reference guide for organizing a technology-focused Virtual Data Room for M&A due diligence.</p>
             </header>
 
+            <div class="vdr-layout">
             <nav class="vdr-toc" aria-label="Table of contents">
                 <h2 class="vdr-section-heading">
                     <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
@@ -369,6 +370,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     </ul>
                 </section>
 
+            </div>
             </div>
 
             <div class="vdr-back-nav">
@@ -723,10 +725,97 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         }
     }
 
+    /* Desktop sidebar layout */
+    @media (min-width: 1025px) {
+        .vdr-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: var(--spacing-2xl);
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .vdr-toc {
+            position: sticky;
+            top: var(--spacing-xl);
+            max-width: none;
+            margin: 0;
+            max-height: calc(100vh - var(--spacing-2xl));
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(5, 205, 153, 0.2) transparent;
+        }
+
+        .vdr-toc::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .vdr-toc::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .vdr-toc::-webkit-scrollbar-thumb {
+            background: rgba(5, 205, 153, 0.2);
+            border-radius: 2px;
+        }
+
+        .vdr-toc::-webkit-scrollbar-thumb:hover {
+            background: rgba(5, 205, 153, 0.4);
+        }
+
+        .vdr-toc .vdr-section-heading {
+            font-size: 1rem;
+            padding: var(--spacing-xs) var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .vdr-toc-list {
+            padding-left: var(--spacing-md);
+        }
+
+        .vdr-toc-list a {
+            font-size: var(--text-sm);
+            padding: 3px var(--spacing-sm);
+        }
+
+        .vdr-toc-sublist {
+            padding-left: var(--spacing-md);
+        }
+
+        .vdr-toc-sublist a {
+            font-size: 0.8rem;
+            padding: 2px var(--spacing-xs);
+        }
+
+        .vdr-content {
+            max-width: none;
+            margin: 0;
+        }
+
+        .vdr-list--labeled {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+        }
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
         .vdr-folder-grid {
             grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Tablet: slightly wider content */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .vdr-toc {
+            max-width: 900px;
+        }
+
+        .vdr-content {
+            max-width: 900px;
         }
     }
 
@@ -856,6 +945,11 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
     /* Print layout */
     @media print {
+        /* Neutralize desktop grid for print */
+        .vdr-layout {
+            display: block;
+        }
+
         /* Reset page-level spacing */
         .vdr-guide {
             padding: 0;
