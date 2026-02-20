@@ -35,28 +35,35 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     <li><a href="#interactions">How the Layers Interact</a></li>
                     <li><a href="#applying">Applying This Framework</a></li>
                     <li class="arch-toc-separator" aria-hidden="true"></li>
-                    <li><a href="#layer-1">Layer 1: Software Architecture (The Foundation)</a>
-                        <ol class="arch-toc-sublist">
-                            <li><a href="#layer-1-principles">Principles That Translate to Business Risk</a></li>
-                            <li><a href="#layer-1-wellarchitected">What Well-Architected Software Looks Like</a></li>
-                            <li><a href="#layer-1-cost">The Cost of Getting It Wrong</a></li>
-                        </ol>
+                    <li class="arch-toc-layer" data-layer="1">
+                        <a href="#layer-1">Software Architecture <span class="arch-toc-layer-sub">(The Foundation)</span></a>
+                        <ul class="arch-toc-sublist">
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-principles">Principles That Translate to Business Risk</a></li>
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-wellarchitected">What Well-Architected Software Looks Like</a></li>
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-cost">The Cost of Getting It Wrong</a></li>
+                        </ul>
                     </li>
-                    <li><a href="#layer-2">Layer 2: Operational Architecture (Infrastructure)</a>
-                        <ol class="arch-toc-sublist">
-                            <li><a href="#layer-2-risk">Two Philosophies of Managing Risk</a></li>
-                            <li><a href="#layer-2-context">Why DevOps Is Harder in Some Contexts</a></li>
-                        </ol>
+                    <li class="arch-toc-layer" data-layer="2">
+                        <a href="#layer-2">Operational Architecture <span class="arch-toc-layer-sub">(Infrastructure)</span></a>
+                        <ul class="arch-toc-sublist">
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-2-risk">Two Philosophies of Managing Risk</a></li>
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-2-context">Why DevOps Is Harder in Some Contexts</a></li>
+                        </ul>
                     </li>
-                    <li><a href="#layer-3">Layer 3: Product Architecture</a>
-                        <ol class="arch-toc-sublist">
-                            <li><a href="#layer-3-strategy">The Architecture-Strategy Connection</a></li>
-                            <li><a href="#layer-3-problem">Defining the Right Problem</a></li>
-                            <li><a href="#layer-3-selection">Selection Principles for M&amp;A</a></li>
-                        </ol>
+                    <li class="arch-toc-layer" data-layer="3">
+                        <a href="#layer-3">Product Architecture</a>
+                        <ul class="arch-toc-sublist">
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-3-strategy">The Architecture-Strategy Connection</a></li>
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-3-problem">Defining the Right Problem</a></li>
+                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-3-selection">Selection Principles for M&amp;A</a></li>
+                        </ul>
                     </li>
-                    <li><a href="#layer-4">Layer 4: Organizational Architecture</a></li>
-                    <li><a href="#layer-5">Layer 5: Industry &amp; Regulatory Architecture</a></li>
+                    <li class="arch-toc-layer" data-layer="4">
+                        <a href="#layer-4">Organizational Architecture</a>
+                    </li>
+                    <li class="arch-toc-layer" data-layer="5">
+                        <a href="#layer-5">Industry &amp; Regulatory Architecture</a>
+                    </li>
                 </ul>
             </nav>
 
@@ -433,6 +440,47 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
         list-style: none;
     }
 
+    /* Layer cards in TOC */
+    .arch-toc-layer {
+        padding: var(--spacing-md) var(--spacing-lg);
+        background: rgba(5, 205, 153, 0.03);
+        border: 1px solid rgba(5, 205, 153, 0.12);
+        border-left: 3px solid var(--color-primary);
+        border-radius: 6px;
+        transition: all var(--transition-normal);
+    }
+
+    .arch-toc-layer > a {
+        color: var(--text-light-primary);
+        border-left: none;
+        padding: 0 0 var(--spacing-xs) 0;
+        display: block;
+    }
+
+    .arch-toc-layer-sub {
+        font-weight: 400;
+        font-size: 0.85rem;
+        color: var(--text-light-muted);
+    }
+
+    /* Opacity gradation per layer */
+    .arch-toc-layer[data-layer="1"] { border-left-color: rgba(5, 205, 153, 1); background: rgba(5, 205, 153, 0.05); }
+    .arch-toc-layer[data-layer="2"] { border-left-color: rgba(5, 205, 153, 0.85); background: rgba(5, 205, 153, 0.04); }
+    .arch-toc-layer[data-layer="3"] { border-left-color: rgba(5, 205, 153, 0.7); background: rgba(5, 205, 153, 0.035); }
+    .arch-toc-layer[data-layer="4"] { border-left-color: rgba(5, 205, 153, 0.55); background: rgba(5, 205, 153, 0.03); }
+    .arch-toc-layer[data-layer="5"] { border-left-color: rgba(5, 205, 153, 0.4); background: rgba(5, 205, 153, 0.025); }
+
+    :global(html.dark-theme) .arch-toc-layer {
+        background: rgba(5, 205, 153, 0.05);
+        border-color: rgba(5, 205, 153, 0.18);
+    }
+
+    :global(html.dark-theme) .arch-toc-layer[data-layer="1"] { border-left-color: rgba(5, 205, 153, 1); background: rgba(5, 205, 153, 0.08); }
+    :global(html.dark-theme) .arch-toc-layer[data-layer="2"] { border-left-color: rgba(5, 205, 153, 0.85); background: rgba(5, 205, 153, 0.07); }
+    :global(html.dark-theme) .arch-toc-layer[data-layer="3"] { border-left-color: rgba(5, 205, 153, 0.7); background: rgba(5, 205, 153, 0.06); }
+    :global(html.dark-theme) .arch-toc-layer[data-layer="4"] { border-left-color: rgba(5, 205, 153, 0.55); background: rgba(5, 205, 153, 0.05); }
+    :global(html.dark-theme) .arch-toc-layer[data-layer="5"] { border-left-color: rgba(5, 205, 153, 0.4); background: rgba(5, 205, 153, 0.04); }
+
     .arch-toc-list a {
         font-size: var(--text-base);
         color: var(--text-light-secondary);
@@ -446,6 +494,12 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
         border-left: 2px solid transparent;
     }
 
+    /* Override generic link styles for layer title links — must come after .arch-toc-list a */
+    .arch-toc-list .arch-toc-layer > a {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
     .arch-toc-list a:hover {
         color: var(--color-primary);
         background: rgba(5, 205, 153, 0.06);
@@ -457,30 +511,42 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
     }
 
     .arch-toc-sublist {
-        padding-left: var(--spacing-lg);
+        list-style: none;
+        padding: 0;
         margin-top: var(--spacing-sm);
         display: flex;
         flex-direction: column;
+        gap: var(--spacing-xs);
     }
 
     .arch-toc-sublist li {
-        margin-bottom: var(--spacing-xs);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+    }
+
+    .arch-toc-sublist .bullet-icon {
+        flex-shrink: 0;
+        margin-top: 0;
+        opacity: 0.5;
     }
 
     .arch-toc-sublist a {
         font-size: var(--text-sm);
         text-transform: none;
         letter-spacing: normal;
+        color: var(--text-light-secondary);
+        text-decoration: none;
         display: inline-block;
-        padding: var(--spacing-xs) var(--spacing-sm);
+        padding: 2px var(--spacing-xs);
         border-radius: 4px;
-        border-left: 2px solid transparent;
-        transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+        border-left: none;
+        transition: color var(--transition-fast), background var(--transition-fast);
     }
 
     .arch-toc-sublist a:hover {
+        color: var(--color-primary);
         background: rgba(5, 205, 153, 0.06);
-        border-left-color: var(--color-primary);
     }
 
     /* Content */
@@ -758,6 +824,16 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
             background: rgba(5, 205, 153, 0.07);
             border-left-color: var(--color-primary);
             box-shadow: 0 2px 8px rgba(5, 205, 153, 0.12);
+        }
+
+        .arch-toc-layer:hover {
+            border-left-color: var(--color-primary);
+            box-shadow: 0 3px 12px rgba(5, 205, 153, 0.1);
+            transform: translateY(-2px);
+        }
+
+        :global(html.dark-theme) .arch-toc-layer:hover {
+            box-shadow: 0 3px 12px rgba(5, 205, 153, 0.15);
         }
     }
 
