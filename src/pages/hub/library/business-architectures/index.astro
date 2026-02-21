@@ -136,10 +136,14 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <p class="arch-defn-why"><strong>Why it matters to you:</strong> Software architecture is where abstract strategy meets concrete reality. The principles operating at this layer determine whether the higher-level architectural choices — product modularity, operational agility, organizational flexibility — are actually achievable or merely aspirational. Poor software architecture is the most common source of hidden cost in technology acquisitions.</p>
                     </div>
 
+                    <p class="arch-body">This isn't about "clean code" as an aesthetic preference — it's about disposability, scalability, and the cost structure they enable. You don't need to understand every engineering principle at work here, but you need to recognize the <em>categories</em> of risk and opportunity they represent.</p>
+
+                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Developer productivity · Defect rates · Cost of change · Security exposure</p>
+
                     <h3 class="arch-subheading" id="layer-1-principles">Three Principles That Translate Directly to Business Risk</h3>
 
                     <ul class="arch-list arch-list--labeled">
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Separation of Responsibilities</strong><span class="arch-label-desc">Good architecture assigns each component a clear, singular purpose. When a single component handles authentication, payment processing, and customer notifications, a change to any one of those capabilities risks breaking the others. For business leaders, this translates directly to <em>change cost and change risk</em>. Systems with poor separation of responsibilities are expensive to modify, slow to extend, and prone to cascading failures that affect seemingly unrelated capabilities.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Separation of Responsibilities</strong><span class="arch-label-desc">Good architecture assigns each component a clear, singular purpose. When a single component handles authentication, payment processing, and customer notifications, a change to any one of those capabilities risks breaking the others. The quick test: <em>does one piece of code do ten things?</em> If yes, it's a maintenance nightmare waiting to become an investor's problem. For business leaders, this translates directly to <em>change cost and change risk</em>. Systems with poor separation of responsibilities are expensive to modify, slow to extend, and prone to cascading failures that affect seemingly unrelated capabilities.</span></span></li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Least Knowledge (Information Hiding)</strong><span class="arch-label-desc">Components should know as little as possible about each other's internal workings. When components are tightly coupled — when changing one requires intimate knowledge of another's implementation — development velocity drops and integration complexity increases. During M&amp;A, tight coupling between components is one of the primary drivers of integration difficulty and timeline risk.</span></span></li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Least Privilege</strong><span class="arch-label-desc">Systems and users should have only the minimum access required to perform their function. This is fundamentally a security and compliance principle, but it also signals architectural maturity. Organizations that implement least privilege well tend to have clearer system boundaries, better audit capabilities, and lower regulatory risk.</span></span></li>
                     </ul>
@@ -153,7 +157,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Stateless design and horizontal scalability</strong><span class="arch-label-desc">Modern architectures are designed so that individual processes don't retain internal state between requests. Capacity can be increased by adding more instances rather than upgrading to larger hardware. The business implication: infrastructure costs scale linearly with demand rather than in expensive step functions, and the system can handle traffic spikes without architectural overhaul.</span></span></li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Build and deployment pipeline separation</strong><span class="arch-label-desc">Clear separation between building the software, packaging a release, and running it in production. The business implication: auditability, reproducibility, and the ability to roll back quickly when something goes wrong — all of which directly affect operational risk and downtime costs.</span></span></li>
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Observability</strong><span class="arch-label-desc">Well-architected systems treat operational data as a stream of events that can be captured, analyzed, and acted upon by external tools. The business implication: faster incident detection and resolution, better capacity planning, and the kind of operational visibility that supports data-driven decision-making.</span></span></li>
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Extension without modification</strong><span class="arch-label-desc">Good software architecture allows new capabilities to be added without changing existing, working code. The business implication: lower regression risk, faster feature development, and reduced cost of ongoing maintenance. This is perhaps the single most important architectural quality for post-acquisition value creation, because it determines how quickly and safely new capabilities can be added to the platform.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Extension without modification</strong><span class="arch-label-desc">Good software architecture allows new capabilities to be added without changing existing, working code. The quick test: <em>can we add features without breaking the core?</em> If not, every new capability carries regression risk that compounds over time. The business implication: lower regression risk, faster feature development, and reduced cost of ongoing maintenance. This is perhaps the single most important architectural quality for post-acquisition value creation, because it determines how quickly and safely new capabilities can be added to the platform.</span></span></li>
                     </ul>
 
                     <h3 class="arch-subheading" id="layer-1-cost">The Cost of Getting It Wrong</h3>
@@ -178,6 +182,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <p class="arch-defn-what"><strong>What it is:</strong> How the organization builds, deploys, monitors, and maintains its technology in production — the machinery that turns product architecture into a running business.</p>
                         <p class="arch-defn-why"><strong>Why it matters to you:</strong> Operational architecture determines a company's cost to serve, its ability to respond to incidents, its capacity for change, and its risk profile. Two companies with identical product architectures can have radically different operational costs, reliability characteristics, and speed of innovation depending on how their operational infrastructure is designed.</p>
                     </div>
+
+                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Reliability and uptime · Cost to operate · Speed to ship · Incident blast radius and recovery time</p>
 
                     <h3 class="arch-subheading">The Core Challenge: Matching Supply with Demand</h3>
                     <p class="arch-body">At its most fundamental, technology operations is about matching computing capacity and system reliability with customer demand. The metrics are familiar to any business leader: throughput, availability, cost-per-transaction, time-to-recovery. The architectural choices that underpin those metrics, however, have profound strategic implications.</p>
@@ -221,6 +227,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <p class="arch-defn-what"><strong>What it is:</strong> The choices about what a product does, how its components fit together, and where the boundaries are drawn between what's built internally and what's sourced externally.</p>
                         <p class="arch-defn-why"><strong>Why it matters to you:</strong> Product architecture decisions are strategy decisions — they determine a company's core competency, its cost structure, its ability to respond to market changes, and its options for future growth. When a CTO makes a product architecture choice, they are making a fundamental statement about who the company's customer is, how the company competes, and where it believes value will accrue in the future. Most executive teams don't recognize this. That's a problem.</p>
                     </div>
+
+                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Gross margin potential · Innovation velocity · Ability to pursue M&amp;A · Integration and customization complexity</p>
 
                     <h3 class="arch-subheading" id="layer-3-strategy">The Architecture-Strategy Connection</h3>
                     <p class="arch-body">Product architecture is not a technical concern that can be delegated entirely to engineering. It's a strategic choice that sits at the intersection of technology capability, organizational structure, and business model.</p>
@@ -282,6 +290,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <p class="arch-defn-why"><strong>Why it matters to you:</strong> There's a well-known principle in systems design called Conway's Law: <em>organizations design systems that mirror their own communication structures.</em> In practice, this means a company's technology architecture is a reflection of its organizational architecture — and vice versa. You cannot change one without confronting the other.</p>
                     </div>
 
+                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Whether strategy can be executed · Decision velocity · Ability to absorb change · Engineering capacity converted into outcomes</p>
+
                     <h3 class="arch-subheading">The Congruence Model: Four Levers of Organizational Architecture</h3>
                     <p class="arch-body">The Tushman-Nadler Congruence Model provides a practical framework for understanding how organizational architecture either enables or constrains technology outcomes. It identifies four components that must be aligned for effective execution:</p>
 
@@ -293,6 +303,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     </ul>
 
                     <p class="arch-body">The Congruence Model's key insight is that these four components are <em>interdependent</em>. Changing one without adjusting the others creates misalignment that shows up as execution failures, cultural resistance, or the quiet departure of key talent. This is why post-acquisition technology transformations that focus only on the technology itself so frequently underdeliver.</p>
+
+                    <p class="arch-body">The diagnostic questions are straightforward: <em>Does the organization reinforce strategy — or fight it? Are teams empowered or blocked? Do incentives reward the outcomes that matter?</em></p>
 
                     <div class="arch-diligence-callout">
                         <p class="arch-diligence-label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="12" height="12" /> What to look for in diligence</p>
@@ -311,6 +323,8 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <p class="arch-defn-what"><strong>What it is:</strong> The external forces, standards, and competitive dynamics that shape what's possible — and what's required — before a single internal decision gets made.</p>
                         <p class="arch-defn-why"><strong>Why it matters to you:</strong> No company's technology exists in a vacuum. Industry structure dictates which architectural choices create competitive advantage and which simply keep the lights on. Regulatory requirements can turn a minor design decision into a material compliance liability.</p>
                     </div>
+
+                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Which business models are viable · Where margins concentrate · How defensible advantage can be built · Which constraints are non-negotiable</p>
 
                     <h3 class="arch-subheading">Impedance Mismatches and Industry Standards</h3>
                     <p class="arch-body">Every industry develops its own interfaces — the points where one company's systems need to connect with another's. When these interfaces are well-established, they become industry standards. When they aren't, the resulting friction creates what engineers call an <em>impedance mismatch</em>: the cost and complexity of making systems work together that weren't designed to.</p>
@@ -606,6 +620,31 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
     .arch-defn strong {
         color: var(--text-light-primary);
+    }
+
+    /* Business meaning callout */
+    .arch-business-meaning {
+        font-size: var(--text-sm);
+        color: var(--text-light-secondary);
+        line-height: 1.6;
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-sm) var(--spacing-lg);
+        background: rgba(5, 205, 153, 0.03);
+        border-left: 3px solid rgba(5, 205, 153, 0.3);
+        border-radius: 0 4px 4px 0;
+    }
+
+    .arch-business-meaning strong {
+        color: var(--color-primary);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.75rem;
+    }
+
+    :global(html.dark-theme) .arch-business-meaning {
+        background: rgba(5, 205, 153, 0.05);
+        border-left-color: rgba(5, 205, 153, 0.4);
     }
 
     /* Sub-headings (h3) */
