@@ -33,8 +33,6 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                 </h2>
                 <ul class="arch-toc-list">
                     <li><a href="#why-architecture-matters">Why Architecture Matters to Business Leaders</a></li>
-                    <li><a href="#interactions">How the Layers Interact</a></li>
-                    <li><a href="#applying">Applying This Framework</a></li>
                     <li class="arch-toc-separator" aria-hidden="true"></li>
                     <li class="arch-toc-layer" data-layer="1">
                         <a href="#layer-1">Software Architecture</a>
@@ -67,6 +65,9 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     <li class="arch-toc-layer" data-layer="5">
                         <a href="#layer-5">Industry &amp; Regulatory Architecture</a>
                     </li>
+                    <li class="arch-toc-separator" aria-hidden="true"></li>
+                    <li><a href="#interactions">How the Layers Interact</a></li>
+                    <li><a href="#applying">Applying This Framework</a></li>
                 </ul>
             </nav>
 
@@ -81,45 +82,6 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     <p class="arch-body">For investors evaluating an acquisition, architecture is the difference between a platform that scales with investment and one that collapses under it. For executives navigating their own technology landscape, it's the lens that reveals which strategic initiatives the current architecture can support and which ones it will quietly resist. For executives inheriting a technology stack post-close, it's the difference between a 100-day integration plan and a multi-year rebuild. For founders, it's the set of early choices that either preserves optionality or quietly forecloses it.</p>
                     <p class="arch-body">Technology architectures exist within every business, whether or not they have been consciously. The five architectural layers presented here are one useful way to decompose them, chosen because each one surfaces different challenges and opportunities for different parts of the business. Other reasonable decompositions exist, but this framing gives investors, executives, and operators a shared vocabulary for reasoning about where value is created, where challenges accumulate, and where the layers constrain or enable one another.</p>
                     <p class="arch-body">This guide walks through each layer from the foundation up, translating the structural realities of technology into business enablement (affordance), risk, and value creation.</p>
-                </section>
-
-                <!-- How the Layers Interact -->
-                <section class="arch-section" id="interactions">
-                    <h2 class="arch-section-heading">
-                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
-                        How the Layers Interact
-                    </h2>
-                    <p class="arch-body">These five architectural layers don't operate independently. They form a system of mutual constraints and enablements:</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Bottom-up enablement</strong><span class="arch-label-desc">Strong software architecture enables operational agility. Operational agility supports product iteration speed. Product flexibility enables competitive response to industry shifts.</span></span></li>
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Top-down constraints</strong><span class="arch-label-desc">Industry standards limit product architecture choices. Product architecture dictates operational requirements. Operational requirements shape what software architecture must support.</span></span></li>
-                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Lateral coupling</strong><span class="arch-label-desc">Organizational architecture (the people, incentives, processes, and structure) runs alongside every layer and either amplifies or dampens the effectiveness of choices made at each level.</span></span></li>
-                    </ul>
-
-                    <p class="arch-body">The most common failure pattern in technology-driven organizations is attempting to change one layer without addressing the others. A product architecture migration that ignores organizational readiness. An operational transformation that doesn't account for the software architecture's limitations. A software modernization that proceeds without clarity on the product strategy it's meant to enable.</p>
-                    <p class="arch-body">For investors and executives, the framework offers a structured way to assess technology risk and opportunity across the full stack, from source code to market forces, and to ensure that value creation plans address all the layers that matter, not just the ones that are most visible.</p>
-                </section>
-
-                <!-- Applying This Framework -->
-                <section class="arch-section" id="applying">
-                    <h2 class="arch-section-heading">
-                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
-                        Applying This Framework
-                    </h2>
-
-                    <h3 class="arch-subheading">For Investors Evaluating a Deal</h3>
-                    <p class="arch-body">Use the layered architecture framework during diligence to identify where value is created and where risk resides at each level. Ask how the target's architectural choices at each layer align with the investment thesis. Pay particular attention to the interactions between layers: the organizational readiness to execute the product roadmap, the operational maturity to support the growth plan, and the software architecture's ability to sustain the required pace of change.</p>
-
-                    <h3 class="arch-subheading">For Executives Post-Acquisition</h3>
-                    <p class="arch-body">Map the inherited technology across all five layers before committing to a transformation plan. Identify the binding constraint, the layer where limitations will slow or prevent progress at every other level, and address it first. Recognize that changing technology architecture without adjusting organizational architecture is an exercise in frustration.</p>
-
-                    <h3 class="arch-subheading">For Founders</h3>
-                    <p class="arch-body">Understand that the architectural choices you make today create the constraints and opportunities your company will have tomorrow. Product architecture decisions are business strategy decisions. Organizational architecture choices are technology choices. Building with awareness of all five layers, even when resource constraints force compromises, creates optionality that preserves future value.</p>
-
-                    <div class="arch-closing">
-                        <p>The difference between a good technology investment and a bad one often comes down to architectural awareness: the ability to see how structural choices at every level create, constrain, or destroy business value. Architecture isn't just an engineering concern. It's the invisible infrastructure of competitive advantage.</p>
-                    </div>
                 </section>
 
                 <!-- Layer 1: Software Architecture -->
@@ -345,6 +307,45 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     <div class="arch-diligence-callout">
                         <p class="arch-diligence-label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="12" height="12" /> What to look for in diligence</p>
                         <p class="arch-diligence-body">Industry interface dependencies. Regulatory compliance as an architectural constraint vs. an afterthought. The target's position in the industry value chain and the strength of its competitive moat relative to platform shifts. Whether the company's technology bets align with or resist emerging industry standards.</p>
+                    </div>
+                </section>
+
+                <!-- How the Layers Interact -->
+                <section class="arch-section" id="interactions">
+                    <h2 class="arch-section-heading">
+                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                        How the Layers Interact
+                    </h2>
+                    <p class="arch-body">These five architectural layers don't operate independently. They form a system of mutual constraints and enablements:</p>
+
+                    <ul class="arch-list arch-list--labeled">
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Bottom-up enablement</strong><span class="arch-label-desc">Strong software architecture enables operational agility. Operational agility supports product iteration speed. Product flexibility enables competitive response to industry shifts.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Top-down constraints</strong><span class="arch-label-desc">Industry standards limit product architecture choices. Product architecture dictates operational requirements. Operational requirements shape what software architecture must support.</span></span></li>
+                        <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Lateral coupling</strong><span class="arch-label-desc">Organizational architecture (the people, incentives, processes, and structure) runs alongside every layer and either amplifies or dampens the effectiveness of choices made at each level.</span></span></li>
+                    </ul>
+
+                    <p class="arch-body">The most common failure pattern in technology-driven organizations is attempting to change one layer without addressing the others. A product architecture migration that ignores organizational readiness. An operational transformation that doesn't account for the software architecture's limitations. A software modernization that proceeds without clarity on the product strategy it's meant to enable.</p>
+                    <p class="arch-body">For investors and executives, the framework offers a structured way to assess technology risk and opportunity across the full stack, from source code to market forces, and to ensure that value creation plans address all the layers that matter, not just the ones that are most visible.</p>
+                </section>
+
+                <!-- Applying This Framework -->
+                <section class="arch-section" id="applying">
+                    <h2 class="arch-section-heading">
+                        <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" />
+                        Applying This Framework
+                    </h2>
+
+                    <h3 class="arch-subheading">For Investors Evaluating a Deal</h3>
+                    <p class="arch-body">Use the layered architecture framework during diligence to identify where value is created and where risk resides at each level. Ask how the target's architectural choices at each layer align with the investment thesis. Pay particular attention to the interactions between layers: the organizational readiness to execute the product roadmap, the operational maturity to support the growth plan, and the software architecture's ability to sustain the required pace of change.</p>
+
+                    <h3 class="arch-subheading">For Executives Post-Acquisition</h3>
+                    <p class="arch-body">Map the inherited technology across all five layers before committing to a transformation plan. Identify the binding constraint, the layer where limitations will slow or prevent progress at every other level, and address it first. Recognize that changing technology architecture without adjusting organizational architecture is an exercise in frustration.</p>
+
+                    <h3 class="arch-subheading">For Founders</h3>
+                    <p class="arch-body">Understand that the architectural choices you make today create the constraints and opportunities your company will have tomorrow. Product architecture decisions are business strategy decisions. Organizational architecture choices are technology choices. Building with awareness of all five layers, even when resource constraints force compromises, creates optionality that preserves future value.</p>
+
+                    <div class="arch-closing">
+                        <p>The difference between a good technology investment and a bad one often comes down to architectural awareness: the ability to see how structural choices at every level create, constrain, or destroy business value. Architecture isn't just an engineering concern. It's the invisible infrastructure of competitive advantage.</p>
                     </div>
                 </section>
 
