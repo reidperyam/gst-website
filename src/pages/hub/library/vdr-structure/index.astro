@@ -30,19 +30,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                 <ol class="vdr-toc-list">
                     <li><a href="#what-this-is">What This Is</a></li>
                     <li><a href="#why-it-matters">Why VDR Structure Matters</a></li>
-                    <li><a href="#folder-taxonomy">Recommended Folder Taxonomy</a>
-                        <ul class="vdr-toc-sublist">
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#product">Product</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#software-architecture">Software Architecture</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#infrastructure-operations">Infrastructure & Operations</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#sdlc">Software Development Lifecycle</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#data-analytics-ai">Data, Analytics & AI</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#security">Security</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#people-organization">People & Organization</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#corporate-it">Corporate IT</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#governance-compliance">Governance & Compliance</a></li>
-                        </ul>
-                    </li>
+                    <li class="vdr-toc-taxonomy"><a href="#folder-taxonomy">Recommended Folder Taxonomy</a></li>
                     <li><a href="#common-pitfalls">Common Pitfalls</a></li>
                     <li><a href="#best-practices">Best Practices</a></li>
                     <li><a href="#vdr-platforms">VDR Platforms</a></li>
@@ -380,6 +368,47 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
     </section>
 </BaseLayout>
 
+<script>
+    // Build TOC sublist from folder section headings (DRY: heading text defined once)
+    const taxonomyItem = document.querySelector('.vdr-toc-taxonomy');
+    if (taxonomyItem) {
+        const folderIds = [
+            'product', 'software-architecture', 'infrastructure-operations',
+            'sdlc', 'data-analytics-ai', 'security',
+            'people-organization', 'corporate-it', 'governance-compliance'
+        ];
+
+        const sublist = document.createElement('ul');
+        sublist.className = 'vdr-toc-sublist';
+
+        folderIds.forEach(id => {
+            const section = document.getElementById(id);
+            if (!section) return;
+            const heading = section.querySelector('h2');
+            if (!heading) return;
+
+            const li = document.createElement('li');
+            const icon = document.createElement('img');
+            icon.src = '/images/gst-delta-icon-teal-stroke-thick.svg';
+            icon.alt = '';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.className = 'bullet-icon';
+            icon.width = 10;
+            icon.height = 10;
+
+            const link = document.createElement('a');
+            link.href = `#${id}`;
+            link.textContent = heading.textContent.trim();
+
+            li.appendChild(icon);
+            li.appendChild(link);
+            sublist.appendChild(li);
+        });
+
+        taxonomyItem.appendChild(sublist);
+    }
+</script>
+
 <style>
     .vdr-guide {
         padding: var(--spacing-3xl) 0 5rem;
@@ -464,7 +493,8 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         background: rgba(5, 205, 153, 0.08);
     }
 
-    .vdr-toc-sublist {
+    /* :global() needed because sublist elements are created at runtime by script */
+    .vdr-toc-taxonomy :global(.vdr-toc-sublist) {
         list-style: none;
         padding-left: var(--spacing-xl);
         margin-top: var(--spacing-sm);
@@ -473,13 +503,13 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         gap: var(--spacing-xs);
     }
 
-    .vdr-toc-sublist li {
+    .vdr-toc-taxonomy :global(.vdr-toc-sublist li) {
         display: flex;
         align-items: baseline;
         gap: var(--spacing-xs);
     }
 
-    .vdr-toc-sublist .bullet-icon {
+    .vdr-toc-taxonomy :global(.vdr-toc-sublist .bullet-icon) {
         flex-shrink: 0;
         width: 10px;
         height: 10px;
@@ -487,7 +517,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         top: 1px;
     }
 
-    .vdr-toc-sublist a {
+    .vdr-toc-taxonomy :global(.vdr-toc-sublist a) {
         font-size: var(--text-sm);
         display: block;
         padding: var(--spacing-xs) var(--spacing-sm);
@@ -496,7 +526,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
         transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
     }
 
-    .vdr-toc-sublist a:hover {
+    .vdr-toc-taxonomy :global(.vdr-toc-sublist a:hover) {
         background: rgba(5, 205, 153, 0.06);
         border-left-color: var(--color-primary);
     }
@@ -794,11 +824,11 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             padding: 3px var(--spacing-sm);
         }
 
-        .vdr-toc-sublist {
+        .vdr-toc-taxonomy :global(.vdr-toc-sublist) {
             padding-left: var(--spacing-md);
         }
 
-        .vdr-toc-sublist a {
+        .vdr-toc-taxonomy :global(.vdr-toc-sublist a) {
             font-size: 0.8rem;
             padding: 2px var(--spacing-xs);
         }
@@ -873,19 +903,19 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
             background: rgba(5, 205, 153, 0.08);
         }
 
-        .vdr-toc-sublist {
+        .vdr-toc-taxonomy :global(.vdr-toc-sublist) {
             padding-left: var(--spacing-lg);
             list-style: none;
         }
 
-        .vdr-toc-sublist a {
+        .vdr-toc-taxonomy :global(.vdr-toc-sublist a) {
             display: block;
             padding: var(--spacing-xs) var(--spacing-sm);
             border-radius: 4px;
             font-size: var(--text-sm);
         }
 
-        .vdr-toc-sublist a:hover {
+        .vdr-toc-taxonomy :global(.vdr-toc-sublist a:hover) {
             background: rgba(5, 205, 153, 0.08);
         }
 
