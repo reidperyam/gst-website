@@ -37,27 +37,13 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                     <li class="arch-toc-layer" data-layer="1">
                         <a href="#layer-1">Software Architecture</a>
                         <span class="arch-toc-layer-sub">(The Foundation)</span>
-                        <ul class="arch-toc-sublist">
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-principles">Principles That Translate to Business Risk</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-wellarchitected">What Well-Architected Software Looks Like</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-1-cost">The Cost of Getting It Wrong</a></li>
-                        </ul>
                     </li>
                     <li class="arch-toc-layer" data-layer="2">
                         <a href="#layer-2">Operational Architecture</a>
                         <span class="arch-toc-layer-sub">(Infrastructure)</span>
-                        <ul class="arch-toc-sublist">
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-2-risk">Two Philosophies of Managing Risk</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-2-context">Why DevOps Is Harder in Some Contexts</a></li>
-                        </ul>
                     </li>
                     <li class="arch-toc-layer" data-layer="3">
                         <a href="#layer-3">Product Architecture</a>
-                        <ul class="arch-toc-sublist">
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-3-strategy">The Architecture-Strategy Connection</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-3-problem">Defining the Right Problem</a></li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" /><a href="#layer-3-selection">Selection Principles for M&amp;A</a></li>
-                        </ul>
                     </li>
                     <li class="arch-toc-layer" data-layer="4">
                         <a href="#layer-4">Organizational Architecture</a>
@@ -114,7 +100,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
                     <p class="arch-body">The reason this decomposition matters for business leaders: problems at each sub-layer have different cost profiles, different remediation timelines, and different owners. A code quality issue is a team-level fix. A systems boundary problem is an organizational restructuring. An integration liability is a vendor negotiation or a rebuild. Conflating them, treating "the software" as a single thing, leads to transformation plans that underestimate scope and misallocate investment.</p>
 
-                    <h3 class="arch-subheading" id="layer-1-principles">Three Principles That Translate Directly to Business Risk</h3>
+                    <h3 class="arch-subheading" id="layer-1-principles">Three Principles That Signal Architectural Health</h3>
 
                     <ul class="arch-list arch-list--labeled">
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Separation of Responsibilities</strong><span class="arch-label-desc">Good architecture assigns each component a clear, singular purpose. When a single component handles authentication, payment processing, and customer notifications, a change to any one of those capabilities risks breaking the others. The quick test: <em>does one piece of code do ten things?</em> If yes, it's a maintenance nightmare waiting to become an investor's problem. For business leaders, this translates directly to <em>change cost and change risk</em>. Systems with poor separation of responsibilities are expensive to modify, slow to extend, and prone to cascading failures that affect seemingly unrelated capabilities.</span></span></li>
@@ -374,6 +360,42 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
         </div>
     </section>
 </BaseLayout>
+
+<script>
+    // Build TOC sublists from actual h3 headings (DRY: heading text defined once)
+    document.querySelectorAll<HTMLElement>('.arch-toc-layer').forEach(tocLayer => {
+        const layerNum = tocLayer.dataset.layer;
+        const section = document.getElementById(`layer-${layerNum}`);
+        if (!section) return;
+
+        const headings = section.querySelectorAll('h3[id]');
+        if (headings.length === 0) return;
+
+        const sublist = document.createElement('ul');
+        sublist.className = 'arch-toc-sublist';
+
+        headings.forEach(h3 => {
+            const li = document.createElement('li');
+            const icon = document.createElement('img');
+            icon.src = '/images/gst-delta-icon-teal-stroke-thick.svg';
+            icon.alt = '';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.className = 'bullet-icon';
+            icon.width = 10;
+            icon.height = 10;
+
+            const link = document.createElement('a');
+            link.href = `#${h3.id}`;
+            link.textContent = h3.textContent;
+
+            li.appendChild(icon);
+            li.appendChild(link);
+            sublist.appendChild(li);
+        });
+
+        tocLayer.appendChild(sublist);
+    });
+</script>
 
 <style>
     .arch-guide {
