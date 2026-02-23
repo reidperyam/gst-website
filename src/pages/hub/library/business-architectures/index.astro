@@ -127,14 +127,18 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
                     <div class="arch-diligence-callout">
                         <p class="arch-diligence-label">What to look for in diligence</p>
-                        <ul class="arch-diligence-list">
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" />Deployment frequency and release cycle duration as proxies for architectural health</li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" />The ratio of maintenance effort to new development</li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" />Dependency and licensing exposure</li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" />System observability and incident response capabilities</li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" />Evidence of architectural principles being applied consistently vs. aspirationally</li>
-                            <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="10" height="10" />Technical debt quantification and trending</li>
-                        </ul>
+                        <div class="arch-diligence-section">
+                            <p class="arch-diligence-sublabel">Signals to look for</p>
+                            <p class="arch-diligence-text">Deployment frequency and release cycle duration — mature architectures ship frequently with low incident rates. The ratio of maintenance effort to new development — teams spending more than 60% on maintenance are signaling architectural constraints. Whether architectural principles are applied consistently or only aspirationally.</p>
+                        </div>
+                        <div class="arch-diligence-section">
+                            <p class="arch-diligence-sublabel">Questions to ask</p>
+                            <p class="arch-diligence-text">How long does it take to deploy a single-line change to production? What happens when a third-party dependency has a critical vulnerability — how quickly can it be patched? Where does the team spend most of its time: building new capabilities or maintaining existing ones?</p>
+                        </div>
+                        <div class="arch-diligence-section">
+                            <p class="arch-diligence-sublabel">Artifacts to request</p>
+                            <p class="arch-diligence-text">Dependency manifest and license audit. Deployment logs showing frequency and rollback history. Technical debt register or backlog with trending. Incident postmortems from the past 12 months. System architecture diagrams (and whether they match the actual implementation).</p>
+                        </div>
                     </div>
                 </section>
 
