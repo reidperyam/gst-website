@@ -49,7 +49,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <a href="#layer-4">Organizational Architecture</a>
                     </li>
                     <li class="arch-toc-layer" data-layer="5">
-                        <a href="#layer-5">Industry &amp; Regulatory Architecture</a>
+                        <a href="#layer-5">Industry &amp; Regulatory Architecture (Externalities)</a>
                     </li>
                     <li class="arch-toc-separator" aria-hidden="true"></li>
                     <li><a href="#interactions">How the Layers Interact</a></li>
@@ -271,7 +271,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
                     <p class="arch-business-meaning"><strong>Business meaning:</strong> Key-person dependencies · Capability gaps · Leadership decision rights and accountability · Incentive alignment · Organizational capacity to absorb change</p>
 
-                    <h3 class="arch-subheading">The Congruence Model: Four Levers of Organizational Architecture</h3>
+                    <h3 class="arch-subheading" id="layer-4-congruence">The Congruence Model: Four Levers of Organizational Architecture</h3>
                     <p class="arch-body">The Tushman-Nadler Congruence Model provides a practical framework for understanding how organizational architecture either enables or constrains execution. It applies to any organization, but its implications for technology-driven businesses are particularly acute because of Conway's Law: misalignment between these four components doesn't just slow the organization down, it deforms the technology itself. The model identifies four components that must be aligned for effective execution:</p>
 
                     <ul class="arch-list arch-list--labeled">
@@ -310,13 +310,13 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 
                     <p class="arch-business-meaning"><strong>Business meaning:</strong> Which business models are viable · Where margins concentrate · How defensible advantage can be built · Which constraints are non-negotiable</p>
 
-                    <h3 class="arch-subheading">Industry Standards and Impedance Mismatch</h3>
+                    <h3 class="arch-subheading" id="layer-5-impedance">Industry Standards and Impedance Mismatch</h3>
                     <p class="arch-body">Every industry develops its own interfaces: the points where one company's products, data, or services need to connect with another's. When these interfaces are well-established, they become industry standards. When they aren't, or when they shift, the resulting friction creates what engineers call an <em>impedance mismatch</em>: the cost and complexity of operating within an industry structure your architecture wasn't designed for.</p>
                     <p class="arch-body">Microsoft under Steve Ballmer is a vivid example. The company's entire architecture, organizational, product, and operational, was optimized around Windows as the industry's dominant interface. Every initiative, phone, cloud, search, mobile, had to be compatible with that Windows-centric model. When the industry's interfaces shifted toward mobile, cloud, and platform-agnostic services, Microsoft faced a structural mismatch between how it was built and where the market was going. Satya Nadella's transformation was fundamentally an exercise in resolving that impedance mismatch: Office on iOS, Azure as a platform-agnostic cloud, Windows decoupled from the rest of the portfolio. The market rewarded the realignment accordingly.</p>
                     <p class="arch-body">Dell illustrates the same pattern from a different angle. Their business model was perfectly optimized for a modular industry architecture: standardized PC components, direct-to-consumer sales, build-to-order manufacturing. When the industry shifted toward integrated mobile devices where those standardized interfaces no longer defined the market, Dell's operational and product architecture were exquisitely tuned for an industry structure that was losing relevance.</p>
                     <p class="arch-body">For investors evaluating a target, the key question is: <em>Where does this company sit in its industry's architecture?</em> A business that depends on proprietary interfaces it doesn't control faces fundamentally different risks than one that owns a critical standard or operates within a mature, modular ecosystem. And a business whose architecture is optimized for an industry structure that is shifting faces the most dangerous risk of all: everything works, until it doesn't.</p>
 
-                    <h3 class="arch-subheading">Managing the Innovation Portfolio</h3>
+                    <h3 class="arch-subheading" id="layer-5-innovation">Managing the Innovation Portfolio</h3>
                     <p class="arch-body">How companies respond to industry-level change reveals their strategic maturity, and for acquirers, their future trajectory. There are typically three mechanisms:</p>
 
                     <ul class="arch-list arch-list--labeled">
@@ -325,7 +325,7 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
                         <li><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="bullet-icon" width="12" height="12" /><span class="arch-label-group"><strong>Organic innovation</strong><span class="arch-label-desc">Works best when the trajectory is clear and internal architecture supports iterative development. It struggles when the required changes cut across too many existing architectural layers.</span></span></li>
                     </ul>
 
-                    <h3 class="arch-subheading">Disruptive Innovation as a Filter</h3>
+                    <h3 class="arch-subheading" id="layer-5-disruption">Disruptive Innovation as a Filter</h3>
                     <p class="arch-body">In The Innovator's Dilemma, Clayton Christensen identified a pattern that has repeated across industries: established companies lose market position not because they execute poorly, but because they execute well on a strategy that the market is moving away from. The mechanism is architectural. Incumbents optimize their technology, operations, and organization around their most profitable customers. A new entrant arrives with a simpler, cheaper alternative built on fundamentally different architectural choices. It initially serves customers the incumbent considers low-value or unprofitable. By the time the alternative is good enough to compete for the incumbent's core market, the incumbent's architecture is too optimized for the old model to adapt quickly enough.</p>
                     <p class="arch-body">The question for investors isn't just "Is this company's technology current?" but "Is this company's architecture optimized for a market structure that is about to shift?" A target with a beautifully optimized architecture for today's competitive landscape can still be a poor investment if that landscape is being disrupted from below.</p>
 
