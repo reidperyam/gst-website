@@ -1,0 +1,101 @@
+---
+/**
+ * Category filter pills for the Radar page.
+ * Client-side filtering via data-category attributes.
+ */
+import type { RadarCategory } from '../../lib/inoreader/types';
+
+interface Props {
+  categories: Record<string, RadarCategory>;
+}
+
+const { categories } = Astro.props;
+---
+
+<nav class="category-filter" aria-label="Filter by category">
+  <button class="filter-btn active" data-filter="all">All</button>
+  {Object.entries(categories).map(([key, cat]) => (
+    <button
+      class="filter-btn"
+      data-filter={key}
+      style={`--btn-color: ${cat.color}`}
+    >
+      {cat.label}
+    </button>
+  ))}
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('[data-category]');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = (btn as HTMLElement).dataset.filter;
+
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        items.forEach(item => {
+          const el = item as HTMLElement;
+          if (filter === 'all' || el.dataset.category === filter) {
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xl) 0;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .filter-btn {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border: 1px solid var(--filter-chip-border);
+    background: var(--filter-chip-bg);
+    color: var(--filter-chip-text);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--btn-color, var(--color-primary));
+    color: var(--btn-color, var(--color-primary));
+  }
+
+  .filter-btn.active {
+    background: var(--btn-color, var(--color-primary));
+    border-color: var(--btn-color, var(--color-primary));
+    color: var(--bg-light);
+  }
+
+  :global(html.dark-theme) .category-filter {
+    border-bottom-color: var(--border-dark);
+  }
+
+  @media (max-width: 480px) {
+    .category-filter {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--spacing-lg);
+    }
+
+    .filter-btn {
+      white-space: nowrap;
+    }
+  }
+</style>

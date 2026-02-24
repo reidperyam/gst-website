@@ -1,123 +1,222 @@
 ---
+/**
+ * /hub/radar — The Radar: Curated Intelligence Feed
+ *
+ * SERVER-RENDERED with ISR. This page fetches from the Inoreader API
+ * at render time and is cached by Vercel for the configured revalidation
+ * interval. No build-time data files needed.
+ *
+ * Content tiers:
+ *   1. Signals — Original markdown posts (from content collection)
+ *   2. Featured — Annotated items from Inoreader (highlights + GST Take)
+ *   3. Stream — Automated RSS from Inoreader subscriptions
+ */
+export const prerender = false;
+
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RadarHeader from '../../../components/radar/RadarHeader.astro';
+import SignalCard from '../../../components/radar/SignalCard.astro';
+import FeaturedItem from '../../../components/radar/FeaturedItem.astro';
+import StreamItem from '../../../components/radar/StreamItem.astro';
+import CategoryFilter from '../../../components/radar/CategoryFilter.astro';
+
+import { fetchAnnotatedItems, fetchAllStreams } from '../../../lib/inoreader/client';
+import { toFeaturedItem, toStreamItem, CATEGORIES } from '../../../lib/inoreader/transform';
+import { getCollection } from 'astro:content';
 import { trackPageView } from '../../../utils/analytics';
 
+import type { RadarFeaturedItem, RadarStreamItem } from '../../../lib/inoreader/types';
+
 trackPageView('hub-radar', 'The Radar - Perspectives | GST');
+
+// --- Data Fetching (runs on Vercel at revalidation time) ---
+
+// Tier 3: Signal posts from content collection
+const allSignals = await getCollection('signals');
+const signals = allSignals
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime());
+
+// Tier 2: Featured items (annotated in Inoreader)
+let featured: RadarFeaturedItem[] = [];
+try {
+  const annotatedResponse = await fetchAnnotatedItems(30);
+  if (annotatedResponse) {
+    featured = annotatedResponse.items
+      .map(toFeaturedItem)
+      .filter((item): item is RadarFeaturedItem => item !== null);
+  }
+} catch (e) {
+  console.error('[Radar] Featured items fetch failed:', e);
+}
+
+// Tier 1: Automated stream from all GST folders
+let stream: RadarStreamItem[] = [];
+try {
+  const folderPrefix = import.meta.env.INOREADER_FOLDER_PREFIX || 'GST-';
+  const streamsResponse = await fetchAllStreams(folderPrefix, 15);
+  if (streamsResponse) {
+    const featuredUrls = new Set(featured.map(f => f.url));
+    stream = streamsResponse.items
+      .filter(item => {
+        const url = item.canonical?.[0]?.href || item.alternate?.[0]?.href || '';
+        return !featuredUrls.has(url);
+      })
+      .map(toStreamItem);
+  }
+} catch (e) {
+  console.error('[Radar] Stream fetch failed:', e);
+}
+
+const lastUpdated = new Date();
 ---
 
 <BaseLayout
-    title="The Radar | Strategic Intelligence Hub"
-    description="Rapid-response analysis of emerging technology shifts, AI developments, and M&A market dynamics."
-    ogTitle="The Radar - Perspectives | GST"
-    ogDescription="Analysis of emerging technology shifts, AI developments, and M&A market dynamics."
-    ogImage="/og-image.png"
-    ogUrl="https://globalstrategic.tech/hub/radar"
+  title="The Radar — Technology & M&A Intelligence | GST"
+  description="Curated intelligence on technology trends, M&A dynamics, and enterprise technology shifts. Practitioner perspectives from 50+ PE technology engagements."
+  ogTitle="The Radar - Perspectives | GST"
+  ogDescription="Curated technology and M&A intelligence for PE investors and portfolio company leaders."
+  ogImage="/og-image.png"
+  ogUrl="https://globalstrategic.tech/hub/radar"
 >
-    <section class="placeholder-hero">
-        <div class="container">
-            <span class="section-label">Perspectives</span>
-            <h1>The Radar</h1>
-            <svg class="page-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="24" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
-                <circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="2" opacity="0.6"/>
-                <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2" opacity="0.3"/>
-                <line x1="24" y1="2" x2="24" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <line x1="24" y1="40" x2="24" y2="46" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <line x1="2" y1="24" x2="8" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <line x1="40" y1="24" x2="46" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <p class="placeholder-description">Coming soon. Strategic intelligence for emerging technology shifts and M&A market dynamics.</p>
-            <p class="content-type-label">Short-form perspectives on Security, AI-shift, technology and M&A trends</p>
-            <a href="/hub" class="cta-button secondary">Return to Hub</a>
-        </div>
-    </section>
+  <div class="radar-container">
+    <div class="container">
+      <RadarHeader />
+
+      <CategoryFilter categories={CATEGORIES} />
+
+      {/* Tier 3: Signal Posts (most prominent) */}
+      {signals.length > 0 && (
+        <section class="radar-section" id="signals">
+          <div class="section-header">
+            <h2 class="section-label">Signals</h2>
+            <p class="section-description">Original perspectives on emerging patterns</p>
+          </div>
+          <div class="signals-grid">
+            {signals.slice(0, 3).map(signal => (
+              <SignalCard signal={signal} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Tier 2: Featured Items (annotated with GST Take) */}
+      {featured.length > 0 && (
+        <section class="radar-section" id="featured">
+          <div class="section-header">
+            <h2 class="section-label">Featured</h2>
+            <p class="section-description">Curated reads with practitioner context</p>
+          </div>
+          <div class="featured-list">
+            {featured.map(item => (
+              <FeaturedItem item={item} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Tier 1: Automated Stream */}
+      {stream.length > 0 && (
+        <section class="radar-section" id="stream">
+          <div class="section-header">
+            <h2 class="section-label">Stream</h2>
+            <p class="section-description">Latest from tracked sources</p>
+          </div>
+          <div class="stream-list">
+            {stream.slice(0, 30).map(item => (
+              <StreamItem item={item} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Fallback if no content available */}
+      {featured.length === 0 && stream.length === 0 && signals.length === 0 && (
+        <section class="radar-section radar-empty">
+          <p>Intelligence feed is currently being refreshed. Check back shortly.</p>
+        </section>
+      )}
+
+      <footer class="radar-footer">
+        <p class="last-updated">
+          Updated {lastUpdated.toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric',
+            hour: 'numeric', minute: '2-digit'
+          })}
+        </p>
+        <a href="/hub" class="cta-button secondary">Return to Hub</a>
+      </footer>
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
-    .placeholder-hero {
-        padding: 5rem 0;
-        text-align: center;
+  .radar-container {
+    padding-bottom: var(--spacing-3xl);
+  }
+
+  .radar-section {
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-label {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-light-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .section-description {
+    font-size: var(--text-sm);
+    color: var(--text-light-secondary);
+  }
+
+  .signals-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  @media (min-width: 768px) {
+    .signals-grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
+  }
 
-    .section-label {
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: var(--color-primary);
-        margin-bottom: var(--spacing-lg);
-        display: block;
+  .radar-empty {
+    padding: var(--spacing-3xl) 0;
+    text-align: center;
+    color: var(--text-light-muted);
+  }
+
+  .radar-footer {
+    padding: var(--spacing-xl) 0;
+    border-top: 1px solid var(--border-light);
+    margin-top: var(--spacing-2xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .last-updated {
+    font-size: var(--text-xs);
+    color: var(--text-light-muted);
+  }
+
+  :global(html.dark-theme) .radar-footer {
+    border-top-color: var(--border-dark);
+  }
+
+  @media (max-width: 480px) {
+    .radar-footer {
+      flex-direction: column;
+      gap: var(--spacing-lg);
+      align-items: flex-start;
     }
-
-    .placeholder-hero h1 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: rgba(26, 26, 26, 0.95);
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-        margin-bottom: var(--spacing-lg);
-    }
-
-    .page-icon {
-        color: var(--color-primary);
-        margin: 0 auto var(--spacing-xl);
-        display: block;
-    }
-
-    :global(html.dark-theme) .placeholder-hero h1 {
-        color: rgba(245, 245, 245, 0.95);
-    }
-
-    .placeholder-description {
-        font-size: 1.1rem;
-        color: rgba(26, 26, 26, 0.7);
-        line-height: 1.8;
-        max-width: 600px;
-        margin: 0 auto var(--spacing-lg);
-    }
-
-    :global(html.dark-theme) .placeholder-description {
-        color: rgba(200, 200, 200, 0.7);
-    }
-
-    .content-type-label {
-        font-size: 0.9rem;
-        color: rgba(26, 26, 26, 0.6);
-        line-height: 1.6;
-        max-width: 600px;
-        margin: 0 auto var(--spacing-3xl);
-        font-style: italic;
-    }
-
-    :global(html.dark-theme) .content-type-label {
-        color: rgba(200, 200, 200, 0.6);
-    }
-
-    @media (max-width: 768px) {
-        .placeholder-hero {
-            padding: 3rem 0;
-        }
-
-        .placeholder-hero h1 {
-            font-size: 1.75rem;
-        }
-
-        .placeholder-description {
-            font-size: 1rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .placeholder-hero {
-            padding: 2rem 0;
-        }
-
-        .placeholder-hero h1 {
-            font-size: 1.5rem;
-        }
-
-        .placeholder-description {
-            font-size: 0.9rem;
-        }
-    }
+  }
 </style>
