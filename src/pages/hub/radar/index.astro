@@ -120,7 +120,7 @@ const lastUpdated = new Date();
       {/* Tier 1: Signal Posts (most prominent) */}
       {signals.length > 0 && (
         <section class="radar-section radar-section--signals" id="signals">
-          <details class="radar-section__details" data-section="signals">
+          <details class="radar-section__details" open data-section="signals">
             <summary class="section-header">
               <span class="section-toggle" aria-hidden="true"></span>
               <div class="section-header__text">
@@ -140,7 +140,7 @@ const lastUpdated = new Date();
       {/* Tier 2: FYI Items (annotated with GST Take) */}
       {fyi.length > 0 && (
         <section class="radar-section radar-section--fyi" id="fyi">
-          <details class="radar-section__details" data-section="fyi">
+          <details class="radar-section__details" open data-section="fyi">
             <summary class="section-header">
               <span class="section-toggle" aria-hidden="true"></span>
               <div class="section-header__text">
@@ -163,7 +163,7 @@ const lastUpdated = new Date();
       {/* Tier 3: The Wire — Automated Feed */}
       {wire.length > 0 && (
         <section class="radar-section radar-section--wire" id="wire">
-          <details class="radar-section__details" data-section="wire">
+          <details class="radar-section__details" open data-section="wire">
             <summary class="section-header">
               <span class="section-toggle" aria-hidden="true"></span>
               <div class="section-header__text">
