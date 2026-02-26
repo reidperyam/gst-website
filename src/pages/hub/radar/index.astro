@@ -122,11 +122,11 @@ const lastUpdated = new Date();
         <section class="radar-section radar-section--signals" id="signals">
           <details class="radar-section__details" data-section="signals">
             <summary class="section-header">
+              <span class="section-toggle" aria-hidden="true"></span>
               <div class="section-header__text">
                 <h2 class="section-label">Δ Signals</h2>
                 <p class="section-description">Original analysis from GST</p>
               </div>
-              <span class="section-toggle" aria-hidden="true"></span>
             </summary>
             <div class="signals-grid">
               {signals.slice(0, 3).map(signal => (
@@ -142,6 +142,7 @@ const lastUpdated = new Date();
         <section class="radar-section radar-section--fyi" id="fyi">
           <details class="radar-section__details" data-section="fyi">
             <summary class="section-header">
+              <span class="section-toggle" aria-hidden="true"></span>
               <div class="section-header__text">
                 <h2 class="section-label">
                   Δ FYI
@@ -149,7 +150,6 @@ const lastUpdated = new Date();
                 </h2>
                 <p class="section-description">Curated reads with our commentary</p>
               </div>
-              <span class="section-toggle" aria-hidden="true"></span>
             </summary>
             <div class="fyi-list">
               {fyi.map(item => (
@@ -165,11 +165,11 @@ const lastUpdated = new Date();
         <section class="radar-section radar-section--wire" id="wire">
           <details class="radar-section__details" data-section="wire">
             <summary class="section-header">
+              <span class="section-toggle" aria-hidden="true"></span>
               <div class="section-header__text">
                 <h2 class="section-label">Δ The Wire</h2>
                 <p class="section-description">Latest from tracked sources</p>
               </div>
-              <span class="section-toggle" aria-hidden="true"></span>
             </summary>
             <div class="wire-list">
               {wire.map(item => (
@@ -270,7 +270,6 @@ const lastUpdated = new Date();
   .section-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-xl);
   }
@@ -378,8 +377,8 @@ const lastUpdated = new Date();
   .radar-footer {
     margin-top: var(--spacing-3xl);
     padding: var(--spacing-2xl) 0;
-    border-top: 1px solid var(--border-light);
     background: transparent;
+    border-top: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -395,10 +394,6 @@ const lastUpdated = new Date();
 
   :global(html.dark-theme) .radar-section--fyi {
     border-color: var(--border-dark);
-  }
-
-  :global(html.dark-theme) .radar-footer {
-    border-top-color: var(--border-dark);
   }
 
   /* --- Mobile --- */
