@@ -363,22 +363,14 @@ test.describe('About Page - Founder Section', () => {
       const founderLink = page.locator('#founder-photo-link');
       await expect(founderLink).toBeVisible();
 
-      // Get initial opacity
-      const initialOpacity = await founderLink.evaluate(el => {
-        return window.getComputedStyle(el).opacity;
-      });
-
-      // Hover over link
+      // Hover over link and wait for opacity to change (CSS transition is 0.3s)
       await founderLink.hover();
-      await page.waitForTimeout(400);
-
-      // Get hover opacity
-      const hoverOpacity = await founderLink.evaluate(el => {
-        return window.getComputedStyle(el).opacity;
-      });
-
-      // Opacity should change on hover (0.9 in CSS)
-      expect(parseFloat(hoverOpacity)).toBeLessThan(parseFloat(initialOpacity));
+      await expect(async () => {
+        const opacity = await founderLink.evaluate(el =>
+          parseFloat(window.getComputedStyle(el).opacity)
+        );
+        expect(opacity).toBeLessThan(1);
+      }).toPass({ timeout: 3000 });
     });
 
     test('should have cursor:pointer on founder photo link', async ({ page }) => {
