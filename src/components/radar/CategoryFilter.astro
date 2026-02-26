@@ -30,6 +30,15 @@ const { categories } = Astro.props;
     const buttons = document.querySelectorAll('.filter-btn');
     const items = document.querySelectorAll('[data-category]');
 
+    // Gravity: set --d (0–1) based on distance from center index
+    const count = buttons.length;
+    const center = (count - 1) / 2;
+    const maxDist = center || 1;
+    buttons.forEach((btn, i) => {
+      const d = Math.abs(i - center) / maxDist;
+      (btn as HTMLElement).style.setProperty('--d', d.toFixed(3));
+    });
+
     buttons.forEach(btn => {
       btn.addEventListener('click', () => {
         const filter = (btn as HTMLElement).dataset.filter;
@@ -54,7 +63,8 @@ const { categories } = Astro.props;
   .category-filter {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    justify-content: center;
+    gap: 0;
     padding: var(--spacing-xl) 0;
     border-bottom: 1px solid var(--border-light);
     margin-bottom: var(--spacing-2xl);
@@ -71,6 +81,9 @@ const { categories } = Astro.props;
     letter-spacing: 0.05em;
     cursor: pointer;
     transition: all var(--transition-normal);
+    /* Gravity: --d is distance from center (0 = center, 1 = edge).
+       Margin grows quadratically so center buttons cluster tight. */
+    margin: var(--spacing-xs) calc(var(--spacing-xs) + var(--d, 0) * var(--d, 0) * 1.2rem);
   }
 
   .filter-btn:hover {
@@ -104,6 +117,7 @@ const { categories } = Astro.props;
     .filter-btn {
       white-space: nowrap;
       min-height: 44px;
+      margin: var(--spacing-xs) var(--spacing-xs);
     }
   }
 </style>
