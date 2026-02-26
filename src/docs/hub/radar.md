@@ -81,6 +81,28 @@ Create folders in Inoreader prefixed with `GST-`:
 3. Add a note with practitioner context (becomes "Δ GST Take")
 4. Optionally tag with `gst-[category]` for category override
 
+## Page UX Features
+
+### Collapsible Sections
+
+Each content tier (Signals, FYI, The Wire) is wrapped in a native `<details>`/`<summary>` element:
+
+- **Default state**: All sections open
+- **Toggle indicator**: `+` (collapsed) / `−` (expanded) on the left side of each section header
+- **Hover**: Toggle turns green (`--color-primary`)
+- **localStorage persistence**: Section open/closed states are saved to `localStorage` key `radar-sections` (format: `{"signals": true, "fyi": false, "wire": true}`). On return visits, saved preferences override the default open state.
+- **Pattern**: Follows the same `<details>`/`<summary>` approach used in `FyiItem.astro` for individual FYI items, and the `ThemeToggle.astro` try/catch pattern for localStorage access.
+
+### Category Filter with Gravity Spacing
+
+The category filter pills (`CategoryFilter.astro`) use a gravitational spacing effect:
+
+- Pills are center-justified with `justify-content: center`
+- A client-side script computes each button's normalized distance from center (`--d`: 0 at center, 1 at edges)
+- CSS uses `--d` squared to calculate horizontal margin: `calc(var(--spacing-xs) + var(--d) * var(--d) * 1.6rem)`
+- Center buttons cluster tightly together; edge buttons have progressively wider spacing
+- On mobile (< 480px), pills switch to horizontal scroll with uniform spacing
+
 ## File Structure
 
 ```
@@ -91,13 +113,14 @@ src/
 │   ├── SignalCard.astro          # Signal post preview card
 │   ├── FyiItem.astro             # Collapsible FYI item with GST Take
 │   ├── WireItem.astro            # Compact wire feed item
-│   └── CategoryFilter.astro     # Client-side filter pills
+│   └── CategoryFilter.astro     # Client-side filter pills (gravity spacing)
 ├── lib/inoreader/
 │   ├── types.ts                  # TypeScript interfaces
-│   ├── client.ts                 # API client (fetch wrappers)
+│   ├── client.ts                 # API client (fetch wrappers + dev cache)
+│   ├── cache.ts                  # Dev-mode file cache (24h TTL)
 │   └── transform.ts             # Data transformation + categories
 ├── pages/hub/radar/
-│   ├── index.astro               # Main Radar page (SSR + ISR)
+│   ├── index.astro               # Main Radar page (SSR + ISR + collapsible sections)
 │   └── signals/[...slug].astro  # Signal post detail pages
 scripts/
 └── inoreader-auth.mjs           # OAuth setup helper
@@ -168,6 +191,63 @@ During dev, the cache logs its behavior to the terminal:
 ```
 [Radar] Dev cache hit: fetchAnnotatedItems        # using cached response
 [Radar] Dev cache stored: fetchAllStreams          # fresh response saved
+```
+
+## Working Offline / Rate-Limited Development
+
+When the Inoreader API rate limit (200 requests/day) has been exhausted — or when working without network access — you can seed the dev cache with mock data so the Radar page renders fully without any live API calls.
+
+### Quick Start
+
+Run the E2E seed script directly with `tsx`:
+
+```bash
+npx tsx -e "import { seedRadarCache } from './tests/e2e/fixtures/seed-radar-cache'; seedRadarCache();"
+```
+
+This writes two cache entries into `.cache/inoreader/` with a fresh timestamp (24h TTL). Start the dev server normally afterward:
+
+```bash
+npm run dev
+# Visit http://localhost:4321/hub/radar — renders with mock data, zero API calls
+```
+
+### How It Works
+
+The seed script (`tests/e2e/fixtures/seed-radar-cache.ts`) writes the same cache files the dev-mode cache system reads. The Astro dev server sees valid cache entries and skips all Inoreader API calls. The mock data includes:
+
+- **6 FYI items** with annotations (highlights + GST Take) across all 5 categories
+- **16 Wire items** across all 5 GST-* folders with realistic titles and sources
+
+### Resetting to Live Data
+
+When you're ready to return to live API data:
+
+```bash
+rm -rf .cache/inoreader    # Remove seeded mock data
+npm run dev                # Next page load fetches from Inoreader and re-caches
+```
+
+### Preserving Real Cache Data
+
+If you've already loaded the Radar page with live data and want to keep that cache for offline use, the files in `.cache/inoreader/` persist across dev server restarts. The 24-hour TTL is based on a `timestamp` field stored inside each JSON file, not the file modification time.
+
+To extend expired cache entries without re-fetching:
+
+```bash
+# Reset the timestamp inside each cache file to "now"
+npx tsx -e "
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
+const dir = '.cache/inoreader';
+for (const f of readdirSync(dir)) {
+  const p = join(dir, f);
+  const entry = JSON.parse(readFileSync(p, 'utf-8'));
+  entry.timestamp = Date.now();
+  writeFileSync(p, JSON.stringify(entry), 'utf-8');
+}
+console.log('Cache timestamps refreshed');
+"
 ```
 
 ## E2E Test Mocking
