@@ -13,7 +13,7 @@ import { Page, expect } from '@playwright/test';
  */
 export async function waitForRadarReady(page: Page): Promise<void> {
   // SSR page delivers full HTML — just confirm the radar structure rendered
-  await expect(page.locator('.radar-header')).toBeVisible();
+  await expect(page.locator('.hub-header')).toBeVisible();
 }
 
 /**
@@ -21,16 +21,6 @@ export async function waitForRadarReady(page: Page): Promise<void> {
  * Returns true if at least one content item exists; false if only the fallback.
  */
 export async function hasRadarContent(page: Page): Promise<boolean> {
-  const fyiCount = await page.locator('.fyi-item').count();
-  const wireCount = await page.locator('.wire-item').count();
-  return fyiCount > 0 || wireCount > 0;
-}
-
-/**
- * Check whether the page has Inoreader-sourced content (FYI or wire).
- * Use this for tests that depend on live API data (category filtering, etc.).
- */
-export async function hasInoreaderContent(page: Page): Promise<boolean> {
   const fyiCount = await page.locator('.fyi-item').count();
   const wireCount = await page.locator('.wire-item').count();
   return fyiCount > 0 || wireCount > 0;

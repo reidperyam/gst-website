@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import {
   waitForRadarReady,
   hasRadarContent,
-  hasInoreaderContent,
   clickCategoryFilter,
   getVisibleItemCount,
 } from './helpers/radar';
@@ -22,14 +21,14 @@ test.describe('Radar Page', () => {
       expect(page.url()).toContain('/hub/radar');
 
       // Verify page renders with real content (not a blank/error page)
-      const title = page.locator('.radar-header__title');
+      const title = page.locator('.hub-header__title');
       await expect(title).toBeVisible();
       const titleText = await title.textContent();
       expect(titleText).toContain('The Radar');
     });
 
     test('should display breadcrumb linking back to Hub', async ({ page }) => {
-      const hubLink = page.locator('.radar-header__breadcrumb a[href="/hub"]');
+      const hubLink = page.locator('.hub-header__breadcrumb a[href="/hub"]');
       await expect(hubLink).toBeVisible();
       const linkText = await hubLink.textContent();
       expect(linkText).toContain('Hub');
@@ -62,7 +61,7 @@ test.describe('Radar Page', () => {
       const returnLink = footer.locator('a[href="/hub"]');
       await expect(returnLink).toBeVisible();
 
-      const timestamp = page.locator('.radar-header__updated');
+      const timestamp = page.locator('.hub-header__updated');
       const timestampText = await timestamp.textContent();
       // Verify it contains "Updated" and a date-like pattern (month name)
       expect(timestampText).toBeTruthy();
@@ -93,7 +92,7 @@ test.describe('Radar Page', () => {
 
   test.describe('Content Behavior', () => {
     test('external links should open in new tab with security attributes', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -114,7 +113,7 @@ test.describe('Radar Page', () => {
     });
 
     test('data-category attributes should match known category IDs', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -132,21 +131,21 @@ test.describe('Radar Page', () => {
       }
     });
 
-    test('FYI items should display category tags with visible labels', async ({ page }) => {
+    test('FYI items should display Editor\'s Pick tags', async ({ page }) => {
       const fyiItems = page.locator('.fyi-item');
       if (await fyiItems.count() === 0) {
         test.skip();
         return;
       }
 
-      const categoryTags = page.locator('.fyi-item .category-tag');
-      const tagCount = await categoryTags.count();
+      const pickTags = page.locator('.fyi-item .editors-pick-tag');
+      const tagCount = await pickTags.count();
       expect(tagCount).toBeGreaterThan(0);
 
-      // Verify tags have actual rendered text, not empty elements
+      // Verify every tag says "Editor's Pick"
       for (let i = 0; i < Math.min(tagCount, 3); i++) {
-        const tagText = await categoryTags.nth(i).textContent();
-        expect(tagText?.trim().length).toBeGreaterThan(0);
+        const tagText = await pickTags.nth(i).textContent();
+        expect(tagText?.trim()).toBe("Editor's Pick");
       }
     });
   });
@@ -165,7 +164,7 @@ test.describe('Radar Page', () => {
     });
 
     test('clicking a category should activate it, deactivate "All", and hide non-matching items', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -237,7 +236,7 @@ test.describe('Radar Page', () => {
     });
 
     test('clicking "All" should reset filter — before/after state comparison', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -286,7 +285,7 @@ test.describe('Radar Page', () => {
     });
 
     test('switching between categories should update visible items each time', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
