@@ -4,7 +4,6 @@
  * Collapsed by default; expands to show summary, highlight, and GST Take.
  * Uses native <details>/<summary> for zero-JS, accessible expand/collapse.
  */
-import { CATEGORIES } from '../../lib/inoreader/transform';
 import type { RadarFyiItem } from '../../lib/inoreader/types';
 
 interface Props {
@@ -12,7 +11,6 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const cat = CATEGORIES[item.category];
 const pubDate = new Date(item.publishedAt);
 const dateStr = pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 ---
@@ -21,11 +19,7 @@ const dateStr = pubDate.toLocaleDateString('en-US', { month: 'short', day: 'nume
   <details class="fyi-item__details">
     <summary class="fyi-item__header">
       <div class="fyi-item__meta">
-        {cat && (
-          <span class="category-tag" style={`--tag-color: ${cat.color}`}>
-            {cat.label}
-          </span>
-        )}
+        <span class="editors-pick-tag">Editor's Pick</span>
         <span class="source">{item.source}</span>
         <span class="date">{dateStr}</span>
       </div>
@@ -90,14 +84,19 @@ const dateStr = pubDate.toLocaleDateString('en-US', { month: 'short', day: 'nume
     margin-bottom: var(--spacing-xs);
   }
 
-  .category-tag {
+  .editors-pick-tag {
     font-size: var(--text-xs);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--tag-color);
-    border: 1px solid var(--tag-color);
+    color: #b26622;
+    border: 1px solid #b26622;
     padding: 0.125rem var(--spacing-sm);
+  }
+
+  :global(html.dark-theme) .editors-pick-tag {
+    color: #d4923a;
+    border-color: #d4923a;
   }
 
   .fyi-item__headline {

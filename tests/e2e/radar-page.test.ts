@@ -131,21 +131,21 @@ test.describe('Radar Page', () => {
       }
     });
 
-    test('FYI items should display category tags with visible labels', async ({ page }) => {
+    test('FYI items should display Editor\'s Pick tags', async ({ page }) => {
       const fyiItems = page.locator('.fyi-item');
       if (await fyiItems.count() === 0) {
         test.skip();
         return;
       }
 
-      const categoryTags = page.locator('.fyi-item .category-tag');
-      const tagCount = await categoryTags.count();
+      const pickTags = page.locator('.fyi-item .editors-pick-tag');
+      const tagCount = await pickTags.count();
       expect(tagCount).toBeGreaterThan(0);
 
-      // Verify tags have actual rendered text, not empty elements
+      // Verify every tag says "Editor's Pick"
       for (let i = 0; i < Math.min(tagCount, 3); i++) {
-        const tagText = await categoryTags.nth(i).textContent();
-        expect(tagText?.trim().length).toBeGreaterThan(0);
+        const tagText = await pickTags.nth(i).textContent();
+        expect(tagText?.trim()).toBe("Editor's Pick");
       }
     });
   });
