@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import {
   waitForRadarReady,
   hasRadarContent,
-  hasInoreaderContent,
   clickCategoryFilter,
   getVisibleItemCount,
 } from './helpers/radar';
@@ -93,7 +92,7 @@ test.describe('Radar Page', () => {
 
   test.describe('Content Behavior', () => {
     test('external links should open in new tab with security attributes', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -114,7 +113,7 @@ test.describe('Radar Page', () => {
     });
 
     test('data-category attributes should match known category IDs', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -165,7 +164,7 @@ test.describe('Radar Page', () => {
     });
 
     test('clicking a category should activate it, deactivate "All", and hide non-matching items', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -237,7 +236,7 @@ test.describe('Radar Page', () => {
     });
 
     test('clicking "All" should reset filter — before/after state comparison', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;
@@ -286,7 +285,7 @@ test.describe('Radar Page', () => {
     });
 
     test('switching between categories should update visible items each time', async ({ page }) => {
-      const hasContent = await hasInoreaderContent(page);
+      const hasContent = await hasRadarContent(page);
       if (!hasContent) {
         test.skip();
         return;

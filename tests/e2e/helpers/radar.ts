@@ -27,16 +27,6 @@ export async function hasRadarContent(page: Page): Promise<boolean> {
 }
 
 /**
- * Check whether the page has Inoreader-sourced content (FYI or wire).
- * Use this for tests that depend on live API data (category filtering, etc.).
- */
-export async function hasInoreaderContent(page: Page): Promise<boolean> {
-  const fyiCount = await page.locator('.fyi-item').count();
-  const wireCount = await page.locator('.wire-item').count();
-  return fyiCount > 0 || wireCount > 0;
-}
-
-/**
  * Click a category filter button and wait for the DOM to update.
  * Uses page.evaluate() for WebKit stability.
  */

@@ -12,6 +12,7 @@ import { buildCacheKey, getCachedResponse, setCachedResponse } from './cache';
 
 const API_BASE = 'https://www.inoreader.com/reader/api/0';
 const OAUTH_BASE = 'https://www.inoreader.com/oauth2';
+const FETCH_TIMEOUT_MS = 10_000;
 
 export interface ClientConfig {
   appId: string;
@@ -93,26 +94,33 @@ async function refreshAccessToken(config: ClientConfig): Promise<string | null> 
  * Make an authenticated API request with automatic token refresh on 401.
  */
 async function authenticatedFetch(url: string, config: ClientConfig): Promise<Response | null> {
-  const response = await fetch(url, { headers: buildHeaders(config) });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-  if (response.status === 401) {
-    console.warn('[Radar] Access token expired, attempting refresh...');
-    const newToken = await refreshAccessToken(config);
-    if (!newToken) return null;
+  try {
+    const response = await fetch(url, { headers: buildHeaders(config), signal: controller.signal });
 
-    // Cache the new token for subsequent calls in this render
-    refreshedAccessToken = newToken;
-    const updatedConfig = { ...config, accessToken: newToken };
+    if (response.status === 401) {
+      console.warn('[Radar] Access token expired, attempting refresh...');
+      const newToken = await refreshAccessToken(config);
+      if (!newToken) return null;
 
-    const retryResponse = await fetch(url, { headers: buildHeaders(updatedConfig) });
-    if (!retryResponse.ok) {
-      console.error(`[Radar] Request failed after token refresh: ${retryResponse.status}`);
-      return null;
+      // Cache the new token for subsequent calls in this render
+      refreshedAccessToken = newToken;
+      const updatedConfig = { ...config, accessToken: newToken };
+
+      const retryResponse = await fetch(url, { headers: buildHeaders(updatedConfig), signal: controller.signal });
+      if (!retryResponse.ok) {
+        console.error(`[Radar] Request failed after token refresh: ${retryResponse.status}`);
+        return null;
+      }
+      return retryResponse;
     }
-    return retryResponse;
-  }
 
-  return response;
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 /**

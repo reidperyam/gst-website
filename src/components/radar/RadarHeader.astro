@@ -22,7 +22,7 @@ const dateStr = lastUpdated
     <span class="separator">/</span>
     <span>The Radar</span>
   </div>
-  <h1 class="radar-header__title">The Radar</h1>
+  <h1 class="radar-header__title heading-xl">The Radar</h1>
   <p class="radar-header__subtitle">
     What's happening in business and technology news.
   </p>
@@ -58,9 +58,6 @@ const dateStr = lastUpdated
   }
 
   .radar-header__title {
-    font-size: 2.5rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--text-light-primary);
     margin-bottom: var(--spacing-md);
     line-height: 1.2;
   }
@@ -85,7 +82,7 @@ const dateStr = lastUpdated
     }
 
     .radar-header__title {
-      font-size: 1.75rem;
+      font-size: var(--text-2xl);
     }
   }
 
@@ -95,7 +92,7 @@ const dateStr = lastUpdated
     }
 
     .radar-header__title {
-      font-size: 1.5rem;
+      font-size: var(--text-xl);
     }
 
     .radar-header__subtitle {
