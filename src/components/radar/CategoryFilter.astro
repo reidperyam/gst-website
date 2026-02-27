@@ -1,0 +1,120 @@
+---
+/**
+ * Category filter pills for the Radar page.
+ * Client-side filtering via data-category attributes.
+ */
+import type { RadarCategory } from '../../lib/inoreader/types';
+
+interface Props {
+  categories: Record<string, RadarCategory>;
+}
+
+const { categories } = Astro.props;
+---
+
+<nav class="category-filter" aria-label="Filter by category">
+  <button class="filter-btn active" data-filter="all">All</button>
+  {Object.entries(categories).map(([key, cat]) => (
+    <button
+      class="filter-btn"
+      data-filter={key}
+      style={`--btn-color: ${cat.color}`}
+    >
+      {cat.label}
+    </button>
+  ))}
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('[data-category]');
+
+    // Gravity: set --d (0–1) based on distance from center index
+    const count = buttons.length;
+    const center = (count - 1) / 2;
+    const maxDist = center || 1;
+    buttons.forEach((btn, i) => {
+      const d = Math.abs(i - center) / maxDist;
+      (btn as HTMLElement).style.setProperty('--d', d.toFixed(3));
+    });
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = (btn as HTMLElement).dataset.filter;
+
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        items.forEach(item => {
+          const el = item as HTMLElement;
+          if (filter === 'all' || el.dataset.category === filter) {
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+    padding: var(--spacing-xl) 0;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .filter-btn {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 1px solid var(--filter-chip-border);
+    background: var(--filter-chip-bg);
+    color: var(--filter-chip-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    /* Gravity: --d is distance from center (0 = center, 1 = edge).
+       Margin grows quadratically so center buttons cluster tight. */
+    margin: var(--spacing-xs) calc(var(--spacing-xs) + var(--d, 0) * var(--d, 0) * 1.6rem);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--btn-color, var(--color-primary));
+    color: var(--btn-color, var(--color-primary));
+  }
+
+  .filter-btn.active {
+    background: var(--btn-color, var(--color-primary));
+    border-color: var(--btn-color, var(--color-primary));
+    color: var(--bg-light);
+  }
+
+  @media (max-width: 480px) {
+    .category-filter {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: var(--spacing-md) 0 var(--spacing-lg);
+    }
+
+    .category-filter::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+      min-height: 44px;
+      margin: var(--spacing-xs) var(--spacing-xs);
+    }
+  }
+</style>

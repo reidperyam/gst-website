@@ -4,7 +4,10 @@ import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   adapter: vercel({
-    webAnalytics: { enabled: false }
+    webAnalytics: { enabled: false },
+    isr: {
+      expiration: 60 * 60 * 6, // 6 hours — revalidation interval for SSR pages (Radar)
+    },
   }),
   devToolbar: {
     enabled: false // Disable dev toolbar to prevent interference with E2E tests

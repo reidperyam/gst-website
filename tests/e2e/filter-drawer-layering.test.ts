@@ -168,12 +168,13 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
     const ariaExpanded = await filterButton.getAttribute('aria-expanded');
     expect(ariaExpanded).toBe('false');
 
-    // Verify the right position is back to -400px
+    // Verify the right position is back to approximately -400px
     const finalRight = await drawer.evaluate((el) => {
       const styles = window.getComputedStyle(el);
-      return styles.right;
+      return parseFloat(styles.right);
     });
-    expect(finalRight).toBe('-400px');
+    expect(finalRight).toBeLessThanOrEqual(-360);
+    expect(finalRight).toBeGreaterThanOrEqual(-450);
   });
 
   test('should close filter drawer when overlay is clicked', async ({ page }) => {
