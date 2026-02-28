@@ -54,11 +54,8 @@ test.describe('Radar Page', () => {
       }
     });
 
-    test('should display footer with return link and header with valid timestamp', async ({ page }) => {
-      const footer = page.locator('.radar-footer');
-      await expect(footer).toBeVisible();
-
-      const returnLink = footer.locator('a[href="/hub"]');
+    test('should display return link and header with valid timestamp', async ({ page }) => {
+      const returnLink = page.locator('.radar-container a[href="/hub"]');
       await expect(returnLink).toBeVisible();
 
       const timestamp = page.locator('.hub-header__updated');
