@@ -6,11 +6,8 @@
 import {
   trackEvent,
   trackNavigation,
-  trackPortfolioInteraction,
   trackCTA,
-  trackFilterAction,
   trackThemeToggle,
-  trackFounderProfileClick,
 } from '@/utils/analytics';
 
 describe('Analytics Utility Functions', () => {
@@ -80,38 +77,6 @@ describe('Analytics Utility Functions', () => {
     });
   });
 
-  describe('trackPortfolioInteraction', () => {
-    it('should track portfolio_view_details event', () => {
-      trackPortfolioInteraction('view_details', 'proj-123', 'Project Name');
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'portfolio_view_details', {
-        event_category: 'portfolio',
-        project_id: 'proj-123',
-        project_name: 'Project Name',
-      });
-    });
-
-    it('should track portfolio_close_modal event', () => {
-      trackPortfolioInteraction('close_modal');
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'portfolio_close_modal', {
-        event_category: 'portfolio',
-        project_id: undefined,
-        project_name: undefined,
-      });
-    });
-
-    it('should track portfolio_apply_filter event', () => {
-      trackPortfolioInteraction('apply_filter');
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'portfolio_apply_filter', {
-        event_category: 'portfolio',
-        project_id: undefined,
-        project_name: undefined,
-      });
-    });
-  });
-
   describe('trackCTA', () => {
     it('should track cta_click event with type and location', () => {
       trackCTA('calendly', 'hero');
@@ -162,28 +127,6 @@ describe('Analytics Utility Functions', () => {
     });
   });
 
-  describe('trackFilterAction', () => {
-    it('should track filter_applied event', () => {
-      trackFilterAction('stage', 'Growth');
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'filter_applied', {
-        event_category: 'portfolio',
-        filter_type: 'stage',
-        filter_value: 'Growth',
-      });
-    });
-
-    it('should track different filter types', () => {
-      trackFilterAction('theme', 'AI');
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'filter_applied', {
-        event_category: 'portfolio',
-        filter_type: 'theme',
-        filter_value: 'AI',
-      });
-    });
-  });
-
   describe('trackThemeToggle', () => {
     it('should track theme_toggle event with theme value', () => {
       trackThemeToggle('dark');
@@ -201,40 +144,6 @@ describe('Analytics Utility Functions', () => {
         event_category: 'ui',
         theme: 'light',
       });
-    });
-  });
-
-  describe('trackFounderProfileClick', () => {
-    it('should track founder_profile_click event', () => {
-      trackFounderProfileClick('https://www.linkedin.com/in/reidperyam/');
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'founder_profile_click', {
-        event_category: 'engagement',
-        destination: 'https://www.linkedin.com/in/reidperyam/',
-      });
-    });
-
-    it('should include destination URL in event data', () => {
-      const linkedinUrl = 'https://www.linkedin.com/in/reidperyam/';
-      trackFounderProfileClick(linkedinUrl);
-
-      const callArgs = gtagMock.mock.calls[0];
-      expect(callArgs[2].destination).toBe(linkedinUrl);
-    });
-
-    it('should use engagement category for founder profile clicks', () => {
-      trackFounderProfileClick('https://www.linkedin.com/in/reidperyam/');
-
-      const callArgs = gtagMock.mock.calls[0];
-      expect(callArgs[2].event_category).toBe('engagement');
-    });
-
-    it('should not throw if gtag is not available', () => {
-      (global as any).window = {};
-
-      expect(() => {
-        trackFounderProfileClick('https://www.linkedin.com/in/reidperyam/');
-      }).not.toThrow();
     });
   });
 
@@ -262,13 +171,6 @@ describe('Analytics Utility Functions', () => {
 
       const callArgs = gtagMock.mock.calls[0];
       expect(callArgs[2].event_category).toBe('navigation');
-    });
-
-    it('portfolio events should use portfolio category', () => {
-      trackPortfolioInteraction('view_details');
-
-      const callArgs = gtagMock.mock.calls[0];
-      expect(callArgs[2].event_category).toBe('portfolio');
     });
 
     it('CTA events should use engagement category', () => {

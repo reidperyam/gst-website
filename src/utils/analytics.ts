@@ -42,25 +42,6 @@ export function trackNavigation(destination: string, label: string): void {
 }
 
 /**
- * Track portfolio project interactions
- * @param action - The action performed (view, filter, etc.)
- * @param projectId - The ID of the project (if applicable)
- * @param projectName - The name of the project
- */
-export function trackPortfolioInteraction(
-  action: 'view_details' | 'close_modal' | 'apply_filter',
-  projectId?: string,
-  projectName?: string
-): void {
-  trackEvent({
-    event: `portfolio_${action}`,
-    category: 'portfolio',
-    project_id: projectId,
-    project_name: projectName,
-  });
-}
-
-/**
  * Track CTA (Call-to-Action) button clicks
  * @param ctaType - Type of CTA (calendly, email, etc.)
  * @param location - Where the CTA is located on the page
@@ -71,20 +52,6 @@ export function trackCTA(ctaType: string, location: string): void {
     category: 'engagement',
     cta_type: ctaType,
     location,
-  });
-}
-
-/**
- * Track filter actions on the portfolio
- * @param filterType - The type of filter applied (stage, theme, year, etc.)
- * @param filterValue - The value of the filter
- */
-export function trackFilterAction(filterType: string, filterValue: string): void {
-  trackEvent({
-    event: 'filter_applied',
-    category: 'portfolio',
-    filter_type: filterType,
-    filter_value: filterValue,
   });
 }
 
@@ -111,18 +78,6 @@ export function trackPageView(pageName: string, pageTitle: string): void {
     category: 'navigation',
     page_name: pageName,
     page_title: pageTitle,
-  });
-}
-
-/**
- * Track founder profile link clicks
- * @param destination - The URL being navigated to
- */
-export function trackFounderProfileClick(destination: string): void {
-  trackEvent({
-    event: 'founder_profile_click',
-    category: 'engagement',
-    destination,
   });
 }
 

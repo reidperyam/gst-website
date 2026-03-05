@@ -32,9 +32,7 @@ npm run test -- --coverage
 Unit tests cover:
 - ✅ `trackEvent()` - Verifies gtag is called with correct event structure
 - ✅ `trackNavigation()` - Verifies navigation_click event with parameters
-- ✅ `trackPortfolioInteraction()` - Verifies portfolio_view_details, portfolio_close_modal, portfolio_apply_filter events
 - ✅ `trackCTA()` - Verifies cta_click event with type and location
-- ✅ `trackFilterAction()` - Verifies filter_applied event with filter details
 - ✅ `trackThemeToggle()` - Verifies theme_toggle event with theme value
 - ✅ Error handling - Graceful handling when gtag unavailable
 - ✅ Event categories - Proper category assignment for each event type

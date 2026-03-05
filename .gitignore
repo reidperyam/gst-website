@@ -26,8 +26,8 @@ pnpm-debug.log*
 # vercel deployment
 .vercel/
 
-# claude code and agents
-.claude/
+# claude local settings (per-developer)
+.claude/settings.local.json
 
 # playwright test results and reports
 test-results/
