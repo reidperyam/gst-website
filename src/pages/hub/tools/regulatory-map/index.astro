@@ -116,6 +116,7 @@ import caData from '../../../../data/canada-provinces.json';
     import { numericToAlpha3, alpha3ToName } from '../../../../utils/countryCodeMap';
     import { fipsToStateCode, stateCodeToName } from '../../../../utils/fipsToStateCode';
     import { provinceCodeToName } from '../../../../utils/canadianProvinceMap';
+    import { trackEvent } from '../../../../utils/analytics';
 
     // --- Parse embedded data ---
     const regionMap: Record<string, Regulation[]> = JSON.parse(
@@ -394,6 +395,15 @@ import caData from '../../../../data/canada-provinces.json';
 
         document.getElementById('mapCta')?.remove();
         compliancePanel.hidden = false;
+
+        trackEvent({
+            event: 'region_selected',
+            category: 'engagement',
+            region_id: regionId,
+            region_name: countryName,
+            regulation_count: count,
+            page: 'regulatory-map',
+        });
 
         // On mobile, scroll the panel into view
         if (window.innerWidth < 1024) {
