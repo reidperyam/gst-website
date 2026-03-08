@@ -29,7 +29,7 @@ describe('Regulatory Map Data Validation', () => {
     });
 
     it('should have exactly 110 regulation files', () => {
-      expect(filenames.length).toBe(110);
+      expect(filenames.length).toBe(120);
     });
   });
 
@@ -69,7 +69,7 @@ describe('Regulatory Map Data Validation', () => {
       expect(byCat['data-privacy']).toBe(69);
       expect(byCat['ai-governance']).toBe(19);
       expect(byCat['industry-compliance']).toBe(12);
-      expect(byCat['cybersecurity']).toBe(10);
+      expect(byCat['cybersecurity']).toBe(20);
     });
 
     it('should have non-empty id strings', () => {
