@@ -81,6 +81,28 @@ import caData from '../../../../data/canada-provinces.json';
             </div>
 
             <div class="regulation-filters" role="toolbar" aria-label="Filter regulations by category">
+                <div class="regulation-search" id="regulationSearch">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M10.5 10.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <input
+                            type="search"
+                            id="regulationSearchInput"
+                            class="search-input"
+                            placeholder="Search regulations..."
+                            aria-label="Search regulations by name, summary, or requirements"
+                            autocomplete="off"
+                        />
+                        <button id="searchClearBtn" class="search-clear-btn" aria-label="Clear search" hidden>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="search-results" id="searchResults" role="listbox" aria-label="Search results" hidden></div>
+                </div>
                 <div class="filter-chips" id="regulation-filter-chips">
                     <button class="filter-chip filter-chip--all active" data-category="all">All</button>
                     <button class="filter-chip filter-chip--privacy" data-category="data-privacy">Data Privacy</button>
@@ -239,6 +261,25 @@ import caData from '../../../../data/canada-provinces.json';
             if (!regById[reg.id]) regById[reg.id] = reg;
         }
     }
+
+    // --- Search index ---
+    interface SearchableReg {
+        reg: Regulation;
+        searchText: string;
+    }
+
+    const searchIndex: SearchableReg[] = Object.values(regById).map(reg => ({
+        reg,
+        searchText: [
+            reg.name,
+            reg.summary,
+            ...(reg.keyRequirements ?? []),
+        ].join(' ').toLowerCase(),
+    }));
+
+    let activeSearchTerm = '';
+    let searchResults: Regulation[] = [];
+    let activeResultIndex = -1;
 
     function clearRegionHighlights(): void {
         select('#mapSvg').selectAll('.country-path--highlighted')
@@ -728,6 +769,13 @@ import caData from '../../../../data/canada-provinces.json';
 
         updateMapHighlighting();
 
+        // Re-run search with new category filter
+        if (activeSearchTerm.trim()) {
+            searchResults = performSearch(activeSearchTerm);
+            renderSearchResults(searchResults);
+            updateMapForSearch(searchResults, activeSearchTerm);
+        }
+
         if (currentRegionId && !compliancePanel.hidden) {
             const filteredMap = getFilteredRegionMap();
             const regs = filteredMap[currentRegionId] ?? [];
@@ -757,6 +805,229 @@ import caData from '../../../../data/canada-provinces.json';
         });
     });
 
+    // --- Search ---
+    const categoryColorMap: Record<string, string> = {
+        'data-privacy': 'privacy',
+        'ai-governance': 'ai',
+        'industry-compliance': 'industry',
+        'cybersecurity': 'cyber',
+    };
+
+    const categoryLabelMap: Record<string, string> = {
+        'data-privacy': 'Privacy',
+        'ai-governance': 'AI',
+        'industry-compliance': 'Industry',
+        'cybersecurity': 'Cyber',
+    };
+
+    function performSearch(query: string): Regulation[] {
+        if (!query.trim()) return [];
+        const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+        return searchIndex
+            .filter(({ searchText, reg }) => {
+                if (activeCategory !== 'all' && reg.category !== activeCategory) return false;
+                return terms.every(term => searchText.includes(term));
+            })
+            .map(({ reg }) => reg);
+    }
+
+    function renderSearchResults(results: Regulation[]): void {
+        const container = document.getElementById('searchResults')!;
+
+        if (!activeSearchTerm.trim()) {
+            container.hidden = true;
+            container.innerHTML = '';
+            return;
+        }
+
+        if (results.length === 0) {
+            container.innerHTML = '<div class="search-no-results">No regulations found</div>';
+            container.hidden = false;
+            return;
+        }
+
+        container.innerHTML = results.slice(0, 15).map((reg, i) => {
+            const catColor = categoryColorMap[reg.category] ?? 'privacy';
+            const catLabel = categoryLabelMap[reg.category] ?? reg.category;
+            const regionCount = reg.regions.length;
+            return `
+                <div class="search-result-item"
+                     role="option"
+                     id="search-result-${i}"
+                     data-reg-id="${escapeHtml(reg.id)}"
+                     tabindex="-1">
+                    <span class="search-result-name">${escapeHtml(reg.name)}</span>
+                    <span class="search-result-meta">
+                        <span class="search-result-category search-result-category--${catColor}">${catLabel}</span>
+                        <span class="search-result-regions">${regionCount} region${regionCount !== 1 ? 's' : ''}</span>
+                    </span>
+                </div>`;
+        }).join('');
+
+        if (results.length > 15) {
+            container.innerHTML += `<div class="search-result-overflow">${results.length - 15} more results\u2026</div>`;
+        }
+
+        container.hidden = false;
+        activeResultIndex = -1;
+    }
+
+    function updateMapForSearch(results: Regulation[], query: string): void {
+        if (!query.trim()) {
+            updateMapHighlighting();
+            return;
+        }
+
+        const matchingRegions = new Set<string>();
+        for (const reg of results) {
+            for (const region of reg.regions) {
+                matchingRegions.add(region);
+            }
+        }
+
+        select('#mapSvg').selectAll('path[class^="country-path"]')
+            .attr('class', function(this: SVGPathElement) {
+                const d = select(this).datum() as { id?: string } | undefined;
+                if (!d || !d.id) return 'country-path';
+                const alpha3 = numericToAlpha3[d.id as string];
+                if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
+                return `country-path${matchingRegions.has(alpha3) ? ' country-path--active' : ''}`;
+            });
+
+        select('#mapSvg').selectAll('path[class^="state-path"]')
+            .attr('class', function(this: SVGPathElement) {
+                const code = this.dataset.stateCode ?? '';
+                return `state-path${matchingRegions.has(code) ? ' state-path--active' : ''}`;
+            });
+    }
+
+    function selectSearchResult(regId: string): void {
+        const reg = regById[regId];
+        if (!reg) return;
+
+        highlightRegulationRegions(reg);
+
+        const regionCount = reg.regions.length;
+        panelCountryName.textContent = reg.name;
+        panelRegCount.textContent = `${regionCount} region${regionCount !== 1 ? 's' : ''}`;
+        panelRegulations.innerHTML = renderRegulationCard(reg);
+        document.getElementById('mapCta')?.remove();
+        compliancePanel.hidden = false;
+
+        if (isMobile()) {
+            openBottomSheet();
+        }
+
+        document.getElementById('searchResults')!.hidden = true;
+
+        trackEvent({
+            event: 'regulation_search_result_clicked',
+            category: 'engagement',
+            regulation_id: regId,
+            regulation_name: reg.name,
+            search_term: activeSearchTerm,
+            page: 'regulatory-map',
+        });
+    }
+
+    // Search input handler with debounce
+    const searchInput = document.getElementById('regulationSearchInput') as HTMLInputElement;
+    const searchClearBtn = document.getElementById('searchClearBtn')!;
+    let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value;
+        activeSearchTerm = query;
+        searchClearBtn.hidden = !query;
+
+        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => {
+            searchResults = performSearch(query);
+            renderSearchResults(searchResults);
+            updateMapForSearch(searchResults, query);
+
+            if (query.trim()) {
+                trackEvent({
+                    event: 'regulation_search',
+                    category: 'engagement',
+                    search_term: query,
+                    result_count: searchResults.length,
+                    page: 'regulatory-map',
+                });
+            }
+        }, 200);
+    });
+
+    // Re-show results on focus
+    searchInput.addEventListener('focus', () => {
+        if (activeSearchTerm.trim() && searchResults.length > 0) {
+            document.getElementById('searchResults')!.hidden = false;
+        }
+    });
+
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', (e) => {
+        const resultsEl = document.getElementById('searchResults')!;
+        const items = resultsEl.querySelectorAll('.search-result-item');
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            activeResultIndex = Math.min(activeResultIndex + 1, items.length - 1);
+            updateActiveSearchResult(items);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            activeResultIndex = Math.max(activeResultIndex - 1, -1);
+            updateActiveSearchResult(items);
+        } else if (e.key === 'Enter' && activeResultIndex >= 0 && activeResultIndex < items.length) {
+            e.preventDefault();
+            const item = items[activeResultIndex] as HTMLElement;
+            selectSearchResult(item.dataset.regId ?? '');
+        } else if (e.key === 'Escape') {
+            resultsEl.hidden = true;
+            activeResultIndex = -1;
+            searchInput.blur();
+        }
+    });
+
+    function updateActiveSearchResult(items: NodeListOf<Element>): void {
+        items.forEach((item, i) => {
+            item.classList.toggle('search-result-item--active', i === activeResultIndex);
+            if (i === activeResultIndex) {
+                (item as HTMLElement).scrollIntoView({ block: 'nearest' });
+            }
+        });
+        searchInput.setAttribute('aria-activedescendant',
+            activeResultIndex >= 0 ? `search-result-${activeResultIndex}` : '');
+    }
+
+    // Click on search result
+    document.getElementById('searchResults')?.addEventListener('click', (e) => {
+        const item = (e.target as HTMLElement).closest('.search-result-item') as HTMLElement | null;
+        if (!item) return;
+        selectSearchResult(item.dataset.regId ?? '');
+    });
+
+    // Clear button
+    searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        activeSearchTerm = '';
+        searchResults = [];
+        document.getElementById('searchResults')!.hidden = true;
+        searchClearBtn.hidden = true;
+        activeResultIndex = -1;
+        updateMapHighlighting();
+        searchInput.focus();
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        const searchContainer = document.getElementById('regulationSearch')!;
+        if (!searchContainer.contains(e.target as Node)) {
+            document.getElementById('searchResults')!.hidden = true;
+            activeResultIndex = -1;
+        }
+    });
+
     // --- Timeline ---
     function buildTimelineData(): Regulation[] {
         const seen = new Set<string>();
@@ -771,13 +1042,6 @@ import caData from '../../../../data/canada-provinces.json';
         }
         return all.sort((a, b) => a.effectiveDate.localeCompare(b.effectiveDate));
     }
-
-    const categoryColorMap: Record<string, string> = {
-        'data-privacy': 'privacy',
-        'ai-governance': 'ai',
-        'industry-compliance': 'industry',
-        'cybersecurity': 'cyber',
-    };
 
     /**
      * Position the Today marker absolutely over the timeline track.
@@ -1033,7 +1297,9 @@ import caData from '../../../../data/canada-provinces.json';
 
     .regulation-filters {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
         margin-top: var(--spacing-xl);
         margin-bottom: var(--spacing-sm);
     }
@@ -1051,6 +1317,212 @@ import caData from '../../../../data/canada-provinces.json';
         :global(html.dark-theme) .regulation-filters {
             background: var(--bg-dark);
             border-bottom-color: var(--border-dark);
+        }
+    }
+
+    /* Search */
+    .regulation-search {
+        width: 100%;
+        max-width: 480px;
+        position: relative;
+    }
+
+    .search-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--bg-light);
+        border: 1px solid var(--border-light);
+        border-radius: 6px;
+        transition: border-color var(--transition-fast);
+    }
+
+    .search-input-wrapper:focus-within {
+        border-color: var(--color-primary);
+    }
+
+    .search-icon {
+        flex-shrink: 0;
+        color: var(--text-light-muted);
+    }
+
+    .search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: var(--text-sm);
+        font-family: inherit;
+        color: var(--text-light-primary);
+        outline: none;
+        min-width: 0;
+    }
+
+    .search-input::placeholder {
+        color: var(--text-light-muted);
+    }
+
+    /* Remove default search cancel button in WebKit */
+    .search-input::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+    }
+
+    .search-clear-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--text-light-muted);
+        cursor: pointer;
+        border-radius: 50%;
+        transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .search-clear-btn:hover {
+        background: rgba(26, 26, 26, 0.08);
+        color: var(--text-light-primary);
+    }
+
+    /* Search results dropdown */
+    .search-results {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: var(--bg-light);
+        border: 1px solid var(--border-light);
+        border-radius: 6px;
+        box-shadow: var(--shadow-md);
+        max-height: 320px;
+        overflow-y: auto;
+        z-index: 30;
+    }
+
+    .search-result-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: var(--spacing-sm) var(--spacing-md);
+        cursor: pointer;
+        transition: background var(--transition-fast);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-result-item:hover,
+    .search-result-item--active {
+        background: rgba(5, 205, 153, 0.08);
+    }
+
+    .search-result-name {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+    }
+
+    .search-result-meta {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .search-result-category {
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        padding: 1px var(--spacing-xs);
+        border-radius: 3px;
+    }
+
+    .search-result-category--privacy { background: rgba(5, 205, 153, 0.15); color: var(--color-primary); }
+    .search-result-category--ai { background: rgba(26, 26, 26, 0.08); color: var(--color-secondary); }
+    .search-result-category--industry { background: rgba(108, 99, 255, 0.12); color: #6c63ff; }
+    .search-result-category--cyber { background: rgba(231, 76, 60, 0.12); color: #e74c3c; }
+
+    .search-result-regions {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+    }
+
+    .search-no-results {
+        padding: var(--spacing-lg);
+        text-align: center;
+        font-size: var(--text-sm);
+        color: var(--text-light-muted);
+    }
+
+    .search-result-overflow {
+        padding: var(--spacing-sm) var(--spacing-md);
+        text-align: center;
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+        font-style: italic;
+    }
+
+    /* Search dark theme */
+    :global(html.dark-theme) .search-input-wrapper {
+        background: var(--bg-dark-secondary);
+        border-color: rgba(245, 245, 245, 0.1);
+    }
+
+    :global(html.dark-theme) .search-input-wrapper:focus-within {
+        border-color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .search-input {
+        color: rgba(245, 245, 245, 0.9);
+    }
+
+    :global(html.dark-theme) .search-input::placeholder {
+        color: rgba(200, 200, 200, 0.5);
+    }
+
+    :global(html.dark-theme) .search-clear-btn:hover {
+        background: rgba(245, 245, 245, 0.1);
+        color: rgba(245, 245, 245, 0.9);
+    }
+
+    :global(html.dark-theme) .search-results {
+        background: var(--bg-dark-secondary);
+        border-color: rgba(245, 245, 245, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    :global(html.dark-theme) .search-result-item {
+        border-bottom-color: rgba(245, 245, 245, 0.06);
+    }
+
+    :global(html.dark-theme) .search-result-item:hover,
+    :global(html.dark-theme) .search-result-item--active {
+        background: rgba(5, 205, 153, 0.12);
+    }
+
+    :global(html.dark-theme) .search-result-name {
+        color: rgba(245, 245, 245, 0.9);
+    }
+
+    :global(html.dark-theme) .search-result-category--ai {
+        background: rgba(245, 245, 245, 0.08);
+    }
+
+    /* Search responsive */
+    @media (max-width: 1023px) {
+        .regulation-search {
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .search-results {
+            max-height: 50vh;
         }
     }
 
