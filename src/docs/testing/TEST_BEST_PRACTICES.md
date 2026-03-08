@@ -296,6 +296,66 @@ const badgeCount = parseInt(await badge.textContent() || '0');
 expect(badgeVisible && badgeCount > 0).toBe(true);
 ```
 
+### 5. ❌ Interacting with Animated Panels Before Transitions Complete
+
+CSS-animated panels (drawers, bottom sheets, slide-ins) may report `toBeVisible()` mid-transition, before child elements are interactable. This causes flaky failures, especially on Firefox and WebKit under parallel worker load.
+
+**Bad:**
+```typescript
+test('should click filter chip in drawer', async ({ page }) => {
+  // Open drawer
+  await page.locator('[data-testid="filter-toggle"]').click();
+
+  // ❌ Drawer is "visible" but still sliding in — chip click may miss
+  const drawer = page.locator('[data-testid="filter-drawer"]');
+  await expect(drawer).toBeVisible({ timeout: 5000 });
+
+  // Click chip immediately — flaky on Firefox/WebKit
+  await page.locator('[data-testid="filter-chip"]').click();
+  await expect(page.locator('[data-testid="filter-chip"]')).toHaveClass(/active/);
+});
+```
+
+**Good:**
+```typescript
+/**
+ * Reusable helper — waits for both visibility AND transition completion.
+ * Check the element's computed CSS property to confirm the animation has settled.
+ */
+async function openFilterDrawer(page: Page): Promise<void> {
+  await page.locator('[data-testid="filter-toggle"]').click();
+
+  const drawer = page.locator('[data-testid="filter-drawer"]');
+  await expect(drawer).toBeVisible({ timeout: 5000 });
+
+  // ✅ Wait for the CSS transition to complete (right: -400px → 0)
+  await page.waitForFunction(() => {
+    const el = document.querySelector('[data-testid="filter-drawer"]');
+    if (!el || !el.classList.contains('open')) return false;
+    const right = parseFloat(window.getComputedStyle(el).right);
+    return right >= -1; // accounts for sub-pixel rounding
+  }, { timeout: 5000 });
+}
+
+test('should click filter chip in drawer', async ({ page }) => {
+  await openFilterDrawer(page);
+
+  // ✅ Transition complete — chip click is reliable
+  await page.locator('[data-testid="filter-chip"]').click();
+  await expect(page.locator('[data-testid="filter-chip"]')).toHaveClass(/active/);
+});
+```
+
+**Key principle:** For any element that uses CSS `transition` or `animation`, wait for the **computed CSS property** to reach its final value — not just for `toBeVisible()` or a class to be applied. Common properties to check:
+- Slide-in drawers: `right`, `left`, or `transform`
+- Bottom sheets: `transform: translateY(0)`
+- Fade-ins: `opacity`
+- Expanding panels: `height`, `max-height`
+
+**Extract a reusable helper** when the same open/close pattern is used across multiple tests. This eliminates duplication and ensures every test waits correctly.
+
+---
+
 ## Common Test Patterns
 
 ### Pattern 1: Filter/Search Interaction
@@ -402,6 +462,8 @@ If your test has any of these, it's likely a false positive:
 8. ✗ Clicks element but never checks result of click
 9. ✗ Gets initial state but never compares to final state
 10. ✗ Comments like "allow for X not working" that silence failures
+11. ✗ Clicks inside an animated panel right after `toBeVisible()` without waiting for transition end
+12. ✗ Duplicated open/close boilerplate instead of a shared helper function
 
 ## Running Tests
 
