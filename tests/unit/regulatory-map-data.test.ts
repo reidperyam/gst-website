@@ -28,8 +28,8 @@ describe('Regulatory Map Data Validation', () => {
       expect(Array.isArray(regulations)).toBe(true);
     });
 
-    it('should have exactly 74 regulation files', () => {
-      expect(filenames.length).toBe(74);
+    it('should have exactly 110 regulation files', () => {
+      expect(filenames.length).toBe(110);
     });
   });
 
@@ -66,9 +66,10 @@ describe('Regulatory Map Data Validation', () => {
         acc[r.category] = (acc[r.category] || 0) + 1;
         return acc;
       }, {} as Record<string, number>);
-      expect(byCat['data-privacy']).toBe(56);
-      expect(byCat['ai-governance']).toBe(16);
-      expect(byCat['industry-compliance']).toBe(2);
+      expect(byCat['data-privacy']).toBe(69);
+      expect(byCat['ai-governance']).toBe(19);
+      expect(byCat['industry-compliance']).toBe(12);
+      expect(byCat['cybersecurity']).toBe(10);
     });
 
     it('should have non-empty id strings', () => {
