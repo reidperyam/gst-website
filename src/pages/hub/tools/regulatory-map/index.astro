@@ -295,19 +295,21 @@ import caData from '../../../../data/canada-provinces.json';
 
         // Highlight country paths
         select('#mapSvg').selectAll('path[data-alpha3]')
-            .each(function(this: SVGPathElement) {
-                const alpha3 = this.dataset.alpha3 ?? '';
+            .each(function() {
+                const el = this as SVGPathElement;
+                const alpha3 = el.dataset.alpha3 ?? '';
                 if (regionSet.has(alpha3)) {
-                    this.classList.add('country-path--highlighted');
+                    el.classList.add('country-path--highlighted');
                 }
             });
 
         // Highlight state/province paths
         select('#mapSvg').selectAll('path[data-state-code]')
-            .each(function(this: SVGPathElement) {
-                const code = this.dataset.stateCode ?? '';
+            .each(function() {
+                const el = this as SVGPathElement;
+                const code = el.dataset.stateCode ?? '';
                 if (regionSet.has(code)) {
-                    this.classList.add('state-path--highlighted');
+                    el.classList.add('state-path--highlighted');
                 }
             });
     }
@@ -741,8 +743,9 @@ import caData from '../../../../data/canada-provinces.json';
 
         // Update country paths
         select('#mapSvg').selectAll('path[class^="country-path"]')
-            .attr('class', function(this: SVGPathElement) {
-                const d = select(this).datum() as { id?: string; properties?: { iso_3166_2?: string } } | undefined;
+            .attr('class', function() {
+                const el = this as unknown as SVGPathElement;
+                const d = select(el).datum() as { id?: string; properties?: { iso_3166_2?: string } } | undefined;
                 if (!d || !d.id) return 'country-path';
                 const alpha3 = numericToAlpha3[d.id as string];
                 if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
@@ -752,8 +755,9 @@ import caData from '../../../../data/canada-provinces.json';
 
         // Update US state and Canadian province paths
         select('#mapSvg').selectAll('path[class^="state-path"]')
-            .attr('class', function(this: SVGPathElement) {
-                const code = this.dataset.stateCode ?? '';
+            .attr('class', function() {
+                const el = this as unknown as SVGPathElement;
+                const code = el.dataset.stateCode ?? '';
                 const hasRegs = code && filteredMap[code];
                 return `state-path${hasRegs ? ' state-path--active' : ''}`;
             });
@@ -886,8 +890,9 @@ import caData from '../../../../data/canada-provinces.json';
         }
 
         select('#mapSvg').selectAll('path[class^="country-path"]')
-            .attr('class', function(this: SVGPathElement) {
-                const d = select(this).datum() as { id?: string } | undefined;
+            .attr('class', function() {
+                const el = this as unknown as SVGPathElement;
+                const d = select(el).datum() as { id?: string } | undefined;
                 if (!d || !d.id) return 'country-path';
                 const alpha3 = numericToAlpha3[d.id as string];
                 if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
@@ -895,8 +900,9 @@ import caData from '../../../../data/canada-provinces.json';
             });
 
         select('#mapSvg').selectAll('path[class^="state-path"]')
-            .attr('class', function(this: SVGPathElement) {
-                const code = this.dataset.stateCode ?? '';
+            .attr('class', function() {
+                const el = this as unknown as SVGPathElement;
+                const code = el.dataset.stateCode ?? '';
                 return `state-path${matchingRegions.has(code) ? ' state-path--active' : ''}`;
             });
     }
