@@ -550,6 +550,43 @@ If your test has any of these, it's likely a false positive:
 15. ✗ Uses `toBeHidden()` on an element whose CSS overrides `[hidden]` with `display: block`
 16. ✗ Imports `describe`/`it`/`expect` from `'vitest'` when `globals: true` is set — tests silently don't register
 17. ✗ Top-level `beforeEach`/`afterEach` outside a `describe` block — causes runner initialization failure
+18. ✗ Uses `grantPermissions(['clipboard-read', 'clipboard-write'])` — only works in Chromium, fails on Firefox/WebKit
+
+## E2E Cross-Browser Pitfalls
+
+### 11. ❌ Using `grantPermissions` with Clipboard Permissions on Firefox/WebKit
+
+Playwright's `browserContext.grantPermissions()` only supports clipboard permissions (`clipboard-read`, `clipboard-write`) on Chromium. Firefox and WebKit throw `"Unknown permission"` errors, causing immediate test failure.
+
+**Bad:**
+```typescript
+// ❌ Fails on Firefox ("Unknown permission: clipboard-read")
+// ❌ Fails on WebKit ("Unknown permission: clipboard-write")
+test('should copy link', async ({ page }) => {
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.locator('#copyBtn').click();
+  // ...assert clipboard content
+});
+```
+
+**Good:**
+```typescript
+// ✅ Test the UI feedback, not the clipboard content
+// Source code should show feedback regardless of clipboard API success:
+//   navigator.clipboard.writeText(url).then(showFeedback, showFeedback);
+test('should show copied feedback on click', async ({ page }) => {
+  await page.locator('#copyBtn').click();
+
+  // Assert on observable UI state, not clipboard contents
+  await page.waitForFunction(() => {
+    const btn = document.getElementById('copyBtn');
+    return btn && btn.classList.contains('copied');
+  });
+  await expect(page.locator('#copyBtn')).toHaveAttribute('aria-label', 'Copied!');
+});
+```
+
+**Key principle:** Make the source code resilient — show UI feedback on both clipboard success and failure (the `.then(onSuccess, onFailure)` pattern). Then test the UI feedback, which works identically across all browsers. Only test actual clipboard content in Chromium-specific test suites if needed.
 
 ## Unit / Integration Test Pitfalls
 
