@@ -89,22 +89,22 @@ test.describe('Regulatory Map — Category Filters', () => {
   });
 
   test('should deselect region when filter removes its regulations', async ({ page }) => {
-    // Select Brazil (has data-privacy LGPD)
-    await clickSvgPath(page, '[data-alpha3="BRA"].country-path--active');
+    // Select Thailand (has data-privacy + cybersecurity, but NOT industry-compliance)
+    await clickSvgPath(page, '[data-alpha3="THA"].country-path--active');
 
     const panel = page.locator('[data-testid="compliance-panel"]');
     await expect(panel).toBeVisible();
-    await expect(page.locator('#panelCountryName')).toHaveText('Brazil');
+    await expect(page.locator('#panelCountryName')).toHaveText('Thailand');
 
-    // Verify Brazil has regulation cards
+    // Verify Thailand has regulation cards
     await page.waitForFunction(() => {
       return document.querySelectorAll('.reg-card').length > 0;
     });
 
-    // Switch to Industry Compliance — Brazil has no industry-compliance regs
+    // Switch to Industry Compliance — Thailand has no industry-compliance regs
     await page.locator('.filter-chip[data-category="industry-compliance"]').click();
 
-    // Panel should be hidden because Brazil has no industry compliance regulations
+    // Panel should be hidden because Thailand has no industry compliance regulations
     await expect(panel).toBeHidden();
 
     // Selected path highlight should be cleared

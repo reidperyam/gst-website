@@ -354,6 +354,87 @@ test('should click filter chip in drawer', async ({ page }) => {
 
 **Extract a reusable helper** when the same open/close pattern is used across multiple tests. This eliminates duplication and ensures every test waits correctly.
 
+### 6. ❌ Hardcoded Test Data Assumptions
+
+Tests that assume specific data relationships (e.g., "Brazil has no industry-compliance regulations") break silently when new data is added. This is especially common with filter/category tests where global regulations (like Basel III or PCI-DSS) can retroactively add categories to countries.
+
+**Bad:**
+```typescript
+test('should deselect when filter removes regulations', async ({ page }) => {
+  // ❌ Assumes Brazil has no industry-compliance regs — breaks when global regs are added
+  await selectCountry(page, 'BRA');
+  await page.locator('.filter-chip[data-category="industry-compliance"]').click();
+  await expect(panel).toBeHidden();
+});
+```
+
+**Good:**
+```typescript
+test('should deselect when filter removes regulations', async ({ page }) => {
+  // ✅ Thailand has data-privacy + cybersecurity but NOT industry-compliance
+  // Verified via: node -e "..." against the actual data files
+  await selectCountry(page, 'THA');
+  await page.locator('.filter-chip[data-category="industry-compliance"]').click();
+  await expect(panel).toBeHidden();
+});
+```
+
+**Key principle:** When a test depends on a specific data relationship (region X has/doesn't have category Y), document *why* that region was chosen in a comment. When adding new data files, grep tests for the affected region codes to catch broken assumptions. See also: CLAUDE.md § "Content Changes Must Include Test Updates".
+
+### 7. ❌ Clicking Elements Obscured by Z-Index Layering
+
+Playwright's `click()` (even with `force: true`) dispatches a click at the element's center coordinates. If a higher z-index element covers that point, the click lands on the wrong element. This commonly happens with overlays (z-index: 50) that sit behind panels (z-index: 60) — the overlay is "visible" but unreachable by coordinate-based clicks.
+
+**Bad:**
+```typescript
+// ❌ Overlay is behind the panel in z-index stacking — click hits the panel instead
+await page.locator('#bottomSheetOverlay').click({ force: true });
+```
+
+**Good:**
+```typescript
+// ✅ Dispatch the event directly to bypass coordinate-based hit testing
+await page.evaluate(() => {
+  document.getElementById('bottomSheetOverlay')?.dispatchEvent(
+    new MouseEvent('click', { bubbles: true })
+  );
+});
+```
+
+**When to use `dispatchEvent` over `click()`:**
+- Overlays behind higher z-index panels
+- SVG path elements inside D3-managed `<svg>` containers (same pattern as `clickSvgPath`)
+- Any element where Playwright logs `"<other-element> intercepts pointer events"` repeatedly
+
+**Extract a helper** when the same dispatch pattern appears in multiple tests.
+
+### 8. ❌ Using `toBeHidden()` When CSS Overrides `[hidden]`
+
+Playwright's `toBeHidden()` checks computed visibility. If your CSS overrides the `[hidden]` attribute with `display: block` (common for animated panels that need to remain in the layout for transitions), the element is technically visible even when `hidden` is set.
+
+**Bad:**
+```typescript
+// ❌ CSS rule `.panel[hidden] { display: block; transform: translateY(100%) }` means
+//    Playwright sees this as visible — toBeHidden() fails
+compliancePanel.hidden = true;
+await expect(panel).toBeHidden();
+```
+
+**Good:**
+```typescript
+// ✅ Check the actual behavioral state instead
+await page.waitForFunction(() => {
+  const el = document.getElementById('compliancePanel');
+  return el && !el.classList.contains('bottom-sheet--open');
+});
+
+// Verify the observable result (region deselected)
+const selectedPaths = await page.locator('.country-path--selected').count();
+expect(selectedPaths).toBe(0);
+```
+
+**Key principle:** When an element uses CSS transitions that override `[hidden]`, assert on the class or state that controls the transition — not on Playwright's visibility check. This is a specific case of §4 (test behavior, not implementation).
+
 ---
 
 ## Common Test Patterns
@@ -464,6 +545,9 @@ If your test has any of these, it's likely a false positive:
 10. ✗ Comments like "allow for X not working" that silence failures
 11. ✗ Clicks inside an animated panel right after `toBeVisible()` without waiting for transition end
 12. ✗ Duplicated open/close boilerplate instead of a shared helper function
+13. ✗ Hardcoded data assumptions like "country X has no category Y regulations" without a comment explaining why
+14. ✗ Uses `click({ force: true })` on an element that's obscured by a higher z-index layer
+15. ✗ Uses `toBeHidden()` on an element whose CSS overrides `[hidden]` with `display: block`
 
 ## Running Tests
 
