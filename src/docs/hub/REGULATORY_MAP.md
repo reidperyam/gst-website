@@ -468,6 +468,7 @@ Adding state/province-level rendering for a new country (beyond the US and Canad
 ### Feature Roadmap
 
 **UX Improvements:**
+- Coverage stats strip — Compact stat counters between the page header and the map showing key metrics at a glance (see design spec below)
 - Print/export — PDF export of selected region's regulation cards for inclusion in diligence reports
 - Regulation change alerts — Flag regulations with recent amendments or pending changes
 
@@ -510,6 +511,55 @@ Prioritized list of regulations and jurisdictions for future phases:
 - Australia: My Health Records Act 2012
 - Japan: Next Generation Medical Infrastructure Act (2018)
 - Canada: provincial health information acts (Ontario PHIPA, Alberta HIA, BC E-Health Act)
+
+---
+
+### Design Spec: Coverage Stats Strip
+
+**Purpose:** Fill the empty space between the page header and the map with a compact stats strip that communicates the map's breadth at a glance — before the user interacts with anything.
+
+**Placement:** Between `<HubHeader>` and `<div class="map-layout">` in `index.astro` (line ~58).
+
+**Layout:**
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  120            4                  60+              2004–2027    │
+│  Regulations    Categories         Jurisdictions    Date Range  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+- Horizontal row of 4 stat items, divided by subtle vertical separators
+- Desktop: single row, centered, with `gap: var(--spacing-xl)`
+- Mobile: 2×2 grid (matches existing `StatsBar.astro` responsive pattern)
+- Values are large (`heading-md` / `--text-2xl`), labels are small (`--text-xs`, muted)
+
+**Stats (computed at build time from `regulations` array):**
+
+| Value | Label | Source |
+|-------|-------|--------|
+| `regulations.length` | Regulations | Count of all JSON files |
+| `4` | Categories | Hardcoded (data-privacy, ai-governance, industry-compliance, cybersecurity) |
+| Unique region count | Jurisdictions | `new Set(regulations.flatMap(r => r.regions)).size` |
+| Date range | Date Range | `min(effectiveDate)` – `max(effectiveDate)` year |
+
+**Styling approach:**
+- Reuse the existing `.stats-bar` / `.stat-item` pattern from `global.css` (already handles dark theme, responsive grid, separator borders)
+- OR scope new styles inside `index.astro`'s `<style>` block if the global pattern doesn't fit visually (the global stats bar has a dark background which may clash)
+- Use CSS variables for all colors, spacing, typography — no hardcoded values
+- Primary color accent on the numeric values (`var(--color-primary)`) for visual pop
+
+**Animation (optional, low priority):**
+- Count-up animation on scroll-into-view using `IntersectionObserver` + `requestAnimationFrame`
+- Falls back to static numbers if `prefers-reduced-motion: reduce`
+
+**Implementation notes:**
+- All values are available at build time in the frontmatter (`regulations` is already fetched)
+- No client JS required for the base implementation — pure SSG HTML
+- Responsive breakpoint matches existing page: `@media (min-width: 1024px)`
+
+**Files to modify:**
+- `src/pages/hub/tools/regulatory-map/index.astro` — add HTML + scoped styles in frontmatter/template
 
 ---
 
