@@ -548,6 +548,81 @@ If your test has any of these, it's likely a false positive:
 13. ✗ Hardcoded data assumptions like "country X has no category Y regulations" without a comment explaining why
 14. ✗ Uses `click({ force: true })` on an element that's obscured by a higher z-index layer
 15. ✗ Uses `toBeHidden()` on an element whose CSS overrides `[hidden]` with `display: block`
+16. ✗ Imports `describe`/`it`/`expect` from `'vitest'` when `globals: true` is set — tests silently don't register
+17. ✗ Top-level `beforeEach`/`afterEach` outside a `describe` block — causes runner initialization failure
+
+## Unit / Integration Test Pitfalls
+
+### 9. ❌ Explicit Vitest Imports When `globals: true` Is Enabled
+
+When `globals: true` is set in `vitest.config.ts`, test primitives (`describe`, `it`, `expect`, `beforeEach`, `afterEach`) are injected globally. Explicitly importing them from `'vitest'` in the same file causes Vitest 4.x to silently fail — tests appear to load but never register, producing "No test suite found" or "failed to find the runner" errors with 0 tests executed.
+
+**Bad:**
+```typescript
+// ❌ With globals: true, these imports shadow the global injections
+// Tests silently fail to register — 0 tests run, suite marked as failed
+import { describe, it, expect, beforeEach } from 'vitest';
+
+describe('my feature', () => {
+  it('should work', () => {
+    expect(true).toBe(true);
+  });
+});
+```
+
+**Good:**
+```typescript
+// ✅ Only import vi (for mocks/spies) — everything else comes from globals
+import { vi } from 'vitest';
+
+describe('my feature', () => {
+  it('should work', () => {
+    expect(true).toBe(true);
+  });
+});
+```
+
+**What to import from `'vitest'`:**
+- `vi` — always import (mocks, spies, timers, stubs)
+- `describe`, `it`, `test`, `expect`, `beforeEach`, `afterEach`, `beforeAll`, `afterAll` — **never import** when `globals: true`
+
+**How to detect:** If `npm run test:run` reports failing suites but all counted tests pass, check the failing files for explicit vitest imports. The symptom is 0 tests registered from those files.
+
+### 10. ❌ Top-Level `beforeEach` / `afterEach` Outside a `describe` Block
+
+Vitest 4.x requires lifecycle hooks to be nested inside a `describe` block. A top-level `beforeEach` (common when a file has a single implicit test group) causes a runner initialization error.
+
+**Bad:**
+```typescript
+// ❌ Top-level beforeEach — Vitest 4.x throws "failed to find the runner"
+let mockFetch: ReturnType<typeof vi.fn>;
+
+beforeEach(() => {
+  mockFetch = vi.fn();
+  vi.stubGlobal('fetch', mockFetch);
+});
+
+it('should fetch data', async () => { /* ... */ });
+```
+
+**Good:**
+```typescript
+// ✅ Wrap in a describe block
+import { vi } from 'vitest';
+
+describe('API Client', () => {
+  let mockFetch: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    mockFetch = vi.fn();
+    vi.stubGlobal('fetch', mockFetch);
+  });
+
+  it('should fetch data', async () => { /* ... */ });
+});
+```
+
+---
 
 ## Running Tests
 
