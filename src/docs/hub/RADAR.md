@@ -48,8 +48,8 @@ Set in Vercel project settings and local `.env`:
 | `INOREADER_ACCESS_TOKEN` | OAuth access token (initial/fallback) | OAuth flow or Redis auto-refresh |
 | `INOREADER_REFRESH_TOKEN` | OAuth refresh token (initial/fallback) | OAuth flow or Redis auto-refresh |
 | `INOREADER_FOLDER_PREFIX` | Folder prefix filter (default: `GST-`) | Manual |
-| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint | Auto-provisioned by Upstash integration |
-| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis auth token | Auto-provisioned by Upstash integration |
+| `KV_REST_API_URL` | Upstash Redis REST endpoint | Auto-provisioned by Vercel Upstash integration |
+| `KV_REST_API_TOKEN` | Upstash Redis auth token | Auto-provisioned by Vercel Upstash integration |
 
 ## Inoreader Setup
 
@@ -178,7 +178,7 @@ With Redis, the refreshed token chain stays alive indefinitely — each refresh 
 Redis is provisioned via the Upstash integration in the Vercel Marketplace (free tier: 10,000 commands/day, 256MB):
 
 1. **Vercel Dashboard → Storage → Upstash** → Create a Redis database named `gst-radar-tokens`
-2. **Connect to the project** — Upstash auto-provisions `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` env vars
+2. **Connect to the project** — Upstash auto-provisions `KV_REST_API_URL` and `KV_REST_API_TOKEN` env vars
 3. **Redeploy** — the code detects Redis automatically via `@upstash/redis`
 
 No code changes or local env var setup needed. For local development, Redis is not used — the client reads tokens from `.env` as usual.
@@ -189,8 +189,8 @@ These are auto-provisioned when you connect an Upstash Redis store to the projec
 
 | Variable | Purpose | Source |
 |----------|---------|--------|
-| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint | Auto-set by Upstash integration |
-| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis auth token | Auto-set by Upstash integration |
+| `KV_REST_API_URL` | Upstash Redis REST endpoint | Auto-set by Vercel Upstash integration |
+| `KV_REST_API_TOKEN` | Upstash Redis auth token | Auto-set by Vercel Upstash integration |
 
 ### Manual Fallback
 

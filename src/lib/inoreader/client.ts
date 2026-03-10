@@ -33,8 +33,8 @@ async function getRedis(): Promise<RedisStore | null> {
   if (_redisInstance !== undefined) return _redisInstance;
   try {
     const { Redis } = await import('@upstash/redis');
-    const url = import.meta.env.UPSTASH_REDIS_REST_URL;
-    const token = import.meta.env.UPSTASH_REDIS_REST_TOKEN;
+    const url = import.meta.env.KV_REST_API_URL || import.meta.env.UPSTASH_REDIS_REST_URL;
+    const token = import.meta.env.KV_REST_API_TOKEN || import.meta.env.UPSTASH_REDIS_REST_TOKEN;
     if (!url || !token) {
       _redisInstance = null;
       return null;
