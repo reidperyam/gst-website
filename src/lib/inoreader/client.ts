@@ -4,6 +4,10 @@
  * Handles authentication, automatic token refresh, and data fetching.
  * Called at render time by the Radar page (SSR with ISR caching).
  *
+ * Token persistence: On refresh, both access and refresh tokens are saved
+ * to Upstash Redis so they survive across serverless invocations. Falls back
+ * to environment variables when Redis is unavailable (dev mode, tests).
+ *
  * API Reference: https://www.inoreader.com/developers/
  */
 
@@ -13,6 +17,71 @@ import { buildCacheKey, getCachedResponse, setCachedResponse } from './cache';
 const API_BASE = 'https://www.inoreader.com/reader/api/0';
 const OAUTH_BASE = 'https://www.inoreader.com/oauth2';
 const FETCH_TIMEOUT_MS = 10_000;
+
+// ---------------------------------------------------------------------------
+// Upstash Redis — lazy-loaded, gracefully degrades when unavailable
+// ---------------------------------------------------------------------------
+
+const KV_ACCESS_TOKEN_KEY = 'inoreader:access_token';
+const KV_REFRESH_TOKEN_KEY = 'inoreader:refresh_token';
+const KV_TOKEN_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
+
+type RedisStore = { get: <T>(key: string) => Promise<T | null>; set: (key: string, value: unknown, opts?: { ex?: number }) => Promise<unknown> };
+let _redisInstance: RedisStore | null | undefined; // undefined = not yet attempted
+
+async function getRedis(): Promise<RedisStore | null> {
+  if (_redisInstance !== undefined) return _redisInstance;
+  try {
+    const { Redis } = await import('@upstash/redis');
+    const url = import.meta.env.UPSTASH_REDIS_REST_URL;
+    const token = import.meta.env.UPSTASH_REDIS_REST_TOKEN;
+    if (!url || !token) {
+      _redisInstance = null;
+      return null;
+    }
+    _redisInstance = new Redis({ url, token }) as unknown as RedisStore;
+    return _redisInstance;
+  } catch {
+    _redisInstance = null;
+    return null;
+  }
+}
+
+async function loadTokensFromKV(): Promise<{ accessToken: string | null; refreshToken: string | null }> {
+  try {
+    const store = await getRedis();
+    if (!store) return { accessToken: null, refreshToken: null };
+    const [accessToken, refreshToken] = await Promise.all([
+      store.get<string>(KV_ACCESS_TOKEN_KEY),
+      store.get<string>(KV_REFRESH_TOKEN_KEY),
+    ]);
+    if (accessToken) {
+      console.log('[Radar] Loaded tokens from KV store');
+    }
+    return { accessToken, refreshToken };
+  } catch (error) {
+    console.warn(`[Radar] KV read failed, falling back to env vars: ${(error as Error).message}`);
+    return { accessToken: null, refreshToken: null };
+  }
+}
+
+async function saveTokensToKV(accessToken: string, refreshToken: string): Promise<void> {
+  try {
+    const store = await getRedis();
+    if (!store) return;
+    await Promise.all([
+      store.set(KV_ACCESS_TOKEN_KEY, accessToken, { ex: KV_TOKEN_TTL_SECONDS }),
+      store.set(KV_REFRESH_TOKEN_KEY, refreshToken, { ex: KV_TOKEN_TTL_SECONDS }),
+    ]);
+    console.log('[Radar] Tokens persisted to KV store');
+  } catch (error) {
+    console.warn(`[Radar] KV write failed (non-fatal): ${(error as Error).message}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Token state — in-memory caches populated per serverless invocation
+// ---------------------------------------------------------------------------
 
 export interface ClientConfig {
   appId: string;
@@ -24,16 +93,36 @@ export interface ClientConfig {
 /** In-memory cache of the refreshed access token for the lifetime of this SSR invocation */
 let refreshedAccessToken: string | null = null;
 
-/** Reset the token cache. Exported for test cleanup only. */
+/** KV-loaded tokens, populated once per invocation */
+let kvTokensLoaded = false;
+let kvAccessToken: string | null = null;
+let kvRefreshToken: string | null = null;
+
+/** Reset all token caches. Exported for test cleanup only. */
 export function resetTokenCache(): void {
   refreshedAccessToken = null;
+  kvTokensLoaded = false;
+  kvAccessToken = null;
+  kvRefreshToken = null;
+  _redisInstance = undefined;
 }
 
-function getConfig(): ClientConfig {
+/**
+ * Resolve credentials with priority: in-memory refresh > KV store > env vars.
+ */
+async function getConfig(): Promise<ClientConfig> {
+  // Load from KV once per serverless invocation
+  if (!kvTokensLoaded) {
+    const kvTokens = await loadTokensFromKV();
+    kvAccessToken = kvTokens.accessToken;
+    kvRefreshToken = kvTokens.refreshToken;
+    kvTokensLoaded = true;
+  }
+
   const appId = import.meta.env.INOREADER_APP_ID;
   const appKey = import.meta.env.INOREADER_APP_KEY;
-  const accessToken = refreshedAccessToken || import.meta.env.INOREADER_ACCESS_TOKEN;
-  const refreshToken = import.meta.env.INOREADER_REFRESH_TOKEN;
+  const accessToken = refreshedAccessToken || kvAccessToken || import.meta.env.INOREADER_ACCESS_TOKEN;
+  const refreshToken = kvRefreshToken || import.meta.env.INOREADER_REFRESH_TOKEN;
 
   if (!appId || !appKey || !accessToken) {
     throw new Error(
@@ -56,6 +145,7 @@ function buildHeaders(config: ClientConfig): Record<string, string> {
 
 /**
  * Attempt to refresh the access token using the refresh token.
+ * Persists both new tokens to KV for future invocations.
  * Returns the new access token or null on failure.
  */
 async function refreshAccessToken(config: ClientConfig): Promise<string | null> {
@@ -82,8 +172,18 @@ async function refreshAccessToken(config: ClientConfig): Promise<string | null> 
     }
 
     const data = await response.json();
+    const newAccessToken: string = data.access_token;
+    const newRefreshToken: string | undefined = data.refresh_token;
     console.log('[Radar] Access token refreshed successfully');
-    return data.access_token;
+
+    // Persist both tokens to KV for future serverless invocations
+    if (newRefreshToken) {
+      await saveTokensToKV(newAccessToken, newRefreshToken);
+      kvAccessToken = newAccessToken;
+      kvRefreshToken = newRefreshToken;
+    }
+
+    return newAccessToken;
   } catch (error) {
     console.error(`[Radar] Token refresh request failed: ${(error as Error).message}`);
     return null;
@@ -141,7 +241,7 @@ export async function fetchAnnotatedItems(
     }
   }
 
-  const config = configOverride ?? getConfig();
+  const config = configOverride ?? await getConfig();
   const streamId = encodeURIComponent('user/-/state/com.google/annotated');
 
   const url = `${API_BASE}/stream/contents/${streamId}?` + new URLSearchParams({
@@ -191,7 +291,7 @@ export async function fetchFolderStream(
     }
   }
 
-  const config = configOverride ?? getConfig();
+  const config = configOverride ?? await getConfig();
   const streamId = encodeURIComponent(`user/-/label/${folderName}`);
 
   const url = `${API_BASE}/stream/contents/${streamId}?` + new URLSearchParams({
@@ -241,7 +341,7 @@ export async function fetchAllStreams(
     }
   }
 
-  const config = configOverride ?? getConfig();
+  const config = configOverride ?? await getConfig();
 
   const tagsUrl = `${API_BASE}/tag/list?output=json`;
 
