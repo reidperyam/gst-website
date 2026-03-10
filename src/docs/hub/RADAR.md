@@ -41,13 +41,15 @@ The "Updated" timestamp in the page header (`RadarHeader.astro`) displays the se
 
 Set in Vercel project settings and local `.env`:
 
-| Variable | Purpose |
-|----------|---------|
-| `INOREADER_APP_ID` | Inoreader developer app ID |
-| `INOREADER_APP_KEY` | Inoreader developer app key |
-| `INOREADER_ACCESS_TOKEN` | OAuth access token |
-| `INOREADER_REFRESH_TOKEN` | OAuth refresh token |
-| `INOREADER_FOLDER_PREFIX` | Folder prefix filter (default: `GST-`) |
+| Variable | Purpose | Source |
+|----------|---------|--------|
+| `INOREADER_APP_ID` | Inoreader developer app ID | Manual (Inoreader dev portal) |
+| `INOREADER_APP_KEY` | Inoreader developer app key | Manual (Inoreader dev portal) |
+| `INOREADER_ACCESS_TOKEN` | OAuth access token (initial/fallback) | OAuth flow or Redis auto-refresh |
+| `INOREADER_REFRESH_TOKEN` | OAuth refresh token (initial/fallback) | OAuth flow or Redis auto-refresh |
+| `INOREADER_FOLDER_PREFIX` | Folder prefix filter (default: `GST-`) | Manual |
+| `KV_REST_API_URL` | Upstash Redis REST endpoint | Auto-provisioned by Vercel Upstash integration |
+| `KV_REST_API_TOKEN` | Upstash Redis auth token | Auto-provisioned by Vercel Upstash integration |
 
 ## Inoreader Setup
 
@@ -125,7 +127,7 @@ src/
 │   └── CategoryFilter.astro     # Client-side filter pills (gravity spacing)
 ├── lib/inoreader/
 │   ├── types.ts                  # TypeScript interfaces
-│   ├── client.ts                 # API client (fetch wrappers + dev cache)
+│   ├── client.ts                 # API client (fetch wrappers + token refresh + Upstash Redis persistence)
 │   ├── cache.ts                  # Dev-mode file cache (24h TTL)
 │   └── transform.ts             # Data transformation + categories + feed merge
 ├── pages/hub/radar/
@@ -136,16 +138,63 @@ scripts/
 
 ## Token Management
 
+### How Token Refresh Works
+
 The API client handles token refresh automatically at runtime:
 
-1. Each API call uses the stored `INOREADER_ACCESS_TOKEN`
-2. If Inoreader returns **401** (token expired), the client automatically uses `INOREADER_REFRESH_TOKEN` to obtain a new access token
-3. The refreshed token is cached in memory for the remainder of that SSR render
-4. Subsequent API calls in the same page render reuse the refreshed token
+1. Each API call uses the current access token (resolved from Redis or env var)
+2. If Inoreader returns **401** (token expired), the client automatically uses the refresh token to obtain a **new access token AND a new refresh token**
+3. Both new tokens are **persisted to Upstash Redis** so they survive across serverless invocations
+4. Subsequent API calls in the same page render reuse the in-memory refreshed token
+5. The next ISR invocation (up to 6 hours later) loads the Redis-stored tokens automatically
 
-**No manual token rotation needed.** As long as the refresh token remains valid (long-lived, typically months), the client self-heals on every ISR revalidation cycle.
+### Token Resolution Priority
 
-The manual refresh script (`node scripts/inoreader-auth.mjs refresh`) is available as a fallback if the refresh token itself expires, which would require re-running the full OAuth flow.
+When resolving credentials, the client checks three sources in order:
+
+| Priority | Source | When Used |
+|----------|--------|-----------|
+| 1 | In-memory refresh | Token was refreshed during this SSR invocation |
+| 2 | Upstash Redis store | Token was refreshed by a previous invocation and persisted |
+| 3 | Environment variable | Initial setup value; used when Redis is empty or unavailable |
+
+### Upstash Redis Persistence
+
+Tokens are stored in Upstash Redis to survive across serverless invocations:
+
+| Redis Key | Value | TTL |
+|--------|-------|-----|
+| `inoreader:access_token` | OAuth access token | 30 days |
+| `inoreader:refresh_token` | OAuth refresh token | 30 days |
+
+**Why this matters:** Without Redis, each serverless invocation starts fresh with the original env var tokens. When Inoreader's refresh endpoint returns a new refresh token (which it does on every refresh), the old refresh token may be invalidated. Without persistence, the next invocation would try to use the now-invalid original refresh token from the env var — eventually causing a permanent auth failure.
+
+With Redis, the refreshed token chain stays alive indefinitely — each refresh stores the new pair, and the next invocation picks it up.
+
+**Graceful degradation:** All Redis operations are wrapped in try/catch. If Redis is unavailable (dev mode, quota exceeded, not configured), the client silently falls back to env vars — matching the pre-Redis behavior.
+
+### Redis Setup
+
+Redis is provisioned via the Upstash integration in the Vercel Marketplace (free tier: 10,000 commands/day, 256MB):
+
+1. **Vercel Dashboard → Storage → Upstash** → Create a Redis database named `gst-radar-tokens`
+2. **Connect to the project** — Upstash auto-provisions `KV_REST_API_URL` and `KV_REST_API_TOKEN` env vars
+3. **Redeploy** — the code detects Redis automatically via `@upstash/redis`
+
+No code changes or local env var setup needed. For local development, Redis is not used — the client reads tokens from `.env` as usual.
+
+### Environment Variables for Redis
+
+These are auto-provisioned when you connect an Upstash Redis store to the project:
+
+| Variable | Purpose | Source |
+|----------|---------|--------|
+| `KV_REST_API_URL` | Upstash Redis REST endpoint | Auto-set by Vercel Upstash integration |
+| `KV_REST_API_TOKEN` | Upstash Redis auth token | Auto-set by Vercel Upstash integration |
+
+### Manual Fallback
+
+The manual refresh script (`node scripts/inoreader-auth.mjs refresh`) remains available if the entire token chain breaks (e.g., Redis store deleted, both tokens expired). In that case, re-run the full OAuth flow and update the Vercel env vars.
 
 ## Dev-Mode API Cache
 
@@ -345,8 +394,8 @@ The prerender config (`.vercel/output/functions/_isr.prerender-config.json`) set
 ## Error Handling
 
 - **API down**: Radar page renders with empty FYI/Wire sections and fallback message
-- **Token expired**: Automatic refresh via refresh token; no manual intervention needed
-- **Refresh token expired**: Re-run OAuth flow (`node scripts/inoreader-auth.mjs setup`) and update Vercel env vars
+- **Token expired**: Automatic refresh via refresh token; both new tokens persisted to Upstash Redis
+- **Refresh token expired**: Should not happen if Redis is configured (each refresh stores a new pair). If it does, re-run OAuth flow (`node scripts/inoreader-auth.mjs setup`) and update Vercel env vars
 - **No env vars**: Radar page shows "Intelligence feed is currently being refreshed" fallback
 - **ISR cache**: Vercel serves last good render even during API outages
 
@@ -355,13 +404,15 @@ The prerender config (`.vercel/output/functions/_isr.prerender-config.json`) set
 | Scenario | User Sees | ISR Cache Impact | Logged |
 |----------|-----------|------------------|--------|
 | Inoreader API temporarily down | Fallback message | Degraded page cached for 6h | `[Radar] Inoreader API error: {status}` |
-| Access token expired (refresh works) | **Normal page** — auto-heals | Good page cached | `[Radar] Access token expired, attempting refresh...` + success |
-| Refresh token revoked/expired | Fallback message | Degraded page cached for 6h | `[Radar] Token refresh failed: {status}` |
-| Both tokens invalid | Fallback message | Degraded page cached for 6h | `[Radar] Token refresh failed` |
+| Access token expired (refresh works) | **Normal page** — auto-heals | Good page cached | `[Radar] Access token expired, attempting refresh...` + `Tokens persisted to KV store` |
+| Refresh token revoked/expired (no Redis) | Fallback message | Degraded page cached for 6h | `[Radar] Token refresh failed: {status}` |
+| Refresh token revoked (with Redis) | **Unlikely** — Redis stores fresh pair on each refresh | N/A | Should not occur if Redis is healthy |
+| Both tokens invalid + Redis empty | Fallback message | Degraded page cached for 6h | `[Radar] Token refresh failed` |
+| Redis unavailable | Falls back to env vars | No impact if env vars are valid | `[Radar] KV read failed, falling back to env vars` |
 | Env vars missing entirely | **Page render crashes** | No cache generated | `Inoreader credentials not configured` error |
 | Network timeout to Inoreader | Fallback message | Degraded page cached for 6h | `[Radar] Wire fetch failed` / `Folder fetch failed` |
 
-**Key risk:** If tokens go permanently bad, Vercel ISR caches the degraded page for 6 hours, then re-renders another degraded page for another 6 hours, indefinitely — with no automatic alerting.
+**Key risk (mitigated by Redis):** Previously, if the refresh token expired, Vercel ISR would cache a degraded page indefinitely with no alerting. With Upstash Redis, each successful refresh persists a new token pair, keeping the chain alive. The remaining risk is if the Redis store is deleted or both the Redis-stored and env var tokens expire simultaneously — an unlikely scenario under normal operation.
 
 ## Production Observability & Troubleshooting
 
@@ -375,6 +426,10 @@ The Inoreader client (`src/lib/inoreader/client.ts`) logs to `console.error` / `
 |-------------|----------|---------|
 | `[Radar] Access token expired, attempting refresh...` | Warn | Normal — token rotation in progress |
 | `[Radar] Access token refreshed successfully` | Info | Normal — self-healed |
+| `[Radar] Loaded tokens from KV store` | Info | Normal — using Redis-persisted tokens |
+| `[Radar] Tokens persisted to KV store` | Info | Normal — fresh tokens saved for next invocation |
+| `[Radar] KV read failed, falling back to env vars` | Warn | Redis unavailable — using env vars instead |
+| `[Radar] KV write failed (non-fatal)` | Warn | Redis persistence failed — tokens still work in-memory |
 | `[Radar] Token refresh failed: {status}` | Error | **Action needed** — refresh token may be revoked |
 | `[Radar] No refresh token available` | Error | **Action needed** — env var missing |
 | `[Radar] Request failed after token refresh: {status}` | Error | API issue persists after token refresh |
@@ -406,7 +461,7 @@ The Inoreader client (`src/lib/inoreader/client.ts`) logs to `console.error` / `
 - No alerting (Slack, email, PagerDuty) on API failures
 - No health check endpoint (e.g., `/api/radar-health`)
 - No structured logging (only console output)
-- No retry logic — single attempt per API call, then returns `null`
+- No retry logic beyond token refresh — single attempt per API call, then returns `null`
 
 ### Troubleshooting Playbook
 
@@ -438,6 +493,41 @@ The Inoreader client (`src/lib/inoreader/client.ts`) logs to `console.error` / `
 
 1. Content refreshes every 6 hours via ISR — wait for the next cycle
 2. To force a refresh: trigger a redeployment from Vercel dashboard
+
+## Unit Test Coverage
+
+### API Client Tests (`tests/unit/radar-client.test.ts`)
+
+25 tests covering the fetch layer with `configOverride` injection (bypasses `getConfig()`):
+
+- `fetchAnnotatedItems` — URL construction, headers, success/failure, query params
+- `fetchFolderStream` — URL encoding, success/failure, query params
+- `fetchAllStreams` — Tag discovery, prefix filtering, dedup, sort, partial failures
+- Token refresh on 401 — Refresh attempt, retry with new token, refresh failure, missing refresh token
+
+### KV Persistence Tests (`tests/unit/radar-kv-persistence.test.ts`)
+
+18 tests covering the Upstash Redis token persistence layer. These call public functions **without** `configOverride` to exercise the real `getConfig()` → `loadTokensFromKV()` → `getRedis()` code path.
+
+| Group | Tests | What's Covered |
+|-------|-------|----------------|
+| KV Token Loading | 6 | Token priority chain (in-memory > Redis > env), one-time load flag, env var fallback, exhausted sources |
+| Persistence on Refresh | 4 | Save both tokens on 401 refresh, skip when no refresh_token returned, in-memory cache update, KV write failure resilience |
+| Graceful Degradation | 3 | Redis read failure, Redis write failure, cached null instance reuse |
+| resetTokenCache | 1 | Full state reset triggers fresh KV reload (simulates new serverless invocation) |
+| Edge Cases | 3 | `UPSTASH_REDIS_REST_*` fallback env var names, 30-day TTL verification, correct Redis key names |
+
+**Mocking strategy:**
+- `@upstash/redis` is mocked at module level via `vi.mock()` — constructor and `get`/`set` methods are individually controllable
+- `import.meta.env` properties are set directly on the env object per test (with save/restore in `beforeEach`/`afterEach`)
+- Global `fetch` is stubbed to return controlled responses
+- Console spies are managed via `afterEach` cleanup to prevent leak on assertion failure
+
+```bash
+npm run test:run                                           # All tests (581)
+npx vitest run tests/unit/radar-client.test.ts             # API client only (25)
+npx vitest run tests/unit/radar-kv-persistence.test.ts     # KV persistence only (18)
+```
 
 ## Category Inference
 
