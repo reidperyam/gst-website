@@ -1,0 +1,1208 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { trackPageView } from '../../../../utils/analytics';
+import {
+  DEPLOY_OPTIONS,
+  DEFAULT_STATE,
+} from '../../../../utils/tech-debt-engine';
+
+trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
+---
+
+<BaseLayout
+    title="Technical Debt Cost Calculator | Strategic Intelligence Hub"
+    description="Quantify the annual cost of technical debt. Built for PE diligence and portfolio executive conversations."
+    ogTitle="Technical Debt Cost Calculator | GST"
+    ogDescription="Quantify the annual carrying cost of technical debt. Input team size, salary, maintenance burden, and delivery metrics to produce defensible estimates."
+    ogImage="/og-image.png"
+    ogUrl="https://globalstrategic.tech/hub/tools/tech-debt-calculator"
+>
+    <section class="tdc-section">
+        <div class="container">
+
+            <!-- Page header -->
+            <header class="tdc-header">
+                <span class="section-label">Tools</span>
+                <h1><span class="delta">Δ</span>Tech Debt Cost Calculator</h1>
+                <p class="tdc-subtitle">Quantify the real cost of deferred technical investment</p>
+            </header>
+
+            <!-- Calculator -->
+            <div data-calc>
+
+                <!-- Mode Tabs -->
+                <div data-calc-tabs>
+                    <button data-mode-tab="quick" class="calc-tab active" type="button">
+                        Quick
+                        <span class="calc-tab-sub">Back of napkin</span>
+                    </button>
+                    <button data-mode-tab="deep" class="calc-tab" type="button">
+                        Deep Dive
+                        <span class="calc-tab-sub">Full breakdown</span>
+                    </button>
+                </div>
+
+                <!-- Sticky metrics bar — always visible -->
+                <div data-calc-metrics-bar>
+                    <!-- Row 1: Always visible -->
+                    <div data-metrics-row="primary" class="metrics-row">
+                        <div class="metric-cell">
+                            <div class="metric-label">Annual Cost</div>
+                            <div class="metric-value metric-value--primary">
+                                <span class="metric-delta">Δ</span><span data-metric="annual-cost">—</span>
+                            </div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-label">Per Month</div>
+                            <div class="metric-value"><span data-metric="per-month">—</span></div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-label">Hrs Lost / Eng / Wk</div>
+                            <div class="metric-value"><span data-metric="hrs-lost">—</span></div>
+                        </div>
+                        <div class="metric-cell metric-cell--last">
+                            <div class="metric-label">Cost / Eng / Mo</div>
+                            <div class="metric-value"><span data-metric="cost-per-eng">—</span></div>
+                        </div>
+                    </div>
+                    <!-- Row 2: Detail — always in DOM, opacity transition only -->
+                    <div data-metrics-row="detail" class="metrics-row metrics-row--detail">
+                        <div class="metric-cell">
+                            <div class="metric-label">Direct Labor</div>
+                            <div class="metric-value"><span data-metric="direct-labor">—</span></div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-label">Incident Labor</div>
+                            <div class="metric-value"><span data-metric="incident-labor">—</span></div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-label">Velocity (V)</div>
+                            <div class="metric-value"><span data-metric="velocity">—</span></div>
+                        </div>
+                        <div class="metric-cell metric-cell--last">
+                            <div class="metric-label">Debt % of ARR</div>
+                            <div class="metric-value"><span data-metric="debt-pct-arr">—</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body: inputs left, context/outputs right -->
+                <div data-calc-body>
+
+                    <!-- Inputs Panel -->
+                    <div data-calc-inputs>
+
+                        <!-- Base inputs -->
+                        <div class="inputs-grid-3">
+                            <div class="slider-row">
+                                <div class="slider-header">
+                                    <label class="slider-label" for="input-team-size">Team Size</label>
+                                    <span class="slider-value" data-display="team-size">8</span>
+                                </div>
+                                <input id="input-team-size" type="range" min="0" max="100" step="1"
+                                    class="calc-slider" data-input="team-size" />
+                                <div class="slider-hints">
+                                    <span class="hint-low">1</span>
+                                    <span class="hint-high">500</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-row">
+                                <div class="slider-header">
+                                    <label class="slider-label" for="input-salary">Avg. Salary</label>
+                                    <span class="slider-value" data-display="salary">$150K</span>
+                                </div>
+                                <input id="input-salary" type="range" min="0" max="100" step="1"
+                                    class="calc-slider" data-input="salary" />
+                                <div class="slider-hints">
+                                    <span class="hint-low">$60K</span>
+                                    <span class="hint-high">$1M</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-row">
+                                <div class="slider-header">
+                                    <label class="slider-label" for="input-maint-pct">Maintenance Burden</label>
+                                    <span class="slider-value" data-display="maint-pct">40%</span>
+                                </div>
+                                <input id="input-maint-pct" type="range" min="5" max="100" step="1"
+                                    class="calc-slider" data-input="maint-pct" />
+                                <div class="slider-hints">
+                                    <span class="hint-low">5%</span>
+                                    <span class="hint-high">100%</span>
+                                </div>
+                                <div class="slider-hint-text">20–30% healthy · 40%+ material debt</div>
+                            </div>
+                        </div>
+
+                        <!-- Deep Dive: Delivery Metrics + ROI -->
+                        <div data-show-in="deep" class="is-hidden">
+                            <div class="inputs-divider">
+                                <span class="divider-label">Delivery Metrics</span>
+                                <div class="divider-line"></div>
+                            </div>
+                            <div class="inputs-grid-2">
+                                <div class="slider-row">
+                                    <div class="slider-header">
+                                        <label class="slider-label" for="input-incidents">Incidents / Mo</label>
+                                        <span class="slider-value" data-display="incidents">3</span>
+                                    </div>
+                                    <input id="input-incidents" type="range" min="0" max="20" step="1"
+                                        class="calc-slider" data-input="incidents" />
+                                    <div class="slider-hints">
+                                        <span class="hint-low">None</span>
+                                        <span class="hint-high">20+</span>
+                                    </div>
+                                </div>
+
+                                <div class="slider-row">
+                                    <div class="slider-header">
+                                        <label class="slider-label" for="input-mttr">Avg. Time to Resolve</label>
+                                        <span class="slider-value" data-display="mttr">4h</span>
+                                    </div>
+                                    <input id="input-mttr" type="range" min="1" max="48" step="1"
+                                        class="calc-slider" data-input="mttr" />
+                                    <div class="slider-hints">
+                                        <span class="hint-low">1h</span>
+                                        <span class="hint-high">48h</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Deploy frequency -->
+                            <div class="deploy-section">
+                                <div class="deploy-label">Deployment Frequency</div>
+                                <div class="deploy-grid">
+                                    {DEPLOY_OPTIONS.map((opt, i) => (
+                                        <button
+                                            data-deploy-btn={i}
+                                            class={`deploy-btn${i === DEFAULT_STATE.deployIdx ? ' active' : ''}`}
+                                            type="button"
+                                        >
+                                            {opt.label}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div data-dora-message class="dora-message"></div>
+                            </div>
+
+                            <div class="inputs-divider">
+                                <span class="divider-label">ROI Analysis</span>
+                                <div class="divider-line"></div>
+                            </div>
+                            <div class="inputs-grid-2">
+                                <div class="slider-row">
+                                    <div class="slider-header">
+                                        <label class="slider-label" for="input-arr">Annual Recurring Revenue</label>
+                                        <span class="slider-value" data-display="arr">$10M</span>
+                                    </div>
+                                    <input id="input-arr" type="range" min="0" max="100" step="1"
+                                        class="calc-slider" data-input="arr" />
+                                    <div class="slider-hints">
+                                        <span class="hint-low">$100K</span>
+                                        <span class="hint-high">$1B</span>
+                                    </div>
+                                </div>
+
+                                <div class="slider-row">
+                                    <div class="slider-header">
+                                        <label class="slider-label" for="input-budget">Remediation Budget</label>
+                                        <span class="slider-value" data-display="budget">$500K</span>
+                                    </div>
+                                    <input id="input-budget" type="range" min="0" max="100" step="1"
+                                        class="calc-slider" data-input="budget" />
+                                    <div class="slider-hints">
+                                        <span class="hint-low">$10K</span>
+                                        <span class="hint-high">$50M</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /Inputs Panel -->
+
+                    <!-- Outputs Panel -->
+                    <div data-calc-outputs>
+
+                        <!-- Quick mode: context card (always visible in Quick) -->
+                        <div data-context-panel class="context-panel">
+                            <div class="context-label">What This Means</div>
+                            <div class="context-stat">
+                                <div class="context-stat-label">Annualized drag on team output</div>
+                                <div class="context-stat-value" id="ctx-annual-cost">—</div>
+                            </div>
+                            <div class="context-stat">
+                                <div class="context-stat-label">Engineers effectively lost to debt</div>
+                                <div class="context-stat-value" id="ctx-engs-lost">—</div>
+                            </div>
+                            <div class="context-stat">
+                                <div class="context-stat-label">Burden level</div>
+                                <div class="context-stat-value" id="ctx-burden-label">—</div>
+                            </div>
+                            <p class="context-note" id="ctx-note"></p>
+                        </div>
+
+                        <!-- Deep mode: payback box -->
+                        <div data-payback-section data-show-in="deep" class="is-hidden payback-box">
+                            <div class="payback-label">Remediation ROI</div>
+                            <div class="payback-grid">
+                                <div>
+                                    <div class="payback-item-label">Break-even</div>
+                                    <div class="payback-value" id="payback-breakeven">—</div>
+                                </div>
+                                <div>
+                                    <div class="payback-item-label">Monthly Savings</div>
+                                    <div class="payback-value payback-value--teal" id="payback-savings">—</div>
+                                </div>
+                            </div>
+                            <div class="payback-disclaimer" id="payback-disclaimer"></div>
+                        </div>
+
+                    </div>
+                    <!-- /Outputs Panel -->
+
+                </div>
+                <!-- /Body -->
+
+                <!-- Footer -->
+                <div data-calc-footer>
+                    <span class="footer-left">Δ Global Strategic Technologies · Workbench</span>
+                    <span class="footer-right">Estimates based on industry benchmarks. Not a substitute for formal technical diligence.</span>
+                </div>
+
+            </div>
+            <!-- /Calculator -->
+
+            <a href="/hub/tools" class="cta-button secondary back-link">Return to Workbench</a>
+
+        </div>
+    </section>
+</BaseLayout>
+
+<style>
+    /* ── Page wrapper ────────────────────────────────────────────────────────── */
+    .tdc-section {
+        padding-bottom: var(--spacing-3xl);
+    }
+
+    /* ── Page header ─────────────────────────────────────────────────────────── */
+    .tdc-header {
+        text-align: center;
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .section-label {
+        display: inline-block;
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .tdc-header h1 {
+        font-size: var(--text-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-light-primary);
+        margin: 0 0 var(--spacing-xs);
+    }
+
+    .delta {
+        color: var(--color-primary);
+        margin-right: 0.3em;
+    }
+
+    .tdc-subtitle {
+        font-size: var(--text-base);
+        color: var(--text-light-secondary);
+        margin: 0;
+    }
+
+    /* ── Calculator shell ────────────────────────────────────────────────────── */
+    [data-calc] {
+        max-width: 980px;
+        margin: 0 auto;
+        background: var(--bg-light-alt);
+        border: 1px solid rgba(5, 205, 153, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    :global(html.dark-theme) [data-calc] {
+        background: rgba(5, 205, 153, 0.03);
+        border-color: rgba(5, 205, 153, 0.18);
+    }
+
+    /* ── Mode tabs ───────────────────────────────────────────────────────────── */
+    [data-calc-tabs] {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: 1px solid rgba(5, 205, 153, 0.08);
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    :global(html.dark-theme) [data-calc-tabs] {
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    .calc-tab {
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: none;
+        border-bottom: 2px solid transparent;
+        background: none;
+        cursor: pointer;
+        color: var(--text-light-muted);
+        font-family: var(--font-family);
+        font-weight: var(--font-weight-bold);
+        font-size: var(--text-sm);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        transition: color var(--transition-fast), border-color var(--transition-fast);
+        position: relative;
+        bottom: -1px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        text-align: center;
+        /* Large enough tap target */
+        min-height: 48px;
+        justify-content: center;
+    }
+
+    .calc-tab:hover {
+        color: var(--text-light-secondary);
+    }
+
+    .calc-tab.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+    }
+
+    .calc-tab-sub {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-normal);
+        letter-spacing: 0.03em;
+        text-transform: none;
+        color: inherit;
+        opacity: 0.7;
+    }
+
+    /* ── Metrics bar ─────────────────────────────────────────────────────────── */
+    [data-calc-metrics-bar] {
+        border-bottom: 1px solid rgba(5, 205, 153, 0.12);
+        background: rgba(0, 0, 0, 0.06);
+    }
+
+    :global(html.dark-theme) [data-calc-metrics-bar] {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .metrics-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .metrics-row--detail {
+        border-top: 1px solid rgba(5, 205, 153, 0.06);
+        transition: opacity 0.2s;
+    }
+
+    .metric-cell {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        border-right: 1px solid rgba(5, 205, 153, 0.06);
+    }
+
+    .metric-cell--last,
+    .metric-cell:last-child {
+        border-right: none;
+    }
+
+    .metric-label {
+        font-size: 0.6rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--text-light-faded);
+        margin-bottom: 0.15rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .metric-value {
+        font-family: monospace;
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        line-height: 1;
+        letter-spacing: -0.02em;
+    }
+
+    .metric-value--primary {
+        font-size: var(--text-xl);
+        color: var(--color-primary);
+    }
+
+    .metric-delta {
+        font-size: var(--text-xs);
+        color: var(--color-primary);
+        vertical-align: super;
+        margin-right: 0.1em;
+    }
+
+    /* ── Body: two-column on desktop ─────────────────────────────────────────── */
+    [data-calc-body] {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+
+    /* ── Inputs panel ────────────────────────────────────────────────────────── */
+    [data-calc-inputs] {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        border-right: 1px solid rgba(5, 205, 153, 0.06);
+    }
+
+    /* ── Outputs panel ───────────────────────────────────────────────────────── */
+    [data-calc-outputs] {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        background: rgba(0, 0, 0, 0.03);
+        /* Fills height of inputs panel */
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+
+    :global(html.dark-theme) [data-calc-outputs] {
+        background: rgba(0, 0, 0, 0.18);
+    }
+
+    /* ── Context panel (Quick mode right-side) ───────────────────────────────── */
+    .context-panel {
+        background: rgba(5, 205, 153, 0.04);
+        border: 1px solid rgba(5, 205, 153, 0.12);
+        border-radius: 6px;
+        padding: var(--spacing-lg);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    :global(html.dark-theme) .context-panel {
+        background: rgba(5, 205, 153, 0.06);
+        border-color: rgba(5, 205, 153, 0.18);
+    }
+
+    .context-label {
+        font-size: 0.6rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+    }
+
+    .context-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 1px solid rgba(5, 205, 153, 0.07);
+    }
+
+    .context-stat:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .context-stat-label {
+        font-size: 0.6rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-light-faded);
+    }
+
+    .context-stat-value {
+        font-family: monospace;
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        line-height: 1.1;
+    }
+
+    .context-note {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+        font-style: italic;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* ── Payback box ─────────────────────────────────────────────────────────── */
+    .payback-box {
+        background: rgba(5, 205, 153, 0.05);
+        border: 1px solid rgba(5, 205, 153, 0.2);
+        border-radius: 6px;
+        padding: var(--spacing-lg);
+    }
+
+    .payback-label {
+        font-size: 0.6rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .payback-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap-normal);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .payback-item-label {
+        font-size: 0.6rem;
+        color: var(--text-light-muted);
+        margin-bottom: 0.2rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .payback-value {
+        font-size: var(--text-xl);
+        font-family: monospace;
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-primary);
+        line-height: 1;
+    }
+
+    .payback-value--teal {
+        color: var(--color-primary);
+    }
+
+    .payback-disclaimer {
+        font-size: 0.58rem;
+        color: var(--text-light-faded);
+        font-style: italic;
+        line-height: 1.5;
+    }
+
+    /* ── Slider grid layouts ─────────────────────────────────────────────────── */
+    .inputs-grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0 var(--gap-normal);
+    }
+
+    .inputs-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 var(--gap-normal);
+    }
+
+    /* ── Slider rows ─────────────────────────────────────────────────────────── */
+    .slider-row {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .slider-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.25rem;
+        gap: var(--gap-tight);
+    }
+
+    .slider-label {
+        font-size: 0.62rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-light-muted);
+        cursor: pointer;
+        /* Allow label to truncate rather than push value off */
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .slider-value {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+        font-family: monospace;
+        color: var(--color-primary);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Slider track */
+    .calc-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        /* Taller invisible hit area on mobile */
+        height: 20px;
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Visible track via pseudo */
+    .calc-slider::-webkit-slider-runnable-track {
+        height: 3px;
+        background: var(--border-light);
+        border-radius: 2px;
+    }
+
+    :global(html.dark-theme) .calc-slider::-webkit-slider-runnable-track {
+        background: rgba(5, 205, 153, 0.15);
+    }
+
+    .calc-slider::-moz-range-track {
+        height: 3px;
+        background: var(--border-light);
+        border-radius: 2px;
+    }
+
+    :global(html.dark-theme) .calc-slider::-moz-range-track {
+        background: rgba(5, 205, 153, 0.15);
+    }
+
+    /* Thumb */
+    .calc-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        background: var(--color-primary);
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -7.5px;
+        transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.12);
+    }
+
+    .calc-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 6px rgba(5, 205, 153, 0.18);
+    }
+
+    .calc-slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: var(--color-primary);
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+    .slider-hints {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.1rem;
+    }
+
+    .hint-low {
+        font-size: 0.56rem;
+        color: var(--color-primary);
+        opacity: 0.7;
+    }
+
+    .hint-high {
+        font-size: 0.56rem;
+        color: var(--color-secondary);
+        opacity: 0.7;
+    }
+
+    .slider-hint-text {
+        font-size: 0.57rem;
+        color: var(--text-light-faded);
+        margin-top: 0.1rem;
+        font-style: italic;
+    }
+
+    /* ── Section dividers ────────────────────────────────────────────────────── */
+    .inputs-divider {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-tight);
+        margin: var(--spacing-md) 0 var(--spacing-sm);
+    }
+
+    .divider-label {
+        font-size: 0.58rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-light-faded);
+        white-space: nowrap;
+    }
+
+    .divider-line {
+        flex: 1;
+        height: 1px;
+        background: rgba(5, 205, 153, 0.08);
+    }
+
+    /* ── Deploy frequency grid ───────────────────────────────────────────────── */
+    .deploy-section {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .deploy-label {
+        font-size: 0.62rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--text-light-muted);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .deploy-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-xs);
+    }
+
+    .deploy-btn {
+        /* 44px minimum touch target */
+        min-height: 44px;
+        padding: var(--spacing-xs) var(--spacing-xs);
+        border: 1px solid var(--border-light);
+        background: rgba(5, 205, 153, 0.02);
+        border-radius: 4px;
+        color: var(--text-light-faded);
+        font-family: var(--font-family);
+        font-size: 0.67rem;
+        font-weight: 500;
+        cursor: pointer;
+        text-align: center;
+        transition: all var(--transition-fast);
+        line-height: 1.3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    :global(html.dark-theme) .deploy-btn {
+        border-color: rgba(5, 205, 153, 0.12);
+    }
+
+    .deploy-btn:hover {
+        border-color: rgba(5, 205, 153, 0.3);
+        color: var(--text-light-secondary);
+    }
+
+    .deploy-btn.active {
+        border-color: var(--color-primary);
+        background: rgba(5, 205, 153, 0.08);
+        color: var(--color-primary);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    /* ── DORA message ────────────────────────────────────────────────────────── */
+    .dora-message {
+        min-height: 1.2rem;
+        margin-top: 0.25rem;
+        font-size: 0.63rem;
+        font-style: italic;
+        opacity: 0.85;
+        line-height: 1.3;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────────────────── */
+    [data-calc-footer] {
+        padding: var(--spacing-md) var(--spacing-2xl);
+        border-top: 1px solid rgba(5, 205, 153, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--gap-normal);
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    :global(html.dark-theme) [data-calc-footer] {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .footer-left {
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-light-faded);
+        white-space: nowrap;
+    }
+
+    .footer-right {
+        font-size: var(--text-xs);
+        color: var(--text-light-faded);
+        text-align: right;
+    }
+
+    /* ── Visibility toggle ───────────────────────────────────────────────────── */
+    .is-hidden {
+        display: none;
+    }
+
+    /* ── Back link ───────────────────────────────────────────────────────────── */
+    .back-link {
+        display: inline-block;
+        margin-top: var(--spacing-2xl);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════════
+       RESPONSIVE — tablet (≤ 768px)
+       Single column layout. Outputs panel moves below inputs.
+       Metrics bar wraps to 2×2.
+    ════════════════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+        /* Single column body — outputs below inputs */
+        [data-calc-body] {
+            grid-template-columns: 1fr;
+        }
+
+        [data-calc-inputs] {
+            border-right: none;
+            border-bottom: 1px solid rgba(5, 205, 153, 0.06);
+            padding: var(--spacing-lg);
+        }
+
+        [data-calc-outputs] {
+            padding: var(--spacing-lg);
+            background: transparent;
+            align-self: auto;
+        }
+
+        :global(html.dark-theme) [data-calc-outputs] {
+            background: transparent;
+        }
+
+        /* Metrics bar: 2 per row on tablet */
+        .metrics-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Second row cells need right border reset for 2-col */
+        .metrics-row [class*="metric-cell"]:nth-child(2) {
+            border-right: none;
+        }
+
+        /* Base sliders: 2-col on tablet (better than 3-col squished) */
+        .inputs-grid-3 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* Footer wraps */
+        [data-calc-footer] {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-md) var(--spacing-lg);
+        }
+
+        .footer-right {
+            text-align: left;
+        }
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════════
+       RESPONSIVE — mobile (≤ 480px)
+       Full single-column stack. Larger touch targets throughout.
+    ════════════════════════════════════════════════════════════════════════════ */
+    @media (max-width: 480px) {
+        /* Header tighter */
+        .tdc-header {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .tdc-header h1 {
+            font-size: var(--text-xl);
+        }
+
+        /* Metrics: 2×2 grid, taller cells */
+        .metric-cell {
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        /* All slider grids → single column on small screens */
+        .inputs-grid-3,
+        .inputs-grid-2 {
+            grid-template-columns: 1fr;
+        }
+
+        /* Slightly taller slider hit area on touch */
+        .calc-slider {
+            height: 28px;
+        }
+
+        .calc-slider::-webkit-slider-thumb {
+            width: 22px;
+            height: 22px;
+            margin-top: -9.5px;
+        }
+
+        .calc-slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Padding reductions */
+        [data-calc-inputs],
+        [data-calc-outputs] {
+            padding: var(--spacing-md);
+        }
+
+        /* Deploy grid stays 3-col but taller buttons */
+        .deploy-btn {
+            min-height: 48px;
+            font-size: 0.62rem;
+        }
+
+        /* Context panel slimmer on mobile */
+        .context-panel {
+            padding: var(--spacing-md);
+        }
+
+        /* Payback grid: stack on very small screens */
+        .payback-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        [data-calc-footer] {
+            padding: var(--spacing-md);
+        }
+
+        .footer-left {
+            font-size: 0.6rem;
+        }
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════════
+       RESPONSIVE — very small (≤ 360px)
+    ════════════════════════════════════════════════════════════════════════════ */
+    @media (max-width: 360px) {
+        .tdc-header h1 {
+            font-size: var(--text-lg);
+        }
+
+        .deploy-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .payback-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+import {
+  DEPLOY_OPTIONS,
+  DEFAULT_STATE,
+  posToTeamSize,
+  posToSalary,
+  posTobudget,
+  posToArr,
+  calculate,
+  fmt,
+  fmtShort,
+  fmtPayback,
+} from '../../../../utils/tech-debt-engine';
+
+import type { CalcState } from '../../../../utils/tech-debt-engine';
+
+// ─── DOM helpers ─────────────────────────────────────────────────────────────
+
+function getInput(key: string): HTMLInputElement {
+  return document.querySelector(`[data-input="${key}"]`) as HTMLInputElement;
+}
+
+function getDisplay(key: string): HTMLElement {
+  return document.querySelector(`[data-display="${key}"]`) as HTMLElement;
+}
+
+function getMetric(key: string): HTMLElement {
+  return document.querySelector(`[data-metric="${key}"]`) as HTMLElement;
+}
+
+function el(id: string): HTMLElement {
+  return document.getElementById(id) as HTMLElement;
+}
+
+// ─── State ────────────────────────────────────────────────────────────────────
+
+const state: CalcState = { ...DEFAULT_STATE };
+
+// ─── Context panel helpers ────────────────────────────────────────────────────
+
+function burdenLabel(pct: number): { text: string; color: string } {
+  if (pct < 20) return { text: 'Healthy (< 20%)',       color: 'var(--color-primary)' };
+  if (pct < 35) return { text: 'Moderate (20–35%)',     color: 'var(--color-primary)' };
+  if (pct < 50) return { text: 'Material (35–50%)',     color: 'var(--color-secondary)' };
+  return              { text: 'Critical (> 50%)',       color: 'var(--color-secondary)' };
+}
+
+function contextNote(pct: number, annualCost: number): string {
+  if (pct < 20) return 'Debt is well-managed. Focus on preventing accumulation as the team scales.';
+  if (pct < 35) return 'Debt is growing. Allocate 1–2 sprints per quarter to targeted paydown before it compounds.';
+  if (pct < 50) return `At ${pct}% burden, debt is consuming significant engineering capacity and compounding velocity loss.`;
+  return `At ${pct}% burden, debt is likely the primary drag on throughput. The annual carrying cost of ${fmtShort(annualCost)} makes a remediation case compelling.`;
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+
+function render(): void {
+  const result = calculate(state);
+
+  // ── Metric row 1 ──
+  getMetric('annual-cost').textContent  = fmtShort(result.annualCost);
+  getMetric('per-month').textContent    = fmtShort(result.totalMonthly);
+  getMetric('hrs-lost').textContent     = result.hoursLostPerEng.toFixed(0) + 'h';
+  getMetric('cost-per-eng').textContent = fmtShort(result.costPerEng);
+
+  // ── Metric row 2 (opacity only) ──
+  const detailRow = document.querySelector('[data-metrics-row="detail"]') as HTMLElement;
+  detailRow.style.opacity = state.mode === 'quick' ? '0.25' : '1';
+
+  const directEl   = getMetric('direct-labor');
+  const incidentEl = getMetric('incident-labor');
+  const velocityEl = getMetric('velocity');
+  const debtPctEl  = getMetric('debt-pct-arr');
+
+  if (state.mode === 'quick') {
+    directEl.textContent   = '—';
+    incidentEl.textContent = '—';
+    velocityEl.textContent = '—';
+    debtPctEl.textContent  = '—';
+    directEl.style.color   = '';
+    incidentEl.style.color = '';
+    velocityEl.style.color = '';
+    debtPctEl.style.color  = '';
+  } else {
+    directEl.textContent   = fmtShort(result.directMonthly) + '/mo';
+    incidentEl.textContent = fmtShort(result.incidentMonthly) + '/mo';
+    velocityEl.textContent = result.V.toFixed(2) + '× ' + result.doraLabel;
+    debtPctEl.textContent  = result.debtPctArr.toFixed(1) + '%';
+
+    velocityEl.style.color  = result.V <= 1.0 ? 'var(--color-primary)' : 'var(--color-secondary)';
+    debtPctEl.style.color   = result.debtPctArr < 5 ? 'var(--color-primary)' : 'var(--color-secondary)';
+    incidentEl.style.color  = 'var(--color-secondary)';
+    directEl.style.color    = '';
+  }
+
+  // ── Mode tabs ──
+  document.querySelectorAll('[data-mode-tab]').forEach(btn => {
+    const b = btn as HTMLElement;
+    b.classList.toggle('active', b.dataset.modeTab === state.mode);
+  });
+
+  // ── Deep Dive visibility ──
+  document.querySelectorAll('[data-show-in="deep"]').forEach(el => {
+    (el as HTMLElement).classList.toggle('is-hidden', state.mode !== 'deep');
+  });
+
+  // ── Context panel ──
+  const teamSize = posToTeamSize(state.teamSizePos);
+  const engsLost = (teamSize * state.maintPct / 100).toFixed(1);
+  const burden   = burdenLabel(state.maintPct);
+
+  el('ctx-annual-cost').textContent      = fmtShort(result.annualCost) + ' / yr';
+  el('ctx-annual-cost').style.color      = state.maintPct >= 35 ? 'var(--color-secondary)' : 'var(--color-primary)';
+  el('ctx-engs-lost').textContent        = engsLost + ' FTEs';
+  el('ctx-engs-lost').style.color        = state.maintPct >= 35 ? 'var(--color-secondary)' : 'var(--color-primary)';
+  el('ctx-burden-label').textContent     = burden.text;
+  el('ctx-burden-label').style.color     = burden.color;
+  el('ctx-note').textContent             = contextNote(state.maintPct, result.annualCost);
+
+  // ── Deploy buttons ──
+  document.querySelectorAll('[data-deploy-btn]').forEach(btn => {
+    const b = btn as HTMLElement;
+    b.classList.toggle('active', Number(b.dataset.deployBtn) === state.deployIdx);
+  });
+
+  // ── DORA message ──
+  const doraEl = document.querySelector('[data-dora-message]') as HTMLElement;
+  if (state.deployIdx >= 6) {
+    doraEl.textContent = 'DORA Low tier — constrained velocity signals debt is likely the rate-limiting factor';
+    doraEl.style.color = 'var(--color-secondary)';
+  } else if (state.deployIdx >= 4) {
+    doraEl.textContent = 'DORA Medium tier — deployment lag suggests debt friction is dampening throughput';
+    doraEl.style.color = 'var(--color-secondary)';
+  } else {
+    doraEl.textContent = '';
+    doraEl.style.color = '';
+  }
+
+  // ── Slider display values ──
+  getDisplay('team-size').textContent = String(teamSize);
+  getDisplay('salary').textContent    = fmtShort(posToSalary(state.salaryPos));
+  getDisplay('maint-pct').textContent = state.maintPct + '%';
+  getDisplay('incidents').textContent = state.incidents === 0 ? 'None' : String(state.incidents);
+  getDisplay('mttr').textContent      = state.mttr + 'h';
+  getDisplay('budget').textContent    = fmtShort(posTobudget(state.budgetPos));
+  getDisplay('arr').textContent       = fmtShort(posToArr(state.arrPos));
+
+  // ── Payback section ──
+  if (state.mode === 'deep') {
+    el('payback-breakeven').textContent = fmtPayback(result.paybackMonths);
+    el('payback-breakeven').style.color = result.paybackMonths < 24
+      ? 'var(--color-primary)'
+      : 'var(--color-secondary)';
+    el('payback-savings').textContent   = fmtShort(result.monthlySavings);
+    el('payback-disclaimer').textContent =
+      `Assumes full resolution of identified debt · Budget: ${fmt(posTobudget(state.budgetPos))}`;
+  }
+}
+
+// ─── Initialise sliders ───────────────────────────────────────────────────────
+
+function initSliders(): void {
+  getInput('team-size').value = String(state.teamSizePos);
+  getInput('salary').value    = String(state.salaryPos);
+  getInput('maint-pct').value = String(state.maintPct);
+  getInput('incidents').value = String(state.incidents);
+  getInput('mttr').value      = String(state.mttr);
+  getInput('budget').value    = String(state.budgetPos);
+  getInput('arr').value       = String(state.arrPos);
+}
+
+// ─── Event wiring ─────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  initSliders();
+  render();
+
+  getInput('team-size').addEventListener('input', e => { state.teamSizePos = Number((e.target as HTMLInputElement).value); render(); });
+  getInput('salary').addEventListener('input',    e => { state.salaryPos   = Number((e.target as HTMLInputElement).value); render(); });
+  getInput('maint-pct').addEventListener('input', e => { state.maintPct    = Number((e.target as HTMLInputElement).value); render(); });
+  getInput('incidents').addEventListener('input', e => { state.incidents   = Number((e.target as HTMLInputElement).value); render(); });
+  getInput('mttr').addEventListener('input',      e => { state.mttr        = Number((e.target as HTMLInputElement).value); render(); });
+  getInput('budget').addEventListener('input',    e => { state.budgetPos   = Number((e.target as HTMLInputElement).value); render(); });
+  getInput('arr').addEventListener('input',       e => { state.arrPos      = Number((e.target as HTMLInputElement).value); render(); });
+
+  document.querySelectorAll('[data-deploy-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.deployIdx = Number((btn as HTMLElement).dataset.deployBtn);
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-mode-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.mode = (btn as HTMLElement).dataset.modeTab as 'quick' | 'deep';
+      render();
+    });
+  });
+});
+</script>
