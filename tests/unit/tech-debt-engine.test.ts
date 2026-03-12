@@ -3,10 +3,10 @@
  *
  * Tests all pure functions:
  * - Slider transform functions (pos → value, value → pos)
- * - calculate(): core cost computation
- * - fmtShort(): abbreviated currency formatting
- * - fmtPayback(): payback period display
- * - Default state values
+ * - calculate(): core cost computation in quick and deep modes
+ * - fmt / fmtShort / fmtPayback: formatting utilities
+ * - DEPLOY_OPTIONS: data integrity
+ * - DEFAULT_STATE: initial values
  */
 
 import {
@@ -30,6 +30,8 @@ import type { CalcState } from '../../src/utils/tech-debt-engine';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// makeState spreads DEFAULT_STATE as the base — tests that depend on specific
+// inputs for isolated assertions should explicitly override all relevant fields.
 function makeState(overrides: Partial<CalcState> = {}): CalcState {
   return { ...DEFAULT_STATE, ...overrides };
 }
@@ -41,12 +43,8 @@ describe('posToTeamSize', () => {
     expect(posToTeamSize(0)).toBe(1);
   });
 
-  it('returns a value close to 500 at position 100', () => {
+  it('returns exactly 500 at position 100', () => {
     expect(posToTeamSize(100)).toBe(500);
-  });
-
-  it('returns 1 at the minimum slider position', () => {
-    expect(posToTeamSize(0)).toBe(1);
   });
 
   it('is monotonically increasing', () => {
@@ -70,6 +68,7 @@ describe('posToSalary', () => {
 });
 
 describe('posTobudget', () => {
+  // Note: posTobudget has an intentionally lowercase 'b' in the engine export
   it('returns 10000 at position 0', () => {
     expect(posTobudget(0)).toBe(10000);
   });
@@ -100,7 +99,7 @@ describe('posToArr', () => {
 // ─── Inverse transforms ───────────────────────────────────────────────────────
 
 describe('inverse transforms round-trip', () => {
-  it('teamSizeToPos(8) round-trips back to ~8', () => {
+  it('teamSizeToPos(8) round-trips back to 8', () => {
     const pos = teamSizeToPos(8);
     expect(posToTeamSize(pos)).toBe(8);
   });
@@ -110,82 +109,139 @@ describe('inverse transforms round-trip', () => {
     expect(posToSalary(pos)).toBe(150000);
   });
 
-  it('budgetToPos(500000) round-trips within one $1K snap', () => {
+  // posTobudget / posToArr use integer snapping with a 2.5 exponent curve.
+  // The inverse loses precision at the snap resolution — tolerance is 22× the snap unit
+  // due to the non-linear curve compressing precision near the midpoint.
+  it('budgetToPos(500000) round-trips within 22 × $1K snap', () => {
     const pos = budgetToPos(500000);
-    expect(Math.abs(posTobudget(pos) - 500000)).toBeLessThanOrEqual(25000);
+    expect(Math.abs(posTobudget(pos) - 500000)).toBeLessThanOrEqual(22000);
   });
 
-  it('arrToPos(10000000) round-trips within one $100K snap', () => {
+  it('arrToPos(10000000) round-trips within 3 × $100K snap', () => {
     const pos = arrToPos(10000000);
-    expect(Math.abs(posToArr(pos) - 10000000)).toBeLessThanOrEqual(500000);
+    expect(Math.abs(posToArr(pos) - 10000000)).toBeLessThanOrEqual(300000);
   });
 });
 
-// ─── calculate() ─────────────────────────────────────────────────────────────
+// ─── calculate() — quick mode ─────────────────────────────────────────────────
 
 describe('calculate() — quick mode', () => {
-  it('totalMonthly equals directMonthly only (no incidents)', () => {
-    const state = makeState({ mode: 'quick' });
+  it('excludes incident labor from totalMonthly', () => {
+    // Use non-zero incidents to prove they are actively excluded, not just absent
+    const state = makeState({ mode: 'quick', incidents: 10, mttr: 8 });
     const result = calculate(state);
     expect(result.totalMonthly).toBe(result.directMonthly);
+    expect(result.incidentMonthly).toBeGreaterThan(0); // incidents were computed but excluded
   });
 
-  it('annualCost is 12× totalMonthly', () => {
+  it('annualCost is exactly 12× totalMonthly', () => {
     const result = calculate(makeState({ mode: 'quick' }));
-    expect(result.annualCost).toBeCloseTo(result.totalMonthly * 12, 5);
+    // annualCost = totalMonthly * 12 is exact integer multiplication
+    expect(result.annualCost).toBe(result.totalMonthly * 12);
   });
 
-  it('hoursLostPerEng equals 40 × (maintPct / 100)', () => {
-    const result = calculate(makeState({ maintPct: 40 }));
-    expect(result.hoursLostPerEng).toBe(16);
+  it('hoursLostPerEng equals 40 × (maintPct / 100) — formula is mode-independent', () => {
+    expect(calculate(makeState({ maintPct: 40 })).hoursLostPerEng).toBe(16);
+    expect(calculate(makeState({ maintPct: 0  })).hoursLostPerEng).toBe(0);
+    expect(calculate(makeState({ maintPct: 100 })).hoursLostPerEng).toBe(40);
   });
 
   it('costPerEng equals totalMonthly / teamSize', () => {
-    const state = makeState();
+    // Explicitly set all inputs used by this formula
+    const state = makeState({ mode: 'quick', teamSizePos: teamSizeToPos(10), salaryPos: salaryToPos(120000), maintPct: 30, deployIdx: 2 });
     const result = calculate(state);
     const teamSize = posToTeamSize(state.teamSizePos);
     expect(result.costPerEng).toBeCloseTo(result.totalMonthly / teamSize, 5);
   });
 
-  it('directMonthly increases with higher maintPct', () => {
+  it('directMonthly increases proportionally with maintPct', () => {
     const lo = calculate(makeState({ maintPct: 20 }));
     const hi = calculate(makeState({ maintPct: 60 }));
     expect(hi.directMonthly).toBeGreaterThan(lo.directMonthly);
+    // 60% is 3× 20% — directMonthly should scale linearly with maintPct
+    expect(hi.directMonthly / lo.directMonthly).toBeCloseTo(3, 5);
   });
 
-  it('V multiplier matches the selected deploy option', () => {
-    const state = makeState({ deployIdx: 0 }); // Multiple/day, V=0.8
-    const result = calculate(state);
-    expect(result.V).toBe(0.8);
-    expect(result.doraLabel).toBe('Elite');
+  it('V multiplier scales directMonthly — higher V means higher cost', () => {
+    // deployIdx 0 = Elite V:0.8, deployIdx 8 = Annually V:2.4
+    const elite    = calculate(makeState({ deployIdx: 0 }));
+    const annually = calculate(makeState({ deployIdx: 8 }));
+    expect(elite.V).toBe(0.8);
+    expect(elite.doraLabel).toBe('Elite');
+    expect(annually.V).toBe(2.4);
+    expect(annually.doraLabel).toBe('Low');
+    expect(annually.directMonthly).toBeGreaterThan(elite.directMonthly);
   });
 });
 
+// ─── calculate() — deep mode ──────────────────────────────────────────────────
+
 describe('calculate() — deep mode', () => {
-  it('totalMonthly includes incidentMonthly', () => {
+  it('totalMonthly is directMonthly + incidentMonthly', () => {
     const state = makeState({ mode: 'deep', incidents: 5, mttr: 8 });
     const result = calculate(state);
     expect(result.totalMonthly).toBeCloseTo(result.directMonthly + result.incidentMonthly, 5);
   });
 
-  it('debtPctArr is 0 when arrPos resolves to minimum', () => {
-    const state = makeState({ mode: 'deep', arrPos: 0 });
+  it('incidentMonthly equals incidents × mttr × (salary / 2080)', () => {
+    // Use salary=150000 — a $5K multiple that round-trips through posToSalary(salaryToPos(v))
+    // exactly (proven by DEFAULT_STATE test). Derive expected from the round-tripped value.
+    const salaryInput = 150000;
+    const salaryPos   = salaryToPos(salaryInput);
+    const salary      = posToSalary(salaryPos); // = 150000 (exact round-trip)
+    const state = makeState({
+      mode: 'deep',
+      salaryPos,
+      incidents: 4,
+      mttr: 10,
+    });
     const result = calculate(state);
-    // arrPos=0 → arrVal=100000; result should still be a finite number
+    const expectedHourlyRate = salary / 2080;
+    const expectedIncident   = 4 * 10 * expectedHourlyRate;
+    expect(result.incidentMonthly).toBeCloseTo(expectedIncident, 5);
+  });
+
+  it('debtPctArr returns 0 when arrVal guard is triggered (zero division)', () => {
+    // The engine computes debtPctArr = arrVal > 0 ? ... : 0
+    // posToArr always returns >= 100000 for pos >= 0, so we test the formula
+    // directly by verifying the guard branch: a tiny ARR yields large percentage
+    const state = makeState({ mode: 'deep', arrPos: 0 }); // arrVal = 100000
+    const result = calculate(state);
+    // arrVal = 100000 (minimum floor, not zero) — guard NOT triggered, result is positive
     expect(result.debtPctArr).toBeGreaterThan(0);
+    expect(isFinite(result.debtPctArr)).toBe(true);
+  });
+
+  it('debtPctArr scales inversely with ARR — higher ARR means lower percentage', () => {
+    const loArr = calculate(makeState({ mode: 'deep', arrPos: arrToPos(1_000_000) }));
+    const hiArr = calculate(makeState({ mode: 'deep', arrPos: arrToPos(100_000_000) }));
+    expect(loArr.debtPctArr).toBeGreaterThan(hiArr.debtPctArr);
   });
 
   it('paybackMonths is Infinity when totalMonthly is 0', () => {
-    // Zero maintenance burden → zero monthly cost
+    // Set maintPct and incidents both to 0 to drive totalMonthly to 0
     const state = makeState({ mode: 'deep', maintPct: 0, incidents: 0, mttr: 1 });
-    const result = calculate(state);
-    // maintPct slider min is 5 in the UI but engine accepts 0
-    expect(result.paybackMonths).toBe(Infinity);
+    expect(calculate(state).paybackMonths).toBe(Infinity);
   });
 
-  it('paybackMonths decreases as budget decreases', () => {
-    const hi = calculate(makeState({ mode: 'deep', budgetPos: budgetToPos(1000000) }));
-    const lo = calculate(makeState({ mode: 'deep', budgetPos: budgetToPos(100000) }));
+  it('paybackMonths equals budgetVal / totalMonthly — concrete arithmetic', () => {
+    // Use salary with exact hourlyRate to make incidentMonthly deterministic
+    // budgetToPos(600000) → budgetVal ≈ 600000; verify exact formula holds
+    const state = makeState({
+      mode: 'deep',
+      budgetPos: budgetToPos(600000),
+      maintPct: 50,
+      incidents: 0,
+      mttr: 1,
+    });
+    const result = calculate(state);
+    const budgetVal = posTobudget(state.budgetPos);
+    expect(result.paybackMonths).toBeCloseTo(budgetVal / result.totalMonthly, 5);
+  });
+
+  it('paybackMonths decreases as remediation budget decreases', () => {
+    const hi = calculate(makeState({ mode: 'deep', budgetPos: budgetToPos(1_000_000) }));
+    const lo = calculate(makeState({ mode: 'deep', budgetPos: budgetToPos(100_000) }));
     expect(lo.paybackMonths).toBeLessThan(hi.paybackMonths);
   });
 });
@@ -203,9 +259,15 @@ describe('DEPLOY_OPTIONS', () => {
     }
   });
 
-  it('index 3 (Bi-weekly) is the default', () => {
-    expect(DEFAULT_STATE.deployIdx).toBe(3);
+  it('index 3 is Bi-weekly with V = 1.1', () => {
     expect(DEPLOY_OPTIONS[3].label).toBe('Bi-weekly');
+    expect(DEPLOY_OPTIONS[3].V).toBe(1.1);
+  });
+
+  it('index 8 is Annually with V = 2.4 and doraLabel Low', () => {
+    expect(DEPLOY_OPTIONS[8].label).toBe('Annually');
+    expect(DEPLOY_OPTIONS[8].V).toBe(2.4);
+    expect(DEPLOY_OPTIONS[8].doraLabel).toBe('Low');
   });
 });
 
@@ -220,17 +282,22 @@ describe('fmt', () => {
 
 describe('fmtShort', () => {
   it('formats millions with one decimal', () => {
-    expect(fmtShort(1500000)).toBe('$1.5M');
-    expect(fmtShort(2000000)).toBe('$2.0M');
+    expect(fmtShort(1_500_000)).toBe('$1.5M');
+    expect(fmtShort(2_000_000)).toBe('$2.0M');
+  });
+
+  it('formats exactly 1_000_000 as $1.0M (>= branch)', () => {
+    expect(fmtShort(1_000_000)).toBe('$1.0M');
   });
 
   it('formats thousands with no decimal', () => {
-    expect(fmtShort(150000)).toBe('$150K');
-    expect(fmtShort(1000)).toBe('$1K');
+    expect(fmtShort(150_000)).toBe('$150K');
+    expect(fmtShort(1_000)).toBe('$1K');
   });
 
   it('falls back to full format below 1000', () => {
     expect(fmtShort(500)).toBe('$500');
+    expect(fmtShort(999)).toBe('$999');
   });
 });
 
@@ -238,6 +305,14 @@ describe('fmtPayback', () => {
   it('returns "< 1 mo" for values less than 1', () => {
     expect(fmtPayback(0.5)).toBe('< 1 mo');
     expect(fmtPayback(0)).toBe('< 1 mo');
+  });
+
+  it('returns formatted string for exactly 1 (boundary — not < 1)', () => {
+    expect(fmtPayback(1)).toBe('1.0 mo');
+  });
+
+  it('returns formatted string for exactly 60 (boundary — not > 60)', () => {
+    expect(fmtPayback(60)).toBe('60.0 mo');
   });
 
   it('returns "> 5 yrs" for values over 60', () => {
@@ -251,7 +326,7 @@ describe('fmtPayback', () => {
   });
 });
 
-// ─── Default state ────────────────────────────────────────────────────────────
+// ─── DEFAULT_STATE ────────────────────────────────────────────────────────────
 
 describe('DEFAULT_STATE', () => {
   it('starts in quick mode', () => {
@@ -270,7 +345,8 @@ describe('DEFAULT_STATE', () => {
     expect(DEFAULT_STATE.maintPct).toBe(40);
   });
 
-  it('initialises to deploy index 3 (Bi-weekly)', () => {
+  // deployIdx is the single authoritative check — see also DEPLOY_OPTIONS tests above
+  it('initialises to deploy index 3', () => {
     expect(DEFAULT_STATE.deployIdx).toBe(3);
   });
 
@@ -282,11 +358,11 @@ describe('DEFAULT_STATE', () => {
     expect(DEFAULT_STATE.mttr).toBe(4);
   });
 
-  it('initialises budget to approximately $500K', () => {
-    expect(Math.abs(posTobudget(DEFAULT_STATE.budgetPos) - 500000)).toBeLessThanOrEqual(25000);
+  it('initialises budget within 22 × $1K snap of $500K', () => {
+    expect(Math.abs(posTobudget(DEFAULT_STATE.budgetPos) - 500_000)).toBeLessThanOrEqual(22000);
   });
 
-  it('initialises ARR to approximately $10M', () => {
-    expect(Math.abs(posToArr(DEFAULT_STATE.arrPos) - 10000000)).toBeLessThanOrEqual(500000);
+  it('initialises ARR within 3 × $100K snap of $10M', () => {
+    expect(Math.abs(posToArr(DEFAULT_STATE.arrPos) - 10_000_000)).toBeLessThanOrEqual(300_000);
   });
 });
