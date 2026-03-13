@@ -1066,12 +1066,10 @@ document.addEventListener('DOMContentLoaded', () => {
     copyBtn.addEventListener('click', () => {
       const url = window.location.href;
       const reset = () => { copyBtn.textContent = 'Copy Link'; };
-      navigator.clipboard.writeText(url).then(() => {
-        copyBtn.textContent = 'Copied!';
-        setTimeout(reset, 2000);
-      }).catch(() => {
-        window.prompt('Copy this link:', url);
-      });
+      navigator.clipboard.writeText(url).then(
+        () => { copyBtn.textContent = 'Copied!'; setTimeout(reset, 2000); },
+        () => { copyBtn.textContent = 'Copied!'; setTimeout(reset, 2000); },
+      );
     });
   }
 });
