@@ -565,7 +565,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <h3 class="doc-attention-title">${escapeHtml(area.title)}</h3>
                         </div>
                         <div class="doc-attention-divider"></div>
-                        <p class="doc-attention-desc">${escapeHtml(area.description)}</p>
+                        <p class="doc-attention-desc">${escapeHtml(area.description)}${area.id === 'attention-tech-debt' ? ' <a href="/hub/tools/tech-debt-calculator" target="_blank" rel="noopener noreferrer" style="color:var(--color-secondary);text-decoration:underline;">Quantify it with the Tech Debt Cost Calculator →</a>' : ''}</p>
                     </div>
                 `)
                 .join('');
