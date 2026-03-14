@@ -553,6 +553,10 @@ If your test has any of these, it's likely a false positive:
 18. ✗ Uses `grantPermissions(['clipboard-read', 'clipboard-write'])` — only works in Chromium, fails on Firefox/WebKit
 19. ✗ Uses `waitUntil: 'networkidle'` in `page.goto()` or `waitForLoadState()` — times out under parallel worker load
 20. ✗ Uses `page.$$()` or `page.$()` on dynamically rendered elements — snapshot query returns stale/empty results
+21. ✗ Uses `page.evaluate(() => el.click())` without a following `waitForFunction` to confirm the DOM reacted
+22. ✗ Source code uses `setTimeout` for navigation/state changes without saving and clearing the timer ID
+23. ✗ Assumes `page.evaluate()` mocks survive `page.goto()` — mocks are lost on navigation, must be re-applied
+24. ✗ Dispatches mouse events to test CSS `:hover` styles — pseudo-class state cannot be activated via JS
 
 ## E2E Cross-Browser Pitfalls
 
@@ -813,6 +817,170 @@ async function answerAllInStep(page: Page, score: number): Promise<void> {
 - Any pattern where a container's children are replaced after a state change
 
 **Key principle:** Prefer `page.locator()` (auto-waiting, auto-retrying) over `page.$$()` / `page.$()` (snapshot, no waiting). When you need to iterate over multiple elements, use `locator.count()` + `locator.nth(i)` instead of `ElementHandle[]` iteration. Always pair with a `waitForSelector` or `waitForFunction` to confirm the render is complete before counting.
+
+### 17. ❌ Using `page.evaluate(() => el.click())` Without Waiting for the DOM Reaction
+
+`page.evaluate()` executes synchronously in the browser and returns immediately to the test runner. The click fires the event handler, but any resulting DOM update (class toggle, filter re-render, step transition) happens asynchronously. Asserting immediately after the evaluate call reads stale state.
+
+This is the most common cause of "works in Chromium, fails in WebKit/Firefox" — WebKit is slightly slower to process event handlers under parallel load.
+
+**Bad:**
+```typescript
+// ❌ evaluate returns before the click handler's DOM updates complete
+await page.evaluate(() => {
+  document.querySelector('.filter-chip[data-category="ai"]')?.click();
+});
+// Immediately reading state — may get pre-click value
+const isActive = await page.locator('.filter-chip[data-category="ai"]').evaluate(
+  el => el.classList.contains('active')
+);
+expect(isActive).toBe(true); // Flaky
+```
+
+**Good:**
+```typescript
+// ✅ Click via evaluate, then wait for the DOM to reflect the change
+await page.evaluate(() => {
+  (document.querySelector('.filter-chip[data-category="ai"]') as HTMLElement)?.click();
+});
+
+await page.waitForFunction(() => {
+  const chip = document.querySelector('.filter-chip[data-category="ai"]');
+  return chip?.classList.contains('active');
+});
+
+await expect(page.locator('.filter-chip[data-category="ai"]')).toHaveClass(/active/);
+```
+
+**When this applies:** Every time you use `page.evaluate(() => el.click())` — which is the standard pattern for WebKit stability (§7) — you **must** follow it with a `waitForFunction` that confirms the expected DOM change before asserting. The evaluate-click and the wait are always a pair.
+
+### 18. ❌ Fire-and-Forget `setTimeout` Timers in Source Code
+
+When source code uses `setTimeout` for delayed actions (auto-advance, debounce, animation cleanup) without saving the timer ID, stale timers can fire after navigation has moved to a different state. This creates race conditions that are invisible in manual testing but surface under E2E parallel load.
+
+**Bad (source code):**
+```typescript
+// ❌ Timer reference is lost — cannot be cancelled
+function handleOptionClick(card: HTMLElement): void {
+  selectOption(card);
+
+  // Auto-advance after visual feedback delay
+  setTimeout(() => {
+    if (currentStep < totalSteps) {
+      showStep(currentStep + 1);  // Fires even if user navigated away
+    }
+  }, 300);
+}
+```
+
+**Good (source code):**
+```typescript
+// ✅ Save timer ID, cancel in any navigation function
+let autoAdvanceTimer: ReturnType<typeof setTimeout> | null = null;
+
+function showStep(step: number): void {
+  // Cancel any pending auto-advance to prevent stale navigations
+  if (autoAdvanceTimer !== null) {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
+  currentStep = step;
+  // ... render step
+}
+
+function handleOptionClick(card: HTMLElement): void {
+  selectOption(card);
+
+  autoAdvanceTimer = setTimeout(() => {
+    autoAdvanceTimer = null;
+    if (currentStep < totalSteps) {
+      showStep(currentStep + 1);
+    }
+  }, 300);
+}
+```
+
+**Key principle:** Every `setTimeout` that triggers navigation or state changes **must** have a saved reference and be cancelled by any function that also changes that state. This is not just a test concern — it's a real product bug that manifests as "clicked Back but ended up on the wrong step" for fast users.
+
+**How to detect in tests:** Step-mismatch errors like `Expected step "6", got "7"` or `Expected step "9", got "10"` — the stale timer fires `showStep(currentStep + 1)` after navigation has already set `currentStep` to the target.
+
+### 19. ❌ Mocking State Lost After Cross-Page Navigation
+
+`page.evaluate()` mocks (window property overrides, `gtag` intercepts, `fetch` stubs) exist only in the current page context. After `page.goto()` to a different URL, the new page loads fresh JavaScript — all mocks are gone. Tests that navigate and then assert on mocked state silently pass with unmocked (real) behavior, or fail because the mock data is missing.
+
+**Bad:**
+```typescript
+test('should track events across pages', async ({ page }) => {
+  await setupAnalyticsMocking(page);  // Overrides window.gtag
+  await page.goto('/page-a');
+  // ... interact with page A
+
+  await page.goto('/page-b');  // ❌ Mocks are gone — new page context
+
+  await page.locator('#cta').click();
+  const events = await getRecordedEvents(page);  // Returns [] — mock was lost
+  expect(events).toContainEqual({ eventName: 'cta_click' });  // Fails
+});
+```
+
+**Good:**
+```typescript
+test('should track events across pages', async ({ page }) => {
+  await setupAnalyticsMocking(page);
+  await page.goto('/page-a');
+  // ... interact with page A
+
+  await page.goto('/page-b');
+  await setupAnalyticsMocking(page);  // ✅ Re-initialize mocks for new page
+
+  await page.locator('#cta').click();
+  const events = await getRecordedEvents(page);
+  expect(events).toContainEqual({ eventName: 'cta_click' });
+});
+```
+
+**Key principle:** Any `page.evaluate()`-based mock must be re-applied after every `page.goto()`. If your test navigates between pages, call the mock setup function again. Route-based mocks (`page.route()`) persist across navigations because they operate at the network layer, not the page context.
+
+### 20. ❌ Simulating CSS `:hover` with JavaScript Events in Headless Browsers
+
+CSS `:hover` is a browser-internal pseudo-class state. Dispatching `mouseenter`, `mouseover`, or `pointerover` events via JavaScript does **not** activate `:hover` styles in headless browsers (and often not in headed mode either). Tests that dispatch mouse events and then assert on `:hover` CSS properties always fail.
+
+**Bad:**
+```typescript
+// ❌ dispatchEvent does not activate CSS :hover pseudo-class
+await page.evaluate(() => {
+  const el = document.querySelector('.photo-link');
+  el?.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+  el?.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+});
+
+const opacity = await page.locator('.photo-link').evaluate(el =>
+  window.getComputedStyle(el).opacity
+);
+expect(opacity).toBe('0.85');  // Fails — :hover styles never activated
+```
+
+**Good:**
+```typescript
+// ✅ Verify the CSS rule exists in the stylesheet instead
+const hasHoverRule = await page.evaluate(() => {
+  for (const sheet of document.styleSheets) {
+    try {
+      for (const rule of sheet.cssRules) {
+        if (rule instanceof CSSStyleRule && rule.selectorText.includes('.photo-link:hover')) {
+          return true;
+        }
+      }
+    } catch { /* cross-origin sheets throw */ }
+  }
+  return false;
+});
+expect(hasHoverRule).toBe(true);
+```
+
+**When to use which approach:**
+- **JavaScript event handlers** (e.g., `element.addEventListener('mouseenter', ...)`) — use `page.hover()` or `dispatchEvent`, these work fine
+- **CSS `:hover` pseudo-class styles** — cannot be triggered programmatically; verify the rule exists in the stylesheet, or use `page.hover()` which activates the browser's native hover state (works in headed mode, unreliable in headless)
 
 ---
 
