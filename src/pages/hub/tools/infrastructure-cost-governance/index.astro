@@ -51,6 +51,11 @@ const domainCount = DOMAINS.length;
                         </div>
 
                         <button data-action="start" type="button" class="icg-btn-primary icg-btn-primary--full">Begin assessment</button>
+
+                        <div class="landing-actions">
+                            <button data-action="landing-copy" type="button" class="icg-btn-secondary" title="Copy a shareable link to this assessment">Copy link</button>
+                            <a data-action="landing-email" href="#" class="icg-btn-secondary icg-btn-secondary--link" title="Open a pre-filled email inviting your engineering lead to complete the assessment">Send to engineering lead</a>
+                        </div>
                     </div>
                 </div>
 
@@ -135,9 +140,9 @@ const domainCount = DOMAINS.length;
 
                         <!-- Actions row -->
                         <div class="icg-actions">
-                            <button data-action="copy" type="button" class="icg-btn-secondary">Copy link</button>
+                            <button data-action="copy" type="button" class="icg-btn-secondary" title="Copy a shareable link that preserves your answers and dismissed recommendations">Copy link</button>
                             <button data-action="print" type="button" class="icg-btn-secondary">Print / Save as PDF</button>
-                            <a data-action="email" href="#" class="icg-btn-secondary icg-btn-secondary--link">Send to engineering lead</a>
+                            <a data-action="email" href="#" class="icg-btn-secondary icg-btn-secondary--link" title="Open a pre-filled email with your results link. The recipient can complete the assessment independently.">Send to engineering lead</a>
                             <button data-action="reset" type="button" class="icg-btn-secondary">Start over</button>
                         </div>
                         <div class="icg-actions-note text-tiny">Your browser will open a print dialog. Select Save as PDF to download.</div>
@@ -810,6 +815,14 @@ const domainCount = DOMAINS.length;
         margin-top: var(--spacing-sm);
     }
 
+    /* ── Landing: Actions ─────────────────────────────────────────────────── */
+    .landing-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        margin-top: var(--spacing-md);
+    }
+
     /* ── Back link ────────────────────────────────────────────────────────── */
     .icg-back-link {
         display: inline-block;
@@ -833,6 +846,15 @@ const domainCount = DOMAINS.length;
         }
 
         .icg-actions .icg-btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .landing-actions {
+            flex-direction: column;
+        }
+
+        .landing-actions .icg-btn-secondary {
             width: 100%;
             justify-content: center;
         }
@@ -1069,6 +1091,16 @@ function maturityDescription(score: number): string {
   return 'Cloud spend is a managed, optimized discipline.';
 }
 
+// ─── Email helper ────────────────────────────────────────────────────────────
+
+function emailHref(context: 'landing' | 'results', score?: number): string {
+  const baseUrl = window.location.href.split('?')[0];
+  if (context === 'landing') {
+    return `mailto:?subject=${encodeURIComponent('Infrastructure Cost Governance Assessment')}&body=${encodeURIComponent('Use this tool to identify useful opportunities for cloud cost optimization:\n\n' + baseUrl)}`;
+  }
+  return `mailto:?subject=${encodeURIComponent('Cloud Cost Assessment - ' + score + '/100')}&body=${encodeURIComponent('Here are potential opportunities for improvement that were identified for your consideration:\n\n' + window.location.href)}`;
+}
+
 // ─── Render ─────────────────────────────────────────────────────────────────
 
 function render(): void {
@@ -1201,8 +1233,7 @@ function renderResults(): void {
 
   // Email link
   const emailLink = qs<HTMLAnchorElement>('[data-action="email"]');
-  const toolUrl = window.location.href.split('?')[0];
-  emailLink.href = `mailto:?subject=${encodeURIComponent('Cloud Cost Assessment - ' + result.overallScore + '/100')}&body=${encodeURIComponent('Infrastructure Cost Governance results: ' + window.location.href)}`;
+  emailLink.href = emailHref('results', result.overallScore);
 
   // Recommendations
   const recsContainer = qs<HTMLElement>('[data-recs-container]');
@@ -1229,7 +1260,7 @@ function renderResults(): void {
                 <div class="icg-rec-body__title">${rec.title}</div>
                 <div class="icg-rec-body__desc">${rec.description}</div>
               </div>
-              <button class="icg-rec-na" data-dismiss="${rec.id}" type="button" title="${isDismissed ? 'Restore recommendation' : 'Mark as not applicable'}">${isDismissed ? 'Restore' : 'N/A'}</button>
+              <button class="icg-rec-na" data-dismiss="${rec.id}" type="button" title="${isDismissed ? 'Restore this recommendation to the active list' : 'Mark as not applicable. Dismissed items are excluded from the printed report.'}">${isDismissed ? 'Restore' : 'N/A'}</button>
             </div>`;
           }).join('')}
         </div>`;
@@ -1306,5 +1337,21 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
   });
+
+  // ── Landing actions ──
+  const landingCopy = qs<HTMLButtonElement>('[data-action="landing-copy"]');
+  landingCopy.addEventListener('click', () => {
+    const url = window.location.href.split('?')[0];
+    const reset = () => { landingCopy.textContent = 'Copy link'; };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(
+        () => { landingCopy.textContent = 'Link copied'; setTimeout(reset, 2000); },
+        () => { landingCopy.textContent = 'Link copied'; setTimeout(reset, 2000); },
+      );
+    }
+  });
+
+  const landingEmail = qs<HTMLAnchorElement>('[data-action="landing-email"]');
+  landingEmail.href = emailHref('landing');
 });
 </script>
