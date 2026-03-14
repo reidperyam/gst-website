@@ -667,7 +667,7 @@ footer p {
     line-height: 1;
     display: flex;
     align-items: center;
-    height: auto;
+    height: 0.85rem;
 }
 
 .theme-toggle:hover {
