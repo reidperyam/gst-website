@@ -552,6 +552,7 @@ If your test has any of these, it's likely a false positive:
 17. ✗ Top-level `beforeEach`/`afterEach` outside a `describe` block — causes runner initialization failure
 18. ✗ Uses `grantPermissions(['clipboard-read', 'clipboard-write'])` — only works in Chromium, fails on Firefox/WebKit
 19. ✗ Uses `waitUntil: 'networkidle'` in `page.goto()` or `waitForLoadState()` — times out under parallel worker load
+20. ✗ Uses `page.$$()` or `page.$()` on dynamically rendered elements — snapshot query returns stale/empty results
 
 ## E2E Cross-Browser Pitfalls
 
@@ -776,6 +777,42 @@ expect(await filterButton.getAttribute('aria-expanded')).toBe('false'); // ✅ D
 ```
 
 **Key principle:** Test the logical closed state (CSS class, `aria-expanded`, `hidden` attribute, visibility), not the animated CSS property value. If you genuinely need to assert on a final CSS position, wait for the `transitionend` event instead of using `waitForFunction` on the class.
+
+### 16. ❌ Using `page.$$()` Snapshot Queries on Dynamically Rendered Elements
+
+`page.$$()` (and `page.$()`) takes a one-shot DOM snapshot and returns `ElementHandle` references. When elements are rendered dynamically via `innerHTML` (common in wizard/SPA patterns), the snapshot may return 0 elements or stale handles if the render hasn't completed. This causes tests to silently skip interactions — e.g., "answer all questions" answers nothing, so the next button stays disabled and the test times out.
+
+**Bad:**
+```typescript
+// ❌ page.$$ is a snapshot — if innerHTML render hasn't completed, returns []
+async function answerAllInStep(page: Page, score: number): Promise<void> {
+  const buttons = await page.$$(`[data-score="${score}"]`);
+  for (const btn of buttons) {
+    await btn.click(); // never executes if buttons is empty
+  }
+}
+```
+
+**Good:**
+```typescript
+// ✅ waitForSelector confirms elements exist; locator auto-retries
+async function answerAllInStep(page: Page, score: number): Promise<void> {
+  await page.waitForSelector(`[data-score="${score}"]`, { timeout: 3000 });
+
+  const buttons = page.locator(`[data-score="${score}"]`);
+  const count = await buttons.count();
+  for (let i = 0; i < count; i++) {
+    await buttons.nth(i).click();
+  }
+}
+```
+
+**When this bites you:**
+- Wizard/multi-step forms that render questions via `innerHTML` on each step transition
+- SPA views that swap content dynamically without full page navigation
+- Any pattern where a container's children are replaced after a state change
+
+**Key principle:** Prefer `page.locator()` (auto-waiting, auto-retrying) over `page.$$()` / `page.$()` (snapshot, no waiting). When you need to iterate over multiple elements, use `locator.count()` + `locator.nth(i)` instead of `ElementHandle[]` iteration. Always pair with a `waitForSelector` or `waitForFunction` to confirm the render is complete before counting.
 
 ---
 
