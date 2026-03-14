@@ -283,6 +283,12 @@ export async function getAttentionAreaCount(page: Page): Promise<number> {
  * Verify the wizard is on a specific step
  */
 export async function expectWizardOnStep(page: Page, stepNumber: number): Promise<void> {
+  // Wait for the expected step to become active
+  await page.waitForFunction((step) => {
+    const activeStep = document.querySelector('.wizard-step.active');
+    return activeStep?.getAttribute('data-step') === String(step);
+  }, stepNumber, { timeout: 5000 });
+
   const activeStep = page.locator('.wizard-step.active');
   await expect(activeStep).toBeVisible();
   expect(await activeStep.getAttribute('data-step')).toBe(String(stepNumber));

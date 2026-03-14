@@ -269,6 +269,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     };
     let targetIdentifier = 'Target';
     let lastGeneratedScript: GeneratedScript | null = null;
+    let autoAdvanceTimer: ReturnType<typeof setTimeout> | null = null;
 
     // ─── DOM REFERENCES ──────────────────────────────────────────────────
 
@@ -325,6 +326,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     // ─── STEP NAVIGATION ─────────────────────────────────────────────────
 
     function showStep(step: number): void {
+        // Cancel any pending auto-advance timer to prevent stale navigations
+        if (autoAdvanceTimer !== null) {
+            clearTimeout(autoAdvanceTimer);
+            autoAdvanceTimer = null;
+        }
+
         currentStep = step;
         highestStepReached = Math.max(highestStepReached, step);
 
@@ -460,7 +467,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             saveState();
 
             // Auto-advance to next step after brief delay for visual feedback
-            setTimeout(() => {
+            autoAdvanceTimer = setTimeout(() => {
+                autoAdvanceTimer = null;
                 if (currentStep < totalSteps) {
                     showStep(currentStep + 1);
                 }
