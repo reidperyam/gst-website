@@ -76,7 +76,7 @@ test.describe('Theme Toggle Journey', () => {
     // Toggle to dark if not already dark
     if (!initialIsDark) {
       await themeToggle.click();
-      await page.waitForTimeout(100);
+      await page.waitForFunction(() => document.documentElement.classList.contains('dark-theme'));
     }
 
     // Capture the theme state AFTER toggle
@@ -117,7 +117,9 @@ test.describe('Theme Toggle Journey', () => {
     );
 
     await themeToggle.press('Enter');
-    await page.waitForTimeout(100);
+    await page.waitForFunction((wasDark) =>
+      document.documentElement.classList.contains('dark-theme') !== wasDark,
+    initialIsDark);
 
     // Theme should have changed
     const newIsDark = await page.evaluate(() =>
@@ -177,7 +179,9 @@ test.describe('Theme Toggle Journey', () => {
 
     // Toggle theme and check again
     await themeToggle.click();
-    await page.waitForTimeout(100);
+    await page.waitForFunction((prevBg) =>
+      window.getComputedStyle(document.body).backgroundColor !== prevBg,
+    bgColor);
 
     const newFontSize = await themeToggle.evaluate(el => {
       return window.getComputedStyle(el).fontSize;
@@ -205,10 +209,13 @@ test.describe('Theme Toggle Journey', () => {
       document.documentElement.classList.contains('dark-theme')
     );
 
-    // Rapidly toggle theme 5 times
+    // Rapidly toggle theme 5 times, waiting for each toggle to register
     for (let i = 0; i < 5; i++) {
+      const wasDark = await page.evaluate(() => document.documentElement.classList.contains('dark-theme'));
       await themeToggle.click();
-      await page.waitForTimeout(50);
+      await page.waitForFunction((prev) =>
+        document.documentElement.classList.contains('dark-theme') !== prev,
+      wasDark);
     }
 
     // After 5 toggles (odd number), theme should be opposite of initial
@@ -229,7 +236,7 @@ test.describe('Theme Toggle Journey', () => {
 
     // Toggle theme
     await themeToggle.click();
-    await page.waitForTimeout(100);
+    await page.waitForFunction(() => document.documentElement.classList.contains('dark-theme'));
 
     // Should still be able to interact with other elements
     const buttons = page.locator('button');
