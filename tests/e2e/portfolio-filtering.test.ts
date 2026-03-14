@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Portfolio Filtering - DOM Integration Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/ma-portfolio', { waitUntil: 'networkidle' });
+    await page.goto('/ma-portfolio', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 5000 });
   });
 
@@ -192,7 +192,10 @@ test.describe('Portfolio Filtering - DOM Integration Tests', () => {
     await clearButton.click();
 
     // Wait for filter reset
-    await page.waitForTimeout(300);
+    await page.waitForFunction(() => {
+      const allChip = document.querySelector('[data-testid="filter-chip-stage-all"]');
+      return allChip && allChip.classList.contains('active');
+    });
 
     // Applied filters should no longer be active
     await expect(growthChip).not.toHaveClass(/active/);

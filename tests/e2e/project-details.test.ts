@@ -2,8 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Project Details Viewing Journey', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/ma-portfolio', { waitUntil: 'networkidle' });
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto('/ma-portfolio', { waitUntil: 'domcontentloaded' });
   });
 
   test('should have interactive project elements', async ({ page }) => {

@@ -62,7 +62,7 @@ async function openBottomSheetFor(page: import('@playwright/test').Page, alpha3:
 
 test.describe('Regulatory Map — Mobile UX', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/hub/tools/regulatory-map', { waitUntil: 'networkidle' });
+    await page.goto('/hub/tools/regulatory-map', { waitUntil: 'domcontentloaded' });
     await waitForMapReady(page);
   });
 

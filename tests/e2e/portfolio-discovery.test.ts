@@ -2,9 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Portfolio Discovery Journey', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/ma-portfolio', { waitUntil: 'networkidle' });
-    // Wait for content to load
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto('/ma-portfolio', { waitUntil: 'domcontentloaded' });
   });
 
   test('should load the portfolio page', async ({ page }) => {
@@ -115,7 +113,7 @@ test.describe('Portfolio Discovery Journey', () => {
     });
 
     // Load page
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Should have minimal errors (some scripts might error but page should work)
     const criticalErrors = errors.filter(e =>
@@ -277,8 +275,11 @@ test.describe('Portfolio Discovery Journey', () => {
     const growthStageChip = page.locator('[data-testid="filter-chip-stage-growth"]');
     await growthStageChip.click();
 
-    // Wait a moment for badge to update
-    await page.waitForTimeout(300);
+    // Wait for filter state to update
+    await page.waitForFunction(() => {
+      const chip = document.querySelector('[data-testid="filter-chip-stage-growth"]');
+      return chip && chip.classList.contains('active');
+    });
 
     // Filter badge should show an active filter count
     const badge = page.locator('[data-testid="portfolio-filter-badge"]');
@@ -316,7 +317,10 @@ test.describe('Portfolio Discovery Journey', () => {
     await clearButton.click();
 
     // Wait for filters to reset
-    await page.waitForTimeout(300);
+    await page.waitForFunction(() => {
+      const allChip = document.querySelector('[data-testid="filter-chip-stage-all"]');
+      return allChip && allChip.classList.contains('active');
+    });
 
     // All chips should return to "all" and be active
     const allStagesChip = page.locator('[data-testid="filter-chip-stage-all"]');
