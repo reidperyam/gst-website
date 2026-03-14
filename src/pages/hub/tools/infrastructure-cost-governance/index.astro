@@ -724,17 +724,50 @@ const domainCount = DOMAINS.length;
         background: rgba(200, 200, 200, 0.05);
     }
 
+    :global(.icg-rec-body) {
+        cursor: pointer;
+    }
+
     :global(.icg-rec-body__title) {
         font-size: var(--text-sm);
         font-weight: var(--font-weight-semibold);
         color: var(--text-light-primary);
         margin-bottom: var(--spacing-xs);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+    }
+
+    :global(.icg-rec-chevron) {
+        flex-shrink: 0;
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        border-right: 2px solid var(--text-light-muted);
+        border-bottom: 2px solid var(--text-light-muted);
+        transform: rotate(45deg);
+        transition: transform var(--transition-fast);
+        margin-left: auto;
+    }
+
+    :global(.icg-rec-card.is-collapsed .icg-rec-chevron) {
+        transform: rotate(-45deg);
     }
 
     :global(.icg-rec-body__desc) {
         font-size: var(--text-sm);
         color: var(--text-light-secondary);
         line-height: 1.55;
+        transition: max-height var(--transition-normal), opacity var(--transition-normal);
+        max-height: 200px;
+        opacity: 1;
+        overflow: hidden;
+    }
+
+    :global(.icg-rec-card.is-collapsed .icg-rec-body__desc) {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
     }
 
     :global(.icg-recs-empty) {
@@ -1000,6 +1033,15 @@ const domainCount = DOMAINS.length;
             break-inside: avoid;
         }
 
+        :global(.icg-rec-card.is-collapsed .icg-rec-body__desc) {
+            max-height: none !important;
+            opacity: 1 !important;
+        }
+
+        :global(.icg-rec-chevron) {
+            display: none !important;
+        }
+
         :global(.icg-rec-card.is-dismissed),
         :global(.icg-rec-na) {
             display: none !important;
@@ -1257,10 +1299,10 @@ function renderResults(): void {
           ${items.map(rec => {
             const isDismissed = dismissed.has(rec.id);
             return `
-            <div class="icg-rec-card${isDismissed ? ' is-dismissed' : ''}" data-rec-id="${rec.id}">
+            <div class="icg-rec-card is-collapsed${isDismissed ? ' is-dismissed' : ''}" data-rec-id="${rec.id}">
               <span class="icg-rec-badge icg-rec-badge--${rec.impact}">${rec.impact}</span>
-              <div class="icg-rec-body">
-                <div class="icg-rec-body__title">${rec.title}</div>
+              <div class="icg-rec-body" data-rec-toggle>
+                <div class="icg-rec-body__title">${rec.title}<span class="icg-rec-chevron"></span></div>
                 <div class="icg-rec-body__desc">${rec.description}</div>
               </div>
               <button class="icg-rec-na" data-dismiss="${rec.id}" type="button" title="${isDismissed ? 'Restore this recommendation to the active list' : 'Mark as not applicable. Dismissed items are excluded from the printed report.'}">${isDismissed ? 'Restore' : 'N/A'}</button>
@@ -1275,6 +1317,14 @@ function renderResults(): void {
       ${renderGroup(med, 'Medium', 'medium', 'var(--color-secondary)')}
       ${renderGroup(low, 'Low', 'low', 'var(--text-light-muted)')}
     `;
+
+    // Wire expand/collapse toggle
+    recsContainer.querySelectorAll('[data-rec-toggle]').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const card = (toggle as HTMLElement).closest('.icg-rec-card');
+        if (card) card.classList.toggle('is-collapsed');
+      });
+    });
 
     // Wire N/A dismiss buttons
     recsContainer.querySelectorAll('[data-dismiss]').forEach(btn => {
