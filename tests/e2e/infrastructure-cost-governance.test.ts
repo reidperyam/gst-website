@@ -21,27 +21,35 @@ async function jsClick(page: Page, selector: string): Promise<void> {
   }, selector);
 }
 
-/** Answer all questions in the current step with a given score */
-async function answerAllInStep(page: Page, score: number): Promise<void> {
-  const buttons = await page.$$(`[data-score="${score}"]`);
-  for (const btn of buttons) {
-    await btn.click();
-  }
-}
-
-/** Wait for a specific wizard step to render by checking the domain label */
+/** Wait for a specific wizard step to render — verifies label AND question buttons exist */
 async function waitForStep(page: Page, step: number): Promise<void> {
   await page.waitForFunction((s) => {
     const label = document.querySelector('[data-domain-label]');
-    return label && label.textContent?.includes(`Domain ${s}`);
+    if (!label || !label.textContent?.includes(`Domain ${s}`)) return false;
+    // Ensure question buttons have been rendered via innerHTML
+    return document.querySelectorAll('[data-answer]').length > 0;
   }, step, { timeout: 5000 });
+}
+
+/** Answer all questions in the current step with a given score */
+async function answerAllInStep(page: Page, score: number): Promise<void> {
+  // Wait for at least one answer button to exist (innerHTML render may lag)
+  await page.waitForSelector(`[data-score="${score}"]`, { timeout: 3000 });
+
+  // Each question has one button per score — click all that match the desired score.
+  // Use locator (auto-waiting) rather than page.$$ (snapshot query).
+  const buttons = page.locator(`[data-score="${score}"]`);
+  const count = await buttons.count();
+  for (let i = 0; i < count; i++) {
+    await buttons.nth(i).click();
+  }
 }
 
 /** Navigate through all 5 wizard steps answering all questions */
 async function completeWizard(page: Page, score: number = 2): Promise<void> {
   // Start the assessment
   await jsClick(page, '[data-action="start"]');
-  await page.waitForSelector('[data-view="wizard"]:not(.is-hidden)', { timeout: 3000 });
+  await waitForStep(page, 1);
 
   // Steps 1-4: answer and advance to next domain
   for (let step = 1; step <= 4; step++) {
@@ -121,7 +129,7 @@ test.describe('ICG - Wizard navigation', () => {
   test('answering all questions enables next', async ({ page }) => {
     await gotoTool(page);
     await jsClick(page, '[data-action="start"]');
-    await page.waitForSelector('[data-view="wizard"]:not(.is-hidden)', { timeout: 3000 });
+    await waitForStep(page, 1);
 
     // Answer all Domain 1 questions (3 questions)
     await answerAllInStep(page, 2);
@@ -143,7 +151,7 @@ test.describe('ICG - Results view', () => {
   test('foundational flag renders when D1 answers are all "Not in place"', async ({ page }) => {
     await gotoTool(page);
     await jsClick(page, '[data-action="start"]');
-    await page.waitForSelector('[data-view="wizard"]:not(.is-hidden)', { timeout: 3000 });
+    await waitForStep(page, 1);
 
     // Step 1: answer all with 0 (Not in place)
     await answerAllInStep(page, 0);
@@ -169,7 +177,7 @@ test.describe('ICG - Results view', () => {
   test('foundational flag does not render when D1 answers are all "Optimized"', async ({ page }) => {
     await gotoTool(page);
     await jsClick(page, '[data-action="start"]');
-    await page.waitForSelector('[data-view="wizard"]:not(.is-hidden)', { timeout: 3000 });
+    await waitForStep(page, 1);
 
     // Step 1: answer all with 3 (Optimized)
     await answerAllInStep(page, 3);
