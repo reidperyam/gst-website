@@ -11,9 +11,9 @@ const domainCount = DOMAINS.length;
 
 <BaseLayout
     title="Infrastructure Cost Governance | Strategic Intelligence Hub"
-    description="A structured maturity assessment for cloud cost management. Answer 16 questions across five operational domains and receive a scored diagnostic with a prioritized improvement checklist."
+    description="A structured maturity assessment for cloud cost management. Answer 20 questions across six operational domains and receive a scored diagnostic with a prioritized improvement checklist."
     ogTitle="Infrastructure Cost Governance | GST"
-    ogDescription="Cloud cost maturity assessment for PE diligence, board reviews, and 100-day planning. Score your cloud spend governance across five operational domains."
+    ogDescription="Cloud cost maturity assessment for PE diligence, board reviews, and 100-day planning. Score your cloud spend governance across six operational domains."
     ogImage="/og-image.png"
     ogUrl="https://globalstrategic.tech/hub/tools/infrastructure-cost-governance"
 >
@@ -22,7 +22,7 @@ const domainCount = DOMAINS.length;
 
             <HubHeader
                 title="Infrastructure Cost Governance"
-                subtitle="A structured maturity assessment for cloud cost management. Answer 16 questions across five operational domains and receive a scored diagnostic with a prioritized improvement checklist. Purpose-built for PE diligence, board reviews, and 100-day planning."
+                subtitle="A structured maturity assessment for cloud cost management. Answer 20 questions across six operational domains and receive a scored diagnostic with a prioritized improvement checklist. Purpose-built for PE diligence, board reviews, and 100-day planning."
             />
 
             <div data-icg class="icg-shell">
@@ -32,7 +32,7 @@ const domainCount = DOMAINS.length;
                     <div class="landing-content">
                         <div class="landing-callout">
                             <span class="landing-callout__title">Who should complete this assessment.</span>
-                            This tool takes 4 to 6 minutes. Domains 2 through 5 require familiarity with cloud infrastructure. PE investors and executives should complete this alongside their engineering lead, or send them the link directly.
+                            This tool takes 5 to 7 minutes. Domains 3 through 6 require familiarity with cloud infrastructure. PE investors and executives should complete this alongside their engineering lead, or send them the link directly.
                         </div>
 
                         <div class="stats-row">
@@ -45,7 +45,7 @@ const domainCount = DOMAINS.length;
                                 <div class="stat-tile__label">questions</div>
                             </div>
                             <div class="stat-tile">
-                                <div class="stat-tile__value">4-6 min</div>
+                                <div class="stat-tile__value">5-7 min</div>
                                 <div class="stat-tile__label">to complete</div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@ const domainCount = DOMAINS.length;
                     </div>
                 </div>
 
-                <!-- ── Wizard view (steps 1-5) ───────────────────────────── -->
+                <!-- ── Wizard view (steps 1-6) ───────────────────────────── -->
                 <div data-view="wizard" class="icg-view is-hidden">
                     <div class="wizard-content">
                         <!-- Progress bar -->
@@ -78,7 +78,7 @@ const domainCount = DOMAINS.length;
                             </div>
                             <h2 class="heading-md icg-domain-name" data-domain-name></h2>
                             <p class="text-small icg-domain-desc" data-domain-desc></p>
-                            <p class="text-small icg-foundational-note is-hidden" data-foundational-note>This is the foundational domain. Scores here affect how results in later sections should be interpreted.</p>
+                            <p class="text-small icg-foundational-note is-hidden" data-foundational-note>This is a foundational domain. Scores here affect how results in later sections should be interpreted.</p>
                         </div>
 
                         <!-- Questions container -->
@@ -93,7 +93,7 @@ const domainCount = DOMAINS.length;
                     </div>
                 </div>
 
-                <!-- ── Results view (step 6) ─────────────────────────────── -->
+                <!-- ── Results view (step 7) ─────────────────────────────── -->
                 <div data-view="results" class="icg-view is-hidden">
                     <div class="results-content">
 
@@ -106,8 +106,8 @@ const domainCount = DOMAINS.length;
 
                         <!-- Foundational flag (conditional) -->
                         <div class="icg-foundational-warning is-hidden" data-foundational-warning>
-                            <div class="icg-foundational-warning__title">Visibility and Tagging scored below the foundational threshold</div>
-                            <div class="icg-foundational-warning__text text-small">Without resource tagging and cost dashboards in place, scores in other domains may understate the true optimization gap. It is difficult to right-size or govern what you cannot see.</div>
+                            <div class="icg-foundational-warning__title" data-foundational-warning-title></div>
+                            <div class="icg-foundational-warning__text text-small" data-foundational-warning-text></div>
                         </div>
 
                         <!-- Domain breakdown -->
@@ -1111,16 +1111,16 @@ function render(): void {
 
   // Toggle views
   landingView.classList.toggle('is-hidden', state.currentStep !== 0);
-  wizardView.classList.toggle('is-hidden', state.currentStep < 1 || state.currentStep > 5);
-  resultsView.classList.toggle('is-hidden', state.currentStep !== 6);
+  wizardView.classList.toggle('is-hidden', state.currentStep < 1 || state.currentStep > 6);
+  resultsView.classList.toggle('is-hidden', state.currentStep !== 7);
 
   // Hide back link during wizard/results to reduce mobile clutter
   const backLink = document.querySelector('.icg-back-link') as HTMLElement | null;
   if (backLink) backLink.classList.toggle('is-hidden', state.currentStep !== 0);
 
-  if (state.currentStep >= 1 && state.currentStep <= 5) {
+  if (state.currentStep >= 1 && state.currentStep <= 6) {
     renderWizard();
-  } else if (state.currentStep === 6) {
+  } else if (state.currentStep === 7) {
     renderResults();
   }
 
@@ -1133,8 +1133,8 @@ function renderWizard(): void {
   // Progress
   const fill = qs<HTMLElement>('[data-progress-fill]');
   const label = qs<HTMLElement>('[data-progress-label]');
-  fill.style.width = `${(state.currentStep / 5) * 100}%`;
-  label.textContent = `${state.currentStep} of 5`;
+  fill.style.width = `${(state.currentStep / 6) * 100}%`;
+  label.textContent = `${state.currentStep} of 6`;
 
   // Domain header
   qs<HTMLElement>('[data-domain-label]').textContent = `Domain ${state.currentStep}`;
@@ -1181,7 +1181,7 @@ function renderWizard(): void {
   const nextBtn = qs<HTMLButtonElement>('[data-action="next"]');
 
   backBtn.textContent = state.currentStep === 1 ? 'Back to intro' : 'Previous';
-  nextBtn.textContent = state.currentStep === 5 ? 'View results' : 'Next domain';
+  nextBtn.textContent = state.currentStep === 6 ? 'View results' : 'Next domain';
   nextBtn.disabled = !canNext;
 
   // Counter
@@ -1203,7 +1203,17 @@ function renderResults(): void {
   qs<HTMLElement>('[data-score-desc]').textContent = maturityDescription(result.overallScore);
 
   // Foundational warning
-  qs<HTMLElement>('[data-foundational-warning]').classList.toggle('is-hidden', !result.showFoundationalFlag);
+  const warningEl = qs<HTMLElement>('[data-foundational-warning]');
+  warningEl.classList.toggle('is-hidden', !result.showFoundationalFlag);
+  if (result.showFoundationalFlag) {
+    const belowNames = result.domainScores
+      .filter(ds => ds.isFoundational && ds.belowFoundationalThreshold)
+      .map(ds => ds.name);
+    qs<HTMLElement>('[data-foundational-warning-title]').textContent =
+      `${belowNames.join(' and ')} scored below the foundational threshold`;
+    qs<HTMLElement>('[data-foundational-warning-text]').textContent =
+      'Without foundational visibility and cost structure in place, scores in other domains may understate the true optimization gap. It is difficult to right-size or govern what you cannot see or attribute.';
+  }
 
   // Domain bars
   const barsContainer = qs<HTMLElement>('[data-domain-bars]');
@@ -1318,8 +1328,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   qs<HTMLElement>('[data-action="next"]').addEventListener('click', () => {
-    const nextStep = state.currentStep < 5 ? state.currentStep + 1 : 6;
-    if (nextStep <= 5) {
+    const nextStep = state.currentStep < 6 ? state.currentStep + 1 : 7;
+    if (nextStep <= 6) {
       trackEvent({ event: 'icg_domain_advance', category: 'engagement', domain: DOMAINS[nextStep - 1].name, step: nextStep });
     } else {
       const result = calculateResults(state, DOMAINS);

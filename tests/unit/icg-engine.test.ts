@@ -5,7 +5,7 @@
  * - calculateResults(): domain scoring, weighted overall, maturity levels
  * - getMaturityLevel(): threshold boundaries
  * - getRecommendations(): filtering and sorting
- * - checkFoundationalFlag(): D1 threshold detection
+ * - checkFoundationalFlag(): D1/D2 threshold detection
  * - encodeState / decodeState: URL serialisation round-trip
  * - Data integrity: question/recommendation cross-references
  */
@@ -113,7 +113,7 @@ describe('checkFoundationalFlag', () => {
 
   it('returns false when no foundational domain exists', () => {
     const scores: DomainScore[] = [
-      { domainId: 'd2', name: 'Test', score: 10, rawScore: 1, maxScore: 9, isFoundational: false, belowFoundationalThreshold: false },
+      { domainId: 'd3', name: 'Test', score: 10, rawScore: 1, maxScore: 9, isFoundational: false, belowFoundationalThreshold: false },
     ];
     expect(checkFoundationalFlag(scores)).toBe(false);
   });
@@ -124,75 +124,96 @@ describe('checkFoundationalFlag', () => {
     ];
     expect(checkFoundationalFlag(scores)).toBe(true);
   });
+
+  it('returns true when second foundational domain is below threshold', () => {
+    const scores: DomainScore[] = [
+      { domainId: 'd1', name: 'Visibility', score: 67, rawScore: 6, maxScore: 9, isFoundational: true, belowFoundationalThreshold: false },
+      { domainId: 'd2', name: 'Account Structure', score: 25, rawScore: 3, maxScore: 12, isFoundational: true, belowFoundationalThreshold: true },
+    ];
+    expect(checkFoundationalFlag(scores)).toBe(true);
+  });
+
+  it('returns true when both foundational domains are below threshold', () => {
+    const scores: DomainScore[] = [
+      { domainId: 'd1', name: 'Visibility', score: 33, rawScore: 3, maxScore: 9, isFoundational: true, belowFoundationalThreshold: true },
+      { domainId: 'd2', name: 'Account Structure', score: 25, rawScore: 3, maxScore: 12, isFoundational: true, belowFoundationalThreshold: true },
+    ];
+    expect(checkFoundationalFlag(scores)).toBe(true);
+  });
 });
 
 // ─── calculateResults ────────────────────────────────────────────────────────
 
 describe('calculateResults', () => {
   it('returns 0 overall score when all answers are 0', () => {
-    const state = makeState({ answers: allAnswers(0), currentStep: 6 });
+    const state = makeState({ answers: allAnswers(0), currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
     expect(result.overallScore).toBe(0);
   });
 
   it('returns 100 overall score when all answers are 3 (Optimized)', () => {
-    const state = makeState({ answers: allAnswers(3), currentStep: 6 });
+    const state = makeState({ answers: allAnswers(3), currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
     expect(result.overallScore).toBe(100);
   });
 
   it('returns correct maturity level for all-zero answers', () => {
-    const state = makeState({ answers: allAnswers(0), currentStep: 6 });
+    const state = makeState({ answers: allAnswers(0), currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
     expect(result.maturityLevel).toBe('Reactive');
   });
 
   it('returns correct maturity level for all-optimized answers', () => {
-    const state = makeState({ answers: allAnswers(3), currentStep: 6 });
+    const state = makeState({ answers: allAnswers(3), currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
     expect(result.maturityLevel).toBe('Strategic');
   });
 
   it('calculates correct per-domain score for Domain 1 with all answers at 1', () => {
     const answers = domainAnswers('d1', 1);
-    const state = makeState({ answers, currentStep: 6 });
+    const state = makeState({ answers, currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
     const d1 = result.domainScores.find(d => d.domainId === 'd1')!;
     // 3 questions * 1 score = 3, max = 9, (3/9)*100 = 33
     expect(d1.score).toBe(33);
   });
 
-  it('calculates correct per-domain score for Domain 5 with all answers at 2', () => {
-    const answers = domainAnswers('d5', 2);
-    const state = makeState({ answers, currentStep: 6 });
+  it('calculates correct per-domain score for Domain 6 with all answers at 2', () => {
+    const answers = domainAnswers('d6', 2);
+    const state = makeState({ answers, currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
-    const d5 = result.domainScores.find(d => d.domainId === 'd5')!;
+    const d6 = result.domainScores.find(d => d.domainId === 'd6')!;
     // 4 questions * 2 score = 8, max = 12, (8/12)*100 = 67
-    expect(d5.score).toBe(67);
+    expect(d6.score).toBe(67);
   });
 
   it('applies D1 weight of 1.5 in weighted overall score', () => {
     // Give D1 all 3s (score 100), everything else 0s (score 0)
     const answers = { ...allAnswers(0), ...domainAnswers('d1', 3) };
-    const state = makeState({ answers, currentStep: 6 });
+    const state = makeState({ answers, currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
-    // D1=100*1.5, D2-D5=0*1.0 each. Total weight=5.5
-    // (150) / 5.5 = 27.27 -> 27
-    expect(result.overallScore).toBe(27);
+    // D1=100*1.5, D2=0*1.5, D3-D6=0*1.0 each. Total weight=7.0
+    // (150) / 7.0 = 21.43 -> 21
+    expect(result.overallScore).toBe(21);
   });
 
   it('sets showFoundationalFlag when D1 score is 33', () => {
     const answers = domainAnswers('d1', 1); // score = 33
-    const state = makeState({ answers, currentStep: 6 });
+    const state = makeState({ answers, currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
     expect(result.showFoundationalFlag).toBe(true);
   });
 
   it('does not set showFoundationalFlag when D1 score is above 33', () => {
     const answers = domainAnswers('d1', 2); // score = 67
-    const state = makeState({ answers, currentStep: 6 });
+    const state = makeState({ answers, currentStep: 7 });
     const result = calculateResults(state, DOMAINS);
-    expect(result.showFoundationalFlag).toBe(false);
+    // D2 is also foundational and unanswered (score 0), so flag still shows
+    // To test D1 alone, we need D2 above threshold too
+    const answersWithD2 = { ...answers, ...domainAnswers('d2', 2) };
+    const state2 = makeState({ answers: answersWithD2, currentStep: 7 });
+    const result2 = calculateResults(state2, DOMAINS);
+    expect(result2.showFoundationalFlag).toBe(false);
   });
 
   it('reports correct answeredCount', () => {
@@ -205,13 +226,13 @@ describe('calculateResults', () => {
   it('reports correct totalQuestions', () => {
     const state = makeState();
     const result = calculateResults(state, DOMAINS);
-    expect(result.totalQuestions).toBe(16);
+    expect(result.totalQuestions).toBe(20);
   });
 
-  it('returns 5 domain scores', () => {
+  it('returns 6 domain scores', () => {
     const state = makeState({ answers: allAnswers(2) });
     const result = calculateResults(state, DOMAINS);
-    expect(result.domainScores).toHaveLength(5);
+    expect(result.domainScores).toHaveLength(6);
   });
 });
 
@@ -268,22 +289,22 @@ describe('encodeState / decodeState', () => {
   it('round-trips without data loss', () => {
     const state: ICGState = {
       currentStep: 3,
-      answers: { q1_1: 2, q2_3: 1, q5_4: 0 },
+      answers: { q1_1: 2, q3_3: 1, q6_4: 0 },
       dismissed: [],
     };
     const encoded = encodeState(state);
     const decoded = decodeState(encoded);
     expect(decoded).toEqual({
       currentStep: 3,
-      answers: { q1_1: 2, q2_3: 1, q5_4: 0 },
+      answers: { q1_1: 2, q3_3: 1, q6_4: 0 },
     });
   });
 
   it('round-trips with all answers filled', () => {
-    const state = makeState({ answers: allAnswers(2), currentStep: 6 });
+    const state = makeState({ answers: allAnswers(2), currentStep: 7 });
     const encoded = encodeState(state);
     const decoded = decodeState(encoded);
-    expect(decoded?.currentStep).toBe(6);
+    expect(decoded?.currentStep).toBe(7);
     expect(decoded?.answers).toEqual(state.answers);
   });
 
@@ -304,7 +325,7 @@ describe('encodeState / decodeState', () => {
   });
 
   it('validates currentStep range', () => {
-    const encoded = btoa(JSON.stringify({ s: 7, a: {} }));
+    const encoded = btoa(JSON.stringify({ s: 8, a: {} }));
     const decoded = decodeState(encoded);
     expect(decoded?.currentStep).toBeUndefined();
   });
@@ -317,7 +338,7 @@ describe('encodeState / decodeState', () => {
 
   it('round-trips dismissed recommendation IDs', () => {
     const state: ICGState = {
-      currentStep: 6,
+      currentStep: 7,
       answers: { q1_1: 0 },
       dismissed: ['r01', 'r05'],
     };
@@ -338,7 +359,7 @@ describe('encodeState / decodeState', () => {
   });
 
   it('filters non-string values from dismissed array', () => {
-    const encoded = btoa(JSON.stringify({ s: 6, a: {}, d: ['r01', 42, null, 'r03'] }));
+    const encoded = btoa(JSON.stringify({ s: 7, a: {}, d: ['r01', 42, null, 'r03'] }));
     const decoded = decodeState(encoded);
     expect(decoded?.dismissed).toEqual(['r01', 'r03']);
   });
@@ -363,12 +384,12 @@ describe('DEFAULT_STATE', () => {
 // ─── Data integrity ─────────────────────────────────────────────────────────
 
 describe('data integrity', () => {
-  it('has exactly 16 total questions', () => {
-    expect(TOTAL_QUESTIONS).toBe(16);
+  it('has exactly 20 total questions', () => {
+    expect(TOTAL_QUESTIONS).toBe(20);
   });
 
-  it('has 5 domains', () => {
-    expect(DOMAINS).toHaveLength(5);
+  it('has 6 domains', () => {
+    expect(DOMAINS).toHaveLength(6);
   });
 
   it('every question has a unique id', () => {
@@ -393,18 +414,20 @@ describe('data integrity', () => {
     expect(ANSWER_OPTIONS).toHaveLength(4);
   });
 
-  it('domain weights are correct (D1=1.5, others=1.0)', () => {
+  it('domain weights are correct (D1=1.5, D2=1.5, others=1.0)', () => {
     const d1 = DOMAINS.find(d => d.id === 'd1')!;
+    const d2 = DOMAINS.find(d => d.id === 'd2')!;
     expect(d1.weight).toBe(1.5);
-    for (const d of DOMAINS.filter(d => d.id !== 'd1')) {
+    expect(d2.weight).toBe(1.5);
+    for (const d of DOMAINS.filter(d => d.id !== 'd1' && d.id !== 'd2')) {
       expect(d.weight).toBe(1.0);
     }
   });
 
-  it('only D1 is foundational', () => {
+  it('D1 and D2 are foundational', () => {
     const foundational = DOMAINS.filter(d => d.foundational);
-    expect(foundational).toHaveLength(1);
-    expect(foundational[0].id).toBe('d1');
+    expect(foundational).toHaveLength(2);
+    expect(foundational.map(d => d.id)).toEqual(['d1', 'd2']);
   });
 
   it('every recommendation triggerQuestionId maps to a valid question', () => {

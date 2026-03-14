@@ -49,14 +49,13 @@ export function getMaturityLevel(score: number): { level: ICGResult['maturityLev
 // ─── Foundational flag ──────────────────────────────────────────────────────
 
 export function checkFoundationalFlag(domainScores: DomainScore[]): boolean {
-  const d1 = domainScores.find(d => d.isFoundational);
-  return d1 ? d1.score <= 33 : false;
+  return domainScores.some(d => d.isFoundational && d.score <= 33);
 }
 
 // ─── Recommendations ────────────────────────────────────────────────────────
 
 const IMPACT_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };
-const DOMAIN_ORDER: Record<string, number> = { d1: 0, d2: 1, d3: 2, d4: 3, d5: 4 };
+const DOMAIN_ORDER: Record<string, number> = { d1: 0, d2: 1, d3: 2, d4: 3, d5: 4, d6: 5 };
 
 export function getRecommendations(
   state: ICGState,
@@ -136,7 +135,7 @@ export function decodeState(encoded: string): Partial<ICGState> | null {
 
     const out: Partial<ICGState> = {};
 
-    if (Number.isInteger(raw.s) && raw.s >= 0 && raw.s <= 6) {
+    if (Number.isInteger(raw.s) && raw.s >= 0 && raw.s <= 7) {
       out.currentStep = raw.s;
     }
 

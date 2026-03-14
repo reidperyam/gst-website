@@ -71,20 +71,20 @@ async function answerAllInStep(page: Page, score: number): Promise<void> {
   }
 }
 
-/** Navigate through all 5 wizard steps answering all questions */
+/** Navigate through all 6 wizard steps answering all questions */
 async function completeWizard(page: Page, score: number = 2): Promise<void> {
   // Start the assessment
   await jsClick(page, '[data-action="start"]');
   await waitForStep(page, 1);
 
-  // Steps 1-4: answer and advance to next domain
-  for (let step = 1; step <= 4; step++) {
+  // Steps 1-5: answer and advance to next domain
+  for (let step = 1; step <= 5; step++) {
     await answerAllInStep(page, score);
     await jsClick(page, '[data-action="next"]');
     await waitForStep(page, step + 1);
   }
 
-  // Step 5: answer and advance to results
+  // Step 6: answer and advance to results
   await answerAllInStep(page, score);
   await jsClick(page, '[data-action="next"]');
   await page.waitForSelector('[data-view="results"]:not(.is-hidden)', { timeout: 5000 });
@@ -105,16 +105,16 @@ test.describe('ICG - Landing page', () => {
     expect(subtitle).toContain('maturity assessment');
   });
 
-  test('renders stats row with 5 domains, 16 questions, 4-6 min', async ({ page }) => {
+  test('renders stats row with 6 domains, 20 questions, 5-7 min', async ({ page }) => {
     await gotoTool(page);
     const stats = await page.$$('.stat-tile');
     expect(stats).toHaveLength(3);
 
     const values = await Promise.all(stats.map(s => s.textContent()));
     const text = values.join(' ');
-    expect(text).toContain('5');
-    expect(text).toContain('16');
-    expect(text).toContain('4-6 min');
+    expect(text).toContain('6');
+    expect(text).toContain('20');
+    expect(text).toContain('5-7 min');
   });
 
   test('"Begin assessment" button is visible', async ({ page }) => {
@@ -164,7 +164,7 @@ test.describe('ICG - Wizard navigation', () => {
     await expect(nextBtn).toBeEnabled();
   });
 
-  test('completing all 5 steps reaches results view', async ({ page }) => {
+  test('completing all 6 steps reaches results view', async ({ page }) => {
     await gotoTool(page);
     await completeWizard(page, 2);
     await page.waitForSelector('[data-view="results"]:not(.is-hidden)', { timeout: 3000 });
@@ -184,14 +184,14 @@ test.describe('ICG - Results view', () => {
     await jsClick(page, '[data-action="next"]');
     await waitForStep(page, 2);
 
-    // Steps 2-4: answer with 2 to get through
-    for (let step = 2; step <= 4; step++) {
+    // Steps 2-5: answer with 2 to get through
+    for (let step = 2; step <= 5; step++) {
       await answerAllInStep(page, 2);
       await jsClick(page, '[data-action="next"]');
       await waitForStep(page, step + 1);
     }
 
-    // Step 5: answer and advance to results
+    // Step 6: answer and advance to results
     await answerAllInStep(page, 2);
     await jsClick(page, '[data-action="next"]');
     await page.waitForSelector('[data-view="results"]:not(.is-hidden)', { timeout: 5000 });
@@ -200,24 +200,29 @@ test.describe('ICG - Results view', () => {
     await expect(warning).not.toHaveClass(/is-hidden/);
   });
 
-  test('foundational flag does not render when D1 answers are all "Optimized"', async ({ page }) => {
+  test('foundational flag does not render when foundational domains are "Optimized"', async ({ page }) => {
     await gotoTool(page);
     await jsClick(page, '[data-action="start"]');
     await waitForStep(page, 1);
 
-    // Step 1: answer all with 3 (Optimized)
+    // Step 1 (D1): answer all with 3 (Optimized)
     await answerAllInStep(page, 3);
     await jsClick(page, '[data-action="next"]');
     await waitForStep(page, 2);
 
-    // Steps 2-4
-    for (let step = 2; step <= 4; step++) {
+    // Step 2 (D2): answer all with 3 (Optimized)
+    await answerAllInStep(page, 3);
+    await jsClick(page, '[data-action="next"]');
+    await waitForStep(page, 3);
+
+    // Steps 3-5
+    for (let step = 3; step <= 5; step++) {
       await answerAllInStep(page, 2);
       await jsClick(page, '[data-action="next"]');
       await waitForStep(page, step + 1);
     }
 
-    // Step 5: answer and advance to results
+    // Step 6: answer and advance to results
     await answerAllInStep(page, 2);
     await jsClick(page, '[data-action="next"]');
     await page.waitForSelector('[data-view="results"]:not(.is-hidden)', { timeout: 5000 });
