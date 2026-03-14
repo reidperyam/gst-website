@@ -245,7 +245,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 <script>
     import { generateScript, syncMultiRegion, MULTI_REGION_ID } from '../../../../utils/diligence-engine';
     import { getOptionLabel, WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
-    import { trackCTA } from '../../../../utils/analytics';
+    import { trackCTA, trackEvent } from '../../../../utils/analytics';
     import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
     const STORAGE_KEY = 'diligence-machine-state';
@@ -728,6 +728,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
             // Add click handler
             label.addEventListener('click', () => {
+                trackEvent({ event: 'dm_edit_parameter', category: 'engagement', step_id: stepId, step: stepNumber });
+
                 // Hide output, show wizard
                 outputContainer.style.display = 'none';
                 wizardContainer.style.display = '';
@@ -977,12 +979,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     btnNext.addEventListener('click', () => {
         if (currentStep < totalSteps && isStepValid(currentStep)) {
-            showStep(currentStep + 1);
+            const nextStep = currentStep + 1;
+            trackEvent({ event: 'dm_step_advance', category: 'engagement', step: nextStep, step_id: WIZARD_STEPS[nextStep - 1]?.id ?? '' });
+            showStep(nextStep);
         }
     });
 
     btnGenerate.addEventListener('click', () => {
         if (!isStepValid(currentStep)) return;
+
+        trackEvent({ event: 'dm_generate', category: 'engagement' });
 
         // Hide wizard and generate output immediately
         wizardContainer.style.display = 'none';
@@ -1008,13 +1014,23 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     });
 
     btnGoBack.addEventListener('click', () => {
+        trackEvent({ event: 'dm_go_back', category: 'engagement' });
         outputContainer.style.display = 'none';
         wizardContainer.style.display = '';
         showStep(totalSteps);
     });
-    btnCopy.addEventListener('click', copyToClipboard);
-    btnPrint.addEventListener('click', () => window.print());
-    btnRestart.addEventListener('click', restart);
+    btnCopy.addEventListener('click', () => {
+        trackEvent({ event: 'dm_copy', category: 'engagement' });
+        copyToClipboard();
+    });
+    btnPrint.addEventListener('click', () => {
+        trackEvent({ event: 'dm_print', category: 'engagement' });
+        window.print();
+    });
+    btnRestart.addEventListener('click', () => {
+        trackEvent({ event: 'dm_restart', category: 'engagement' });
+        restart();
+    });
 
     // ─── INITIALIZE ───────────────────────────────────────────────────────
 
