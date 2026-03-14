@@ -15,7 +15,10 @@ async function clickSvgPath(page: import('@playwright/test').Page, selector: str
  * Wait for D3 map paths to finish rendering.
  */
 async function waitForMapReady(page: import('@playwright/test').Page): Promise<void> {
-  await page.waitForFunction(() => document.querySelectorAll('.country-path').length > 0);
+  await page.waitForFunction(() =>
+    document.querySelectorAll('.country-path').length > 0 &&
+    document.querySelectorAll('.country-path--active').length > 0
+  );
 }
 
 test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {

@@ -4,7 +4,10 @@ import { test, expect } from '@playwright/test';
  * Wait for D3 map paths to finish rendering.
  */
 async function waitForMapReady(page: import('@playwright/test').Page): Promise<void> {
-  await page.waitForFunction(() => document.querySelectorAll('.country-path').length > 0);
+  await page.waitForFunction(() =>
+    document.querySelectorAll('.country-path').length > 0 &&
+    document.querySelectorAll('.timeline-entry').length > 0
+  );
 }
 
 test.describe('Regulatory Map — Timeline', () => {
