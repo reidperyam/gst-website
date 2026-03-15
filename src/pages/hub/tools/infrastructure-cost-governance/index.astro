@@ -680,6 +680,7 @@ const domainCount = DOMAINS.length;
         border: 1px solid var(--border-light);
         border-radius: 8px;
         margin-bottom: var(--spacing-sm);
+        cursor: pointer;
     }
 
     :global(html.dark-theme .icg-rec-card) {
@@ -694,7 +695,6 @@ const domainCount = DOMAINS.length;
         letter-spacing: 0.05em;
         padding: 2px var(--spacing-sm);
         border-radius: 4px;
-        align-self: flex-start;
     }
 
     :global(.icg-rec-badge--high) {
@@ -722,10 +722,6 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme .icg-rec-badge--low) {
         background: rgba(200, 200, 200, 0.05);
-    }
-
-    :global(.icg-rec-body) {
-        cursor: pointer;
     }
 
     :global(.icg-rec-body__title) {
@@ -966,16 +962,6 @@ const domainCount = DOMAINS.length;
         .icg-foundational-note {
             font-style: normal;
             font-size: var(--text-xs);
-        }
-
-        /* Results: rec cards stack better */
-        :global(.icg-rec-card) {
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-
-        :global(.icg-rec-badge) {
-            align-self: flex-start;
         }
 
         :global(.icg-rec-na) {
@@ -1299,10 +1285,9 @@ function renderResults(): void {
           ${items.map(rec => {
             const isDismissed = dismissed.has(rec.id);
             return `
-            <div class="icg-rec-card is-collapsed${isDismissed ? ' is-dismissed' : ''}" data-rec-id="${rec.id}">
-              <span class="icg-rec-badge icg-rec-badge--${rec.impact}">${rec.impact}</span>
-              <div class="icg-rec-body" data-rec-toggle>
-                <div class="icg-rec-body__title">${rec.title}<span class="icg-rec-chevron"></span></div>
+            <div class="icg-rec-card is-collapsed${isDismissed ? ' is-dismissed' : ''}" data-rec-id="${rec.id}" data-rec-toggle>
+              <div class="icg-rec-body">
+                <div class="icg-rec-body__title"><span class="icg-rec-badge icg-rec-badge--${rec.impact}">${rec.impact}</span>${rec.title}<span class="icg-rec-chevron"></span></div>
                 <div class="icg-rec-body__desc">${rec.description}</div>
               </div>
               <button class="icg-rec-na" data-dismiss="${rec.id}" type="button" title="${isDismissed ? 'Restore this recommendation to the active list' : 'Mark as not applicable. Dismissed items are excluded from the printed report.'}">${isDismissed ? 'Restore' : 'N/A'}</button>
@@ -1318,17 +1303,17 @@ function renderResults(): void {
       ${renderGroup(low, 'Low', 'low', 'var(--text-light-muted)')}
     `;
 
-    // Wire expand/collapse toggle
-    recsContainer.querySelectorAll('[data-rec-toggle]').forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const card = (toggle as HTMLElement).closest('.icg-rec-card');
-        if (card) card.classList.toggle('is-collapsed');
+    // Wire expand/collapse toggle on the entire card
+    recsContainer.querySelectorAll('[data-rec-toggle]').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('is-collapsed');
       });
     });
 
-    // Wire N/A dismiss buttons
+    // Wire N/A dismiss buttons (stop propagation so card doesn't toggle)
     recsContainer.querySelectorAll('[data-dismiss]').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const recId = (btn as HTMLElement).dataset.dismiss!;
         const idx = state.dismissed.indexOf(recId);
         const action = idx === -1 ? 'dismiss' : 'restore';
