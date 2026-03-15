@@ -825,6 +825,7 @@ import {
 } from '../../../../utils/tech-debt-engine';
 
 import type { CalcState } from '../../../../utils/tech-debt-engine';
+import { trackEvent } from '../../../../utils/analytics';
 
 // ─── DOM helpers ─────────────────────────────────────────────────────────────
 
@@ -1023,6 +1024,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSliders();
   render();
 
+  // Slider input handlers (live update on drag)
   getInput('team-size').addEventListener('input', e => { state.teamSizePos = Number((e.target as HTMLInputElement).value); render(); });
   getInput('salary').addEventListener('input',    e => { state.salaryPos   = Number((e.target as HTMLInputElement).value); render(); });
   getInput('maint-pct').addEventListener('input', e => { state.maintPct    = Number((e.target as HTMLInputElement).value); render(); });
@@ -1031,9 +1033,19 @@ document.addEventListener('DOMContentLoaded', () => {
   getInput('budget').addEventListener('input',    e => { state.budgetPos   = Number((e.target as HTMLInputElement).value); render(); });
   getInput('arr').addEventListener('input',       e => { state.arrPos      = Number((e.target as HTMLInputElement).value); render(); });
 
+  // Slider analytics (fire once on release, not every drag tick)
+  const sliderIds = ['team-size', 'salary', 'maint-pct', 'incidents', 'mttr', 'budget', 'arr'] as const;
+  sliderIds.forEach(id => {
+    getInput(id).addEventListener('change', e => {
+      trackEvent({ event: 'tdc_slider_change', category: 'engagement', slider: id, value: Number((e.target as HTMLInputElement).value) });
+    });
+  });
+
   document.querySelectorAll('[data-deploy-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
-      state.deployIdx = Number((btn as HTMLElement).dataset.deployBtn);
+      const idx = Number((btn as HTMLElement).dataset.deployBtn);
+      trackEvent({ event: 'tdc_deploy_frequency', category: 'engagement', value: DEPLOY_OPTIONS[idx] ?? idx });
+      state.deployIdx = idx;
       render();
     });
   });
@@ -1042,6 +1054,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (advancedToggle) {
     advancedToggle.addEventListener('click', () => {
       state.advancedOpen = !state.advancedOpen;
+      trackEvent({ event: 'tdc_advanced_toggle', category: 'engagement', action: state.advancedOpen ? 'open' : 'close' });
       render();
     });
   }
@@ -1050,6 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (currencySelect) {
     currencySelect.addEventListener('change', () => {
       currency = currencySelect.value;
+      trackEvent({ event: 'tdc_currency_change', category: 'engagement', currency });
       render();
     });
   }
@@ -1057,6 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('copy-link-btn') as HTMLButtonElement | null;
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
+      trackEvent({ event: 'tdc_copy_link', category: 'engagement' });
       const url = window.location.href;
       const reset = () => { copyBtn.textContent = 'Copy Link'; };
       navigator.clipboard.writeText(url).then(

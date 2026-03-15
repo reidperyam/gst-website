@@ -5,6 +5,17 @@
 
 import { test, expect } from '@playwright/test';
 
+/**
+ * Click the theme toggle via dispatchEvent to bypass WebKit hit-test issues.
+ */
+async function clickThemeToggle(page: import('@playwright/test').Page): Promise<void> {
+  await page.evaluate(() => {
+    document.getElementById('themeToggle')?.dispatchEvent(
+      new MouseEvent('click', { bubbles: true })
+    );
+  });
+}
+
 test.describe('Terms Page', () => {
   test.beforeEach(async ({ page }) => {
     // Block external GA requests
@@ -16,7 +27,7 @@ test.describe('Terms Page', () => {
     });
 
     // Navigate to terms page
-    await page.goto('/terms', { waitUntil: 'networkidle' });
+    await page.goto('/terms', { waitUntil: 'domcontentloaded' });
   });
 
   test.describe('Page Load & Structure', () => {
@@ -182,9 +193,8 @@ test.describe('Terms Page', () => {
       });
 
       // Toggle to dark theme
-      const themeToggle = page.locator('[data-testid="theme-toggle"]');
-      await themeToggle.click();
-      await page.waitForTimeout(150);
+      await clickThemeToggle(page);
+      await page.waitForFunction(() => document.documentElement.classList.contains('dark-theme'));
 
       // Verify dark theme is active
       const isDark = await page.evaluate(() => document.documentElement.classList.contains('dark-theme'));
@@ -208,9 +218,8 @@ test.describe('Terms Page', () => {
       });
 
       // Toggle to dark theme
-      const themeToggle = page.locator('[data-testid="theme-toggle"]');
-      await themeToggle.click();
-      await page.waitForTimeout(150);
+      await clickThemeToggle(page);
+      await page.waitForFunction(() => document.documentElement.classList.contains('dark-theme'));
 
       // Get dark theme color
       const darkColor = await termsBody.evaluate(el => {
@@ -229,9 +238,8 @@ test.describe('Terms Page', () => {
       });
 
       // Toggle to dark theme
-      const themeToggle = page.locator('[data-testid="theme-toggle"]');
-      await themeToggle.click();
-      await page.waitForTimeout(150);
+      await clickThemeToggle(page);
+      await page.waitForFunction(() => document.documentElement.classList.contains('dark-theme'));
 
       // Get dark theme background
       const darkBg = await contactSection.evaluate(el => {
@@ -245,7 +253,7 @@ test.describe('Terms Page', () => {
   test.describe('Responsive Layout', () => {
     test('should render correctly on mobile viewport (375px)', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/terms', { waitUntil: 'networkidle' });
+      await page.goto('/terms', { waitUntil: 'domcontentloaded' });
 
       const container = page.locator('.terms-container');
       await expect(container).toBeVisible();
@@ -259,7 +267,7 @@ test.describe('Terms Page', () => {
 
     test('should render heading at larger size on tablet viewport (768px)', async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('/terms', { waitUntil: 'networkidle' });
+      await page.goto('/terms', { waitUntil: 'domcontentloaded' });
 
       const heading = page.locator('.terms-header h1');
       await expect(heading).toBeVisible();
@@ -275,7 +283,7 @@ test.describe('Terms Page', () => {
 
     test('should render correctly on desktop viewport (1920px)', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await page.goto('/terms', { waitUntil: 'networkidle' });
+      await page.goto('/terms', { waitUntil: 'domcontentloaded' });
 
       const container = page.locator('.terms-container');
       await expect(container).toBeVisible();

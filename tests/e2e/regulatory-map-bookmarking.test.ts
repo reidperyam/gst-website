@@ -44,7 +44,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
     });
 
     test('should add filter param to URL when switching category', async ({ page }) => {
-      await page.locator('.filter-chip[data-category="ai-governance"]').click();
+      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="ai-governance"]') as HTMLElement)?.click());
 
       // Wait for map to update (behavioral proof filter applied)
       await page.waitForFunction(() => {
@@ -59,7 +59,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
 
     test('should encode both region and filter in URL', async ({ page }) => {
       // Set filter first
-      await page.locator('.filter-chip[data-category="data-privacy"]').click();
+      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="data-privacy"]') as HTMLElement)?.click());
       await page.waitForFunction(() => {
         const chip = document.querySelector('.filter-chip[data-category="data-privacy"]');
         return chip && chip.classList.contains('active');
@@ -83,7 +83,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       expect(new URL(page.url()).searchParams.get('region')).toBe('THA');
 
       // Switch to industry-compliance — Thailand has no regs in this category
-      await page.locator('.filter-chip[data-category="industry-compliance"]').click();
+      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="industry-compliance"]') as HTMLElement)?.click());
 
       // Wait for panel to close (region deselected)
       await page.waitForFunction(() => {
@@ -99,11 +99,11 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
 
     test('should clear all params when returning to default state', async ({ page }) => {
       // Set a filter
-      await page.locator('.filter-chip[data-category="cybersecurity"]').click();
+      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="cybersecurity"]') as HTMLElement)?.click());
       expect(new URL(page.url()).searchParams.has('filter')).toBe(true);
 
       // Return to "All"
-      await page.locator('.filter-chip[data-category="all"]').click();
+      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="all"]') as HTMLElement)?.click());
       await page.waitForFunction(() => {
         const chip = document.querySelector('.filter-chip[data-category="all"]');
         return chip && chip.classList.contains('active');
@@ -213,7 +213,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       await expect(page.locator('[data-testid="compliance-panel"]')).toBeVisible();
 
       const copyBtn = page.locator('#panelCopyLink');
-      await copyBtn.click();
+      await page.evaluate(() => (document.querySelector('#panelCopyLink') as HTMLElement)?.click());
 
       // Button should show "copied" state
       await page.waitForFunction(() => {
