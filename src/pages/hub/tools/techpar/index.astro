@@ -18,7 +18,7 @@ trackPageView('techpar', 'TechPar | GST');
         <div class="container">
             <HubHeader
                 title="TechPar"
-                subtitle="A technology cost structure analysis tool for PE diligence and portfolio company benchmarking. Enter spend across infrastructure, personnel, and R&D to compute a blended technology cost ratio benchmarked against stage-adjusted ranges. Purpose-built for IC packages, board reporting, and sell-side preparation."
+                subtitle="Benchmark total technology cost against stage-adjusted ranges. Built for IC packages, board reporting, and sell-side preparation."
             />
 
             <div data-techpar class="techpar-shell">
@@ -259,7 +259,7 @@ trackPageView('techpar', 'TechPar | GST');
 
                     <!-- Empty state -->
                     <div class="tp-empty" data-analysis-empty>
-                        <div class="tp-empty__sym">&Delta;</div>
+                        <svg class="tp-empty__sym" width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" aria-hidden="true"><path d="M32 12 L52 52 L12 52 Z"></path></svg>
                         <div class="tp-empty__msg text-small">Enter ARR and infrastructure spend<br/>on the Costs tab to compute TechPar.</div>
                         <button class="tp-empty__cta" data-action="go-costs" type="button">Go to costs &rarr;</button>
                     </div>
@@ -336,7 +336,7 @@ trackPageView('techpar', 'TechPar | GST');
 
                     <!-- Empty state -->
                     <div class="tp-empty" data-traj-empty>
-                        <div class="tp-empty__sym">&uarr;</div>
+                        <svg class="tp-empty__sym" width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" aria-hidden="true"><path d="M32 12 L52 52 L12 52 Z"></path></svg>
                         <div class="tp-empty__msg text-small">Enter costs on the Costs tab<br/>to generate trajectory.</div>
                         <button class="tp-empty__cta" data-action="go-costs" type="button">Go to costs &rarr;</button>
                     </div>
@@ -830,9 +830,9 @@ trackPageView('techpar', 'TechPar | GST');
     }
 
     .tp-empty__sym {
-        font-size: 4rem;
+        width: 64px;
+        height: 64px;
         color: var(--text-light-muted);
-        line-height: 1;
     }
 
     .tp-empty__msg {
