@@ -30,14 +30,12 @@ trackPageView('techpar', 'TechPar | GST');
                             <rect x="12" y="12" width="40" height="40"></rect>
                         </svg>
                         <span class="tp-tab__label">Profile</span>
-                        <span class="tp-tab__check" data-check="profile" aria-label="Complete">&#10003;</span>
                     </button>
                     <button class="tp-tab" data-tab="costs" type="button">
                         <svg class="tp-tab__icon" width="16" height="16" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" aria-hidden="true">
                             <circle cx="32" cy="32" r="20"></circle>
                         </svg>
                         <span class="tp-tab__label">Costs</span>
-                        <span class="tp-tab__check" data-check="costs" aria-label="Complete">&#10003;</span>
                     </button>
                     <button class="tp-tab" data-tab="analysis" type="button">
                         <svg class="tp-tab__icon" width="16" height="16" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter" aria-hidden="true">
@@ -450,25 +448,9 @@ trackPageView('techpar', 'TechPar | GST');
         text-transform: uppercase;
     }
 
-    .tp-tab__check {
-        display: none;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: var(--color-primary);
-        color: var(--bg-light);
-        font-size: 8px;
-        align-items: center;
-        justify-content: center;
-        margin-left: var(--spacing-xs);
-        flex-shrink: 0;
-        position: absolute;
-        top: 4px;
-        right: 8px;
-    }
-
-    .tp-tab__check--on {
-        display: flex;
+    .tp-tab--done:not(.tp-tab--active) {
+        color: var(--text-light-secondary);
+        border-bottom-color: var(--color-primary);
     }
 
     .tp-tab__badge {
@@ -1545,12 +1527,11 @@ trackPageView('techpar', 'TechPar | GST');
         const btnAnalysis = document.querySelector('[data-btn-analysis]') as HTMLButtonElement;
         if (btnAnalysis) btnAnalysis.disabled = !r;
 
-        // Tab completion checks
+        // Tab completion — teal bottom border on done tabs
         const profileDone = inputs.arr > 0;
         const costsDone = r !== null;
-        g('check="profile"')
-        document.querySelector('[data-check="profile"]')?.classList.toggle('tp-tab__check--on', profileDone);
-        document.querySelector('[data-check="costs"]')?.classList.toggle('tp-tab__check--on', costsDone);
+        document.querySelector('[data-tab="profile"]')?.classList.toggle('tp-tab--done', profileDone);
+        document.querySelector('[data-tab="costs"]')?.classList.toggle('tp-tab--done', costsDone);
 
         // Analysis badge
         const analysisAlert = r && (r.zone === 'above' || r.zone === 'elevated' || r.zone === 'critical');
