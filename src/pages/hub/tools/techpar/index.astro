@@ -478,6 +478,12 @@ trackPageView('techpar', 'TechPar | GST');
 
     .tp-panel--active {
         display: block;
+        animation: tp-fade-in 150ms ease-out;
+    }
+
+    @keyframes tp-fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
     }
 
     .tp-panel__header {
@@ -1353,7 +1359,7 @@ trackPageView('techpar', 'TechPar | GST');
         $$('.tp-panel').forEach(p => p.classList.remove('tp-panel--active'));
         document.querySelector(`.tp-tab[data-tab="${tab}"]`)?.classList.add('tp-tab--active');
         document.querySelector(`[data-panel="${tab}"]`)?.classList.add('tp-panel--active');
-        window.scrollTo(0, 0);
+        document.querySelector('[data-tab-bar]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (tab === 'trajectory') {
             const result = runCompute();
             if (result) renderTrajectory(result);
