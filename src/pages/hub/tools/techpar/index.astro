@@ -117,6 +117,10 @@ trackPageView('techpar', 'TechPar | GST');
                                 <button class="tp-seg__btn" data-growth="50" type="button">50%</button>
                             </div>
                         </div>
+                        <div class="tp-input-wrap">
+                            <input type="number" id="tp-growth-custom" data-input="growthCustom" min="1" max="500" placeholder="Custom %" class="tp-input--no-pre tp-input--has-suf" />
+                            <span class="tp-input-suf">%</span>
+                        </div>
                         <div class="tp-hint text-tiny">Used in trajectory projections. Does not affect current-period KPIs.</div>
                     </div>
 
@@ -1506,9 +1510,11 @@ trackPageView('techpar', 'TechPar | GST');
         $$('.tp-stage-card').forEach(c => c.classList.remove('tp-stage-card--active'));
         document.querySelector('[data-stage="series_bc"]')?.classList.add('tp-stage-card--active');
 
-        // Reset growth buttons
+        // Reset growth buttons and custom input
         $$('[data-growth]').forEach(b => b.classList.remove('tp-seg__btn--active'));
         document.querySelector('[data-growth="20"]')?.classList.add('tp-seg__btn--active');
+        const growthCustomEl = document.getElementById('tp-growth-custom') as HTMLInputElement | null;
+        if (growthCustomEl) growthCustomEl.value = '20';
 
         // Reset mode toggle
         $$('[data-mode]').forEach(b => b.classList.remove('tp-seg__btn--active'));
@@ -1545,13 +1551,27 @@ trackPageView('techpar', 'TechPar | GST');
     });
 
     // ─── Growth rate selector ──────────────────────────────────
+    const growthCustomInput = document.getElementById('tp-growth-custom') as HTMLInputElement | null;
+    if (growthCustomInput) growthCustomInput.value = String(growthRate);
+
     $$('[data-growth]').forEach(btn => {
         btn.addEventListener('click', () => {
             $$('[data-growth]').forEach(b => b.classList.remove('tp-seg__btn--active'));
             btn.classList.add('tp-seg__btn--active');
             growthRate = parseInt((btn as HTMLElement).dataset.growth || '20', 10);
+            if (growthCustomInput) growthCustomInput.value = String(growthRate);
             updateAll();
         });
+    });
+
+    // ─── Growth rate custom input ──────────────────────────────
+    growthCustomInput?.addEventListener('input', () => {
+        const val = parseFloat(growthCustomInput.value);
+        if (!isNaN(val) && val > 0) {
+            $$('[data-growth]').forEach(b => b.classList.remove('tp-seg__btn--active'));
+            growthRate = val;
+            updateAll();
+        }
     });
 
     // ─── Mode toggle ───────────────────────────────────────────
