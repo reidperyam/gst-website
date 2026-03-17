@@ -20,6 +20,7 @@ export interface StageConfig {
   label: string;
   frame: Frame;
   note: string;
+  noteUnder?: string;
   zones: {
     underinvest: number;
     lo: number;

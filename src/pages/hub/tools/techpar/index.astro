@@ -1923,8 +1923,9 @@ trackPageView('techpar', 'TechPar | GST');
         // Note banner
         const note = g('traj-note');
         if (note) {
+            const isUnder = r.zone === 'underinvest' || r.zone === 'ahead';
             note.className = 'tp-traj-note' + (s.frame === 'convergence' ? ' tp-traj-note--convergence' : '');
-            note.textContent = s.note;
+            note.textContent = (isUnder && s.noteUnder) ? s.noteUnder : s.note;
         }
 
         // Trajectory signal card
