@@ -1886,14 +1886,19 @@ trackPageView('techpar', 'TechPar | GST');
             }
         }
 
-        // Context block — only relevant when overspending (not underinvest/ahead)
+        // Context block
         const ctxBlock = g('ctx-block');
         if (ctxBlock) {
             const isOver = r.zone === 'above' || r.zone === 'elevated' || r.zone === 'critical';
+            const isUnder = r.zone === 'underinvest';
             if (isOver && r.stageConfig.key !== 'seed') {
                 const exitMult = getInput('exitMult') || 12;
                 const annualImpact = buildInputs().arr * 0.01 * exitMult;
                 ctxBlock.innerHTML = `For PE-backed and enterprise companies, total technology cost above the healthy ceiling translates directly to EBITDA compression and exit value. At a <strong style="color:var(--text-light-primary)">${exitMult}&times;</strong> revenue multiple, each 1% of ARR in excess technology spend represents <strong style="color:var(--color-primary)">${formatDollars(annualImpact)}</strong> in exit value per year.`;
+            } else if (isUnder) {
+                const floorPct = s.zones.lo;
+                const annualGap = buildInputs().arr * (floorPct - r.totalTechPct) / 100;
+                ctxBlock.innerHTML = `Spend is <strong style="color:var(--text-light-primary)">${formatDollars(annualGap)}</strong> per year below the ${floorPct}% benchmark floor. This gap often reflects deferred investment in engineering capacity or infrastructure that surfaces later as reliability issues, slower product velocity, or a higher cost to remediate at scale.`;
             } else {
                 ctxBlock.innerHTML = '';
             }
