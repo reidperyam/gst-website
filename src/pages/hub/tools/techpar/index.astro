@@ -404,8 +404,8 @@ trackPageView('techpar', 'TechPar | GST');
                     <!-- Empty state -->
                     <div class="tp-empty" data-traj-empty>
                         <img class="tp-empty__sym" src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" />
-                        <div class="tp-empty__msg text-small">Enter costs on the Costs tab<br/>to generate trajectory.</div>
-                        <button class="tp-empty__cta" data-action="go-costs" type="button">Go to costs &rarr;</button>
+                        <div class="tp-empty__msg text-small" data-traj-empty-msg>Enter your ARR on the Profile tab<br/>to generate trajectory.</div>
+                        <button class="tp-empty__cta" data-action="go-profile" data-traj-empty-cta type="button">Go to profile &rarr;</button>
                     </div>
 
                     <!-- Content -->
@@ -1773,6 +1773,16 @@ trackPageView('techpar', 'TechPar | GST');
             if (emptyCta) {
                 emptyCta.dataset.action = missingArr ? 'go-profile' : 'go-costs';
                 emptyCta.textContent = missingArr ? 'Go to profile →' : 'Go to costs →';
+            }
+            // Trajectory empty state
+            const trajMsg = document.querySelector('[data-traj-empty-msg]');
+            const trajCta = document.querySelector('[data-traj-empty-cta]') as HTMLButtonElement | null;
+            if (trajMsg) trajMsg.textContent = missingArr
+                ? 'Enter your ARR on the Profile tab\nto generate trajectory.'
+                : 'Enter infrastructure spend on the\nCosts tab to generate trajectory.';
+            if (trajCta) {
+                trajCta.dataset.action = missingArr ? 'go-profile' : 'go-costs';
+                trajCta.textContent = missingArr ? 'Go to profile →' : 'Go to costs →';
             }
             // Show empty states
             g('analysis-empty')?.classList.remove('tp-empty--hidden');
