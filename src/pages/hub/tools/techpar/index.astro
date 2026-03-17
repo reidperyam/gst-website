@@ -1882,12 +1882,17 @@ trackPageView('techpar', 'TechPar | GST');
             }
         }
 
-        // Context block
-        const exitMult = getInput('exitMult') || 12;
-        const annualImpact = r.stageConfig.key === 'seed' ? 0 : buildInputs().arr * 0.01 * exitMult;
+        // Context block — only relevant when overspending (not underinvest/ahead)
         const ctxBlock = g('ctx-block');
         if (ctxBlock) {
-            ctxBlock.innerHTML = `For PE-backed and enterprise companies, total technology cost above the healthy ceiling translates directly to EBITDA compression and exit value. At a <strong style="color:var(--text-light-primary)">${exitMult}&times;</strong> revenue multiple, each 1% of ARR in excess technology spend represents <strong style="color:var(--color-primary)">${formatDollars(annualImpact)}</strong> in exit value per year.`;
+            const isOver = r.zone === 'above' || r.zone === 'elevated' || r.zone === 'critical';
+            if (isOver && r.stageConfig.key !== 'seed') {
+                const exitMult = getInput('exitMult') || 12;
+                const annualImpact = buildInputs().arr * 0.01 * exitMult;
+                ctxBlock.innerHTML = `For PE-backed and enterprise companies, total technology cost above the healthy ceiling translates directly to EBITDA compression and exit value. At a <strong style="color:var(--text-light-primary)">${exitMult}&times;</strong> revenue multiple, each 1% of ARR in excess technology spend represents <strong style="color:var(--color-primary)">${formatDollars(annualImpact)}</strong> in exit value per year.`;
+            } else {
+                ctxBlock.innerHTML = '';
+            }
         }
     }
 
