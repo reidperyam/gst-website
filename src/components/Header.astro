@@ -20,7 +20,7 @@ const { currentPath = '/', staticHeader = false } = Astro.props;
                     class="delta-icon"
                     aria-hidden="true"
                 />
-                <a href="/" class="logo" onclick="trackNavigation('/', 'Logo')">G<span>S</span>T</a>
+                <a href="/" class="logo" aria-label="GST" onclick="trackNavigation('/', 'Logo')">G<span>S</span>T</a>
             </div>
             <ul>
                 <li><a href="/services" onclick="trackNavigation('/services', 'Services')">Services</a></li>
