@@ -997,7 +997,8 @@ trackPageView('techpar', 'TechPar | GST');
     }
 
     /* Zone pill */
-    .tp-zone-pill {
+    /* Zone pill is injected via innerHTML */
+    .tp-kpi-hero :global(.tp-zone-pill) {
         display: inline-flex;
         align-items: center;
         gap: var(--spacing-sm);
@@ -1008,7 +1009,7 @@ trackPageView('techpar', 'TechPar | GST');
         margin-top: var(--spacing-sm);
     }
 
-    .tp-zone-dot {
+    .tp-kpi-hero :global(.tp-zone-dot) {
         width: 5px;
         height: 5px;
         border-radius: 50%;
@@ -1082,15 +1083,16 @@ trackPageView('techpar', 'TechPar | GST');
         margin: var(--spacing-md) 0;
     }
 
-    .tp-sig-met {
+    /* Signal metrics are injected via innerHTML */
+    .tp-signal :global(.tp-sig-met) {
         margin-bottom: var(--spacing-sm);
     }
 
-    .tp-sig-met:last-child {
+    .tp-signal :global(.tp-sig-met:last-child) {
         margin-bottom: 0;
     }
 
-    .tp-sig-mlbl {
+    .tp-signal :global(.tp-sig-mlbl) {
         font-size: var(--text-xs);
         letter-spacing: 0.07em;
         text-transform: uppercase;
@@ -1098,19 +1100,19 @@ trackPageView('techpar', 'TechPar | GST');
         margin-bottom: var(--spacing-xs);
     }
 
-    .tp-sig-mval {
+    .tp-signal :global(.tp-sig-mval) {
         font-size: var(--text-2xl);
         font-weight: var(--font-weight-semibold);
         line-height: 1;
     }
 
-    .tp-sig-msub {
+    .tp-signal :global(.tp-sig-msub) {
         font-size: var(--text-xs);
         color: var(--text-light-muted);
         margin-top: var(--spacing-xs);
     }
 
-    .tp-sig-note {
+    .tp-signal :global(.tp-sig-note) {
         font-size: var(--text-xs);
         color: var(--text-light-secondary);
         line-height: 1.7;
@@ -1120,43 +1122,63 @@ trackPageView('techpar', 'TechPar | GST');
     .tp-kpi-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 1px;
-        background: var(--border-light);
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    /* KPI cells are injected via innerHTML — use :global for children */
+    .tp-kpi-grid :global(.tp-kpi-cell) {
         border: 1px solid var(--border-light);
-        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md);
+        display: flex;
+        flex-direction: column;
     }
 
-    .tp-kpi-cell {
-        background: var(--bg-light);
-        padding: var(--spacing-md) var(--spacing-lg);
-    }
-
-    .tp-kpi-cell--highlight {
+    .tp-kpi-grid :global(.tp-kpi-cell--highlight) {
+        grid-column: 1 / -1;
         background: var(--bg-light-alt);
+        border-left: 3px solid var(--color-primary);
+        padding: var(--spacing-lg);
     }
 
-    .tp-kpi-lbl {
-        font-size: var(--text-xs);
-        color: var(--text-light-secondary);
+    .tp-kpi-grid :global(.tp-kpi-cell--highlight .tp-kpi-val) {
+        font-size: var(--text-2xl);
+    }
+
+    .tp-kpi-grid :global(.tp-kpi-lbl) {
+        font-size: 10px;
+        color: var(--text-light-muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: var(--font-weight-bold);
+        line-height: 1;
         margin-bottom: var(--spacing-sm);
-        line-height: 1.4;
-        letter-spacing: 0.02em;
     }
 
-    .tp-kpi-val {
+    .tp-kpi-grid :global(.tp-kpi-val) {
         font-size: var(--text-lg);
         font-weight: var(--font-weight-semibold);
         line-height: 1;
+        color: var(--text-light-primary);
+        margin-bottom: var(--spacing-xs);
     }
 
-    .tp-kpi-val--pos { color: var(--techpar-kpi-positive); }
-    .tp-kpi-val--warn { color: var(--techpar-kpi-warn); }
-    .tp-kpi-val--bad { color: var(--techpar-kpi-negative); }
+    .tp-kpi-grid :global(.tp-kpi-val--pos) { color: var(--techpar-kpi-positive); }
+    .tp-kpi-grid :global(.tp-kpi-val--warn) { color: var(--techpar-kpi-warn); }
+    .tp-kpi-grid :global(.tp-kpi-val--bad) { color: var(--techpar-kpi-negative); }
 
-    .tp-kpi-sub {
-        font-size: var(--text-xs);
+    .tp-kpi-grid :global(.tp-kpi-sub) {
+        font-size: 10px;
         color: var(--text-light-muted);
-        margin-top: var(--spacing-xs);
+        line-height: 1.3;
+        margin-top: auto;
+        padding-top: var(--spacing-xs);
+        border-top: 1px solid var(--border-light);
+    }
+
+    .tp-kpi-grid :global(.tp-kpi-cell--highlight .tp-kpi-sub) {
+        border-top: none;
+        padding-top: 0;
     }
 
     /* ── Category bars ────────────────────────────────────────── */
@@ -1173,39 +1195,40 @@ trackPageView('techpar', 'TechPar | GST');
         margin-bottom: var(--spacing-md);
     }
 
-    .tp-cat-row {
+    /* Category bar rows are injected via innerHTML */
+    .tp-cat-section :global(.tp-cat-row) {
         margin-bottom: var(--spacing-md);
     }
 
-    .tp-cat-row:last-child {
+    .tp-cat-section :global(.tp-cat-row:last-child) {
         margin-bottom: 0;
     }
 
-    .tp-cat-meta {
+    .tp-cat-section :global(.tp-cat-meta) {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
         margin-bottom: var(--spacing-xs);
     }
 
-    .tp-cat-name {
+    .tp-cat-section :global(.tp-cat-name) {
         font-size: var(--text-xs);
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
     }
 
-    .tp-cat-pct {
+    .tp-cat-section :global(.tp-cat-pct) {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-semibold);
     }
 
-    .tp-cat-bench {
+    .tp-cat-section :global(.tp-cat-bench) {
         font-size: var(--text-xs);
         color: var(--text-light-muted);
     }
 
-    .tp-cat-track {
+    .tp-cat-section :global(.tp-cat-track) {
         height: 5px;
         background: var(--bg-light-alt);
         position: relative;
@@ -1213,13 +1236,13 @@ trackPageView('techpar', 'TechPar | GST');
         overflow: hidden;
     }
 
-    .tp-cat-band {
+    .tp-cat-section :global(.tp-cat-band) {
         position: absolute;
         height: 100%;
         background: var(--techpar-chart-band-fill);
     }
 
-    .tp-cat-fill {
+    .tp-cat-section :global(.tp-cat-fill) {
         position: absolute;
         height: 100%;
         top: 0;
@@ -1329,7 +1352,8 @@ trackPageView('techpar', 'TechPar | GST');
         margin-bottom: var(--spacing-lg);
     }
 
-    .tp-tleg {
+    /* Trajectory legend items are injected via innerHTML */
+    .tp-traj-legend :global(.tp-tleg) {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
@@ -1337,7 +1361,7 @@ trackPageView('techpar', 'TechPar | GST');
         color: var(--text-light-secondary);
     }
 
-    .tp-tleg__sw {
+    .tp-traj-legend :global(.tp-tleg__sw) {
         width: 14px;
         height: 8px;
         border-radius: 1px;
@@ -1348,6 +1372,10 @@ trackPageView('techpar', 'TechPar | GST');
     @media (min-width: 640px) {
         .tp-kpi-grid {
             grid-template-columns: repeat(3, 1fr);
+        }
+
+        .tp-kpi-grid :global(.tp-kpi-cell--highlight) {
+            grid-column: 1 / -1;
         }
     }
 
