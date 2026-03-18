@@ -18,6 +18,10 @@ async function clickTab(page: Page, tab: string): Promise<void> {
   await page.click(`.tp-tab[data-tab="${tab}"]`);
 }
 
+async function selectStage(page: Page, stage: string = 'series_bc'): Promise<void> {
+  await page.click(`[data-stage="${stage}"]`);
+}
+
 // ─── Profile tab ─────────────────────────────────────────────────────────────
 
 test.describe('TechPar - Profile tab', () => {
@@ -42,23 +46,24 @@ test.describe('TechPar - Profile tab', () => {
     await expect(page.locator('[data-panel="costs"]')).toHaveClass(/tp-panel--active/);
   });
 
-  test('Profile tab shows checkmark when ARR > 0', async ({ page }) => {
+  test('Profile tab shows checkmark when ARR > 0 and stage selected', async ({ page }) => {
     await gotoTool(page);
     const tab = page.locator('[data-tab="profile"]');
     await expect(tab).not.toHaveClass(/tp-tab--done/);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await expect(tab).toHaveClass(/tp-tab--done/);
   });
 
   test('exit multiple field is hidden on Seed, Series A, Series B-C stages', async ({ page }) => {
     await gotoTool(page);
-    // Default is series_bc
+    // No stage selected — exit field should be hidden
     await expect(page.locator('[data-exit-field]')).not.toHaveClass(/tp-exit-field--vis/);
-    // Switch to seed
-    await page.click('[data-stage="seed"]');
+    await selectStage(page, 'series_bc');
     await expect(page.locator('[data-exit-field]')).not.toHaveClass(/tp-exit-field--vis/);
-    // Switch to series_a
-    await page.click('[data-stage="series_a"]');
+    await selectStage(page, 'seed');
+    await expect(page.locator('[data-exit-field]')).not.toHaveClass(/tp-exit-field--vis/);
+    await selectStage(page, 'series_a');
     await expect(page.locator('[data-exit-field]')).not.toHaveClass(/tp-exit-field--vis/);
   });
 
@@ -76,6 +81,7 @@ test.describe('TechPar - Profile tab', () => {
 test.describe('TechPar - Costs tab', () => {
   test('"View analysis" button is disabled when infraHosting is 0', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     const btn = page.locator('[data-btn-analysis]');
@@ -84,6 +90,7 @@ test.describe('TechPar - Costs tab', () => {
 
   test('"View analysis" button is enabled when ARR > 0 and infraHosting > 0', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -93,6 +100,7 @@ test.describe('TechPar - Costs tab', () => {
 
   test('Costs tab shows checkmark when both required fields have values', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -137,6 +145,7 @@ test.describe('TechPar - Costs tab', () => {
 
   test('CapEx toggle changes the primary KPI value and basis label', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -172,6 +181,7 @@ test.describe('TechPar - Analysis tab', () => {
 
   test('Analysis tab renders primary KPI when required inputs are present', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -183,6 +193,7 @@ test.describe('TechPar - Analysis tab', () => {
 
   test('zone pill label matches the computed zone', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -195,6 +206,7 @@ test.describe('TechPar - Analysis tab', () => {
 
   test('benchmark table highlights the active stage row', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -215,6 +227,7 @@ test.describe('TechPar - Trajectory tab', () => {
 
   test('Trajectory tab renders chart when costs are entered', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -225,6 +238,7 @@ test.describe('TechPar - Trajectory tab', () => {
 
   test('Trajectory chart has convergence revenue line on Series B-C stage', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -257,6 +271,7 @@ test.describe('TechPar - Navigation', () => {
     await expect(page.locator('[data-panel="profile"]')).toHaveClass(/tp-panel--active/);
 
     // Fill required fields so analysis content (with go-costs back button) is shown
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
@@ -283,6 +298,7 @@ test.describe('TechPar - Integrity', () => {
 
   test('no em dashes present in any rendered signal copy', async ({ page }) => {
     await gotoTool(page);
+    await selectStage(page);
     await fillInput(page, 'arr', '10000000');
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
