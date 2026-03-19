@@ -314,3 +314,50 @@ test.describe('TechPar - Integrity', () => {
     // Trajectory tab has no signal cards — em dash check is scoped to analysis tab only
   });
 });
+
+// ─── Audit fixes ────────────────────────────────────────────────────────────
+
+test.describe('TechPar - Audit fixes', () => {
+  test('infra hosting shows annual equivalent annotation', async ({ page }) => {
+    await gotoTool(page);
+    await selectStage(page);
+    await clickTab(page, 'costs');
+    await fillInput(page, 'infra', '50000');
+    const anno = page.locator('[data-infra-annual]');
+    await expect(anno).toBeVisible();
+    await expect(anno).toContainText('/yr');
+  });
+
+  test('switching from Deep Dive to Quick populates rdOpEx with sum', async ({ page }) => {
+    await gotoTool(page);
+    await selectStage(page);
+    await clickTab(page, 'costs');
+    await page.click('[data-mode="deepdive"]');
+    await fillInput(page, 'rdEng', '1000000');
+    await fillInput(page, 'rdProd', '500000');
+    await fillInput(page, 'rdTool', '100000');
+    await page.click('[data-mode="quick"]');
+    const rdInput = page.locator('[data-input="rdOpEx"]');
+    await expect(rdInput).toHaveValue('1600000');
+  });
+
+  test('ARR chips update currency symbol when currency changes', async ({ page }) => {
+    await gotoTool(page);
+    await page.click('[data-currency="€"]');
+    const chip = page.locator('[data-arr-val="10000000"]');
+    await expect(chip).toContainText('€');
+  });
+
+  test('baseline bar shows the percentage value', async ({ page }) => {
+    await gotoTool(page);
+    await selectStage(page);
+    await fillInput(page, 'arr', '10000000');
+    await clickTab(page, 'costs');
+    await fillInput(page, 'infra', '50000');
+    await clickTab(page, 'analysis');
+    await page.click('[data-action="set-baseline"]');
+    const barLabel = page.locator('.tp-baseline-bar__label');
+    await expect(barLabel).toContainText('Baseline:');
+    await expect(barLabel).toContainText('%');
+  });
+});

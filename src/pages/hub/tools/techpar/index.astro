@@ -73,7 +73,7 @@ trackPageView('techpar', 'TechPar | GST');
                     </div>
 
                     <div class="tp-section">
-                        <span class="tp-sec-label label">Company stage</span>
+                        <span class="tp-sec-label label">Company stage <span class="tp-field__req">(required)</span></span>
                         <div class="tp-stage-grid" data-stage-grid>
                             <button class="tp-stage-card" data-stage="seed" type="button">
                                 <span class="tp-stage-card__name">Seed / Pre-A</span>
@@ -211,6 +211,8 @@ trackPageView('techpar', 'TechPar | GST');
                                 <span class="tp-input-suf">/ mo</span>
                             </div>
                             <div class="tp-hint text-tiny">Cloud, data center, CDN, observability, managed services. Auto-converted to annual.</div>
+                            <div class="tp-infra-annual text-tiny" data-infra-annual style="display:none"></div>
+                            <div class="tp-hint tp-hint--warn text-tiny" data-infra-warn style="display:none"></div>
                         </div>
                     </div>
 
@@ -231,6 +233,7 @@ trackPageView('techpar', 'TechPar | GST');
                                 <input type="number" id="tp-infra-pers" data-input="infraPers" min="0" step="10000" placeholder="&#8212;" />
                             </div>
                             <div class="tp-hint text-tiny">DevOps, SRE, platform engineering, cloud architecture headcount.</div>
+                            <div class="tp-hint tp-hint--warn text-tiny" data-sanity-warn="infraPers" style="display:none"></div>
                         </div>
                     </div>
 
@@ -241,7 +244,7 @@ trackPageView('techpar', 'TechPar | GST');
                         <!-- Quick mode -->
                         <div data-rd-quick>
                             <div class="tp-field">
-                                <label class="tp-field__label text-small" for="tp-rd-opex">Annual fully-loaded cost <span class="tp-field__req">(required)</span></label>
+                                <label class="tp-field__label text-small" for="tp-rd-opex">Annual fully-loaded cost</label>
                                 <div class="tp-arr-quick">
                                     <button class="tp-arr-chip" data-preset-for="rdOpEx" data-preset-val="1000000" type="button">$1M</button>
                                     <button class="tp-arr-chip" data-preset-for="rdOpEx" data-preset-val="3000000" type="button">$3M</button>
@@ -254,6 +257,7 @@ trackPageView('techpar', 'TechPar | GST');
                                     <input type="number" id="tp-rd-opex" data-input="rdOpEx" min="0" step="100000" placeholder="0" />
                                 </div>
                                 <div class="tp-hint text-tiny">Engineering and product headcount plus tooling subscriptions. Annual fully-loaded.</div>
+                                <div class="tp-hint tp-hint--warn text-tiny" data-sanity-warn="rdOpEx" style="display:none"></div>
                             </div>
                         </div>
 
@@ -341,6 +345,7 @@ trackPageView('techpar', 'TechPar | GST');
                                 <input type="number" id="tp-rd-capex" data-input="rdCapEx" min="0" step="100000" placeholder="&#8212;" />
                             </div>
                             <div class="tp-hint text-tiny">Enables GAAP view toggle above and CapEx-of-R&D benchmark.</div>
+                            <div class="tp-hint tp-hint--warn text-tiny" data-sanity-warn="rdCapEx" style="display:none"></div>
                         </div>
                     </div>
 
@@ -699,6 +704,11 @@ trackPageView('techpar', 'TechPar | GST');
 
     .tp-hint--warn {
         color: var(--techpar-zone-above);
+    }
+
+    .tp-infra-annual {
+        color: var(--color-primary);
+        margin-top: var(--spacing-xs);
     }
 
     /* ─── Baseline comparison ─────────────────────────────── */

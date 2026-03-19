@@ -89,6 +89,7 @@ export interface TechParResult {
     exitValue: number;
     underinvestGap: number;
     annualAdvantage: number;
+    annualExcess: number;
   };
 }
 
@@ -323,6 +324,9 @@ export function compute(inputs: TechParInputs): TechParResult | null {
   const annualAdvantage = totalTechPct < stageConfig.zones.hi
     ? (arr / 12) * (stageConfig.zones.hi - totalTechPct) / 100 * 12
     : 0;
+  const annualExcess = totalTechPct > stageConfig.zones.hi
+    ? (totalTechPct - stageConfig.zones.hi) / 100 * arr
+    : 0;
 
   return {
     total,
@@ -349,6 +353,7 @@ export function compute(inputs: TechParInputs): TechParResult | null {
       exitValue,
       underinvestGap,
       annualAdvantage,
+      annualExcess,
     },
   };
 }
@@ -519,6 +524,7 @@ export function buildSummaryText(inputs: TechParInputs, result: TechParResult, u
   const lines: string[] = [];
 
   lines.push('TechPar Summary');
+  lines.push(`Generated: ${new Date().toISOString().slice(0, 10)}`);
   lines.push('\u2500'.repeat(40));
   lines.push(`Stage: ${s.label}`);
   lines.push(`ARR: ${formatDollars(inputs.arr)} | Growth: ${inputs.growthRate}% | Basis: ${inputs.capexView === 'gaap' ? 'GAAP' : 'Cash'}`);

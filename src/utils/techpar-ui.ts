@@ -103,6 +103,8 @@ function setBaseline() {
     if (!result) return;
     baselineResult = result;
     baselineInputs = inputs;
+    const barLabel = document.querySelector('.tp-baseline-bar__label');
+    if (barLabel) barLabel.textContent = `Baseline: ${formatPercent(result.totalTechPct)}`;
     const bar = g('baseline-bar');
     if (bar) bar.style.display = 'flex';
     const setBtn = document.querySelector('[data-action="set-baseline"]') as HTMLElement | null;
@@ -228,11 +230,28 @@ $$('[data-mode]').forEach(btn => {
         const rdDeep = g('rd-deep');
         if (rdQuick) rdQuick.style.display = mode === 'quick' ? 'block' : 'none';
         if (rdDeep) rdDeep.classList.toggle('tp-deep-wrap--on', mode === 'deepdive');
+        // Sync deep-dive sum into quick-mode R&D OpEx field when switching back
+        if (mode === 'quick') {
+            const sum = getInput('rdEng') + getInput('rdProd') + getInput('rdTool');
+            if (sum > 0) {
+                const rdInput = document.querySelector('[data-input="rdOpEx"]') as HTMLInputElement | null;
+                if (rdInput) rdInput.value = String(sum);
+            }
+        }
         updateAll();
     });
 });
 
 // ─── Currency selector ─────────────────────────────────────
+/** Update currency symbol shown on all preset chips */
+function updateChipCurrencies() {
+    document.querySelectorAll<HTMLButtonElement>('.tp-arr-chip[data-arr-val], [data-preset-for]').forEach(chip => {
+        const txt = chip.textContent || '';
+        const updated = txt.replace(/^[CA]?\$|^€|^£/, currencySymbol);
+        if (updated !== txt) chip.textContent = updated;
+    });
+}
+
 $$('[data-currency]').forEach(btn => {
     btn.addEventListener('click', () => {
         $$('[data-currency]').forEach(b => b.classList.remove('tp-seg__btn--active'));
@@ -242,6 +261,7 @@ $$('[data-currency]').forEach(btn => {
         document.querySelectorAll('.tp-input-pre').forEach(pre => {
             pre.textContent = currencySymbol;
         });
+        updateChipCurrencies();
         updateAll();
     });
 });
@@ -379,12 +399,70 @@ function syncUrlState() {
     }
 }
 
+// ─── Infra monthly/annual annotation ─────────────────────────
+function updateInfraAnnotation() {
+    const infra = getInput('infra');
+    const annualEl = g('infra-annual');
+    const warnEl = g('infra-warn');
+    if (annualEl) {
+        if (infra > 0) {
+            annualEl.textContent = `= ${fmtD(infra * 12)}/yr`;
+            annualEl.style.display = 'block';
+        } else {
+            annualEl.style.display = 'none';
+        }
+    }
+    if (warnEl) {
+        const arr = getInput('arr');
+        if (arr > 0 && infra > 0 && (infra * 12) > arr * 0.5) {
+            warnEl.textContent = 'This value is monthly. If you entered an annual figure, divide by 12.';
+            warnEl.style.display = 'block';
+        } else {
+            warnEl.style.display = 'none';
+        }
+    }
+}
+
+// ─── Input sanity warnings ───────────────────────────────────
+function checkSanity() {
+    if (!stageKey) {
+        document.querySelectorAll('[data-sanity-warn]').forEach(el => {
+            (el as HTMLElement).style.display = 'none';
+        });
+        return;
+    }
+    const config = STAGES[stageKey];
+    const arr = getInput('arr');
+    if (!arr || !config) return;
+
+    const totalCeiling = config.zones.hi;
+    const checks: Array<{ warnAttr: string; value: number }> = [
+        { warnAttr: 'infraPers', value: getInput('infraPers') },
+        { warnAttr: 'rdOpEx', value: mode === 'deepdive' ? (getInput('rdEng') + getInput('rdProd') + getInput('rdTool')) : getInput('rdOpEx') },
+        { warnAttr: 'rdCapEx', value: getInput('rdCapEx') },
+    ];
+
+    for (const { warnAttr, value } of checks) {
+        const el = document.querySelector(`[data-sanity-warn="${warnAttr}"]`) as HTMLElement | null;
+        if (!el) continue;
+        const pct = (value / arr) * 100;
+        if (value > 0 && pct > totalCeiling) {
+            el.textContent = `This category alone exceeds the total technology benchmark ceiling for ${config.label}. Verify the figure is correct.`;
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
+    }
+}
+
 // ─── Main update ───────────────────────────────────────────
 function updateAll() {
     const inputs = buildInputs();
     const r = inputs ? compute(inputs) : null;
 
     syncUrlState();
+    updateInfraAnnotation();
+    checkSanity();
 
     // Growth rate warning
     const growthWarn = g('growth-warn');
@@ -656,13 +734,15 @@ function buildMetrics(r: TechParResult, col: string, s: StageConfig): string {
         h = `<div class="tp-sig-met"><div class="tp-sig-mlbl">Annual advantage vs ${s.zones.hi}% ceiling</div>
             <div class="tp-sig-mval" style="color:${col}">${fmtD(r.gap.annualAdvantage)}</div></div>`;
     } else if (r.zone !== 'healthy') {
-        h = `<div class="tp-sig-met"><div class="tp-sig-mlbl">Excess above ${s.zones.hi}% ceiling: 36 months</div>
+        h = `<div class="tp-sig-met"><div class="tp-sig-mlbl">Annual excess above ${s.zones.hi}% ceiling</div>
+            <div class="tp-sig-mval" style="color:${col}">${fmtD(r.gap.annualExcess)}</div></div>`;
+        h += `<div class="tp-sig-met" style="margin-top:var(--spacing-sm)"><div class="tp-sig-mlbl">Cumulative excess: 36-month hold</div>
             <div class="tp-sig-mval" style="color:${col}">${fmtD(r.gap.cumulative36)}</div></div>`;
         if (s.frame === 'dollars') {
             const exitMult = getInput('exitMult') || 12;
-            h += `<div class="tp-sig-met" style="margin-top:var(--spacing-sm)"><div class="tp-sig-mlbl">Exit value at ${exitMult}&times;</div>
+            h += `<div class="tp-sig-met" style="margin-top:var(--spacing-sm)"><div class="tp-sig-mlbl">Hold-period exit impact at ${exitMult}&times;</div>
                 <div class="tp-sig-mval" style="color:var(--color-primary)">${fmtD(r.gap.exitValue)}</div>
-                <div class="tp-sig-msub">recoverable through optimization</div></div>`;
+                <div class="tp-sig-msub">cumulative drag over 36-month hold</div></div>`;
         } else {
             h += `<div class="tp-sig-met" style="margin-top:var(--spacing-sm);padding-top:var(--spacing-sm);border-top:1px solid var(--border-light)">
                 <div class="tp-sig-note">At ${s.label}, trajectory matters more than the current number. The key question is whether this ratio declines as revenue scales.</div></div>`;
@@ -681,7 +761,8 @@ function renderTrajectory(r: TechParResult) {
     if (note) {
         const isUnder = r.zone === 'underinvest' || r.zone === 'ahead';
         note.className = 'tp-traj-note' + (s.frame === 'convergence' ? ' tp-traj-note--convergence' : '');
-        note.textContent = (isUnder && s.noteUnder) ? s.noteUnder : s.note;
+        const baseNote = (isUnder && s.noteUnder) ? s.noteUnder : s.note;
+        note.textContent = baseNote + ' This projection assumes a constant technology cost ratio. Actual trajectory depends on optimization and scaling decisions.';
     }
 
     // Build chart data
@@ -709,10 +790,10 @@ function renderTrajectory(r: TechParResult) {
 
     const datasets: any[] = [
         { label: '_z', data: Array(37).fill(0), borderColor: 'transparent', borderWidth: 0, pointRadius: 0, fill: false },
-        { label: '_uf', data: traj.underFloor, borderColor: underBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: underFill, below: 'transparent' }, tension: 0.3 },
-        { label: '_blo', data: traj.bandLo, borderColor: aheadBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: aheadFill, below: 'transparent' }, tension: 0.3 },
+        { label: 'Underinvestment floor', data: traj.underFloor, borderColor: underBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: underFill, below: 'transparent' }, tension: 0.3 },
+        { label: 'Efficiency band', data: traj.bandLo, borderColor: aheadBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: aheadFill, below: 'transparent' }, tension: 0.3 },
         { label: 'Healthy range', data: traj.bandHi, borderColor: bandBorder, borderWidth: 1, borderDash: [4, 3], pointRadius: 0, fill: { target: '-1', above: bandFill, below: 'transparent' }, tension: 0.3 },
-        { label: '_ac', data: traj.aboveCeiling, borderColor: aboveBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: aboveFill, below: 'transparent' }, tension: 0.3 },
+        { label: 'Caution ceiling', data: traj.aboveCeiling, borderColor: aboveBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: aboveFill, below: 'transparent' }, tension: 0.3 },
         { label: 'Monthly tech spend', data: traj.spend, borderColor: zoneCol, borderWidth: 2, pointRadius: 0, fill: false, tension: 0.3 },
     ];
 
@@ -805,7 +886,7 @@ function renderTrajectory(r: TechParResult) {
                     padding: 8,
                     titleFont: { family: getStyle('--font-family') || "'Helvetica Neue', Arial, sans-serif", size: 9 },
                     bodyFont: { family: getStyle('--font-family') || "'Helvetica Neue', Arial, sans-serif", size: 9 },
-                    filter: (item: any) => !item.dataset.label.startsWith('_'),
+                    filter: (item: any) => item.dataset.label !== '_z',
                     callbacks: {
                         title: (c: any) => `Month ${c[0].dataIndex}`,
                         label: (c: any) => `${c.dataset.label}: ${fmtD(c.parsed.y)}/mo`,
@@ -889,6 +970,7 @@ function hydrateFromUrl() {
         document.querySelectorAll('.tp-input-pre').forEach(pre => {
             pre.textContent = currencySymbol;
         });
+        updateChipCurrencies();
     }
 
     // Stage

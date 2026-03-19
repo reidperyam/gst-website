@@ -527,4 +527,44 @@ describe('buildSummaryText', () => {
       expect(text).toContain('Exit value');
     }
   });
+
+  it('should include a Generated date in ISO format', () => {
+    const inputs = makeInputs({ arr: 10_000_000, stage: 'pe', infraHosting: 50_000 });
+    const result = compute(inputs);
+    const text = buildSummaryText(inputs, result!);
+    expect(text).toMatch(/Generated: \d{4}-\d{2}-\d{2}/);
+  });
+});
+
+// ─── gap.annualExcess ───────────────────────────────────────────────────────
+
+describe('gap.annualExcess', () => {
+  it('is positive when totalTechPct exceeds the stage ceiling', () => {
+    // PE ceiling is 40%. $50K/mo infra + $3M R&D + $500K pers + $500K capex on $10M ARR
+    // = ($600K + $3M + $500K + $500K) / $10M = 46% → above 40%
+    const inputs = makeInputs({
+      arr: 10_000_000,
+      stage: 'pe',
+      infraHosting: 50_000,
+      rdOpEx: 3_000_000,
+      infraPersonnel: 500_000,
+      rdCapEx: 500_000,
+    });
+    const result = compute(inputs)!;
+    expect(result.totalTechPct).toBeGreaterThan(40);
+    const expectedExcess = (result.totalTechPct - 40) / 100 * 10_000_000;
+    expect(result.gap.annualExcess).toBeCloseTo(expectedExcess, 0);
+  });
+
+  it('is zero when totalTechPct is at or below the stage ceiling', () => {
+    // PE ceiling is 40%. $20K/mo infra on $10M ARR = 2.4% → well below 40%
+    const inputs = makeInputs({
+      arr: 10_000_000,
+      stage: 'pe',
+      infraHosting: 20_000,
+    });
+    const result = compute(inputs)!;
+    expect(result.totalTechPct).toBeLessThanOrEqual(40);
+    expect(result.gap.annualExcess).toBe(0);
+  });
 });
