@@ -559,6 +559,7 @@ If your test has any of these, it's likely a false positive:
 24. ✗ Dispatches mouse events to test CSS `:hover` styles — pseudo-class state cannot be activated via JS
 25. ✗ Relies on implicit UI defaults (pre-selected stage, pre-filled growth rate) instead of explicitly setting required state — breaks when defaults are removed or changed
 26. ✗ Queries `body` for a class that lives on `document.documentElement` (or vice versa) — silently returns `false`, making conditional setup fire incorrectly
+27. ✗ Waits for a CSS class change but asserts on a computed style property (`display`, `visibility`) that lags behind in the rendering pipeline — passes in Chromium, fails in Firefox
 
 ## E2E Cross-Browser Pitfalls
 
@@ -1008,6 +1009,42 @@ if (!isDark) {
 **How to detect:** If a test fails only on one browser (often Firefox) after an unrelated DOM change, check whether state queries target the correct element. Search for `body.evaluate(el => el.classList` and verify the class actually lives on `<body>`, not `<html>` or another ancestor.
 
 **Key principle:** A state check that always returns the same value is a tautology — it makes the conditional branch deterministic in a way that depends on external test ordering, not on actual page state. Always verify your query returns different values in different states before trusting it as a conditional guard.
+
+### 23. ❌ Waiting on a Class Change but Asserting on a Lagging Computed Style
+
+CSS class changes are synchronous in JavaScript, but the browser's style recalculation and layout (the "rendering pipeline") is asynchronous. When a class toggle triggers a `display: none → block` change via a CSS rule like `:global(html.dark-theme) .element { display: block }`, the class is applied instantly but `getComputedStyle().display` may still return `none` for several frames — especially in Firefox under CI load.
+
+This manifests as: `waitForFunction` confirms the class is present, but the immediately following `toBeVisible()` fails because the element's computed display hasn't updated yet.
+
+**Bad:**
+```typescript
+// ❌ Class is applied, but CSS cascade hasn't recalculated display property yet
+await clickThemeToggle(page);
+await page.waitForFunction(() =>
+  document.documentElement.classList.contains('dark-theme')
+);
+
+// Fails in Firefox — display is still 'none' despite class being present
+const darkEl = page.locator('.dark-variant');
+await expect(darkEl).toBeVisible(); // Flaky
+```
+
+**Good:**
+```typescript
+// ✅ Wait for the actual computed style, not the class
+await clickThemeToggle(page);
+await page.waitForFunction(() => {
+  const el = document.querySelector('.dark-variant');
+  return el && window.getComputedStyle(el).display !== 'none';
+}, { timeout: 5000 });
+
+const darkEl = page.locator('.dark-variant');
+await expect(darkEl).toBeVisible({ timeout: 5000 });
+```
+
+**Why this differs from anti-pattern #4:** Anti-pattern #4 says "don't *assert* on classes, assert on computed styles." This pattern says "don't *wait* on classes when you're about to *assert* on computed styles." The wait and the assertion must target the same layer — if you're asserting on visibility, wait for visibility, not for the class that eventually causes visibility.
+
+**When this bites you:** Any CSS rule that uses a parent class to toggle `display`, `visibility`, or `opacity` on a child element — especially theme toggles (`html.dark-theme`), accordion panels, and tab content switches. Firefox's rendering pipeline is measurably slower than Chromium's under parallel CI load.
 
 ### 20. ❌ Simulating CSS `:hover` with JavaScript Events in Headless Browsers
 
