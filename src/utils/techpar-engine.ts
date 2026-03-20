@@ -407,6 +407,125 @@ export function buildTrajectory(inputs: TechParInputs, config: StageConfig): Tra
   return { labels, spend, bandLo, bandHi, underFloor, aboveCeiling, revenue, frame: config.frame };
 }
 
+// ─── Historical actuals ───────────────────────────────────────────────────────
+
+export interface HistoricalPoint {
+  label: string;
+  arr: number;
+  totalTechSpend: number;
+}
+
+export interface HistoricalResult {
+  label: string;
+  techCostPct: number;
+  monthlySpend: number;
+  monthlyRevenue: number;
+}
+
+/** Compute technology cost percentages and monthly equivalents for prior-year data points. */
+export function computeHistorical(points: HistoricalPoint[]): HistoricalResult[] {
+  return points
+    .filter(p => p.arr > 0 && p.totalTechSpend > 0)
+    .map(p => ({
+      label: p.label,
+      techCostPct: (p.totalTechSpend / p.arr) * 100,
+      monthlySpend: p.totalTechSpend / 12,
+      monthlyRevenue: p.arr / 12,
+    }));
+}
+
+/**
+ * Build chart-ready data for historical points.
+ * Each year expands to 12 monthly data points so historical segments
+ * occupy proportional width relative to the 36-month forward projection.
+ *
+ * Values are linearly interpolated from the previous year-end to the
+ * current year-end within each 12-month segment, creating smooth
+ * transitions between years and into "Now."
+ *
+ * @param currentArr - The current ARR (used to interpolate the final
+ *   historical year smoothly toward the forward projection start)
+ * @param currentTechSpend - The current total annual tech spend
+ */
+export function buildHistoricalTrajectory(
+  points: HistoricalPoint[],
+  config: StageConfig,
+  currentArr?: number,
+  currentTechSpend?: number,
+): { labels: string[]; spend: number[]; bandLo: number[]; bandHi: number[]; underFloor: number[]; aboveCeiling: number[]; revenue: number[] } {
+  const labels: string[] = [];
+  const spend: number[] = [];
+  const bandLo: number[] = [];
+  const bandHi: number[] = [];
+  const underFloor: number[] = [];
+  const aboveCeiling: number[] = [];
+  const revenue: number[] = [];
+
+  // Build anchor points: each historical year, then "Now" as the final target
+  interface Anchor { label: string; monSpend: number; monRev: number; }
+  const anchors: Anchor[] = [];
+  for (const p of points) {
+    if (p.arr <= 0) continue;
+    anchors.push({
+      label: p.label || '',
+      monSpend: p.totalTechSpend / 12,
+      monRev: p.arr / 12,
+    });
+  }
+  // Add "Now" as final anchor so the last historical year interpolates
+  // smoothly into the forward projection's starting point
+  if (currentArr && currentArr > 0) {
+    anchors.push({
+      label: '',  // "Now" label is provided by the forward trajectory
+      monSpend: (currentTechSpend || 0) / 12,
+      monRev: currentArr / 12,
+    });
+  }
+
+  if (anchors.length < 2) {
+    // Only one anchor (no interpolation possible): hold flat
+    const a = anchors[0];
+    if (!a) return { labels, spend, bandLo, bandHi, underFloor, aboveCeiling, revenue };
+    for (let m = 0; m < 12; m++) {
+      labels.push(m === 0 ? a.label : '');
+      spend.push(Math.round(a.monSpend));
+      bandLo.push(Math.round(a.monRev * config.zones.lo / 100));
+      bandHi.push(Math.round(a.monRev * config.zones.hi / 100));
+      underFloor.push(Math.round(a.monRev * config.zones.underinvest / 100));
+      aboveCeiling.push(Math.round(a.monRev * config.zones.above / 100));
+      revenue.push(Math.round(a.monRev));
+    }
+    return { labels, spend, bandLo, bandHi, underFloor, aboveCeiling, revenue };
+  }
+
+  // Interpolate 12 months between each pair of consecutive anchors
+  // (last pair is final historical year → "Now", which is NOT emitted
+  //  as data points since "Now" is the forward trajectory's first point)
+  const segmentCount = anchors.length - 1; // e.g., 2 hist + Now = 3 anchors = 2 segments
+  for (let seg = 0; seg < segmentCount; seg++) {
+    const from = anchors[seg];
+    const to = anchors[seg + 1];
+    // Only emit 12 data points for historical segments (not the final "Now" anchor)
+    const isLastSegment = seg === segmentCount - 1;
+
+    for (let m = 0; m < 12; m++) {
+      const t = m / 11; // 0 at start, 1 at end
+      const monRev = from.monRev + (to.monRev - from.monRev) * t;
+      const monSpend = from.monSpend + (to.monSpend - from.monSpend) * t;
+
+      labels.push(m === 0 ? from.label : '');
+      spend.push(Math.round(monSpend));
+      bandLo.push(Math.round(monRev * config.zones.lo / 100));
+      bandHi.push(Math.round(monRev * config.zones.hi / 100));
+      underFloor.push(Math.round(monRev * config.zones.underinvest / 100));
+      aboveCeiling.push(Math.round(monRev * config.zones.above / 100));
+      revenue.push(Math.round(monRev));
+    }
+  }
+
+  return { labels, spend, bandLo, bandHi, underFloor, aboveCeiling, revenue };
+}
+
 // ─── URL State Serialization ──────────────────────────────────────────────────
 
 /** Compact single-letter key mapping for URL params */
@@ -436,7 +555,7 @@ const VALID_MODES: Mode[] = ['quick', 'deepdive'];
 const VALID_CAPEX: CapExView[] = ['cash', 'gaap'];
 
 /** Serialize TechParInputs into compact URL search params. Only non-default values are included. */
-export function serializeToParams(inputs: TechParInputs): URLSearchParams {
+export function serializeToParams(inputs: TechParInputs, historical?: HistoricalPoint[]): URLSearchParams {
   const params = new URLSearchParams();
   const set = (field: string, val: string) => {
     const key = REVERSE_KEYS[field];
@@ -458,6 +577,16 @@ export function serializeToParams(inputs: TechParInputs): URLSearchParams {
   if (inputs.prodCost) set('prodCost', String(inputs.prodCost));
   if (inputs.toolingCost) set('toolingCost', String(inputs.toolingCost));
 
+  // Historical data points (max 2)
+  if (historical) {
+    historical.slice(0, 2).forEach((pt, i) => {
+      const j = i + 1;
+      if (pt.label) params.set(`y${j}l`, pt.label);
+      if (pt.arr) params.set(`y${j}a`, String(pt.arr));
+      if (pt.totalTechSpend) params.set(`y${j}t`, String(pt.totalTechSpend));
+    });
+  }
+
   return params;
 }
 
@@ -477,6 +606,7 @@ export interface DeserializedState {
   engCost?: number;
   prodCost?: number;
   toolingCost?: number;
+  historical?: HistoricalPoint[];
 }
 
 /** Deserialize URL search params into partial state. Invalid values are silently ignored. */
@@ -513,13 +643,25 @@ export function deserializeFromParams(params: URLSearchParams): DeserializedStat
   state.prodCost = num('q');
   state.toolingCost = num('t');
 
+  // Historical data points
+  const hist: HistoricalPoint[] = [];
+  for (let j = 1; j <= 2; j++) {
+    const lbl = params.get(`y${j}l`);
+    const a = num(`y${j}a`);
+    const t = num(`y${j}t`);
+    if (lbl || a || t) {
+      hist.push({ label: lbl || `Y-${j}`, arr: a || 0, totalTechSpend: t || 0 });
+    }
+  }
+  if (hist.length) state.historical = hist;
+
   return state;
 }
 
 // ─── Plain-text Summary ───────────────────────────────────────────────────────
 
 /** Build a structured plain-text summary suitable for clipboard / email / Slack. */
-export function buildSummaryText(inputs: TechParInputs, result: TechParResult, url?: string): string {
+export function buildSummaryText(inputs: TechParInputs, result: TechParResult, url?: string, historical?: HistoricalPoint[]): string {
   const s = result.stageConfig;
   const lines: string[] = [];
 
@@ -537,6 +679,16 @@ export function buildSummaryText(inputs: TechParInputs, result: TechParResult, u
   for (const cat of result.categories) {
     const bench = cat.benchmarkHi > 0 ? ` (bench ${cat.benchmarkLo}\u2013${cat.benchmarkHi}%)` : '';
     lines.push(`${cat.label}: ${formatPercent(cat.pctArr)}${bench}`);
+  }
+
+  if (historical?.length) {
+    lines.push('');
+    lines.push('Historical:');
+    const histResults = computeHistorical(historical);
+    for (const h of histResults) {
+      lines.push(`  ${h.label}: ${formatPercent(h.techCostPct)} (${formatDollars(h.monthlySpend * 12)} on ${formatDollars(h.monthlyRevenue * 12)} ARR)`);
+    }
+    lines.push(`  Current: ${formatPercent(result.totalTechPct)} (${formatDollars(result.total)} on ${formatDollars(inputs.arr)} ARR)`);
   }
 
   if (result.gap.cumulative36 > 0 && result.zone !== 'healthy' && result.zone !== 'ahead' && result.zone !== 'underinvest') {
