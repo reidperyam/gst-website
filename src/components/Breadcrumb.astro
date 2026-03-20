@@ -42,7 +42,10 @@ const crumbs = segments.map((slug, index) => ({
 
 <style>
   .breadcrumb {
-    padding: var(--spacing-md) 0 0;
+    padding: var(--spacing-lg) 0 0;
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--text-sm);
+    color: var(--text-light-muted);
   }
 
   .breadcrumb__list {
@@ -78,6 +81,7 @@ const crumbs = segments.map((slug, index) => ({
   @media (max-width: 480px) {
     .breadcrumb {
       padding: var(--spacing-sm) 0 0;
+      margin-bottom: var(--spacing-md);
     }
   }
 </style>
