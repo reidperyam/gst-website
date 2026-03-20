@@ -114,8 +114,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                                 <input id="input-incidents" type="range" min="0" max="20" step="1"
                                     class="calc-slider" data-input="incidents" />
                                 <div class="slider-hints">
-                                    <span>None</span>
-                                    <span>20+</span>
+                                    <input type="number" class="hint-input" data-direct="incidents"
+                                        min="0" max="20" step="1" value="3" aria-label="Incidents per month" />
                                 </div>
                             </div>
 
@@ -127,8 +127,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                                 <input id="input-mttr" type="range" min="1" max="48" step="1"
                                     class="calc-slider" data-input="mttr" />
                                 <div class="slider-hints">
-                                    <span>1h</span>
-                                    <span>48h</span>
+                                    <input type="number" class="hint-input" data-direct="mttr"
+                                        min="1" max="48" step="1" value="4" aria-label="Average hours to resolve" />
                                 </div>
                             </div>
                         </div>
@@ -157,8 +157,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                                 <input id="input-arr" type="range" min="0" max="100" step="1"
                                     class="calc-slider" data-input="arr" />
                                 <div class="slider-hints">
-                                    <span data-hint="arr-min">$100K</span>
-                                    <span data-hint="arr-max">$1B</span>
+                                    <input type="text" class="hint-input hint-input--currency" data-direct="arr"
+                                        value="10000000" aria-label="Annual recurring revenue in dollars" />
                                 </div>
                             </div>
 
@@ -170,8 +170,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                                 <input id="input-budget" type="range" min="0" max="100" step="1"
                                     class="calc-slider" data-input="budget" />
                                 <div class="slider-hints">
-                                    <span data-hint="budget-min">$10K</span>
-                                    <span data-hint="budget-max">$50M</span>
+                                    <input type="text" class="hint-input hint-input--currency" data-direct="budget"
+                                        value="500000" aria-label="Remediation budget in dollars" />
                                 </div>
                             </div>
                         </div>
@@ -388,6 +388,33 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
         font-size: var(--text-xs);
         color: var(--text-light-faded);
         opacity: 0.7;
+    }
+
+    .hint-input {
+        width: 100%;
+        text-align: center;
+        border: 1px solid var(--border-light);
+        border-radius: 4px;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-family: monospace;
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light-secondary);
+        background: transparent;
+        transition: border-color var(--transition-fast), color var(--transition-fast);
+        -moz-appearance: textfield;
+    }
+
+    .hint-input::-webkit-inner-spin-button,
+    .hint-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .hint-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
     }
 
     .slider-benchmark {
@@ -954,6 +981,8 @@ import {
   posToSalary,
   posTobudget,
   posToArr,
+  arrToPos,
+  budgetToPos,
   calculate,
   fmtPayback,
   encodeState,
@@ -1137,11 +1166,27 @@ function render(): void {
   const budgetMin = hint('budget-min'); if (budgetMin) budgetMin.textContent = fmtShortC(10000);
   const budgetMax = hint('budget-max'); if (budgetMax) budgetMax.textContent = fmtShortC(50000000);
 
-  // ── Persist state to URL ──
+  // ── Sync direct inputs and persist state to URL ──
+  syncDirectInputs();
   pushUrlState(state);
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
+
+function getDirect(key: string): HTMLInputElement | null {
+  return document.querySelector(`[data-direct="${key}"]`) as HTMLInputElement | null;
+}
+
+function syncDirectInputs(): void {
+  const inc = getDirect('incidents');
+  if (inc) inc.value = String(state.incidents);
+  const mttr = getDirect('mttr');
+  if (mttr) mttr.value = String(state.mttr);
+  const arr = getDirect('arr');
+  if (arr) arr.value = fmtShortC(posToArr(state.arrPos));
+  const budget = getDirect('budget');
+  if (budget) budget.value = fmtShortC(posTobudget(state.budgetPos));
+}
 
 function initSliders(): void {
   getInput('team-size').value = String(state.teamSizePos);
@@ -1151,6 +1196,7 @@ function initSliders(): void {
   getInput('mttr').value      = String(state.mttr);
   getInput('budget').value    = String(state.budgetPos);
   getInput('arr').value       = String(state.arrPos);
+  syncDirectInputs();
 }
 
 // ─── Event wiring ─────────────────────────────────────────────────────────────
@@ -1171,6 +1217,49 @@ document.addEventListener('DOMContentLoaded', () => {
   getInput('mttr').addEventListener('input',      e => { state.mttr        = Number((e.target as HTMLInputElement).value); render(); });
   getInput('budget').addEventListener('input',    e => { state.budgetPos   = Number((e.target as HTMLInputElement).value); render(); });
   getInput('arr').addEventListener('input',       e => { state.arrPos      = Number((e.target as HTMLInputElement).value); render(); });
+
+  // Direct input handlers — sync typed values back to sliders and state
+  const incInput = getDirect('incidents');
+  if (incInput) {
+    incInput.addEventListener('change', () => {
+      const v = Math.max(0, Math.min(20, Number(incInput.value) || 0));
+      state.incidents = v;
+      getInput('incidents').value = String(v);
+      render();
+    });
+  }
+
+  const mttrInput = getDirect('mttr');
+  if (mttrInput) {
+    mttrInput.addEventListener('change', () => {
+      const v = Math.max(1, Math.min(48, Number(mttrInput.value) || 1));
+      state.mttr = v;
+      getInput('mttr').value = String(v);
+      render();
+    });
+  }
+
+  const arrInput = getDirect('arr');
+  if (arrInput) {
+    arrInput.addEventListener('change', () => {
+      const raw = Number(arrInput.value.replace(/[^0-9.]/g, '')) || 0;
+      const clamped = Math.max(100000, Math.min(1000000000, raw));
+      state.arrPos = arrToPos(clamped);
+      getInput('arr').value = String(state.arrPos);
+      render();
+    });
+  }
+
+  const budgetInput = getDirect('budget');
+  if (budgetInput) {
+    budgetInput.addEventListener('change', () => {
+      const raw = Number(budgetInput.value.replace(/[^0-9.]/g, '')) || 0;
+      const clamped = Math.max(10000, Math.min(50000000, raw));
+      state.budgetPos = budgetToPos(clamped);
+      getInput('budget').value = String(state.budgetPos);
+      render();
+    });
+  }
 
   // Slider analytics (fire once on release, not every drag tick)
   const sliderIds = ['team-size', 'salary', 'maint-pct', 'incidents', 'mttr', 'budget', 'arr'] as const;
