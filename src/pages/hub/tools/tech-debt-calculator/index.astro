@@ -18,6 +18,17 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
     ogImage="/og-image.png"
     ogUrl="https://globalstrategic.tech/hub/tools/tech-debt-calculator"
 >
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Technical Debt Cost Calculator",
+        "description": "Quantify the annual carrying cost of technical debt for PE diligence and portfolio executive conversations",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "GST" }
+    })} />
+
     <section class="tdc-section">
         <div class="container">
 
