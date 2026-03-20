@@ -66,6 +66,16 @@ trackPageView('techpar', 'TechPar | GST');
 
                 <!-- ── TAB: PROFILE ──────────────────────────────────── -->
                 <div class="tp-panel tp-panel--active" data-panel="profile">
+                    <details class="tp-onboarding" data-onboarding open>
+                        <summary class="tp-onboarding__trigger label-small">How to use TechPar</summary>
+                        <div class="tp-onboarding__body text-tiny">
+                            <p><strong>TechPar</strong> benchmarks your total technology cost against stage-adjusted ranges derived from KeyBanc, OpenView, Bessemer, and GST engagement data.</p>
+                            <p><strong>Who it's for:</strong> PE deal teams, portfolio company CTOs and CFOs, and board-level reporting.</p>
+                            <p><strong>What you'll need:</strong> Annual recurring revenue (ARR) and monthly infrastructure spend at minimum. Additional cost categories (personnel, R&D, CapEx) unlock deeper analysis.</p>
+                            <p><strong>How it works:</strong> Select your company stage, enter revenue and costs, and TechPar computes a blended technology cost ratio with zone classification, gap analysis, and 36-month trajectory projection.</p>
+                        </div>
+                    </details>
+
                     <div class="tp-panel__header">
                         <span class="tp-step label-small">Step 1 of 4</span>
                         <h2 class="tp-panel__title heading-md">Company profile</h2>
@@ -97,6 +107,18 @@ trackPageView('techpar', 'TechPar | GST');
                             </button>
                         </div>
                         <div class="tp-hint text-tiny">Sets benchmark ranges and zone thresholds for your growth stage.</div>
+                    </div>
+
+                    <div class="tp-section">
+                        <span class="tp-sec-label label">Industry</span>
+                        <div class="tp-seg tp-seg--wide" data-seg="industry">
+                            <button class="tp-seg__btn tp-seg__btn--active" data-industry="saas" type="button">SaaS</button>
+                            <button class="tp-seg__btn" data-industry="fintech" type="button">Fintech</button>
+                            <button class="tp-seg__btn" data-industry="marketplace" type="button">Marketplace</button>
+                            <button class="tp-seg__btn" data-industry="infra_hw" type="button">Infra / HW</button>
+                            <button class="tp-seg__btn" data-industry="other" type="button">Other</button>
+                        </div>
+                        <div class="tp-hint text-tiny">Adds industry-specific context to the analysis. Benchmark ranges remain the same across industries.</div>
                     </div>
 
                     <div class="tp-section">
@@ -164,6 +186,15 @@ trackPageView('techpar', 'TechPar | GST');
                         <div class="tp-hint text-tiny">Revenue multiple at exit. Used in exit value calculations.</div>
                     </div>
 
+                    <details class="tp-historical" data-historical>
+                        <summary class="tp-historical__trigger label-small">Historical data (optional)</summary>
+                        <div class="tp-historical__body">
+                            <p class="tp-hint text-tiny">Add 1-2 prior fiscal years to show actual trajectory on the chart. Enter the annual ARR and total technology spend for each year.</p>
+                            <div data-hist-rows></div>
+                            <button class="tp-hist-add" data-hist-add type="button">+ Add year</button>
+                        </div>
+                    </details>
+
                     <div class="tp-nav-row">
                         <button class="tp-btn-next" data-action="go-costs" type="button">Enter technology costs &rarr;</button>
                     </div>
@@ -197,20 +228,31 @@ trackPageView('techpar', 'TechPar | GST');
                     <div class="tp-section">
                         <span class="tp-sec-label label tp-sec-label--cat"><span class="tp-cat-dot tp-cat-dot--infra"></span>Infrastructure and hosting</span>
                         <div class="tp-field">
-                            <label class="tp-field__label text-small" for="tp-infra">Monthly cloud spend <span class="tp-field__req">(required)</span></label>
-                            <div class="tp-arr-quick">
+                            <label class="tp-field__label text-small" for="tp-infra"><span data-infra-label>Monthly cloud spend</span> <span class="tp-field__req">(required)</span></label>
+                            <div class="tp-seg tp-seg--sm" data-seg="infra-period">
+                                <button class="tp-seg__btn tp-seg__btn--active" data-infra-period="monthly" type="button">Monthly</button>
+                                <button class="tp-seg__btn" data-infra-period="annual" type="button">Annual</button>
+                            </div>
+                            <div class="tp-arr-quick" data-infra-chips-monthly>
                                 <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="5000" type="button">$5K</button>
                                 <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="15000" type="button">$15K</button>
                                 <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="50000" type="button">$50K</button>
                                 <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="150000" type="button">$150K</button>
                                 <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="500000" type="button">$500K</button>
                             </div>
+                            <div class="tp-arr-quick" data-infra-chips-annual style="display:none">
+                                <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="50000" type="button">$50K</button>
+                                <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="200000" type="button">$200K</button>
+                                <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="500000" type="button">$500K</button>
+                                <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="2000000" type="button">$2M</button>
+                                <button class="tp-arr-chip" data-preset-for="infra" data-preset-val="5000000" type="button">$5M</button>
+                            </div>
                             <div class="tp-input-wrap">
                                 <span class="tp-input-pre">$</span>
                                 <input type="number" id="tp-infra" data-input="infra" min="0" step="1000" placeholder="0" />
-                                <span class="tp-input-suf">/ mo</span>
+                                <span class="tp-input-suf" data-infra-suf>/ mo</span>
                             </div>
-                            <div class="tp-hint text-tiny">Cloud, data center, CDN, observability, managed services. Auto-converted to annual.</div>
+                            <div class="tp-hint text-tiny" data-infra-hint>Cloud, data center, CDN, observability, managed services. Auto-converted to annual.</div>
                             <div class="tp-infra-annual text-tiny" data-infra-annual style="display:none"></div>
                             <div class="tp-hint tp-hint--warn text-tiny" data-infra-warn style="display:none"></div>
                         </div>
@@ -356,7 +398,10 @@ trackPageView('techpar', 'TechPar | GST');
 
                     <div class="tp-nav-row">
                         <button class="tp-btn-back" data-action="go-profile" type="button">&larr; Profile</button>
-                        <button class="tp-btn-next" data-action="go-analysis" data-btn-analysis type="button" disabled>View analysis &rarr;</button>
+                        <div class="tp-nav-row__next">
+                            <button class="tp-btn-next" data-action="go-analysis" data-btn-analysis type="button" disabled>View analysis &rarr;</button>
+                            <span class="tp-nav-row__hint text-tiny" data-analysis-hint></span>
+                        </div>
                     </div>
                 </div>
 
@@ -415,12 +460,21 @@ trackPageView('techpar', 'TechPar | GST');
                             <div class="tp-signal__zone label-small" data-sig-zone></div>
                             <div class="tp-signal__head heading-sm" data-sig-head></div>
                             <div class="tp-signal__body text-base" data-sig-body></div>
-                            <div class="tp-signal__div"></div>
+                            <div class="tp-signal__div" data-sig-div></div>
                             <div data-sig-mets></div>
+                        </div>
+
+                        <!-- Recommendations -->
+                        <div class="tp-recs" data-recommendations style="display:none">
+                            <div class="tp-recs__title label-small">Recommended actions</div>
+                            <ol class="tp-recs__list" data-recs-list></ol>
                         </div>
 
                         <!-- KPI grid -->
                         <div class="tp-kpi-grid" data-kpi-grid></div>
+
+                        <!-- Deep Dive prompt -->
+                        <div class="tp-deepdive-prompt" data-deepdive-prompt style="display:none"></div>
 
                         <!-- Scenario comparison -->
                         <div class="tp-scenario-compare" data-scenario-compare style="display:none">
@@ -447,8 +501,11 @@ trackPageView('techpar', 'TechPar | GST');
                                 </tbody>
                             </table>
                             <div class="tp-bench-disc text-tiny">Ranges informed by KeyBanc SaaS Survey (2024), OpenView Benchmarks (2024), Bessemer State of the Cloud (2024), and GST engagement experience (2023&ndash;2025). Benchmarks are reviewed annually. Individual results vary based on business model and organizational structure.</div>
-                            <div class="tp-bench-disc tp-bench-disc--context text-tiny">These benchmarks are derived primarily from SaaS company data. Companies operating marketplace, fintech, infrastructure, or hardware-intensive models may observe materially different cost structures. Apply professional judgment when benchmarking outside a pure-SaaS context.</div>
+                            <div class="tp-bench-disc tp-bench-disc--context text-tiny" data-industry-disc>These benchmarks are derived primarily from SaaS company data. Companies operating marketplace, fintech, infrastructure, or hardware-intensive models may observe materially different cost structures. Apply professional judgment when benchmarking outside a pure-SaaS context.</div>
                         </div>
+
+                        <!-- Industry context note -->
+                        <div class="tp-industry-note" data-industry-note style="display:none"></div>
 
                         <!-- Methodology -->
                         <details class="tp-methodology" data-methodology>
@@ -568,7 +625,7 @@ trackPageView('techpar', 'TechPar | GST');
         color: var(--text-light-muted);
         font-family: var(--font-family);
         font-size: var(--text-xs);
-        letter-spacing: 0.08em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
         cursor: pointer;
         transition: color var(--transition-fast);
@@ -579,6 +636,11 @@ trackPageView('techpar', 'TechPar | GST');
 
     .tp-tab-reset:hover {
         color: var(--text-light-primary);
+    }
+
+    .tp-tab-reset--confirming {
+        color: var(--techpar-zone-elevated);
+        background: color-mix(in srgb, var(--techpar-zone-elevated) 12%, transparent);
     }
 
     .tp-tab {
@@ -1037,6 +1099,19 @@ trackPageView('techpar', 'TechPar | GST');
         color: var(--color-primary);
     }
 
+    .tp-seg--sm {
+        max-width: 180px;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .tp-seg--sm .tp-seg__btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .tp-seg--wide {
+        max-width: 440px;
+    }
+
     .tp-seg__btn:hover:not(.tp-seg__btn--active) {
         color: var(--text-light-secondary);
     }
@@ -1109,6 +1184,17 @@ trackPageView('techpar', 'TechPar | GST');
         align-items: center;
         gap: var(--spacing-sm);
         margin-top: var(--spacing-xl);
+    }
+
+    .tp-nav-row__next {
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .tp-nav-row__hint {
+        display: block;
+        margin-top: 4px;
+        color: var(--text-light-muted);
     }
 
     .tp-nav-row__actions {
@@ -1556,6 +1642,253 @@ trackPageView('techpar', 'TechPar | GST');
         margin-top: var(--spacing-xs);
         padding-top: var(--spacing-xs);
         border-top: 1px dashed var(--border-light);
+    }
+
+    /* ── Historical data section ────────────────────────────── */
+    .tp-historical {
+        margin-bottom: var(--spacing-md);
+        border: 1px solid var(--border-light);
+    }
+
+    .tp-historical__trigger {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        cursor: pointer;
+        color: var(--text-light-muted);
+        transition: color var(--transition-fast);
+        list-style: none;
+    }
+
+    .tp-historical__trigger::-webkit-details-marker {
+        display: none;
+    }
+
+    .tp-historical__trigger::before {
+        content: '\25B6';
+        font-size: 0.6em;
+        transition: transform var(--transition-fast);
+    }
+
+    .tp-historical[open] > .tp-historical__trigger::before {
+        transform: rotate(90deg);
+    }
+
+    .tp-historical__trigger:hover {
+        color: var(--text-light-secondary);
+    }
+
+    .tp-historical__body {
+        padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+        border-top: 1px solid var(--border-light);
+    }
+
+    .tp-historical__body :global(.tp-hist-row) {
+        display: flex;
+        align-items: flex-end;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .tp-historical__body :global(.tp-hist-row:last-child) {
+        border-bottom: none;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .tp-historical__body :global(.tp-hist-field) {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .tp-historical__body :global(.tp-hist-field--label) {
+        flex: 0 0 80px;
+    }
+
+    .tp-historical__body :global(.tp-hist-field__lbl) {
+        font-size: var(--text-xs);
+        color: var(--text-light-muted);
+        letter-spacing: 0.02em;
+    }
+
+    .tp-historical__body :global(.tp-hist-field input) {
+        width: 100%;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-family: var(--font-family);
+        font-size: var(--text-xs);
+        background: var(--bg-light);
+        border: 1px solid var(--border-light);
+        color: var(--text-light-primary);
+    }
+
+    .tp-historical__body :global(.tp-input-wrap) {
+        width: 100%;
+    }
+
+    .tp-historical__body :global(.tp-hist-remove) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        margin-bottom: 1px;
+        background: none;
+        border: 1px solid var(--border-light);
+        color: var(--text-light-muted);
+        cursor: pointer;
+        font-size: var(--text-sm);
+        flex-shrink: 0;
+    }
+
+    .tp-historical__body :global(.tp-hist-remove:hover) {
+        color: var(--techpar-zone-elevated);
+        border-color: var(--techpar-zone-elevated);
+    }
+
+    .tp-hist-add {
+        display: inline-flex;
+        align-items: center;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        background: none;
+        border: 1px dashed var(--border-light);
+        color: var(--text-light-muted);
+        font-family: var(--font-family);
+        font-size: var(--text-xs);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .tp-hist-add:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .tp-hist-add:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* ── Deep Dive prompt ─────────────────────────────────────── */
+    .tp-deepdive-prompt {
+        padding: var(--spacing-sm) var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+        border-left: 3px solid var(--techpar-zone-elevated);
+        background: var(--bg-light-alt);
+        color: var(--text-light-secondary);
+        font-size: var(--text-xs);
+        line-height: 1.7;
+    }
+
+    .tp-deepdive-prompt :global(.tp-deepdive-prompt__btn) {
+        display: inline;
+        padding: 0;
+        background: none;
+        border: none;
+        color: var(--color-primary);
+        font-family: var(--font-family);
+        font-size: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .tp-deepdive-prompt :global(.tp-deepdive-prompt__btn:hover) {
+        color: var(--text-light-primary);
+    }
+
+    /* ── Recommendations ─────────────────────────────────────── */
+    .tp-recs {
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md);
+        border: 1px solid var(--border-light);
+        background: var(--bg-light-alt);
+    }
+
+    .tp-recs__title {
+        color: var(--text-light-muted);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .tp-recs__list {
+        margin: 0;
+        padding-left: var(--spacing-lg);
+        color: var(--text-light-secondary);
+        font-size: var(--text-sm);
+        line-height: 1.7;
+    }
+
+    .tp-recs__list :global(li) {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .tp-recs__list :global(li:last-child) {
+        margin-bottom: 0;
+    }
+
+    /* ── Industry note ───────────────────────────────────────── */
+    .tp-industry-note {
+        padding: var(--spacing-sm) var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+        border-left: 3px solid var(--color-primary);
+        background: var(--bg-light-alt);
+        color: var(--text-light-secondary);
+        font-size: var(--text-xs);
+        line-height: 1.7;
+    }
+
+    /* ── Onboarding section ──────────────────────────────────── */
+    .tp-onboarding {
+        margin-bottom: var(--spacing-md);
+        border: 1px solid var(--border-light);
+    }
+
+    .tp-onboarding__trigger {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        cursor: pointer;
+        color: var(--text-light-muted);
+        transition: color var(--transition-fast);
+        list-style: none;
+    }
+
+    .tp-onboarding__trigger::-webkit-details-marker {
+        display: none;
+    }
+
+    .tp-onboarding__trigger::before {
+        content: '\25B6';
+        font-size: 0.6em;
+        transition: transform var(--transition-fast);
+    }
+
+    .tp-onboarding[open] > .tp-onboarding__trigger::before {
+        transform: rotate(90deg);
+    }
+
+    .tp-onboarding__trigger:hover {
+        color: var(--text-light-secondary);
+    }
+
+    .tp-onboarding__body {
+        padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--border-light);
+    }
+
+    .tp-onboarding__body p {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .tp-onboarding__body p:last-child {
+        margin-bottom: 0;
     }
 
     /* ── Methodology section ─────────────────────────────────── */
