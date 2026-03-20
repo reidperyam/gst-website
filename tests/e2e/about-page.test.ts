@@ -220,13 +220,14 @@ test.describe('About Page - Founder Section', () => {
       const initialIsDark = await page.evaluate(() => document.documentElement.classList.contains('dark-theme'));
       if (!initialIsDark) {
         await clickThemeToggle(page);
-        // Wait for dark-theme class to be applied (not an arbitrary timeout)
-        await page.waitForFunction(() =>
-          document.documentElement.classList.contains('dark-theme')
-        );
       }
 
-      // Wait for dark signature to become visible after CSS switch
+      // Wait for dark signature to actually become visible (CSS repaint, not just class)
+      await page.waitForFunction(() => {
+        const el = document.querySelector('.founder-signature-dark');
+        return el && window.getComputedStyle(el).display !== 'none';
+      }, { timeout: 5000 });
+
       const darkSig = page.locator('.founder-signature-dark');
       await expect(darkSig).toBeVisible({ timeout: 5000 });
 
@@ -235,45 +236,49 @@ test.describe('About Page - Founder Section', () => {
     });
 
     test('should maintain signature aspect ratio across themes', async ({ page }) => {
-      // Get signature containers
-      const sigContainers = page.locator('.founder-signature');
-      const count = await sigContainers.count();
+      // Determine which signature is currently visible via computed style
+      const getVisibleSigClass = () => page.evaluate(() => {
+        const light = document.querySelector('.founder-signature-light');
+        const dark = document.querySelector('.founder-signature-dark');
+        if (light && window.getComputedStyle(light).display !== 'none') return '.founder-signature-light';
+        if (dark && window.getComputedStyle(dark).display !== 'none') return '.founder-signature-dark';
+        return null;
+      });
 
-      if (count > 0) {
-        // Get initial visible signature and its dimensions
-        const visibleSig = page.locator('.founder-signature-light:visible, .founder-signature-dark:visible').first();
-        await expect(visibleSig).toBeVisible();
+      const initialClass = await getVisibleSigClass();
+      if (!initialClass) return; // no signature visible, skip
 
-        const initialBox = await visibleSig.boundingBox();
-        expect(initialBox).toBeTruthy();
+      const visibleSig = page.locator(initialClass);
+      await expect(visibleSig).toBeVisible({ timeout: 5000 });
 
-        if (initialBox) {
-          const initialWidth = initialBox.width;
-          const initialHeight = initialBox.height;
-          const initialRatio = initialWidth / initialHeight;
+      const initialBox = await visibleSig.boundingBox();
+      expect(initialBox).toBeTruthy();
 
-          // Toggle theme and wait for CSS to switch
-          const wasDark = await page.evaluate(() => document.documentElement.classList.contains('dark-theme'));
-          await clickThemeToggle(page);
-          await page.waitForFunction((prevDark) =>
-            document.documentElement.classList.contains('dark-theme') !== prevDark
-          , wasDark);
+      if (initialBox) {
+        const initialRatio = initialBox.width / initialBox.height;
 
-          // Get new visible signature and its dimensions
-          const newVisibleSig = page.locator('.founder-signature-light:visible, .founder-signature-dark:visible').first();
-          await expect(newVisibleSig).toBeVisible({ timeout: 5000 });
+        // Toggle theme and wait for the OTHER signature to become visible
+        await clickThemeToggle(page);
+        const expectedClass = initialClass === '.founder-signature-light'
+          ? '.founder-signature-dark'
+          : '.founder-signature-light';
 
-          const newBox = await newVisibleSig.boundingBox();
-          expect(newBox).toBeTruthy();
+        await page.waitForFunction((cls) => {
+          const el = document.querySelector(cls);
+          return el && window.getComputedStyle(el).display !== 'none';
+        }, expectedClass, { timeout: 5000 });
 
-          if (newBox) {
-            const newWidth = newBox.width;
-            const newHeight = newBox.height;
-            const newRatio = newWidth / newHeight;
+        const newVisibleSig = page.locator(expectedClass);
+        await expect(newVisibleSig).toBeVisible({ timeout: 5000 });
 
-            // Aspect ratio should be maintained (allow 10% tolerance)
-            expect(Math.abs(newRatio - initialRatio)).toBeLessThan(initialRatio * 0.1);
-          }
+        const newBox = await newVisibleSig.boundingBox();
+        expect(newBox).toBeTruthy();
+
+        if (newBox) {
+          const newRatio = newBox.width / newBox.height;
+
+          // Aspect ratio should be maintained (allow 10% tolerance)
+          expect(Math.abs(newRatio - initialRatio)).toBeLessThan(initialRatio * 0.1);
         }
       }
     });
