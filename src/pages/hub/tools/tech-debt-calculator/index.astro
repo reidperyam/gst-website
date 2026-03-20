@@ -52,8 +52,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                             <input id="input-team-size" type="range" min="0" max="100" step="1"
                                 class="calc-slider" data-input="team-size" />
                             <div class="slider-hints">
-                                <span>1</span>
-                                <span>500</span>
+                                <input type="number" class="hint-input" data-direct="team-size"
+                                    min="1" max="500" step="1" value="8" aria-label="Number of engineers" />
                             </div>
                         </div>
 
@@ -65,8 +65,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                             <input id="input-salary" type="range" min="0" max="100" step="1"
                                 class="calc-slider" data-input="salary" />
                             <div class="slider-hints">
-                                <span data-hint="salary-min">$60K</span>
-                                <span data-hint="salary-max">$1M</span>
+                                <input type="text" class="hint-input hint-input--currency" data-direct="salary"
+                                    value="150000" aria-label="Average all-in salary in dollars" />
                             </div>
                         </div>
 
@@ -78,8 +78,8 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                             <input id="input-maint-pct" type="range" min="5" max="100" step="1"
                                 class="calc-slider" data-input="maint-pct" />
                             <div class="slider-hints">
-                                <span>5%</span>
-                                <span>100%</span>
+                                <input type="number" class="hint-input" data-direct="maint-pct"
+                                    min="5" max="100" step="1" value="40" aria-label="Maintenance burden percentage" />
                             </div>
                             <div class="slider-benchmark">&lt; 10% well-managed &nbsp;·&nbsp; 15%+ yellow flag &nbsp;·&nbsp; 25%+ red flag</div>
                         </div>
@@ -383,7 +383,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
 
     .slider-hints {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         margin-top: 2px;
         font-size: var(--text-xs);
         color: var(--text-light-faded);
@@ -391,7 +391,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
     }
 
     .hint-input {
-        width: 100%;
+        width: 33%;
         text-align: center;
         border: 1px solid var(--border-light);
         border-radius: 4px;
@@ -981,6 +981,8 @@ import {
   posToSalary,
   posTobudget,
   posToArr,
+  teamSizeToPos,
+  salaryToPos,
   arrToPos,
   budgetToPos,
   calculate,
@@ -1178,6 +1180,12 @@ function getDirect(key: string): HTMLInputElement | null {
 }
 
 function syncDirectInputs(): void {
+  const ts = getDirect('team-size');
+  if (ts) ts.value = String(posToTeamSize(state.teamSizePos));
+  const sal = getDirect('salary');
+  if (sal) sal.value = fmtShortC(posToSalary(state.salaryPos));
+  const mp = getDirect('maint-pct');
+  if (mp) mp.value = String(state.maintPct);
   const inc = getDirect('incidents');
   if (inc) inc.value = String(state.incidents);
   const mttr = getDirect('mttr');
@@ -1219,6 +1227,37 @@ document.addEventListener('DOMContentLoaded', () => {
   getInput('arr').addEventListener('input',       e => { state.arrPos      = Number((e.target as HTMLInputElement).value); render(); });
 
   // Direct input handlers — sync typed values back to sliders and state
+  const tsInput = getDirect('team-size');
+  if (tsInput) {
+    tsInput.addEventListener('change', () => {
+      const v = Math.max(1, Math.min(500, Number(tsInput.value) || 1));
+      state.teamSizePos = teamSizeToPos(v);
+      getInput('team-size').value = String(state.teamSizePos);
+      render();
+    });
+  }
+
+  const salInput = getDirect('salary');
+  if (salInput) {
+    salInput.addEventListener('change', () => {
+      const raw = Number(salInput.value.replace(/[^0-9.]/g, '')) || 0;
+      const clamped = Math.max(60000, Math.min(1000000, raw));
+      state.salaryPos = salaryToPos(clamped);
+      getInput('salary').value = String(state.salaryPos);
+      render();
+    });
+  }
+
+  const mpInput = getDirect('maint-pct');
+  if (mpInput) {
+    mpInput.addEventListener('change', () => {
+      const v = Math.max(5, Math.min(100, Number(mpInput.value) || 5));
+      state.maintPct = v;
+      getInput('maint-pct').value = String(v);
+      render();
+    });
+  }
+
   const incInput = getDirect('incidents');
   if (incInput) {
     incInput.addEventListener('change', () => {
