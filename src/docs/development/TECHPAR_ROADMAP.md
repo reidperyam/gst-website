@@ -295,6 +295,43 @@ The 2,187-line single file works but creates maintenance friction as features ar
 
 ---
 
+## March 2026 Audit Enhancements (Completed)
+
+The following features were implemented based on a comprehensive audit of TechPar's capabilities, EEAT communication, and user experience:
+
+| # | Enhancement | Files Added/Changed | Status |
+|---|---|---|---|
+| 20 | **Reset confirmation dialog** — two-click inline confirmation prevents accidental data loss | `techpar-ui.ts`, `index.astro` | Done |
+| 21 | **Onboarding microcopy** — collapsible "How to use TechPar" section, open on first visit | `techpar-ui.ts`, `index.astro` | Done |
+| 22 | **Infrastructure monthly/annual toggle** — users can enter infra spend in either period; annotation and chips adapt | `techpar-ui.ts`, `index.astro` | Done |
+| 23 | **Industry selector** — SaaS, Fintech, Marketplace, Infra/HW, Other with contextual notes and adjusted disclaimers | `techpar-ui.ts`, `index.astro`, `industry-notes.ts` (new) | Done |
+| 24 | **Actionable recommendations** — 2-3 specific actions per stage/zone combination (30 combos) below signal card | `techpar-ui.ts`, `index.astro`, `recommendations.ts` (new) | Done |
+| 25 | **Deep Dive prompt** — contextual CTA when Quick mode shows elevated/critical R&D OpEx | `techpar-ui.ts`, `index.astro` | Done |
+| 26 | **Historical actuals** — 1-2 prior year data points plotted on trajectory chart for convergence/divergence analysis | `techpar-engine.ts`, `techpar-ui.ts`, `index.astro` | Done |
+
+### New Data Files
+
+- `src/data/techpar/industry-notes.ts` — 5 industry types with contextual notes and disclaimers
+- `src/data/techpar/recommendations.ts` — 30 stage×zone combinations with 2-3 actionable recommendations each
+
+### New Engine Functions
+
+- `computeHistorical(points)` — computes tech cost % and monthly equivalents for prior-year data
+- `buildHistoricalTrajectory(points, config)` — builds chart-ready data for historical segment
+- `serializeToParams()` and `deserializeFromParams()` extended for historical data (`y1l`, `y1a`, `y1t`, `y2l`, `y2a`, `y2t`)
+- `buildSummaryText()` extended to include historical data in plain-text export
+
+### New URL Parameters
+
+| Key | Purpose | Default |
+|---|---|---|
+| `b` | Infrastructure billing period (`monthly` or `annual`) | `monthly` |
+| `n` | Industry (`saas`, `fintech`, `marketplace`, `infra_hw`, `other`) | `saas` |
+| `y1l`, `y1a`, `y1t` | Historical year 1: label, ARR, total tech spend | (none) |
+| `y2l`, `y2a`, `y2t` | Historical year 2: label, ARR, total tech spend | (none) |
+
+---
+
 ## Implementation Notes
 
 - **P1 URL encoding** should use compact single-letter keys to keep URLs under 2,000 characters (safe for all browsers and messaging platforms). Example: `?s=pe&a=25000000&ih=50000&ip=500000&ro=3000000&rc=1000000&g=20&em=12&m=q&cv=cash`
