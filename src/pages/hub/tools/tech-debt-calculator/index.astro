@@ -81,7 +81,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                                 <span>5%</span>
                                 <span>100%</span>
                             </div>
-                            <div class="slider-benchmark">20–30% healthy &nbsp;·&nbsp; 40%+ material debt</div>
+                            <div class="slider-benchmark">&lt; 10% well-managed &nbsp;·&nbsp; 15%+ yellow flag &nbsp;·&nbsp; 25%+ red flag</div>
                         </div>
                     </div>
                 </div>
@@ -258,7 +258,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                         <p>Deployment frequency serves as a proxy for delivery friction. The multiplier (0.8&times;&ndash;2.4&times;) is applied to direct labor cost to reflect the productivity overhead associated with slower release cycles. Tiers follow the DORA State of DevOps classification: Elite (multiple/day&ndash;daily), High (weekly&ndash;biweekly), Medium (3-week&ndash;monthly), Low (quarterly&ndash;annually). Source: Forsgren, N., Humble, J., &amp; Kim, G., <em>Accelerate</em> (2018); DORA State of DevOps Reports (2019&ndash;2023).</p>
 
                         <h4 class="tdc-methodology__heading">Maintenance burden benchmarks</h4>
-                        <p>The 20&ndash;30% &ldquo;healthy&rdquo; range and 40%+ &ldquo;material debt&rdquo; threshold are informed by industry surveys of engineering time allocation and GST&rsquo;s direct experience across 100+ technology diligence engagements. Teams below 20% are well-managed; 35&ndash;50% indicates compounding velocity loss; above 50% suggests debt is the primary drag on throughput.</p>
+                        <p>Thresholds are calibrated for PE buy-side diligence where growth velocity is the priority. Below 10% is well-managed with capacity directed forward. 10&ndash;15% is acceptable but belongs on a 100-day remediation plan. 15&ndash;25% is a yellow flag that warrants investigation into SDLC maturity, architecture, test coverage, and deployment practices. 25&ndash;40% is a red flag signaling strategic liability: expect architectural problems, manual processes, and talent risk. Above 40% represents deal risk where the platform may require restructuring post-close. These thresholds are informed by GST&rsquo;s direct experience across 100+ technology diligence engagements.</p>
 
                         <h4 class="tdc-methodology__heading">Payback analysis</h4>
                         <p>The break-even period divides the remediation budget by monthly savings (equal to total monthly debt cost). This assumes full resolution of identified debt, which is a simplification. Real remediation programs typically achieve 50&ndash;80% efficiency. The estimate should be treated as a lower bound.</p>
@@ -1028,17 +1028,19 @@ const state: CalcState = { ...DEFAULT_STATE };
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function burdenLabel(pct: number): { text: string; color: string } {
-  if (pct < 20) return { text: 'Healthy (< 20%)',   color: 'var(--color-primary)' };
-  if (pct < 35) return { text: 'Moderate (20–35%)', color: 'var(--color-primary)' };
-  if (pct < 50) return { text: 'Material (35–50%)', color: 'var(--color-secondary)' };
-  return              { text: 'Critical (> 50%)',   color: 'var(--color-secondary)' };
+  if (pct < 10) return { text: 'Well-managed (< 10%)',     color: 'var(--color-primary)' };
+  if (pct < 15) return { text: 'Acceptable (10–15%)',      color: 'var(--color-primary)' };
+  if (pct < 25) return { text: 'Yellow flag (15–25%)',     color: 'var(--color-secondary)' };
+  if (pct < 40) return { text: 'Red flag (25–40%)',        color: '#d93636' };
+  return              { text: 'Deal risk (40%+)',           color: '#b82e2e' };
 }
 
 function contextNote(pct: number, formattedAnnualCost: string): string {
-  if (pct < 20) return 'Debt is well-managed. Focus on preventing accumulation as the team scales.';
-  if (pct < 35) return 'Debt is growing. Allocate 1–2 sprints per quarter to targeted paydown before it compounds.';
-  if (pct < 50) return `At ${pct}% burden, debt is consuming significant engineering capacity and compounding velocity loss.`;
-  return `At ${pct}% burden, debt is likely the primary drag on throughput. The annual carrying cost of ${formattedAnnualCost} makes a remediation case compelling.`;
+  if (pct < 10) return 'Engineering capacity is predominantly forward-looking. Maintain discipline as the team scales.';
+  if (pct < 15) return 'Some accumulated friction is present. Normal for companies that have shipped fast, but should be on the 100-day plan.';
+  if (pct < 25) return `At ${pct}% burden, maintenance is a material drag on velocity. Warrants targeted investigation into root causes and active mitigation: SDLC maturity, infrastructure architecture, test coverage, and deployment pipeline should all be examined.`;
+  if (pct < 40) return `At ${pct}% burden, debt is a strategic liability carrying ${formattedAnnualCost}/yr in costs. Expect architectural problems, manual processes, fragile deployments, and potential talent retention risk. Remediation cost belongs in the deal model.`;
+  return `At ${pct}% burden, debt is the dominant constraint on this technology organization. The ${formattedAnnualCost}/yr carrying cost signals the platform may require significant restructuring or rewrite post-close. Factor directly into valuation.`;
 }
 
 // ─── Render ───────────────────────────────────────────────────────────────────

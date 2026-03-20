@@ -199,17 +199,19 @@ export const fmtShortC = (n: number, symbol: string = '$', multiplier: number = 
 // ─── Plain-text summary for clipboard export ─────────────────────────────────
 
 function burdenLabel(pct: number): string {
-  if (pct < 20) return 'Healthy (< 20%)';
-  if (pct < 35) return 'Moderate (20–35%)';
-  if (pct < 50) return 'Material (35–50%)';
-  return 'Critical (> 50%)';
+  if (pct < 10) return 'Well-managed (< 10%)';
+  if (pct < 15) return 'Acceptable (10-15%)';
+  if (pct < 25) return 'Yellow flag (15-25%)';
+  if (pct < 40) return 'Red flag (25-40%)';
+  return 'Deal risk (40%+)';
 }
 
 function contextNote(pct: number, formattedAnnualCost: string): string {
-  if (pct < 20) return 'Debt is well-managed. Focus on preventing accumulation as the team scales.';
-  if (pct < 35) return 'Debt is growing. Allocate 1–2 sprints per quarter to targeted paydown before it compounds.';
-  if (pct < 50) return `At ${pct}% burden, debt is consuming significant engineering capacity and compounding velocity loss.`;
-  return `At ${pct}% burden, debt is likely the primary drag on throughput. The annual carrying cost of ${formattedAnnualCost} makes a remediation case compelling.`;
+  if (pct < 10) return 'Engineering capacity is predominantly forward-looking. Maintain discipline as the team scales.';
+  if (pct < 15) return 'Some accumulated friction is present. Normal for companies that have shipped fast, but should be on the 100-day plan.';
+  if (pct < 25) return `At ${pct}% burden, maintenance is a material drag on velocity. Warrants targeted investigation into root causes and active mitigation: SDLC maturity, infrastructure architecture, test coverage, and deployment pipeline should all be examined.`;
+  if (pct < 40) return `At ${pct}% burden, debt is a strategic liability carrying ${formattedAnnualCost}/yr in costs. Expect architectural problems, manual processes, fragile deployments, and potential talent retention risk. Remediation cost belongs in the deal model.`;
+  return `At ${pct}% burden, debt is the dominant constraint on this technology organization. The ${formattedAnnualCost}/yr carrying cost signals the platform may require significant restructuring or rewrite post-close. Factor directly into valuation.`;
 }
 
 export function buildSummaryText(
