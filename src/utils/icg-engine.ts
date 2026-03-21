@@ -55,6 +55,7 @@ export function checkFoundationalFlag(domainScores: DomainScore[]): boolean {
 // ─── Recommendations ────────────────────────────────────────────────────────
 
 const IMPACT_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };
+const EFFORT_ORDER: Record<string, number> = { 'quick-win': 0, 'project': 1, 'initiative': 2 };
 const DOMAIN_ORDER: Record<string, number> = { d1: 0, d2: 1, d3: 2, d4: 3, d5: 4, d6: 5 };
 
 export function getRecommendations(
@@ -66,6 +67,8 @@ export function getRecommendations(
     .sort((a, b) => {
       const impactDiff = IMPACT_ORDER[a.impact] - IMPACT_ORDER[b.impact];
       if (impactDiff !== 0) return impactDiff;
+      const effortDiff = (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1);
+      if (effortDiff !== 0) return effortDiff;
       return (DOMAIN_ORDER[a.domain] ?? 0) - (DOMAIN_ORDER[b.domain] ?? 0);
     });
 }
