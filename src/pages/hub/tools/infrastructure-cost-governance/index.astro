@@ -933,29 +933,15 @@ const domainCount = DOMAINS.length;
         line-height: 1;
     }
 
-    :global(.icg-rec-badge--high) {
-        background: rgba(226, 75, 74, 0.1);
-        color: #E24B4A;
-    }
-
-    :global(html.dark-theme .icg-rec-badge--high) {
-        background: rgba(226, 75, 74, 0.15);
-    }
-
-    :global(.icg-rec-badge--medium) {
-        background: rgba(204, 136, 0, 0.1);
-        color: var(--color-secondary);
-    }
-
-    :global(html.dark-theme .icg-rec-badge--medium) {
-        background: rgba(255, 170, 51, 0.1);
-    }
-
+    :global(.icg-rec-badge--high),
+    :global(.icg-rec-badge--medium),
     :global(.icg-rec-badge--low) {
         background: var(--bg-light-alt);
         color: var(--text-light-muted);
     }
 
+    :global(html.dark-theme .icg-rec-badge--high),
+    :global(html.dark-theme .icg-rec-badge--medium),
     :global(html.dark-theme .icg-rec-badge--low) {
         background: rgba(200, 200, 200, 0.05);
     }
