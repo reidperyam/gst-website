@@ -1695,7 +1695,9 @@ function renderWizard(): void {
   badge.classList.toggle('is-hidden', !domain.foundational);
   note.classList.toggle('is-hidden', !domain.foundational);
 
-  // Questions
+  // Questions — use global numbering (1–20) instead of per-domain
+  const globalOffset = DOMAINS.slice(0, state.currentStep - 1)
+    .reduce((sum, d) => sum + d.questions.length, 0);
   const container = qs<HTMLElement>('[data-questions-container]');
   container.innerHTML = domain.questions.map((q, qi) => {
     const unsureSel = state.answers[q.id] === -1;
@@ -1707,7 +1709,7 @@ function renderWizard(): void {
     return `
       <div class="icg-question-card">
         <p class="icg-question-text">
-          <span class="icg-question-num">${qi + 1}.</span>${q.text}
+          <span class="icg-question-num">${globalOffset + qi + 1}.</span>${q.text}
         </p>
         <div class="icg-options-row">${optBtns}</div>
         ${q.rationale ? `<details class="icg-rationale"><summary class="icg-rationale__trigger">Why this matters</summary><p class="icg-rationale__text">${q.rationale}</p></details>` : ''}
