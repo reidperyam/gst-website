@@ -80,7 +80,7 @@ export const RECOMMENDATIONS: readonly Recommendation[] = [
     effort: 'initiative',
     domain: 'd2',
     title: 'Segregate cloud accounts by service or product',
-    description: 'Create dedicated billing accounts per service or product line. This enables clean unit economics per product — a key diligence requirement — and makes it possible to identify which products are margin-positive without manual allocation.',
+    description: 'Create dedicated billing accounts per service or product line. This enables clean unit economics per product, a key diligence requirement, and makes it possible to identify which products are margin-positive without manual allocation.',
   },
   {
     id: 'r25',

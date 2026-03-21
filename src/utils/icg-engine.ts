@@ -175,7 +175,7 @@ export function buildSummaryText(
   const { level } = getMaturityLevel(result.overallScore);
 
   const lines: string[] = [
-    'Infrastructure Cost Governance — Summary',
+    'Infrastructure Cost Governance - Summary',
     `Generated: ${date}`,
     '────────────────────────────────────────',
     `Overall score: ${result.overallScore}/100 (${level})`,
