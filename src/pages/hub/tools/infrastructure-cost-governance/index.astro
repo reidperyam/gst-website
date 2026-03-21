@@ -2042,6 +2042,7 @@ document.addEventListener('DOMContentLoaded', () => {
       reviewMode = false;
       state.currentStep = 7;
       render();
+      qs<HTMLElement>('[data-icg]').scrollIntoView({ behavior: 'smooth' });
       return;
     }
     const nextStep = state.currentStep < 6 ? state.currentStep + 1 : 7;
@@ -2055,6 +2056,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     state.currentStep = nextStep;
     render();
+    if (nextStep === 7) {
+      qs<HTMLElement>('[data-icg]').scrollIntoView({ behavior: 'smooth' });
+    }
   });
 
   qs<HTMLElement>('[data-action="review"]').addEventListener('click', () => {
