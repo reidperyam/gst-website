@@ -2,7 +2,7 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import HubHeader from '../../../../components/hub/HubHeader.astro';
 import { trackPageView } from '../../../../utils/analytics';
-import { DOMAINS, ANSWER_OPTIONS, TOTAL_QUESTIONS } from '../../../../data/infrastructure-cost-governance/domains';
+import { DOMAINS, TOTAL_QUESTIONS } from '../../../../data/infrastructure-cost-governance/domains';
 
 trackPageView('infrastructure-cost-governance', 'Infrastructure Cost Governance | GST');
 
@@ -1469,17 +1469,13 @@ import {
 import type { ICGState, ICGSnapshot } from '../../../../utils/icg-engine';
 import { trackEvent } from '../../../../utils/analytics';
 
-import { DOMAINS, ANSWER_OPTIONS, TOTAL_QUESTIONS } from '../../../../data/infrastructure-cost-governance/domains';
+import { DOMAINS, ANSWER_OPTIONS } from '../../../../data/infrastructure-cost-governance/domains';
 import { RECOMMENDATIONS } from '../../../../data/infrastructure-cost-governance/recommendations';
 
 // ─── DOM helpers ────────────────────────────────────────────────────────────
 
 function qs<T extends HTMLElement>(sel: string): T {
   return document.querySelector(sel) as T;
-}
-
-function qsa(sel: string): NodeListOf<HTMLElement> {
-  return document.querySelectorAll(sel);
 }
 
 // ─── URL state ──────────────────────────────────────────────────────────────
@@ -1841,7 +1837,7 @@ function renderResults(): void {
     const med = recs.filter(r => r.impact === 'medium');
     const low = recs.filter(r => r.impact === 'low');
 
-    const renderGroup = (items: typeof recs, label: string, colorClass: string, labelColor: string) => {
+    const renderGroup = (items: typeof recs, label: string, labelColor: string) => {
       if (items.length === 0) return '';
       return `
         <div class="icg-recs-group">
@@ -1861,9 +1857,9 @@ function renderResults(): void {
 
     recsContainer.innerHTML = `
       <div class="icg-section-label">Prioritized recommendations (${activeCount} of ${recs.length})</div>
-      ${renderGroup(high, 'High', 'high', '#E24B4A')}
-      ${renderGroup(med, 'Medium', 'medium', 'var(--color-secondary)')}
-      ${renderGroup(low, 'Low', 'low', 'var(--text-light-muted)')}
+      ${renderGroup(high, 'High', '#E24B4A')}
+      ${renderGroup(med, 'Medium', 'var(--color-secondary)')}
+      ${renderGroup(low, 'Low', 'var(--text-light-muted)')}
     `;
 
     // Wire expand/collapse toggle on the entire card
@@ -2111,11 +2107,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show comparison view, hide results
     qs<HTMLElement>('[data-view="results"]').classList.add('is-hidden');
     qs<HTMLElement>('[data-view="comparison"]').classList.remove('is-hidden');
+    qs<HTMLElement>('[data-icg]').scrollIntoView({ behavior: 'smooth' });
   });
 
   qs<HTMLElement>('[data-action="back-to-results"]').addEventListener('click', () => {
     qs<HTMLElement>('[data-view="comparison"]').classList.add('is-hidden');
     qs<HTMLElement>('[data-view="results"]').classList.remove('is-hidden');
+    qs<HTMLElement>('[data-icg]').scrollIntoView({ behavior: 'smooth' });
   });
 
   // Initial check for compare visibility
