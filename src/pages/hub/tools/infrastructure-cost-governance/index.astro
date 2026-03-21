@@ -1370,6 +1370,15 @@ const domainCount = DOMAINS.length;
             font-size: var(--text-xs);
         }
 
+        :global(.icg-rec-card) {
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        :global(.icg-rec-body__title) {
+            flex-wrap: wrap;
+        }
+
         :global(.icg-rec-na) {
             align-self: flex-end;
         }
