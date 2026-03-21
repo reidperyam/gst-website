@@ -634,12 +634,6 @@ const domainCount = DOMAINS.length;
         background: var(--accent-light-bg-hover);
     }
 
-    :global(.icg-check) {
-        color: var(--color-primary);
-        margin-right: var(--spacing-xs);
-        font-weight: var(--font-weight-bold);
-    }
-
     :global(.icg-opt-btn--unsure) {
         border-style: dashed;
         font-style: italic;
@@ -1704,9 +1698,9 @@ function renderWizard(): void {
     const unsureSel = state.answers[q.id] === -1;
     const optBtns = ANSWER_OPTIONS.map(opt => {
       const sel = state.answers[q.id] === opt.score;
-      return `<button class="icg-opt-btn${sel ? ' selected' : ''}" data-answer="${q.id}" data-score="${opt.score}" type="button" aria-pressed="${sel}">${sel ? '<span class="icg-check" aria-hidden="true">&#10003;</span>' : ''}${opt.label}</button>`;
+      return `<button class="icg-opt-btn${sel ? ' selected' : ''}" data-answer="${q.id}" data-score="${opt.score}" type="button" aria-pressed="${sel}">${opt.label}</button>`;
     }).join('')
-      + `<button class="icg-opt-btn icg-opt-btn--unsure${unsureSel ? ' selected' : ''}" data-answer="${q.id}" data-score="-1" type="button" aria-pressed="${unsureSel}">${unsureSel ? '<span class="icg-check" aria-hidden="true">&#10003;</span>' : ''}Not sure</button>`;
+      + `<button class="icg-opt-btn icg-opt-btn--unsure${unsureSel ? ' selected' : ''}" data-answer="${q.id}" data-score="-1" type="button" aria-pressed="${unsureSel}">Not sure</button>`;
     return `
       <div class="icg-question-card">
         <p class="icg-question-text">
