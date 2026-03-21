@@ -1046,6 +1046,54 @@ await expect(darkEl).toBeVisible({ timeout: 5000 });
 
 **When this bites you:** Any CSS rule that uses a parent class to toggle `display`, `visibility`, or `opacity` on a child element — especially theme toggles (`html.dark-theme`), accordion panels, and tab content switches. Firefox's rendering pipeline is measurably slower than Chromium's under parallel CI load.
 
+### 24. ❌ Adding Browser Permissions to Global/Project Playwright Config
+
+Setting `permissions` (e.g., `clipboard-read`, `clipboard-write`) in the Playwright **project config** silently breaks every test file that overrides the device via `test.use()`. When a mobile test spreads a different device, the project-level `use` object is merged and the permission array propagates — but mobile device contexts don't support desktop-only permissions, causing `"Unknown permission"` errors across the entire file.
+
+This is an **externality bug**: the config change works for the tests the author ran, but breaks unrelated tests that the author never checked.
+
+**Bad:**
+```typescript
+// playwright.config.ts — ❌ breaks ALL mobile test files
+projects: [
+  {
+    name: 'chromium',
+    use: {
+      ...devices['Desktop Chrome'],
+      permissions: ['clipboard-read', 'clipboard-write'], // ← bleeds into mobile tests
+    },
+  },
+]
+
+// mobile-navigation.test.ts — inherits clipboard permissions → crash
+test.use({ ...devices['iPhone 12'] });
+// Error: browserContext.newPage: Unknown permission: clipboard-write
+```
+
+**Good:**
+```typescript
+// playwright.config.ts — ✅ no permissions at project level
+projects: [
+  {
+    name: 'chromium',
+    use: { ...devices['Desktop Chrome'] },
+  },
+]
+
+// diligence-machine.test.ts — ✅ grant per-test, guarded by browser
+test('should copy output to clipboard', async ({ page, context, browserName }) => {
+  if (browserName === 'chromium') {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  }
+  // ...test clipboard behavior
+});
+```
+
+**Key principles:**
+1. **Never add permissions to project-level config** — they leak into every test that runs under that project, including mobile device overrides.
+2. **Grant permissions per-test** using `context.grantPermissions()` with a `browserName` guard.
+3. **Check externalities** — before committing a config-level change, grep for `test.use` calls that might interact with it: `grep -r "test.use" tests/e2e/`.
+
 ### 20. ❌ Simulating CSS `:hover` with JavaScript Events in Headless Browsers
 
 CSS `:hover` is a browser-internal pseudo-class state. Dispatching `mouseenter`, `mouseover`, or `pointerover` events via JavaScript does **not** activate `:hover` styles in headless browsers (and often not in headed mode either). Tests that dispatch mouse events and then assert on `:hover` CSS properties always fail.
