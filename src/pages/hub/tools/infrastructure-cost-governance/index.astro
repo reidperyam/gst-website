@@ -1016,10 +1016,9 @@ const domainCount = DOMAINS.length;
         font-size: var(--text-sm);
     }
 
-    /* ── N/A dismiss button ──────────────────────────────────────────────── */
+    /* ── N/A dismiss button (inline with badges) ────────────────────────── */
     :global(.icg-rec-na) {
         flex-shrink: 0;
-        align-self: flex-start;
         padding: 2px var(--spacing-sm);
         font-size: 0.65rem;
         font-weight: var(--font-weight-bold);
@@ -1027,24 +1026,27 @@ const domainCount = DOMAINS.length;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--text-light-muted);
-        background: transparent;
-        border: 1px solid var(--border-light);
+        background: rgba(200, 200, 200, 0.08);
+        border: 1px dashed var(--border-light);
         border-radius: 4px;
         cursor: pointer;
-        transition: color var(--transition-fast), border-color var(--transition-fast);
+        transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
     }
 
     :global(.icg-rec-na:hover) {
         color: var(--text-light-primary);
         border-color: var(--text-light-secondary);
+        background: rgba(200, 200, 200, 0.15);
     }
 
     :global(html.dark-theme .icg-rec-na) {
+        background: rgba(200, 200, 200, 0.04);
         border-color: rgba(5, 205, 153, 0.12);
     }
 
     :global(html.dark-theme .icg-rec-na:hover) {
         border-color: rgba(5, 205, 153, 0.3);
+        background: rgba(5, 205, 153, 0.08);
     }
 
     /* ── Dismissed recommendation ─────────────────────────────────────────── */
@@ -1053,13 +1055,10 @@ const domainCount = DOMAINS.length;
         border-style: dashed;
     }
 
-    :global(.icg-rec-card.is-dismissed .icg-rec-body__title) {
-        text-decoration: line-through;
-    }
-
     :global(.icg-rec-card.is-dismissed .icg-rec-na) {
         color: var(--color-primary);
         border-color: var(--color-primary);
+        border-style: solid;
     }
 
     /* ── Results: Actions ──────────────────────────────────────────────────── */
@@ -1370,17 +1369,8 @@ const domainCount = DOMAINS.length;
             font-size: var(--text-xs);
         }
 
-        :global(.icg-rec-card) {
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-
         :global(.icg-rec-body__title) {
             flex-wrap: wrap;
-        }
-
-        :global(.icg-rec-na) {
-            align-self: flex-end;
         }
 
         /* Hide back link on mobile when in wizard or results */
@@ -1869,10 +1859,9 @@ function renderResults(): void {
             return `
             <div class="icg-rec-card is-collapsed${isDismissed ? ' is-dismissed' : ''}" data-rec-id="${rec.id}" data-rec-toggle>
               <div class="icg-rec-body">
-                <div class="icg-rec-body__title"><span class="icg-rec-badge icg-rec-badge--${rec.impact}">${rec.impact}</span><span class="icg-rec-badge icg-rec-badge--effort">${rec.effort.replace('-', ' ')}</span>${rec.title}<span class="icg-rec-chevron"></span></div>
+                <div class="icg-rec-body__title"><span class="icg-rec-badge icg-rec-badge--${rec.impact}">${rec.impact}</span><span class="icg-rec-badge icg-rec-badge--effort">${rec.effort.replace('-', ' ')}</span><button class="icg-rec-na" data-dismiss="${rec.id}" type="button" title="${isDismissed ? 'Restore this recommendation to the active list' : 'Mark as not applicable. Dismissed items are excluded from the printed report.'}">${isDismissed ? 'Restore' : 'N/A'}</button>${rec.title}<span class="icg-rec-chevron"></span></div>
                 <div class="icg-rec-body__desc">${rec.description}</div>
               </div>
-              <button class="icg-rec-na" data-dismiss="${rec.id}" type="button" title="${isDismissed ? 'Restore this recommendation to the active list' : 'Mark as not applicable. Dismissed items are excluded from the printed report.'}">${isDismissed ? 'Restore' : 'N/A'}</button>
             </div>`;
           }).join('')}
         </div>`;
