@@ -25,7 +25,10 @@ const domainCount = DOMAINS.length;
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "publisher": { "@type": "Organization", "name": "Global Strategic Technologies" }
+        "publisher": { "@type": "Organization", "name": "Global Strategic Technologies" },
+        "datePublished": "2026-03-01",
+        "dateModified": "2026-03-21",
+        "author": { "@type": "Person", "name": "Reid Peryam", "jobTitle": "Strategic Technology Advisor", "sameAs": ["https://www.linkedin.com/in/reidperyam/"], "description": "Technology advisor with experience across 100+ PE technology diligence engagements", "knowsAbout": ["Cloud Cost Optimization", "Infrastructure Governance", "FinOps", "Technical Due Diligence", "M&A Tech Strategy"] }
     })} />
 
     <section class="icg-section">
@@ -37,6 +40,8 @@ const domainCount = DOMAINS.length;
             />
 
             <div data-icg class="icg-shell">
+
+                <p class="icg-authority">Scoring model informed by cloud cost governance patterns across PE portfolio companies</p>
 
                 <!-- ── Landing view (step 0) ─────────────────────────────── -->
                 <div data-view="landing" class="icg-view">
@@ -150,6 +155,7 @@ const domainCount = DOMAINS.length;
 
                         <!-- Actions row -->
                         <div class="icg-actions">
+                            <button data-action="copy-summary" type="button" class="icg-btn-secondary" title="Copy a plain-text summary of your results to clipboard">Copy summary</button>
                             <button data-action="copy" type="button" class="icg-btn-secondary" title="Copy a shareable link that preserves your answers and dismissed recommendations">Copy link</button>
                             <button data-action="print" type="button" class="icg-btn-secondary" title="Your browser will open a print dialog. Select Save as PDF to download.">Print / Save as PDF</button>
                             <a data-action="email" href="#" class="icg-btn-secondary icg-btn-secondary--link" title="Open a pre-filled email with your results link. The recipient can complete the assessment independently.">Send to engineering lead</a>
@@ -157,6 +163,35 @@ const domainCount = DOMAINS.length;
                         </div>
                     </div>
                 </div>
+
+                <!-- ── Methodology ─────────────────────────────────────────── -->
+                <details class="icg-methodology">
+                    <summary class="icg-methodology__trigger">How the assessment works</summary>
+                    <div class="icg-methodology__body">
+                        <h4 class="icg-methodology__heading">Scoring model</h4>
+                        <p>Each of the 20 questions is scored on a four-point scale: Not in place (0), Ad hoc (1), Established (2), Optimized (3). Domain scores are the percentage of points earned out of the maximum possible for that domain.</p>
+
+                        <h4 class="icg-methodology__heading">Domain weighting</h4>
+                        <p>Foundational domains (Visibility and Tagging, Account Structure and Attribution) carry 1.5&times; weight in the overall score. The remaining four domains carry 1.0&times; weight. This reflects the principle that visibility and attribution are prerequisites for effective optimization.</p>
+
+                        <h4 class="icg-methodology__heading">Maturity levels</h4>
+                        <p>The overall score maps to four maturity levels: Reactive (0&ndash;25), Aware (26&ndash;50), Optimizing (51&ndash;75), and Strategic (76&ndash;100).</p>
+
+                        <h4 class="icg-methodology__heading">Foundational flag</h4>
+                        <p>If either foundational domain scores at or below 33%, a warning is surfaced. Low foundational scores indicate that higher-level optimization practices may be unreliable because the organization cannot see or attribute its spend.</p>
+
+                        <h4 class="icg-methodology__heading">Recommendations</h4>
+                        <p>Recommendations are triggered when a question scores at or below a defined threshold. They are sorted by impact tier (high, medium, low) and can be dismissed as not applicable. Dismissed items are excluded from the printed report.</p>
+
+                        <h4 class="icg-methodology__heading">Benchmarks</h4>
+                        <p>The benchmark ranges reflect illustrative patterns from GST diligence and value creation engagements. They are not normative targets&mdash;individual results depend on company stage, team maturity, and infrastructure complexity.</p>
+
+                        <h4 class="icg-methodology__heading">Privacy</h4>
+                        <p>All calculations run entirely in your browser&mdash;no inputs are sent to our servers. Anonymous page-view and interaction analytics (Google Analytics 4) help us improve the tool. See our <a href="/privacy">privacy policy</a> for details.</p>
+
+                        <p class="icg-methodology__updated">Methodology last updated March 2026</p>
+                    </div>
+                </details>
 
             </div>
 
@@ -176,6 +211,22 @@ const domainCount = DOMAINS.length;
     .icg-shell {
         max-width: 660px;
         margin: 0 auto;
+        background: var(--bg-light-alt);
+        border: 1px solid var(--accent-light-bg-hover);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    /* ── Authority line ────────────────────────────────────────────────────── */
+    .icg-authority {
+        padding: var(--spacing-sm) var(--spacing-2xl);
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-light-faded);
+        border-bottom: 1px solid var(--accent-light-bg);
+        margin: 0;
     }
 
     /* ── View toggling ────────────────────────────────────────────────────── */
@@ -191,7 +242,7 @@ const domainCount = DOMAINS.length;
 
     .landing-callout {
         padding: var(--spacing-md) var(--spacing-lg);
-        background: var(--bg-light-alt);
+        background: var(--bg-light);
         border-radius: 8px;
         font-size: var(--text-sm);
         color: var(--text-light-secondary);
@@ -221,7 +272,7 @@ const domainCount = DOMAINS.length;
     .stat-tile {
         flex: 1;
         padding: var(--spacing-md);
-        background: var(--bg-light-alt);
+        background: var(--bg-light);
         border-radius: 8px;
         text-align: center;
     }
@@ -468,7 +519,7 @@ const domainCount = DOMAINS.length;
         margin-top: var(--spacing-xl);
         position: sticky;
         bottom: 0;
-        background: var(--bg-light);
+        background: var(--bg-light-alt);
         padding: var(--spacing-md) 0;
         border-top: 1px solid var(--border-light);
         z-index: 10;
@@ -856,6 +907,77 @@ const domainCount = DOMAINS.length;
         margin-top: var(--spacing-2xl);
     }
 
+    /* ── Methodology collapsible ───────────────────────────────────────────── */
+    .icg-methodology {
+        margin-top: 0;
+        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
+    }
+
+    .icg-methodology__trigger {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-2xl);
+        cursor: pointer;
+        color: var(--text-light-muted);
+        transition: color var(--transition-fast);
+        list-style: none;
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .icg-methodology__trigger::-webkit-details-marker {
+        display: none;
+    }
+
+    .icg-methodology__trigger::before {
+        content: '\25B6';
+        font-size: 0.6em;
+        transition: transform var(--transition-fast);
+    }
+
+    .icg-methodology[open] > .icg-methodology__trigger::before {
+        transform: rotate(90deg);
+    }
+
+    .icg-methodology__trigger:hover {
+        color: var(--text-light-secondary);
+    }
+
+    .icg-methodology__body {
+        padding: var(--spacing-sm) var(--spacing-2xl) var(--spacing-md);
+        color: var(--text-light-secondary);
+        line-height: 1.7;
+        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
+    }
+
+    .icg-methodology__heading {
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--text-light-primary);
+        margin-top: var(--spacing-md);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .icg-methodology__heading:first-child {
+        margin-top: 0;
+    }
+
+    .icg-methodology__body p {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .icg-methodology__updated {
+        font-size: var(--text-xs);
+        color: var(--text-light-faded);
+        font-style: italic;
+        margin-top: var(--spacing-sm);
+    }
+
     /* ════════════════════════════════════════════════════════════════════════
        RESPONSIVE — tablet (<=768px)
     ════════════════════════════════════════════════════════════════════════ */
@@ -988,6 +1110,7 @@ const domainCount = DOMAINS.length;
         .icg-section :global(footer),
         .icg-back-link,
         .icg-actions,
+        .icg-authority,
         [data-view="landing"],
         [data-view="wizard"] {
             display: none !important;
@@ -1000,6 +1123,7 @@ const domainCount = DOMAINS.length;
 
         .icg-shell {
             max-width: 100%;
+            border: 1px solid #ddd;
         }
 
         .results-content::before {
@@ -1040,6 +1164,19 @@ const domainCount = DOMAINS.length;
         .icg-foundational-warning {
             break-inside: avoid;
         }
+
+        /* Auto-expand methodology in print */
+        .icg-methodology {
+            border: none;
+        }
+
+        .icg-methodology__trigger {
+            display: none;
+        }
+
+        .icg-methodology__body {
+            padding: var(--spacing-md) 0;
+        }
     }
 </style>
 
@@ -1051,6 +1188,7 @@ import {
   getRecommendations,
   encodeState,
   decodeState,
+  buildSummaryText,
 } from '../../../../utils/icg-engine';
 
 import type { ICGState } from '../../../../utils/icg-engine';
@@ -1378,6 +1516,22 @@ document.addEventListener('DOMContentLoaded', () => {
   qs<HTMLElement>('[data-action="print"]').addEventListener('click', () => {
     trackEvent({ event: 'icg_print', category: 'engagement' });
     window.print();
+  });
+
+  qs<HTMLElement>('[data-action="copy-summary"]').addEventListener('click', () => {
+    trackEvent({ event: 'icg_copy_summary', category: 'engagement' });
+    const btn = qs<HTMLButtonElement>('[data-action="copy-summary"]');
+    const result = calculateResults(state, DOMAINS);
+    const recs = getRecommendations(state, RECOMMENDATIONS)
+      .filter(r => !state.dismissed.includes(r.id));
+    const text = buildSummaryText(state, result, DOMAINS, recs, window.location.href);
+    const reset = () => { btn.textContent = 'Copy summary'; };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(
+        () => { btn.textContent = 'Copied!'; setTimeout(reset, 2000); },
+        () => { btn.textContent = 'Failed'; setTimeout(reset, 2000); },
+      );
+    }
   });
 
   qs<HTMLElement>('[data-action="copy"]').addEventListener('click', () => {
