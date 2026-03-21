@@ -469,8 +469,12 @@ test.describe('Tech Debt Calculator', () => {
     });
 
     test.describe('clipboard', () => {
-      test('Copy Link button changes text to Copied! on click', async ({ page }) => {
+      test('Copy Link button changes text to Copied! on click', async ({ page, context, browserName }) => {
         await gotoCalc(page);
+
+        if (browserName === 'chromium') {
+          await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+        }
 
         await jsClick(page, '#copy-link-btn');
 
