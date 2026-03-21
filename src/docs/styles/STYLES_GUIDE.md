@@ -10,10 +10,11 @@ Conventions, best practices, and patterns for all CSS work on the GST Website.
 2. [Design System Architecture](#design-system-architecture)
 3. [File Organization](#file-organization)
 4. [Component Styling](#component-styling)
-5. [Dark Theme Implementation](#dark-theme-implementation)
-6. [Responsive Design](#responsive-design)
-7. [Anti-Patterns](#anti-patterns)
-8. [New Component Checklist](#new-component-checklist)
+5. [Brand Assets in CSS](#brand-assets-in-css)
+6. [Dark Theme Implementation](#dark-theme-implementation)
+7. [Responsive Design](#responsive-design)
+8. [Anti-Patterns](#anti-patterns)
+9. [New Component Checklist](#new-component-checklist)
 
 ---
 
@@ -158,6 +159,38 @@ import '../../styles/my-component.css';
 
 **From `global.css`:**
 - `.sr-only` — screen reader only (visually hidden)
+
+### Brand Assets in CSS
+
+The GST delta icon (`/images/logo/gst-delta-icon-teal-stroke-thick.svg`) can be used as a CSS pseudo-element via the `mask-image` technique. This renders the SVG in any color without embedding an `<img>` tag, making it suitable for `::before`/`::after` decorators, list markers, and toggle indicators.
+
+**Pattern: CSS mask with brand color**
+
+```css
+.my-element::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-primary);
+  mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+}
+```
+
+**Guidelines:**
+- Use `var(--color-primary)` as `background-color` to keep the icon on-brand
+- Include `-webkit-` prefixes for Safari/iOS compatibility
+- Use `mask-size: contain` so the icon scales to the element dimensions
+- Adjust `width`/`height` to suit context (10px for inline text, 12-16px for standalone markers)
+
+**Current usage:** ICG rationale "Why this matters" toggle trigger
+
+**When to use instead of `<img>`:** When the icon appears in a CSS pseudo-element, needs to inherit or use CSS color values, or appears as a decorative detail rather than standalone content.
 
 ---
 
