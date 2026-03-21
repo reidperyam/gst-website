@@ -58,7 +58,7 @@ const crumbs = allCrumbs.length > MAX_BREADCRUMBS
     margin: 0;
     display: flex;
     flex-wrap: nowrap;
-    align-items: center;
+    align-items: baseline;
     font-size: var(--text-sm);
     color: var(--text-light-muted);
     overflow: hidden;
@@ -66,12 +66,20 @@ const crumbs = allCrumbs.length > MAX_BREADCRUMBS
 
   .breadcrumb__item {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     white-space: nowrap;
+    line-height: 1.4;
   }
 
   .breadcrumb__item:last-child {
     overflow: hidden;
+  }
+
+  .breadcrumb__item a,
+  .breadcrumb__item [aria-current="page"] {
+    font-size: var(--text-sm);
+    font-weight: normal;
+    line-height: 1.4;
   }
 
   .breadcrumb__item [aria-current="page"] {
@@ -82,7 +90,6 @@ const crumbs = allCrumbs.length > MAX_BREADCRUMBS
   .breadcrumb__item a {
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: normal;
     text-transform: none;
     letter-spacing: normal;
     border-bottom: none;
