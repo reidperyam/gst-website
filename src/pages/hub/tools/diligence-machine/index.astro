@@ -738,25 +738,23 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         <span class="doc-meta-value">${escapeHtml(f.value)}</span>
                     </div>
                 `}).join('')}
-                <div class="doc-meta-card doc-meta-card--cta">
-                    <a href="https://calendly.com/globalstrategictech"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="cta-button doc-meta-cta-button"
-                       id="metaCtaButton"
-                       data-testid="meta-cta-button">
-                        Schedule a Call to Discuss <span id="metaCtaTarget">${escapeHtml(targetIdentifier)}</span>
-                    </a>
-                </div>
-                <div class="doc-meta-card doc-meta-card--cta">
-                    <a href="/hub/tools/techpar"
-                       target="_blank"
-                       rel="noopener"
-                       class="cta-button doc-meta-cta-button doc-meta-cta-button--secondary"
-                       data-testid="techpar-cross-link">
-                        Already know your costs? Run them through TechPar &rarr;
-                    </a>
-                </div>
+            </div>
+            <div class="doc-meta-actions">
+                <a href="https://calendly.com/globalstrategictech"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="cta-button doc-meta-cta-button"
+                   id="metaCtaButton"
+                   data-testid="meta-cta-button">
+                    Schedule a Call to Discuss <span id="metaCtaTarget">${escapeHtml(targetIdentifier)}</span>
+                </a>
+                <a href="/hub/tools/techpar"
+                   target="_blank"
+                   rel="noopener"
+                   class="cta-button doc-meta-cta-button doc-meta-cta-button--secondary"
+                   data-testid="techpar-cross-link">
+                    Already know your costs? Run them through TechPar &rarr;
+                </a>
             </div>
         `;
 
@@ -1827,19 +1825,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border-bottom-color: var(--color-primary);
     }
 
-    .doc-meta :global(.doc-meta-card--cta) {
+    .doc-meta :global(.doc-meta-actions) {
         display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-        padding: var(--spacing-sm) 0;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-lg);
+        padding-left: var(--spacing-xl);
     }
 
     .doc-meta :global(.doc-meta-cta-button) {
         font-size: 0.7rem;
-        padding: var(--spacing-sm) var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-lg);
         text-align: center;
         line-height: 1.3;
-        white-space: normal;
+        white-space: nowrap;
     }
 
     /* ─── TABLE OF CONTENTS ────────────────────────────────────────────── */
@@ -2443,9 +2441,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             text-align: right;
         }
 
-        .doc-meta :global(.doc-meta-card--cta) {
-            align-items: flex-end;
-            justify-content: flex-end;
+        .doc-meta :global(.doc-meta-actions) {
+            flex-direction: column;
+            padding-left: var(--spacing-md);
+            gap: var(--spacing-sm);
+        }
+
+        .doc-meta :global(.doc-meta-cta-button) {
+            white-space: normal;
         }
 
         .doc-toc :global(.doc-toc-list) {
@@ -2496,7 +2499,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             display: none;
         }
 
-        .doc-meta :global(.doc-meta-card--cta) {
+        .doc-meta :global(.doc-meta-actions) {
             display: none;
         }
 
