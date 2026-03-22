@@ -81,6 +81,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         >
                             <h2 class="step-title">{step.title}</h2>
                             <p class="step-subtitle">{step.subtitle}</p>
+                            {step.id === 'tech-archetype' && (
+                                <p class="step-note">Benchmark infrastructure costs against peers with <a href="/hub/tools/techpar" target="_blank" rel="noopener">TechPar</a>.</p>
+                            )}
+                            {step.id === 'scale-intensity' && (
+                                <p class="step-note">Evaluate cloud cost governance practices with the <a href="/hub/tools/infrastructure-cost-governance" target="_blank" rel="noopener">Infrastructure Cost Governance</a> tool.</p>
+                            )}
+                            {step.id === 'transformation-state' && (
+                                <p class="step-note">Estimate technical debt remediation costs with the <a href="/hub/tools/tech-debt-calculator" target="_blank" rel="noopener">Tech Debt Calculator</a>.</p>
+                            )}
                             {step.id === 'data-sensitivity' && (
                                 <p class="step-note">Explore jurisdiction-specific requirements in the <a href="/hub/tools/regulatory-map" target="_blank" rel="noopener">Regulatory Map</a>.</p>
                             )}
@@ -633,7 +642,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                             <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
                         </div>
                         <div class="doc-attention-divider"></div>
-                        <p class="doc-attention-desc">${escapeHtml(area.description)}${area.id === 'attention-tech-debt' ? ' <a href="/hub/tools/tech-debt-calculator" target="_blank" rel="noopener noreferrer" style="color:var(--color-secondary);text-decoration:underline;">Quantify it with the Tech Debt Cost Calculator →</a>' : ''}</p>
+                        <p class="doc-attention-desc">${escapeHtml(area.description)}${area.id === 'attention-tech-debt' ? ' <a href="/hub/tools/tech-debt-calculator" target="_blank" rel="noopener noreferrer" style="color:var(--color-secondary);text-decoration:underline;">Quantify it with the Tech Debt Cost Calculator →</a>' : ''}${['attention-high-scale-architecture', 'attention-multi-infra-cost'].includes(area.id) ? ' <a href="/hub/tools/infrastructure-cost-governance" target="_blank" rel="noopener noreferrer" style="color:var(--color-secondary);text-decoration:underline;">Assess cost governance maturity with ICG →</a>' : ''}</p>
                     </div>
                 `)
                 .join('');
