@@ -290,6 +290,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         targetIdentifier?: string;
         dismissedAttention?: string[];
         dismissedQuestions?: string[];
+        collapsedAttention?: string[];
+        collapsedQuestions?: string[];
     }
 
     // ─── STATE ────────────────────────────────────────────────────────────
@@ -305,6 +307,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     let autoAdvanceTimer: ReturnType<typeof setTimeout> | null = null;
     let dismissedAttention = new Set<string>();
     let dismissedQuestions = new Set<string>();
+    let collapsedAttention = new Set<string>();
+    let collapsedQuestions = new Set<string>();
 
     // ─── DOM REFERENCES ──────────────────────────────────────────────────
 
@@ -333,6 +337,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 targetIdentifier,
                 dismissedAttention: [...dismissedAttention],
                 dismissedQuestions: [...dismissedQuestions],
+                collapsedAttention: [...collapsedAttention],
+                collapsedQuestions: [...collapsedQuestions],
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         } catch {
@@ -620,7 +626,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             attentionAreasSection.style.display = '';
             attentionAreasGrid.innerHTML = script.attentionAreas
                 .map((area) => `
-                    <div class="doc-attention-card relevance-${escapeHtml(area.relevance)}${dismissedAttention.has(area.id) ? ' is-dismissed' : ''}" data-attention-id="${escapeHtml(area.id)}" data-card-toggle>
+                    <div class="doc-attention-card relevance-${escapeHtml(area.relevance)}${collapsedAttention.has(area.id) ? ' is-collapsed' : ''}${dismissedAttention.has(area.id) ? ' is-dismissed' : ''}" data-attention-id="${escapeHtml(area.id)}" data-card-toggle>
                         <div class="doc-attention-header">
                             <h3 class="doc-attention-title">${escapeHtml(area.title)}</h3>
                             <button class="dm-na-btn" data-dismiss-attention="${escapeHtml(area.id)}" type="button" title="${dismissedAttention.has(area.id) ? 'Restore this item' : 'Mark as not applicable'}">${dismissedAttention.has(area.id) ? 'Restore' : 'N/A'}</button>
@@ -649,7 +655,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     </div>
                     <ol class="doc-questions">
                         ${topic.questions.map((q, qIndex) => `
-                            <li class="doc-question priority-${escapeHtml(q.priority)}${dismissedQuestions.has(q.id) ? ' is-dismissed' : ''}" data-question-id="${escapeHtml(q.id)}" data-card-toggle>
+                            <li class="doc-question priority-${escapeHtml(q.priority)}${collapsedQuestions.has(q.id) ? ' is-collapsed' : ''}${dismissedQuestions.has(q.id) ? ' is-dismissed' : ''}" data-question-id="${escapeHtml(q.id)}" data-card-toggle>
                                 <div class="doc-q-header">
                                     <span class="doc-q-number">${topicIndex + 1}.${qIndex + 1}</span>
                                     <div class="doc-q-badges">
@@ -684,7 +690,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         document.querySelectorAll('[data-card-toggle]').forEach(card => {
             card.addEventListener('click', (e) => {
                 if ((e.target as HTMLElement).closest('a, button')) return;
-                card.classList.toggle('is-collapsed');
+                const el = card as HTMLElement;
+                const isNowCollapsed = el.classList.toggle('is-collapsed');
+                const attentionId = el.dataset.attentionId;
+                const questionId = el.dataset.questionId;
+                if (attentionId) {
+                    isNowCollapsed ? collapsedAttention.add(attentionId) : collapsedAttention.delete(attentionId);
+                } else if (questionId) {
+                    isNowCollapsed ? collapsedQuestions.add(questionId) : collapsedQuestions.delete(questionId);
+                }
+                saveState();
             });
         });
 
@@ -978,6 +993,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         targetIdentifier = 'Target';
         dismissedAttention.clear();
         dismissedQuestions.clear();
+        collapsedAttention.clear();
+        collapsedQuestions.clear();
         clearState();
 
         // Reset all option cards
@@ -1018,6 +1035,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         highestStepReached = saved.highestStepReached ?? saved.currentStep;
         dismissedAttention = new Set(saved.dismissedAttention ?? []);
         dismissedQuestions = new Set(saved.dismissedQuestions ?? []);
+        collapsedAttention = new Set(saved.collapsedAttention ?? []);
+        collapsedQuestions = new Set(saved.collapsedQuestions ?? []);
 
         // Restore single-select options
         for (const [stepId, key] of Object.entries({
