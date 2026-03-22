@@ -1151,8 +1151,24 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         color: var(--text-light-primary);
     }
 
+    :global(html.dark-theme) .progress-number {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    :global(html.dark-theme) .progress-label {
+        color: var(--text-dark-muted);
+    }
+
     :global(html.dark-theme) .progress-number-text {
         fill: var(--text-dark-muted);
+    }
+
+    :global(html.dark-theme) .progress-segment.active .progress-number {
+        color: var(--color-primary);
+    }
+
+    :global(html.dark-theme) .progress-segment.active .progress-label {
+        color: var(--text-dark-primary);
     }
 
     :global(html.dark-theme) .progress-segment.active .progress-number-text {
