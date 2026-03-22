@@ -407,9 +407,10 @@ The `.delta-chevron` utility (defined in `interactions.css`) provides a collapse
 ```
 
 **Behavior:**
-- Default state (expanded): triangle points down (`rotate(180deg)`)
-- When a parent has `.is-collapsed`: triangle points up (`rotate(0deg)`)
-- Dark theme color handled automatically via `var(--text-dark-muted)`
+- Default state (expanded): triangle points down (`rotate(180deg)`), teal (`--color-primary`)
+- When a parent has `.is-collapsed`: triangle points up (`rotate(0deg)`), muted color
+- Color transitions smoothly between states via `var(--transition-fast)`
+- Dark theme collapsed color handled automatically via `var(--text-dark-muted)`
 
 **Convention:**
 - Place the SVG as the last child inside the collapsible header/title row
