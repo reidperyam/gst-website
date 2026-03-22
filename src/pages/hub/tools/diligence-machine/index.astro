@@ -753,17 +753,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                    class="cta-button doc-meta-cta-button"
                    id="metaCtaButton"
                    data-testid="meta-cta-button">
-                    Schedule a Call to Discuss <span id="metaCtaTarget">${escapeHtml(targetIdentifier)}</span> &rarr;
+                    Schedule a Call to Discuss &rarr;
                 </a>
             </div>
         `;
 
         // Wire up identifier input
         const identifierInput = document.getElementById('targetIdentifierInput') as HTMLInputElement;
-        const metaCtaTarget = document.getElementById('metaCtaTarget');
         identifierInput.addEventListener('input', () => {
             targetIdentifier = identifierInput.value || 'Target';
-            if (metaCtaTarget) metaCtaTarget.textContent = targetIdentifier;
             saveState();
         });
 
