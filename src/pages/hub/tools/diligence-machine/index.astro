@@ -2028,6 +2028,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         overflow: hidden;
     }
 
+    .doc-attention-grid :global(.doc-attention-card.is-collapsed) {
+        padding: var(--spacing-sm) var(--spacing-xl);
+    }
+
     .doc-attention-grid :global(.doc-attention-card.relevance-high) {
         border-left-color: #5b7a9d;
         background: rgba(91, 122, 157, 0.04);
@@ -2251,7 +2255,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         padding: 0;
         margin: 0;
         display: grid;
-        gap: var(--spacing-xl);
+        gap: var(--spacing-md);
     }
 
     .doc-topics :global(.doc-question) {
@@ -2261,6 +2265,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         border-left: 3px solid var(--border-light);
         min-width: 0;
         overflow: hidden;
+    }
+
+    .doc-topics :global(.doc-question.is-collapsed) {
+        padding: var(--spacing-sm) var(--spacing-lg);
     }
 
     .doc-topics :global(.doc-question.priority-high) {
@@ -2689,6 +2697,23 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         .doc-footer-content {
             flex-wrap: wrap;
             justify-content: center;
+        }
+
+        /* Tighten question list spacing on mobile */
+        .doc-topics :global(.doc-questions) {
+            gap: var(--spacing-sm);
+        }
+
+        .doc-topics :global(.doc-question) {
+            padding: var(--spacing-md);
+        }
+
+        .doc-topics :global(.doc-question.is-collapsed) {
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .doc-attention-grid :global(.doc-attention-card.is-collapsed) {
+            padding: var(--spacing-sm) var(--spacing-md);
         }
 
         /* Collapsed cards: title-only on mobile */
