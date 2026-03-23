@@ -19,7 +19,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 1. Brand Color and Style Guidelines
 
-**Status**: Not formalized
+**Status**: Partially complete — existing palette documented in BRAND_GUIDELINES.md (March 23, 2026). Stakeholder decisions pending for extended palette.
 
 **Problem**: GST uses `#05cd99` as its primary brand teal, but there is no formal brand color palette, no documented secondary/tertiary colors, and no guidelines for when to use brand colors vs. neutral/semantic colors. The delta icon is used as a brand asset but its usage rules are informal.
 
