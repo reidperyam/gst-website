@@ -199,7 +199,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 7. Standardized Tool Shell Container
 
-**Status**: Pattern exists but is not standardized
+**Status**: Complete — `.tool-shell` class defined in global.css, migrated ICG + Tech Debt Calculator (March 23, 2026). TechPar and Diligence Machine use structurally different patterns (fluid/width-only) and are documented exceptions.
 
 **Problem**: Each hub tool implements its own container shell with slightly different max-widths and styling:
 

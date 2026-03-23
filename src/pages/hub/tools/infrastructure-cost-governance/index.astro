@@ -40,7 +40,7 @@ const domainCount = DOMAINS.length;
                 subtitle="A structured maturity assessment for cloud cost management. Answer 20 questions across six operational domains and receive a scored diagnostic with a prioritized improvement checklist. Purpose-built for PE diligence, board reviews, and 100-day planning."
             />
 
-            <div data-icg class="icg-shell">
+            <div data-icg class="tool-shell tool-shell--narrow icg-shell">
 
                 <p class="icg-authority">Scoring model informed by cloud cost governance patterns across PE portfolio companies</p>
 
@@ -293,15 +293,8 @@ const domainCount = DOMAINS.length;
         padding-bottom: var(--spacing-3xl);
     }
 
-    /* ── Tool shell ───────────────────────────────────────────────────────── */
-    .icg-shell {
-        max-width: 660px;
-        margin: 0 auto;
-        background: var(--bg-light-alt);
-        border: 1px solid var(--accent-light-bg-hover);
-        border-radius: 10px;
-        overflow: hidden;
-    }
+    /* ── Tool shell — base styles provided by global .tool-shell + .tool-shell--narrow ── */
+    /* .icg-shell retained for ICG-specific overrides only */
 
     /* ── Authority line ────────────────────────────────────────────────────── */
     .icg-authority {
@@ -1763,8 +1756,7 @@ const domainCount = DOMAINS.length;
         }
 
         .icg-shell {
-            max-width: 100%;
-            border: 1px solid #ddd;
+            border: 1px solid #ddd;  /* print-only border override */
         }
 
         .results-content::before {
