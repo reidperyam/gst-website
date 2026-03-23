@@ -55,7 +55,7 @@ const { projects } = Astro.props;
 
 <style>
   .portfolio-grid-container {
-    background: #ffffff;
+    background: var(--bg-light);
     padding: 2rem 0 4rem 0;
   }
 
@@ -75,17 +75,17 @@ const { projects } = Astro.props;
     grid-column: 1 / -1;
     padding: 3rem 1.5rem;
     text-align: center;
-    color: rgba(26, 26, 26, 0.65);
+    color: var(--text-light-secondary);
     font-size: 1rem;
   }
 
   :global(html.dark-theme) .no-results-message {
-    color: rgba(200, 200, 200, 0.65);
+    color: var(--text-dark-muted);
   }
 
   .project-card {
-    background: #ffffff;
-    border: 1px solid rgba(26, 26, 26, 0.1);
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
     padding: 1.5rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -98,11 +98,11 @@ const { projects } = Astro.props;
   .project-card:hover {
     box-shadow: 0 10px 30px rgba(5, 205, 153, 0.15);
     transform: translateY(-4px);
-    border-color: #05cd99;
+    border-color: var(--color-primary);
   }
 
   .project-card:focus-visible {
-    outline: 2px solid #05cd99;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
@@ -117,7 +117,7 @@ const { projects } = Astro.props;
   .project-title {
     font-weight: 900;
     font-size: 1.25rem;
-    color: rgba(26, 26, 26, 0.95);
+    color: var(--text-light-primary);
     margin: 0 0 0.25rem 0;
     letter-spacing: -0.01em;
     line-height: 1.3;
@@ -125,14 +125,14 @@ const { projects } = Astro.props;
 
   .project-industry {
     font-size: 0.8125rem;
-    color: rgba(26, 26, 26, 0.6);
+    color: var(--text-light-muted);
     margin: 0;
     font-weight: 500;
   }
 
   .year-badge {
-    background: rgba(26, 26, 26, 0.05);
-    color: rgba(26, 26, 26, 0.7);
+    background: var(--filter-chip-bg);
+    color: var(--text-light-secondary);
     padding: 0.35rem 0.75rem;
     border-radius: 0;
     font-size: 0.75rem;
@@ -148,8 +148,8 @@ const { projects } = Astro.props;
     gap: 1rem;
     margin: 1rem 0;
     padding: 1rem;
-    background: rgba(26, 26, 26, 0.02);
-    border-left: 3px solid #05cd99;
+    background: var(--search-input-bg);
+    border-left: 3px solid var(--color-primary);
   }
 
   .metric {
@@ -159,7 +159,7 @@ const { projects } = Astro.props;
 
   .metric-label {
     font-size: 0.65rem;
-    color: rgba(26, 26, 26, 0.55);
+    color: var(--text-light-faded);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 0.35rem;
@@ -169,18 +169,18 @@ const { projects } = Astro.props;
   .metric-value {
     font-size: 1rem;
     font-weight: 700;
-    color: rgba(26, 26, 26, 0.9);
+    color: var(--text-light-primary);
     letter-spacing: -0.01em;
   }
 
   .metric-value.arr {
-    color: #05cd99;
+    color: var(--color-primary);
     font-size: 1.125rem;
   }
 
   .summary {
     font-size: 0.875rem;
-    color: rgba(26, 26, 26, 0.7);
+    color: var(--text-light-secondary);
     line-height: 1.6;
     margin: 1rem 0;
     display: -webkit-box;
@@ -197,8 +197,8 @@ const { projects } = Astro.props;
   }
 
   .tag {
-    background: rgba(5, 205, 153, 0.1);
-    color: #05cd99;
+    background: var(--accent-dark-bg);
+    color: var(--color-primary);
     padding: 0.35rem 0.75rem;
     border-radius: 0;
     font-size: 0.7rem;
@@ -208,16 +208,16 @@ const { projects } = Astro.props;
   }
 
   .tag.theme {
-    background: rgba(5, 205, 153, 0.15);
-    color: #05cd99;
+    background: var(--accent-light-bg-hover);
+    color: var(--color-primary);
   }
 
   .cta-button {
     width: 100%;
     padding: 0.875rem 1rem;
     background: transparent;
-    color: #05cd99;
-    border: 2px solid #05cd99;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
     cursor: pointer;
     font-size: 0.8rem;
     font-weight: 700;
@@ -237,7 +237,7 @@ const { projects } = Astro.props;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: #05cd99;
+    background: var(--color-primary);
     transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: -1;
   }
@@ -247,11 +247,11 @@ const { projects } = Astro.props;
   }
 
   .cta-button:hover {
-    color: #ffffff;
+    color: var(--bg-light);
   }
 
   .cta-button:focus-visible {
-    outline: 2px solid #05cd99;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
@@ -261,21 +261,21 @@ const { projects } = Astro.props;
 
   /* Dark theme */
   :global(html.dark-theme) .portfolio-grid-container {
-    background: #0a0a0a;
+    background: var(--bg-dark);
   }
 
   :global(html.dark-theme) .project-card {
-    background: #1a1a1a;
-    border-color: rgba(5, 205, 153, 0.2);
+    background: var(--bg-dark-secondary);
+    border-color: var(--border-dark);
   }
 
   :global(html.dark-theme) .project-card:hover {
-    border-color: #05cd99;
+    border-color: var(--color-primary);
     box-shadow: 0 10px 30px rgba(5, 205, 153, 0.2);
   }
 
   :global(html.dark-theme) .project-title {
-    color: rgba(245, 245, 245, 0.95);
+    color: var(--text-dark-primary);
   }
 
   :global(html.dark-theme) .project-industry {
@@ -283,34 +283,34 @@ const { projects } = Astro.props;
   }
 
   :global(html.dark-theme) .year-badge {
-    background: rgba(5, 205, 153, 0.1);
-    color: rgba(200, 200, 200, 0.8);
+    background: var(--accent-dark-bg);
+    color: var(--text-dark-secondary);
   }
 
   :global(html.dark-theme) .metrics {
     background: rgba(5, 205, 153, 0.05);
-    border-left-color: #05cd99;
+    border-left-color: var(--color-primary);
   }
 
   :global(html.dark-theme) .metric-label {
-    color: rgba(200, 200, 200, 0.6);
+    color: var(--text-dark-muted);
   }
 
   :global(html.dark-theme) .metric-value {
-    color: rgba(245, 245, 245, 0.95);
+    color: var(--text-dark-primary);
   }
 
   :global(html.dark-theme) .metric-value.arr {
-    color: #05cd99;
+    color: var(--color-primary);
   }
 
   :global(html.dark-theme) .summary {
-    color: rgba(200, 200, 200, 0.8);
+    color: var(--text-dark-secondary);
   }
 
   :global(html.dark-theme) .tag {
-    background: rgba(5, 205, 153, 0.15);
-    color: #05cd99;
+    background: var(--accent-light-bg-hover);
+    color: var(--color-primary);
   }
 
   /* Responsive */

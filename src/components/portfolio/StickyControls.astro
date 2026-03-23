@@ -69,7 +69,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
   /* Fixed Search/Filter Controls */
   .portfolio-controls-fixed {
-    background: #ffffff;
+    background: var(--bg-light);
     border-bottom: none;
     padding: 0;
     height: auto;
@@ -82,7 +82,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     width: fit-content;
     max-width: calc(100% - 3rem);
     z-index: 1002;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
     pointer-events: auto;
     top: 73px;
     transform: translateX(-50%) translateY(-200px);
@@ -109,7 +109,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     left: 0.875rem;
     width: 18px;
     height: 18px;
-    color: rgba(26, 26, 26, 0.5);
+    color: var(--text-light-faded);
     pointer-events: none;
     z-index: 1;
   }
@@ -134,8 +134,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     position: absolute;
     top: -8px;
     right: -8px;
-    background: #05cd99;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--bg-light);
     font-size: 0.65rem;
     font-weight: 700;
     padding: 0.25rem 0.5rem;
@@ -156,8 +156,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     top: 80px;
     width: 350px;
     height: calc(100vh - 80px);
-    background: #ffffff;
-    border-left: 2px solid #05cd99;
+    background: var(--bg-light);
+    border-left: 2px solid var(--color-primary);
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 10001;
@@ -176,14 +176,14 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 1px solid var(--border-light);
     flex-shrink: 0;
   }
 
   .drawer-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: rgba(26, 26, 26, 0.95);
+    color: var(--text-light-primary);
     margin: 0;
     letter-spacing: -0.01em;
   }
@@ -192,7 +192,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     background: transparent;
     border: none;
     cursor: pointer;
-    color: rgba(26, 26, 26, 0.6);
+    color: var(--text-light-muted);
     padding: 0.5rem;
     display: flex;
     align-items: center;
@@ -201,11 +201,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   .drawer-close:hover {
-    color: #05cd99;
+    color: var(--color-primary);
   }
 
   .drawer-close:focus-visible {
-    outline: 2px solid #05cd99;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
@@ -228,7 +228,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(26, 26, 26, 0.6);
+    color: var(--text-light-muted);
     margin-bottom: 0.75rem;
   }
 
@@ -240,9 +240,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
   .filter-chip {
     padding: 0.5rem 1rem;
-    background: rgba(26, 26, 26, 0.05);
-    color: rgba(26, 26, 26, 0.7);
-    border: 1px solid rgba(26, 26, 26, 0.1);
+    background: var(--filter-chip-bg);
+    color: var(--text-light-secondary);
+    border: 1px solid var(--border-light);
     cursor: pointer;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -253,15 +253,15 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   .filter-chip:hover {
-    background: rgba(26, 26, 26, 0.08);
-    border-color: #05cd99;
-    color: #05cd99;
+    background: var(--filter-chip-bg-hover);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
   }
 
   .filter-chip.active {
-    background: #05cd99;
-    color: #ffffff;
-    border-color: #05cd99;
+    background: var(--color-primary);
+    color: var(--bg-light);
+    border-color: var(--color-primary);
   }
 
   .clear-filters-btn {
@@ -269,8 +269,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     margin: 0 1.5rem 1.5rem;
     padding: 0.875rem 1rem;
     background: transparent;
-    color: rgba(26, 26, 26, 0.6);
-    border: 2px solid rgba(26, 26, 26, 0.1);
+    color: var(--text-light-muted);
+    border: 2px solid var(--border-light);
     cursor: pointer;
     font-size: 0.75rem;
     font-weight: 700;
@@ -282,12 +282,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   .clear-filters-btn:hover {
-    color: #05cd99;
-    border-color: #05cd99;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   .clear-filters-btn:focus-visible {
-    outline: 2px solid #05cd99;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
@@ -318,37 +318,37 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
   /* Dark Theme */
   :global(html.dark-theme) .portfolio-controls-fixed {
-    background: #1a1a1a;
+    background: var(--bg-dark-secondary);
   }
 
   :global(html.dark-theme) .controls-wrapper {
-    border-bottom-color: #05cd99;
+    border-bottom-color: var(--color-primary);
   }
 
   :global(html.dark-theme) .search-icon {
-    color: rgba(200, 200, 200, 0.5);
+    color: var(--text-dark-faded);
   }
 
   :global(html.dark-theme) .portfolio-filter-drawer {
-    background: #1a1a1a;
-    border-left-color: #05cd99;
+    background: var(--bg-dark-secondary);
+    border-left-color: var(--color-primary);
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
   }
 
   :global(html.dark-theme) .drawer-header {
-    border-bottom-color: rgba(5, 205, 153, 0.2);
+    border-bottom-color: var(--border-dark);
   }
 
   :global(html.dark-theme) .drawer-title {
-    color: rgba(245, 245, 245, 0.95);
+    color: var(--text-dark-primary);
   }
 
   :global(html.dark-theme) .drawer-close {
-    color: rgba(200, 200, 200, 0.6);
+    color: var(--text-dark-muted);
   }
 
   :global(html.dark-theme) .drawer-close:hover {
-    color: #05cd99;
+    color: var(--color-primary);
   }
 
   :global(html.dark-theme) .filter-label {
@@ -356,31 +356,31 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   :global(html.dark-theme) .filter-chip {
-    background: rgba(5, 205, 153, 0.1);
-    border-color: rgba(5, 205, 153, 0.2);
-    color: rgba(200, 200, 200, 0.8);
+    background: var(--filter-chip-bg);
+    border-color: var(--filter-chip-border);
+    color: var(--text-dark-secondary);
   }
 
   :global(html.dark-theme) .filter-chip:hover {
-    background: rgba(5, 205, 153, 0.15);
-    border-color: #05cd99;
-    color: #05cd99;
+    background: var(--filter-chip-bg-hover);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
   }
 
   :global(html.dark-theme) .filter-chip.active {
-    background: #05cd99;
-    color: #0a0a0a;
-    border-color: #05cd99;
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border-color: var(--color-primary);
   }
 
   :global(html.dark-theme) .clear-filters-btn {
-    color: rgba(200, 200, 200, 0.6);
-    border-color: rgba(5, 205, 153, 0.2);
+    color: var(--text-dark-muted);
+    border-color: var(--border-dark);
   }
 
   :global(html.dark-theme) .clear-filters-btn:hover {
-    color: #05cd99;
-    border-color: #05cd99;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   /* Responsive */
@@ -398,7 +398,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
       width: 100%;
       height: calc(100vh - 80px);
       border-left: none;
-      border-top: 2px solid #05cd99;
+      border-top: 2px solid var(--color-primary);
     }
 
     .portfolio-filter-drawer.open {
@@ -461,7 +461,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
       height: auto;
       max-height: 85vh;
       border-left: none;
-      border-top: 2px solid #05cd99;
+      border-top: 2px solid var(--color-primary);
       border-radius: 12px 12px 0 0;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
     }
