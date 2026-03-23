@@ -46,10 +46,10 @@ export interface ICGResult {
 // ─── Maturity level ──────────────────────────────────────────────────────────
 
 export function getMaturityLevel(score: number): { level: ICGResult['maturityLevel']; color: string } {
-  if (score <= 25) return { level: 'Reactive',   color: '#E24B4A' };
-  if (score <= 50) return { level: 'Aware',      color: '#EF9F27' };
-  if (score <= 75) return { level: 'Optimizing', color: '#639922' };
-  return                   { level: 'Strategic',  color: 'var(--color-primary)' };
+  if (score <= 25) return { level: 'Reactive',   color: 'var(--icg-maturity-reactive)' };
+  if (score <= 50) return { level: 'Aware',      color: 'var(--icg-maturity-aware)' };
+  if (score <= 75) return { level: 'Optimizing', color: 'var(--icg-maturity-optimizing)' };
+  return                   { level: 'Strategic',  color: 'var(--icg-maturity-strategic)' };
 }
 
 // ─── Foundational flag ──────────────────────────────────────────────────────

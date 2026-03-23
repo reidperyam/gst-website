@@ -160,7 +160,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 6. ICG Color Standardization
 
-**Status**: Functional but not integrated into design system — scope increased by recent commits
+**Status**: Complete — maturity colors, radar chart, and template colors standardized with CSS variables (March 23, 2026)
 
 **Problem**: The Infrastructure Cost Governance tool uses hardcoded colors for maturity levels and data visualization that should eventually become semantic design system variables. Recent commits (benchmark table redesign, recommendation badge borders) introduced additional hardcoded colors.
 

@@ -498,7 +498,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme) .icg-progress__track {
-        background: rgba(5, 205, 153, 0.12);
+        background: var(--accent-light-bg-hover);
     }
 
     .icg-progress__fill {
@@ -537,7 +537,7 @@ const domainCount = DOMAINS.length;
         letter-spacing: 0.05em;
         padding: 2px var(--spacing-sm);
         border-radius: 4px;
-        background: rgba(5, 205, 153, 0.1);
+        background: var(--accent-dark-bg);
         color: var(--color-primary);
     }
 
@@ -571,7 +571,7 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme .icg-question-card) {
         background: rgba(5, 205, 153, 0.02);
-        border-color: rgba(5, 205, 153, 0.12);
+        border-color: var(--accent-light-bg-hover);
     }
 
     :global(.icg-question-text) {
@@ -614,7 +614,7 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme .icg-opt-btn) {
         background: rgba(5, 205, 153, 0.02);
-        border-color: rgba(5, 205, 153, 0.12);
+        border-color: var(--accent-light-bg-hover);
     }
 
     :global(.icg-opt-btn:hover) {
@@ -720,7 +720,7 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme) .icg-wizard-nav {
         background: var(--bg-light-alt);
-        border-top-color: rgba(5, 205, 153, 0.1);
+        border-top-color: var(--accent-dark-bg);
     }
 
     .icg-wizard-nav .icg-btn-primary {
@@ -790,7 +790,7 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme) .icg-card {
         background: rgba(5, 205, 153, 0.02);
-        border-color: rgba(5, 205, 153, 0.12);
+        border-color: var(--accent-light-bg-hover);
     }
 
     :global(.icg-section-label) {
@@ -847,7 +847,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme .icg-domain-bar__track) {
-        background: rgba(5, 205, 153, 0.1);
+        background: var(--accent-dark-bg);
     }
 
     :global(.icg-domain-bar__fill) {
@@ -928,14 +928,14 @@ const domainCount = DOMAINS.length;
     }
 
     :global(.icg-bench-label--score) {
-        background: rgba(5, 205, 153, 0.12);
+        background: var(--accent-light-bg-hover);
         color: var(--color-primary);
         border: 1px solid rgba(5, 205, 153, 0.25);
     }
 
     :global(.icg-bench-label--stage) {
-        background: rgba(91, 122, 157, 0.1);
-        color: #5b7a9d;
+        background: var(--hub-authority-blue-bg);
+        color: var(--hub-authority-blue);
         border: 1px solid rgba(91, 122, 157, 0.2);
     }
 
@@ -1007,7 +1007,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme .icg-rec-card) {
-        border-color: rgba(5, 205, 153, 0.1);
+        border-color: var(--accent-dark-bg);
     }
 
     :global(.icg-rec-badge) {
@@ -1116,12 +1116,12 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme .icg-rec-na) {
         background: rgba(200, 200, 200, 0.04);
-        border-color: rgba(5, 205, 153, 0.12);
+        border-color: var(--accent-light-bg-hover);
     }
 
     :global(html.dark-theme .icg-rec-na:hover) {
         border-color: rgba(5, 205, 153, 0.3);
-        background: rgba(5, 205, 153, 0.08);
+        background: var(--accent-light-bg);
     }
 
     /* ── Dismissed recommendation ─────────────────────────────────────────── */
@@ -1145,7 +1145,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme) .icg-actions {
-        border-top-color: rgba(5, 205, 153, 0.1);
+        border-top-color: var(--accent-dark-bg);
     }
 
     /* ── Landing: Actions ─────────────────────────────────────────────────── */
@@ -1164,7 +1164,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme) .icg-snapshot-manager {
-        border-top-color: rgba(5, 205, 153, 0.1);
+        border-top-color: var(--accent-dark-bg);
     }
 
     :global(.icg-snapshot-list-items) {
@@ -1182,7 +1182,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme .icg-snapshot-row) {
-        border-bottom-color: rgba(5, 205, 153, 0.08);
+        border-bottom-color: var(--accent-light-bg);
     }
 
     :global(.icg-snapshot-row__info) {
@@ -1225,7 +1225,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme .icg-comparison-row) {
-        border-bottom-color: rgba(5, 205, 153, 0.08);
+        border-bottom-color: var(--accent-light-bg);
     }
 
     :global(.icg-comparison-row__name) {
@@ -1463,7 +1463,7 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme) .icg-stage-card {
         background: rgba(5, 205, 153, 0.02);
-        border-color: rgba(5, 205, 153, 0.1);
+        border-color: var(--accent-dark-bg);
     }
 
     .icg-stage-card:hover {
@@ -1476,7 +1476,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme) .icg-stage-card--active {
-        background: rgba(5, 205, 153, 0.1);
+        background: var(--accent-dark-bg);
     }
 
     .icg-stage-card__name {
@@ -1519,7 +1519,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme .icg-bench-active td) {
-        background: rgba(5, 205, 153, 0.08);
+        background: var(--accent-light-bg);
     }
 
     /* ── Domain bar rec count badge ───────────────────────────────────────── */
@@ -1557,7 +1557,7 @@ const domainCount = DOMAINS.length;
     }
 
     :global(html.dark-theme) .icg-snapshot-save-row {
-        border-top-color: rgba(5, 205, 153, 0.1);
+        border-top-color: var(--accent-dark-bg);
     }
 
     .icg-snapshot-label-input {
@@ -1963,9 +1963,9 @@ function radarChartSVG(domainScores: Array<{ name: string; score: number }>): st
 
   // Use explicit colors so the SVG is print-safe (currentColor fails
   // when dark-mode text color meets white print paper)
-  const gridColor = '#999';
-  const labelColor = '#666';
-  const primaryColor = '#05cd99';
+  const gridColor = 'var(--icg-radar-grid)';
+  const labelColor = 'var(--icg-radar-label)';
+  const primaryColor = 'var(--color-primary)';
 
   // Grid rings at 25%, 50%, 75%, 100%
   const rings = [25, 50, 75, 100].map(pct => {
@@ -1974,7 +1974,7 @@ function radarChartSVG(domainScores: Array<{ name: string; score: number }>): st
       const a = (Math.PI * 2 * i) / n - Math.PI / 2;
       return `${(cx + ringR * Math.cos(a)).toFixed(1)},${(cy + ringR * Math.sin(a)).toFixed(1)}`;
     }).join(' ');
-    return `<polygon points="${pts}" fill="none" stroke="${gridColor}" opacity="${pct === 100 ? 0.4 : 0.2}" stroke-width="1"/>`;
+    return `<polygon points="${pts}" style="fill:none;stroke:${gridColor};opacity:${pct === 100 ? 0.4 : 0.2};stroke-width:1"/>`;
   }).join('');
 
   // Axis lines
@@ -1982,7 +1982,7 @@ function radarChartSVG(domainScores: Array<{ name: string; score: number }>): st
     const a = (Math.PI * 2 * i) / n - Math.PI / 2;
     const ex = (cx + r * Math.cos(a)).toFixed(1);
     const ey = (cy + r * Math.sin(a)).toFixed(1);
-    return `<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="${gridColor}" opacity="0.2" stroke-width="1"/>`;
+    return `<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" style="stroke:${gridColor};opacity:0.2;stroke-width:1"/>`;
   }).join('');
 
   // Labels
@@ -2002,13 +2002,13 @@ function radarChartSVG(domainScores: Array<{ name: string; score: number }>): st
 
   return `<svg viewBox="0 0 300 300" role="img" aria-label="Radar chart showing domain scores" style="width:100%;max-width:300px;display:block;margin:0 auto">
     ${rings}${axes}${labels}
-    <polygon points="${dataPoints}" fill="${primaryColor}" fill-opacity="0.15" stroke="${primaryColor}" stroke-width="2"/>
+    <polygon points="${dataPoints}" style="fill:${primaryColor};fill-opacity:0.15;stroke:${primaryColor};stroke-width:2"/>
     ${domainScores.map((ds, i) => {
       const a = (Math.PI * 2 * i) / n - Math.PI / 2;
       const dr = (ds.score / 100) * r;
       const dx = cx + dr * Math.cos(a);
       const dy = cy + dr * Math.sin(a);
-      return `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="4" fill="${primaryColor}"/>`;
+      return `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="4" style="fill:${primaryColor}"/>`;
     }).join('')}
   </svg>`;
 }
