@@ -67,6 +67,7 @@ Complete catalog of all CSS custom properties defined in `src/styles/variables.c
 | `--spacing-lg` | `1rem` | 16px |
 | `--spacing-xl` | `1.5rem` | 24px |
 | `--spacing-2xl` | `2rem` | 32px |
+| `--spacing-2_5xl` | `2.5rem` | 40px |
 | `--spacing-3xl` | `3rem` | 48px |
 
 ## Gap Variables
@@ -224,6 +225,56 @@ Domain-specific variables for the TechPar tool. Defined in `variables.css` lines
 
 ---
 
+## Shared Hub Tool Variables
+
+Cross-tool semantic colors shared by multiple hub tools.
+
+### Shared Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--hub-authority-blue` | `#5b7a9d` | `#7a9dbd` | Authority/expertise theme color (DM + ICG) |
+| `--hub-authority-blue-bg` | `rgba(91, 122, 157, 0.1)` | `rgba(122, 157, 189, 0.1)` | Authority theme background |
+
+### Diligence Machine Domain Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--dm-methodology-brown` | `#8c7a6b` | `#a89888` | Methodology theme color |
+| `--dm-methodology-brown-bg` | `rgba(140, 122, 107, 0.04)` | `rgba(140, 122, 107, 0.06)` | Methodology theme background |
+| `--dm-results-blue` | `#7a9dbd` | `#9dbde0` | Results theme accent |
+| `--dm-results-tan` | `#a89888` | `#c0b0a0` | Results theme secondary |
+| `--dm-positive` | `#4cba7a` | `#4cba7a` | Positive indicator |
+| `--dm-negative` | `#e06060` | `#e06060` | Negative/red flag indicator |
+| `--dm-negative-dark` | `#b22222` | `#b22222` | Strong negative indicator |
+| `--dm-negative-dark-bg` | `rgba(178, 34, 34, 0.06)` | `rgba(178, 34, 34, 0.1)` | Negative indicator background |
+| `--dm-warning` | `#d4923a` | `#d4923a` | Warning indicator |
+| `--dm-warning-dark` | `#b26622` | `#b26622` | Strong warning indicator |
+| `--dm-success` | `#2e8b57` | `#3da868` | Success indicator |
+
+### ICG Maturity Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--icg-maturity-reactive` | `#E24B4A` | `#e86060` | Reactive maturity level (red) |
+| `--icg-maturity-aware` | `#EF9F27` | `#f5b040` | Aware maturity level (orange) |
+| `--icg-maturity-optimizing` | `#639922` | `#78b830` | Optimizing maturity level (green) |
+| `--icg-maturity-strategic` | `var(--color-primary)` | _(inherits)_ | Strategic maturity level (teal) |
+| `--icg-radar-grid` | `#999` | `#666` | Radar chart grid lines |
+| `--icg-radar-label` | `#666` | `#999` | Radar chart axis labels |
+
+---
+
+## Extended Spacing
+
+| Variable | Value | Pixels (at 16px base) |
+|----------|-------|-----------------------|
+| `--spacing-2_5xl` | `2.5rem` | 40px |
+
+Fills the gap between `--spacing-2xl` (32px) and `--spacing-3xl` (48px). Used in hub tool layouts where 40px padding/margins are common.
+
+---
+
 ## Quick Lookup by Purpose
 
 | I need... | Use |
@@ -253,4 +304,4 @@ Domain-specific variables for the TechPar tool. Defined in `variables.css` lines
 ---
 
 **Last Updated**: March 23, 2026
-**Total Variables**: 95 (`:root`) + 43 dark theme overrides (includes 35 TechPar domain variables)
+**Total Variables**: 117 (`:root`) + 57 dark theme overrides

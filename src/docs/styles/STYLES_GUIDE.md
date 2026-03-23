@@ -348,31 +348,42 @@ Hub tools render content via `innerHTML` at runtime (questions, recommendations,
 
 ### Tool Shell Container
 
-Hub tools use a centered container shell. The pattern is not yet standardized (see [STYLES_REMEDIATION_ROADMAP.md](./STYLES_REMEDIATION_ROADMAP.md#7-standardized-tool-shell-container)), but the current convention is:
+Hub tools use the standardized `.tool-shell` class defined in `global.css`. This provides a centered, themed container with consistent border-radius, background, and responsive padding.
 
 ```css
-.tool-shell {
-  max-width: 660px;         /* Range: 660-760px across tools */
-  margin: 0 auto;
-  background: var(--bg-light-alt);
-  border: 1px solid var(--accent-light-bg-hover);
-  border-radius: 10px;
-  overflow: hidden;
-}
+/* Base: 700px centered container */
+.tool-shell { max-width: 700px; margin: 0 auto; ... }
+
+/* Width modifiers */
+.tool-shell--narrow   { max-width: 660px; }  /* ICG */
+.tool-shell--wide     { max-width: 760px; }  /* Tech Debt Calculator */
+.tool-shell--fluid    { max-width: 100%; }   /* TechPar */
+.tool-shell--document { max-width: 800px; }  /* Diligence Machine */
 ```
 
-Content wrappers inside the shell use consistent padding:
+**Content wrapper**: Use `.tool-content` inside the shell for automatic responsive padding:
 ```css
-.content-wrapper {
+.tool-shell .tool-content {
   padding: var(--spacing-xl) var(--spacing-lg);   /* Desktop */
 }
-
-@media (max-width: 480px) {
-  .content-wrapper {
-    padding: var(--spacing-lg) var(--spacing-md);  /* Mobile */
-  }
-}
+/* Automatically reduces to var(--spacing-lg) var(--spacing-md) at 480px */
 ```
+
+**HTML template**:
+```html
+<section class="tool-section">
+  <div class="container">
+    <HubHeader title="..." subtitle="..." />
+    <div class="tool-shell tool-shell--narrow">
+      <div class="tool-content">
+        <!-- Tool-specific content -->
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+**Print**: Shell expands to full width with no border or radius.
 
 ### Skeleton Loading Placeholders
 

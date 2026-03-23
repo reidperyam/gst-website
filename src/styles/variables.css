@@ -148,6 +148,34 @@
   --techpar-kpi-positive: var(--color-primary);
   --techpar-kpi-warn: #CC8800;
   --techpar-kpi-negative: #d93636;
+
+  /* Shared Hub Tool Colors */
+  --hub-authority-blue: #5b7a9d;
+  --hub-authority-blue-bg: rgba(91, 122, 157, 0.1);
+
+  /* Diligence Machine — Domain Colors */
+  --dm-methodology-brown: #8c7a6b;
+  --dm-methodology-brown-bg: rgba(140, 122, 107, 0.04);
+  --dm-results-blue: #7a9dbd;
+  --dm-results-tan: #a89888;
+  --dm-positive: #4cba7a;
+  --dm-negative: #e06060;
+  --dm-negative-dark: #b22222;
+  --dm-negative-dark-bg: rgba(178, 34, 34, 0.06);
+  --dm-warning: #d4923a;
+  --dm-warning-dark: #b26622;
+  --dm-success: #2e8b57;
+
+  /* ICG — Maturity Colors */
+  --icg-maturity-reactive: #E24B4A;
+  --icg-maturity-aware: #EF9F27;
+  --icg-maturity-optimizing: #639922;
+  --icg-maturity-strategic: var(--color-primary);
+  --icg-radar-grid: #999;
+  --icg-radar-label: #666;
+
+  /* Spacing — Extended */
+  --spacing-2_5xl: 2.5rem;
 }
 
 /* Dark Theme Overrides */
@@ -227,6 +255,25 @@ html.dark-theme {
   /* TechPar — KPI Colors (dark theme) */
   --techpar-kpi-warn: #FFAA33;
   --techpar-kpi-negative: #e05050;
+
+  /* Shared Hub Tool Colors (dark theme) */
+  --hub-authority-blue: #7a9dbd;
+  --hub-authority-blue-bg: rgba(122, 157, 189, 0.1);
+
+  /* Diligence Machine — Domain Colors (dark theme) */
+  --dm-methodology-brown: #a89888;
+  --dm-methodology-brown-bg: rgba(140, 122, 107, 0.06);
+  --dm-results-blue: #9dbde0;
+  --dm-results-tan: #c0b0a0;
+  --dm-negative-dark-bg: rgba(178, 34, 34, 0.1);
+  --dm-success: #3da868;
+
+  /* ICG — Maturity Colors (dark theme) */
+  --icg-maturity-reactive: #e86060;
+  --icg-maturity-aware: #f5b040;
+  --icg-maturity-optimizing: #78b830;
+  --icg-radar-grid: #666;
+  --icg-radar-label: #999;
 }
 
 /* Utility Classes for Common Patterns */
