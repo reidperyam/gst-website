@@ -103,7 +103,7 @@ trackPageView('about', 'About | GST Leadership & Experience');
     .about-section h2 {
         font-size: 2rem;
         font-weight: 700;
-        color: rgba(26, 26, 26, 0.95);
+        color: var(--text-primary);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 1.5rem;
@@ -111,21 +111,13 @@ trackPageView('about', 'About | GST Leadership & Experience');
 
     .about-section p {
         font-size: 1.1rem;
-        color: rgba(26, 26, 26, 0.75);
+        color: var(--text-secondary);
         line-height: 1.8;
     }
 
     :global(html.dark-theme) .about-section {
         background: rgba(5, 205, 153, 0.08);
         border-bottom-color: rgba(5, 205, 153, 0.15);
-    }
-
-    :global(html.dark-theme) .about-section h2 {
-        color: rgba(245, 245, 245, 0.95);
-    }
-
-    :global(html.dark-theme) .about-section p {
-        color: rgba(200, 200, 200, 0.75);
     }
 
     .experience-section {
@@ -135,15 +127,11 @@ trackPageView('about', 'About | GST Leadership & Experience');
     .experience-section h2 {
         font-size: 2rem;
         font-weight: 700;
-        color: rgba(26, 26, 26, 0.95);
+        color: var(--text-primary);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 3rem;
         text-align: center;
-    }
-
-    :global(html.dark-theme) .experience-section h2 {
-        color: rgba(245, 245, 245, 0.95);
     }
 
     .experience-grid {
@@ -172,14 +160,14 @@ trackPageView('about', 'About | GST Leadership & Experience');
     .experience-card h3 {
         font-size: 1.3rem;
         font-weight: 700;
-        color: rgba(26, 26, 26, 0.95);
+        color: var(--text-primary);
         margin-bottom: 1rem;
         line-height: 1.3;
     }
 
     .experience-card p {
         font-size: 0.95rem;
-        color: rgba(26, 26, 26, 0.75);
+        color: var(--text-secondary);
         line-height: 1.7;
     }
 
@@ -191,14 +179,6 @@ trackPageView('about', 'About | GST Leadership & Experience');
     :global(html.dark-theme) .experience-card:hover {
         background: rgba(5, 205, 153, 0.12);
         border-color: rgba(5, 205, 153, 0.25);
-    }
-
-    :global(html.dark-theme) .experience-card h3 {
-        color: rgba(245, 245, 245, 0.95);
-    }
-
-    :global(html.dark-theme) .experience-card p {
-        color: rgba(200, 200, 200, 0.75);
     }
 
     .founder-section {
@@ -259,14 +239,14 @@ trackPageView('about', 'About | GST Leadership & Experience');
     .founder-bio h2 {
         font-size: 1.8rem;
         font-weight: 700;
-        color: rgba(26, 26, 26, 0.95);
+        color: var(--text-primary);
         margin-bottom: 1.5rem;
         line-height: 1.3;
     }
 
     .founder-bio p {
         font-size: 1rem;
-        color: rgba(26, 26, 26, 0.75);
+        color: var(--text-secondary);
         line-height: 1.8;
         margin-bottom: 1.5rem;
     }
@@ -304,11 +284,7 @@ trackPageView('about', 'About | GST Leadership & Experience');
 
     .founder-credentials {
         font-style: italic;
-        color: rgba(26, 26, 26, 0.75);
-    }
-
-    :global(html.dark-theme) .founder-credentials {
-        color: rgba(200, 200, 200, 0.75);
+        color: var(--text-secondary);
     }
 
     :global(html.dark-theme) .founder-section {
@@ -322,14 +298,6 @@ trackPageView('about', 'About | GST Leadership & Experience');
 
     :global(html.dark-theme) .founder-image {
         border-color: rgba(5, 205, 153, 0.3);
-    }
-
-    :global(html.dark-theme) .founder-bio h2 {
-        color: rgba(245, 245, 245, 0.95);
-    }
-
-    :global(html.dark-theme) .founder-bio p {
-        color: rgba(200, 200, 200, 0.75);
     }
 
     @media (max-width: 1024px) {
