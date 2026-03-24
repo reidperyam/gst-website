@@ -63,7 +63,7 @@ FAQPage (conditional, per-page)
 
 ### Purpose
 
-Identifies Global Strategic Technology as a professional services organization specializing in M&A technical advisory.
+Identifies Global Strategic Technologies as a professional services organization specializing in M&A technical advisory.
 
 ### Schema Definition
 

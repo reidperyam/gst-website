@@ -373,7 +373,7 @@ All images must have descriptive alt text that:
 <img src="/logo.svg" alt="Audience segment - Private equity and investment teams" />
 
 <!-- Logo (decorative with aria-hidden) -->
-<img src="/logo.svg" alt="Global Strategic Technology logo" loading="lazy" aria-hidden="true" />
+<img src="/logo.svg" alt="Global Strategic Technologies logo" loading="lazy" aria-hidden="true" />
 ```
 
 ### Main Content Tag
