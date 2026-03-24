@@ -1102,6 +1102,8 @@ html.dark-theme .cta-box p {
     .cta-button {
         width: 100%;
         text-align: center;
+        padding: var(--spacing-lg) var(--spacing-xl);
+        font-size: 0.9rem;
         min-height: 44px;
     }
 
@@ -1133,12 +1135,6 @@ html.dark-theme .cta-box p {
     .cta-box p {
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
-    }
-
-    .cta-button {
-        padding: var(--spacing-lg) var(--spacing-xl);
-        font-size: 0.9rem;
-        min-height: 44px;
     }
 
     .contact-info {
