@@ -103,6 +103,23 @@ See [VARIABLES_REFERENCE.md — TechPar Variables](./VARIABLES_REFERENCE.md#tech
 
 ---
 
+## Company Name
+
+**Legal name**: Global Strategic Technologies LLC
+
+**Approved references**:
+- "Global Strategic Technologies" — full company name
+- "GST" — abbreviation, acceptable in all contexts
+
+**Prohibited**:
+- "Global Strategic Technology" (singular) — this is incorrect and has been a recurring bug
+- "Global Strategic Tech" — informal abbreviation, not approved
+- Mixing the full name and "GST" on the same page without establishing the full name first
+
+The company name must appear correctly in all user-facing content: page titles, meta tags, alt text, social sharing images, legal pages, and documentation. See also [BRAND_VOICE.md](../branding/BRAND_VOICE.md) for extended naming conventions.
+
+---
+
 ## Accessibility
 
 - **Contrast**: All text/background combinations should meet WCAG 2.1 AA contrast ratios (4.5:1 for normal text, 3:1 for large text)
