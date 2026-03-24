@@ -50,17 +50,18 @@ Centralized CSS variable-based design system. Single source of truth in `variabl
 
 | Category | Examples | Count |
 |----------|---------|-------|
-| Colors | `--color-primary`, `--bg-light`, `--text-light-primary` | 31 |
+| Colors (brand + text) | `--color-primary`, `--bg-light`, `--text-primary` | 35 |
 | Component colors | `--filter-chip-bg`, `--service-card-text`, `--footer-bg` | 31 |
+| Tool-domain colors | `--hub-authority-blue`, `--dm-*`, `--icg-*`, `--techpar-*` | 33 |
 | Misc colors | `--checkerboard-line`, `--theme-toggle-color` | 6 |
-| Spacing | `--spacing-xs` through `--spacing-3xl` | 7 |
+| Spacing | `--spacing-xs` through `--spacing-3xl` + `--spacing-2_5xl` | 8 |
 | Gaps | `--gap-tight` through `--gap-extra-wide` | 4 |
 | Typography | `--font-family`, `--font-weight-*`, `--text-*` | 10 |
 | Transitions | `--transition-fast`, `--transition-normal`, `--transition-slow` | 3 |
 | Shadows | `--shadow-sm`, `--shadow-md`, `--shadow-lg` | 3 |
-| **Total** | | **95** |
+| **Total** | | **134** |
 
-> Note: Dark theme defines 43 variable overrides, not new variables. 13 utility classes are defined across `variables.css`, `typography.css`, and `interactions.css`.
+> Note: Dark theme defines 78 variable overrides, not new variables. 13 utility classes are defined across `variables.css`, `typography.css`, and `interactions.css`.
 
 Full variable catalog: [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md)
 
@@ -100,7 +101,83 @@ In stylesheets, always import in cascade order:
 
 ---
 
+## Astro-Specific Patterns
+
+### Scoped vs. Global Styles — Decision Tree
+
+| Scenario | Use |
+|----------|-----|
+| Design system tokens, resets, page layout | Global CSS in `src/styles/` |
+| Single-component visual styles | Scoped `<style>` in the `.astro` file |
+| Styling dynamically injected HTML (`innerHTML`) | `:global()` wrapper on the selector |
+| Dark theme override for parent state | `:global(html.dark-theme)` prefix — but prefer CSS variables that auto-switch |
+| Global keyframes or animations | `src/styles/global.css` |
+
+### `class:list` — Conditional Classes
+
+Use Astro's `class:list` directive for conditionally applying classes. Preferred over template literal concatenation for new code.
+
+```astro
+<!-- Preferred -->
+<div class:list={['card', { active: isActive, highlighted: score > 90 }]}>
+
+<!-- Avoid in new code -->
+<div class={`card ${isActive ? 'active' : ''}`}>
+```
+
+### `define:vars` — JS-to-CSS Bridging
+
+Use `define:vars` to pass frontmatter variables into scoped `<style>` blocks as CSS custom properties. Preferred over inline `style` attributes for dynamic values.
+
+```astro
+---
+const accentColor = getThemeColor(category);
+---
+<style define:vars={{ accentColor }}>
+  .card { border-left: 3px solid var(--accentColor); }
+</style>
+```
+
+**Limitation**: `define:vars` makes the style tag inline (not bundled). Use sparingly for truly dynamic values, not for values that could be CSS variables.
+
+### When `:global()` Is Necessary
+
+`:global()` breaks Astro's scoping. Only use it when:
+
+1. **Styling dynamically injected content** — Elements created via `innerHTML` in `<script>` blocks don't have Astro's scoping attributes:
+   ```css
+   :global(.question-card) { padding: var(--spacing-md); }
+   ```
+
+2. **Parent state selectors** — When a component's appearance depends on a class on `<html>` or a parent element:
+   ```css
+   :global(html.dark-theme) .my-card { background: var(--bg-dark-secondary); }
+   ```
+
+**Prefer CSS variables over `:global()`** when possible. If a value changes in dark theme, define a CSS variable with a dark override in `variables.css` rather than adding `:global(html.dark-theme)` selectors.
+
+### CSS Linting
+
+The project uses [Stylelint](https://stylelint.io/) to enforce CSS conventions:
+
+```bash
+npm run lint:css    # Lint src/styles/*.css
+```
+
+Rules enforce: no duplicate selectors, no duplicate properties, no named colors. See `.stylelintrc.json` for full configuration.
+
+---
+
 ## Component Styling
+
+### Color Selection Quick-Reference
+
+When choosing a color, follow this priority: **Primary teal → Secondary amber → Semantic → Neutrals → Domain**. See [BRAND_GUIDELINES.md — Color Usage Hierarchy](./BRAND_GUIDELINES.md#color-usage-hierarchy) for the full table and rules.
+
+- Interactive elements / brand accents → `--color-primary`
+- Status indicators (success/warning/error/info) → `--color-success`, `--color-warning`, `--color-error`, `--color-info`
+- Body content, backgrounds, borders → `--text-*`, `--bg-*`, `--border-*`
+- Tool-specific only → `--hub-*`, `--dm-*`, `--icg-*`, `--techpar-*`, `--regmap-*`
 
 ### Scoped styles (single-use components)
 
@@ -119,7 +196,7 @@ In stylesheets, always import in cascade order:
 
   .custom-card h2 {
     font-size: var(--text-lg);
-    color: var(--text-light-primary);
+    color: var(--text-primary);
     margin-bottom: var(--spacing-md);
   }
 </style>
@@ -220,7 +297,7 @@ html.dark-theme {
 
 ### Adding Dark Theme Support to New Components
 
-1. Use existing variables wherever possible (`--bg-light-alt`, `--text-light-primary`, `--color-primary`)
+1. Use existing variables wherever possible (`--bg-light-alt`, `--text-primary`, `--color-primary`)
 2. If you need a new component-specific variable, define both light and dark values in `variables.css`:
    ```css
    :root {
@@ -236,9 +313,9 @@ html.dark-theme {
 
 | Use Case | Variable |
 |----------|----------|
-| Primary text | `--text-light-primary` (auto-switches via dark theme override) |
-| Secondary text | `--text-light-secondary` (auto-switches) |
-| Muted text | `--text-light-muted` (auto-switches) |
+| Primary text | `--text-primary` (auto-switches in dark theme) |
+| Secondary text | `--text-secondary` (auto-switches) |
+| Muted text | `--text-muted` (auto-switches) |
 | Page background | `--bg-light` (auto-switches to `#0a0a0a`) |
 | Alt background | `--bg-light-alt` (auto-switches to `#141414`) |
 | Primary accent | `--color-primary` (same in both themes) |
@@ -348,52 +425,77 @@ Hub tools render content via `innerHTML` at runtime (questions, recommendations,
 
 ### Tool Shell Container
 
-Hub tools use a centered container shell. The pattern is not yet standardized (see [STYLES_REMEDIATION_ROADMAP.md](./STYLES_REMEDIATION_ROADMAP.md#7-standardized-tool-shell-container)), but the current convention is:
+Hub tools use the standardized `.tool-shell` class defined in `global.css`. This provides a centered, themed container with consistent border-radius, background, and responsive padding.
 
 ```css
-.tool-shell {
-  max-width: 660px;         /* Range: 660-760px across tools */
-  margin: 0 auto;
-  background: var(--bg-light-alt);
-  border: 1px solid var(--accent-light-bg-hover);
-  border-radius: 10px;
-  overflow: hidden;
-}
+/* Base: 700px centered container */
+.tool-shell { max-width: 700px; margin: 0 auto; ... }
+
+/* Width modifiers */
+.tool-shell--narrow   { max-width: 660px; }  /* ICG */
+.tool-shell--wide     { max-width: 760px; }  /* Tech Debt Calculator */
+.tool-shell--fluid    { max-width: 100%; }   /* TechPar */
+.tool-shell--document { max-width: 800px; }  /* Diligence Machine */
 ```
 
-Content wrappers inside the shell use consistent padding:
+**Content wrapper**: Use `.tool-content` inside the shell for automatic responsive padding:
 ```css
-.content-wrapper {
+.tool-shell .tool-content {
   padding: var(--spacing-xl) var(--spacing-lg);   /* Desktop */
 }
-
-@media (max-width: 480px) {
-  .content-wrapper {
-    padding: var(--spacing-lg) var(--spacing-md);  /* Mobile */
-  }
-}
+/* Automatically reduces to var(--spacing-lg) var(--spacing-md) at 480px */
 ```
+
+**HTML template**:
+```html
+<section class="tool-section">
+  <div class="container">
+    <HubHeader title="..." subtitle="..." />
+    <div class="tool-shell tool-shell--narrow">
+      <div class="tool-content">
+        <!-- Tool-specific content -->
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+**Print**: Shell expands to full width with no border or radius.
 
 ### Skeleton Loading Placeholders
 
-For components that load content asynchronously (API calls, server islands), use the skeleton loading pattern. The `@keyframes pulse` animation is already defined in `global.css`.
+For components that load content asynchronously (API calls, server islands), use the skeleton loading pattern. The `@keyframes pulse` animation is already defined in `global.css` (line 137).
 
-```css
-.skeleton-bar {
-  height: 0.875rem;
-  background: rgba(5, 205, 153, 0.15);
-  border-radius: 4px;
-  animation: pulse 2s ease-in-out infinite;
-}
+**Canonical reference**: `src/components/radar/RadarFeedSkeleton.astro`
+
+**Global classes** (defined in `global.css`):
+
+| Class | Description |
+|-------|-------------|
+| `.skeleton-bar` | Rectangular placeholder bar (0.875rem height) |
+| `.skeleton-bar--sm` | Smaller bar variant (0.625rem height) |
+| `.skeleton-dot` | Circular placeholder (8px) |
+
+All use `var(--accent-light-bg-hover)` for background color (auto-switches in dark theme) and the `pulse` animation.
+
+```html
+<!-- Example: text block skeleton -->
+<div class="skeleton-bar" style="width: 80%"></div>
+<div class="skeleton-bar skeleton-bar--sm" style="width: 40%; animation-delay: 0.3s"></div>
 ```
 
 **Convention**:
-- Use `rgba(5, 205, 153, 0.15)` (primary teal at 15% opacity) for all skeleton elements
-- Vary bar widths to suggest natural content variation (e.g., `width: 70%`, `width: 80%`)
+- Vary bar widths via inline `style` to suggest natural content variation
 - Add `aria-hidden="true"` to the skeleton container
 - Stagger animation delays on consecutive elements (e.g., `animation-delay: 0.3s`)
 
-**Current usage**: `src/components/radar/RadarFeedSkeleton.astro`
+**Content swap pattern**:
+1. Render the skeleton as the default visible state
+2. Set `aria-hidden="true"` on the skeleton wrapper so screen readers skip it
+3. When real content loads (via client-side JS), hide the skeleton and show the content
+4. Example: `skeletonEl.style.display = 'none'; contentEl.style.display = 'block';`
+
+**Micro-spacing exception**: Skeleton element heights (`0.875rem`, `0.625rem`, `0.375rem`) approximate text line heights and are not layout spacing — these are acceptable as hardcoded rem values since the spacing scale is not designed for visual approximation of text dimensions.
 
 ### Delta Chevron — Collapse/Expand Indicator
 
@@ -427,7 +529,7 @@ The `.delta-chevron` utility (defined in `interactions.css`) provides a collapse
 
 ```css
 /* BAD */  .text { color: #1a1a1a; }
-/* GOOD */ .text { color: var(--text-light-primary); }
+/* GOOD */ .text { color: var(--text-primary); }
 ```
 
 Colors must use CSS variables so dark theme works automatically.
@@ -499,6 +601,7 @@ Delete dead styles. Version control has the history.
 
 ## Related Documentation
 
+- [BRAND_GUIDELINES.md](./BRAND_GUIDELINES.md) — Brand color palette, usage rules, and asset guidelines
 - [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) — Complete design token catalog
 - [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) — Typography utility classes
 - [STYLES_REMEDIATION_ROADMAP.md](./STYLES_REMEDIATION_ROADMAP.md) — Tracked initiatives for closing convention gaps
@@ -506,4 +609,4 @@ Delete dead styles. Version control has the history.
 
 ---
 
-**Last Updated**: March 21, 2026
+**Last Updated**: March 24, 2026

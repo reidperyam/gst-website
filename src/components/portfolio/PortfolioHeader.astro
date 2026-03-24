@@ -139,7 +139,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 <style>
   /* Component-Specific Overrides */
   .portfolio-header {
-    background: #ffffff;
+    background: var(--bg-light);
     border-bottom: none;
     padding: 0.875rem 0;
   }
@@ -159,7 +159,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   .portfolio-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: rgba(26, 26, 26, 0.95);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: -0.02em;
     margin: 0;
@@ -167,7 +167,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   .portfolio-controls-fixed {
-    background: #ffffff;
+    background: var(--bg-light);
     border-bottom: none;
     padding: 0;
     height: auto;
@@ -184,7 +184,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     width: fit-content;
     max-width: calc(100% - 3rem);
     z-index: 1002;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
   }
 
   .portfolio-controls-fixed .container {
@@ -193,7 +193,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background: #ffffff;
+    background: var(--bg-light);
   }
 
 
@@ -211,7 +211,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    color: rgba(26, 26, 26, 0.5);
+    color: var(--text-faded);
     pointer-events: none;
     width: 18px;
     height: 18px;
@@ -222,8 +222,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     position: absolute;
     top: -8px;
     right: -8px;
-    background: #05cd99;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--bg-light);
     font-size: 0.65rem;
     font-weight: 700;
     padding: 0.25rem 0.5rem;
@@ -247,14 +247,14 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 1px solid var(--border-light);
     flex-shrink: 0;
   }
 
   .drawer-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: rgba(26, 26, 26, 0.95);
+    color: var(--text-primary);
     margin: 0;
     letter-spacing: -0.01em;
   }
@@ -263,7 +263,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     background: transparent;
     border: none;
     cursor: pointer;
-    color: rgba(26, 26, 26, 0.6);
+    color: var(--text-muted);
     padding: 0.5rem;
     display: flex;
     align-items: center;
@@ -272,11 +272,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   .drawer-close:hover {
-    color: #05cd99;
+    color: var(--color-primary);
   }
 
   .drawer-close:focus-visible {
-    outline: 2px solid #05cd99;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
@@ -299,7 +299,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(26, 26, 26, 0.6);
+    color: var(--text-muted);
     margin-bottom: 0.75rem;
   }
 
@@ -315,50 +315,26 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   /* Dark Theme Component Overrides */
-  :global(html.dark-theme) .portfolio-header {
-    background: #0a0a0a;
-  }
-
   :global(html.dark-theme) .portfolio-controls-fixed {
-    background: #1a1a1a;
+    background: var(--bg-dark-secondary);
   }
 
   :global(html.dark-theme) .portfolio-controls-fixed .container {
-    background: #1a1a1a;
+    background: var(--bg-dark-secondary);
   }
 
   :global(html.dark-theme) .controls-wrapper {
-    border-bottom-color: #05cd99;
-  }
-
-  :global(html.dark-theme) .portfolio-title {
-    color: rgba(245, 245, 245, 0.95);
-  }
-
-  :global(html.dark-theme) .search-icon {
-    color: rgba(200, 200, 200, 0.5);
+    border-bottom-color: var(--color-primary);
   }
 
   :global(html.dark-theme) .portfolio-filter-drawer {
-    background: #1a1a1a;
-    border-left-color: #05cd99;
+    background: var(--bg-dark-secondary);
+    border-left-color: var(--color-primary);
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
   }
 
   :global(html.dark-theme) .drawer-header {
-    border-bottom-color: rgba(5, 205, 153, 0.2);
-  }
-
-  :global(html.dark-theme) .drawer-title {
-    color: rgba(245, 245, 245, 0.95);
-  }
-
-  :global(html.dark-theme) .drawer-close {
-    color: rgba(200, 200, 200, 0.6);
-  }
-
-  :global(html.dark-theme) .drawer-close:hover {
-    color: #05cd99;
+    border-bottom-color: var(--border-dark);
   }
 
   :global(html.dark-theme) .filter-label {
@@ -409,7 +385,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       top: 133px;
       height: calc(100vh - 133px);
       border-left: none;
-      border-top: 2px solid #05cd99;
+      border-top: 2px solid var(--color-primary);
     }
 
     .portfolio-filter-drawer.open {
@@ -495,7 +471,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       height: auto;
       max-height: 85vh;
       border-left: none;
-      border-top: 2px solid #05cd99;
+      border-top: 2px solid var(--color-primary);
       border-radius: 12px 12px 0 0;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
     }

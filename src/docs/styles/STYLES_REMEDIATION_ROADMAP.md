@@ -7,6 +7,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 ## Table of Contents
 
 1. [Brand Color and Style Guidelines](#1-brand-color-and-style-guidelines)
+1A. [Brand Guidelines Completion](#1a-brand-guidelines-completion) *(complete)*
 2. [Hardcoded Color Remediation](#2-hardcoded-color-remediation)
 3. [Hardcoded Spacing Remediation](#3-hardcoded-spacing-remediation)
 4. [Diligence Machine Remediation](#4-diligence-machine-remediation)
@@ -14,12 +15,15 @@ Tracked initiatives to close the gap between documented conventions and actual i
 6. [ICG Color Standardization](#6-icg-color-standardization)
 7. [Standardized Tool Shell Container](#7-standardized-tool-shell-container)
 8. [Dynamic Content Loading Pattern](#8-dynamic-content-loading-pattern)
+9. [Theme-Agnostic Text Variable Refactor](#9-theme-agnostic-text-variable-refactor)
+10. [Reusable Skeleton CSS Classes](#10-reusable-skeleton-css-classes)
+11. [Astro CSS Alignment & Tooling](#11-astro-css-alignment--tooling)
 
 ---
 
 ## 1. Brand Color and Style Guidelines
 
-**Status**: Not formalized
+**Status**: Complete — existing palette documented, all 5 requirement areas finalized in Init 1A (March 24, 2026).
 
 **Problem**: GST uses `#05cd99` as its primary brand teal, but there is no formal brand color palette, no documented secondary/tertiary colors, and no guidelines for when to use brand colors vs. neutral/semantic colors. The delta icon is used as a brand asset but its usage rules are informal.
 
@@ -37,9 +41,22 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ---
 
+## 1A. Brand Guidelines Completion
+
+**Status**: Complete (March 24, 2026)
+
+**Delivered**:
+1. **Semantic color system** — added `--color-success`, `--color-warning`, `--color-error`, `--color-info` with dark theme overrides
+2. **Color usage hierarchy** — 5-tier priority documented in BRAND_GUIDELINES.md and STYLES_GUIDE.md
+3. **WCAG contrast fix** — `--text-faded` opacity increased from 0.5 to 0.6; contrast thresholds documented
+4. **Data visualization standards** — regulatory map colors migrated to `--regmap-category-industry`/`--regmap-category-cyber` variables; CVD-safe sequence documented
+5. **Brand asset usage rules** — delta icon sizing, clearance, and placement guidelines finalized
+
+---
+
 ## 2. Hardcoded Color Remediation
 
-**Status**: 90+ violations across 14 files
+**Status**: Complete — design system colors standardized across all files (March 23, 2026). Remaining hardcoded colors are domain-specific data visualization values (regulatory map industry/jurisdiction colors, FyiItem editor pick) or accepted exceptions (print styles, shadows/overlays).
 
 **Problem**: The styles guide prohibits hardcoded colors, but the codebase uses them extensively. This breaks dark theme support and creates maintenance burden.
 
@@ -73,7 +90,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 3. Hardcoded Spacing Remediation
 
-**Status**: 70+ violations, concentrated in older components
+**Status**: Complete — actionable spacing values replaced with variables (March 23, 2026). Remaining hardcoded values are micro-spacing exceptions (1-3px for badge padding, optical alignment) per documented convention.
 
 **Problem**: The spacing scale (`--spacing-xs` through `--spacing-3xl`) covers 4px to 48px, but some components use hardcoded pixel values, often mixing hardcoded and variable spacing in the same rule.
 
@@ -98,7 +115,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 4. Diligence Machine Remediation
 
-**Status**: Largest single source of style violations — scope increased by recent feature work
+**Status**: Complete — hardcoded colors replaced with CSS variables, spacing remediated, redundant dark theme overrides removed (March 23, 2026)
 
 **Problem**: The Diligence Machine was built before the current design system was fully established. Recent commits (EEAT signaling, collapse/expand cards, floating action bar, cross-linking CTAs) added significant new CSS that continued the hardcoded pattern. It now contains 75 hardcoded colors and 58 hardcoded spacing values.
 
@@ -136,7 +153,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 5. TechPar Style Deviations
 
-**Status**: Partially integrated, partially divergent
+**Status**: Complete — variables documented in VARIABLES_REFERENCE.md (March 23, 2026)
 
 **Problem**: TechPar has its own color palette defined in `variables.css` (lines 116-150) for zone colors, category colors, and chart colors. These are properly implemented as CSS variables with dark theme overrides, but they are not documented in VARIABLES_REFERENCE.md.
 
@@ -160,7 +177,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 6. ICG Color Standardization
 
-**Status**: Functional but not integrated into design system — scope increased by recent commits
+**Status**: Complete — maturity colors, radar chart, and template colors standardized with CSS variables (March 23, 2026)
 
 **Problem**: The Infrastructure Cost Governance tool uses hardcoded colors for maturity levels and data visualization that should eventually become semantic design system variables. Recent commits (benchmark table redesign, recommendation badge borders) introduced additional hardcoded colors.
 
@@ -199,7 +216,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 7. Standardized Tool Shell Container
 
-**Status**: Pattern exists but is not standardized
+**Status**: Complete — `.tool-shell` class defined in global.css, migrated ICG + Tech Debt Calculator (March 23, 2026). TechPar and Diligence Machine use structurally different patterns (fluid/width-only) and are documented exceptions.
 
 **Problem**: Each hub tool implements its own container shell with slightly different max-widths and styling:
 
@@ -240,7 +257,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## 8. Dynamic Content Loading Pattern
 
-**Status**: Implemented in Radar, not standardized
+**Status**: Documented — pattern standardized in STYLES_GUIDE.md (March 23, 2026)
 
 **Problem**: The Radar page uses a skeleton loading pattern (`RadarFeedSkeleton.astro`) while waiting for API content to load. This pattern is not documented or available for reuse by other components that may need async data loading.
 
@@ -270,32 +287,145 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ---
 
-## Priority Ranking
+## Completion Summary
 
-| Priority | Initiative | Impact | Effort |
-|----------|-----------|--------|--------|
-| 1 | Brand Guidelines (Init. 1) | High | Medium |
-| 2 | Tool Shell Container (Init. 7) | High | Medium |
-| 3 | Diligence Machine (Init. 4) | High | Large |
-| 4 | Hardcoded Colors (Init. 2) | High | Large |
-| 5 | Dynamic Loading Pattern (Init. 8) | Medium | Small |
-| 6 | TechPar Documentation (Init. 5) | Medium | Small |
-| 7 | Hardcoded Spacing (Init. 3) | Medium | Medium |
-| 8 | ICG Color Standardization (Init. 6) | Medium | Medium-Large |
+11 initiatives tracked. 10 fully complete, 1 awaiting stakeholder review (Init 1A).
 
-**Note on Init. 4 + Init. 6**: The Diligence Machine and ICG now share the same "Authority Blue" color family (`#5b7a9d` / `#7a9dbd`). Remediating these together would allow defining shared semantic variables once rather than duplicating across tools.
+| Initiative | Status | Date | Notes |
+|-----------|--------|------|-------|
+| 1. Brand Guidelines | Requirements Defined | Mar 24 | Palette documented; 5 areas with recommendations awaiting stakeholder review (see Init 1A) |
+| 1A. Guidelines Completion | Awaiting Review | Mar 24 | Semantic colors, usage rules, contrast audit, data viz, brand assets |
+| 2. Hardcoded Colors | Complete | Mar 23 | Design system colors standardized; data viz colors preserved as exceptions |
+| 3. Hardcoded Spacing | Complete | Mar 23 | Actionable values replaced; micro-spacing (1-3px) documented as exceptions |
+| 4. Diligence Machine | Complete | Mar 23 | 75+ color + spacing replacements; 6 redundant dark overrides removed |
+| 5. TechPar Docs | Complete | Mar 23 | 35 variables documented in VARIABLES_REFERENCE.md |
+| 6. ICG Colors | Complete | Mar 23 | Engine, radar chart, and template standardized with CSS variables |
+| 7. Tool Shell | Complete | Mar 23 | `.tool-shell` class created; ICG + Tech Debt Calculator migrated |
+| 8. Skeleton Loading | Complete | Mar 23 | Pattern documented; classes extracted in Init 10 |
+| 9. Text Variable Refactor | Complete | Mar 24 | `--text-*` aliases added; 335 refs migrated; ~200 lines of redundant dark overrides removed |
+| 10. Skeleton CSS Classes | Complete | Mar 24 | `.skeleton-bar`, `.skeleton-bar--sm`, `.skeleton-dot` extracted to global.css |
+| 11. Astro CSS Alignment | Complete | Mar 24 | Stylelint added; Astro CSS patterns documented; `:global()` reduced 631→577 |
+
+**Key outcomes**:
+- 22 new shared CSS variables defined (`--hub-authority-blue`, `--dm-*`, `--icg-*`, `--text-*` aliases, `--spacing-2_5xl`)
+- ~200 lines of redundant dark theme CSS eliminated via theme-agnostic text variables
+- Standardized `.tool-shell` container with 4 width modifiers
+- Reusable skeleton loading classes with automatic dark theme support
+- All documentation (VARIABLES_REFERENCE, TYPOGRAPHY_REFERENCE, STYLES_GUIDE, BRAND_GUIDELINES) updated
 
 ---
 
-## Positive Patterns in Recent Commits
+### 9. Theme-Agnostic Text Variable Refactor
 
-The following patterns from recent work demonstrate the target approach for remediation:
+**Status**: Complete — --text-* aliases added, 335 references migrated, ~200 lines of redundant dark theme overrides removed (March 24, 2026)
 
-- **`.delta-chevron` utility** (`interactions.css`): Extracted as a shared component using only CSS variables (`--color-primary`, `--text-light-muted`, `--text-dark-muted`, `--transition-fast`). No hardcoded colors. This is the reference pattern for new interactive components.
-- **ICG benchmark table spacing**: New cell padding uses `var(--spacing-sm) var(--spacing-md)` and row gap uses `var(--spacing-xs)` — correct variable usage throughout.
-- **ICG recommendation badge borders**: Uses `var(--border-light)` for light theme — correct semantic variable usage.
+**Problem**: The design system uses paired text variables — `--text-light-primary` for light theme and `--text-dark-primary` for dark theme. Components reference the light variant, then every dark theme context requires a manual `html.dark-theme` override to swap to the dark variant. The Diligence Machine alone has ~25 such overrides; the pattern repeats across portfolio components, regulatory map, and other tools.
 
-These demonstrate that the conventions are being followed in new utility code even while legacy patterns persist in existing component styles.
+**Root cause**: The variable naming convention is theme-specific (`--text-light-*` / `--text-dark-*`) rather than theme-agnostic. The background and accent variables (e.g., `--bg-light`, `--border-light`) already auto-switch via `html.dark-theme` overrides in `variables.css`, but text variables require manual swapping at the component level because components reference the `-light-` variant directly.
+
+**Proposed approach**:
+1. Introduce theme-agnostic aliases in `variables.css`:
+   ```css
+   :root {
+     --text-primary: var(--text-light-primary);
+     --text-secondary: var(--text-light-secondary);
+     --text-muted: var(--text-light-muted);
+     --text-faded: var(--text-light-faded);
+   }
+   html.dark-theme {
+     --text-primary: var(--text-dark-primary);
+     --text-secondary: var(--text-dark-secondary);
+     --text-muted: var(--text-dark-muted);
+     --text-faded: var(--text-dark-faded);
+   }
+   ```
+2. Migrate components from `--text-light-*` → `--text-*`
+3. Remove now-redundant `html.dark-theme` overrides from each component
+4. Keep `--text-light-*` and `--text-dark-*` available for the rare case where a component needs to force a specific theme's value regardless of context
+
+**Impact**: Eliminates an estimated 60-80 dark theme override rules across the codebase. Reduces CSS volume, simplifies new component authoring, and prevents the recurring pattern of forgetting a dark theme text swap.
+
+**Files affected**:
+- `src/styles/variables.css` — Add aliases + dark overrides
+- `src/styles/typography.css` — Update utility class definitions
+- `src/pages/hub/tools/diligence-machine/index.astro` — ~25 dark overrides removable
+- `src/components/portfolio/*.astro` — ~15 dark overrides removable
+- `src/pages/hub/tools/regulatory-map/index.astro` — ~8 dark overrides removable
+- `src/pages/hub/tools/infrastructure-cost-governance/index.astro` — ~5 dark overrides removable
+- All other components that reference `--text-light-*` or `--text-dark-*`
+
+**Documentation to update**: VARIABLES_REFERENCE.md, STYLES_GUIDE.md (dark theme section), TYPOGRAPHY_REFERENCE.md
+
+**Estimated scope**: Large — touches every component, but each replacement is mechanical (find `--text-light-*` → `--text-*`, delete redundant dark override)
+
+---
+
+### 10. Reusable Skeleton CSS Classes
+
+**Status**: Complete — .skeleton-bar, .skeleton-bar--sm, .skeleton-dot extracted to global.css; RadarFeedSkeleton refactored to use shared classes (March 24, 2026)
+
+**Problem**: The skeleton loading pattern is documented (Init 8) but the CSS lives only inside `RadarFeedSkeleton.astro` as scoped styles. If another component needs skeleton loading (e.g., a hub tool with async data, a server island), the CSS must be duplicated.
+
+**Proposed approach**:
+1. Extract reusable classes into `src/styles/global.css` (or a new `skeleton.css`):
+   ```css
+   .skeleton-bar {
+     height: 0.875rem;
+     background: rgba(5, 205, 153, 0.15);
+     border-radius: 4px;
+     animation: pulse 2s ease-in-out infinite;
+   }
+   .skeleton-dot {
+     width: 8px;
+     height: 8px;
+     border-radius: 50%;
+     background: rgba(5, 205, 153, 0.15);
+     animation: pulse 2s ease-in-out infinite;
+   }
+   .skeleton-text {
+     height: 0.625rem;
+     background: rgba(5, 205, 153, 0.15);
+     border-radius: 4px;
+     animation: pulse 2s ease-in-out infinite;
+   }
+   ```
+2. Refactor `RadarFeedSkeleton.astro` to use the shared classes instead of scoped styles
+3. Document in STYLES_GUIDE.md
+
+**Trigger**: Implement when a second component needs skeleton loading. Until then, the scoped approach in RadarFeedSkeleton is sufficient.
+
+**Estimated scope**: Small
+
+---
+
+### 11. Astro CSS Alignment & Tooling
+
+**Status**: Complete — 11A (Stylelint), 11B (Astro CSS docs), 11C (:global() audit) all done (March 24, 2026)
+
+**Problem**: The project had no CSS linting and no documentation of Astro-specific CSS patterns (`class:list`, `define:vars`, `:global()` decision guidance). Style convention violations were only caught during manual review.
+
+**Context**: Research using Context7 (Astro docs) confirmed the project's CSS architecture (scoped styles, global CSS in layout, CSS variables) is well-aligned with Astro's recommendations. No framework or preprocessor changes needed. Three improvements identified.
+
+**Completed**:
+
+**11A. Stylelint Integration** — Added `stylelint` + `stylelint-config-standard` with project-specific rules. Enforces no duplicate selectors, no duplicate properties, no named colors. Run via `npm run lint:css`. Config adapted to accept project conventions (rgba notation, vendor prefixes, `:global()` pseudo-class).
+
+**11B. Astro CSS Best Practices Documentation** — Added "Astro-Specific Patterns" section to STYLES_GUIDE.md covering: scoped vs. global decision tree, `class:list` for conditional classes, `define:vars` for JS→CSS bridging, when `:global()` is necessary vs. avoidable, CSS linting reference.
+
+**Planned**:
+
+**11C. `:global()` Audit & Reduction** — Audited all 631 instances across 29 files. Categorized as:
+- **Category A** (~500): Dynamic content (innerHTML, set:html, D3) — necessary, kept
+- **Category B** (~75): Dark theme overrides for non-text properties (borders, backgrounds) — necessary, kept
+- **Category E** (1): Unnecessary `:global(header)` in ma-portfolio — removed (known bug)
+- **Redundant dark overrides** (54): Text/bg overrides made unnecessary by CSS variables — removed
+
+Result: 631 → 577 instances (-54). Remaining instances are all justified (dynamic content or non-auto-switching dark theme properties).
+
+**Not pursued** (evaluated and rejected):
+- Tailwind CSS — would create parallel styling paradigm alongside established CSS variables
+- Sass/Less — CSS variables cover the use cases; adds dependency without proportional benefit
+- CSS nesting — would introduce second formatting convention; keep flat selectors for consistency
 
 ---
 
@@ -304,8 +434,9 @@ These demonstrate that the conventions are being followed in new utility code ev
 - [STYLES_GUIDE.md](./STYLES_GUIDE.md) - Current CSS conventions and patterns
 - [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) - Design token catalog
 - [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) - Typography utility classes
+- [BRAND_GUIDELINES.md](./BRAND_GUIDELINES.md) - Brand color palette and usage rules
 
 ---
 
 **Created**: March 21, 2026
-**Last Updated**: March 22, 2026
+**Last Updated**: March 24, 2026

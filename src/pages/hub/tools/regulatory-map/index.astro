@@ -1432,7 +1432,7 @@ import caData from '../../../../data/canada-provinces.json';
 
     .search-icon {
         flex-shrink: 0;
-        color: var(--text-light-muted);
+        color: var(--text-muted);
     }
 
     .search-input {
@@ -1441,13 +1441,13 @@ import caData from '../../../../data/canada-provinces.json';
         background: transparent;
         font-size: var(--text-sm);
         font-family: inherit;
-        color: var(--text-light-primary);
+        color: var(--text-primary);
         outline: none;
         min-width: 0;
     }
 
     .search-input::placeholder {
-        color: var(--text-light-muted);
+        color: var(--text-muted);
     }
 
     /* Remove default search cancel button in WebKit */
@@ -1464,15 +1464,15 @@ import caData from '../../../../data/canada-provinces.json';
         padding: 0;
         border: none;
         background: transparent;
-        color: var(--text-light-muted);
+        color: var(--text-muted);
         cursor: pointer;
         border-radius: 50%;
         transition: background var(--transition-fast), color var(--transition-fast);
     }
 
     .search-clear-btn:hover {
-        background: rgba(26, 26, 26, 0.08);
-        color: var(--text-light-primary);
+        background: var(--accent-light-bg);
+        color: var(--text-primary);
     }
 
     /* Search results dropdown */
@@ -1506,13 +1506,13 @@ import caData from '../../../../data/canada-provinces.json';
 
     .search-result-item:hover,
     .search-result-item--active {
-        background: rgba(5, 205, 153, 0.08);
+        background: var(--accent-light-bg);
     }
 
     .search-result-name {
         font-size: var(--text-sm);
         font-weight: var(--font-weight-semibold);
-        color: var(--text-light-primary);
+        color: var(--text-primary);
     }
 
     .search-result-meta {
@@ -1530,28 +1530,28 @@ import caData from '../../../../data/canada-provinces.json';
         border-radius: 3px;
     }
 
-    .search-result-category--privacy { background: rgba(5, 205, 153, 0.15); color: var(--color-primary); }
-    .search-result-category--ai { background: rgba(26, 26, 26, 0.08); color: var(--color-secondary); }
-    .search-result-category--industry { background: rgba(108, 99, 255, 0.12); color: #6c63ff; }
-    .search-result-category--cyber { background: rgba(231, 76, 60, 0.12); color: #e74c3c; }
+    .search-result-category--privacy { background: var(--accent-light-bg-hover); color: var(--color-primary); }
+    .search-result-category--ai { background: var(--accent-light-bg); color: var(--color-secondary); }
+    .search-result-category--industry { background: color-mix(in srgb, var(--regmap-category-industry) 12%, transparent); color: var(--regmap-category-industry); }
+    .search-result-category--cyber { background: color-mix(in srgb, var(--regmap-category-cyber) 12%, transparent); color: var(--regmap-category-cyber); }
 
     .search-result-regions {
         font-size: var(--text-xs);
-        color: var(--text-light-muted);
+        color: var(--text-muted);
     }
 
     .search-no-results {
         padding: var(--spacing-lg);
         text-align: center;
         font-size: var(--text-sm);
-        color: var(--text-light-muted);
+        color: var(--text-muted);
     }
 
     .search-result-overflow {
         padding: var(--spacing-sm) var(--spacing-md);
         text-align: center;
         font-size: var(--text-xs);
-        color: var(--text-light-muted);
+        color: var(--text-muted);
         font-style: italic;
     }
 
@@ -1590,7 +1590,7 @@ import caData from '../../../../data/canada-provinces.json';
 
     :global(html.dark-theme) .search-result-item:hover,
     :global(html.dark-theme) .search-result-item--active {
-        background: rgba(5, 205, 153, 0.12);
+        background: var(--accent-light-bg-hover);
     }
 
     :global(html.dark-theme) .search-result-name {
@@ -1617,15 +1617,15 @@ import caData from '../../../../data/canada-provinces.json';
     .filter-chips {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: var(--spacing-md);
         justify-content: center;
     }
 
     .filter-chip {
-        padding: 0.5rem 1rem;
+        padding: var(--spacing-sm) var(--spacing-lg);
         background: rgba(26, 26, 26, 0.05);
-        color: rgba(26, 26, 26, 0.7);
-        border: 1px solid rgba(26, 26, 26, 0.1);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-light);
         border-radius: 4px;
         cursor: pointer;
         font-size: 0.8125rem;
@@ -1639,43 +1639,42 @@ import caData from '../../../../data/canada-provinces.json';
 
     .filter-chip--privacy:hover { border-color: var(--color-primary); color: var(--color-primary); }
     .filter-chip--ai:hover { border-color: var(--color-secondary); color: var(--color-secondary); }
-    .filter-chip--industry:hover { border-color: #6c63ff; color: #6c63ff; }
-    .filter-chip--cyber:hover { border-color: #e74c3c; color: #e74c3c; }
+    .filter-chip--industry:hover { border-color: var(--regmap-category-industry); color: var(--regmap-category-industry); }
+    .filter-chip--cyber:hover { border-color: var(--regmap-category-cyber); color: var(--regmap-category-cyber); }
     .filter-chip--all:hover { border-color: var(--color-primary); color: var(--color-primary); }
 
     .filter-chip:hover {
-        background: rgba(26, 26, 26, 0.08);
+        background: var(--accent-light-bg);
     }
 
     .filter-chip--all.active,
     .filter-chip--privacy.active {
         background: var(--color-primary);
-        color: #ffffff;
+        color: var(--bg-light);
         border-color: var(--color-primary);
     }
 
     .filter-chip--ai.active {
         background: var(--color-secondary);
-        color: #ffffff;
+        color: var(--bg-light);
         border-color: var(--color-secondary);
     }
 
     .filter-chip--industry.active {
-        background: #6c63ff;
-        color: #ffffff;
-        border-color: #6c63ff;
+        background: var(--regmap-category-industry);
+        color: var(--bg-light);
+        border-color: var(--regmap-category-industry);
     }
 
     .filter-chip--cyber.active {
-        background: #e74c3c;
-        color: #ffffff;
-        border-color: #e74c3c;
+        background: var(--regmap-category-cyber);
+        color: var(--bg-light);
+        border-color: var(--regmap-category-cyber);
     }
 
     :global(html.dark-theme) .filter-chip {
         background: rgba(245, 245, 245, 0.06);
         border-color: rgba(245, 245, 245, 0.1);
-        color: rgba(200, 200, 200, 0.8);
     }
 
     :global(html.dark-theme) .filter-chip:hover {
@@ -1685,26 +1684,26 @@ import caData from '../../../../data/canada-provinces.json';
     :global(html.dark-theme) .filter-chip--all.active,
     :global(html.dark-theme) .filter-chip--privacy.active {
         background: var(--color-primary);
-        color: #0a0a0a;
+        color: var(--bg-dark);
         border-color: var(--color-primary);
     }
 
     :global(html.dark-theme) .filter-chip--ai.active {
         background: var(--color-secondary);
-        color: #0a0a0a;
+        color: var(--bg-dark);
         border-color: var(--color-secondary);
     }
 
     :global(html.dark-theme) .filter-chip--industry.active {
-        background: #6c63ff;
-        color: #ffffff;
-        border-color: #6c63ff;
+        background: var(--regmap-category-industry);
+        color: var(--bg-light);
+        border-color: var(--regmap-category-industry);
     }
 
     :global(html.dark-theme) .filter-chip--cyber.active {
-        background: #e74c3c;
-        color: #ffffff;
-        border-color: #e74c3c;
+        background: var(--regmap-category-cyber);
+        color: var(--bg-light);
+        border-color: var(--regmap-category-cyber);
     }
 
     .map-layout {
@@ -1759,7 +1758,7 @@ import caData from '../../../../data/canada-provinces.json';
 
     .legend-label {
         font-size: var(--text-xs);
-        color: var(--text-light-secondary);
+        color: var(--text-secondary);
     }
 
     .map-cta {
@@ -1787,7 +1786,7 @@ import caData from '../../../../data/canada-provinces.json';
 
     .map-cta__text {
         font-size: var(--text-xs);
-        color: var(--text-light-secondary);
+        color: var(--text-secondary);
         white-space: nowrap;
     }
 
@@ -1857,21 +1856,21 @@ import caData from '../../../../data/canada-provinces.json';
 
     .faq-item {
         background: rgba(5, 205, 153, 0.03);
-        border: 1px solid rgba(5, 205, 153, 0.1);
+        border: 1px solid var(--accent-dark-bg);
         border-radius: 8px;
         transition: background var(--transition-normal), border-color var(--transition-normal);
     }
 
     .faq-item[open] {
         background: rgba(5, 205, 153, 0.06);
-        border-color: rgba(5, 205, 153, 0.2);
+        border-color: var(--border-dark);
     }
 
     .faq-question {
         padding: var(--spacing-xl);
         font-size: var(--text-lg);
         font-weight: var(--font-weight-semibold);
-        color: rgba(26, 26, 26, 0.95);
+        color: var(--text-primary);
         cursor: pointer;
         list-style: none;
         display: flex;
@@ -1905,7 +1904,7 @@ import caData from '../../../../data/canada-provinces.json';
     .faq-answer {
         padding: 0 var(--spacing-xl) var(--spacing-xl);
         font-size: var(--text-base);
-        color: rgba(26, 26, 26, 0.7);
+        color: var(--text-secondary);
         line-height: 1.7;
     }
 
@@ -1929,11 +1928,11 @@ import caData from '../../../../data/canada-provinces.json';
 
     :global(html.dark-theme) .faq-item {
         background: rgba(5, 205, 153, 0.05);
-        border-color: rgba(5, 205, 153, 0.15);
+        border-color: var(--accent-light-bg-hover);
     }
 
     :global(html.dark-theme) .faq-item[open] {
-        background: rgba(5, 205, 153, 0.08);
+        background: var(--accent-light-bg);
         border-color: rgba(5, 205, 153, 0.25);
     }
 
@@ -1946,7 +1945,7 @@ import caData from '../../../../data/canada-provinces.json';
     }
 
     :global(html.dark-theme) .faq-answer {
-        color: rgba(200, 200, 200, 0.7);
+        color: var(--text-dark-muted);
     }
 
     @media (max-width: 768px) {
@@ -2010,14 +2009,14 @@ import caData from '../../../../data/canada-provinces.json';
         gap: var(--spacing-lg);
         margin-bottom: var(--spacing-xl);
         font-size: var(--text-xs);
-        color: var(--text-light-secondary);
+        color: var(--text-secondary);
     }
 
     .timeline-legend__item {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        gap: var(--spacing-xs);
     }
 
     .timeline-dot {
@@ -2037,11 +2036,11 @@ import caData from '../../../../data/canada-provinces.json';
     }
 
     .timeline-dot--industry {
-        background: #6c63ff;
+        background: var(--regmap-category-industry);
     }
 
     .timeline-dot--cyber {
-        background: #e74c3c;
+        background: var(--regmap-category-cyber);
     }
 
     .timeline-scroll {
@@ -2098,7 +2097,7 @@ import caData from '../../../../data/canada-provinces.json';
     :global(.timeline-year-label) {
         font-size: var(--text-xs);
         font-weight: var(--font-weight-bold);
-        color: var(--text-light-primary);
+        color: var(--text-primary);
         margin-bottom: var(--spacing-sm);
         position: relative;
         z-index: 1;
@@ -2128,15 +2127,15 @@ import caData from '../../../../data/canada-provinces.json';
 
     :global(.timeline-entry--privacy) { border-left-color: var(--color-primary); }
     :global(.timeline-entry--ai) { border-left-color: var(--color-secondary); }
-    :global(.timeline-entry--industry) { border-left-color: #6c63ff; }
-    :global(.timeline-entry--cyber) { border-left-color: #e74c3c; }
+    :global(.timeline-entry--industry) { border-left-color: var(--regmap-category-industry); }
+    :global(.timeline-entry--cyber) { border-left-color: var(--regmap-category-cyber); }
 
     :global(.timeline-entry:hover) {
         background: rgba(26, 26, 26, 0.05);
     }
 
     :global(.timeline-entry--active) {
-        background: rgba(5, 205, 153, 0.1);
+        background: var(--accent-dark-bg);
         border-left-color: var(--color-primary) !important;
     }
 
@@ -2146,19 +2145,19 @@ import caData from '../../../../data/canada-provinces.json';
 
     :global(.timeline-entry__name) {
         font-size: 0.6875rem;
-        color: var(--text-light-secondary);
+        color: var(--text-secondary);
         max-width: 180px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     :global(.timeline-entry--upcoming .timeline-entry__name) {
-        color: var(--text-light-primary);
+        color: var(--text-primary);
     }
 
     :global(.timeline-entry__date) {
         font-size: 0.625rem;
-        color: var(--text-light-muted);
+        color: var(--text-muted);
     }
 
     :global(.timeline-dot--upcoming) {
@@ -2219,11 +2218,11 @@ import caData from '../../../../data/canada-provinces.json';
     }
 
     :global(html.dark-theme .timeline-entry--active) {
-        background: rgba(5, 205, 153, 0.15);
+        background: var(--accent-light-bg-hover);
     }
 
     :global(html.dark-theme .timeline-entry__name) {
-        color: rgba(200, 200, 200, 0.7);
+        color: var(--text-dark-muted);
     }
 
     :global(html.dark-theme .timeline-entry--upcoming .timeline-entry__name) {
@@ -2235,7 +2234,7 @@ import caData from '../../../../data/canada-provinces.json';
     }
 
     :global(html.dark-theme) .timeline-legend {
-        color: rgba(200, 200, 200, 0.7);
+        color: var(--text-dark-muted);
     }
 
     :global(html.dark-theme) .timeline-scroll::-webkit-scrollbar-track {

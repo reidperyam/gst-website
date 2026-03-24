@@ -283,18 +283,22 @@ const badge = page.locator('[data-testid="filter-badge"]');
 await expect(badge).toBeVisible();
 ```
 
-**Good:**
+**Good — when a readiness gate guarantees content is rendered** (see [#25](#25--shallow-readiness-gates-in-beforeeach-that-dont-match-test-dependencies)):
 ```typescript
-// Explicit - verify exact content
+// Explicit - verify exact content (safe after a proper waitForSelector gate)
 const badge = page.locator('[data-testid="filter-badge"]');
 const badgeText = await badge.textContent();
 expect(badgeText).toBe('1'); // Exactly 1 filter applied
-
-// Or for more complex scenarios:
-const badgeVisible = await badge.isVisible();
-const badgeCount = parseInt(await badge.textContent() || '0');
-expect(badgeVisible && badgeCount > 0).toBe(true);
 ```
+
+**Good — when content may still be rendering** (e.g., after navigation, dynamic updates, or no readiness gate):
+```typescript
+// Auto-retrying — Playwright polls until the assertion passes
+const badge = page.locator('[data-testid="filter-badge"]');
+await expect(badge).toHaveText('1');
+```
+
+> **Timing caveat:** `textContent()`, `getAttribute()`, and `isVisible()` are snapshot calls — they read the DOM once and do not retry. If the element's content may not be populated yet (after navigation, during render, or under Firefox/WebKit parallel worker load), use Playwright's auto-retrying assertions (`toHaveText()`, `toContainText()`, `toHaveAttribute()`) instead. See [#16](#16--using-page-snapshot-queries-on-dynamically-rendered-elements) and [#25](#25--shallow-readiness-gates-in-beforeeach-that-dont-match-test-dependencies) for detailed examples.
 
 ### 5. ❌ Interacting with Animated Panels Before Transitions Complete
 
@@ -1134,6 +1138,49 @@ expect(hasHoverRule).toBe(true);
 **When to use which approach:**
 - **JavaScript event handlers** (e.g., `element.addEventListener('mouseenter', ...)`) — use `page.hover()` or `dispatchEvent`, these work fine
 - **CSS `:hover` pseudo-class styles** — cannot be triggered programmatically; verify the rule exists in the stylesheet, or use `page.hover()` which activates the browser's native hover state (works in headed mode, unreliable in headless)
+
+---
+
+### 25. ❌ Shallow Readiness Gates in `beforeEach` That Don't Match Test Dependencies
+
+When `beforeEach` waits for a container element (e.g., `.hero`) but tests assert on child content (e.g., `.hero p`), Firefox under parallel worker load can resolve the container selector before children are attached to the DOM. Tests then snapshot empty or incomplete child elements via non-retrying calls like `textContent()`.
+
+**Bad:**
+```typescript
+test.beforeEach(async ({ page }) => {
+  await page.goto('/page', { waitUntil: 'domcontentloaded' });
+  // ❌ Waits for the container, but tests depend on its children
+  await page.waitForSelector('.hero', { timeout: 10000 });
+});
+
+test('should display description', async ({ page }) => {
+  const text = await page.locator('.hero p').textContent();
+  // Flaky — .hero can exist before <p> is attached under Firefox worker load
+  expect(text!.length).toBeGreaterThan(10);
+});
+```
+
+**Good:**
+```typescript
+test.beforeEach(async ({ page }) => {
+  await page.goto('/page', { waitUntil: 'domcontentloaded' });
+  // ✅ Waits for the deepest element that tests depend on
+  await page.waitForSelector('.hero p', { timeout: 10000 });
+});
+
+test('should display description', async ({ page }) => {
+  const text = await page.locator('.hero p').textContent();
+  // Safe — beforeEach guarantees .hero p exists with content
+  expect(text!.length).toBeGreaterThan(10);
+});
+```
+
+**Key principle:** The readiness gate in `beforeEach` should wait for the deepest shared element that downstream tests depend on — not just the outermost container. This is especially important with `waitUntil: 'domcontentloaded'`, which fires before the browser has fully built the render tree.
+
+**When this bites you:**
+- Static SSG pages under `domcontentloaded` (no hydration to blame — it's pure DOM construction timing)
+- Firefox and WebKit under parallel worker contention (Chromium is faster at DOM attachment)
+- Tests that use non-retrying snapshot calls (`textContent()`, `getAttribute()`, `isVisible()`) immediately after a container-level readiness gate
 
 ---
 

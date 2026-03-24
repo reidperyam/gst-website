@@ -34,7 +34,7 @@
 body {
     font-family: var(--font-family);
     background: var(--bg-light-alt);
-    color: var(--text-light-primary);
+    color: var(--text-primary);
     line-height: 1.5;
     position: relative;
     display: flex;
@@ -66,6 +66,39 @@ body::before {
     padding: 0 3rem;
     position: relative;
     z-index: 1;
+}
+
+/* Hub Tool Shell — standardized centered container for hub tools */
+.tool-shell {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--bg-light-alt);
+    border: 1px solid var(--accent-light-bg-hover);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tool-shell--narrow   { max-width: 660px; }
+.tool-shell--wide     { max-width: 760px; }
+.tool-shell--fluid    { max-width: 100%; }
+.tool-shell--document { max-width: 800px; }
+
+.tool-shell .tool-content {
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+@media (max-width: 480px) {
+    .tool-shell .tool-content {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+}
+
+@media print {
+    .tool-shell {
+        max-width: 100%;
+        border: none;
+        border-radius: 0;
+    }
 }
 
 /* Header */
@@ -105,7 +138,7 @@ nav {
 .logo {
     font-size: 2rem;
     font-weight: 900;
-    color: var(--text-light-primary);
+    color: var(--text-primary);
     letter-spacing: -0.05em;
     text-transform: uppercase;
     display: flex;
@@ -139,6 +172,27 @@ nav {
     50% { opacity: 0.3; }
 }
 
+/* Skeleton Loading Placeholders */
+.skeleton-bar {
+    height: 0.875rem;
+    background: var(--accent-light-bg-hover);
+    border-radius: 4px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.skeleton-bar--sm {
+    height: 0.625rem;
+}
+
+.skeleton-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-light-bg-hover);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+}
+
 nav ul {
     display: flex;
     gap: 3rem;
@@ -146,7 +200,7 @@ nav ul {
 }
 
 nav a {
-    color: var(--text-light-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-weight: var(--font-weight-bold);
     font-size: 0.9rem;
@@ -285,7 +339,7 @@ html.dark-theme .hero p .highlight {
 
 .trust-line {
     font-size: 0.9rem;
-    color: var(--text-light-muted);
+    color: var(--text-muted);
     font-weight: 500;
     letter-spacing: 0.05em;
 }
@@ -329,7 +383,7 @@ html.dark-theme .trust-line {
 }
 
 .contact-info {
-    color: var(--text-light-secondary);
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -627,7 +681,7 @@ footer p {
 }
 
 .footer-links a {
-    color: var(--text-light-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.85rem;
     font-weight: var(--font-weight-bold);
@@ -713,16 +767,8 @@ html.dark-theme .site-header {
     border-bottom-color: var(--color-primary);
 }
 
-html.dark-theme .logo {
-    color: var(--text-dark-primary);
-}
-
 html.dark-theme .logo:hover {
     color: var(--color-primary);
-}
-
-html.dark-theme nav a {
-    color: var(--text-dark-secondary);
 }
 
 /* Dark Theme - Background Grid Pattern */
@@ -833,10 +879,6 @@ html.dark-theme footer p {
 
 html.dark-theme .footer-bottom {
     border-top-color: var(--footer-border);
-}
-
-html.dark-theme .footer-links a {
-    color: var(--text-dark-secondary);
 }
 
 html.dark-theme .footer-links a:hover {
@@ -1060,6 +1102,8 @@ html.dark-theme .cta-box p {
     .cta-button {
         width: 100%;
         text-align: center;
+        padding: var(--spacing-lg) var(--spacing-xl);
+        font-size: 0.9rem;
         min-height: 44px;
     }
 
@@ -1091,12 +1135,6 @@ html.dark-theme .cta-box p {
     .cta-box p {
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
-    }
-
-    .cta-button {
-        padding: var(--spacing-lg) var(--spacing-xl);
-        font-size: 0.9rem;
-        min-height: 44px;
     }
 
     .contact-info {

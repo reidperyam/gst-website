@@ -2,7 +2,7 @@
 
 Complete catalog of all CSS custom properties defined in `src/styles/variables.css`. Use this when styling components.
 
-**Source of truth**: `src/styles/variables.css` — 95 variables in `:root`, 43 dark theme overrides in `html.dark-theme`.
+**Source of truth**: `src/styles/variables.css` — 140 variables in `:root`, 82 dark theme overrides in `html.dark-theme`.
 
 ---
 
@@ -14,6 +14,17 @@ Complete catalog of all CSS custom properties defined in `src/styles/variables.c
 | `--color-primary-dark` | `#04a87a` | Darker shade for emphasis |
 | `--color-secondary` | `#CC8800` (light) / `#FFAA33` (dark) | Secondary accent (amber) |
 | `--color-secondary-dark` | `#FFAA33` | Secondary dark variant |
+
+## Semantic Colors
+
+Shared status colors for cross-tool consistency. See [BRAND_GUIDELINES.md — Semantic Color System](./BRAND_GUIDELINES.md#semantic-color-system).
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--color-success` | `#2e8b57` | `#3da868` | Positive outcomes, passing states |
+| `--color-warning` | `#CC8800` | `#FFAA33` | Caution indicators, borderline states |
+| `--color-error` | `#d93636` | `#e05050` | Failures, negative KPIs, critical alerts |
+| `--color-info` | `var(--color-primary)` | `var(--color-primary)` | Informational highlights (alias) |
 
 ## Backgrounds
 
@@ -27,25 +38,33 @@ Complete catalog of all CSS custom properties defined in `src/styles/variables.c
 
 ## Text Colors
 
-### Light Theme Defaults (auto-switch in dark theme)
+### Theme-Agnostic Aliases (preferred)
 
-| Variable | Light Value | Dark Override | Usage |
-|----------|------------|---------------|-------|
-| `--text-light-primary` | `rgba(26,26,26, 0.95)` | `rgba(245,245,245, 0.95)` | Headings, primary text |
-| `--text-light-secondary` | `rgba(26,26,26, 0.7)` | `rgba(200,200,200, 0.8)` | Body text, descriptions |
-| `--text-light-muted` | `rgba(26,26,26, 0.6)` | `rgba(200,200,200, 0.6)` | Labels, captions |
-| `--text-light-faded` | `rgba(26,26,26, 0.5)` | `rgba(200,200,200, 0.5)` | Disabled, placeholders |
+Use these in all new code. They auto-switch in dark theme.
 
-> In dark theme, `--text-light-*` variables are overridden to point to the dark equivalents. Components only need to reference `--text-light-*` — they get dark values automatically.
+| Variable | Light Value | Dark Value | Usage |
+|----------|------------|------------|-------|
+| `--text-primary` | `rgba(26,26,26, 0.95)` | `rgba(245,245,245, 0.95)` | Headings, primary text |
+| `--text-secondary` | `rgba(26,26,26, 0.7)` | `rgba(200,200,200, 0.8)` | Body text, descriptions |
+| `--text-muted` | `rgba(26,26,26, 0.6)` | `rgba(200,200,200, 0.6)` | Labels, captions |
+| `--text-faded` | `rgba(26,26,26, 0.6)` | `rgba(200,200,200, 0.6)` | Disabled, placeholders (large text only — see [contrast requirements](./BRAND_GUIDELINES.md#color-contrast-requirements)) |
 
-### Dark Theme Raw Values (used internally by overrides)
+> Components reference `--text-primary` etc. and get dark values automatically. No dark theme overrides needed for text colors.
 
-| Variable | Value | Usage |
-|----------|-------|-------|
-| `--text-dark-primary` | `rgba(245,245,245, 0.95)` | Referenced by dark theme override |
-| `--text-dark-secondary` | `rgba(200,200,200, 0.8)` | Referenced by dark theme override |
-| `--text-dark-muted` | `rgba(200,200,200, 0.6)` | Referenced by dark theme override |
-| `--text-dark-faded` | `rgba(200,200,200, 0.5)` | Referenced by dark theme override |
+### Legacy Theme-Specific Variables (still available)
+
+| Variable | Value | When to use |
+|----------|-------|-------------|
+| `--text-light-primary` | `rgba(26,26,26, 0.95)` | Force light-theme text color regardless of active theme |
+| `--text-light-secondary` | `rgba(26,26,26, 0.7)` | Force light-theme text color |
+| `--text-light-muted` | `rgba(26,26,26, 0.6)` | Force light-theme text color |
+| `--text-light-faded` | `rgba(26,26,26, 0.6)` | Force light-theme text color |
+| `--text-dark-primary` | `rgba(245,245,245, 0.95)` | Force dark-theme text color (e.g., text on dark card) |
+| `--text-dark-secondary` | `rgba(200,200,200, 0.8)` | Force dark-theme text color |
+| `--text-dark-muted` | `rgba(200,200,200, 0.6)` | Force dark-theme text color |
+| `--text-dark-faded` | `rgba(200,200,200, 0.6)` | Force dark-theme text color |
+
+> `--text-light-*` also auto-switch in dark theme (legacy behavior). Prefer `--text-*` for clarity.
 
 ## Borders & Accents
 
@@ -67,6 +86,7 @@ Complete catalog of all CSS custom properties defined in `src/styles/variables.c
 | `--spacing-lg` | `1rem` | 16px |
 | `--spacing-xl` | `1.5rem` | 24px |
 | `--spacing-2xl` | `2rem` | 32px |
+| `--spacing-2_5xl` | `2.5rem` | 40px |
 | `--spacing-3xl` | `3rem` | 48px |
 
 ## Gap Variables
@@ -170,13 +190,114 @@ These variables exist for page sections and UI components that need distinct lig
 
 ---
 
+## TechPar Variables
+
+Domain-specific variables for the TechPar tool. Defined in `variables.css` lines 116-150 with dark theme overrides at lines 204-229.
+
+### Zone Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--techpar-zone-underinvest` | `#CC8800` | `#FFAA33` | Under-investment zone label/border |
+| `--techpar-zone-underinvest-bg` | `rgba(204, 136, 0, 0.08)` | `rgba(255, 170, 51, 0.09)` | Under-investment zone background |
+| `--techpar-zone-ahead` | `#2ea84e` | `#2ea84e` | Ahead-of-peers zone label/border |
+| `--techpar-zone-ahead-bg` | `rgba(46, 168, 78, 0.08)` | `rgba(46, 168, 78, 0.09)` | Ahead zone background |
+| `--techpar-zone-healthy` | `var(--color-primary)` | _(inherits)_ | Healthy zone label/border |
+| `--techpar-zone-healthy-bg` | `var(--accent-light-bg)` | _(inherits)_ | Healthy zone background |
+| `--techpar-zone-above` | `#CC8800` | `#FFAA33` | Above-average zone label/border |
+| `--techpar-zone-above-bg` | `rgba(204, 136, 0, 0.08)` | `rgba(255, 170, 51, 0.09)` | Above-average zone background |
+| `--techpar-zone-elevated` | `#d93636` | `#e05050` | Elevated risk zone label/border |
+| `--techpar-zone-elevated-bg` | `rgba(217, 54, 54, 0.08)` | `rgba(224, 80, 80, 0.09)` | Elevated risk zone background |
+| `--techpar-zone-critical` | `#b82e2e` | `#e05050` | Critical risk zone label/border |
+| `--techpar-zone-critical-bg` | `rgba(184, 46, 46, 0.08)` | `rgba(224, 80, 80, 0.09)` | Critical risk zone background |
+
+### Category Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--techpar-category-infra` | `var(--color-primary)` | _(inherits)_ | Infrastructure spend category |
+| `--techpar-category-personnel` | `#3b82f6` | _(no override)_ | Personnel spend category |
+| `--techpar-category-rd-opex` | `#8b5cf6` | _(no override)_ | R&D OpEx spend category |
+| `--techpar-category-rd-capex` | `var(--color-secondary)` | _(inherits)_ | R&D CapEx spend category |
+
+### Chart Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--techpar-chart-band-fill` | `rgba(5, 205, 153, 0.15)` | `rgba(5, 205, 153, 0.13)` | Healthy band fill |
+| `--techpar-chart-band-border` | `rgba(5, 205, 153, 0.5)` | `rgba(5, 205, 153, 0.45)` | Healthy band border |
+| `--techpar-chart-ahead-fill` | `rgba(33, 118, 174, 0.10)` | `rgba(56, 152, 214, 0.11)` | Ahead zone chart fill (blue — CVD-safe) |
+| `--techpar-chart-ahead-border` | `rgba(33, 118, 174, 0.5)` | `rgba(56, 152, 214, 0.5)` | Ahead zone chart border |
+| `--techpar-chart-under-fill` | `rgba(224, 123, 0, 0.12)` | `rgba(255, 140, 0, 0.12)` | Under-investment chart fill (amber) |
+| `--techpar-chart-under-border` | `rgba(224, 123, 0, 0.55)` | `rgba(255, 140, 0, 0.55)` | Under-investment chart border |
+| `--techpar-chart-above-fill` | `rgba(217, 54, 54, 0.10)` | `rgba(240, 70, 70, 0.12)` | Above-average chart fill (red) |
+| `--techpar-chart-above-border` | `rgba(217, 54, 54, 0.45)` | `rgba(240, 70, 70, 0.50)` | Above-average chart border |
+| `--techpar-chart-revenue-line` | `rgba(26, 26, 26, 0.55)` | `rgba(200, 200, 200, 0.6)` | Revenue reference line |
+
+### KPI Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--techpar-kpi-positive` | `var(--color-primary)` | _(inherits)_ | Positive KPI indicator |
+| `--techpar-kpi-warn` | `#CC8800` | `#FFAA33` | Warning KPI indicator |
+| `--techpar-kpi-negative` | `#d93636` | `#e05050` | Negative KPI indicator |
+
+---
+
+## Shared Hub Tool Variables
+
+Cross-tool semantic colors shared by multiple hub tools.
+
+### Shared Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--hub-authority-blue` | `#5b7a9d` | `#7a9dbd` | Authority/expertise theme color (DM + ICG) |
+| `--hub-authority-blue-bg` | `rgba(91, 122, 157, 0.1)` | `rgba(122, 157, 189, 0.1)` | Authority theme background |
+
+### Diligence Machine Domain Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--dm-methodology-brown` | `#8c7a6b` | `#a89888` | Methodology theme color |
+| `--dm-methodology-brown-bg` | `rgba(140, 122, 107, 0.04)` | `rgba(140, 122, 107, 0.06)` | Methodology theme background |
+| `--dm-results-blue` | `#7a9dbd` | `#9dbde0` | Results theme accent |
+| `--dm-results-tan` | `#a89888` | `#c0b0a0` | Results theme secondary |
+| `--dm-positive` | `#4cba7a` | `#4cba7a` | Positive indicator |
+| `--dm-negative` | `#e06060` | `#e06060` | Negative/red flag indicator |
+| `--dm-negative-dark` | `#b22222` | `#b22222` | Strong negative indicator |
+| `--dm-negative-dark-bg` | `rgba(178, 34, 34, 0.06)` | `rgba(178, 34, 34, 0.1)` | Negative indicator background |
+| `--dm-warning` | `#d4923a` | `#d4923a` | Warning indicator |
+| `--dm-warning-dark` | `#b26622` | `#b26622` | Strong warning indicator |
+| `--dm-success` | `#2e8b57` | `#3da868` | Success indicator |
+
+### ICG Maturity Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--icg-maturity-reactive` | `#E24B4A` | `#e86060` | Reactive maturity level (red) |
+| `--icg-maturity-aware` | `#EF9F27` | `#f5b040` | Aware maturity level (orange) |
+| `--icg-maturity-optimizing` | `#639922` | `#78b830` | Optimizing maturity level (green) |
+| `--icg-maturity-strategic` | `var(--color-primary)` | _(inherits)_ | Strategic maturity level (teal) |
+| `--icg-radar-grid` | `#999` | `#666` | Radar chart grid lines |
+| `--icg-radar-label` | `#666` | `#999` | Radar chart axis labels |
+
+### Regulatory Map Category Colors
+
+| Variable | Light | Dark | Usage |
+|----------|-------|------|-------|
+| `--regmap-category-industry` | `#6c63ff` | `#8078ff` | Industry regulation category (purple-blue) |
+| `--regmap-category-cyber` | `#e74c3c` | `#f06050` | Cybersecurity regulation category (red) |
+
+---
+
 ## Quick Lookup by Purpose
 
 | I need... | Use |
 |-----------|-----|
-| Primary text color | `--text-light-primary` |
-| Secondary/body text | `--text-light-secondary` |
-| Muted/label text | `--text-light-muted` |
+| Primary text color | `--text-primary` |
+| Secondary/body text | `--text-secondary` |
+| Muted/label text | `--text-muted` |
 | Page background | `--bg-light` |
 | Card/section background | `--bg-light-alt` |
 | Primary accent | `--color-primary` |
@@ -198,5 +319,5 @@ These variables exist for page sections and UI components that need distinct lig
 
 ---
 
-**Last Updated**: March 13, 2026
-**Total Variables**: 95 (`:root`) + 43 dark theme overrides
+**Last Updated**: March 24, 2026
+**Total Variables**: 134 (`:root`) + 78 dark theme overrides
