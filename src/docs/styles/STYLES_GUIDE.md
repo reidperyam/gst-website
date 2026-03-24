@@ -101,6 +101,73 @@ In stylesheets, always import in cascade order:
 
 ---
 
+## Astro-Specific Patterns
+
+### Scoped vs. Global Styles — Decision Tree
+
+| Scenario | Use |
+|----------|-----|
+| Design system tokens, resets, page layout | Global CSS in `src/styles/` |
+| Single-component visual styles | Scoped `<style>` in the `.astro` file |
+| Styling dynamically injected HTML (`innerHTML`) | `:global()` wrapper on the selector |
+| Dark theme override for parent state | `:global(html.dark-theme)` prefix — but prefer CSS variables that auto-switch |
+| Global keyframes or animations | `src/styles/global.css` |
+
+### `class:list` — Conditional Classes
+
+Use Astro's `class:list` directive for conditionally applying classes. Preferred over template literal concatenation for new code.
+
+```astro
+<!-- Preferred -->
+<div class:list={['card', { active: isActive, highlighted: score > 90 }]}>
+
+<!-- Avoid in new code -->
+<div class={`card ${isActive ? 'active' : ''}`}>
+```
+
+### `define:vars` — JS-to-CSS Bridging
+
+Use `define:vars` to pass frontmatter variables into scoped `<style>` blocks as CSS custom properties. Preferred over inline `style` attributes for dynamic values.
+
+```astro
+---
+const accentColor = getThemeColor(category);
+---
+<style define:vars={{ accentColor }}>
+  .card { border-left: 3px solid var(--accentColor); }
+</style>
+```
+
+**Limitation**: `define:vars` makes the style tag inline (not bundled). Use sparingly for truly dynamic values, not for values that could be CSS variables.
+
+### When `:global()` Is Necessary
+
+`:global()` breaks Astro's scoping. Only use it when:
+
+1. **Styling dynamically injected content** — Elements created via `innerHTML` in `<script>` blocks don't have Astro's scoping attributes:
+   ```css
+   :global(.question-card) { padding: var(--spacing-md); }
+   ```
+
+2. **Parent state selectors** — When a component's appearance depends on a class on `<html>` or a parent element:
+   ```css
+   :global(html.dark-theme) .my-card { background: var(--bg-dark-secondary); }
+   ```
+
+**Prefer CSS variables over `:global()`** when possible. If a value changes in dark theme, define a CSS variable with a dark override in `variables.css` rather than adding `:global(html.dark-theme)` selectors.
+
+### CSS Linting
+
+The project uses [Stylelint](https://stylelint.io/) to enforce CSS conventions:
+
+```bash
+npm run lint:css    # Lint src/styles/*.css
+```
+
+Rules enforce: no duplicate selectors, no duplicate properties, no named colors. See `.stylelintrc.json` for full configuration.
+
+---
+
 ## Component Styling
 
 ### Scoped styles (single-use components)

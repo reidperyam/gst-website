@@ -17,6 +17,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 8. [Dynamic Content Loading Pattern](#8-dynamic-content-loading-pattern)
 9. [Theme-Agnostic Text Variable Refactor](#9-theme-agnostic-text-variable-refactor)
 10. [Reusable Skeleton CSS Classes](#10-reusable-skeleton-css-classes)
+11. [Astro CSS Alignment & Tooling](#11-astro-css-alignment--tooling)
 
 ---
 
@@ -296,7 +297,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 ## Completion Summary
 
-All 10 initiatives complete. 9 of 10 fully resolved; Init 1 partial pending stakeholder decisions.
+11 initiatives tracked. 9 fully complete, 1 awaiting stakeholder review (Init 1A), 1 partially complete (Init 11 — 11C planned).
 
 | Initiative | Status | Date | Notes |
 |-----------|--------|------|-------|
@@ -311,6 +312,7 @@ All 10 initiatives complete. 9 of 10 fully resolved; Init 1 partial pending stak
 | 8. Skeleton Loading | Complete | Mar 23 | Pattern documented; classes extracted in Init 10 |
 | 9. Text Variable Refactor | Complete | Mar 24 | `--text-*` aliases added; 335 refs migrated; ~200 lines of redundant dark overrides removed |
 | 10. Skeleton CSS Classes | Complete | Mar 24 | `.skeleton-bar`, `.skeleton-bar--sm`, `.skeleton-dot` extracted to global.css |
+| 11. Astro CSS Alignment | 11A+11B Complete | Mar 24 | Stylelint added; Astro CSS patterns documented; 11C (`:global()` audit) planned |
 
 **Key outcomes**:
 - 22 new shared CSS variables defined (`--hub-authority-blue`, `--dm-*`, `--icg-*`, `--text-*` aliases, `--spacing-2_5xl`)
@@ -404,11 +406,39 @@ All 10 initiatives complete. 9 of 10 fully resolved; Init 1 partial pending stak
 
 ---
 
+### 11. Astro CSS Alignment & Tooling
+
+**Status**: 11A complete, 11B complete, 11C planned (March 24, 2026)
+
+**Problem**: The project had no CSS linting and no documentation of Astro-specific CSS patterns (`class:list`, `define:vars`, `:global()` decision guidance). Style convention violations were only caught during manual review.
+
+**Context**: Research using Context7 (Astro docs) confirmed the project's CSS architecture (scoped styles, global CSS in layout, CSS variables) is well-aligned with Astro's recommendations. No framework or preprocessor changes needed. Three improvements identified.
+
+**Completed**:
+
+**11A. Stylelint Integration** — Added `stylelint` + `stylelint-config-standard` with project-specific rules. Enforces no duplicate selectors, no duplicate properties, no named colors. Run via `npm run lint:css`. Config adapted to accept project conventions (rgba notation, vendor prefixes, `:global()` pseudo-class).
+
+**11B. Astro CSS Best Practices Documentation** — Added "Astro-Specific Patterns" section to STYLES_GUIDE.md covering: scoped vs. global decision tree, `class:list` for conditional classes, `define:vars` for JS→CSS bridging, when `:global()` is necessary vs. avoidable, CSS linting reference.
+
+**Planned**:
+
+**11C. `:global()` Audit & Reduction** — 631 `:global()` instances across 25 files. Most are necessary (dynamic content styling, dark theme parent state). Best done incrementally when components are actively edited, not as a standalone sweep.
+
+**Not pursued** (evaluated and rejected):
+- Tailwind CSS — would create parallel styling paradigm alongside established CSS variables
+- Sass/Less — CSS variables cover the use cases; adds dependency without proportional benefit
+- CSS nesting — would introduce second formatting convention; keep flat selectors for consistency
+
+**Estimated scope for 11C**: Medium — incremental, per-component when editing
+
+---
+
 ## Related Documentation
 
 - [STYLES_GUIDE.md](./STYLES_GUIDE.md) - Current CSS conventions and patterns
 - [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) - Design token catalog
 - [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) - Typography utility classes
+- [BRAND_GUIDELINES.md](./BRAND_GUIDELINES.md) - Brand color palette and usage rules
 
 ---
 
