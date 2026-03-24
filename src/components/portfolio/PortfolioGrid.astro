@@ -274,17 +274,12 @@ const { projects } = Astro.props;
     box-shadow: 0 10px 30px rgba(5, 205, 153, 0.2);
   }
 
-  :global(html.dark-theme) .project-title {
-    color: var(--text-dark-primary);
-  }
-
   :global(html.dark-theme) .project-industry {
     color: rgba(200, 200, 200, 0.7);
   }
 
   :global(html.dark-theme) .year-badge {
     background: var(--accent-dark-bg);
-    color: var(--text-dark-secondary);
   }
 
   :global(html.dark-theme) .metrics {
@@ -296,16 +291,8 @@ const { projects } = Astro.props;
     color: var(--text-dark-muted);
   }
 
-  :global(html.dark-theme) .metric-value {
-    color: var(--text-dark-primary);
-  }
-
   :global(html.dark-theme) .metric-value.arr {
     color: var(--color-primary);
-  }
-
-  :global(html.dark-theme) .summary {
-    color: var(--text-dark-secondary);
   }
 
   :global(html.dark-theme) .tag {
