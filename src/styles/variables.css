@@ -26,6 +26,12 @@
   --text-dark-muted: rgba(200, 200, 200, 0.6);
   --text-dark-faded: rgba(200, 200, 200, 0.5);
 
+  /* Theme-Agnostic Text Aliases (auto-switch via dark theme overrides) */
+  --text-primary: var(--text-light-primary);
+  --text-secondary: var(--text-light-secondary);
+  --text-muted: var(--text-light-muted);
+  --text-faded: var(--text-light-faded);
+
   /* Borders & Accents */
   --border-light: rgba(26, 26, 26, 0.1);
   --border-dark: rgba(5, 205, 153, 0.2);
@@ -186,6 +192,10 @@ html.dark-theme {
   --text-light-secondary: var(--text-dark-secondary);
   --text-light-muted: var(--text-dark-muted);
   --text-light-faded: var(--text-dark-faded);
+  --text-primary: var(--text-dark-primary);
+  --text-secondary: var(--text-dark-secondary);
+  --text-muted: var(--text-dark-muted);
+  --text-faded: var(--text-dark-faded);
   --color-secondary: var(--color-secondary-dark);
 
   /* Section Backgrounds */
@@ -302,11 +312,7 @@ html.dark-theme {
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-light-muted);
-}
-
-html.dark-theme .text-label {
-  color: var(--text-dark-muted);
+  color: var(--text-muted);
 }
 
 .flex-center {

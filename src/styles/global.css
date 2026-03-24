@@ -34,7 +34,7 @@
 body {
     font-family: var(--font-family);
     background: var(--bg-light-alt);
-    color: var(--text-light-primary);
+    color: var(--text-primary);
     line-height: 1.5;
     position: relative;
     display: flex;
@@ -138,7 +138,7 @@ nav {
 .logo {
     font-size: 2rem;
     font-weight: 900;
-    color: var(--text-light-primary);
+    color: var(--text-primary);
     letter-spacing: -0.05em;
     text-transform: uppercase;
     display: flex;
@@ -179,7 +179,7 @@ nav ul {
 }
 
 nav a {
-    color: var(--text-light-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-weight: var(--font-weight-bold);
     font-size: 0.9rem;
@@ -318,7 +318,7 @@ html.dark-theme .hero p .highlight {
 
 .trust-line {
     font-size: 0.9rem;
-    color: var(--text-light-muted);
+    color: var(--text-muted);
     font-weight: 500;
     letter-spacing: 0.05em;
 }
@@ -362,7 +362,7 @@ html.dark-theme .trust-line {
 }
 
 .contact-info {
-    color: var(--text-light-secondary);
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -660,7 +660,7 @@ footer p {
 }
 
 .footer-links a {
-    color: var(--text-light-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.85rem;
     font-weight: var(--font-weight-bold);
