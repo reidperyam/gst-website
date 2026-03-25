@@ -93,16 +93,16 @@ const domainCount = DOMAINS.length;
                         <div data-resume-prompt class="icg-resume-prompt is-hidden">
                             <p class="text-small icg-resume-prompt__text">You have an incomplete assessment saved from a previous session.</p>
                             <div class="icg-resume-actions">
-                                <button data-action="resume" type="button" class="icg-btn-primary">Resume</button>
-                                <button data-action="discard" type="button" class="icg-btn-secondary">Start fresh</button>
+                                <button data-action="resume" type="button" class="hub-btn hub-btn--primary icg-btn-primary">Resume</button>
+                                <button data-action="discard" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary">Start fresh</button>
                             </div>
                         </div>
 
-                        <button data-action="start" type="button" class="icg-btn-primary icg-btn-primary--full">Begin assessment</button>
+                        <button data-action="start" type="button" class="hub-btn hub-btn--primary hub-btn--full icg-btn-primary icg-btn-primary--full">Begin assessment</button>
 
                         <div class="landing-actions">
-                            <button data-action="landing-copy" type="button" class="icg-btn-secondary" title="Copy a shareable link to this assessment">Copy link</button>
-                            <a data-action="landing-email" href="#" class="icg-btn-secondary icg-btn-secondary--link" title="Open a pre-filled email inviting your engineering lead to complete the assessment">Send to engineering lead</a>
+                            <button data-action="landing-copy" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Copy a shareable link to this assessment">Copy link</button>
+                            <a data-action="landing-email" href="#" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Open a pre-filled email inviting your engineering lead to complete the assessment">Send to engineering lead</a>
                         </div>
                     </div>
                 </div>
@@ -134,8 +134,8 @@ const domainCount = DOMAINS.length;
 
                         <!-- Navigation -->
                         <div class="icg-wizard-nav">
-                            <button data-action="back" type="button" class="icg-btn-secondary">Back to intro</button>
-                            <button data-action="next" type="button" class="icg-btn-primary" disabled>Next domain</button>
+                            <button data-action="back" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary">Back to intro</button>
+                            <button data-action="next" type="button" class="hub-btn hub-btn--primary icg-btn-primary" disabled>Next domain</button>
                         </div>
                     </div>
                 </div>
@@ -198,27 +198,27 @@ const domainCount = DOMAINS.length;
 
                         <!-- Actions row -->
                         <div class="icg-actions">
-                            <button data-action="copy-summary" type="button" class="icg-btn-secondary" title="Copy a plain-text summary of your results to clipboard">Copy summary</button>
-                            <button data-action="copy" type="button" class="icg-btn-secondary" title="Copy a shareable link that preserves your answers and dismissed recommendations">Copy link</button>
-                            <button data-action="export-json" type="button" class="icg-btn-secondary" title="Download your results as a structured JSON file for portfolio aggregation">Download JSON</button>
-                            <button data-action="print" type="button" class="icg-btn-secondary" title="Your browser will open a print dialog. Select Save as PDF to download.">Print / Save as PDF</button>
-                            <a data-action="email" href="#" class="icg-btn-secondary icg-btn-secondary--link" title="Open a pre-filled email with your results link. The recipient can complete the assessment independently.">Send to engineering lead</a>
+                            <button data-action="copy-summary" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Copy a plain-text summary of your results to clipboard">Copy summary</button>
+                            <button data-action="copy" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Copy a shareable link that preserves your answers and dismissed recommendations">Copy link</button>
+                            <button data-action="export-json" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Download your results as a structured JSON file for portfolio aggregation">Download JSON</button>
+                            <button data-action="print" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Your browser will open a print dialog. Select Save as PDF to download.">Print / Save as PDF</button>
+                            <a data-action="email" href="#" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Open a pre-filled email with your results link. The recipient can complete the assessment independently.">Send to engineering lead</a>
                             <button data-action="compare" type="button" class="icg-btn-secondary is-hidden" title="Compare saved snapshots side by side">Compare</button>
-                            <button data-action="review" type="button" class="icg-btn-secondary" title="Review your answers across all six domains">Review answers</button>
-                            <button data-action="reset" type="button" class="icg-btn-secondary">Start over</button>
+                            <button data-action="review" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary" title="Review your answers across all six domains">Review answers</button>
+                            <button data-action="reset" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary">Start over</button>
                         </div>
 
                         <!-- Snapshot save -->
                         <div class="icg-snapshot-save-row">
                             <input data-snapshot-label type="text" class="icg-snapshot-label-input" placeholder="Label (e.g., 90-day review)" maxlength="60" />
-                            <button data-action="save-snapshot" type="button" class="icg-btn-secondary">Save snapshot</button>
+                            <button data-action="save-snapshot" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary">Save snapshot</button>
                         </div>
 
                         <!-- Snapshot manager -->
                         <div data-snapshot-manager class="icg-snapshot-manager is-hidden">
                             <div class="icg-section-label">Saved snapshots</div>
                             <div data-snapshot-list class="icg-snapshot-list-items"></div>
-                            <button data-action="clear-snapshots" type="button" class="icg-btn-secondary icg-snapshot-clear">Clear all snapshots</button>
+                            <button data-action="clear-snapshots" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary icg-snapshot-clear">Clear all snapshots</button>
                         </div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@ const domainCount = DOMAINS.length;
                         <div class="icg-section-label">Snapshot comparison</div>
                         <div data-comparison-body class="icg-comparison-body"></div>
                         <div class="icg-comparison-actions">
-                            <button data-action="back-to-results" type="button" class="icg-btn-secondary">Back to results</button>
+                            <button data-action="back-to-results" type="button" class="hub-btn hub-btn--secondary icg-btn-secondary">Back to results</button>
                         </div>
                     </div>
                 </div>
@@ -408,70 +408,19 @@ const domainCount = DOMAINS.length;
         color: var(--text-muted);
     }
 
-    /* ── Primary button ───────────────────────────────────────────────────── */
-    .icg-btn-primary {
-        padding: var(--spacing-sm) var(--spacing-xl);
-        font-size: 0.75rem;
-        font-weight: var(--font-weight-bold);
-        font-family: var(--font-family);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        text-align: center;
-        background: var(--color-primary);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: opacity var(--transition-fast);
-    }
-
-    .icg-btn-primary:hover {
-        opacity: 0.9;
-    }
-
-    .icg-btn-primary:disabled {
-        opacity: 0.35;
-        cursor: not-allowed;
-    }
-
+    /* ── Button overrides (base styles from global .hub-btn) ────────────── */
     .icg-btn-primary--full {
-        width: 100%;
         padding: var(--spacing-md) 0;
         font-size: 0.95rem;
         letter-spacing: 0.08em;
     }
 
-    /* ── Secondary button ─────────────────────────────────────────────────── */
     .icg-btn-secondary {
         padding: var(--spacing-sm) var(--spacing-lg);
-        font-size: 0.75rem;
-        font-weight: var(--font-weight-bold);
-        font-family: var(--font-family);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--text-secondary);
-        background: transparent;
-        border: 1px solid var(--border-light);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: color var(--transition-fast), border-color var(--transition-fast);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
     }
 
     :global(html.dark-theme) .icg-btn-secondary {
         border-color: rgba(5, 205, 153, 0.15);
-    }
-
-    .icg-btn-secondary:hover {
-        color: var(--text-primary);
-        border-color: var(--color-primary);
-    }
-
-    .icg-btn-secondary--link {
-        text-decoration: none;
     }
 
     /* ── Progress bar ─────────────────────────────────────────────────────── */
@@ -2619,7 +2568,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <label for="snap-sel-${i}">${escHtml(s.label)} <span class="icg-snapshot-item__date">${score}/100</span></label>
             </div>`;
         }).join('')}
-        <button data-action="compare-selected" type="button" class="icg-btn-primary" disabled style="margin-top:var(--spacing-md);width:100%">Compare selected</button>
+        <button data-action="compare-selected" type="button" class="hub-btn hub-btn--primary icg-btn-primary" disabled style="margin-top:var(--spacing-md);width:100%">Compare selected</button>
       </div>`;
 
     const checkboxes = compBody.querySelectorAll<HTMLInputElement>('[data-snap-select]');
