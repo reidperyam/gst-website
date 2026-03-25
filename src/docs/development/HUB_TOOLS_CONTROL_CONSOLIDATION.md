@@ -3,7 +3,7 @@
 Identifies reusable UI controls and patterns across the five hub tools that are currently implemented independently. Consolidating these improves consistency, reduces maintenance surface, and ensures UX cohesion as tools evolve.
 
 **Status**: Defined, not started
-**Depends on**: [HUB_TOOLS_STYLE_ALIGNMENT.md](HUB_TOOLS_STYLE_ALIGNMENT.md) Phases 1-2 (completed)
+**Depends on**: Hub Tools Style Alignment Phases 1-2 (completed, `feature/style-redesign` branch)
 **Last Updated**: March 25, 2026
 
 ---
@@ -282,6 +282,6 @@ TechPar's tab-bar uses `z-index: 11` while `.site-header` uses `z-index: 10`. Th
 
 ## Related
 
-- [HUB_TOOLS_STYLE_ALIGNMENT.md](HUB_TOOLS_STYLE_ALIGNMENT.md) — visual consistency audit and Phases 1-2 remediation (completed)
+- Hub Tools Style Alignment — visual consistency audit and Phases 1-2 remediation (completed, removed after close-out)
 - [STYLES_GUIDE.md](../styles/STYLES_GUIDE.md) — CSS conventions and hub tool patterns
 - [VARIABLES_REFERENCE.md](../styles/VARIABLES_REFERENCE.md) — design token catalog
