@@ -32,7 +32,7 @@
     "solution": "Validated robust cloud-native architecture on AWS EKS with 99.95% uptime and 95%+ net revenue retention, confirmed successful integration of two acquired products, assessed AI chatbot viability with proprietary data flywheel, and identified legacy .NET technical debt requiring prioritised remediation.",
     "engagementCategory": "Buy-Side Technical Due Diligence"
   },
-   {
+  {
     "id": "project-atlas",
     "codeName": "Project Atlas",
     "industry": "Healthcare Revenue Cycle Management",
@@ -143,6 +143,36 @@
     "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
+    "id": "project-helios",
+    "codeName": "Project Helios",
+    "industry": "Government Services Technology",
+    "theme": "Public Sector",
+    "summary": "Technology-enabled mission services platform providing transportation lifecycle management, workforce coordination, compliance tracking, and government reporting for federal agencies through a proprietary FedRAMP-authorized operational system.",
+    "arr": "$151M",
+    "arrNumeric": 151000000,
+    "currency": "USD",
+    "growthStage": "Mature / Expansion",
+    "year": 2026,
+    "technologies": [
+      ".NET 10",
+      "C#",
+      "React 19",
+      ".NET MAUI",
+      "SQL Server",
+      "TypeScript",
+      "Power BI",
+      "Azure",
+      "Twilio",
+      "Zerto"
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side technology evaluation for investor readiness",
+    "challenge": "Demonstrating technology maturity, platform defensibility, and scalability of a proprietary transportation operations platform operating within FedRAMP-authorized infrastructure to prospective investors, with a carve-out in progress.",
+    "solution": "Validated mature, vertically integrated technology-enabled services organization with 99.97% uptime, 1,500+ platform enhancements since 2017, FedRAMP Moderate authorization with 150 NIST 800-53 controls, and articulated investment opportunities in data architecture maturation, AI-enabled analytics, and Zero Trust alignment.",
+    "engagementCategory": "Sell-Side Advisory"
+  },
+  {
     "id": "fusion",
     "codeName": "Fusion",
     "industry": "Financial Administration",
@@ -209,7 +239,7 @@
     "industry": "Intranet Software",
     "theme": "Human Resources",
     "summary": "AI-powered intranet platform designed to engage employees through personalized internal communications, social interaction, and knowledge sharing tools.",
-    "arr": "\u00a345M",
+    "arr": "£45M",
     "arrNumeric": 45000000,
     "currency": "GBP",
     "growthStage": "Growth Stage",
@@ -486,7 +516,7 @@
     "industry": "Information Management",
     "theme": "Software",
     "summary": "Knowledge work automation platform using metadata-centric organization to facilitate document and workflow management for enterprise customers.",
-    "arr": "\u20ac120M",
+    "arr": "€120M",
     "arrNumeric": 120000000,
     "currency": "EUR",
     "growthStage": "Mature Enterprise",
@@ -632,7 +662,7 @@
     "industry": "Public Health",
     "theme": "Healthcare",
     "summary": "Software solutions for organ, blood, and plasma management supporting regulatory compliance and process management for health systems.",
-    "arr": "\u20ac36M",
+    "arr": "€36M",
     "arrNumeric": 36000000,
     "currency": "EUR",
     "growthStage": "Mature",
@@ -809,7 +839,7 @@
     "engagementTypeTag": "technical-assessment",
     "engagementTypeDescription": "Comprehensive technology evaluation",
     "challenge": "Assessing a scheduling solution for complex manufacturing constraints.",
-    "solution": "Recommended developing a new integration platform to facilitate data interchange with the acquirer\u2019s MES offerings.",
+    "solution": "Recommended developing a new integration platform to facilitate data interchange with the acquirer’s MES offerings.",
     "engagementCategory": "Buy-Side Technical Due Diligence"
   },
   {
@@ -1478,35 +1508,5 @@
     "challenge": null,
     "solution": null,
     "engagementCategory": null
-  },
-  {
-    "id": "project-helios",
-    "codeName": "Project Helios",
-    "industry": "Government Services Technology",
-    "theme": "Public Sector",
-    "summary": "Technology-enabled mission services platform providing transportation lifecycle management, workforce coordination, compliance tracking, and government reporting for federal agencies through a proprietary FedRAMP-authorized operational system.",
-    "arr": "$151M",
-    "arrNumeric": 151000000,
-    "currency": "USD",
-    "growthStage": "Mature / Expansion",
-    "year": 2026,
-    "technologies": [
-      ".NET 10",
-      "C#",
-      "React 19",
-      ".NET MAUI",
-      "SQL Server",
-      "TypeScript",
-      "Power BI",
-      "Azure",
-      "Twilio",
-      "Zerto"
-    ],
-    "engagementType": "Technical Assessment",
-    "engagementTypeTag": "technical-assessment",
-    "engagementTypeDescription": "Sell-side technology evaluation for investor readiness",
-    "challenge": "Demonstrating technology maturity, platform defensibility, and scalability of a proprietary transportation operations platform operating within FedRAMP-authorized infrastructure to prospective investors, with a carve-out in progress.",
-    "solution": "Validated mature, vertically integrated technology-enabled services organization with 99.97% uptime, 1,500+ platform enhancements since 2017, FedRAMP Moderate authorization with 150 NIST 800-53 controls, and articulated investment opportunities in data architecture maturation, AI-enabled analytics, and Zero Trust alignment.",
-    "engagementCategory": "Sell-Side Advisory"
   }
 ]
