@@ -1,5 +1,36 @@
 [
   {
+    "id": "project-voss",
+    "codeName": "Project VOSS",
+    "industry": "Cross-Border Payments & FinTech",
+    "theme": "Finance",
+    "summary": "Integrated cross-border payments and spend management platform combining FX risk management, corporate cards, and multi-currency accounts on a modern serverless architecture with AI-driven automation and agentic workflows.",
+    "arr": "$156M",
+    "arrNumeric": 156000000,
+    "currency": "USD",
+    "growthStage": "Mature / Expansion",
+    "year": 2026,
+    "technologies": [
+      "Node.js",
+      "TypeScript",
+      "React",
+      ".NET",
+      "C#",
+      "AWS Lambda",
+      "DynamoDB",
+      "EventBridge",
+      "GCP BigQuery",
+      "Looker",
+      "Okta"
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
+    "challenge": "Evaluating product competitiveness and technology scalability of an integrated cross-border payments and spend management platform undergoing a multi-year migration from legacy architecture to a modern serverless platform.",
+    "solution": "Confirmed a differentiated product outperforming larger competitors with a modern cloud-native architecture supporting scalable growth, elite-level engineering metrics, and production-grade AI capabilities, with technical debt confined to transitional legacy operations.",
+    "engagementCategory": "Sell-Side Advisory"
+  },
+  {
     "id": "project-ecological-eagle",
     "codeName": "Project Ecological Eagle",
     "industry": "Government Affairs Technology",
