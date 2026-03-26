@@ -70,22 +70,10 @@ const domainCount = DOMAINS.length;
                         <div class="icg-stage-selector">
                             <span class="icg-stage-selector__label label">Company stage <span class="icg-stage-optional text-tiny">(optional)</span></span>
                             <div class="icg-stage-grid" data-stage-grid>
-                                <button class="icg-stage-card" data-stage="pre-series-b" type="button">
-                                    <span class="icg-stage-card__name">Pre-Series B</span>
-                                    <span class="icg-stage-card__range">15&ndash;35</span>
-                                </button>
-                                <button class="icg-stage-card" data-stage="series-bc" type="button">
-                                    <span class="icg-stage-card__name">Series B-C</span>
-                                    <span class="icg-stage-card__range">30&ndash;55</span>
-                                </button>
-                                <button class="icg-stage-card" data-stage="pe-backed" type="button">
-                                    <span class="icg-stage-card__name">PE-backed 2+ yr</span>
-                                    <span class="icg-stage-card__range">45&ndash;70</span>
-                                </button>
-                                <button class="icg-stage-card" data-stage="enterprise" type="button">
-                                    <span class="icg-stage-card__name">Enterprise</span>
-                                    <span class="icg-stage-card__range">65&ndash;90</span>
-                                </button>
+                                <button class="icg-stage-card" data-stage="pre-series-b" type="button">Pre-Series B</button>
+                                <button class="icg-stage-card" data-stage="series-bc" type="button">Series B-C</button>
+                                <button class="icg-stage-card" data-stage="pe-backed" type="button">PE-backed 2+ yr</button>
+                                <button class="icg-stage-card" data-stage="enterprise" type="button">Enterprise</button>
                             </div>
                             <div class="icg-stage-hint text-tiny">Sets benchmark context for your results. You can skip this.</div>
                         </div>
@@ -1383,16 +1371,16 @@ const domainCount = DOMAINS.length;
     }
 
     .icg-stage-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
         padding: var(--spacing-sm) var(--spacing-md);
         background: var(--bg-light);
         border: 1px solid var(--border-light);
         border-radius: 8px;
         cursor: pointer;
         font-family: var(--font-family);
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        text-align: center;
         transition: border-color var(--transition-fast), background var(--transition-fast);
     }
 
@@ -1412,17 +1400,6 @@ const domainCount = DOMAINS.length;
 
     :global(html.dark-theme) .icg-stage-card--active {
         background: var(--accent-dark-bg);
-    }
-
-    .icg-stage-card__name {
-        font-size: var(--text-sm);
-        font-weight: var(--font-weight-semibold);
-        color: var(--text-primary);
-    }
-
-    .icg-stage-card__range {
-        font-size: var(--text-xs);
-        color: var(--text-muted);
     }
 
     .icg-stage-hint {
