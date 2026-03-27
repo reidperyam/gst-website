@@ -1,7 +1,7 @@
 [
   {
     "id": "voss",
-    "codeName": "Project Voss",
+    "codeName": "Voss",
     "industry": "Cross-Border Payments & FinTech",
     "theme": "Finance",
     "summary": "Integrated cross-border payments and spend management platform combining FX risk management, corporate cards, and multi-currency accounts on a modern serverless architecture with AI-driven automation and agentic workflows.",
@@ -32,7 +32,7 @@
   },
   {
     "id": "ecological-eagle",
-    "codeName": "Project Ecological Eagle",
+    "codeName": "Ecological Eagle",
     "industry": "Government Affairs Technology",
     "theme": "Public Sector",
     "summary": "Government affairs SaaS platform unifying legislative tracking, stakeholder engagement, PAC management, and grassroots advocacy with an AI chatbot assistant, proprietary data flywheel moat, and scalable cloud infrastructure.",
@@ -65,7 +65,7 @@
   },
   {
     "id": "atlas",
-    "codeName": "Project Atlas",
+    "codeName": "Atlas",
     "industry": "Healthcare Revenue Cycle Management",
     "theme": "Healthcare",
     "summary": "Cloud-augmented platform providing accounts receivable management, medical revenue recovery, insurance follow-up, and collection services using core collections workflow system with modern peripheral integrations.",
@@ -119,7 +119,7 @@
   },
   {
     "id": "eclipse",
-    "codeName": "Project Eclipse",
+    "codeName": "Eclipse",
     "industry": "Healthcare Technology",
     "theme": "Healthcare",
     "summary": "Cloud-based suite for surgical centers providing practice management, scheduling, electronic health records, and billing solutions.",
@@ -175,7 +175,7 @@
   },
   {
     "id": "helios",
-    "codeName": "Project Helios",
+    "codeName": "Helios",
     "industry": "Government Services Technology",
     "theme": "Public Sector",
     "summary": "Technology-enabled mission services platform providing transportation lifecycle management, workforce coordination, compliance tracking, and government reporting for federal agencies through a proprietary FedRAMP-authorized operational system.",
@@ -205,7 +205,7 @@
   },
   {
     "id": "colors",
-    "codeName": "Project Colors",
+    "codeName": "Colors",
     "industry": "Healthcare Marketing Technology",
     "theme": "Healthcare",
     "summary": "AI-enabled healthcare marketing agency with proprietary omnichannel analytics platform, AI copywriting pipeline, social intelligence tools, and workflow automation for pharma brand commercialization.",
@@ -263,7 +263,7 @@
   },
   {
     "id": "legis",
-    "codeName": "Project Legis",
+    "codeName": "Legis",
     "industry": "Government Affairs",
     "theme": "Public Sector",
     "summary": "Unified platform for legislative tracking, grassroots advocacy, and PAC management with integrated data scraping and AI capabilities.",
@@ -324,7 +324,7 @@
   },
   {
     "id": "longhorn",
-    "codeName": "Project Longhorn",
+    "codeName": "Longhorn",
     "industry": "EHS Software",
     "theme": "Security",
     "summary": "Cloud-native SaaS platform for incident management, audits, and compliance tracking utilizing a metadata-driven engine for high configurability.",
@@ -382,7 +382,7 @@
   },
   {
     "id": "shield",
-    "codeName": "Project Shield",
+    "codeName": "Shield",
     "industry": "Public Safety",
     "theme": "Public Sector",
     "summary": "Comprehensive public safety suite helping police, fire, and dispatch teams manage training, quality assurance, and community engagement.",
@@ -439,7 +439,7 @@
   },
   {
     "id": "titan",
-    "codeName": "Project Titan",
+    "codeName": "Titan",
     "industry": "FinTech",
     "theme": "Finance",
     "summary": "Multi-asset cloud platform for trading, risk management, and prime brokerage, featuring modular service-oriented architecture and messaging.",
@@ -628,7 +628,7 @@
   },
   {
     "id": "everton",
-    "codeName": "Project Everton",
+    "codeName": "Everton",
     "industry": "Marketing Services",
     "theme": "Marketing",
     "summary": "Marketing automation platform for multi-channel lead generation and customer acquisition campaigns targeting specialized vertical market segments.",
@@ -657,7 +657,7 @@
   },
   {
     "id": "volcano",
-    "codeName": "Project Volcano",
+    "codeName": "Volcano",
     "industry": "Advertising Technology",
     "theme": "Marketing",
     "summary": "End-to-end programmatic advertising platform including DSP, SSP, and ad server functionality optimized for digital signage and outdoor media.",
@@ -747,7 +747,7 @@
   },
   {
     "id": "credential",
-    "codeName": "Project Credential",
+    "codeName": "Credential",
     "industry": "EdTech",
     "theme": "Education",
     "summary": "Platform connecting education with career pathways through industry certifications, aptitude discovery tools, and real-time analytics for students.",
@@ -826,7 +826,7 @@
   },
   {
     "id": "vanguard-infra",
-    "codeName": "Project Vanguard",
+    "codeName": "Vanguard SASE",
     "industry": "IT Infrastructure",
     "theme": "Software",
     "summary": "Innovative networking solutions providing secure access service edge capabilities and business phone systems for managed service providers.",
@@ -1042,7 +1042,7 @@
   },
   {
     "id": "dynamic",
-    "codeName": "Project Dynamic",
+    "codeName": "Dynamic",
     "industry": "Food Manufacturing",
     "theme": "Food & Beverage",
     "summary": "Manufacturing operation leveraging ERP systems for production, inventory, and logistics, specializing in food ingredient taxonomies and supply chain management.",
@@ -1068,7 +1068,7 @@
   },
   {
     "id": "trident",
-    "codeName": "Project Trident",
+    "codeName": "Trident",
     "industry": "Telehealth",
     "theme": "Healthcare",
     "summary": "Comprehensive virtual health and well-being platform providing 24/7 medical and mental health care services for college students.",
@@ -1132,7 +1132,7 @@
   },
   {
     "id": "eagle",
-    "codeName": "Project Eagle",
+    "codeName": "Eagle",
     "industry": "FinTech",
     "theme": "Finance",
     "summary": "Cloud-native payment facilitation platform providing engagement and management solutions for government, healthcare, and higher education transactions.",
@@ -1388,7 +1388,7 @@
   },
   {
     "id": "teton",
-    "codeName": "Project Teton",
+    "codeName": "Teton",
     "industry": "Human Capital Management",
     "theme": "Human Resources",
     "summary": "Talent management platform streamlining location-based hiring and management workflows designed for the needs of the hourly workforce.",
@@ -1413,7 +1413,7 @@
   },
   {
     "id": "chariot",
-    "codeName": "Project Chariot",
+    "codeName": "Chariot",
     "industry": "Transportation",
     "theme": "Logistics",
     "summary": "On-demand bus charter platform providing applications for fleet managers, drivers, and customers alongside a transport management system.",
@@ -1438,7 +1438,7 @@
   },
   {
     "id": "zoolander",
-    "codeName": "Project Zoolander",
+    "codeName": "Zoolander",
     "industry": "Cybersecurity",
     "theme": "Security",
     "summary": "Hybrid-cloud platform for mobile device data analysis to identify malicious activity and post-incident threat signatures.",
