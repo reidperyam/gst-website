@@ -274,17 +274,17 @@ test.describe('ICG - Authority & Methodology', () => {
 
   test('methodology section is collapsed by default', async ({ page }) => {
     await gotoTool(page);
-    const details = page.locator('.icg-methodology');
+    const details = page.locator('.tool-methodology');
     await expect(details).toBeVisible();
     // The body should not be visible when collapsed
-    const body = page.locator('.icg-methodology__body');
+    const body = page.locator('.tool-methodology__body');
     await expect(body).not.toBeVisible();
   });
 
   test('methodology section expands on click', async ({ page }) => {
     await gotoTool(page);
-    await page.click('.icg-methodology__trigger');
-    const body = page.locator('.icg-methodology__body');
+    await page.click('.tool-methodology__trigger');
+    const body = page.locator('.tool-methodology__body');
     await expect(body).toBeVisible();
     await expect(body).toContainText('Scoring model');
   });

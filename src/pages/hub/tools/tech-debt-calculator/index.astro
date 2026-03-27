@@ -256,31 +256,31 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
                 </div>
 
                 <!-- ── Methodology ─────────────────────────────────────────── -->
-                <details class="tdc-methodology">
-                    <summary class="tdc-methodology__trigger">How the calculator works</summary>
-                    <div class="tdc-methodology__body">
-                        <h4 class="tdc-methodology__heading">Cost model</h4>
+                <details class="tool-methodology">
+                    <summary class="tool-methodology__trigger">How the calculator works</summary>
+                    <div class="tool-methodology__body">
+                        <h4 class="tool-methodology__heading">Cost model</h4>
                         <p>The calculator estimates the annual carrying cost of technical debt by multiplying engineering labor cost by the maintenance burden percentage. Direct monthly cost = team size &times; (salary / 12) &times; (maintenance burden %) &times; velocity multiplier. When advanced mode is enabled, incident response cost (incidents &times; mean time to resolve &times; hourly rate) is added.</p>
 
-                        <h4 class="tdc-methodology__heading">DORA velocity multiplier</h4>
+                        <h4 class="tool-methodology__heading">DORA velocity multiplier</h4>
                         <p>Deployment frequency serves as a proxy for delivery friction. The multiplier (0.8&times;&ndash;2.4&times;) is applied to direct labor cost to reflect the productivity overhead associated with slower release cycles. Tiers follow the DORA State of DevOps classification: Elite (multiple/day&ndash;daily), High (weekly&ndash;biweekly), Medium (3-week&ndash;monthly), Low (quarterly&ndash;annually). Source: Forsgren, N., Humble, J., &amp; Kim, G., <em>Accelerate</em> (2018); DORA State of DevOps Reports (2019&ndash;2023).</p>
 
-                        <h4 class="tdc-methodology__heading">Maintenance burden benchmarks</h4>
+                        <h4 class="tool-methodology__heading">Maintenance burden benchmarks</h4>
                         <p>Thresholds are calibrated for PE buy-side diligence where growth velocity is the priority. Below 10% is well-managed with capacity directed forward. 10&ndash;15% is acceptable but belongs on a 100-day remediation plan. 15&ndash;25% is a yellow flag that warrants investigation into SDLC maturity, architecture, test coverage, and deployment practices. 25&ndash;40% is a red flag signaling strategic liability: expect architectural problems, manual processes, and talent risk. Above 40% represents deal risk where the platform may require restructuring post-close. These thresholds are informed by GST&rsquo;s direct experience across 100+ technology diligence engagements.</p>
 
-                        <h4 class="tdc-methodology__heading">Payback analysis</h4>
+                        <h4 class="tool-methodology__heading">Payback analysis</h4>
                         <p>The break-even period divides the remediation budget by monthly savings (equal to total monthly debt cost). This assumes full resolution of identified debt, which is a simplification. Real remediation programs typically achieve 50&ndash;80% efficiency. The estimate should be treated as a lower bound.</p>
 
-                        <h4 class="tdc-methodology__heading">Limitations</h4>
+                        <h4 class="tool-methodology__heading">Limitations</h4>
                         <p>This model produces order-of-magnitude estimates, not precise valuations. It does not account for context-switching overhead, team ramp-up time, partial remediation efficiency, revenue impact of incidents, or the war-room effect (larger teams pull more responders per incident, which the single-responder model understates). Salary inputs are all-in (base + benefits + equity) and should reflect loaded cost. Results are most useful for framing diligence conversations and scoping remediation budgets, not for formal valuation adjustments.</p>
 
-                        <h4 class="tdc-methodology__heading">Currency</h4>
+                        <h4 class="tool-methodology__heading">Currency</h4>
                         <p>Non-USD currencies use static mid-market approximations fixed at tool release, March 2026 (EUR 0.92, GBP 0.79, CAD 1.36, AUD 1.53). For valuation work, apply current exchange rates to the USD figure.</p>
 
-                        <h4 class="tdc-methodology__heading">Privacy</h4>
+                        <h4 class="tool-methodology__heading">Privacy</h4>
                         <p>All calculations run entirely in your browser&mdash;no inputs are sent to our servers. Anonymous page-view and interaction analytics (Google Analytics 4) help us improve the tool. See our <a href="/privacy">privacy policy</a> for details.</p>
 
-                        <p class="tdc-methodology__updated">Methodology last updated March 2026</p>
+                        <p class="tool-methodology__updated">Methodology last updated March 2026</p>
                     </div>
                 </details>
 
@@ -773,77 +773,6 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
         margin-top: var(--spacing-2xl);
     }
 
-    /* ── Methodology collapsible ───────────────────────────────────────────── */
-    .tdc-methodology {
-        margin-top: 0;
-        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
-    }
-
-    .tdc-methodology__trigger {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-        padding: var(--spacing-sm) var(--spacing-2xl);
-        cursor: pointer;
-        color: var(--text-muted);
-        transition: color var(--transition-fast);
-        list-style: none;
-        font-size: var(--text-xs);
-        font-weight: var(--font-weight-bold);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-    }
-
-    .tdc-methodology__trigger::-webkit-details-marker {
-        display: none;
-    }
-
-    .tdc-methodology__trigger::before {
-        content: '\25B6';
-        font-size: 0.6em;
-        transition: transform var(--transition-fast);
-    }
-
-    .tdc-methodology[open] > .tdc-methodology__trigger::before {
-        transform: rotate(90deg);
-    }
-
-    .tdc-methodology__trigger:hover {
-        color: var(--text-secondary);
-    }
-
-    .tdc-methodology__body {
-        padding: var(--spacing-sm) var(--spacing-2xl) var(--spacing-md);
-        color: var(--text-secondary);
-        line-height: 1.7;
-        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
-    }
-
-    .tdc-methodology__heading {
-        font-size: var(--text-sm);
-        font-weight: var(--font-weight-bold);
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--text-primary);
-        margin-top: var(--spacing-md);
-        margin-bottom: var(--spacing-xs);
-    }
-
-    .tdc-methodology__heading:first-child {
-        margin-top: 0;
-    }
-
-    .tdc-methodology__body p {
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .tdc-methodology__updated {
-        font-size: var(--text-xs);
-        color: var(--text-faded);
-        font-style: italic;
-        margin-top: var(--spacing-sm);
-    }
-
     /* ════════════════════════════════════════════════════════════════════════
        RESPONSIVE — tablet (≤ 768px)
     ════════════════════════════════════════════════════════════════════════ */
@@ -1005,19 +934,6 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
             border-top: 1px solid #ccc;
         }
 
-        .tdc-methodology > .tdc-methodology__body {
-            display: block !important;
-        }
-
-        .tdc-methodology__trigger::before {
-            display: none !important;
-        }
-
-        .tdc-methodology {
-            border-top: 1px solid #ccc;
-            break-inside: avoid;
-            page-break-inside: avoid;
-        }
     }
 </style>
 

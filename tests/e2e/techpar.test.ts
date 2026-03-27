@@ -396,8 +396,8 @@ test.describe('TechPar - EEAT enhancements', () => {
     await clickTab(page, 'costs');
     await fillInput(page, 'infra', '50000');
     await clickTab(page, 'analysis');
-    await page.click('.tp-methodology__trigger');
-    const body = page.locator('.tp-methodology__body');
+    await page.click('.tool-methodology__trigger');
+    const body = page.locator('.tool-methodology__body');
     await expect(body).toBeVisible();
     await expect(body).toContainText('KeyBanc');
     await expect(body).toContainText('36-month');

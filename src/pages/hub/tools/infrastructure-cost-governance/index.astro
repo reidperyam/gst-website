@@ -222,46 +222,46 @@ const domainCount = DOMAINS.length;
                 </div>
 
                 <!-- ── Methodology ─────────────────────────────────────────── -->
-                <details class="icg-methodology">
-                    <summary class="icg-methodology__trigger">How the assessment works</summary>
-                    <div class="icg-methodology__body">
-                        <h4 class="icg-methodology__heading">Scoring model</h4>
+                <details class="tool-methodology tool-methodology--delta">
+                    <summary class="tool-methodology__trigger">How the assessment works</summary>
+                    <div class="tool-methodology__body">
+                        <h4 class="tool-methodology__heading">Scoring model</h4>
                         <p>Each of the 20 questions is scored on a four-point scale: Not in place (0), Ad hoc (1), Established (2), Optimized (3). Domain scores are the percentage of points earned out of the maximum possible for that domain.</p>
 
-                        <h4 class="icg-methodology__heading">Domain weighting</h4>
+                        <h4 class="tool-methodology__heading">Domain weighting</h4>
                         <p>Foundational domains (Visibility and Tagging, Account Structure and Attribution) carry 1.5&times; weight in the overall score. The remaining four domains carry 1.0&times; weight. This reflects the principle that visibility and attribution are prerequisites for effective optimization.</p>
 
-                        <h4 class="icg-methodology__heading">Maturity levels</h4>
+                        <h4 class="tool-methodology__heading">Maturity levels</h4>
                         <p>The overall score maps to four maturity levels: Reactive (0&ndash;25), Aware (26&ndash;50), Optimizing (51&ndash;75), and Strategic (76&ndash;100).</p>
 
-                        <h4 class="icg-methodology__heading">FinOps Foundation alignment</h4>
+                        <h4 class="tool-methodology__heading">FinOps Foundation alignment</h4>
                         <p>The maturity levels map loosely to the FinOps Foundation&rsquo;s Crawl-Walk-Run framework. Reactive and Aware correspond to the Crawl phase, where organizations are building foundational visibility. Optimizing aligns with Walk, where active management is in place. Strategic maps to Run, where cost governance is embedded in engineering culture. For more on the framework, see <a href="https://www.finops.org/framework/" target="_blank" rel="noopener noreferrer">finops.org/framework</a>.</p>
 
-                        <h4 class="icg-methodology__heading">Foundational flag</h4>
+                        <h4 class="tool-methodology__heading">Foundational flag</h4>
                         <p>If either foundational domain scores at or below 33%, a warning is surfaced. Low foundational scores indicate that higher-level optimization practices may be unreliable because the organization cannot see or attribute its spend.</p>
 
-                        <h4 class="icg-methodology__heading">Recommendations</h4>
+                        <h4 class="tool-methodology__heading">Recommendations</h4>
                         <p>Recommendations are triggered when a question scores at or below a defined threshold. They are sorted by impact tier (high, medium, low) and can be dismissed as not applicable. Dismissed items are excluded from the printed report.</p>
 
-                        <h4 class="icg-methodology__heading">Benchmarks</h4>
+                        <h4 class="tool-methodology__heading">Benchmarks</h4>
                         <p>The benchmark ranges reflect illustrative patterns from GST diligence and value creation engagements. Individual results depend on company stage, team maturity, and infrastructure complexity.</p>
 
-                        <h4 class="icg-methodology__heading">Snapshots and comparison</h4>
+                        <h4 class="tool-methodology__heading">Snapshots and comparison</h4>
                         <p>After completing an assessment, click Save snapshot to store your results in your browser. Up to three snapshots are kept; saving a fourth removes the oldest. Once you have two or more snapshots, a Compare button appears. It shows the two most recent snapshots side by side with per-domain score deltas. Use this to track governance improvements over time, for example between initial diligence and a 90-day post-acquisition review. Snapshots are stored in your browser only and can be cleared from the snapshot manager below the action buttons.</p>
 
-                        <h4 class="icg-methodology__heading">Privacy</h4>
+                        <h4 class="tool-methodology__heading">Privacy</h4>
                         <p>All calculations run entirely in your browser&mdash;no inputs are sent to our servers. Anonymous page-view and interaction analytics (Google Analytics 4) help us improve the tool. See our <a href="/privacy">privacy policy</a> for details.</p>
 
-                        <p class="icg-methodology__updated">Methodology last updated March 2026</p>
+                        <p class="tool-methodology__updated">Methodology last updated March 2026</p>
 
-                        <div class="icg-methodology__author">
-                            <span class="icg-methodology__author-name">Reid Peryam</span>
-                            <span class="icg-methodology__author-sep">&middot;</span>
+                        <div class="tool-methodology__author">
+                            <span class="tool-methodology__author-name">Reid Peryam</span>
+                            <span class="tool-methodology__author-sep">&middot;</span>
                             <span>Strategic Technology Advisor</span>
-                            <span class="icg-methodology__author-sep">&middot;</span>
+                            <span class="tool-methodology__author-sep">&middot;</span>
                             <span>100+ PE technology diligence engagements</span>
-                            <span class="icg-methodology__author-sep">&middot;</span>
-                            <a href="https://www.linkedin.com/in/reidperyam/" target="_blank" rel="noopener noreferrer" class="icg-methodology__author-link">LinkedIn</a>
+                            <span class="tool-methodology__author-sep">&middot;</span>
+                            <a href="https://www.linkedin.com/in/reidperyam/" target="_blank" rel="noopener noreferrer" class="tool-methodology__author-link">LinkedIn</a>
                         </div>
                     </div>
                 </details>
@@ -1167,117 +1167,6 @@ const domainCount = DOMAINS.length;
         margin-top: var(--spacing-2xl);
     }
 
-    /* ── Methodology collapsible ───────────────────────────────────────────── */
-    .icg-methodology {
-        margin-top: 0;
-        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
-    }
-
-    .icg-methodology__trigger {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-        padding: var(--spacing-sm) var(--spacing-2xl);
-        cursor: pointer;
-        color: var(--text-muted);
-        transition: color var(--transition-fast);
-        list-style: none;
-        font-size: var(--text-xs);
-        font-weight: var(--font-weight-bold);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-    }
-
-    .icg-methodology__trigger::-webkit-details-marker {
-        display: none;
-    }
-
-    .icg-methodology__trigger::before {
-        content: '';
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        background-color: var(--color-primary);
-        mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
-        mask-size: contain;
-        mask-repeat: no-repeat;
-        -webkit-mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
-        -webkit-mask-size: contain;
-        -webkit-mask-repeat: no-repeat;
-        transition: transform var(--transition-fast);
-    }
-
-    .icg-methodology[open] > .icg-methodology__trigger::before {
-        transform: rotate(180deg);
-    }
-
-    .icg-methodology__trigger:hover {
-        color: var(--text-secondary);
-    }
-
-    .icg-methodology__body {
-        padding: var(--spacing-sm) var(--spacing-2xl) var(--spacing-md);
-        color: var(--text-secondary);
-        line-height: 1.7;
-        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
-    }
-
-    .icg-methodology__heading {
-        font-size: var(--text-sm);
-        font-weight: var(--font-weight-bold);
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--text-primary);
-        margin-top: var(--spacing-md);
-        margin-bottom: var(--spacing-xs);
-    }
-
-    .icg-methodology__heading:first-child {
-        margin-top: 0;
-    }
-
-    .icg-methodology__body p {
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .icg-methodology__updated {
-        font-size: var(--text-xs);
-        color: var(--text-faded);
-        font-style: italic;
-        margin-top: var(--spacing-sm);
-    }
-
-    /* ── Author attribution ──────────────────────────────────────────────── */
-    .icg-methodology__author {
-        display: flex;
-        align-items: baseline;
-        gap: var(--spacing-sm);
-        flex-wrap: wrap;
-        padding-top: var(--spacing-md);
-        margin-top: var(--spacing-md);
-        border-top: 1px solid color-mix(in srgb, var(--color-primary) 6%, transparent);
-        font-size: var(--text-xs);
-        color: var(--text-muted);
-    }
-
-    .icg-methodology__author-name {
-        font-weight: var(--font-weight-semibold);
-        color: var(--text-secondary);
-    }
-
-    .icg-methodology__author-sep {
-        color: var(--text-faded);
-    }
-
-    .icg-methodology__author-link {
-        color: var(--color-primary);
-        text-decoration: none;
-    }
-
-    .icg-methodology__author-link:hover {
-        text-decoration: underline;
-    }
-
     /* ── Company stage selector ───────────────────────────────────────────── */
     .icg-stage-selector {
         margin-bottom: var(--spacing-xl);
@@ -1620,18 +1509,6 @@ const domainCount = DOMAINS.length;
             break-inside: avoid;
         }
 
-        /* Auto-expand methodology in print */
-        .icg-methodology {
-            border: none;
-        }
-
-        .icg-methodology__trigger {
-            display: none;
-        }
-
-        .icg-methodology__body {
-            padding: var(--spacing-md) 0;
-        }
     }
 </style>
 
