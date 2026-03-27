@@ -1907,12 +1907,14 @@ function renderResults(): void {
     });
   });
 
-  // Benchmark highlighting — show "YOUR RANGE" badge on the matching range row
+  // Benchmark highlighting — show "YOUR RANGE" badge on the first matching range row
   const benchCells = document.querySelectorAll<HTMLElement>('[data-bench]');
+  let rangeMatched = false;
   benchCells.forEach(td => {
     const range = td.dataset.bench!;
     const [lo, hi] = range.split('-').map(Number);
-    const inRange = result.overallScore >= lo && result.overallScore <= hi;
+    const inRange = !rangeMatched && result.overallScore >= lo && result.overallScore <= hi;
+    if (inRange) rangeMatched = true;
     td.classList.toggle('in-range', inRange);
     td.textContent = range;
     // Add label to first td in the same row
