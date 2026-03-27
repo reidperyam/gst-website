@@ -2445,12 +2445,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     /* DM methodology — scoped overrides on shared .tool-methodology */
-    .diligence-machine .tool-methodology {
+    .diligence-machine :global(.tool-methodology) {
         max-width: 800px;
         margin: var(--spacing-2xl) auto 0;
     }
 
-    .diligence-machine .tool-methodology__trigger {
+    .diligence-machine :global(.tool-methodology__trigger) {
         padding-left: var(--spacing-lg);
         padding-right: var(--spacing-lg);
     }
