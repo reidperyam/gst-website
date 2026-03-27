@@ -497,7 +497,7 @@ trackPageView('techpar', 'TechPar | GST');
                         <!-- Benchmark reference table -->
                         <div class="tp-bench-table-wrap">
                             <div class="tp-bench-table-head label">Stage benchmarks: total technology cost</div>
-                            <table class="tp-btbl">
+                            <table class="tool-bench-table">
                                 <tbody data-bench-tbl>
                                     <tr data-bench-row="seed"><td>Seed / Pre-A</td><td>60&ndash;100%</td></tr>
                                     <tr data-bench-row="series_a"><td>Series A</td><td>45&ndash;75%</td></tr>
@@ -506,8 +506,8 @@ trackPageView('techpar', 'TechPar | GST');
                                     <tr data-bench-row="enterprise"><td>Enterprise</td><td>18&ndash;32%</td></tr>
                                 </tbody>
                             </table>
-                            <div class="tp-bench-disc text-tiny">Ranges informed by KeyBanc SaaS Survey (2024), OpenView Benchmarks (2024), Bessemer State of the Cloud (2024), and GST engagement experience (2023&ndash;2025). Benchmarks are reviewed annually. Individual results vary based on business model and organizational structure.</div>
-                            <div class="tp-bench-disc tp-bench-disc--context text-tiny" data-industry-disc>These benchmarks are derived primarily from SaaS company data. Companies operating marketplace, fintech, infrastructure, or hardware-intensive models may observe materially different cost structures. Apply professional judgment when benchmarking outside a pure-SaaS context.</div>
+                            <div class="tool-bench-note text-tiny">Ranges informed by KeyBanc SaaS Survey (2024), OpenView Benchmarks (2024), Bessemer State of the Cloud (2024), and GST engagement experience (2023&ndash;2025). Benchmarks are reviewed annually. Individual results vary based on business model and organizational structure.</div>
+                            <div class="tool-bench-note text-tiny" data-industry-disc>These benchmarks are derived primarily from SaaS company data. Companies operating marketplace, fintech, infrastructure, or hardware-intensive models may observe materially different cost structures. Apply professional judgment when benchmarking outside a pure-SaaS context.</div>
                         </div>
 
                         <!-- Industry context note -->
@@ -1607,37 +1607,8 @@ trackPageView('techpar', 'TechPar | GST');
         margin-bottom: var(--spacing-sm);
     }
 
-    .tp-btbl {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .tp-btbl td {
-        padding: var(--spacing-sm);
-        font-size: var(--text-xs);
-        border-bottom: 1px solid var(--border-light);
-        color: var(--text-secondary);
-    }
-
-    .tp-btbl td:last-child {
-        text-align: right;
-    }
-
-    .tp-btbl tr.tp-btbl--active td {
-        background: var(--accent-light-bg);
-    }
-
-    .tp-btbl tr.tp-btbl--active td:last-child {
-        color: var(--color-primary);
-    }
-
-    .tp-bench-disc {
-        color: var(--text-muted);
-        margin-top: var(--spacing-sm);
-        line-height: 1.5;
-    }
-
-    .tp-bench-disc + .tp-bench-disc {
+    /* Adjacent benchmark notes get a dashed separator */
+    .tool-bench-note + .tool-bench-note {
         margin-top: var(--spacing-xs);
         padding-top: var(--spacing-xs);
         border-top: 1px dashed var(--border-light);

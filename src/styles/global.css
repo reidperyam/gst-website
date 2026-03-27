@@ -122,6 +122,75 @@ body::before {
     margin-bottom: var(--spacing-md);
 }
 
+/* Hub Tool Benchmark Table — shared two-column reference table with active row */
+.tool-bench-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tool-bench-table td {
+    padding: var(--spacing-sm);
+    font-size: var(--text-xs);
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+
+.tool-bench-table td:last-child {
+    text-align: right;
+}
+
+.tool-bench-table .bench-row--active td {
+    background: var(--accent-light-bg);
+}
+
+.tool-bench-table .bench-row--active td:last-child {
+    color: var(--color-primary);
+}
+
+/* Benchmark label pills — inline badges for stage/score indicators */
+.bench-label {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1px var(--spacing-xs);
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-left: var(--spacing-xs);
+    line-height: 1.4;
+}
+
+.bench-label--score {
+    background: var(--accent-light-bg-hover);
+    color: var(--color-primary);
+    border: 1px solid rgba(5, 205, 153, 0.25);
+}
+
+.bench-label--stage {
+    background: var(--hub-authority-blue-bg);
+    color: var(--hub-authority-blue);
+    border: 1px solid rgba(91, 122, 157, 0.2);
+}
+
+html.dark-theme .bench-label--score {
+    background: rgba(5, 205, 153, 0.15);
+    border-color: rgba(5, 205, 153, 0.3);
+}
+
+html.dark-theme .bench-label--stage {
+    background: rgba(91, 122, 157, 0.15);
+    color: #7a9dbd;
+    border-color: rgba(91, 122, 157, 0.25);
+}
+
+/* Benchmark disclaimer note */
+.tool-bench-note {
+    color: var(--text-muted);
+    margin-top: var(--spacing-sm);
+    line-height: 1.5;
+}
+
 /* Hub Tool Buttons — lightweight buttons for tool UIs */
 .hub-btn {
     display: inline-flex;

@@ -882,7 +882,7 @@ function renderAnalysis(r: TechParResult) {
 
     // Benchmark table active row
     $$('[data-bench-row]').forEach(tr => {
-        tr.classList.toggle('tp-btbl--active', (tr as HTMLElement).dataset.benchRow === stageKey);
+        tr.classList.toggle('bench-row--active', (tr as HTMLElement).dataset.benchRow === stageKey);
     });
 
     // Industry context

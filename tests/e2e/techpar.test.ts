@@ -212,7 +212,7 @@ test.describe('TechPar - Analysis tab', () => {
     await fillInput(page, 'infra', '50000');
     await clickTab(page, 'analysis');
     const activeRow = page.locator('[data-bench-row="series_bc"]');
-    await expect(activeRow).toHaveClass(/tp-btbl--active/);
+    await expect(activeRow).toHaveClass(/bench-row--active/);
   });
 });
 

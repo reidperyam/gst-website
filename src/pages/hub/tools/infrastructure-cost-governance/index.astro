@@ -164,7 +164,7 @@ const domainCount = DOMAINS.length;
                         <!-- Benchmark reference -->
                         <div class="icg-card">
                             <div class="tool-section-label">Benchmark reference</div>
-                            <table class="icg-benchmark-table">
+                            <table class="tool-bench-table">
                                 <tbody data-benchmark-body>
                                     <tr data-stage-row="pre-series-b"><td>Pre-Series B / high-growth startup</td><td data-bench="15-35">15-35</td></tr>
                                     <tr data-stage-row="series-bc"><td>Series B-C SaaS, scaling team</td><td data-bench="30-55">30-55</td></tr>
@@ -172,7 +172,7 @@ const domainCount = DOMAINS.length;
                                     <tr data-stage-row="enterprise"><td>Enterprise with established FinOps practice</td><td data-bench="65-90">65-90</td></tr>
                                 </tbody>
                             </table>
-                            <div class="icg-benchmark-note text-tiny">Ranges reflect illustrative patterns from GST diligence and value creation engagements. Individual results vary based on team maturity and infrastructure complexity.</div>
+                            <div class="tool-bench-note text-tiny">Ranges reflect illustrative patterns from GST diligence and value creation engagements. Individual results vary based on team maturity and infrastructure complexity.</div>
                         </div>
 
                         <!-- Cost context -->
@@ -801,25 +801,23 @@ const domainCount = DOMAINS.length;
         line-height: 1.55;
     }
 
-    /* ── Results: Benchmark table ──────────────────────────────────────────── */
-    .icg-benchmark-table {
-        width: 100%;
+    /* ── Results: Benchmark table — overrides on shared .tool-bench-table ─── */
+    .tool-bench-table {
         border-collapse: separate;
         border-spacing: 0 var(--spacing-xs);
     }
 
-    .icg-benchmark-table td {
+    .tool-bench-table td {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: var(--text-sm);
-        color: var(--text-secondary);
+        border-bottom: none;
     }
 
-    .icg-benchmark-table td:first-child {
+    .tool-bench-table td:first-child {
         border-radius: 4px 0 0 4px;
     }
 
-    .icg-benchmark-table td:last-child {
-        text-align: right;
+    .tool-bench-table td:last-child {
         white-space: nowrap;
         font-family: var(--font-family);
         font-weight: var(--font-weight-semibold);
@@ -827,51 +825,12 @@ const domainCount = DOMAINS.length;
         border-radius: 0 4px 4px 0;
     }
 
-    :global(.icg-benchmark-table td.in-range) {
+    :global(.tool-bench-table td.in-range) {
         font-weight: var(--font-weight-bold);
         color: var(--color-primary);
     }
 
-    :global(.icg-bench-label) {
-        display: inline-block;
-        font-size: 0.6rem;
-        font-weight: var(--font-weight-bold);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 1px var(--spacing-xs);
-        border-radius: 3px;
-        vertical-align: middle;
-        margin-left: var(--spacing-xs);
-        line-height: 1.4;
-    }
-
-    :global(.icg-bench-label--score) {
-        background: var(--accent-light-bg-hover);
-        color: var(--color-primary);
-        border: 1px solid rgba(5, 205, 153, 0.25);
-    }
-
-    :global(.icg-bench-label--stage) {
-        background: var(--hub-authority-blue-bg);
-        color: var(--hub-authority-blue);
-        border: 1px solid rgba(91, 122, 157, 0.2);
-    }
-
-    :global(html.dark-theme .icg-bench-label--score) {
-        background: rgba(5, 205, 153, 0.15);
-        border-color: rgba(5, 205, 153, 0.3);
-    }
-
-    :global(html.dark-theme .icg-bench-label--stage) {
-        background: rgba(91, 122, 157, 0.15);
-        color: #7a9dbd;
-        border-color: rgba(91, 122, 157, 0.25);
-    }
-
-    .icg-benchmark-note {
-        color: var(--text-muted);
-        margin-top: var(--spacing-sm);
-        line-height: 1.5;
+    .tool-bench-note {
         font-style: italic;
     }
 
@@ -1417,16 +1376,8 @@ const domainCount = DOMAINS.length;
     }
 
     /* ── Benchmark stage highlight ────────────────────────────────────────── */
-    :global(.icg-bench-active td) {
-        background: rgba(5, 205, 153, 0.04);
-    }
-
-    :global(.icg-bench-active td:first-child) {
+    :global(.bench-row--active td:first-child) {
         border-left: 3px solid var(--color-primary);
-    }
-
-    :global(html.dark-theme .icg-bench-active td) {
-        background: var(--accent-light-bg);
     }
 
     /* ── Domain bar rec count badge ───────────────────────────────────────── */
@@ -2120,10 +2071,10 @@ function renderResults(): void {
     // Add label to first td in the same row
     const firstTd = td.closest('tr')?.querySelector('td');
     if (firstTd) {
-      const existingScore = firstTd.querySelector('.icg-bench-label--score');
+      const existingScore = firstTd.querySelector('.bench-label--score');
       if (existingScore) existingScore.remove();
       if (inRange) {
-        firstTd.insertAdjacentHTML('beforeend', ' <span class="icg-bench-label icg-bench-label--score">Your range</span>');
+        firstTd.insertAdjacentHTML('beforeend', ' <span class="bench-label bench-label--score">Your range</span>');
       }
     }
   });
@@ -2131,12 +2082,12 @@ function renderResults(): void {
   // Benchmark stage row highlighting — show "YOUR STAGE" badge
   document.querySelectorAll<HTMLElement>('[data-stage-row]').forEach(tr => {
     const isActive = tr.dataset.stageRow === state.companyStage;
-    tr.classList.toggle('icg-bench-active', isActive);
+    tr.classList.toggle('bench-row--active', isActive);
     const firstTd = tr.querySelector('td')!;
-    const existingLabel = firstTd.querySelector('.icg-bench-label--stage');
+    const existingLabel = firstTd.querySelector('.bench-label--stage');
     if (existingLabel) existingLabel.remove();
     if (isActive) {
-      firstTd.insertAdjacentHTML('beforeend', ' <span class="icg-bench-label icg-bench-label--stage">Your stage</span>');
+      firstTd.insertAdjacentHTML('beforeend', ' <span class="bench-label bench-label--stage">Your stage</span>');
     }
   });
 
