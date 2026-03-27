@@ -90,5 +90,14 @@ No dark theme overrides needed — the variables handle theme switching automati
 
 ---
 
+## Related Documentation
+
+- **[/brand](https://globalstrategic.tech/brand)** — Live typography specimens with computed sizes, weights, and line-heights
+- [BRAND_GUIDELINES.md](./BRAND_GUIDELINES.md) — Brand typography and font family guidelines
+- [STYLES_GUIDE.md](./STYLES_GUIDE.md) — CSS conventions and component patterns
+- [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) — Complete design token catalog
+
+---
+
 **Last Updated**: March 24, 2026
 **Source**: `src/styles/typography.css` (128 lines)

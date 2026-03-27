@@ -273,6 +273,7 @@ For multi-series charts (max 6 colors), use this sequence for adequate color vis
 
 ## Related Documentation
 
+- **[/brand](https://globalstrategic.tech/brand)** — Live rendered brand reference page with color swatches, typography specimens, and UI component library. Shareable with external stakeholders without repo access.
 - [STYLES_GUIDE.md](./STYLES_GUIDE.md) — CSS conventions, component patterns
 - [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) — Complete design token catalog
 - [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) — Typography utility classes

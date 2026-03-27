@@ -601,6 +601,7 @@ Delete dead styles. Version control has the history.
 
 ## Related Documentation
 
+- **[/brand](https://globalstrategic.tech/brand)** — Live visual reference of the full design system: color swatches, typography specimens, spacing scale, and UI component library. Share this URL with designers, reviewers, or integration partners who don't have repo access.
 - [BRAND_GUIDELINES.md](./BRAND_GUIDELINES.md) — Brand color palette, usage rules, and asset guidelines
 - [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) — Complete design token catalog
 - [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) — Typography utility classes

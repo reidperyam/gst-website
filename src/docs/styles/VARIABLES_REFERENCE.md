@@ -319,5 +319,14 @@ Cross-tool semantic colors shared by multiple hub tools.
 
 ---
 
+## Related Documentation
+
+- **[/brand](https://globalstrategic.tech/brand)** — Live rendered swatches for every variable below, with computed hex values and dark theme comparison
+- [BRAND_GUIDELINES.md](./BRAND_GUIDELINES.md) — Brand color palette, usage rules, and asset guidelines
+- [STYLES_GUIDE.md](./STYLES_GUIDE.md) — CSS conventions and component patterns
+- [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) — Typography utility classes
+
+---
+
 **Last Updated**: March 24, 2026
 **Total Variables**: 134 (`:root`) + 78 dark theme overrides
