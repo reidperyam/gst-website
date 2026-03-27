@@ -880,9 +880,31 @@ function renderAnalysis(r: TechParResult) {
     const benchMax = g('bench-max');
     if (benchMax) benchMax.textContent = maxB.toFixed(0) + '%';
 
-    // Benchmark table active row
+    // Benchmark table — dual markers: "Your stage" + "Your ratio"
+    const ratio = r.totalTechPct;
+    let ratioMatched = false;
     $$('[data-bench-row]').forEach(tr => {
-        tr.classList.toggle('bench-row--active', (tr as HTMLElement).dataset.benchRow === stageKey);
+        const el = tr as HTMLElement;
+        const isStage = el.dataset.benchRow === stageKey;
+        tr.classList.toggle('bench-row--active', isStage);
+
+        // Clear previous badges
+        const firstTd = el.querySelector('td')!;
+        firstTd.querySelectorAll('.bench-label').forEach(b => b.remove());
+
+        // "Your stage" badge
+        if (isStage) {
+            firstTd.insertAdjacentHTML('beforeend', ' <span class="bench-label bench-label--stage">Your stage</span>');
+        }
+
+        // "Your ratio" badge — first matching range wins
+        if (!ratioMatched && el.dataset.bench) {
+            const [lo, hi] = el.dataset.bench.split('-').map(Number);
+            if (ratio >= lo && ratio <= hi) {
+                ratioMatched = true;
+                firstTd.insertAdjacentHTML('beforeend', ' <span class="bench-label bench-label--score">Your ratio</span>');
+            }
+        }
     });
 
     // Industry context
