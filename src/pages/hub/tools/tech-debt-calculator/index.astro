@@ -1045,6 +1045,7 @@ import {
 
 import type { CalcState } from '../../../../utils/tech-debt-engine';
 import { trackEvent } from '../../../../utils/analytics';
+import { copyWithFeedback } from '../../../../utils/copy-feedback';
 
 // ─── DOM helpers ─────────────────────────────────────────────────────────────
 
@@ -1404,12 +1405,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
       trackEvent({ event: 'tdc_copy_link', category: 'engagement' });
-      const url = window.location.href;
-      const reset = () => { copyBtn.textContent = 'Copy Link'; };
-      navigator.clipboard.writeText(url).then(
-        () => { copyBtn.textContent = 'Copied!'; setTimeout(reset, 2000); },
-        () => { copyBtn.textContent = 'Failed'; setTimeout(reset, 2000); },
-      );
+      copyWithFeedback(window.location.href, copyBtn);
     });
   }
 
@@ -1420,11 +1416,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = calculate(state);
       const { symbol, multiplier } = CURRENCIES[currency];
       const text = buildSummaryText(state, result, symbol, multiplier, window.location.href);
-      const reset = () => { summaryBtn.textContent = 'Copy Summary'; };
-      navigator.clipboard.writeText(text).then(
-        () => { summaryBtn.textContent = 'Copied!'; setTimeout(reset, 2000); },
-        () => { summaryBtn.textContent = 'Failed'; setTimeout(reset, 2000); },
-      );
+      copyWithFeedback(text, summaryBtn);
     });
   }
 });

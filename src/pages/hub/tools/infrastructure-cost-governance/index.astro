@@ -1740,6 +1740,7 @@ import { trackEvent } from '../../../../utils/analytics';
 
 import { DOMAINS, ANSWER_OPTIONS } from '../../../../data/infrastructure-cost-governance/domains';
 import { RECOMMENDATIONS } from '../../../../data/infrastructure-cost-governance/recommendations';
+import { copyWithFeedback } from '../../../../utils/copy-feedback';
 
 // ─── DOM helpers ────────────────────────────────────────────────────────────
 
@@ -2371,38 +2372,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const recs = getRecommendations(state, RECOMMENDATIONS)
       .filter(r => !state.dismissed.includes(r.id));
     const text = buildSummaryText(state, result, DOMAINS, recs, window.location.href);
-    const reset = () => { btn.textContent = 'Copy summary'; };
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(
-        () => { btn.textContent = 'Copied!'; setTimeout(reset, 2000); },
-        () => { btn.textContent = 'Failed'; setTimeout(reset, 2000); },
-      );
-    }
+    copyWithFeedback(text, btn);
   });
 
   qs<HTMLElement>('[data-action="copy"]').addEventListener('click', () => {
     trackEvent({ event: 'icg_copy_link', category: 'engagement', location: 'results' });
     const btn = qs<HTMLButtonElement>('[data-action="copy"]');
-    const url = window.location.href;
-    const reset = () => { btn.textContent = 'Copy link'; };
-    btn.textContent = 'Link copied';
-    setTimeout(reset, 2000);
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).catch(() => {});
-    }
+    copyWithFeedback(window.location.href, btn, { label: 'Link copied' });
   });
 
   // ── Landing actions ──
   const landingCopy = qs<HTMLButtonElement>('[data-action="landing-copy"]');
   landingCopy.addEventListener('click', () => {
     trackEvent({ event: 'icg_copy_link', category: 'engagement', location: 'landing' });
-    const url = window.location.href.split('?')[0];
-    const reset = () => { landingCopy.textContent = 'Copy link'; };
-    landingCopy.textContent = 'Link copied';
-    setTimeout(reset, 2000);
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).catch(() => {});
-    }
+    copyWithFeedback(window.location.href.split('?')[0], landingCopy, { label: 'Link copied' });
   });
 
   const landingEmail = qs<HTMLAnchorElement>('[data-action="landing-email"]');

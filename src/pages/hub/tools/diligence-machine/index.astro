@@ -320,6 +320,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     import { generateScript, syncMultiRegion, MULTI_REGION_ID } from '../../../../utils/diligence-engine';
     import { getOptionLabel, WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
     import { trackCTA, trackEvent } from '../../../../utils/analytics';
+    import { copyWithFeedback } from '../../../../utils/copy-feedback';
     import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
     const STORAGE_KEY = 'diligence-machine-state';
@@ -1035,9 +1036,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         const text = lines.join('\n');
 
         const label = document.getElementById('btnCopyLabel')!;
-        label.textContent = 'Copied!';
-        setTimeout(() => { label.textContent = 'Copy'; }, 2000);
-        navigator.clipboard.writeText(text).catch(() => {});
+        copyWithFeedback(text, label);
     }
 
     // ─── RESTART ──────────────────────────────────────────────────────────
