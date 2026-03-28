@@ -1215,29 +1215,6 @@ html.dark-theme .footer-links a:hover {
     position: relative;
 }
 
-.cta-box::before,
-.cta-box::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-primary);
-}
-
-.cta-box::before {
-    top: -2px;
-    left: -2px;
-    border-right: none;
-    border-bottom: none;
-}
-
-.cta-box::after {
-    bottom: -2px;
-    right: -2px;
-    border-left: none;
-    border-top: none;
-}
-
 .cta-box h2 {
     font-size: 2.5rem;
     color: rgba(26, 26, 26, 0.95);
@@ -1265,11 +1242,6 @@ html.dark-theme .cta-button:hover {
 
 html.dark-theme .cta-box {
     background: var(--cta-box-bg);
-    border-color: var(--color-primary);
-}
-
-html.dark-theme .cta-box::before,
-html.dark-theme .cta-box::after {
     border-color: var(--color-primary);
 }
 
