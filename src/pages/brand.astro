@@ -1145,7 +1145,7 @@ trackPageView('brand', 'Brand Style Reference');
       </div>
     </div>
 
-    <h4 class="label brand-subgroup-title">Filter Chips</h4>
+    <h4 class="label brand-subgroup-title">Filter Chips (Current)</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <div class="brand-filter-chips">
@@ -1154,7 +1154,20 @@ trackPageView('brand', 'Brand Style Reference');
           <div class="brand-filter-chip" data-demo-chip>Mature</div>
           <div class="brand-filter-chip" data-demo-chip>Early Stage</div>
         </div>
-        <code class="brand-code">.filter-chip, .filter-chip.active — click to toggle</code>
+        <code class="brand-code">.filter-chip — rounded (4px), filled bg, filled active state</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Filter Chips (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brand-filter-chips-brutal">
+          <div class="brand-chip-brutal brand-chip-brutal--active" data-demo-chip-brutal>All</div>
+          <div class="brand-chip-brutal" data-demo-chip-brutal>Growth</div>
+          <div class="brand-chip-brutal" data-demo-chip-brutal>Mature</div>
+          <div class="brand-chip-brutal" data-demo-chip-brutal>Early Stage</div>
+        </div>
+        <code class="brand-code">.filter-chip (brutalist) — no radius, outlined, monospace, primary-fill active state</code>
       </div>
     </div>
 
@@ -4131,10 +4144,17 @@ trackPageView('brand', 'Brand Style Reference');
       });
     });
 
-    // Filter chip toggle demo
+    // Filter chip toggle demo (current)
     document.querySelectorAll<HTMLElement>('[data-demo-chip]').forEach(chip => {
       chip.addEventListener('click', () => {
         chip.classList.toggle('brand-filter-chip--active');
+      });
+    });
+
+    // Filter chip toggle demo (brutalist)
+    document.querySelectorAll<HTMLElement>('[data-demo-chip-brutal]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('brand-chip-brutal--active');
       });
     });
 
