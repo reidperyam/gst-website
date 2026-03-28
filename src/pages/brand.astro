@@ -459,6 +459,67 @@ trackPageView('brand', 'Brand Style Reference');
         <code class="brand-code">--font-weight-bold</code>
       </div>
     </div>
+
+    <h3 class="heading-sm brand-group-title">Brutalist Typography</h3>
+    <p class="text-small brand-section__note">Monospace-first variants for controls, data display, and tool interfaces. Designed to complement the existing Helvetica Neue system typography.</p>
+
+    <div class="brand-type-specimens">
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-heading-xl" data-specimen>Heading XL</span>
+        <code class="brand-code">.brutal-heading-xl</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-heading-lg" data-specimen>Heading LG</span>
+        <code class="brand-code">.brutal-heading-lg</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-heading-md" data-specimen>Heading MD</span>
+        <code class="brand-code">.brutal-heading-md</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-heading-sm" data-specimen>Heading SM</span>
+        <code class="brand-code">.brutal-heading-sm</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-text-base" data-specimen>Text Base — The quick brown fox jumps over the lazy dog</span>
+        <code class="brand-code">.brutal-text-base</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-text-small" data-specimen>Text Small — The quick brown fox jumps over the lazy dog</span>
+        <code class="brand-code">.brutal-text-small</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-text-tiny" data-specimen>Text Tiny — The quick brown fox jumps over the lazy dog</span>
+        <code class="brand-code">.brutal-text-tiny</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-label" data-specimen>Label</span>
+        <code class="brand-code">.brutal-label</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-label-small" data-specimen>Label Small</span>
+        <code class="brand-code">.brutal-label-small</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-data" data-specimen>$18,240,000</span>
+        <code class="brand-code">.brutal-data</code>
+        <span class="brand-type-meta"></span>
+      </div>
+      <div class="brand-type-specimen">
+        <span class="brand-brutal-data-sm" data-specimen>12.4%</span>
+        <code class="brand-code">.brutal-data-sm</code>
+        <span class="brand-type-meta"></span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -587,7 +648,7 @@ trackPageView('brand', 'Brand Style Reference');
   <div class="container">
     <h2 class="heading-md brand-section__title">Components</h2>
 
-    <h3 class="heading-sm brand-group-title">Hub Buttons</h3>
+    <h3 class="heading-sm brand-group-title">Hub Buttons (Current)</h3>
     <div class="brand-component-row">
       <div class="brand-component-item">
         <button class="hub-btn hub-btn--primary">Primary</button>
@@ -605,6 +666,28 @@ trackPageView('brand', 'Brand Style Reference');
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <button class="hub-btn hub-btn--primary hub-btn--full">Full Width</button>
+        <code class="brand-code">.hub-btn--full</code>
+      </div>
+    </div>
+
+    <h3 class="heading-sm brand-group-title">Hub Buttons (Brutalist)</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <button class="brand-btn-brutal brand-btn-brutal--primary">Primary</button>
+        <code class="brand-code">.hub-btn--primary</code>
+      </div>
+      <div class="brand-component-item">
+        <button class="brand-btn-brutal brand-btn-brutal--secondary">Secondary</button>
+        <code class="brand-code">.hub-btn--secondary</code>
+      </div>
+      <div class="brand-component-item">
+        <button class="brand-btn-brutal brand-btn-brutal--primary" disabled>Disabled</button>
+        <code class="brand-code">:disabled</code>
+      </div>
+    </div>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <button class="brand-btn-brutal brand-btn-brutal--primary brand-btn-brutal--full">Full Width</button>
         <code class="brand-code">.hub-btn--full</code>
       </div>
     </div>
@@ -819,7 +902,7 @@ trackPageView('brand', 'Brand Style Reference');
       </div>
     </div>
 
-    <h4 class="label brand-subgroup-title">Option Card</h4>
+    <h4 class="label brand-subgroup-title">Option Card (Current)</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <div class="brand-options-grid">
@@ -836,14 +919,35 @@ trackPageView('brand', 'Brand Style Reference');
             <span class="brand-option-description">Controlling interest with existing ownership retained</span>
           </button>
         </div>
-        <code class="brand-code">.option-card — selectable with delta icon, hover lift, .selected state (primary border + accent bg)</code>
+        <code class="brand-code">.option-card — rounded corners, box-shadow, soft hover lift (current DM implementation)</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Option Card (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brand-options-grid">
+          <button class="brand-option-card-brutal" type="button" data-demo-option-brutal>
+            <span class="brand-option-label-brutal"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" class="brand-option-icon" width="10" height="10" />Full Acquisition</span>
+            <span class="brand-option-description-brutal">Complete purchase of the target entity</span>
+          </button>
+          <button class="brand-option-card-brutal brand-option-card-brutal--selected" type="button" data-demo-option-brutal>
+            <span class="brand-option-label-brutal"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" class="brand-option-icon" width="10" height="10" />Carve-out</span>
+            <span class="brand-option-description-brutal">Separation of a business unit from a parent company</span>
+          </button>
+          <button class="brand-option-card-brutal" type="button" data-demo-option-brutal>
+            <span class="brand-option-label-brutal"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" class="brand-option-icon" width="10" height="10" />Majority Stake</span>
+            <span class="brand-option-description-brutal">Controlling interest with existing ownership retained</span>
+          </button>
+        </div>
+        <code class="brand-code">.option-card (brutalist) — sharp edges, no shadow, monospace label, hard border, primary-fill selected state</code>
       </div>
     </div>
 
     <!-- 8b. Cards -->
     <h3 class="heading-sm brand-group-title">Cards</h3>
 
-    <h4 class="label brand-subgroup-title">Trust Card</h4>
+    <h4 class="label brand-subgroup-title">Trust Card (Current)</h4>
     <div class="brand-card-grid">
       <div class="brand-trust-card">
         <h3>Vendor-Neutral Analysis</h3>
@@ -854,9 +958,22 @@ trackPageView('brand', 'Brand Style Reference');
         <p>Board-level deliverables that translate technical complexity into strategic clarity for decision-makers.</p>
       </div>
     </div>
-    <code class="brand-code">.trust-card — accent-wash bg, hover lift + shadow, flex column layout</code>
+    <code class="brand-code">.trust-card — accent-wash bg, rounded corners, hover lift + shadow</code>
 
-    <h4 class="label brand-subgroup-title">Project Card</h4>
+    <h4 class="label brand-subgroup-title">Trust Card (Brutalist)</h4>
+    <div class="brand-card-grid">
+      <div class="brand-trust-brutal">
+        <h3>Vendor-Neutral Analysis</h3>
+        <p>Independent assessment without platform bias. Recommendations based solely on organizational fit and strategic alignment.</p>
+      </div>
+      <div class="brand-trust-brutal">
+        <h3>Executive-Ready Outputs</h3>
+        <p>Board-level deliverables that translate technical complexity into strategic clarity for decision-makers.</p>
+      </div>
+    </div>
+    <code class="brand-code">.trust-card (brutalist) — no radius, transparent bg, left-border accent, monospace heading, hard hover</code>
+
+    <h4 class="label brand-subgroup-title">Project Card (Current)</h4>
     <div class="brand-card-grid brand-card-grid--single">
       <div class="brand-project-card">
         <div class="brand-project-card__header">
@@ -884,9 +1001,39 @@ trackPageView('brand', 'Brand Style Reference');
         <button class="brand-project-card__cta">View Project Details</button>
       </div>
     </div>
-    <code class="brand-code">.project-card — header with year badge, metrics box, 3-line clamp, tags, full-width CTA</code>
+    <code class="brand-code">.project-card — rounded hover shadow, filled metrics bg, rounded tags</code>
 
-    <h4 class="label brand-subgroup-title">Teaser Card</h4>
+    <h4 class="label brand-subgroup-title">Project Card (Brutalist)</h4>
+    <div class="brand-card-grid brand-card-grid--single">
+      <div class="brand-project-brutal">
+        <div class="brand-project-brutal__header">
+          <div>
+            <div class="brand-project-brutal__title">Meridian</div>
+            <div class="brand-project-brutal__industry">Healthcare SaaS</div>
+          </div>
+          <div class="brand-project-brutal__year">2025</div>
+        </div>
+        <div class="brand-project-brutal__metrics">
+          <div class="brand-metric">
+            <div class="brand-metric__label">ARR</div>
+            <div class="brand-project-brutal__value brand-project-brutal__value--arr">$18M</div>
+          </div>
+          <div class="brand-metric">
+            <div class="brand-metric__label">Stage</div>
+            <div class="brand-project-brutal__value">Growth</div>
+          </div>
+        </div>
+        <p class="brand-project-brutal__summary">Cloud-native patient engagement platform with strong API integration layer. Three-year infrastructure modernization roadmap in progress.</p>
+        <div class="brand-project-brutal__tags">
+          <span class="brand-project-brutal__tag brand-project-brutal__tag--theme">Digital Health</span>
+          <span class="brand-project-brutal__tag">Cloud Migration</span>
+        </div>
+        <button class="brand-project-brutal__cta">View Project Details</button>
+      </div>
+    </div>
+    <code class="brand-code">.project-card (brutalist) — no shadow, left-border metrics, monospace values, outlined tags, invert-hover CTA</code>
+
+    <h4 class="label brand-subgroup-title">Teaser Card (Current)</h4>
     <div class="brand-card-grid brand-card-grid--single">
       <article class="brand-teaser-card">
         <div class="brand-teaser-card__header">
@@ -906,9 +1053,31 @@ trackPageView('brand', 'Brand Style Reference');
         <a class="cta-button primary brand-teaser-card__cta" href="#ui-library">Launch Tool</a>
       </article>
     </div>
-    <code class="brand-code">.teaser-card — centered, feature list with delta bullets, status badge, launch CTA</code>
+    <code class="brand-code">.teaser-card — rounded corners, accent-wash bg, centered layout</code>
 
-    <h4 class="label brand-subgroup-title">Recommendation Card</h4>
+    <h4 class="label brand-subgroup-title">Teaser Card (Brutalist)</h4>
+    <div class="brand-card-grid brand-card-grid--single">
+      <article class="brand-teaser-brutal">
+        <div class="brand-teaser-brutal__header">
+          <h2>Technology Cost Benchmarking</h2>
+        </div>
+        <ul class="brand-teaser-brutal__features">
+          <li>
+            <svg class="brand-bullet-icon" viewBox="0 0 64 64" fill="none"><path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+            Revenue-normalized cost analysis
+          </li>
+          <li>
+            <svg class="brand-bullet-icon" viewBox="0 0 64 64" fill="none"><path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+            Industry benchmark comparison
+          </li>
+        </ul>
+        <span class="brand-teaser-brutal__badge">Live</span>
+        <button class="brand-btn-brutal brand-btn-brutal--primary brand-teaser-brutal__cta">Launch Tool</button>
+      </article>
+    </div>
+    <code class="brand-code">.teaser-card (brutalist) — no radius, border-top accent, left-aligned, monospace heading, outlined badge</code>
+
+    <h4 class="label brand-subgroup-title">Recommendation Card (Current)</h4>
     <div class="brand-card-grid brand-card-grid--single" style="max-width: 600px;">
       <div class="brand-rec-card" id="demo-rec-card">
         <div class="brand-rec-body">
@@ -925,7 +1094,26 @@ trackPageView('brand', 'Brand Style Reference');
         </div>
       </div>
     </div>
-    <code class="brand-code">.icg-rec-card — collapsible card with priority/effort badges, N/A dismiss, delta chevron</code>
+    <code class="brand-code">.icg-rec-card — rounded corners, filled badges, rounded borders</code>
+
+    <h4 class="label brand-subgroup-title">Recommendation Card (Brutalist)</h4>
+    <div class="brand-card-grid brand-card-grid--single" style="max-width: 600px;">
+      <div class="brand-rec-brutal" id="demo-rec-brutal">
+        <div class="brand-rec-brutal__body">
+          <div class="brand-rec-brutal__title">
+            <span class="brand-rec-brutal__badge brand-rec-brutal__badge--high">High</span>
+            <span class="brand-rec-brutal__badge brand-rec-brutal__badge--effort">Quick Win</span>
+            <button class="brand-rec-brutal__na" id="demo-rec-brutal-na" type="button" title="Mark as not applicable">N/A</button>
+            Deploy a cloud cost visibility dashboard
+            <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/>
+            </svg>
+          </div>
+          <div class="brand-rec-brutal__desc">Implement AWS Cost Explorer, GCP Billing dashboards, or a FinOps platform. Engineering leads need direct access with no approval gate.</div>
+        </div>
+      </div>
+    </div>
+    <code class="brand-code">.icg-rec-card (brutalist) — no radius, left-border accent, outlined badges, monospace title</code>
 
     <h4 class="label brand-subgroup-title">Attention Card</h4>
     <div class="brand-card-grid brand-card-grid--single" style="max-width: 600px;">
@@ -1049,7 +1237,7 @@ trackPageView('brand', 'Brand Style Reference');
       </div>
     </dialog>
 
-    <h4 class="label brand-subgroup-title">Filter Drawer (Inline Demo)</h4>
+    <h4 class="label brand-subgroup-title">Filter Drawer (Current)</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <div class="brand-drawer-demo">
@@ -1080,7 +1268,42 @@ trackPageView('brand', 'Brand Style Reference');
             </div>
           </div>
         </div>
-        <code class="brand-code">.filter-drawer — fixed right panel on desktop, bottom sheet on mobile</code>
+        <code class="brand-code">.filter-drawer — rounded chips, filled active state, box-shadow panel, soft borders</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Filter Drawer (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brand-drawer-brutal">
+          <div class="brand-drawer-brutal__header">
+            <h2 class="brand-drawer-brutal__title">Filters</h2>
+            <button class="brand-drawer-brutal__close" aria-label="Close">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="brand-drawer-brutal__content">
+            <button class="brand-clear-brutal">Clear All</button>
+            <div class="brand-filter-section-brutal">
+              <div class="brand-filter-label-brutal">Growth Stage</div>
+              <div class="brand-filter-chips-brutal">
+                <div class="brand-chip-brutal brand-chip-brutal--active">All</div>
+                <div class="brand-chip-brutal">Growth</div>
+                <div class="brand-chip-brutal">Mature</div>
+              </div>
+            </div>
+            <div class="brand-filter-section-brutal">
+              <div class="brand-filter-label-brutal">Theme</div>
+              <div class="brand-filter-chips-brutal">
+                <div class="brand-chip-brutal brand-chip-brutal--active">All</div>
+                <div class="brand-chip-brutal">Cloud</div>
+                <div class="brand-chip-brutal">AI/ML</div>
+                <div class="brand-chip-brutal">Security</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <code class="brand-code">.filter-drawer (brutalist) — hard primary left-border, monospace labels, outlined chips, primary-fill active state</code>
       </div>
     </div>
 
@@ -1171,7 +1394,7 @@ trackPageView('brand', 'Brand Style Reference');
       </div>
     </div>
 
-    <h4 class="label brand-subgroup-title">Bench Table</h4>
+    <h4 class="label brand-subgroup-title">Bench Table (Current)</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <div style="max-width: 500px;">
@@ -1194,7 +1417,34 @@ trackPageView('brand', 'Brand Style Reference');
             </tr>
           </table>
         </div>
-        <code class="brand-code">.tool-bench-table, .bench-row--active, .bench-label--score, .bench-label--stage</code>
+        <code class="brand-code">.tool-bench-table — light borders, accent-bg active row, small rounded badges</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Bench Table (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div style="max-width: 500px;">
+          <table class="brand-bench-brutal">
+            <tr>
+              <td>Infrastructure</td>
+              <td>12.4%</td>
+            </tr>
+            <tr class="brand-bench-brutal__active">
+              <td>Personnel <span class="brand-bench-brutal__label brand-bench-brutal__label--score">Target</span></td>
+              <td>18.2%</td>
+            </tr>
+            <tr>
+              <td>R&D OpEx <span class="brand-bench-brutal__label brand-bench-brutal__label--stage">Growth</span></td>
+              <td>8.7%</td>
+            </tr>
+            <tr>
+              <td>R&D CapEx</td>
+              <td>5.1%</td>
+            </tr>
+          </table>
+        </div>
+        <code class="brand-code">.tool-bench-table (brutalist) — monospace values, hard primary left-border on active, uppercase labels with no radius</code>
       </div>
     </div>
 
@@ -1243,7 +1493,7 @@ trackPageView('brand', 'Brand Style Reference');
           <p>Strategic technology advisory for high-stakes environments.</p>
           <a class="cta-button primary" href="#ui-library">Schedule a Call</a>
         </div>
-        <code class="brand-code">.cta-box — primary border, corner bracket pseudo-elements, centered layout</code>
+        <code class="brand-code">.cta-box — primary border, centered layout, heading + description + CTA button</code>
       </div>
     </div>
 
@@ -1561,6 +1811,170 @@ trackPageView('brand', 'Brand Style Reference');
   }
 
   /* ==============================
+     Brutalist Typography
+     ============================== */
+
+  .brand-brutal-heading-xl {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+  }
+
+  .brand-brutal-heading-lg {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+
+  .brand-brutal-heading-md {
+    font-size: 1.35rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+  }
+
+  .brand-brutal-heading-sm {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+  }
+
+  .brand-brutal-text-base {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .brand-brutal-text-small {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-normal);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .brand-brutal-text-tiny {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-normal);
+    font-family: monospace;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .brand-brutal-label {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+  }
+
+  .brand-brutal-label-small {
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  .brand-brutal-data {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--color-primary);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .brand-brutal-data-sm {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--color-primary);
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  /* ==============================
+     Brutalist Button Variants
+     ============================== */
+
+  .brand-btn-brutal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-xl);
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .brand-btn-brutal:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .brand-btn-brutal--primary {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border: 2px solid var(--color-primary);
+  }
+
+  .brand-btn-brutal--primary:hover:not(:disabled) {
+    background: transparent;
+    color: var(--color-primary);
+  }
+
+  .brand-btn-brutal--secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border-light);
+  }
+
+  .brand-btn-brutal--secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-btn-brutal--secondary {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global(html.dark-theme) .brand-btn-brutal--secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .brand-btn-brutal--full {
+    width: 100%;
+  }
+
+  /* ==============================
      UI Component Library Specimens
      ============================== */
 
@@ -1783,6 +2197,364 @@ trackPageView('brand', 'Brand Style Reference');
   :global(html.dark-theme) .brand-rec-na:hover {
     border-color: var(--accent-border-medium);
     background: var(--accent-light-bg);
+  }
+
+  /* ==============================
+     Brutalist Card Variants
+     ============================== */
+
+  /* Trust card — brutalist */
+  .brand-trust-brutal {
+    padding: var(--spacing-2xl);
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-trust-brutal:hover {
+    border-color: var(--color-primary);
+    background: var(--accent-subtle-bg);
+  }
+
+  :global(html.dark-theme) .brand-trust-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-trust-brutal:hover {
+    border-color: var(--color-primary);
+  }
+
+  .brand-trust-brutal h3 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+  }
+
+  .brand-trust-brutal p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* Project card — brutalist */
+  .brand-project-brutal {
+    background: transparent;
+    border: 2px solid var(--border-light);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-project-brutal:hover {
+    border-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-project-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global(html.dark-theme) .brand-project-brutal:hover {
+    border-color: var(--color-primary);
+  }
+
+  .brand-project-brutal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .brand-project-brutal__title {
+    font-weight: 900;
+    font-size: 1.1rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .brand-project-brutal__industry {
+    font-size: var(--text-xs);
+    font-family: monospace;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .brand-project-brutal__year {
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
+    padding: 0.25rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .brand-project-brutal__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: transparent;
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .brand-project-brutal__value {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--text-primary);
+  }
+
+  .brand-project-brutal__value--arr {
+    color: var(--color-primary);
+  }
+
+  .brand-project-brutal__summary {
+    font-size: 0.875rem;
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .brand-project-brutal__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .brand-project-brutal__tag {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--border-light);
+  }
+
+  .brand-project-brutal__tag--theme {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .brand-project-brutal__cta {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border: 2px solid var(--color-primary);
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: auto;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .brand-project-brutal__cta:hover {
+    background: transparent;
+    color: var(--color-primary);
+  }
+
+  /* Teaser card — brutalist */
+  .brand-teaser-brutal {
+    max-width: 600px;
+    padding: 2rem;
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 0;
+    text-align: left;
+  }
+
+  :global(html.dark-theme) .brand-teaser-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-primary);
+  }
+
+  .brand-teaser-brutal__header {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .brand-teaser-brutal__header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .brand-teaser-brutal__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .brand-teaser-brutal__features li {
+    font-size: var(--text-sm);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .brand-teaser-brutal__badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px var(--spacing-sm);
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    display: inline-block;
+    margin-top: var(--spacing-md);
+  }
+
+  .brand-teaser-brutal__cta {
+    margin-top: var(--spacing-lg);
+    display: inline-flex;
+  }
+
+  /* Recommendation card — brutalist */
+  .brand-rec-brutal {
+    display: flex;
+    gap: var(--gap-normal);
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0;
+    cursor: pointer;
+    transition: opacity var(--transition-normal);
+  }
+
+  :global(html.dark-theme) .brand-rec-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+  }
+
+  .brand-rec-brutal.is-dismissed {
+    opacity: 0.45;
+    border-style: dashed;
+  }
+
+  .brand-rec-brutal__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+  }
+
+  .brand-rec-brutal__title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+  }
+
+  .brand-rec-brutal__desc {
+    font-size: var(--text-sm);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal);
+    max-height: 200px;
+    opacity: 1;
+    overflow: hidden;
+  }
+
+  .brand-rec-brutal.is-collapsed .brand-rec-brutal__desc {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  .brand-rec-brutal__badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px var(--spacing-sm);
+    border-radius: 0;
+    line-height: 1;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
+  }
+
+  .brand-rec-brutal__badge--high {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .brand-rec-brutal__badge--effort {
+    color: var(--hub-authority-blue);
+    border-color: var(--hub-authority-blue);
+  }
+
+  .brand-rec-brutal__na {
+    flex-shrink: 0;
+    padding: 1px var(--spacing-sm);
+    margin-right: var(--spacing-xs);
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px dashed var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .brand-rec-brutal__na:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   /* Attention card */
@@ -2151,6 +2923,85 @@ trackPageView('brand', 'Brand Style Reference');
 
   .brand-option-description {
     font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: calc(10px + var(--spacing-sm));
+  }
+
+  /* Option cards — brutalist variant */
+  .brand-option-card-brutal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+    text-align: left;
+    font-family: var(--font-family);
+    color: var(--text-primary);
+  }
+
+  .brand-option-card-brutal:hover {
+    border-color: var(--color-primary);
+    background: var(--accent-subtle-bg);
+  }
+
+  .brand-option-card-brutal:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .brand-option-card-brutal--selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+  }
+
+  .brand-option-card-brutal--selected .brand-option-label-brutal {
+    color: var(--bg-dark);
+  }
+
+  .brand-option-card-brutal--selected .brand-option-description-brutal {
+    color: rgba(10, 10, 10, 0.7);
+  }
+
+  .brand-option-card-brutal--selected .brand-option-icon {
+    opacity: 1;
+    filter: brightness(0);
+  }
+
+  :global(html.dark-theme) .brand-option-card-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global(html.dark-theme) .brand-option-card-brutal:hover {
+    border-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-option-card-brutal--selected {
+    background: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-option-card-brutal--selected .brand-option-description-brutal {
+    color: rgba(10, 10, 10, 0.7);
+  }
+
+  .brand-option-label-brutal {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+  }
+
+  .brand-option-description-brutal {
+    font-size: var(--text-xs);
     color: var(--text-muted);
     line-height: 1.5;
     margin-left: calc(10px + var(--spacing-sm));
@@ -2720,6 +3571,137 @@ trackPageView('brand', 'Brand Style Reference');
     margin-bottom: 0.75rem;
   }
 
+  /* Filter drawer — brutalist variant */
+  .brand-drawer-brutal {
+    max-width: 400px;
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-drawer-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+  }
+
+  .brand-drawer-brutal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .brand-drawer-brutal__title {
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+    margin: 0;
+  }
+
+  .brand-drawer-brutal__close {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    display: flex;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .brand-drawer-brutal__close:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .brand-drawer-brutal__content {
+    padding: var(--spacing-lg);
+  }
+
+  .brand-clear-brutal {
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    margin-bottom: var(--spacing-xl);
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .brand-clear-brutal:hover {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+  }
+
+  .brand-filter-section-brutal {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .brand-filter-label-brutal {
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .brand-filter-chips-brutal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .brand-chip-brutal {
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .brand-chip-brutal:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .brand-chip-brutal--active {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-chip-brutal {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global(html.dark-theme) .brand-chip-brutal:hover {
+    border-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .brand-chip-brutal--active {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+  }
+
   /* Details/Summary */
   .brand-details {
     border: 1px solid var(--border-light);
@@ -2810,6 +3792,67 @@ trackPageView('brand', 'Brand Style Reference');
     letter-spacing: 0.15em;
   }
 
+  /* Bench table — brutalist variant */
+  .brand-bench-brutal {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .brand-bench-brutal td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--text-xs);
+    font-family: var(--font-family);
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .brand-bench-brutal td:first-child {
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+  }
+
+  .brand-bench-brutal td:last-child {
+    text-align: right;
+    font-family: monospace;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-secondary);
+  }
+
+  .brand-bench-brutal__active td {
+    border-left: 3px solid var(--color-primary);
+    background: transparent;
+  }
+
+  .brand-bench-brutal__active td:last-child {
+    color: var(--color-primary);
+  }
+
+  .brand-bench-brutal__label {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px var(--spacing-xs);
+    border-radius: 0;
+    margin-left: var(--spacing-xs);
+    vertical-align: middle;
+  }
+
+  .brand-bench-brutal__label--score {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+
+  .brand-bench-brutal__label--stage {
+    background: transparent;
+    color: var(--hub-authority-blue);
+    border: 1px solid var(--hub-authority-blue);
+  }
+
   /* Container demo */
   .brand-container-demo {
     border: 1px dashed var(--color-primary);
@@ -2833,30 +3876,6 @@ trackPageView('brand', 'Brand Style Reference');
     max-width: 600px;
     text-align: center;
     position: relative;
-  }
-
-  .brand-cta-box::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-primary);
-    border-right: none;
-    border-bottom: none;
-  }
-
-  .brand-cta-box::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-primary);
-    border-left: none;
-    border-top: none;
   }
 
   :global(html.dark-theme) .brand-cta-box {
@@ -3094,12 +4113,21 @@ trackPageView('brand', 'Brand Style Reference');
       });
     }
 
-    // Option card single-select demo
+    // Option card single-select demo (current)
     document.querySelectorAll<HTMLElement>('[data-demo-option]').forEach(card => {
       card.addEventListener('click', () => {
         document.querySelectorAll<HTMLElement>('[data-demo-option]').forEach(c =>
           c.classList.remove('brand-option-card--selected'));
         card.classList.add('brand-option-card--selected');
+      });
+    });
+
+    // Option card single-select demo (brutalist)
+    document.querySelectorAll<HTMLElement>('[data-demo-option-brutal]').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll<HTMLElement>('[data-demo-option-brutal]').forEach(c =>
+          c.classList.remove('brand-option-card-brutal--selected'));
+        card.classList.add('brand-option-card-brutal--selected');
       });
     });
 
@@ -3138,6 +4166,21 @@ trackPageView('brand', 'Brand Style Reference');
     if (recNa && recCard) {
       recNa.addEventListener('click', () => {
         recCard.classList.toggle('is-dismissed');
+      });
+    }
+
+    // Brutalist recommendation card — collapse toggle and N/A dismiss
+    const recBrutal = document.getElementById('demo-rec-brutal');
+    const recBrutalNa = document.getElementById('demo-rec-brutal-na');
+    if (recBrutal) {
+      recBrutal.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('.brand-rec-brutal__na')) return;
+        recBrutal.classList.toggle('is-collapsed');
+      });
+    }
+    if (recBrutalNa && recBrutal) {
+      recBrutalNa.addEventListener('click', () => {
+        recBrutal.classList.toggle('is-dismissed');
       });
     }
 
