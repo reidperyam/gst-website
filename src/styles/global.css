@@ -1825,6 +1825,1993 @@ html.dark-theme .filter-drawer {
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
 }
 
+/* ==============================
+   Brutalist Button Variants
+   ============================== */
+
+.brutal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-xl);
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.brutal-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.brutal-btn--primary {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border: 2px solid var(--color-primary);
+}
+
+.brutal-btn--primary:hover:not(:disabled) {
+    background: transparent;
+    color: var(--color-primary);
+}
+
+.brutal-btn--secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border-light);
+}
+
+.brutal-btn--secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+html.dark-theme .brutal-btn--secondary {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-btn--secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.brutal-btn--full {
+    width: 100%;
+}
+
+/* ==============================
+   Brutalist Tool Shell
+   ============================== */
+
+.brutal-tool-shell {
+    max-width: 700px;
+    margin: 0 auto;
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 0;
+}
+
+html.dark-theme .brutal-tool-shell {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-primary);
+}
+
+.brutal-tool-shell--wide {
+    max-width: 760px;
+}
+
+.brutal-tool-shell--document {
+    max-width: 800px;
+}
+
+.brutal-tool-shell__content {
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.brutal-tool-shell__authority {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faded);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: var(--spacing-md);
+}
+
+.brutal-tool-shell__section-label {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ==============================
+   Brutalist Bench Table
+   ============================== */
+
+.brutal-bench-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.brutal-bench-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--text-xs);
+    font-family: var(--font-family);
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.brutal-bench-table td:first-child {
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+}
+
+.brutal-bench-table td:last-child {
+    text-align: right;
+    font-family: monospace;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-secondary);
+}
+
+.brutal-bench-table__active td {
+    border-left: 3px solid var(--color-primary);
+    background: transparent;
+}
+
+.brutal-bench-table__active td:last-child {
+    color: var(--color-primary);
+}
+
+.brutal-bench-table__label {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px var(--spacing-xs);
+    border-radius: 0;
+    margin-left: var(--spacing-xs);
+    vertical-align: middle;
+}
+
+.brutal-bench-table__label--score {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.brutal-bench-table__label--stage {
+    background: transparent;
+    color: var(--hub-authority-blue);
+    border: 1px solid var(--hub-authority-blue);
+}
+
+/* ==============================
+   Brutalist Skeleton Loading
+   ============================== */
+
+.brutal-skeleton-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    background: var(--bg-light);
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0;
+    max-width: 400px;
+}
+
+html.dark-theme .brutal-skeleton-demo {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+}
+
+.brutal-skeleton-bar {
+    height: 0.875rem;
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    border-radius: 0;
+    animation: brutal-blink 1.5s step-end infinite;
+}
+
+.brutal-skeleton-bar--sm {
+    height: 0.625rem;
+}
+
+.brutal-skeleton-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 0;
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    flex-shrink: 0;
+    animation: brutal-blink 1.5s step-end infinite;
+}
+
+@keyframes brutal-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ==============================
+   Brutalist Shadows
+   ============================== */
+
+.brutal-shadow {
+    background: transparent;
+    border-radius: 0;
+    padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.brutal-shadow--sm {
+    border: 2px solid var(--border-light);
+}
+
+.brutal-shadow--md {
+    border: 2px solid var(--border-light);
+    border-bottom: 3px solid var(--color-primary);
+}
+
+.brutal-shadow--lg {
+    border: 2px solid var(--border-light);
+    border-left: 4px solid var(--color-primary);
+}
+
+html.dark-theme .brutal-shadow--sm {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-shadow--md {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--color-primary);
+}
+
+html.dark-theme .brutal-shadow--lg {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+}
+
+.brutal-shadow__desc {
+    font-size: var(--text-xs);
+    font-family: monospace;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* ==============================
+   Brutalist Transitions
+   ============================== */
+
+.brutal-transition {
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-radius: 0;
+    padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    user-select: none;
+    color: var(--text-secondary);
+}
+
+.brutal-transition:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--accent-subtle-bg);
+}
+
+html.dark-theme .brutal-transition {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-transition:hover {
+    border-color: var(--color-primary);
+}
+
+.brutal-transition__hint {
+    font-size: var(--text-xs);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faded);
+}
+
+/* ==============================
+   Brutalist Option Cards
+   ============================== */
+
+.brutal-option-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+    text-align: left;
+    font-family: var(--font-family);
+    color: var(--text-primary);
+}
+
+.brutal-option-card:hover {
+    border-color: var(--color-primary);
+    background: var(--accent-subtle-bg);
+}
+
+.brutal-option-card:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.brutal-option-card--selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+.brutal-option-card--selected .brutal-option-card__label {
+    color: var(--bg-dark);
+}
+
+.brutal-option-card--selected .brutal-option-card__description {
+    color: rgba(10, 10, 10, 0.7);
+}
+
+.brutal-option-card--selected .brutal-option-card__icon {
+    opacity: 1;
+    filter: brightness(0);
+}
+
+html.dark-theme .brutal-option-card {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-option-card:hover {
+    border-color: var(--color-primary);
+}
+
+html.dark-theme .brutal-option-card--selected {
+    background: var(--color-primary);
+}
+
+html.dark-theme .brutal-option-card--selected .brutal-option-card__description {
+    color: rgba(10, 10, 10, 0.7);
+}
+
+.brutal-option-card__label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+}
+
+.brutal-option-card__description {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: calc(10px + var(--spacing-sm));
+}
+
+/* ==============================
+   Brutalist Filter Chips
+   ============================== */
+
+.brutal-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.brutal-filter-chip {
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.brutal-filter-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.brutal-filter-chip--active {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border-color: var(--color-primary);
+}
+
+html.dark-theme .brutal-filter-chip {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-filter-chip:hover {
+    border-color: var(--color-primary);
+}
+
+html.dark-theme .brutal-filter-chip--active {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+}
+
+/* ==============================
+   Brutalist Filter Drawer
+   ============================== */
+
+.brutal-filter-drawer {
+    max-width: 400px;
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+}
+
+html.dark-theme .brutal-filter-drawer {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+}
+
+.brutal-filter-drawer__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.brutal-filter-drawer__title {
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.brutal-filter-drawer__close {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    display: flex;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.brutal-filter-drawer__close:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.brutal-filter-drawer__content {
+    padding: var(--spacing-lg);
+}
+
+.brutal-filter-drawer__clear {
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    margin-bottom: var(--spacing-xl);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.brutal-filter-drawer__clear:hover {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+}
+
+.brutal-filter-drawer__section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.brutal-filter-drawer__label {
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-light);
+}
+
+/* ==============================
+   Brutalist Slider
+   ============================== */
+
+.brutal-slider {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.brutal-slider__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gap-tight);
+}
+
+.brutal-slider__label {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.brutal-slider__value {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+.brutal-slider__input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 24px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.brutal-slider__input::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--border-light);
+    border-radius: 0;
+}
+
+.brutal-slider__input::-moz-range-track {
+    height: 2px;
+    background: var(--border-light);
+    border-radius: 0;
+}
+
+.brutal-slider__input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--color-primary);
+    border-radius: 0;
+    cursor: pointer;
+    margin-top: -7px;
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: none;
+}
+
+.brutal-slider__input::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 4px rgba(5, 205, 153, 0.2);
+}
+
+.brutal-slider__input::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--color-primary);
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.brutal-slider__hints {
+    display: flex;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+.brutal-slider__direct {
+    width: 33%;
+    text-align: center;
+    border: 1px solid var(--border-light);
+    border-radius: 0;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: monospace;
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-secondary);
+    background: transparent;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+    -moz-appearance: textfield;
+}
+
+.brutal-slider__direct::-webkit-inner-spin-button,
+.brutal-slider__direct::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.brutal-slider__direct:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ==============================
+   Brutalist Trust Card
+   ============================== */
+
+.brutal-trust-card {
+    padding: var(--spacing-2xl);
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+}
+
+.brutal-trust-card:hover {
+    border-color: var(--color-primary);
+    background: var(--accent-subtle-bg);
+}
+
+html.dark-theme .brutal-trust-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+}
+
+html.dark-theme .brutal-trust-card:hover {
+    border-color: var(--color-primary);
+}
+
+.brutal-trust-card h3 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+}
+
+.brutal-trust-card p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+/* ==============================
+   Brutalist Project Card
+   ============================== */
+
+.brutal-project-card {
+    background: transparent;
+    border: 2px solid var(--border-light);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+}
+
+.brutal-project-card:hover {
+    border-color: var(--color-primary);
+}
+
+html.dark-theme .brutal-project-card {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-project-card:hover {
+    border-color: var(--color-primary);
+}
+
+.brutal-project-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.brutal-project-card__title {
+    font-weight: 900;
+    font-size: 1.1rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.brutal-project-card__industry {
+    font-size: var(--text-xs);
+    font-family: monospace;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.brutal-project-card__year {
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
+    padding: 0.25rem 0.5rem;
+    white-space: nowrap;
+}
+
+.brutal-project-card__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: transparent;
+    border-left: 3px solid var(--color-primary);
+}
+
+.brutal-project-card__value {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--text-primary);
+}
+
+.brutal-project-card__value--arr {
+    color: var(--color-primary);
+}
+
+.brutal-project-card__summary {
+    font-size: 0.875rem;
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.brutal-project-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.brutal-project-card__tag {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--border-light);
+}
+
+.brutal-project-card__tag--theme {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.brutal-project-card__cta {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border: 2px solid var(--color-primary);
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: auto;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.brutal-project-card__cta:hover {
+    background: transparent;
+    color: var(--color-primary);
+}
+
+/* ==============================
+   Brutalist Teaser Card
+   ============================== */
+
+.brutal-teaser-card {
+    max-width: 600px;
+    padding: 2rem;
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 0;
+    text-align: left;
+}
+
+html.dark-theme .brutal-teaser-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-primary);
+}
+
+.brutal-teaser-card__header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.brutal-teaser-card__header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.brutal-teaser-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.brutal-teaser-card__features li {
+    font-size: var(--text-sm);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+}
+
+.brutal-teaser-card__badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px var(--spacing-sm);
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    display: inline-block;
+    margin-top: var(--spacing-md);
+}
+
+.brutal-teaser-card__cta {
+    margin-top: var(--spacing-lg);
+    display: inline-flex;
+}
+
+/* ==============================
+   Brutalist Rec Card
+   ============================== */
+
+.brutal-rec-card {
+    display: flex;
+    gap: var(--gap-normal);
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0;
+    cursor: pointer;
+    transition: opacity var(--transition-normal);
+}
+
+html.dark-theme .brutal-rec-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--color-primary);
+}
+
+.brutal-rec-card.is-dismissed {
+    opacity: 0.45;
+    border-style: dashed;
+}
+
+.brutal-rec-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+}
+
+.brutal-rec-card__title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+}
+
+.brutal-rec-card__desc {
+    font-size: var(--text-sm);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal);
+    max-height: 200px;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.brutal-rec-card.is-collapsed .brutal-rec-card__desc {
+    max-height: 0;
+    opacity: 0;
+}
+
+.brutal-rec-card__badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px var(--spacing-sm);
+    border-radius: 0;
+    line-height: 1;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
+}
+
+.brutal-rec-card__badge--high {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.brutal-rec-card__badge--effort {
+    color: var(--hub-authority-blue);
+    border-color: var(--hub-authority-blue);
+}
+
+.brutal-rec-card__na {
+    flex-shrink: 0;
+    padding: 1px var(--spacing-sm);
+    margin-right: var(--spacing-xs);
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px dashed var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.brutal-rec-card__na:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* ==============================
+   Brutalist Attention Card
+   ============================== */
+
+.brutal-attention-card {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity var(--transition-normal), padding var(--transition-normal);
+}
+
+.brutal-attention-card--high {
+    border-left-color: var(--hub-authority-blue);
+}
+
+.brutal-attention-card--medium {
+    border-left-color: var(--dm-methodology-brown);
+}
+
+html.dark-theme .brutal-attention-card {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark-theme .brutal-attention-card--high {
+    border-left-color: var(--hub-authority-blue);
+}
+
+.brutal-attention-card.is-dismissed {
+    opacity: 0.45;
+    border-style: dashed;
+}
+
+.brutal-attention-card.is-collapsed {
+    padding-top: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+}
+
+.brutal-attention-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.brutal-attention-card__title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.brutal-attention-card__na {
+    flex-shrink: 0;
+    padding: 1px var(--spacing-sm);
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px dashed var(--border-light);
+    border-radius: 0;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.brutal-attention-card__na:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.brutal-attention-card__desc {
+    font-size: var(--text-sm);
+    font-family: monospace;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: var(--spacing-sm) 0 0;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal), margin var(--transition-normal);
+    max-height: 200px;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.brutal-attention-card.is-collapsed .brutal-attention-card__desc {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+/* ── Range Slider ──────────────────────────────────── */
+.slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gap-tight);
+}
+
+.slider-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.slider-value {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    font-family: monospace;
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+.calc-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 24px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.calc-slider::-webkit-slider-runnable-track {
+    height: 3px;
+    background: var(--border-light);
+    border-radius: 2px;
+}
+
+.calc-slider::-moz-range-track {
+    height: 3px;
+    background: var(--border-light);
+    border-radius: 2px;
+}
+
+.calc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -8.5px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: 0 0 0 3px rgba(5, 205, 153, 0.12);
+}
+
+.calc-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 6px rgba(5, 205, 153, 0.18);
+}
+
+.calc-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.slider-hints {
+    display: flex;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+.hint-input {
+    width: 33%;
+    text-align: center;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: monospace;
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    background: transparent;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+    -moz-appearance: textfield;
+}
+
+.hint-input::-webkit-inner-spin-button,
+.hint-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.hint-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ── Recommendation Card ───────────────────────────── */
+.rec-card {
+    display: flex;
+    gap: var(--gap-normal);
+    padding: var(--spacing-md) var(--spacing-md);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background: var(--bg-light-alt);
+    cursor: pointer;
+    transition: opacity var(--transition-normal), border-style var(--transition-normal);
+}
+
+html.dark-theme .rec-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--bg-dark-secondary);
+}
+
+.rec-card.is-dismissed {
+    opacity: 0.45;
+    border-style: dashed;
+}
+
+.rec-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+}
+
+.rec-title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+}
+
+.rec-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.55;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal);
+    max-height: 200px;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.rec-card.is-collapsed .rec-desc {
+    max-height: 0;
+    opacity: 0;
+}
+
+.rec-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    line-height: 1;
+    border: 1px solid var(--border-light);
+    background: var(--bg-light-alt);
+    color: var(--text-muted);
+}
+
+html.dark-theme .rec-badge {
+    background: rgba(200, 200, 200, 0.05);
+    border-color: rgba(200, 200, 200, 0.1);
+}
+
+.rec-na {
+    flex-shrink: 0;
+    padding: 2px var(--spacing-sm);
+    margin-right: var(--spacing-xs);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: rgba(200, 200, 200, 0.08);
+    border: 1px dashed var(--border-light);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.rec-na:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    background: rgba(200, 200, 200, 0.15);
+}
+
+html.dark-theme .rec-na {
+    background: rgba(200, 200, 200, 0.04);
+    border-color: var(--accent-light-bg-hover);
+}
+
+html.dark-theme .rec-na:hover {
+    border-color: var(--accent-border-medium);
+    background: var(--accent-light-bg);
+}
+
+/* ── Option Cards (current specimen) ──────────────── */
+.options-grid {
+    display: grid;
+    gap: var(--spacing-md);
+    max-width: 340px;
+}
+
+.option-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-light);
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-align: left;
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.option-card:hover {
+    border-color: var(--color-primary);
+    background: rgba(5, 205, 153, 0.06);
+    box-shadow: 0 2px 12px var(--accent-light-bg-hover);
+    transform: translateY(-1px);
+}
+
+.option-card:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.option-card--selected {
+    border-color: var(--color-primary);
+    background: var(--accent-dark-bg);
+    box-shadow: 0 0 0 1px var(--color-primary), 0 2px 12px var(--border-dark);
+}
+
+html.dark-theme .option-card {
+    background: var(--bg-dark-secondary);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+html.dark-theme .option-card:hover {
+    background: var(--accent-dark-bg);
+    box-shadow: 0 2px 12px var(--border-dark);
+}
+
+html.dark-theme .option-card--selected {
+    background: var(--accent-light-bg-hover);
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.option-icon {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.option-card--selected .option-icon {
+    opacity: 1;
+}
+
+.option-description {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: calc(10px + var(--spacing-sm));
+}
+
+/* ── Trust Card (current specimen) ────────────────── */
+.trust-card {
+    padding: var(--spacing-2xl);
+    background: rgba(5, 205, 153, 0.03);
+    border: 1px solid rgba(5, 205, 153, 0.1);
+    border-radius: 8px;
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+}
+
+.trust-card:hover {
+    background: rgba(5, 205, 153, 0.08);
+    border-color: rgba(5, 205, 153, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
+}
+
+.trust-card h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.4;
+}
+
+.trust-card p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+html.dark-theme .trust-card {
+    background: rgba(5, 205, 153, 0.05);
+    border-color: rgba(5, 205, 153, 0.15);
+}
+
+html.dark-theme .trust-card:hover {
+    background: rgba(5, 205, 153, 0.12);
+    border-color: rgba(5, 205, 153, 0.25);
+}
+
+/* ── Project Card (current specimen) ──────────────── */
+.project-card {
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    box-shadow: 0 10px 30px rgba(5, 205, 153, 0.15);
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+}
+
+.project-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.project-card__title {
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.project-card__industry {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.project-card__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--search-input-bg, rgba(26, 26, 26, 0.02));
+    border-left: 3px solid var(--color-primary);
+}
+
+.project-card__summary {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.project-card__cta {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: auto;
+    transition: all var(--transition-normal);
+}
+
+.project-card__cta:hover {
+    background: var(--color-primary);
+    color: var(--bg-dark);
+}
+
+/* ── Teaser Card (current specimen) ───────────────── */
+.teaser-card {
+    max-width: 600px;
+    padding: 2rem;
+    background: rgba(5, 205, 153, 0.03);
+    border: 1px solid rgba(5, 205, 153, 0.3);
+    border-radius: 8px;
+    text-align: center;
+}
+
+html.dark-theme .teaser-card {
+    background: rgba(5, 205, 153, 0.05);
+    border-color: rgba(5, 205, 153, 0.3);
+}
+
+.teaser-card__header {
+    margin-bottom: var(--spacing-md);
+}
+
+.teaser-card__header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.teaser-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+}
+
+.teaser-card__features li {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    text-align: left;
+}
+
+.teaser-card__cta {
+    margin-top: var(--spacing-lg);
+    display: inline-block;
+}
+
+/* ── Search Input ──────────────────────────────────── */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-faded);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    background: var(--search-input-bg, rgba(26, 26, 26, 0.02));
+    border: 1px solid var(--search-input-border, rgba(26, 26, 26, 0.1));
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-family: var(--font-family);
+    transition: all var(--transition-fast);
+    border-radius: 0;
+}
+
+.search-input:focus {
+    outline: none;
+    background: var(--bg-light);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--search-input-focus-shadow, rgba(5, 205, 153, 0.1));
+}
+
+.search-input::placeholder {
+    color: var(--text-faded);
+}
+
+/* ── Filter Chips (current specimen) ──────────────── */
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.filter-chip {
+    padding: 0.5rem 1rem;
+    background: var(--filter-chip-bg, rgba(26, 26, 26, 0.05));
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.filter-chip:hover {
+    background: var(--filter-chip-bg-hover, rgba(26, 26, 26, 0.08));
+    border-color: var(--color-primary);
+}
+
+.filter-chip--active {
+    background: var(--color-primary);
+    color: var(--bg-light);
+    border-color: var(--color-primary);
+}
+
+.filter-chip--active:hover {
+    background: var(--color-primary);
+    color: var(--bg-light);
+}
+
+/* ── Filter Button + Badge ─────────────────────────── */
+.filter-button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--spacing-sm);
+    position: relative;
+    font-family: var(--font-family);
+    transition: color var(--transition-fast);
+}
+
+.filter-button:hover {
+    color: var(--color-primary);
+}
+
+.filter-badge {
+    background: var(--color-primary);
+    color: var(--bg-light);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 50%;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* ── Modal ─────────────────────────────────────────── */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    padding: 2rem;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    border-radius: 0;
+    clip-path: polygon(2.5% 0%, 97.5% 0%, 100% 2.5%, 100% 97.5%, 97.5% 100%, 2.5% 100%, 0% 97.5%, 0% 2.5%);
+    z-index: 1000;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+html.dark-theme .modal {
+    background: var(--bg-dark-secondary);
+    border-color: var(--border-dark);
+}
+
+.modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    transition: all 0.2s;
+}
+
+.modal__close:hover {
+    color: var(--color-primary);
+    background: var(--accent-light-bg);
+}
+
+.modal__header {
+    margin-bottom: 1.5rem;
+}
+
+.modal__title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.01em;
+}
+
+.modal__industry {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.modal__metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal__section {
+    margin-bottom: 1.5rem;
+}
+
+.modal__section-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem 0;
+}
+
+.modal__tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* ── Filter Drawer Demo (inline) ───────────────────── */
+.filter-drawer-demo {
+    max-width: 400px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    border-left: 2px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+}
+
+html.dark-theme .filter-drawer-demo {
+    background: var(--bg-dark-secondary);
+}
+
+.filter-drawer-demo__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.filter-drawer-demo__title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.filter-drawer-demo__close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.5rem;
+    display: flex;
+    transition: color var(--transition-fast);
+}
+
+.filter-drawer-demo__close:hover {
+    color: var(--color-primary);
+}
+
+.filter-drawer-demo__content {
+    padding: 1.5rem;
+}
+
+.clear-filters {
+    background: transparent;
+    border: 1px solid var(--clear-filters-border, rgba(26, 26, 26, 0.1));
+    color: var(--clear-filters-text, rgba(26, 26, 26, 0.6));
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-family);
+    transition: all var(--transition-fast);
+}
+
+.clear-filters:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+
+.filter-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* ── Stats Bar (current specimen) ─────────────────── */
+.stats-bar {
+    background: var(--color-primary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-right: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.stat-item:last-child {
+    border-right: none;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--bg-dark);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--bg-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+/* ── CTA Box ───────────────────────────────────────── */
+.cta-box {
+    background: var(--bg-light);
+    border: 2px solid var(--color-primary);
+    padding: 3rem;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+}
+
+html.dark-theme .cta-box {
+    background: var(--cta-box-bg);
+}
+
+.cta-box h2 {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.cta-box p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+}
+
+/* Responsive overrides for specimen components */
+@media (max-width: 768px) {
+    .modal__metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .modal__metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-item {
+        border-right: none;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+}
+
 /* ── Print ─────────────────────────────────────────── */
 @media print {
     .site-header {
