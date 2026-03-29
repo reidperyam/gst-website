@@ -1892,13 +1892,16 @@ html.dark-theme .brutal-btn--secondary:hover {
 .brutal-tool-shell {
     max-width: 700px;
     margin: 0 auto;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.005);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border: 2px solid var(--border-light);
     border-top: 3px solid var(--color-primary);
     border-radius: 0;
 }
 
 html.dark-theme .brutal-tool-shell {
+    background: rgba(255, 255, 255, 0.005);
     border-color: rgba(255, 255, 255, 0.15);
     border-top-color: var(--color-primary);
 }
