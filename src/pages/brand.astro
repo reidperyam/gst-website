@@ -925,7 +925,7 @@ trackPageView('brand', 'Brand Style Reference');
     <!-- 8a. Navigation -->
     <h3 class="heading-sm brand-group-title">Navigation</h3>
 
-    <h4 class="label brand-subgroup-title">Breadcrumb</h4>
+    <h4 class="label brand-subgroup-title">Breadcrumb (Current)</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <nav aria-label="Breadcrumb demo" class="breadcrumb brand-breadcrumb-demo">
@@ -943,7 +943,29 @@ trackPageView('brand', 'Brand Style Reference');
             </li>
           </ol>
         </nav>
-        <code class="brand-code">.breadcrumb, .breadcrumb__list, .breadcrumb__item, .breadcrumb__separator</code>
+        <code class="brand-code">.breadcrumb — system font, primary-color links, slash separators</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Breadcrumb (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <nav aria-label="Breadcrumb brutalist demo" class="brutal-breadcrumb">
+          <ol class="brutal-breadcrumb__list">
+            <li class="brutal-breadcrumb__item">
+              <a href="#ui-library">Home</a>
+              <span class="brutal-breadcrumb__sep" aria-hidden="true">/</span>
+            </li>
+            <li class="brutal-breadcrumb__item">
+              <a href="#ui-library">Hub</a>
+              <span class="brutal-breadcrumb__sep" aria-hidden="true">/</span>
+            </li>
+            <li class="brutal-breadcrumb__item">
+              <span aria-current="page">Current Page</span>
+            </li>
+          </ol>
+        </nav>
+        <code class="brand-code">.brutal-breadcrumb — monospace, uppercase, primary links, wide letter-spacing</code>
       </div>
     </div>
 
