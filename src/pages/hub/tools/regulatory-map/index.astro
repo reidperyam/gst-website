@@ -232,6 +232,7 @@ import caData from '../../../../data/canada-provinces.json';
         // Force reflow before adding class for transition
         void compliancePanel.offsetHeight;
         compliancePanel.classList.add('brutal-panel--sheet-open');
+        document.body.style.overflow = 'hidden';
         if (overlay) {
             overlay.hidden = false;
             void overlay.offsetHeight;
@@ -241,6 +242,7 @@ import caData from '../../../../data/canada-provinces.json';
 
     function closeBottomSheet(): void {
         compliancePanel.classList.remove('brutal-panel--sheet-open');
+        document.body.style.overflow = '';
         overlay?.classList.remove('visible');
         setTimeout(() => {
             if (overlay) overlay.hidden = true;
@@ -737,6 +739,7 @@ import caData from '../../../../data/canada-provinces.json';
 
         document.getElementById('mapCta')?.remove();
         compliancePanel.hidden = false;
+        if (isMobile()) openBottomSheet();
 
         const totalRegs = regionMap[regionId]?.length ?? 0;
         trackEvent({
