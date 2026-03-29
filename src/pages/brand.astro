@@ -1314,6 +1314,132 @@ trackPageView('brand', 'Brand Style Reference');
       </div>
     </div>
 
+    <h4 class="label brand-subgroup-title">Search Input (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item" style="width: 360px;">
+        <div class="brutal-search">
+          <svg class="brutal-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" class="brutal-search__input" placeholder="Search regulations..." disabled />
+          <button class="brutal-search__clear" type="button" aria-label="Clear search">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <code class="brand-code">.brutal-search — 2px border, no radius, monospace, uppercase placeholder</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Legend (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-legend">
+          <div class="brutal-legend__item">
+            <span class="brutal-legend__swatch" style="background: var(--color-primary);"></span>
+            <span class="brutal-legend__label">Active Regulations</span>
+          </div>
+          <div class="brutal-legend__item">
+            <span class="brutal-legend__swatch" style="background: var(--text-muted);"></span>
+            <span class="brutal-legend__label">No Regulations</span>
+          </div>
+        </div>
+        <code class="brand-code">.brutal-legend — square swatches, monospace uppercase labels, 2px border</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Map CTA (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-map-cta">
+          <svg class="brutal-map-cta__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+          <span class="brutal-map-cta__text">Select a region to view details</span>
+        </div>
+        <code class="brand-code">.brutal-map-cta — static, no animation, opaque bg, monospace uppercase</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Timeline (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div style="display: flex; flex-direction: column; gap: 4px; max-width: 400px;">
+          <div class="brutal-timeline-year">2025</div>
+          <div class="brutal-timeline-entry brutal-timeline-entry--privacy">
+            <span class="brutal-timeline-dot brutal-timeline-dot--privacy"></span>
+            <span class="brutal-timeline-entry__name">EU Data Privacy Act</span>
+            <span class="brutal-timeline-entry__date">Jan 15</span>
+          </div>
+          <div class="brutal-timeline-entry brutal-timeline-entry--ai brutal-timeline-entry--active">
+            <span class="brutal-timeline-dot brutal-timeline-dot--ai"></span>
+            <span class="brutal-timeline-entry__name">EU AI Act (Selected)</span>
+            <span class="brutal-timeline-entry__date">Mar 01</span>
+          </div>
+          <div class="brutal-timeline-today">
+            <span class="brutal-timeline-today__label">Today</span>
+          </div>
+          <div class="brutal-timeline-entry brutal-timeline-entry--industry brutal-timeline-entry--upcoming">
+            <span class="brutal-timeline-dot brutal-timeline-dot--industry brutal-timeline-dot--upcoming"></span>
+            <span class="brutal-timeline-entry__name">PCI DSS 4.1 (Upcoming)</span>
+            <span class="brutal-timeline-entry__date">Dec 31</span>
+          </div>
+        </div>
+        <code class="brand-code">.brutal-timeline-entry — square dots, monospace, 3px category left-border, dashed upcoming</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">FAQ (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full" style="max-width: 600px;">
+        <div class="brutal-faq">
+          <details class="brutal-faq__item" open>
+            <summary class="brutal-faq__question">What data sources does the map use?</summary>
+            <div class="brutal-faq__answer">The regulatory map aggregates data from official government sources, legal databases, and compliance frameworks across 50+ jurisdictions.</div>
+          </details>
+          <details class="brutal-faq__item">
+            <summary class="brutal-faq__question">How often is the data updated?</summary>
+            <div class="brutal-faq__answer">Data is reviewed and updated quarterly, with critical regulatory changes applied within 48 hours of publication.</div>
+          </details>
+        </div>
+        <code class="brand-code">.brutal-faq__item — no radius, 2px border, primary top-border on open, monospace question</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Map Controls (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div style="display: flex; gap: 2px;">
+          <button class="brutal-map-control" type="button">+</button>
+          <button class="brutal-map-control" type="button">&minus;</button>
+          <button class="brutal-map-control" type="button" style="width: auto; padding: 0 8px; font-size: 0.65rem;">RST</button>
+        </div>
+        <code class="brand-code">.brutal-map-control — 32px square, 2px border, monospace, no radius</code>
+      </div>
+      <div class="brand-component-item">
+        <div class="brutal-map-tooltip" style="position: static;">Germany — 5 regulations</div>
+        <code class="brand-code">.brutal-map-tooltip — 2px border, no shadow, monospace</code>
+      </div>
+    </div>
+
+    <h4 class="label brand-subgroup-title">Compliance Panel & Reg Card (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full" style="max-width: 400px;">
+        <div class="brutal-panel" style="max-height: none;">
+          <div class="brutal-panel__header">
+            <span class="brutal-panel__title">Germany</span>
+            <span class="brutal-panel__count">5 regulations</span>
+          </div>
+          <div class="brutal-reg-card">
+            <div class="brutal-reg-card__name">General Data Protection Regulation (GDPR)</div>
+            <div class="brutal-reg-card__date">Effective: May 25, 2018</div>
+            <div class="brutal-reg-card__scope">EU / EEA</div>
+            <ul class="brutal-reg-card__requirements">
+              <li>Data processing lawful basis required</li>
+              <li>72-hour breach notification</li>
+            </ul>
+            <div class="brutal-reg-card__penalties">Up to 4% of annual global turnover or EUR 20M</div>
+          </div>
+        </div>
+        <code class="brand-code">.brutal-panel + .brutal-reg-card — 3px primary top/left borders, monospace headings, square bullets</code>
+      </div>
+    </div>
+
     <h4 class="label brand-subgroup-title">Range Slider (Current)</h4>
     <div class="brand-component-row">
       <div class="brand-component-item" style="width: 300px;">
