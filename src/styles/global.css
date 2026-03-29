@@ -2319,6 +2319,38 @@ html.dark-theme .brutal-filter-chip--active {
     color: var(--bg-dark);
 }
 
+/* Category-specific filter chip variants (regulatory map categories) */
+.brutal-filter-chip--all:hover,
+.brutal-filter-chip--privacy:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.brutal-filter-chip--ai:hover { border-color: var(--color-secondary); color: var(--color-secondary); }
+.brutal-filter-chip--industry:hover { border-color: var(--regmap-category-industry); color: var(--regmap-category-industry); }
+.brutal-filter-chip--cyber:hover { border-color: var(--regmap-category-cyber); color: var(--regmap-category-cyber); }
+
+.brutal-filter-chip--all.brutal-filter-chip--active,
+.brutal-filter-chip--privacy.brutal-filter-chip--active {
+    background: var(--color-primary);
+    color: var(--bg-light);
+    border-color: var(--color-primary);
+}
+
+.brutal-filter-chip--ai.brutal-filter-chip--active {
+    background: var(--color-secondary);
+    color: var(--bg-light);
+    border-color: var(--color-secondary);
+}
+
+.brutal-filter-chip--industry.brutal-filter-chip--active {
+    background: var(--regmap-category-industry);
+    color: var(--bg-light);
+    border-color: var(--regmap-category-industry);
+}
+
+.brutal-filter-chip--cyber.brutal-filter-chip--active {
+    background: var(--regmap-category-cyber);
+    color: var(--bg-light);
+    border-color: var(--regmap-category-cyber);
+}
+
 /* ==============================
    Brutalist Filter Drawer
    ============================== */

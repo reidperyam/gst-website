@@ -206,10 +206,10 @@ test.describe('Regulatory Map — Timeline', () => {
       expect(allCount).toBeGreaterThan(0);
 
       // Switch to AI Governance — wait for filter chip to become active first
-      await jsClick(page, '.filter-chip[data-category="ai-governance"]');
+      await jsClick(page, '.brutal-filter-chip[data-category="ai-governance"]');
       await page.waitForFunction(() => {
-        const chip = document.querySelector('.filter-chip[data-category="ai-governance"]');
-        return chip?.classList.contains('active');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="ai-governance"]');
+        return chip?.classList.contains('brutal-filter-chip--active');
       });
 
       // Wait for timeline to re-render with fewer entries
@@ -226,20 +226,20 @@ test.describe('Regulatory Map — Timeline', () => {
       const allCount = await page.locator('.timeline-entry').count();
 
       // Switch away — wait for filter chip to become active first
-      await jsClick(page, '.filter-chip[data-category="ai-governance"]');
+      await jsClick(page, '.brutal-filter-chip[data-category="ai-governance"]');
       await page.waitForFunction(() => {
-        const chip = document.querySelector('.filter-chip[data-category="ai-governance"]');
-        return chip?.classList.contains('active');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="ai-governance"]');
+        return chip?.classList.contains('brutal-filter-chip--active');
       });
       await page.waitForFunction((prev) => {
         return document.querySelectorAll('.timeline-entry').length !== prev;
       }, allCount);
 
       // Switch back — wait for filter chip to become active first
-      await jsClick(page, '.filter-chip[data-category="all"]');
+      await jsClick(page, '.brutal-filter-chip[data-category="all"]');
       await page.waitForFunction(() => {
-        const chip = document.querySelector('.filter-chip[data-category="all"]');
-        return chip?.classList.contains('active');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="all"]');
+        return chip?.classList.contains('brutal-filter-chip--active');
       });
       await page.waitForFunction((expected) => {
         return document.querySelectorAll('.timeline-entry').length === expected;

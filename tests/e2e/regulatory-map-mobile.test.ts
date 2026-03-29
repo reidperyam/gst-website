@@ -220,7 +220,7 @@ test.describe('Regulatory Map — Mobile UX', () => {
       // Switch to Industry Compliance — Thailand has no industry regs
       // Use evaluate to bypass hit-testing issues on mobile viewport
       await page.evaluate(() => {
-        const chip = document.querySelector('.filter-chip[data-category="industry-compliance"]');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="industry-compliance"]');
         if (chip) (chip as HTMLElement).click();
       });
 

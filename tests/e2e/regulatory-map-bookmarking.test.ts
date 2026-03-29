@@ -44,12 +44,12 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
     });
 
     test('should add filter param to URL when switching category', async ({ page }) => {
-      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="ai-governance"]') as HTMLElement)?.click());
+      await page.evaluate(() => (document.querySelector('.brutal-filter-chip[data-category="ai-governance"]') as HTMLElement)?.click());
 
       // Wait for map to update (behavioral proof filter applied)
       await page.waitForFunction(() => {
-        const chip = document.querySelector('.filter-chip[data-category="ai-governance"]');
-        return chip && chip.classList.contains('active');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="ai-governance"]');
+        return chip && chip.classList.contains('brutal-filter-chip--active');
       });
 
       const url = new URL(page.url());
@@ -59,10 +59,10 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
 
     test('should encode both region and filter in URL', async ({ page }) => {
       // Set filter first
-      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="data-privacy"]') as HTMLElement)?.click());
+      await page.evaluate(() => (document.querySelector('.brutal-filter-chip[data-category="data-privacy"]') as HTMLElement)?.click());
       await page.waitForFunction(() => {
-        const chip = document.querySelector('.filter-chip[data-category="data-privacy"]');
-        return chip && chip.classList.contains('active');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="data-privacy"]');
+        return chip && chip.classList.contains('brutal-filter-chip--active');
       });
 
       // Then select Germany (has data-privacy regs)
@@ -83,7 +83,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       expect(new URL(page.url()).searchParams.get('region')).toBe('THA');
 
       // Switch to industry-compliance — Thailand has no regs in this category
-      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="industry-compliance"]') as HTMLElement)?.click());
+      await page.evaluate(() => (document.querySelector('.brutal-filter-chip[data-category="industry-compliance"]') as HTMLElement)?.click());
 
       // Wait for panel to close (region deselected)
       await page.waitForFunction(() => {
@@ -99,14 +99,14 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
 
     test('should clear all params when returning to default state', async ({ page }) => {
       // Set a filter
-      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="cybersecurity"]') as HTMLElement)?.click());
+      await page.evaluate(() => (document.querySelector('.brutal-filter-chip[data-category="cybersecurity"]') as HTMLElement)?.click());
       expect(new URL(page.url()).searchParams.has('filter')).toBe(true);
 
       // Return to "All"
-      await page.evaluate(() => (document.querySelector('.filter-chip[data-category="all"]') as HTMLElement)?.click());
+      await page.evaluate(() => (document.querySelector('.brutal-filter-chip[data-category="all"]') as HTMLElement)?.click());
       await page.waitForFunction(() => {
-        const chip = document.querySelector('.filter-chip[data-category="all"]');
-        return chip && chip.classList.contains('active');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="all"]');
+        return chip && chip.classList.contains('brutal-filter-chip--active');
       });
 
       // URL should be clean (no params)
@@ -136,12 +136,12 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       await waitForMapReady(page);
 
       // AI Governance chip should be active
-      const aiChip = page.locator('.filter-chip[data-category="ai-governance"]');
-      await expect(aiChip).toHaveClass(/active/);
+      const aiChip = page.locator('.brutal-filter-chip[data-category="ai-governance"]');
+      await expect(aiChip).toHaveClass(/brutal-filter-chip--active/);
 
       // "All" chip should NOT be active
-      const allChip = page.locator('.filter-chip[data-category="all"]');
-      await expect(allChip).not.toHaveClass(/active/);
+      const allChip = page.locator('.brutal-filter-chip[data-category="all"]');
+      await expect(allChip).not.toHaveClass(/brutal-filter-chip--active/);
 
       // Map should show fewer highlighted countries than "All"
       const activeCount = await page.locator('.country-path--active').count();
@@ -153,7 +153,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       await waitForMapReady(page);
 
       // Filter should be applied
-      await expect(page.locator('.filter-chip[data-category="data-privacy"]')).toHaveClass(/active/);
+      await expect(page.locator('.brutal-filter-chip[data-category="data-privacy"]')).toHaveClass(/brutal-filter-chip--active/);
 
       // Panel should show Germany
       await expect(page.locator('[data-testid="compliance-panel"]')).toBeVisible();
@@ -182,7 +182,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       await waitForMapReady(page);
 
       // Should fall back to "All" filter
-      await expect(page.locator('.filter-chip[data-category="all"]')).toHaveClass(/active/);
+      await expect(page.locator('.brutal-filter-chip[data-category="all"]')).toHaveClass(/brutal-filter-chip--active/);
     });
 
     test('should not select region that has no regs for the given filter', async ({ page }) => {
@@ -191,7 +191,7 @@ test.describe('Regulatory Map — URL Bookmarking & Sharing', () => {
       await waitForMapReady(page);
 
       // Filter should be applied
-      await expect(page.locator('.filter-chip[data-category="industry-compliance"]')).toHaveClass(/active/);
+      await expect(page.locator('.brutal-filter-chip[data-category="industry-compliance"]')).toHaveClass(/brutal-filter-chip--active/);
 
       // But panel should NOT be visible (Thailand has no industry regs)
       const panel = page.locator('[data-testid="compliance-panel"]');
