@@ -2856,6 +2856,138 @@ html.dark-theme .brutal-rec-card {
 }
 
 /* ==============================
+   Attention Card
+   ============================== */
+
+.attention-card {
+    padding: calc(var(--spacing-xl) * 0.5) var(--spacing-xl);
+    border-left: 3px solid var(--color-primary);
+    background: rgba(5, 205, 153, 0.03);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: padding var(--transition-normal), opacity var(--transition-normal);
+}
+
+.attention-card--high {
+    border-left-color: var(--hub-authority-blue);
+    background: var(--hub-authority-blue-bg);
+}
+
+.attention-card--medium {
+    border-left-color: var(--dm-methodology-brown);
+    background: var(--dm-methodology-brown-bg);
+}
+
+html.dark-theme .attention-card {
+    background: rgba(5, 205, 153, 0.06);
+}
+
+html.dark-theme .attention-card--high {
+    background: rgba(91, 122, 157, 0.08);
+}
+
+html.dark-theme .attention-card--medium {
+    background: rgba(140, 122, 107, 0.08);
+}
+
+.attention-card.is-dismissed {
+    opacity: 0.45;
+    border-style: dashed;
+}
+
+.attention-card.is-collapsed {
+    padding: var(--spacing-sm) var(--spacing-xl);
+}
+
+.attention-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.attention-title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.attention-na {
+    flex-shrink: 0;
+    padding: 2px var(--spacing-sm);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: rgba(200, 200, 200, 0.08);
+    border: 1px dashed var(--border-light);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.attention-na:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    background: rgba(200, 200, 200, 0.15);
+}
+
+html.dark-theme .attention-na {
+    background: rgba(200, 200, 200, 0.04);
+    border-color: var(--accent-light-bg-hover);
+}
+
+html.dark-theme .attention-na:hover {
+    border-color: var(--accent-border-medium);
+    background: var(--accent-light-bg);
+}
+
+.attention-divider {
+    width: 2rem;
+    height: 2px;
+    border: none;
+    background: var(--color-primary);
+    opacity: 0.4;
+    margin: var(--spacing-md) 0;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal);
+}
+
+.attention-card--high .attention-divider {
+    background: var(--hub-authority-blue);
+}
+
+.attention-card--medium .attention-divider {
+    background: var(--dm-methodology-brown);
+}
+
+.attention-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    transition: max-height var(--transition-normal), opacity var(--transition-normal);
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.attention-card.is-collapsed .attention-divider {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.attention-card.is-collapsed .attention-desc {
+    max-height: 0;
+    opacity: 0;
+}
+
+/* ==============================
    Brutalist Attention Card
    ============================== */
 
