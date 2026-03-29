@@ -66,6 +66,15 @@ import caData from '../../../../data/canada-provinces.json';
 
     <section class="regulatory-map-section">
         <div class="container">
+            <div class="print-report-header" aria-hidden="true">
+                <div class="print-report-header__brand">
+                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" width="24" height="24" />
+                    <span>GST</span>
+                </div>
+                <div class="print-report-header__title">Regulatory Map</div>
+                <div class="print-report-header__date" id="print-date"></div>
+            </div>
+
             <HubHeader
                 title="Regulatory Map"
                 subtitle="Data privacy and artificial intelligence are among the most actively regulated areas in technology. Understanding the frameworks governing how data can be collected, stored, and transferred, and how AI can be developed and deployed, across jurisdictions is imperative."
@@ -155,6 +164,10 @@ import caData from '../../../../data/canada-provinces.json';
                         <div class="brutal-faq__answer" set:html={item.answer} />
                     </details>
                 ))}
+            </div>
+            <div class="print-report-footer" aria-hidden="true">
+                <p>Generated from globalstrategic.tech/hub/tools/regulatory-map</p>
+                <p>Data is informational only and does not constitute legal advice. Verify all regulatory requirements with qualified counsel.</p>
             </div>
             <a href="/hub/tools" class="cta-button secondary back-link">Back to Tools</a>
         </div>
@@ -1355,6 +1368,13 @@ import caData from '../../../../data/canada-provinces.json';
     });
 </script>
 
+<script>
+    const printDate = document.getElementById('print-date');
+    if (printDate) {
+        printDate.textContent = `Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+    }
+</script>
+
 <style>
     .regulatory-map-section {
         padding-bottom: var(--spacing-3xl);
@@ -1706,5 +1726,132 @@ import caData from '../../../../data/canada-provinces.json';
 
     :global(html.dark-theme .timeline-track::before) {
         background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Print-only elements (hidden on screen) */
+    .print-report-header,
+    .print-report-footer {
+        display: none;
+    }
+
+    @media print {
+        /* Hide interactive chrome */
+        :global(.site-header),
+        :global(footer),
+        .regulation-filters,
+        .map-controls,
+        .map-quick-zoom,
+        .brutal-map-cta,
+        .brutal-map-hint,
+        .brutal-bottom-sheet__overlay,
+        .brutal-bottom-sheet__handle,
+        .back-link,
+        :global(.hub-header__breadcrumb) {
+            display: none !important;
+        }
+
+        /* Show print header/footer */
+        .print-report-header {
+            display: flex !important;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 0 var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 3px solid #05cd99;
+        }
+
+        .print-report-header__brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-family: monospace;
+            font-size: 14pt;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #1a1a1a;
+        }
+
+        .print-report-header__title {
+            font-family: monospace;
+            font-size: 11pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #666;
+        }
+
+        .print-report-header__date {
+            font-family: monospace;
+            font-size: 9pt;
+            color: #999;
+        }
+
+        .print-report-footer {
+            display: block !important;
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid #ccc;
+        }
+
+        .print-report-footer p {
+            font-family: monospace;
+            font-size: 8pt;
+            color: #999;
+            margin: 0 0 4px;
+            line-height: 1.4;
+        }
+
+        /* Map: static, bordered */
+        .map-wrapper {
+            page-break-inside: avoid;
+        }
+
+        :global(.brutal-map-container) {
+            border: 1px solid #ccc !important;
+            overflow: visible;
+        }
+
+        /* Panel: static layout */
+        :global(.brutal-panel) {
+            position: static !important;
+            max-height: none !important;
+            overflow: visible !important;
+            transform: none !important;
+            transition: none !important;
+            border: 1px solid #ccc !important;
+            border-top: 3px solid #05cd99 !important;
+            page-break-inside: avoid;
+        }
+
+        :global(.brutal-reg-card) {
+            border: 1px solid #ccc !important;
+            border-left: 3px solid #05cd99 !important;
+            break-inside: avoid;
+        }
+
+        /* Timeline: no scroll, static */
+        .timeline-scroll {
+            overflow: visible;
+            max-width: 100%;
+        }
+
+        :global(.brutal-timeline-entry) {
+            color: #333;
+        }
+
+        /* FAQ: readable, no collapse */
+        :global(.brutal-faq__item) {
+            border: 1px solid #ccc !important;
+            break-inside: avoid;
+        }
+
+        .map-layout {
+            grid-template-columns: 1fr !important;
+            max-width: 100%;
+        }
+
+        @page {
+            margin: 1.5cm;
+        }
     }
 </style>
