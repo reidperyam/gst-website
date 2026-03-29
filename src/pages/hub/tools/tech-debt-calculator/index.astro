@@ -399,40 +399,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
         opacity: 0.7;
     }
 
-    .hint-input {
-        width: 33%;
-        text-align: center;
-        border: 1px dashed var(--border-light);
-        border-radius: 0;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        font-family: monospace;
-        font-size: var(--text-xs);
-        font-weight: var(--font-weight-bold);
-        color: var(--text-muted);
-        background: transparent;
-        cursor: text;
-        transition: border-color var(--transition-fast), color var(--transition-fast), border-style var(--transition-fast);
-        -moz-appearance: textfield;
-    }
-
-    .hint-input::-webkit-inner-spin-button,
-    .hint-input::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    .hint-input:hover {
-        border-color: var(--color-primary);
-        border-style: solid;
-        color: var(--text-secondary);
-    }
-
-    .hint-input:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        border-style: solid;
-        color: var(--color-primary);
-    }
+    /* .hint-input base styles, hover, focus, dark theme — all in global.css */
 
     .slider-benchmark {
         font-size: var(--text-xs);
@@ -493,17 +460,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
         cursor: pointer;
     }
 
-    :global(html.dark-theme) .calc-slider::-webkit-slider-runnable-track {
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    :global(html.dark-theme) .calc-slider::-moz-range-track {
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    :global(html.dark-theme) .hint-input {
-        border-color: rgba(255, 255, 255, 0.15);
-    }
+    /* .calc-slider and .hint-input dark theme overrides — in global.css */
 
     :global(html.dark-theme) .deploy-btn {
         border-color: rgba(255, 255, 255, 0.15);
