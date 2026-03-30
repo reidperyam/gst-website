@@ -812,10 +812,10 @@ trackPageView('brand', 'Brand Style Reference');
     </div>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
-        <div class="brutal-tool-shell" style="max-width: 660px;">
+        <div class="brutal-tool-shell brutal-tool-shell--narrow">
           <div class="brutal-tool-shell__content"><span class="brutal-text-tiny">narrow — 660px</span></div>
         </div>
-        <code class="brand-code">--narrow</code>
+        <code class="brand-code">.brutal-tool-shell--narrow</code>
       </div>
     </div>
     <div class="brand-component-row">
@@ -1273,6 +1273,62 @@ trackPageView('brand', 'Brand Style Reference');
       </div>
     </div>
     <code class="brand-code">.doc-attention-card (brutalist) — no radius, no bg fill, hard left-border, monospace title, no divider</code>
+
+    <!-- 8b-2. ICG Tool Components -->
+
+    <h4 class="label brand-subgroup-title">Progress Bar (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full" style="max-width: 400px;">
+        <div class="brutal-progress-bar">
+          <div class="brutal-progress-bar__track">
+            <div class="brutal-progress-bar__fill" style="width: 66%;"></div>
+          </div>
+          <span class="brutal-progress-bar__label">4 of 6</span>
+        </div>
+      </div>
+    </div>
+    <code class="brand-code">.brutal-progress-bar — hard-edged track, no radius, monospace label, primary fill</code>
+
+    <h4 class="label brand-subgroup-title">Stat Tile (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full" style="max-width: 400px;">
+        <div style="display: flex; gap: var(--gap-normal);">
+          <div class="brutal-stat-tile">
+            <div class="brutal-stat-tile__value">6</div>
+            <div class="brutal-stat-tile__label">domains</div>
+          </div>
+          <div class="brutal-stat-tile">
+            <div class="brutal-stat-tile__value">20</div>
+            <div class="brutal-stat-tile__label">questions</div>
+          </div>
+          <div class="brutal-stat-tile">
+            <div class="brutal-stat-tile__value">5-7 min</div>
+            <div class="brutal-stat-tile__label">to complete</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <code class="brand-code">.brutal-stat-tile — hard borders, no radius, monospace value/label, no bg fill</code>
+
+    <h4 class="label brand-subgroup-title">Callout (Brutalist)</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full" style="max-width: 500px;">
+        <div class="brutal-callout">
+          <span class="brutal-callout__title">Who should complete this assessment.</span>
+          This tool takes 5 to 7 minutes. PE investors and executives should complete this alongside their engineering lead.
+        </div>
+      </div>
+    </div>
+    <code class="brand-code">.brutal-callout — hard left-border accent, no radius, monospace title + body</code>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full" style="max-width: 500px;">
+        <div class="brutal-callout brutal-callout--warning">
+          <span class="brutal-callout__title">Foundational domain scored below threshold</span>
+          Without foundational visibility in place, scores in other domains may understate the true optimization gap.
+        </div>
+      </div>
+    </div>
+    <code class="brand-code">.brutal-callout--warning — gold left-border accent for warnings</code>
 
     <!-- 8c. Form Controls -->
     <h3 class="heading-sm brand-group-title">Form Controls</h3>

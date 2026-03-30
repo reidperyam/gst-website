@@ -107,7 +107,7 @@ test.describe('ICG - Landing page', () => {
 
   test('renders stats row with 6 domains, 20 questions, 5-7 min', async ({ page }) => {
     await gotoTool(page);
-    const stats = await page.$$('.stat-tile');
+    const stats = await page.$$('.brutal-stat-tile');
     expect(stats).toHaveLength(3);
 
     const values = await Promise.all(stats.map(s => s.textContent()));
