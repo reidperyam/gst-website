@@ -57,11 +57,14 @@ The GST delta triangle icon is the primary brand mark. It appears as:
 - Navigation logo element
 - Collapse/expand toggle indicator (`.delta-chevron` in `interactions.css`)
 - CSS pseudo-element decorator via mask-image technique
+- **Attention/action indicator** in `--color-secondary` (gold) — signals user interaction points
 
 **SVG source**: `/images/logo/gst-delta-icon-teal-stroke-thick.svg`
 
 **Usage rules**:
-- Always render in `--color-primary` (teal) or `currentColor` — never in off-brand colors
+- Render in `--color-primary` (teal) for branding and decoration
+- Render in `--color-secondary` (gold) to signal attention or required user action (e.g., CTAs, interactive prompts)
+- Use `currentColor` for stroke when the parent element controls color contextually
 - Use the stroke variant for inline/decorative uses
 - Scale proportionally; do not distort aspect ratio
 - See [STYLES_GUIDE.md — Brand Assets in CSS](./STYLES_GUIDE.md#brand-assets-in-css) for the CSS mask-image pattern
@@ -258,15 +261,16 @@ For multi-series charts (max 6 colors), use this sequence for adequate color vis
 |------|-------|
 | Minimum size (inline) | 10px |
 | Minimum size (standalone) | 16px |
-| Approved colors | `--color-primary` (teal) or `currentColor` |
+| Approved colors | `--color-primary` (teal) for branding, `--color-secondary` (gold) for attention/action, or `currentColor` |
 | Minimum clearance (standalone) | `--spacing-sm` (8px) |
-| Prohibited | Distortion, off-brand colors, background fill, rotation beyond chevron toggle |
+| Prohibited | Distortion, unapproved colors, background fill, rotation beyond chevron toggle |
 
 ### Placement Guidelines
 
 - **Navigation**: Top-left in the logo wrapper. Always paired with "GST" text.
 - **Toggles**: Inline-end position within collapsible headers. Rotates 0°↔180° via `.delta-chevron`.
 - **Decorative**: As `::before`/`::after` pseudo-elements via CSS mask-image. Teal only.
+- **Attention / CTA**: Inline-start position paired with instructional text. Gold (`--color-secondary`) to signal user action. Used in `.brutal-map-cta` and similar interactive prompts.
 - **Print**: Unicode delta character `\0394` in document headers.
 
 ---
