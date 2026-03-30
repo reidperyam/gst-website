@@ -2,7 +2,7 @@
 
 Migrate all five hub tools from their current soft-UI styling (rounded corners, box shadows, filled backgrounds) to the brutalist design system (no radius, monospace typography, structural borders, primary-color accents). The brutalist design tokens and component classes are defined in `global.css`, `typography.css`, and `interactions.css`, and rendered live on the [/brand](https://globalstrategic.tech/brand) reference page.
 
-**Status**: In progress — Stage 1 (TDC) complete, Stage 2 (RegMap) complete, Stage 3 (ICG) next
+**Status**: In progress — Stages 1-2 complete, Stage 3 (ICG) next
 **Priority**: High — brand cohesion
 **Last Updated**: March 29, 2026 (Stage 2 complete)
 
@@ -157,7 +157,7 @@ RegMap is the only tool without `@media print`. Stage 2 should add:
 
 ### Completion Summary
 
-Stage 2 completed March 29, 2026.
+Stage 2 completed March 30, 2026.
 
 **Existing brutalist classes swapped in:**
 - `.filter-chip` → `.brutal-filter-chip` (5 buttons, including per-category active states)
@@ -217,7 +217,13 @@ Stage 2 completed March 29, 2026.
 - [x] New brutalist classes created in global.css (not left as local overrides)
 - [x] New brutalist classes added to `/brand` page (7 specimen groups)
 - [x] `npm run build` passes
-- [ ] `npm run test:run` passes (pending verification)
+- [x] `npm run test:run` passes (857/857)
+- [x] E2E tests updated and passing (all 6 RegMap test files)
+- [x] Mobile UX optimized (CTA hidden, legend static, quick-zoom replaces +/−/reset)
+- [x] Bottom sheet scroll lock and drag-dismiss fixed
+- [x] Delta icon in `--color-secondary` (gold) for CTA — new brand convention documented
+- [x] `.brutal-faq__item` frosted glass effect matches `.brutal-tool-shell`
+- [x] Dark theme SVG fills standardized to `rgba(255, 255, 255, ...)`
 - [ ] Visual review at desktop, 768px, 480px
 
 ---
