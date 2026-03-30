@@ -2,9 +2,9 @@
 
 Migrate all five hub tools from their current soft-UI styling (rounded corners, box shadows, filled backgrounds) to the brutalist design system (no radius, monospace typography, structural borders, primary-color accents). The brutalist design tokens and component classes are defined in `global.css`, `typography.css`, and `interactions.css`, and rendered live on the [/brand](https://globalstrategic.tech/brand) reference page.
 
-**Status**: In progress — Stages 1-2 complete, Stage 3 (ICG) next
+**Status**: In progress — Stages 1-3 complete, Stage 4 (Diligence Machine) next
 **Priority**: High — brand cohesion
-**Last Updated**: March 29, 2026 (Stage 2 complete)
+**Last Updated**: March 30, 2026 (Stage 3 complete)
 
 ---
 
@@ -232,44 +232,98 @@ Stage 2 completed March 30, 2026.
 
 **File**: `src/pages/hub/tools/infrastructure-cost-governance/index.astro`
 **Why third**: Medium-high complexity with multi-view layout (landing → wizard → results), but already uses `.tool-shell`, `.tool-action-bar`, and typography classes from the design system.
+**Status**: Complete
 
-### Direct Swaps
+### Lessons from Stages 1 & 2
+
+Applied these patterns during ICG migration:
+- **Dark theme borders**: `rgba(255, 255, 255, 0.15)` everywhere — replaced all `var(--accent-light-bg-hover)` and `var(--accent-dark-bg)` dark overrides
+- **Propagate to global.css**: new reusable classes (progress bar, stat tile, callout) created in global.css, not scoped
+- **Back links**: kept as `.cta-button secondary` (per Stage 1 lesson)
+- **Recommendation cards**: mapped directly to existing `.brutal-rec-card` family — no new rec classes needed
+- **Benchmark table**: mapped to existing `.brutal-bench-table` family
+
+### Direct Swaps Applied
 
 | Current Class | Brutalist Class | Count |
 |---|---|---|
 | `.tool-shell.tool-shell--narrow` | `.brutal-tool-shell.brutal-tool-shell--narrow` | 1 |
-| `.tool-action-bar` | `.tool-action-bar` (keep, add `.brutal-btn` inside) | 2 |
-| `.label` | `.brutal-label` | 1 |
-| `.text-small` / `.text-tiny` | `.brutal-text-small` / `.brutal-text-tiny` | 2 |
-| `.hub-btn--primary` / `--secondary` | `.brutal-btn--primary` / `--secondary` | buttons |
+| `.hub-btn.hub-btn--primary` | `.brutal-btn.brutal-btn--primary` | 6 |
+| `.hub-btn.hub-btn--secondary` | `.brutal-btn.brutal-btn--secondary` | 14 |
+| `.hub-btn--full` | `.brutal-btn--full` | 1 |
+| `.label` | `.brutal-label` | 2 |
+| `.heading-md` | `.brutal-heading-md` | 2 |
+| `.text-small` | `.brutal-text-small` | 5 |
+| `.text-tiny` | `.brutal-text-tiny` | 4 |
+| `.tool-section-label` | `.brutal-tool-shell__section-label` | 5 (+ JS injected) |
+| `.tool-bench-table` | `.brutal-bench-table` | 1 |
+| `bench-label--score/stage` | `.brutal-bench-table__label--score/stage` | 2 (JS) |
+| `icg-rec-card` / badges / na | `.brutal-rec-card` family | all (JS) |
 
-### New Brutalist Classes Needed
+### New Brutalist Classes Created in global.css
 
-| Pattern | Classes | Notes |
-|---|---|---|
-| **Landing callout** | `.landing-callout`, `.landing-callout__title` | Info box — brutalist: hard border, primary left-border accent, monospace title |
-| **Stage cards** | `.icg-stage-card`, `.icg-stage-card--active` | Selection cards — map to `.brutal-option-card` |
-| **Progress bar** | `.icg-progress`, `.icg-progress__track`, `.icg-progress__fill`, `.icg-progress__label` | Linear progress — brutalist: hard edges, primary fill, monospace label |
-| **Domain header** | `.icg-domain-header`, `.icg-domain-label`, `.icg-domain-name`, `.icg-domain-desc` | Section header — brutalist: monospace label, primary bottom-border divider |
-| **Question cards** | `.icg-question-card`, `.icg-opt-btn`, `.icg-opt-btn.selected` | Assessment questions — map to `.brutal-option-card--compact` |
-| **Score display** | `.icg-score-display`, `.icg-score-level`, `.icg-gauge`, `.icg-radar` | Results visualization — brutalist: `.brutal-data` for scores, hard borders on gauge |
-| **Recommendations** | `.icg-rec-card`, `.icg-rec-badge`, `.icg-rec-na` | Already have `.brutal-rec-card` — verify compatibility |
-| **Snapshots** | `.icg-snapshot-manager`, `.icg-snapshot-label-input`, `.icg-snapshot-clear` | Persistence UI — brutalist: monospace inputs, hard borders, outlined buttons |
-| **Stats tiles** | `.stat-tile`, `.stat-tile__value`, `.stat-tile__label` | Landing stats — may map to `.stats-bar` pattern or create `.brutal-stat-tile` |
-| **Resume prompt** | `.icg-resume-prompt` | Session restore — brutalist: hard border, monospace text |
+| Class | Purpose |
+|---|---|
+| `.brutal-tool-shell--narrow` | 660px narrow shell variant |
+| `.brutal-progress-bar` + `__track`, `__fill`, `__label` | Hard-edged progress bar, no radius, monospace label |
+| `.brutal-stat-tile` + `__value`, `__label` | Hard-bordered stat tiles, monospace values |
+| `.brutal-callout` + `__title`, `--warning` | Reusable callout with left-border accent, monospace |
+
+### Scoped CSS Changes
+
+- Removed ~400 lines of old scoped CSS replaced by global.css definitions
+- Landing callout, resume prompt, quick wins, cost context, foundational warning all use `.brutal-callout`
+- Stat tiles use `.brutal-stat-tile`; progress bar uses `.brutal-progress-bar`
+- Stage cards brutalized in-place: no radius, monospace uppercase, primary-fill active state
+- Question cards: no radius, 2px borders, monospace text, primary-fill selected buttons
+- Option buttons: removed `box-shadow: inset`, use `background: var(--color-primary)` on select
+- Domain bars: removed track/fill radius
+- Cards: no radius, 2px borders, transparent background
+- Snapshot label input: no radius, monospace, 2px border
+- Foundational badge: no radius, outlined with primary border instead of bg fill
+
+### Dark Theme
+
+- All dark borders standardized to `rgba(255, 255, 255, 0.15)`
+- Removed all `var(--accent-light-bg-hover)`, `var(--accent-dark-bg)`, `var(--accent-wash-bg)`, `var(--accent-tint-bg)`, `var(--accent-subtle-bg)` overrides
+- Transparent backgrounds throughout (brutalist: no bg fills)
+
+### Print Styles
+
+- Updated rec-card references from `icg-rec-card` → `brutal-rec-card`
+- Added `font-family: monospace` and `text-transform: uppercase` to print header
+- Existing print layout (branded header, footer, break-inside avoidance) preserved
+
+### E2E Tests Updated
+
+- `.stat-tile` → `.brutal-stat-tile` (1 selector)
+- All other tests use `data-*` attributes — no changes needed
+- Unit tests (1,026 lines, pure functions) — no changes needed
+
+### Brand Page Specimens Added
+
+- `.brutal-progress-bar` — track with 66% fill and monospace label
+- `.brutal-stat-tile` — 3-tile row matching ICG landing stats
+- `.brutal-callout` — default (primary accent) + `--warning` (gold accent) variants
+- Updated narrow shell specimen from inline `max-width` to `.brutal-tool-shell--narrow`
+
+### Completion Summary
+
+Stage 3 completed March 30, 2026.
 
 ### Pause Point
 
-After completing Stage 3:
-- [ ] Landing view has brutalist callout, stage cards, and stats
-- [ ] Assessment questions use brutalist option cards
-- [ ] Progress bar has hard edges and monospace label
-- [ ] Results scores use `.brutal-data` typography
-- [ ] Recommendation cards match `.brutal-rec-card` pattern
-- [ ] Snapshot manager inputs have no radius
-- [ ] 31 dark theme `:global()` overrides migrated to CSS variables
-- [ ] Identify new brutalist classes for `/brand` page
-- [ ] `npm run test:run` passes
+- [x] Landing view has brutalist callout, stage cards, and stats
+- [x] Assessment questions use brutalist option buttons (primary-fill on select)
+- [x] Progress bar has hard edges and monospace label (`.brutal-progress-bar`)
+- [x] Recommendation cards match `.brutal-rec-card` pattern
+- [x] Snapshot manager inputs have no radius, monospace
+- [x] All dark theme overrides use `rgba(255, 255, 255, 0.15)`
+- [x] New brutalist classes created in global.css (progress bar, stat tile, callout, --narrow shell)
+- [x] New specimens added to `/brand` page (3 component groups + warning variant)
+- [x] `npm run build` passes
+- [x] `npm run test:run` passes (857/857)
+- [x] E2E test selectors updated
 - [ ] Visual review at desktop, 768px, 480px
 
 ---
@@ -377,8 +431,10 @@ Classes that will likely need to be created during migration and added to the sh
 | `.brutal-tab-bar`, `.brutal-tab` | Stage 5 (TechPar) | `global.css` |
 | `.brutal-segmented`, `.brutal-seg__btn` | Stage 5 (TechPar) | `global.css` |
 | `.brutal-field`, `.brutal-field__label`, `.brutal-field__input` | Stage 5 (TechPar) | `global.css` |
-| `.brutal-progress-bar`, `.brutal-progress__track`, `.brutal-progress__fill` | Stage 3 (ICG) | `global.css` |
-| `.brutal-stat-tile` | Stage 3 (ICG) | `global.css` |
+| `.brutal-progress-bar`, `.brutal-progress-bar__track`, `.brutal-progress-bar__fill`, `.brutal-progress-bar__label` | Stage 3 (ICG) ✅ | `global.css` |
+| `.brutal-stat-tile`, `.brutal-stat-tile__value`, `.brutal-stat-tile__label` | Stage 3 (ICG) ✅ | `global.css` |
+| `.brutal-callout`, `.brutal-callout__title`, `.brutal-callout--warning` | Stage 3 (ICG) ✅ | `global.css` |
+| `.brutal-tool-shell--narrow` | Stage 3 (ICG) ✅ | `global.css` |
 | `.brutal-search`, `.brutal-search__*` | Stage 2 (RegMap) ✅ | `global.css` |
 | `.brutal-legend`, `.brutal-legend__*` | Stage 2 (RegMap) ✅ | `global.css` |
 | `.brutal-map-cta`, `.brutal-map-cta__*` | Stage 2 (RegMap) ✅ | `global.css` |
