@@ -2731,6 +2731,7 @@ html.dark-theme .brutal-filter-drawer {
 
 .brutal-slider__input::-webkit-slider-thumb {
     -webkit-appearance: none;
+    appearance: none;
     width: 16px;
     height: 16px;
     background: var(--color-primary);
@@ -2774,11 +2775,13 @@ html.dark-theme .brutal-filter-drawer {
     cursor: text;
     transition: border-color var(--transition-fast), color var(--transition-fast), border-style var(--transition-fast);
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .brutal-slider__direct::-webkit-inner-spin-button,
 .brutal-slider__direct::-webkit-outer-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
@@ -2946,6 +2949,7 @@ html.dark-theme .brutal-project-card:hover {
     margin: 1rem 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -4232,6 +4236,7 @@ html.dark-theme .brutal-bottom-sheet__handle-bar {
 
 .calc-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
+    appearance: none;
     width: 20px;
     height: 20px;
     background: var(--color-primary);
@@ -4284,11 +4289,13 @@ html.dark-theme .calc-slider::-moz-range-track {
     cursor: text;
     transition: border-color var(--transition-fast), color var(--transition-fast), border-style var(--transition-fast);
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .hint-input::-webkit-inner-spin-button,
 .hint-input::-webkit-outer-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
@@ -4596,6 +4603,7 @@ html.dark-theme .trust-card:hover {
     margin: 1rem 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
