@@ -105,16 +105,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                 <div class="options-grid">
                                     {step.options.map((option) => (
                                         <button
-                                            class="option-card"
+                                            class="brutal-option-card"
                                             data-option-id={option.id}
                                             data-step-id={step.id}
                                             data-testid={`option-${step.id}-${option.id}`}
                                             type="button"
                                             aria-pressed="false"
                                         >
-                                            <span class="option-label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="option-icon" width="10" height="10" loading="lazy" />{option.label}</span>
+                                            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="brutal-option-card__icon" width="10" height="10" loading="lazy" />{option.label}</span>
                                             {option.description && (
-                                                <span class="option-description">{option.description}</span>
+                                                <span class="brutal-option-card__description">{option.description}</span>
                                             )}
                                         </button>
                                     ))}
@@ -125,16 +125,16 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                 <div class="options-grid">
                                     {step.options.map((option) => (
                                         <button
-                                            class="option-card"
+                                            class="brutal-option-card"
                                             data-option-id={option.id}
                                             data-step-id={step.id}
                                             data-testid={`option-${step.id}-${option.id}`}
                                             type="button"
                                             aria-pressed="false"
                                         >
-                                            <span class="option-label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="option-icon" width="10" height="10" loading="lazy" />{option.label}</span>
+                                            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="brutal-option-card__icon" width="10" height="10" loading="lazy" />{option.label}</span>
                                             {option.description && (
-                                                <span class="option-description">{option.description}</span>
+                                                <span class="brutal-option-card__description">{option.description}</span>
                                             )}
                                         </button>
                                     ))}
@@ -149,7 +149,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                             <div class="field-options-grid" data-field-id={field.id}>
                                                 {field.options.map((opt) => (
                                                     <button
-                                                        class="option-card compound-option"
+                                                        class="brutal-option-card compound-option"
                                                         data-option-id={opt.id}
                                                         data-field-id={field.id}
                                                         data-step-id={step.id}
@@ -157,12 +157,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                                         type="button"
                                                         aria-pressed="false"
                                                     >
-                                                        <span class="option-label">
+                                                        <span class="brutal-option-card__label">
                                                             <img
                                                                 src="/images/gst-delta-icon-teal-stroke-thick.svg"
                                                                 alt=""
                                                                 aria-hidden="true"
-                                                                class="option-icon"
+                                                                class="brutal-option-card__icon"
                                                                 width="10"
                                                                 height="10"
                                                             />
@@ -481,7 +481,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         if (!changed) return;
         inputs.geographies = synced;
         const mrCard = document.querySelector(
-            `.option-card[data-step-id="geography"][data-option-id="${MULTI_REGION_ID}"]`
+            `.brutal-option-card[data-step-id="geography"][data-option-id="${MULTI_REGION_ID}"]`
         ) as HTMLElement | null;
         if (mrCard) {
             const shouldBeSelected = synced.includes(MULTI_REGION_ID);
@@ -492,8 +492,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     /** Deselect all geography cards in the DOM */
     function clearAllGeographyCards(): void {
-        document.querySelectorAll('.option-card[data-step-id="geography"]').forEach((el) => {
-            el.classList.remove('selected');
+        document.querySelectorAll('.brutal-option-card[data-step-id="geography"]').forEach((el) => {
+            el.classList.remove('brutal-option-card--selected');
             el.setAttribute('aria-pressed', 'false');
         });
     }
@@ -553,11 +553,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         if (inputType === 'single-select') {
             // Deselect siblings
-            stepEl.querySelectorAll('.option-card').forEach((el) => {
-                el.classList.remove('selected');
+            stepEl.querySelectorAll('.brutal-option-card').forEach((el) => {
+                el.classList.remove('brutal-option-card--selected');
                 el.setAttribute('aria-pressed', 'false');
             });
-            card.classList.add('selected');
+            card.classList.add('brutal-option-card--selected');
             card.setAttribute('aria-pressed', 'true');
 
             const key = stepIdToInputKey(stepId);
@@ -576,7 +576,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 }
             }, 300);
         } else if (inputType === 'multi-select') {
-            const isSelected = card.classList.toggle('selected');
+            const isSelected = card.classList.toggle('brutal-option-card--selected');
             card.setAttribute('aria-pressed', String(isSelected));
 
             if (!inputs.geographies) inputs.geographies = [];
@@ -607,13 +607,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         const fieldGrid = card.closest('.field-options-grid') as HTMLElement;
 
         // Deselect all cards in this field's grid (single-select)
-        fieldGrid.querySelectorAll('.option-card').forEach((el) => {
-            el.classList.remove('selected');
+        fieldGrid.querySelectorAll('.brutal-option-card').forEach((el) => {
+            el.classList.remove('brutal-option-card--selected');
             el.setAttribute('aria-pressed', 'false');
         });
 
         // Select clicked card
-        card.classList.add('selected');
+        card.classList.add('brutal-option-card--selected');
         card.setAttribute('aria-pressed', 'true');
 
         // Update state (same field mapping as handleFieldChange)
@@ -1051,8 +1051,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         clearState();
 
         // Reset all option cards
-        document.querySelectorAll('.option-card').forEach((el) => {
-            el.classList.remove('selected');
+        document.querySelectorAll('.brutal-option-card').forEach((el) => {
+            el.classList.remove('brutal-option-card--selected');
             el.setAttribute('aria-pressed', 'false');
         });
 
@@ -1105,10 +1105,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             const value = (inputs as Record<string, unknown>)[key] as string | undefined;
             if (value) {
                 const card = document.querySelector(
-                    `.option-card[data-step-id="${stepId}"][data-option-id="${value}"]`
+                    `.brutal-option-card[data-step-id="${stepId}"][data-option-id="${value}"]`
                 );
                 if (card) {
-                    card.classList.add('selected');
+                    card.classList.add('brutal-option-card--selected');
                     card.setAttribute('aria-pressed', 'true');
                 }
             }
@@ -1118,10 +1118,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         if (inputs.geographies && inputs.geographies.length > 0) {
             for (const geo of inputs.geographies) {
                 const card = document.querySelector(
-                    `.option-card[data-step-id="geography"][data-option-id="${geo}"]`
+                    `.brutal-option-card[data-step-id="geography"][data-option-id="${geo}"]`
                 );
                 if (card) {
-                    card.classList.add('selected');
+                    card.classList.add('brutal-option-card--selected');
                     card.setAttribute('aria-pressed', 'true');
                 }
             }
@@ -1139,10 +1139,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             const value = (inputs as Record<string, unknown>)[key] as string | undefined;
             if (value) {
                 const card = document.querySelector(
-                    `.option-card.compound-option[data-field-id="${fieldId}"][data-option-id="${value}"]`
+                    `.brutal-option-card.compound-option[data-field-id="${fieldId}"][data-option-id="${value}"]`
                 );
                 if (card) {
-                    card.classList.add('selected');
+                    card.classList.add('brutal-option-card--selected');
                     card.setAttribute('aria-pressed', 'true');
                 }
             }
@@ -1154,12 +1154,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     // ─── EVENT BINDING ────────────────────────────────────────────────────
 
     // Option card clicks
-    document.querySelectorAll('.option-card').forEach((card) => {
+    document.querySelectorAll('.brutal-option-card').forEach((card) => {
         card.addEventListener('click', () => handleOptionClick(card as HTMLButtonElement));
     });
 
     // Compound field option cards
-    document.querySelectorAll('.option-card.compound-option').forEach((card) => {
+    document.querySelectorAll('.brutal-option-card.compound-option').forEach((card) => {
         card.addEventListener('click', () => handleCompoundOptionClick(card as HTMLButtonElement));
     });
 
