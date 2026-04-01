@@ -217,13 +217,13 @@ html.dark-theme .tool-action-bar--bordered {
 }
 
 .tool-action-bar--frosted {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.005);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
 }
 
 html.dark-theme .tool-action-bar--frosted {
-    background: rgba(10, 10, 10, 0.85);
+    background: rgba(255, 255, 255, 0.005);
 }
 
 @media (max-width: 480px) {

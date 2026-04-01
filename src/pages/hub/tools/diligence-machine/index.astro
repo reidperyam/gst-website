@@ -1965,8 +1965,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         background: var(--dm-methodology-brown-bg);
     }
 
-    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card) {
-        background: rgba(5, 205, 153, 0.06);
+    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card.relevance-high) {
+        background: var(--hub-authority-blue-bg);
+    }
+
+    :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
+        background: var(--dm-methodology-brown-bg);
     }
 
     .doc-attention-grid :global(.doc-attention-header) {
