@@ -387,7 +387,7 @@ Stage 4 completed March 31, 2026.
 - [x] Dark theme borders standardized to `rgba(255, 255, 255, 0.15)`
 - [x] `npm run test:run` passes (857/857)
 - [x] E2E test selectors updated
-- [ ] Visual review at desktop, 768px, 480px
+- [x] Visual review at desktop, 768px, 480px
 
 ---
 
