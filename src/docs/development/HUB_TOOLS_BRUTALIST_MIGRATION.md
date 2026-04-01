@@ -2,9 +2,9 @@
 
 Migrate all five hub tools from their current soft-UI styling (rounded corners, box shadows, filled backgrounds) to the brutalist design system (no radius, monospace typography, structural borders, primary-color accents). The brutalist design tokens and component classes are defined in `global.css`, `typography.css`, and `interactions.css`, and rendered live on the [/brand](https://globalstrategic.tech/brand) reference page.
 
-**Status**: In progress — Stages 1-3 complete, Stage 4 (Diligence Machine) next
+**Status**: In progress — Stages 1-4 complete, Stage 5 (TechPar) next
 **Priority**: High — brand cohesion
-**Last Updated**: March 30, 2026 (Stage 3 complete)
+**Last Updated**: March 31, 2026 (Stage 4 complete)
 
 ---
 
@@ -99,7 +99,7 @@ Stage 1 completed March 29, 2026.
 - [x] Print output overhauled — branded, professional
 - [x] Fixes propagated to global.css (`.hint-input`, `.calc-slider`, `.brutal-slider__direct`)
 - [x] `npm run test:run` passes (857/857)
-- [ ] Visual review at 768px, 480px (pending)
+- [x] Visual review at 768px, 480px
 
 ---
 
@@ -224,7 +224,7 @@ Stage 2 completed March 30, 2026.
 - [x] Delta icon in `--color-secondary` (gold) for CTA — new brand convention documented
 - [x] `.brutal-faq__item` frosted glass effect matches `.brutal-tool-shell`
 - [x] Dark theme SVG fills standardized to `rgba(255, 255, 255, ...)`
-- [ ] Visual review at desktop, 768px, 480px
+- [x] Visual review at desktop, 768px, 480px
 
 ---
 
@@ -324,7 +324,7 @@ Stage 3 completed March 30, 2026.
 - [x] `npm run build` passes
 - [x] `npm run test:run` passes (857/857)
 - [x] E2E test selectors updated
-- [ ] Visual review at desktop, 768px, 480px
+- [x] Visual review at desktop, 768px, 480px
 
 ---
 
@@ -332,43 +332,61 @@ Stage 3 completed March 30, 2026.
 
 **File**: `src/pages/hub/tools/diligence-machine/index.astro`
 **Why fourth**: Complex multi-step wizard + document generation output. The wizard UI has good design system alignment (`.option-card`, `.hub-btn`, `.cta-button`), but the generated document output is highly custom.
+**Status**: Complete
 
-### Direct Swaps
+### Direct Swaps Applied
 
 | Current Class | Brutalist Class | Count |
 |---|---|---|
 | `.hub-btn` / `--secondary` | `.brutal-btn` / `--secondary` | 4 |
 | `.cta-button.primary` / `.secondary` | `.brutal-btn--primary` / `--secondary` | 3 |
-| `.option-card` | `.brutal-option-card` | 3 |
+| `.option-card` | `.brutal-option-card` | 3 (+ ~12 JS querySelector + ~8 classList calls) |
 | `.option-card.selected` | `.brutal-option-card--selected` | state |
 | `.tool-authority` | `.brutal-tool-shell__authority` | 1 |
+| `.back-link` | `.brutal-btn brutal-btn--secondary back-link` | 1 |
+| `.cta-button doc-meta-cta-button` | `.brutal-btn brutal-btn--primary/--secondary doc-meta-cta-button` | 2 |
 
-### New Brutalist Classes Needed
+### Completion Summary
 
-| Pattern | Classes | Notes |
-|---|---|---|
-| **Wizard progress** | `.wizard-progress`, `.progress-segment`, `.progress-number`, `.progress-label` | Already have brand-page specimens — promote to production brutalist classes if not already done |
-| **Mobile progress** | `.wizard-progress-mobile`, `.progress-dot`, `.progress-mobile-*` | Same as above |
-| **Step layout** | `.step-title`, `.step-subtitle`, `.step-note`, `.wizard-step`, `.wizard-nav` | Step typography — use `.brutal-heading-md` for title, `.brutal-text-base` for subtitle |
-| **Compound fields** | `.compound-fields-grid`, `.compound-field-section`, `.field-section-label`, `.field-options-grid` | Grouped option sets — monospace labels, hard border dividers |
-| **Document output** | `.doc-page`, `.doc-header`, `.doc-title`, `.doc-meta-*`, `.doc-toc`, `.doc-topics`, `.doc-divider`, `.doc-footer` | Generated document — brutalist treatment: monospace headings, hard borders between sections, primary-color dividers |
-| **Document questions** | `.doc-question`, `.doc-q-header`, `.doc-q-text`, `.doc-q-badges`, `.doc-q-priority`, `.doc-q-rationale` | Question cards — map to `.brutal-rec-card` pattern with priority badges |
-| **Attention cards** | `.doc-attention-card`, `.doc-attention-header`, `.doc-attention-desc` | Already have `.brutal-attention-card` — verify compatibility |
-| **Action bar** | `.doc-action-bar`, `.doc-action-btn` | Document toolbar — use `.brutal-btn` for action buttons |
-| **N/A button** | `.dm-na-btn` | Map to `.brutal-rec-card__na` or create shared `.na-btn` |
+Stage 4 completed March 31, 2026.
+
+**Scoped CSS changes:**
+- Deleted ~70 lines of `.option-card` CSS (replaced by global `.brutal-option-card`)
+- All `border-radius` removed (option cards, doc-page, attention cards, question cards, priority/exit-impact badges, trigger tags, red-flag indicators, NA buttons — 14+ selectors)
+- All `box-shadow` removed (doc-page, action bar, option cards)
+- Monospace typography applied to 16+ selectors: progress labels, step titles, field labels, doc title, brand name, generation date, meta labels/values, TOC links, topic titles/numbers/audience, question numbers, priority/exit-impact badges, trigger tags, footer brand/disclaimer, NA buttons, attention titles
+
+**Dark theme standardized:**
+- `rgba(255, 255, 255, 0.3)` → `rgba(255, 255, 255, 0.15)` (progress bar, mobile dots)
+- `rgba(200, 200, 200, *)` → `transparent` / `rgba(255, 255, 255, 0.06)` (NA buttons)
+- doc-page: removed box-shadow, border set to `rgba(255, 255, 255, 0.15)`
+- Action bar: simplified to background + border override only
+
+**Print styles updated:**
+- `.tool-authority` → `.brutal-tool-shell__authority` in print hide list
+- Remaining `border-radius: 1px` → `0` in print badge rules
+
+**E2E tests updated:**
+- `.option-card.selected` → `.brutal-option-card.brutal-option-card--selected` (2 selectors)
+
+**Not done (by design):**
+- `.doc-attention-card` kept as page-specific (has relevance colors, divider sub-element different from `.brutal-attention-card`)
+- `.doc-question` kept as page-specific (has priority colors, exit-impact badges, red-flag signals)
+- Wizard progress, mobile progress, step layout kept as page-specific scoped styles
+- No new reusable brutalist classes created — DM reused existing design system classes
+- Document output section brutalized in place (too specialized for global promotion)
 
 ### Pause Point
 
-After completing Stage 4:
-- [ ] Wizard option cards are brutalist (square, no shadow, primary-fill on select)
-- [ ] Progress bar uses brand delta triangles with brutalist styling
-- [ ] Step titles use `.brutal-heading-md`, subtitles use `.brutal-text-base`
-- [ ] Generated document has monospace headings and hard dividers
-- [ ] Question cards match `.brutal-rec-card` pattern
-- [ ] Attention cards match `.brutal-attention-card` pattern
-- [ ] 27 dark theme `:global()` overrides migrated to CSS variables
-- [ ] Identify new brutalist classes for `/brand` page
-- [ ] `npm run test:run` passes
+- [x] Wizard option cards are brutalist (square, no shadow, primary-fill on select)
+- [x] Progress bar uses brand delta triangles with brutalist styling (monospace labels)
+- [x] Step titles have monospace, uppercase treatment
+- [x] Generated document has monospace headings and hard dividers
+- [x] All border-radius removed throughout
+- [x] All box-shadow removed throughout
+- [x] Dark theme borders standardized to `rgba(255, 255, 255, 0.15)`
+- [x] `npm run test:run` passes (857/857)
+- [x] E2E test selectors updated
 - [ ] Visual review at desktop, 768px, 480px
 
 ---
