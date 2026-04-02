@@ -42,6 +42,7 @@ Each stage migrates a logical group of related pages/components. Between stages,
 5. **Print styles**: add branded header/footer (GST delta icon + title + generated date) to every content page
 6. **Brand page specimens**: every brutalized control — whether a new `.brutal-*` class or an existing selector that received brutalist properties (monospace, structural borders, variable colors) — gets a rendered specimen on `/brand` (`src/pages/brand.astro`). This applies retroactively to completed stages
 7. **Test updates**: grep `tests/` for every changed class name before committing
+8. **Shared over scoped**: brutalist typography and interaction patterns should be promoted to reusable `.brutal-*` classes in `global.css` rather than applied inline to element selectors. Page-specific patterns may remain scoped when they have a single consumer — but should be promoted to shared classes if a second consumer emerges
 
 ### Migration Order (simplest -> most complex)
 
