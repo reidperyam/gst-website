@@ -2,7 +2,7 @@
 
 Extend the brutalist design system — established during the [Hub Tools migration](./HUB_TOOLS_BRUTALIST_MIGRATION.md) — to all remaining marketing pages, site chrome, shared components, and content pages. The brutalist tokens and component classes live in `global.css`, `typography.css`, and `interactions.css`, rendered live on the [/brand](https://globalstrategic.tech/brand) reference page.
 
-**Status**: In Progress (Stages 1-2 Complete)
+**Status**: In Progress (Stages 1-3 Complete)
 **Priority**: High — brand cohesion + technical debt reduction
 **Prerequisite**: Hub Tools Brutalist Migration (Complete)
 **Last Updated**: April 2, 2026
@@ -50,7 +50,7 @@ Each stage migrates a logical group of related pages/components. Between stages,
 |-------|-------|-----------|--------------|-----------|-----------------|--------|
 | 1 | ~~Site Chrome (Header, Footer, Breadcrumb, ThemeToggle)~~ | ~~48 lines~~ | ~~0~~ | ~~0~~ | ~~0~~ | ~~Complete~~ |
 | 2 | ~~Shared Components (Hero, CTASection, StatsBar) + global.css marketing sections~~ | ~~0 scoped + ~200 global~~ | ~~0~~ | ~~0~~ | ~~3 (hero text)~~ | ~~Complete~~ |
-| 3 | Legal & Error (Privacy, Terms, 404) | ~90 lines | 0 | 0 | 2 | Low |
+| 3 | ~~Legal & Error (Privacy, Terms, 404)~~ | ~~90 lines~~ | ~~0~~ | ~~0~~ | ~~2~~ | ~~Complete~~ |
 | 4 | Homepage Sections (WhoWeSupport, WhatWeDo, WhyClientsTrustUs, EngagementFlow) | ~297 lines | 6 | 6 | 3 | Medium |
 | 5 | About & Services Pages | ~344 lines | 6 | 3 | 4 | Medium-High |
 | 6 | Hub Gateways & Library (hub/index, library/index, tools/index, VDR Structure, Business Architectures) | ~232 lines | 7 | 3 | 4 | Medium |
@@ -197,15 +197,24 @@ Already uses only the Hero component — brutalized automatically by Stage 2. Ve
 
 ### Pause Point Checklist
 
-- [ ] Privacy and Terms pages render in monospace
-- [ ] No hardcoded color values remain
-- [ ] Dark theme borders use standardized opacity
-- [ ] 404 page renders correctly with brutalist Hero
-- [ ] Print styles added for legal pages
-- [ ] `npm run build` passes
-- [ ] `npm run test:run` passes
-- [ ] Visual review at desktop, 768px, 480px
-- [ ] Brutalized controls added to `/brand` page as specimens (legal headings, legal body text, legal section dividers)
+- [x] Privacy and Terms pages render in monospace
+- [x] No hardcoded color values remain
+- [x] Dark theme borders use standardized opacity (`rgba(255, 255, 255, 0.15)`)
+- [x] 404 page renders correctly with brutalist Hero (no changes needed — uses Hero component)
+- [x] Print styles added for legal pages (branded header with delta icon + title + date)
+- [x] `npm run build` passes
+- [x] `npm run test:run` passes
+- [x] Visual review at desktop, 768px, 480px
+- [x] Brutalized controls added to `/brand` page as specimens (legal headings, legal body text, contact section)
+
+### Additional Notes
+
+- Hardcoded `rgba(5, 205, 153, 0.3)` link underlines replaced with `2px solid transparent` → primary reveal on hover (brutalist underline-reveal pattern)
+- Hardcoded `rgba(5, 205, 153, 0.05)` contact section background replaced with `transparent`
+- Hardcoded `rgba(245, 245, 245, 0.1)` dark theme border replaced with `rgba(255, 255, 255, 0.15)`
+- Hardcoded `0.2s` transition replaced with `var(--transition-fast)`
+- 404 page required no changes — it only uses the Hero component (brutalized in Stage 2)
+- Legal page typography is scoped (single-consumer per principle #8) — no shared classes created
 
 ---
 
