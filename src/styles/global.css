@@ -596,7 +596,6 @@ a:hover {
 .hero h1 {
     font-size: 6rem;
     font-weight: 900;
-    font-family: monospace;
     line-height: 0.95;
     color: var(--text-primary);
     text-transform: uppercase;
@@ -629,7 +628,6 @@ html.dark-theme .hero h1 .highlight {
 
 .hero p {
     font-size: 1.5rem;
-    font-family: monospace;
     color: var(--text-secondary);
     line-height: 1.6;
     font-weight: 400;
@@ -675,14 +673,9 @@ html.dark-theme .hero p .highlight {
 
 .trust-line {
     font-size: 0.9rem;
-    font-family: monospace;
     color: var(--text-muted);
     font-weight: 500;
     letter-spacing: 0.05em;
-}
-
-html.dark-theme .trust-line {
-    color: var(--text-dark-muted);
 }
 
 .cta-button {
@@ -771,7 +764,6 @@ html.dark-theme .trust-line {
 .stat-value {
     font-size: 3.5rem;
     font-weight: 900;
-    font-family: monospace;
     color: var(--bg-dark);
     line-height: 1;
     margin-bottom: 0.5rem;
@@ -779,7 +771,6 @@ html.dark-theme .trust-line {
 
 .stat-label {
     font-size: 0.85rem;
-    font-family: monospace;
     color: var(--bg-dark);
     font-weight: 700;
     text-transform: uppercase;
@@ -1239,15 +1230,12 @@ html.dark-theme .footer-links a:hover {
 
 .cta-box h2 {
     font-size: 2.5rem;
-    font-family: monospace;
     color: var(--text-primary);
-    text-transform: uppercase;
     margin-bottom: 1.5rem;
     font-weight: 600;
 }
 
 .cta-box p {
-    font-family: monospace;
     color: var(--text-secondary);
     font-size: 1.15rem;
     margin-bottom: 2.5rem;
@@ -3020,6 +3008,51 @@ html.dark-theme .brutal-slider__input::-moz-range-track {
 
 html.dark-theme .brutal-slider__direct {
     border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==============================
+   Brutalist Hero
+   ============================== */
+
+.brutal-hero__title {
+    font-family: monospace;
+}
+
+.brutal-hero__description {
+    font-family: monospace;
+}
+
+.brutal-hero__trustline {
+    font-family: monospace;
+}
+
+html.dark-theme .brutal-hero__trustline {
+    color: var(--text-dark-muted);
+}
+
+/* ==============================
+   Brutalist Stat
+   ============================== */
+
+.brutal-stat__value {
+    font-family: monospace;
+}
+
+.brutal-stat__label {
+    font-family: monospace;
+}
+
+/* ==============================
+   Brutalist CTA
+   ============================== */
+
+.brutal-cta__title {
+    font-family: monospace;
+    text-transform: uppercase;
+}
+
+.brutal-cta__description {
+    font-family: monospace;
 }
 
 /* ==============================
