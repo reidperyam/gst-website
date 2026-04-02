@@ -761,11 +761,6 @@ html.dark-theme .trust-line {
 .stat-item {
     text-align: center;
     padding: 2rem;
-    border-right: 2px solid var(--color-primary);
-}
-
-.stat-item:last-child {
-    border-right: none;
 }
 
 .stat-value {
@@ -1128,7 +1123,7 @@ html.dark-theme .hero p {
 
 /* Dark Theme - Stats */
 html.dark-theme .stat-item {
-    border-right-color: var(--stat-item-border);
+    border-right-color: transparent;
 }
 
 html.dark-theme .stat-value {
@@ -1456,16 +1451,6 @@ html.dark-theme .cta-box p {
 
     .stat-item {
         padding: 1.75rem 1.25rem;
-        border-right: 1px solid rgba(0, 0, 0, 0.15);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    }
-
-    .stat-item:nth-child(2n) {
-        border-right: none;
-    }
-
-    .stat-item:nth-last-child(-n+2) {
-        border-bottom: none;
     }
 
     .stat-value {
@@ -5266,11 +5251,6 @@ html.dark-theme .filter-drawer-demo {
 .stat-item {
     text-align: center;
     padding: 1.5rem 1rem;
-    border-right: 2px solid rgba(0, 0, 0, 0.1);
-}
-
-.stat-item:last-child {
-    border-right: none;
 }
 
 .stat-value {
@@ -5334,15 +5314,6 @@ html.dark-theme .cta-box {
 
     .stats-grid {
         grid-template-columns: 1fr;
-    }
-
-    .stat-item {
-        border-right: none;
-        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .stat-item:last-child {
-        border-bottom: none;
     }
 
     .stat-value {
