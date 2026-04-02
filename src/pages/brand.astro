@@ -1098,24 +1098,24 @@ trackPageView('brand', 'Brand Style Reference');
     <h4 class="label brand-subgroup-title">Hero Title</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
-        <span style="font-size:3rem;font-weight:900;font-family:monospace;color:var(--text-primary);text-transform:uppercase;letter-spacing:-0.04em;line-height:0.95;" data-specimen>Technology Advisory</span>
-        <code class="brand-code">.hero h1 — monospace, 900 weight, var(--text-primary), uppercase</code>
+        <span class="brutal-hero__title" style="font-size:3rem;font-weight:900;letter-spacing:-0.04em;line-height:0.95;" data-specimen>Technology Advisory</span>
+        <code class="brand-code">.brutal-hero__title — monospace, uppercase (pair with .hero h1 for size/weight)</code>
       </div>
     </div>
 
     <h4 class="label brand-subgroup-title">Hero Description</h4>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
-        <span style="font-size:1.25rem;font-family:monospace;color:var(--text-secondary);line-height:1.6;font-weight:400;" data-specimen>GST partners with private equity firms to evaluate, stabilize, and scale the technology assets inside their portfolio companies.</span>
-        <code class="brand-code">.hero p — monospace, var(--text-secondary), 1.6 line-height</code>
+        <span class="brutal-hero__description" style="font-size:1.25rem;line-height:1.6;font-weight:400;" data-specimen>GST partners with private equity firms to evaluate, stabilize, and scale the technology assets inside their portfolio companies.</span>
+        <code class="brand-code">.brutal-hero__description — monospace (pair with .hero p for size/color)</code>
       </div>
     </div>
 
     <h4 class="label brand-subgroup-title">Trust Line</h4>
     <div class="brand-component-row">
       <div class="brand-component-item">
-        <span style="font-size:0.9rem;font-family:monospace;color:var(--text-muted);font-weight:500;letter-spacing:0.05em;" data-specimen>Trusted by PE firms managing $50B+ in assets</span>
-        <code class="brand-code">.trust-line — monospace, var(--text-muted), 500 weight</code>
+        <span class="brutal-hero__trustline" style="font-size:0.9rem;" data-specimen>Trusted by PE firms managing $50B+ in assets</span>
+        <code class="brand-code">.brutal-hero__trustline — monospace, var(--text-muted), 500 weight</code>
       </div>
     </div>
 
@@ -1124,15 +1124,15 @@ trackPageView('brand', 'Brand Style Reference');
       <div class="brand-component-item">
         <div style="background:var(--color-primary);padding:1.5rem 2rem;display:flex;gap:3rem;">
           <div style="text-align:center;">
-            <div style="font-size:2.5rem;font-weight:900;font-family:monospace;color:var(--bg-dark);line-height:1;margin-bottom:0.35rem;" data-specimen>51</div>
-            <div style="font-size:0.85rem;font-family:monospace;color:var(--bg-dark);font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Projects</div>
+            <div class="brutal-stat__value" style="font-size:2.5rem;font-weight:900;color:var(--bg-dark);line-height:1;margin-bottom:0.35rem;" data-specimen>51</div>
+            <div class="brutal-stat__label" style="font-size:0.85rem;color:var(--bg-dark);font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Projects</div>
           </div>
           <div style="text-align:center;">
-            <div style="font-size:2.5rem;font-weight:900;font-family:monospace;color:var(--bg-dark);line-height:1;margin-bottom:0.35rem;">$2.4B+</div>
-            <div style="font-size:0.85rem;font-family:monospace;color:var(--bg-dark);font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">ARR Evaluated</div>
+            <div class="brutal-stat__value" style="font-size:2.5rem;font-weight:900;color:var(--bg-dark);line-height:1;margin-bottom:0.35rem;">$2.4B+</div>
+            <div class="brutal-stat__label" style="font-size:0.85rem;color:var(--bg-dark);font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">ARR Evaluated</div>
           </div>
         </div>
-        <code class="brand-code">.stat-value / .stat-label — monospace, 900/700 weight, on --color-primary bg</code>
+        <code class="brand-code">.brutal-stat__value / .brutal-stat__label — monospace (pair with .stat-value/.stat-label for size/color)</code>
       </div>
     </div>
 
@@ -1140,11 +1140,11 @@ trackPageView('brand', 'Brand Style Reference');
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
         <div style="border:2px solid var(--color-primary);padding:2rem;max-width:500px;">
-          <div style="font-size:1.75rem;font-family:monospace;color:var(--text-primary);text-transform:uppercase;font-weight:600;margin-bottom:0.75rem;" data-specimen>Ready To Accelerate?</div>
-          <div style="font-family:monospace;color:var(--text-secondary);font-size:1rem;margin-bottom:1.25rem;">Schedule a confidential technology assessment for your next platform investment.</div>
+          <div class="brutal-cta__title" style="font-size:1.75rem;font-weight:600;margin-bottom:0.75rem;" data-specimen>Ready To Accelerate?</div>
+          <div class="brutal-cta__description" style="font-size:1rem;margin-bottom:1.25rem;">Schedule a confidential technology assessment for your next platform investment.</div>
           <a href="#ui-library" class="cta-button" style="font-size:0.85rem;padding:0.75rem 1.5rem;">BOOK_CALENDAR_SLOT()</a>
         </div>
-        <code class="brand-code">.cta-box h2 — monospace, uppercase, var(--text-primary). .cta-box p — monospace, var(--text-secondary)</code>
+        <code class="brand-code">.brutal-cta__title — monospace, uppercase. .brutal-cta__description — monospace</code>
       </div>
     </div>
 
