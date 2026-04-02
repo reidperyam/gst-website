@@ -596,8 +596,9 @@ a:hover {
 .hero h1 {
     font-size: 6rem;
     font-weight: 900;
+    font-family: monospace;
     line-height: 0.95;
-    color: rgba(26, 26, 26, 0.95);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: -0.04em;
     margin-bottom: 0.5rem;
@@ -628,7 +629,8 @@ html.dark-theme .hero h1 .highlight {
 
 .hero p {
     font-size: 1.5rem;
-    color: rgba(26, 26, 26, 0.85);
+    font-family: monospace;
+    color: var(--text-secondary);
     line-height: 1.6;
     font-weight: 400;
 }
@@ -673,6 +675,7 @@ html.dark-theme .hero p .highlight {
 
 .trust-line {
     font-size: 0.9rem;
+    font-family: monospace;
     color: var(--text-muted);
     font-weight: 500;
     letter-spacing: 0.05em;
