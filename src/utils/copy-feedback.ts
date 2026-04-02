@@ -21,14 +21,29 @@ export async function copyWithFeedback(
   },
 ): Promise<void> {
   const target = options?.feedbackTarget ?? button;
-  const original = target.textContent;
   const duration = options?.duration ?? 2000;
   const successLabel = options?.label ?? 'Copied!';
   const failLabel = options?.failLabel ?? 'Failed';
 
+  // Use stored original to survive rapid re-clicks while feedback is showing
+  const DATA_KEY = 'data-copy-original';
+  const WIDTH_KEY = 'data-copy-width';
+  const original = button.getAttribute(DATA_KEY) ?? target.textContent;
+  button.setAttribute(DATA_KEY, original ?? '');
+
+  // Lock the button width so text changes don't resize it
+  if (!button.getAttribute(WIDTH_KEY)) {
+    const w = button.offsetWidth;
+    button.style.width = `${w}px`;
+    button.setAttribute(WIDTH_KEY, `${w}`);
+  }
+
   const reset = () => {
     target.textContent = original;
     if (options?.copiedClass) button.classList.remove(options.copiedClass);
+    button.removeAttribute(DATA_KEY);
+    button.style.width = '';
+    button.removeAttribute(WIDTH_KEY);
   };
 
   if (options?.copiedClass) button.classList.add(options.copiedClass);

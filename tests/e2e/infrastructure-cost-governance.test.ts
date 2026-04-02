@@ -54,7 +54,7 @@ async function answerAllInStep(page: Page, score: number): Promise<void> {
     // Keep clicking unselected buttons until none remain
     for (let safety = 0; safety < 20; safety++) {
       const btns = Array.from(document.querySelectorAll(`[data-score="${s}"]`));
-      const target = btns.find(b => !b.classList.contains('selected')) as HTMLElement | undefined;
+      const target = btns.find(b => !b.classList.contains('brutal-choice-btn--selected')) as HTMLElement | undefined;
       if (!target) break;
       target.click(); // triggers synchronous render() which rebuilds innerHTML
       clicked++;
@@ -107,7 +107,7 @@ test.describe('ICG - Landing page', () => {
 
   test('renders stats row with 6 domains, 20 questions, 5-7 min', async ({ page }) => {
     await gotoTool(page);
-    const stats = await page.$$('.stat-tile');
+    const stats = await page.$$('.brutal-stat-tile');
     expect(stats).toHaveLength(3);
 
     const values = await Promise.all(stats.map(s => s.textContent()));

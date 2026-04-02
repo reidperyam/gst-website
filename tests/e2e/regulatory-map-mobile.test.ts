@@ -34,7 +34,7 @@ async function dismissBottomSheet(page: import('@playwright/test').Page): Promis
   });
   await page.waitForFunction(() => {
     const el = document.getElementById('compliancePanel');
-    return el && !el.classList.contains('bottom-sheet--open');
+    return el && !el.classList.contains('brutal-panel--sheet-open');
   });
 }
 
@@ -56,7 +56,7 @@ async function openBottomSheetFor(page: import('@playwright/test').Page, alpha3:
   // Wait for both the class AND the CSS transform to reach final value
   await page.waitForFunction(() => {
     const el = document.getElementById('compliancePanel');
-    if (!el || !el.classList.contains('bottom-sheet--open')) return false;
+    if (!el || !el.classList.contains('brutal-panel--sheet-open')) return false;
     const transform = window.getComputedStyle(el).transform;
     // translateY(0) computes to 'none' or identity matrix
     return transform === 'none' || transform === 'matrix(1, 0, 0, 1, 0, 0)';
@@ -77,7 +77,7 @@ test.describe('Regulatory Map — Mobile UX', () => {
 
       // Panel should be visible and contain regulation content
       await expect(panel).toBeVisible();
-      const cards = await page.locator('.reg-card').count();
+      const cards = await page.locator('.brutal-reg-card').count();
       expect(cards).toBeGreaterThan(0);
     });
 
@@ -131,16 +131,9 @@ test.describe('Regulatory Map — Mobile UX', () => {
       await expect(actionBtn).toHaveText('View details');
     });
 
-    test('should remove CTA prompt after first tap interaction', async ({ page }) => {
-      // CTA should exist initially
+    test('should not show CTA on mobile (tap bar provides guidance instead)', async ({ page }) => {
+      // CTA is hidden on mobile via CSS — tap bar covers this UX
       const cta = page.locator('#mapCta');
-      await expect(cta).toBeVisible();
-
-      // First tap on a region
-      await clickSvgPath(page, '[data-alpha3="BRA"].country-path--active');
-
-      // CTA should be removed from the DOM
-      await page.waitForFunction(() => !document.getElementById('mapCta'));
       await expect(cta).toBeHidden();
     });
   });
@@ -153,7 +146,7 @@ test.describe('Regulatory Map — Mobile UX', () => {
     });
 
     test('should have all four region buttons', async ({ page }) => {
-      const buttons = page.locator('.quick-zoom-btn');
+      const buttons = page.locator('.brutal-quick-zoom');
       const count = await buttons.count();
       expect(count).toBe(4);
 
@@ -170,7 +163,7 @@ test.describe('Regulatory Map — Mobile UX', () => {
 
       // Click "Europe" quick-zoom — use evaluate for WebKit mobile
       await page.evaluate(() => {
-        (document.querySelector('.quick-zoom-btn[data-region="europe"]') as HTMLElement)?.click();
+        (document.querySelector('.brutal-quick-zoom[data-region="europe"]') as HTMLElement)?.click();
       });
 
       // Wait for D3 zoom transition to change the transform
@@ -184,20 +177,26 @@ test.describe('Regulatory Map — Mobile UX', () => {
     });
   });
 
-  test.describe('4. Zoom Button Touch Targets', () => {
-    test('should have 44px minimum zoom button size for touch accessibility', async ({ page }) => {
-      const zoomIn = page.locator('#zoomIn');
-      const box = await zoomIn.boundingBox();
+  test.describe('4. Zoom Controls on Mobile', () => {
+    test('should hide +/−/reset zoom controls on mobile (quick-zoom provides navigation)', async ({ page }) => {
+      const controls = page.locator('.map-controls');
+      const display = await controls.evaluate(el => window.getComputedStyle(el).display);
+      expect(display).toBe('none');
+    });
+
+    test('should have 32px minimum quick-zoom button size for touch accessibility', async ({ page }) => {
+      const btn = page.locator('.brutal-quick-zoom').first();
+      const box = await btn.boundingBox();
 
       expect(box).not.toBeNull();
-      expect(box!.width).toBeGreaterThanOrEqual(44);
-      expect(box!.height).toBeGreaterThanOrEqual(44);
+      expect(box!.width).toBeGreaterThanOrEqual(32);
+      expect(box!.height).toBeGreaterThanOrEqual(32);
     });
   });
 
   test.describe('5. Legend Positioning', () => {
     test('should render legend inline (not overlapping map) on mobile', async ({ page }) => {
-      const legend = page.locator('.map-legend');
+      const legend = page.locator('.brutal-legend');
       const position = await legend.evaluate(el => window.getComputedStyle(el).position);
 
       // On mobile, legend should be static (inline) not absolute/fixed
@@ -220,14 +219,14 @@ test.describe('Regulatory Map — Mobile UX', () => {
       // Switch to Industry Compliance — Thailand has no industry regs
       // Use evaluate to bypass hit-testing issues on mobile viewport
       await page.evaluate(() => {
-        const chip = document.querySelector('.filter-chip[data-category="industry-compliance"]');
+        const chip = document.querySelector('.brutal-filter-chip[data-category="industry-compliance"]');
         if (chip) (chip as HTMLElement).click();
       });
 
       // Bottom sheet should not reopen — panel must not have the open class
       await page.waitForFunction(() => {
         const el = document.getElementById('compliancePanel');
-        return el && !el.classList.contains('bottom-sheet--open');
+        return el && !el.classList.contains('brutal-panel--sheet-open');
       });
 
       // Selected path highlight should be cleared (region deselected)
