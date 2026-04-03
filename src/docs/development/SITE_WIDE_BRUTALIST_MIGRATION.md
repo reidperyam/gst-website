@@ -2,7 +2,7 @@
 
 Extend the brutalist design system — established during the [Hub Tools migration](./HUB_TOOLS_BRUTALIST_MIGRATION.md) — to all remaining marketing pages, site chrome, shared components, and content pages. The brutalist tokens and component classes live in `global.css`, `typography.css`, and `interactions.css`, rendered live on the [/brand](https://globalstrategic.tech/brand) reference page.
 
-**Status**: In Progress (Stages 1-4 Complete)
+**Status**: In Progress (Stages 1-5 Complete)
 **Priority**: High — brand cohesion + technical debt reduction
 **Prerequisite**: Hub Tools Brutalist Migration (Complete)
 **Last Updated**: April 2, 2026
@@ -52,7 +52,7 @@ Each stage migrates a logical group of related pages/components. Between stages,
 | 2 | ~~Shared Components (Hero, CTASection, StatsBar) + global.css marketing sections~~ | ~~0 scoped + ~200 global~~ | ~~0~~ | ~~0~~ | ~~3 (hero text)~~ | ~~Complete~~ |
 | 3 | ~~Legal & Error (Privacy, Terms, 404)~~ | ~~90 lines~~ | ~~0~~ | ~~0~~ | ~~2~~ | ~~Complete~~ |
 | 4 | ~~Homepage Sections (WhoWeSupport, WhatWeDo, WhyClientsTrustUs, EngagementFlow)~~ | ~~297 lines~~ | ~~6~~ | ~~6~~ | ~~3~~ | ~~Complete~~ |
-| 5 | About & Services Pages | ~344 lines | 6 | 3 | 4 | Medium-High |
+| 5 | ~~About & Services Pages~~ | ~~344 lines~~ | ~~6~~ | ~~3~~ | ~~4~~ | ~~Complete~~ |
 | 6 | Hub Gateways & Library (hub/index, library/index, tools/index, VDR Structure, Business Architectures) | ~232 lines | 7 | 3 | 4 | Medium |
 | 7 | Radar Feed (CategoryFilter, FyiItem, WireItem, RadarFeed, RadarHeader) | ~140+ lines | 2 | 0 | 4 | Medium |
 | 8 | M&A Portfolio (PortfolioGrid, PortfolioHeader, PortfolioSummary, StickyControls, ProjectModal) | ~500+ lines | 0 | 3+ | 4+ | High |
@@ -335,18 +335,25 @@ Already uses only the Hero component — brutalized automatically by Stage 2. Ve
 
 ### Pause Point Checklist
 
-- [ ] Founder bio card has square corners, hard borders, no shadow
-- [ ] Portrait image is square-cropped (no radius)
-- [ ] Service cards use brutalist hover (border-color, not shadow)
-- [ ] FAQ accordion uses `.brutal-faq` classes
-- [ ] All hardcoded colors replaced with variables
-- [ ] All transitions use design system variables
-- [ ] Dark theme complete — no missing overrides
-- [ ] Print styles added for both pages
-- [ ] `npm run build` passes
-- [ ] `npm run test:run` passes
-- [ ] Visual review at desktop, 768px, 480px
-- [ ] Brutalized controls added to `/brand` page as specimens (founder bio card, service cards, FAQ accordion)
+- [x] Founder bio card has square corners, hard borders, no shadow
+- [x] Portrait image is square-cropped (no radius)
+- [x] Service cards use brutalist hover (border-color, not shadow)
+- [x] FAQ accordion brutalized (no radius, 2px border, primary border on open, monospace)
+- [x] All hardcoded colors replaced with variables
+- [x] All transitions use design system variables
+- [x] Dark theme complete — borders at `rgba(255, 255, 255, 0.15)`
+- [x] Print styles added for both pages
+- [x] `npm run build` passes
+- [x] `npm run test:run` passes
+- [x] Visual review at desktop, 768px, 480px
+- [x] Brutalized controls added to `/brand` page as specimens (service card, FAQ accordion, founder bio card)
+
+### Additional Notes
+
+- About page: ~12 hardcoded `rgba(5,205,153,...)` values replaced, 2 `border-radius` removed (4px founder image, 8px experience cards), 1 `box-shadow` removed, 2 hardcoded `0.3s` transitions replaced
+- Services page: ~12 hardcoded `rgba(5,205,153,...)` values replaced, 3 `border-radius` removed (8px service cards, FAQ items), 2 `box-shadow` removed, 2 hardcoded transitions replaced
+- FAQ styled in-place (scoped, single-consumer per principle #8) rather than mapping to `.brutal-faq` — the Services FAQ has different structure than the RegMap `.brutal-faq` (no category grouping, different padding/spacing)
+- Signature image kept as-is per migration doc (organic element)
 
 ---
 
