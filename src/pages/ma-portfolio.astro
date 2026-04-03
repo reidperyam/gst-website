@@ -48,16 +48,16 @@ const portfolioType = 'ma';
   </div>
 
   <StickyControls projects={typedProjects} />
-  <main>
+  <div class="portfolio-content">
     <PortfolioHeader portfolioType={portfolioType} projects={typedProjects} />
     <PortfolioSummary />
     <StatsBar stats={stats} />
     <PortfolioGrid projects={typedProjects} />
-  </main>
+  </div>
 </BaseLayout>
 
 <style>
-  main {
+  .portfolio-content {
     min-height: 100vh;
   }
 
