@@ -283,6 +283,9 @@ const faqItems = [
 
     .audience-card {
         padding: 2rem;
+        background: rgba(0, 0, 0, 0.005);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
         border-left: 3px solid var(--color-primary);
     }
 
@@ -301,6 +304,10 @@ const faqItems = [
         color: var(--text-secondary);
         line-height: 1.7;
         margin: 0;
+    }
+
+    :global(html.dark-theme) .audience-card {
+        background: rgba(255, 255, 255, 0.005);
     }
 
     @media (max-width: 1024px) {
@@ -463,13 +470,14 @@ const faqItems = [
     }
 
     .faq-item {
-        background: transparent;
+        background: rgba(0, 0, 0, 0.005);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
         border: 2px solid var(--border-light);
         transition: background var(--transition-normal), border-color var(--transition-normal);
     }
 
     .faq-item[open] {
-        background: transparent;
         border-color: var(--color-primary);
     }
 
@@ -526,12 +534,11 @@ const faqItems = [
     }
 
     :global(html.dark-theme) .faq-item {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.005);
         border-color: rgba(255, 255, 255, 0.15);
     }
 
     :global(html.dark-theme) .faq-item[open] {
-        background: transparent;
         border-color: var(--color-primary);
     }
 
