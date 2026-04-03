@@ -1613,23 +1613,24 @@ main {
 
 /* Shared Filter Control Styles */
 
-/* Filter Chip - Base Styles */
+/* Filter Chip - Base Styles (canonical definition — see also .brutal-filter-chip) */
 .filter-chip {
     padding: 0.5rem 1rem;
-    background: rgba(26, 26, 26, 0.05);
-    color: rgba(26, 26, 26, 0.7);
-    border: 1px solid rgba(26, 26, 26, 0.1);
+    background: var(--filter-chip-bg, rgba(26, 26, 26, 0.05));
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
     cursor: pointer;
-    font-size: 0.8125rem;
+    font-family: monospace;
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--transition-fast);
     user-select: none;
 }
 
 .filter-chip:hover {
-    background: rgba(26, 26, 26, 0.08);
+    background: var(--filter-chip-bg-hover, rgba(26, 26, 26, 0.08));
     border-color: var(--color-primary);
     color: var(--color-primary);
 }
@@ -1638,7 +1639,6 @@ main {
     background: var(--color-primary);
     color: var(--bg-light);
     border-color: var(--color-primary);
-    transition: all var(--transition-normal);
 }
 
 /* Search Input - Base Styles */
@@ -3052,6 +3052,30 @@ html.dark-theme .brutal-slider__direct {
 
 html.dark-theme .brutal-frosted {
     background: rgba(255, 255, 255, 0.005);
+}
+
+/* Heavy variant — controls, drawers, sticky bars that need readable
+   content over blurred background. Higher opacity + stronger blur. */
+.brutal-frosted--heavy {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+html.dark-theme .brutal-frosted--heavy {
+    background: rgba(20, 20, 20, 0.6);
+}
+
+/* Overlay variant — drawers/panels that slide over content.
+   Higher opacity than heavy for readability. */
+.brutal-frosted--overlay {
+    background: rgba(245, 245, 245, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+html.dark-theme .brutal-frosted--overlay {
+    background: rgba(20, 20, 20, 0.92);
 }
 
 /* ==============================
@@ -5105,31 +5129,14 @@ html.dark-theme .teaser-card {
     color: var(--text-faded);
 }
 
-/* ── Filter Chips (current specimen) ──────────────── */
+/* ── Filter Chips (layout container) ──────────────── */
 .filter-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
 }
 
-.filter-chip {
-    padding: 0.5rem 1rem;
-    background: var(--filter-chip-bg, rgba(26, 26, 26, 0.05));
-    color: var(--text-secondary);
-    border: 1px solid transparent;
-    cursor: pointer;
-    font-family: monospace;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: all var(--transition-fast);
-    user-select: none;
-}
-
-.filter-chip:hover {
-    background: var(--filter-chip-bg-hover, rgba(26, 26, 26, 0.08));
-    border-color: var(--color-primary);
-}
+/* .filter-chip base defined above in "Shared Filter Control Styles" */
 
 .filter-chip--active {
     background: var(--color-primary);

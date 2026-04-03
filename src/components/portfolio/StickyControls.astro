@@ -25,7 +25,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
 <!-- Fixed Controls - Positioned independently at viewport level -->
 <div class="sticky-controls-overlay">
-  <div class="portfolio-controls-fixed">
+  <div class="portfolio-controls-fixed brutal-frosted--heavy">
     <div class="controls-wrapper brutal-frosted">
       <div class="search-box">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -69,9 +69,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
   /* Fixed Search/Filter Controls */
   .portfolio-controls-fixed {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-bottom: none;
     padding: 0;
     height: auto;
@@ -164,9 +161,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     top: 80px;
     width: 350px;
     height: calc(100vh - 80px);
-    background: rgba(245, 245, 245, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-left: 2px solid var(--color-primary);
     transition: right var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 10001;
@@ -328,16 +322,14 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   /* Dark Theme */
-  :global(html.dark-theme) .portfolio-controls-fixed {
-    background: rgba(20, 20, 20, 0.6);
-  }
+  /* dark theme frosted glass handled by .brutal-frosted--heavy */
 
   :global(html.dark-theme) .controls-wrapper {
     border-bottom-color: var(--color-primary);
   }
 
+  /* dark theme frosted glass handled by .brutal-frosted--overlay */
   :global(html.dark-theme) .portfolio-filter-drawer {
-    background: rgba(20, 20, 20, 0.92);
     border-left-color: var(--color-primary);
   }
 

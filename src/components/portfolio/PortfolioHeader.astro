@@ -46,7 +46,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       </div>
 
       <!-- Search and Filter Controls (Fixed) -->
-      <div class="portfolio-controls-fixed">
+      <div class="portfolio-controls-fixed brutal-frosted--heavy">
         <div class="controls-wrapper brutal-frosted">
           <div class="search-box">
             <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -78,7 +78,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   </div>
 
   <!-- Filter Drawer (Slide-out) -->
-  <div id="filter-drawer" class="filter-drawer portfolio-filter-drawer brutal-frosted" data-testid="portfolio-filter-drawer">
+  <div id="filter-drawer" class="filter-drawer portfolio-filter-drawer brutal-frosted--overlay" data-testid="portfolio-filter-drawer">
     <div class="drawer-header">
       <h2 class="drawer-title">FILTERS</h2>
       <button id="drawer-close" class="drawer-close" aria-label="Close filters" data-testid="portfolio-drawer-close">
@@ -168,9 +168,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   .portfolio-controls-fixed {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-bottom: none;
     padding: 0;
     height: auto;
@@ -320,9 +317,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   /* Dark Theme Component Overrides */
-  :global(html.dark-theme) .portfolio-controls-fixed {
-    background: rgba(20, 20, 20, 0.6);
-  }
+  /* dark theme frosted glass handled by .brutal-frosted--heavy */
 
   :global(html.dark-theme) .portfolio-controls-fixed .container {
     background: transparent;
@@ -332,8 +327,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     border-bottom-color: var(--color-primary);
   }
 
+  /* dark theme frosted glass handled by .brutal-frosted--overlay */
   :global(html.dark-theme) .portfolio-filter-drawer {
-    background: rgba(20, 20, 20, 0.92);
     border-left-color: var(--color-primary);
   }
 
