@@ -2,7 +2,7 @@
 
 Extend the brutalist design system — established during the [Hub Tools migration](./HUB_TOOLS_BRUTALIST_MIGRATION.md) — to all remaining marketing pages, site chrome, shared components, and content pages. The brutalist tokens and component classes live in `global.css`, `typography.css`, and `interactions.css`, rendered live on the [/brand](https://globalstrategic.tech/brand) reference page.
 
-**Status**: In Progress (Stages 1-8 Complete)
+**Status**: Complete (All 9 Stages)
 **Priority**: High — brand cohesion + technical debt reduction
 **Prerequisite**: Hub Tools Brutalist Migration (Complete)
 **Last Updated**: April 2, 2026
@@ -56,7 +56,7 @@ Each stage migrates a logical group of related pages/components. Between stages,
 | 6 | ~~Hub Gateways & Library (hub/index, library/index, tools/index, VDR Structure, Business Architectures)~~ | ~~232 lines~~ | ~~7~~ | ~~3~~ | ~~4~~ | ~~Complete~~ |
 | 7 | ~~Radar Feed (CategoryFilter, FyiItem, WireItem, RadarFeed, RadarHeader)~~ | ~~140+ lines~~ | ~~2~~ | ~~0~~ | ~~4~~ | ~~Complete~~ |
 | 8 | ~~M&A Portfolio (PortfolioGrid, PortfolioHeader, PortfolioSummary, StickyControls, ProjectModal)~~ | ~~500+ lines~~ | ~~0~~ | ~~3+~~ | ~~4+~~ | ~~Complete~~ |
-| 9 | Hub Tools Carryover Audit | 0 | 0 | 0 | 0 | Low |
+| 9 | ~~Hub Tools Carryover Audit~~ | ~~0~~ | ~~0~~ | ~~0~~ | ~~0~~ | ~~Complete~~ |
 
 ---
 
@@ -576,13 +576,20 @@ Already uses only the Hero component — brutalized automatically by Stage 2. Ve
 
 ### Pause Point Checklist
 
-- [ ] TDC scoped selectors reviewed — promoted or confirmed as single-consumer
-- [ ] DM scoped selectors reviewed — promoted or confirmed as single-consumer
-- [ ] Brand page specimens verified for all 5 Hub Tools
-- [ ] `.cta-button` / `.brutal-btn` relationship documented or consolidated
-- [ ] `npm run build` passes
-- [ ] `npm run test:run` passes
-- [ ] Visual review of all 5 Hub Tools at desktop, 768px, 480px
+- [x] TDC scoped selectors reviewed — all 17 confirmed as single-consumer (no shared equivalents exist)
+- [x] DM scoped selectors reviewed — all 23 confirmed as single-consumer (no shared equivalents exist)
+- [x] Brand page specimens verified for all 5 Hub Tools (HT-2 RegMap, HT-3 ICG, HT-5 TechPar have specimens; HT-1 TDC and HT-4 DM correctly have no specimens — they created no reusable classes)
+- [x] `.cta-button` / `.brutal-btn` relationship documented — intentionally distinct (CTA = hero/spacious/motion; brutal-btn = compact/utility/uppercase). Cross-reference comments added in global.css
+- [x] `npm run build` passes
+- [x] `npm run test:run` passes
+- [x] Visual review of all 5 Hub Tools at desktop, 768px, 480px
+
+### Audit Findings
+
+- **TDC (17 selectors)**: All unique — result display (clamp font-size), deploy buttons, slider values, currency select are TDC-specific calculation UI with no cross-component reuse path. `.deploy-hint` noted in migration doc does not exist in code (documentation error)
+- **DM (23 selectors)**: All unique — document generation output uses `:global()` wrappers for dynamically injected HTML. `.doc-trigger-tag` noted in migration doc should be `.doc-q-trigger-tag` (documentation error)
+- **`.cta-button` vs `.brutal-btn`**: Serve different design intents — `.cta-button` is 0.95rem with spacious padding and translateX hover; `.brutal-btn` is 0.7rem uppercase with compact padding. Both correctly coexist
+- **Brand page**: HT-2 (RegMap), HT-3 (ICG), HT-5 (TechPar) have specimens from their respective stages. HT-1 (TDC) and HT-4 (DM) correctly have no brand specimens — they reused existing classes without creating new shared patterns
 
 ---
 

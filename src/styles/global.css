@@ -678,6 +678,9 @@ html.dark-theme .hero p .highlight {
     letter-spacing: 0.05em;
 }
 
+/* CTA Button — hero/primary call-to-action for marketing pages.
+   Spacious padding, larger text, translateX hover motion.
+   Distinct from .brutal-btn (compact utility button for tool UIs). */
 .cta-button {
     display: inline-block;
     background: var(--color-primary);
@@ -1829,7 +1832,9 @@ html.dark-theme .filter-drawer {
 }
 
 /* ==============================
-   Brutalist Button Variants
+   Brutalist Button Variants — compact utility buttons for tool UIs.
+   Smaller text, uppercase, tight padding. Distinct from .cta-button
+   (spacious hero/primary CTA for marketing pages).
    ============================== */
 
 .brutal-btn {
