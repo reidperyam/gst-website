@@ -5390,6 +5390,123 @@ html.dark-theme .cta-box {
     }
 }
 
+/* ==============================
+   Legal Page Layout (Privacy, Terms)
+   ============================== */
+
+.legal-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+.legal-page-header {
+    position: static !important;
+    top: auto;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-light);
+    background: transparent;
+}
+
+.legal-page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: monospace;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.legal-page-updated {
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: var(--text-muted);
+}
+
+.legal-page-body {
+    line-height: 1.8;
+    font-family: monospace;
+    color: var(--text-secondary);
+}
+
+.legal-page-body h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: monospace;
+    text-transform: uppercase;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.legal-page-body p {
+    margin-bottom: 1rem;
+}
+
+.legal-page-body ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-page-body li {
+    margin-bottom: 0.75rem;
+}
+
+.legal-page-body a {
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--transition-fast);
+}
+
+.legal-page-body a:hover {
+    border-bottom-color: var(--color-primary);
+}
+
+.legal-contact-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: transparent;
+    border-left: 3px solid var(--color-primary);
+}
+
+.legal-contact-section h2 {
+    margin-top: 0;
+}
+
+html.dark-theme .legal-page-header {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+html.dark-theme .legal-contact-section {
+    background: transparent;
+}
+
+@media (min-width: 480px) {
+    .legal-page-container {
+        padding: 4rem 2rem;
+    }
+
+    .legal-page-header h1 {
+        font-size: 2.75rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .legal-page-container {
+        padding: 5rem 2rem;
+    }
+
+    .legal-page-header h1 {
+        font-size: 3rem;
+    }
+
+    .legal-page-body h2 {
+        font-size: 1.75rem;
+    }
+}
+
 /* Print Report Header — branded header for printed pages.
    Hidden on screen, visible in print. Use identical HTML structure:
    <div class="print-report-header" aria-hidden="true">
