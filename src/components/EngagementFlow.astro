@@ -65,7 +65,7 @@
 <style>
     .engagement-flow {
         padding: var(--spacing-3xl) 0;
-        background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, var(--bg-light-alt) 15%, var(--bg-light-alt) 85%, rgba(245, 245, 245, 0) 100%);
+        background: transparent;
         position: relative;
     }
 
@@ -75,6 +75,8 @@
     }
 
     .heading-lg {
+        font-family: monospace;
+        text-transform: uppercase;
         margin-bottom: var(--spacing-lg);
         text-align: center;
     }
@@ -82,6 +84,7 @@
     .tagline {
         text-align: center;
         font-size: var(--text-base);
+        font-family: monospace;
         color: var(--text-secondary);
         line-height: 1.7;
         margin-bottom: var(--spacing-2xl);
@@ -98,20 +101,17 @@
 
     .step {
         padding: var(--spacing-xl);
-        background: var(--bg-light-primary);
-        border: 1px solid var(--border-light);
-        border-radius: 8px;
+        background: transparent;
+        border: 2px solid var(--border-light);
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        transition: all 0.3s ease;
+        transition: all var(--transition-normal);
     }
 
     .step:hover {
         border-color: var(--color-primary);
-        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
-        transform: translateY(-2px);
     }
 
     .step-icon-container {
@@ -131,12 +131,14 @@
 
     .step-number {
         font-size: 1.28rem;
+        font-family: monospace;
         font-weight: 700;
         fill: var(--text-primary);
     }
 
     .step-label {
         font-size: 0.875rem;
+        font-family: monospace;
         font-weight: 600;
         color: var(--text-secondary);
         text-transform: uppercase;
@@ -145,6 +147,7 @@
 
     .step-text {
         font-size: var(--text-base);
+        font-family: monospace;
         color: var(--text-primary);
         line-height: 1.6;
         margin: 0;
@@ -161,6 +164,7 @@
 
     .step-detail {
         font-size: var(--text-small);
+        font-family: monospace;
         color: var(--text-muted);
         line-height: 1.6;
         margin: 0;
@@ -168,17 +172,16 @@
 
     /* Dark theme support */
     :global(html.dark-theme) .engagement-flow {
-        background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, var(--bg-dark) 15%, var(--bg-dark) 85%, rgba(10, 10, 10, 0) 100%);
+        background: transparent;
     }
 
     :global(html.dark-theme) .step {
-        background: var(--bg-dark-alt);
-        border-color: var(--border-dark);
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.15);
     }
 
     :global(html.dark-theme) .step:hover {
         border-color: var(--color-primary);
-        box-shadow: 0 4px 12px rgba(5, 205, 153, 0.15);
     }
 
     /* Responsive design */
