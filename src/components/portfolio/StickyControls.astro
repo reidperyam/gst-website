@@ -160,7 +160,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     top: 80px;
     width: 350px;
     height: calc(100vh - 80px);
-    background: var(--bg-light);
+    background: rgba(245, 245, 245, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-left: 2px solid var(--color-primary);
     transition: right var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 10001;
@@ -201,7 +203,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
   }
 
   .drawer-close:hover {
@@ -331,7 +333,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   :global(html.dark-theme) .portfolio-filter-drawer {
-    background: var(--bg-dark-secondary);
+    background: rgba(20, 20, 20, 0.92);
     border-left-color: var(--color-primary);
   }
 

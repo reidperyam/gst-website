@@ -5117,12 +5117,12 @@ html.dark-theme .teaser-card {
     background: var(--filter-chip-bg, rgba(26, 26, 26, 0.05));
     color: var(--text-secondary);
     border: 1px solid transparent;
-    border-radius: 4px;
     cursor: pointer;
+    font-family: monospace;
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
     user-select: none;
 }
 
