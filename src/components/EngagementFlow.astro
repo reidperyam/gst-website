@@ -101,8 +101,11 @@
 
     .step {
         padding: var(--spacing-xl);
-        background: transparent;
+        background: rgba(0, 0, 0, 0.005);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
         border: 2px solid var(--border-light);
+        border-top: 3px solid var(--color-primary);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -176,8 +179,9 @@
     }
 
     :global(html.dark-theme) .step {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.005);
         border-color: rgba(255, 255, 255, 0.15);
+        border-top-color: var(--color-primary);
     }
 
     :global(html.dark-theme) .step:hover {
