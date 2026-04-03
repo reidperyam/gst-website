@@ -187,8 +187,11 @@ const faqItems = [
 
     .service-card {
         padding: 2.5rem;
-        background: transparent;
+        background: rgba(0, 0, 0, 0.005);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
         border: 2px solid var(--border-light);
+        border-top: 3px solid var(--color-primary);
         transition: all var(--transition-normal);
         display: flex;
         flex-direction: column;
@@ -247,12 +250,12 @@ const faqItems = [
     }
 
     :global(html.dark-theme) .service-card {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.005);
         border-color: rgba(255, 255, 255, 0.15);
+        border-top-color: var(--color-primary);
     }
 
     :global(html.dark-theme) .service-card:hover {
-        background: transparent;
         border-color: var(--color-primary);
     }
 
