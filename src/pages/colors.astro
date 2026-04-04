@@ -118,6 +118,62 @@ const palettes = [
     <p class="brutal-text-base colors-palette-concept" id="palette-concept">{palettes[0].concept}</p>
 
     <!-- ════════════════════════════════════════════
+         TOKEN REFERENCE TABLE
+         ════════════════════════════════════════════ -->
+    <h3 class="brutal-heading-sm colors-group-title">Token Reference</h3>
+    <p class="brutal-text-small colors-token-note">All colors across the site derive from these 9 CSS variables. Changing a token here cascades into every tool and component that references it.</p>
+    <div class="colors-token-table">
+      <div class="colors-token-row colors-token-row--header">
+        <span>Token</span><span>Purpose</span><span>Used By</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-primary</code>
+        <span>Brand accent, active states, links</span>
+        <span>CTAs, hub cards, TechPar healthy zone, ICG strategic</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-primary-dark</code>
+        <span>Hover and pressed states</span>
+        <span>Button hover, link active</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-secondary</code>
+        <span>Secondary emphasis</span>
+        <span>Secondary CTAs, TechPar R&amp;D CapEx</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-success</code>
+        <span>Positive outcomes, passing states</span>
+        <span>DM positive, ICG optimizing, TechPar ahead zone</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-warning</code>
+        <span>Caution indicators, borderline states</span>
+        <span>DM warning, ICG aware, TechPar underinvest/above</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-error</code>
+        <span>Errors, critical states, negative KPIs</span>
+        <span>DM negative, ICG reactive, TechPar elevated, RegMap cyber</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-authority</code>
+        <span>Institutional credibility, expertise</span>
+        <span>Hub authority line, DM results, TechPar personnel</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-distinguish</code>
+        <span>Differentiation accent, chart separation</span>
+        <span>RegMap industry, TechPar R&amp;D OpEx</span>
+      </div>
+      <div class="colors-token-row">
+        <code class="colors-code">--color-subdued</code>
+        <span>Muted neutral, process/methodology</span>
+        <span>DM methodology, DM results-tan</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
          COMPONENT SPECIMENS — all 9 tokens represented
          ════════════════════════════════════════════ -->
     <h3 class="brutal-heading-sm colors-group-title">Component Specimens</h3>
@@ -236,35 +292,35 @@ const palettes = [
 
     <h4 class="brutal-label colors-subgroup-title">TechPar</h4>
     <div class="brand-swatch-grid">
-      <div class="brand-swatch" data-var="--techpar-zone-healthy"><div class="brand-swatch__color" style="background: var(--techpar-zone-healthy);"></div><div class="brand-swatch__label">zone-healthy</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Within benchmark (primary)</div></div>
-      <div class="brand-swatch" data-var="--techpar-zone-ahead"><div class="brand-swatch__color" style="background: var(--techpar-zone-ahead);"></div><div class="brand-swatch__label">zone-ahead</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Below benchmark (success)</div></div>
-      <div class="brand-swatch" data-var="--techpar-zone-underinvest"><div class="brand-swatch__color" style="background: var(--techpar-zone-underinvest);"></div><div class="brand-swatch__label">zone-underinvest</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Underinvestment (warning)</div></div>
-      <div class="brand-swatch" data-var="--techpar-zone-elevated"><div class="brand-swatch__color" style="background: var(--techpar-zone-elevated);"></div><div class="brand-swatch__label">zone-elevated</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Elevated overspend (error)</div></div>
-      <div class="brand-swatch" data-var="--techpar-category-personnel"><div class="brand-swatch__color" style="background: var(--techpar-category-personnel);"></div><div class="brand-swatch__label">cat-personnel</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Personnel spend (authority)</div></div>
-      <div class="brand-swatch" data-var="--techpar-category-rd-opex"><div class="brand-swatch__color" style="background: var(--techpar-category-rd-opex);"></div><div class="brand-swatch__label">cat-rd-opex</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">R&amp;D OpEx spend (distinguish)</div></div>
+      <div class="brand-swatch" data-var="--techpar-zone-healthy"><div class="brand-swatch__color" style="background: var(--techpar-zone-healthy);"></div><div class="brand-swatch__label">--techpar-zone-healthy</div><div class="brand-swatch__derives">&rarr; --color-primary</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Within benchmark</div></div>
+      <div class="brand-swatch" data-var="--techpar-zone-ahead"><div class="brand-swatch__color" style="background: var(--techpar-zone-ahead);"></div><div class="brand-swatch__label">--techpar-zone-ahead</div><div class="brand-swatch__derives">&rarr; --color-success</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Below benchmark</div></div>
+      <div class="brand-swatch" data-var="--techpar-zone-underinvest"><div class="brand-swatch__color" style="background: var(--techpar-zone-underinvest);"></div><div class="brand-swatch__label">--techpar-zone-underinvest</div><div class="brand-swatch__derives">&rarr; --color-warning</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Underinvestment</div></div>
+      <div class="brand-swatch" data-var="--techpar-zone-elevated"><div class="brand-swatch__color" style="background: var(--techpar-zone-elevated);"></div><div class="brand-swatch__label">--techpar-zone-elevated</div><div class="brand-swatch__derives">&rarr; --color-error</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Elevated overspend</div></div>
+      <div class="brand-swatch" data-var="--techpar-category-personnel"><div class="brand-swatch__color" style="background: var(--techpar-category-personnel);"></div><div class="brand-swatch__label">--techpar-category-personnel</div><div class="brand-swatch__derives">&rarr; --color-authority</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Personnel spend</div></div>
+      <div class="brand-swatch" data-var="--techpar-category-rd-opex"><div class="brand-swatch__color" style="background: var(--techpar-category-rd-opex);"></div><div class="brand-swatch__label">--techpar-category-rd-opex</div><div class="brand-swatch__derives">&rarr; --color-distinguish</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">R&amp;D OpEx spend</div></div>
     </div>
 
     <h4 class="brutal-label colors-subgroup-title">Diligence Machine</h4>
     <div class="brand-swatch-grid">
-      <div class="brand-swatch" data-var="--dm-methodology-brown"><div class="brand-swatch__color" style="background: var(--dm-methodology-brown);"></div><div class="brand-swatch__label">methodology</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Methodology sections (subdued)</div></div>
-      <div class="brand-swatch" data-var="--dm-results-blue"><div class="brand-swatch__color" style="background: var(--dm-results-blue);"></div><div class="brand-swatch__label">results</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Results/output accent (authority)</div></div>
-      <div class="brand-swatch" data-var="--dm-positive"><div class="brand-swatch__color" style="background: var(--dm-positive);"></div><div class="brand-swatch__label">positive</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Positive findings (success)</div></div>
-      <div class="brand-swatch" data-var="--dm-negative"><div class="brand-swatch__color" style="background: var(--dm-negative);"></div><div class="brand-swatch__label">negative</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Negative/risk findings (error)</div></div>
-      <div class="brand-swatch" data-var="--dm-warning"><div class="brand-swatch__color" style="background: var(--dm-warning);"></div><div class="brand-swatch__label">warning</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Caution findings (warning)</div></div>
+      <div class="brand-swatch" data-var="--dm-methodology-brown"><div class="brand-swatch__color" style="background: var(--dm-methodology-brown);"></div><div class="brand-swatch__label">--dm-methodology-brown</div><div class="brand-swatch__derives">&rarr; --color-subdued</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Methodology sections</div></div>
+      <div class="brand-swatch" data-var="--dm-results-blue"><div class="brand-swatch__color" style="background: var(--dm-results-blue);"></div><div class="brand-swatch__label">--dm-results-blue</div><div class="brand-swatch__derives">&rarr; --color-authority</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Results/output accent</div></div>
+      <div class="brand-swatch" data-var="--dm-positive"><div class="brand-swatch__color" style="background: var(--dm-positive);"></div><div class="brand-swatch__label">--dm-positive</div><div class="brand-swatch__derives">&rarr; --color-success</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Positive findings</div></div>
+      <div class="brand-swatch" data-var="--dm-negative"><div class="brand-swatch__color" style="background: var(--dm-negative);"></div><div class="brand-swatch__label">--dm-negative</div><div class="brand-swatch__derives">&rarr; --color-error</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Negative/risk findings</div></div>
+      <div class="brand-swatch" data-var="--dm-warning"><div class="brand-swatch__color" style="background: var(--dm-warning);"></div><div class="brand-swatch__label">--dm-warning</div><div class="brand-swatch__derives">&rarr; --color-warning</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Caution findings</div></div>
     </div>
 
     <h4 class="brutal-label colors-subgroup-title">ICG Maturity</h4>
     <div class="brand-swatch-grid">
-      <div class="brand-swatch" data-var="--icg-maturity-reactive"><div class="brand-swatch__color" style="background: var(--icg-maturity-reactive);"></div><div class="brand-swatch__label">reactive</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Lowest maturity (error)</div></div>
-      <div class="brand-swatch" data-var="--icg-maturity-aware"><div class="brand-swatch__color" style="background: var(--icg-maturity-aware);"></div><div class="brand-swatch__label">aware</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Early-stage maturity (warning)</div></div>
-      <div class="brand-swatch" data-var="--icg-maturity-optimizing"><div class="brand-swatch__color" style="background: var(--icg-maturity-optimizing);"></div><div class="brand-swatch__label">optimizing</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Active optimization (success)</div></div>
-      <div class="brand-swatch" data-var="--icg-maturity-strategic"><div class="brand-swatch__color" style="background: var(--icg-maturity-strategic);"></div><div class="brand-swatch__label">strategic</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Highest maturity (primary)</div></div>
+      <div class="brand-swatch" data-var="--icg-maturity-reactive"><div class="brand-swatch__color" style="background: var(--icg-maturity-reactive);"></div><div class="brand-swatch__label">--icg-maturity-reactive</div><div class="brand-swatch__derives">&rarr; --color-error</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Lowest maturity</div></div>
+      <div class="brand-swatch" data-var="--icg-maturity-aware"><div class="brand-swatch__color" style="background: var(--icg-maturity-aware);"></div><div class="brand-swatch__label">--icg-maturity-aware</div><div class="brand-swatch__derives">&rarr; --color-warning</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Early-stage maturity</div></div>
+      <div class="brand-swatch" data-var="--icg-maturity-optimizing"><div class="brand-swatch__color" style="background: var(--icg-maturity-optimizing);"></div><div class="brand-swatch__label">--icg-maturity-optimizing</div><div class="brand-swatch__derives">&rarr; --color-success</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Active optimization</div></div>
+      <div class="brand-swatch" data-var="--icg-maturity-strategic"><div class="brand-swatch__color" style="background: var(--icg-maturity-strategic);"></div><div class="brand-swatch__label">--icg-maturity-strategic</div><div class="brand-swatch__derives">&rarr; --color-primary</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Highest maturity</div></div>
     </div>
 
     <h4 class="brutal-label colors-subgroup-title">Regulatory Map</h4>
     <div class="brand-swatch-grid">
-      <div class="brand-swatch" data-var="--regmap-category-industry"><div class="brand-swatch__color" style="background: var(--regmap-category-industry);"></div><div class="brand-swatch__label">industry</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Industry regulations (distinguish)</div></div>
-      <div class="brand-swatch" data-var="--regmap-category-cyber"><div class="brand-swatch__color" style="background: var(--regmap-category-cyber);"></div><div class="brand-swatch__label">cybersecurity</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Cybersecurity regulations (error)</div></div>
+      <div class="brand-swatch" data-var="--regmap-category-industry"><div class="brand-swatch__color" style="background: var(--regmap-category-industry);"></div><div class="brand-swatch__label">--regmap-category-industry</div><div class="brand-swatch__derives">&rarr; --color-distinguish</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Industry regulations</div></div>
+      <div class="brand-swatch" data-var="--regmap-category-cyber"><div class="brand-swatch__color" style="background: var(--regmap-category-cyber);"></div><div class="brand-swatch__label">--regmap-category-cyber</div><div class="brand-swatch__derives">&rarr; --color-error</div><div class="brand-swatch__value"></div><div class="brand-swatch__usage">Cybersecurity regulations</div></div>
     </div>
 
   </div><!-- /.container -->
@@ -484,6 +540,61 @@ const palettes = [
     font-family: monospace;
     color: var(--text-muted);
     min-height: 1.2em;
+  }
+
+  /* ── Token Reference Table ─────────────────────────────────── */
+  .colors-token-note {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .colors-token-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-light);
+    font-family: monospace;
+    font-size: var(--text-xs);
+    margin-bottom: var(--spacing-xl);
+    max-width: 720px;
+  }
+
+  .colors-token-row {
+    display: grid;
+    grid-template-columns: 170px 1fr 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    align-items: center;
+  }
+
+  .colors-token-row:last-child {
+    border-bottom: none;
+  }
+
+  .colors-token-row--header {
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    background: var(--accent-light-bg);
+  }
+
+  @media (max-width: 768px) {
+    .colors-token-row {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xs);
+    }
+    .colors-token-row--header {
+      display: none;
+    }
+  }
+
+  .brand-swatch__derives {
+    font-size: var(--text-xs);
+    font-family: monospace;
+    color: var(--color-primary);
+    opacity: 0.7;
   }
 
   .brand-swatch__usage {
@@ -1132,9 +1243,44 @@ const palettes = [
     }
   }
 
+  const TOKEN_TIPS: Record<string, string> = {
+    '--color-primary': 'Brand accent — links, buttons, active states, hub cards',
+    '--color-primary-dark': 'Hover/pressed variant of primary',
+    '--color-secondary': 'Secondary emphasis — alternative CTAs, TechPar R&D CapEx',
+    '--color-success': 'Positive outcomes — DM positive, ICG optimizing, TechPar ahead',
+    '--color-warning': 'Caution — DM warning, ICG aware, TechPar underinvest/above',
+    '--color-error': 'Errors/critical — DM negative, ICG reactive, TechPar elevated, RegMap cyber',
+    '--color-authority': 'Institutional credibility — hub authority line, DM results, TechPar personnel',
+    '--color-distinguish': 'Differentiation accent — RegMap industry, TechPar R&D OpEx',
+    '--color-subdued': 'Muted neutral — DM methodology, process/background contexts',
+    '--techpar-zone-healthy': 'TechPar: within benchmark range. Derives from --color-primary',
+    '--techpar-zone-ahead': 'TechPar: spending below benchmark. Derives from --color-success',
+    '--techpar-zone-underinvest': 'TechPar: potential underinvestment. Derives from --color-warning',
+    '--techpar-zone-elevated': 'TechPar: elevated overspend. Derives from --color-error',
+    '--techpar-category-personnel': 'TechPar: personnel spend category. Derives from --color-authority',
+    '--techpar-category-rd-opex': 'TechPar: R&D OpEx spend category. Derives from --color-distinguish',
+    '--dm-methodology-brown': 'Diligence Machine: methodology section accent. Derives from --color-subdued',
+    '--dm-results-blue': 'Diligence Machine: results/output accent. Derives from --color-authority',
+    '--dm-positive': 'Diligence Machine: positive findings. Derives from --color-success',
+    '--dm-negative': 'Diligence Machine: negative/risk findings. Derives from --color-error',
+    '--dm-warning': 'Diligence Machine: caution-level findings. Derives from --color-warning',
+    '--icg-maturity-reactive': 'ICG: lowest maturity level (0–25). Derives from --color-error',
+    '--icg-maturity-aware': 'ICG: early-stage maturity (26–50). Derives from --color-warning',
+    '--icg-maturity-optimizing': 'ICG: active optimization (51–75). Derives from --color-success',
+    '--icg-maturity-strategic': 'ICG: highest maturity (76–100). Derives from --color-primary',
+    '--regmap-category-industry': 'Regulatory Map: industry compliance category. Derives from --color-distinguish',
+    '--regmap-category-cyber': 'Regulatory Map: cybersecurity category. Derives from --color-error',
+  };
+
   function injectControls() {
     document.querySelectorAll<HTMLElement>('.brand-swatch').forEach(el => {
       if (el.querySelector('.swatch-controls')) return;
+
+      // Add tooltip
+      const varName = el.dataset.var;
+      if (varName && TOKEN_TIPS[varName]) {
+        el.title = TOKEN_TIPS[varName];
+      }
 
       const colorEl = el.querySelector<HTMLElement>('.brand-swatch__color');
       if (!colorEl) return;
