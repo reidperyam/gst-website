@@ -711,7 +711,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                 <div class="doc-q-header">
                                     <span class="doc-q-number">${topicIndex + 1}.${qIndex + 1}</span>
                                     <div class="doc-q-badges">
-                                        ${q.exitImpact ? `<span class="doc-q-exit-impact exit-impact-${escapeHtml(q.exitImpact.toLowerCase().replace(/\\s+/g, '-'))}">${escapeHtml(q.exitImpact)}</span>` : ''}
+                                        ${q.exitImpact ? `<span class="doc-q-exit-impact exit-impact-${escapeHtml(q.exitImpact.toLowerCase().replaceAll(' ', '-'))}">${escapeHtml(q.exitImpact)}</span>` : ''}
                                         <span class="doc-q-priority">${escapeHtml(q.priority)}</span>
                                         <button class="brutal-na-btn" data-dismiss-question="${escapeHtml(q.id)}" type="button" title="${dismissedQuestions.has(q.id) ? 'Restore this item' : 'Mark as not applicable'}">${dismissedQuestions.has(q.id) ? 'Restore' : 'N/A'}</button>
                                     </div>
@@ -1959,21 +1959,21 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-attention-grid :global(.doc-attention-card.relevance-high) {
-        border-left-color: var(--hub-authority-blue);
-        background: var(--hub-authority-blue-bg);
+        border-left-color: var(--color-authority);
+        background: var(--color-authority-bg);
     }
 
     .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
-        border-left-color: var(--dm-methodology-brown);
-        background: var(--dm-methodology-brown-bg);
+        border-left-color: var(--color-subdued);
+        background: var(--color-subdued-bg);
     }
 
     :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card.relevance-high) {
-        background: var(--hub-authority-blue-bg);
+        background: var(--color-authority-bg);
     }
 
     :global(html.dark-theme) .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
-        background: var(--dm-methodology-brown-bg);
+        background: var(--color-subdued-bg);
     }
 
     .doc-attention-grid :global(.doc-attention-header) {
@@ -2006,11 +2006,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-attention-grid :global(.relevance-high .doc-attention-divider) {
-        background: var(--hub-authority-blue);
+        background: var(--color-authority);
     }
 
     .doc-attention-grid :global(.relevance-medium .doc-attention-divider) {
-        background: var(--dm-methodology-brown);
+        background: var(--color-subdued);
     }
 
     .doc-attention-grid :global(.doc-attention-desc) {
@@ -2153,11 +2153,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-topics :global(.doc-question.priority-high) {
-        border-left-color: var(--hub-authority-blue);
+        border-left-color: var(--color-authority);
     }
 
     .doc-topics :global(.doc-question.priority-medium) {
-        border-left-color: var(--dm-methodology-brown);
+        border-left-color: var(--color-subdued);
     }
 
     .doc-topics :global(.doc-question.priority-standard) {
@@ -2170,19 +2170,19 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     :global(html.dark-theme) .doc-topics :global(.doc-q-red-flag) {
         background: var(--dm-negative-dark-bg);
-        color: var(--dm-negative);
+        color: var(--color-error);
     }
 
     :global(html.dark-theme) .doc-topics :global(.exit-impact-multiple-expander) {
-        color: var(--dm-positive);
+        color: var(--color-success);
     }
 
     :global(html.dark-theme) .doc-topics :global(.exit-impact-valuation-drag) {
-        color: var(--dm-warning);
+        color: var(--color-warning);
     }
 
     :global(html.dark-theme) .doc-topics :global(.exit-impact-operational-risk) {
-        color: var(--dm-negative);
+        color: var(--color-error);
     }
 
     .doc-topics :global(.doc-q-header) {
@@ -2211,13 +2211,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-topics :global(.priority-high .doc-q-priority) {
-        background: var(--hub-authority-blue-bg);
-        color: var(--hub-authority-blue);
+        background: var(--color-authority-bg);
+        color: var(--color-authority);
     }
 
     .doc-topics :global(.priority-medium .doc-q-priority) {
-        background: var(--dm-methodology-brown-bg);
-        color: var(--dm-methodology-brown);
+        background: var(--color-subdued-bg);
+        color: var(--color-subdued);
     }
 
     .doc-topics :global(.priority-standard .doc-q-priority) {
@@ -2284,22 +2284,22 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     .doc-topics :global(.exit-impact-multiple-expander) {
         background: rgba(46, 139, 87, 0.12);
-        color: var(--dm-success);
+        color: var(--color-success);
     }
 
     .doc-topics :global(.exit-impact-valuation-drag) {
         background: rgba(178, 102, 34, 0.12);
-        color: var(--dm-warning-dark);
+        color: var(--color-warning);
     }
 
     .doc-topics :global(.exit-impact-operational-risk) {
         background: rgba(178, 34, 34, 0.12);
-        color: var(--dm-negative-dark);
+        color: var(--color-error);
     }
 
     .doc-topics :global(.doc-q-red-flag) {
         font-size: var(--text-sm);
-        color: var(--dm-negative-dark);
+        color: var(--color-error);
         line-height: 1.6;
         margin: 0 0 var(--spacing-sm) 0;
         padding: var(--spacing-xs) var(--spacing-sm);
