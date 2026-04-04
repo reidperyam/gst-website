@@ -4909,48 +4909,6 @@ html.dark-theme .option-card--selected {
     margin-left: calc(10px + var(--spacing-sm));
 }
 
-/* ── Trust Card (current specimen) ────────────────── */
-.trust-card {
-    padding: var(--spacing-2xl);
-    background: rgba(5, 205, 153, 0.03);
-    border: 1px solid rgba(5, 205, 153, 0.1);
-    border-radius: 8px;
-    transition: all var(--transition-normal);
-    display: flex;
-    flex-direction: column;
-}
-
-.trust-card:hover {
-    background: rgba(5, 205, 153, 0.08);
-    border-color: rgba(5, 205, 153, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(5, 205, 153, 0.1);
-}
-
-.trust-card h3 {
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-md);
-    line-height: 1.4;
-}
-
-.trust-card p {
-    font-size: var(--text-base);
-    color: var(--text-secondary);
-    line-height: 1.7;
-}
-
-html.dark-theme .trust-card {
-    background: rgba(5, 205, 153, 0.05);
-    border-color: rgba(5, 205, 153, 0.15);
-}
-
-html.dark-theme .trust-card:hover {
-    background: rgba(5, 205, 153, 0.12);
-    border-color: rgba(5, 205, 153, 0.25);
-}
-
 /* ── Project Card (current specimen) ──────────────── */
 .project-card {
     background: var(--bg-light);
