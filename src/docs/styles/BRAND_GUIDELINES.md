@@ -176,8 +176,11 @@ Privacy and Terms pages use "we," "us," "our" per legal convention.
 ## Accessibility
 
 - **Contrast**: All text/background combinations should meet WCAG 2.1 AA contrast ratios (4.5:1 for normal text, 3:1 for large text)
-- **Focus indicators**: 2px solid `--color-primary` outline via `.focus-outline` utility
+- **Focus indicators**: 2px solid `--color-primary` outline with 2px offset via `.interactive-focus` utility or `:focus-visible` on `.brutal-*` components
 - **Color alone**: Never use color as the sole indicator of state — always pair with text, icons, or patterns
+- **Touch targets**: 44x44px minimum per WCAG 2.5.5 — all `.brutal-btn` and `.brutal-choice-btn` components meet this
+- **Keyboard navigation**: All interactive components are focusable via Tab; modals trap focus; tab bars support arrow keys
+- **Live reference**: The [/brand page — Accessibility section](https://globalstrategic.tech/brand#accessibility) demonstrates focus states, contrast ratios, touch targets, keyboard patterns, ARIA usage, and semantic HTML structure
 
 ---
 
@@ -286,5 +289,5 @@ For multi-series charts (max 6 colors), use this sequence for adequate color vis
 ---
 
 **Created**: March 23, 2026
-**Last Updated**: March 24, 2026
+**Last Updated**: April 5, 2026
 **Status**: Complete — all requirements finalized

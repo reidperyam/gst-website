@@ -2,8 +2,20 @@
 
 Tracked initiatives identified during the design system maturity assessment (April 2026) that were deferred from the [Design System Completeness Initiative](./DESIGN_SYSTEM_COMPLETENESS.md). Each is independent and can be executed in any order.
 
-**Status**: Backlog
+**Status**: Initiatives 1–5 Complete, Documentation Updated
 **Created**: April 5, 2026
+**Completed**: April 5, 2026
+
+### Completion Summary (Initiatives 1–5)
+
+| # | Initiative | Commits | Key Outcome |
+|---|-----------|---------|-------------|
+| 1 | Primary Color Opacity Scale | 1 | 19 `--color-primary-XX` tokens, ~50 hardcoded replacements across 5 files |
+| 2 | Dark Border Variable | 1 | 3 `--border-dark-*` tokens, 132 replacements across 18 files |
+| 3 | Accessibility Section | 1 | Brand page section: focus states, contrast tables, touch targets, keyboard nav, ARIA, semantic HTML |
+| 4 | Responsive Behavior Demos | 1 | Brand page section with iframe demos at 1200/768/480px + `/brand/responsive-frame` route |
+| 5 | Component State Documentation | 1 | Brand page section: forced-state specimens for buttons, fields, option cards, choice buttons |
+| 6 | Documentation Updates | 2 | VARIABLES_REFERENCE, STYLES_GUIDE, BRAND_GUIDELINES updated with new tokens and sections |
 
 ---
 
@@ -21,7 +33,7 @@ Tracked initiatives identified during the design system maturity assessment (Apr
 
 ## 1. Primary Color Opacity Scale
 
-**Status**: Backlog
+**Status**: Complete (April 5, 2026)
 **Priority**: Medium
 **Effort**: Small
 
@@ -48,7 +60,7 @@ Tracked initiatives identified during the design system maturity assessment (Apr
 
 ## 2. Dark Border Variable
 
-**Status**: Backlog
+**Status**: Complete (April 5, 2026)
 **Priority**: Medium
 **Effort**: Small
 
@@ -65,7 +77,7 @@ Tracked initiatives identified during the design system maturity assessment (Apr
 
 ## 3. Accessibility Section
 
-**Status**: Backlog
+**Status**: Complete (April 5, 2026)
 **Priority**: High
 **Effort**: Large
 
@@ -87,7 +99,7 @@ Tracked initiatives identified during the design system maturity assessment (Apr
 
 ## 4. Responsive Behavior Demos
 
-**Status**: Backlog
+**Status**: Complete (April 5, 2026)
 **Priority**: Low
 **Effort**: Medium
 
@@ -102,7 +114,7 @@ Tracked initiatives identified during the design system maturity assessment (Apr
 
 ## 5. Component State Documentation
 
-**Status**: Backlog
+**Status**: Complete (April 5, 2026)
 **Priority**: Medium
 **Effort**: Medium-Large
 
