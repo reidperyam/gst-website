@@ -2,9 +2,10 @@
 
 Close the gap between documented design system conventions and actual implementation across the GST website. Two workstreams: font-size standardization and brand page component coverage.
 
-**Status**: Planned
+**Status**: Complete
 **Priority**: Medium — design system maturity
 **Created**: April 5, 2026
+**Completed**: April 5, 2026
 
 ---
 
@@ -194,17 +195,32 @@ Each new component follows the established brand page pattern:
 
 ## 6. Deferred Initiatives
 
-These were identified in the design system maturity assessment but are out of scope for this initiative:
+Deferred items from this initiative have been migrated to [DESIGN_SYSTEM_FUTURE_INITIATIVES.md](./DESIGN_SYSTEM_FUTURE_INITIATIVES.md) for future implementation tracking.
 
-| Initiative | Reason for Deferral |
-|-----------|-------------------|
-| **Package extraction** | Single consumer, system still maturing. Re-evaluate when second project needs design tokens. |
-| **Primary color opacity scale** | Useful but lower impact than font-size standardization. Track in remediation roadmap. |
-| **Dark border variable** | Replace 47 instances of `rgba(255,255,255,0.15)`. Track in remediation roadmap. |
-| **Accessibility section** | Largest qualitative gap (focus states, contrast ratios, ARIA). Separate initiative. |
-| **Responsive behavior demos** | Brand page feature. Lower priority than component coverage. |
-| **Component state documentation** | Show all states (error, disabled, loading) per component. Incremental addition. |
-| **global.css split** | Prep for future extraction — split into tokens.css + components.css + layout.css. Only needed if extraction becomes likely. |
+---
+
+## 7. Completion Summary
+
+All 9 planned commits were delivered on April 5, 2026:
+
+| # | Commit | SHA |
+|---|--------|-----|
+| 1 | `docs(design-system): add design system completeness initiative plan` | `d4d2e39` |
+| 2 | `feat(design-system): extend text token scale with --text-2xs and --text-3xl` | `3bae9cb` |
+| 3 | `refactor(portfolio): replace hardcoded font-sizes with text tokens` | `8581dbe` |
+| 4 | `refactor(about): replace hardcoded font-sizes with text tokens` | `c5f6b7c` |
+| 5 | `refactor(services): replace hardcoded font-sizes with text tokens` | `09eb0e9` |
+| 6 | `refactor(components): replace hardcoded font-sizes with text tokens` | `15f1662` |
+| 7 | `feat(brand): add missing component specimens to UI library` | `3baa7e6` |
+| 8 | `docs(design-system): sync typography reference with current token scale` | `2a2f787` |
+
+**Key outcomes:**
+- 2 new text tokens added (`--text-2xs`, `--text-3xl`)
+- ~108 hardcoded font-size values replaced with `var(--text-*)` tokens across 11 files
+- 11 missing component specimens added to the brand page UI library
+- TYPOGRAPHY_REFERENCE.md fully rewritten to reflect current `.brutal-*` class system
+
+**QA verification**: See [QA_DESIGN_SYSTEM_COMPLETENESS.md](../testing/QA_DESIGN_SYSTEM_COMPLETENESS.md)
 
 ---
 
