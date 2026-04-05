@@ -711,6 +711,153 @@ const palettes = [
   </div>
 </section>
 
+<!-- Section 7b: Component States -->
+<section class="brand-section" id="component-states">
+  <div class="container">
+    <h2 class="brutal-heading-md brand-section__title">Component States</h2>
+    <p class="brutal-text-small" style="margin-bottom: var(--spacing-xl); color: var(--text-muted);">
+      Interactive components rendered in each visual state. Forced via <code class="brand-code">data-demo-state</code> attributes.
+    </p>
+
+    <h3 class="brutal-heading-sm brand-group-title">Button States</h3>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary">Default</button>
+        <code class="brand-code">default</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" data-demo-state="hover">Hover</button>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" data-demo-state="focus">Focus</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" disabled>Disabled</button>
+        <code class="brand-code">:disabled</code>
+      </div>
+    </div>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary">Default</button>
+        <code class="brand-code">secondary</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary" data-demo-state="hover">Hover</button>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary" data-demo-state="focus">Focus</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary" disabled>Disabled</button>
+        <code class="brand-code">:disabled</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title">Form Field States</h3>
+    <div class="brand-state-grid">
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Default</label>
+          <input class="brutal-field__input" type="text" placeholder="Placeholder text" />
+        </div>
+        <code class="brand-code">default — dashed border</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Focused</label>
+          <input class="brutal-field__input" type="text" value="Entered text" data-demo-state="focus" />
+        </div>
+        <code class="brand-code">:focus — solid border, teal</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Disabled</label>
+          <input class="brutal-field__input" type="text" value="Cannot edit" disabled />
+        </div>
+        <code class="brand-code">:disabled — reduced opacity</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Error <span class="brutal-field__req" style="color: var(--color-error);">(invalid)</span></label>
+          <input class="brutal-field__input" type="text" value="Bad input" data-demo-state="error" />
+        </div>
+        <code class="brand-code">error — red border</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Read-only</label>
+          <input class="brutal-field__input" type="text" value="Locked value" readonly data-demo-state="readonly" />
+        </div>
+        <code class="brand-code">readonly — muted text, no cursor</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title">Option Card States</h3>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <div class="brutal-option-card">
+          <span class="brutal-option-card__label">Default</span>
+          <span class="brutal-option-card__description">Base state</span>
+        </div>
+        <code class="brand-code">default</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card" data-demo-state="hover">
+          <span class="brutal-option-card__label">Hover</span>
+          <span class="brutal-option-card__description">Teal border + subtle bg</span>
+        </div>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card" data-demo-state="focus">
+          <span class="brutal-option-card__label">Focus</span>
+          <span class="brutal-option-card__description">Outline ring</span>
+        </div>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card brutal-option-card--selected">
+          <span class="brutal-option-card__label">Selected</span>
+          <span class="brutal-option-card__description">Teal border + label</span>
+        </div>
+        <code class="brand-code">--selected</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title">Choice Button States</h3>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button">Default</button>
+        <code class="brand-code">default</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button" data-demo-state="hover">Hover</button>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button" data-demo-state="focus">Focus</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn brutal-choice-btn--selected" type="button">Selected</button>
+        <code class="brand-code">--selected</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn brutal-choice-btn--unsure" type="button">Unsure</button>
+        <code class="brand-code">--unsure</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn brutal-choice-btn--unsure brutal-choice-btn--selected" type="button">Unsure+Sel</button>
+        <code class="brand-code">--unsure --selected</code>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Section 8: UI Component Library -->
 <section class="brand-section" id="ui-library">
   <div class="container">
@@ -2991,6 +3138,87 @@ const palettes = [
     --accent-border-light: rgba(22, 101, 52, 0.25);
     --accent-border-medium: rgba(22, 101, 52, 0.3);
     --stat-item-border: var(--alt5-color-primary);
+  }
+
+  /* ── Component State Demo Layout ── */
+  .brand-state-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-wide);
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .brand-state-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--gap-wide);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .brand-state-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    align-items: flex-start;
+  }
+
+  .brand-state-item--wide {
+    min-width: 240px;
+  }
+
+  /* ── Forced state: hover ── */
+  .brutal-btn--primary[data-demo-state="hover"] {
+    background: transparent;
+    color: var(--color-primary);
+  }
+
+  .brutal-btn--secondary[data-demo-state="hover"] {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .brutal-option-card[data-demo-state="hover"] {
+    border-color: var(--color-primary);
+    background: var(--accent-subtle-bg);
+  }
+
+  .brutal-choice-btn[data-demo-state="hover"] {
+    border-color: var(--color-primary);
+    color: var(--text-primary);
+  }
+
+  /* ── Forced state: focus ── */
+  .brutal-btn[data-demo-state="focus"] {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .brutal-field__input[data-demo-state="focus"] {
+    border-color: var(--color-primary);
+    border-style: solid;
+  }
+
+  .brutal-option-card[data-demo-state="focus"] {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .brutal-choice-btn[data-demo-state="focus"] {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* ── Forced state: error ── */
+  .brutal-field__input[data-demo-state="error"] {
+    border-color: var(--color-error);
+    border-style: solid;
+  }
+
+  /* ── Forced state: readonly ── */
+  .brutal-field__input[data-demo-state="readonly"] {
+    color: var(--text-muted);
+    cursor: default;
   }
 
 </style>
