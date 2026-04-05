@@ -673,6 +673,18 @@ const palettes = [
       </div>
     </div>
 
+    <h4 class="brutal-label brand-subgroup-title">Segmented Control Wide</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-segmented brutal-segmented--wide">
+          <button class="brutal-segmented__btn brutal-segmented__btn--active" type="button">Active</button>
+          <button class="brutal-segmented__btn" type="button">Option B</button>
+          <button class="brutal-segmented__btn" type="button">Option C</button>
+        </div>
+        <code class="brand-code">.brutal-segmented--wide — full-width segmented control</code>
+      </div>
+    </div>
+
     <h3 class="brutal-heading-sm brand-group-title">Form Field</h3>
     <div class="brand-component-row">
       <div class="brand-component-item brand-component-item--full">
@@ -1044,6 +1056,28 @@ const palettes = [
       </div>
     </div>
 
+    <h4 class="brutal-label brand-subgroup-title">Frosted Glass Variants</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-frosted brutal-frosted--heavy" style="padding:var(--spacing-lg);min-height:60px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:monospace;font-size:var(--text-xs);color:var(--text-primary);">Heavy frost</span>
+        </div>
+        <code class="brand-code">.brutal-frosted--heavy — stronger blur + tint</code>
+      </div>
+      <div class="brand-component-item">
+        <div class="brutal-frosted brutal-frosted--blur-only" style="padding:var(--spacing-lg);min-height:60px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:monospace;font-size:var(--text-xs);color:var(--text-primary);">Blur only</span>
+        </div>
+        <code class="brand-code">.brutal-frosted--blur-only — blur without tint</code>
+      </div>
+      <div class="brand-component-item">
+        <div class="brutal-frosted brutal-frosted--overlay" style="padding:var(--spacing-lg);min-height:60px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:monospace;font-size:var(--text-xs);color:var(--text-primary);">Overlay frost</span>
+        </div>
+        <code class="brand-code">.brutal-frosted--overlay — full overlay variant</code>
+      </div>
+    </div>
+
     <!-- 8a-1h. Radar Feed -->
     <h3 class="brutal-heading-sm brand-group-title">Radar Feed</h3>
 
@@ -1245,6 +1279,22 @@ const palettes = [
           </button>
         </div>
         <code class="brand-code">.option-card (brutalist) — sharp edges, no shadow, monospace label, hard border, primary-fill selected state</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Option Card Variants</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-option-card brutal-option-card--compact" style="padding:var(--spacing-sm) var(--spacing-md);">
+          <span class="brutal-option-card__label" style="font-family:monospace;font-size:var(--text-sm);">Compact Option</span>
+        </div>
+        <code class="brand-code">.brutal-option-card--compact — reduced padding variant for tight layouts</code>
+      </div>
+      <div class="brand-component-item">
+        <div class="brutal-option-card brutal-option-card--selected-outline" style="padding:var(--spacing-sm) var(--spacing-md);border:2px solid var(--color-primary);">
+          <span class="brutal-option-card__label" style="font-family:monospace;font-size:var(--text-sm);">Selected Outline</span>
+        </div>
+        <code class="brand-code">.brutal-option-card--selected-outline — outline-only selected state (no fill)</code>
       </div>
     </div>
 
@@ -1604,6 +1654,19 @@ const palettes = [
           </details>
         </div>
         <code class="brand-code">.brutal-faq__item — no radius, 2px border, primary top-border on open, monospace question</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">FAQ Large</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-faq brutal-faq--lg">
+          <details class="brutal-faq__item">
+            <summary class="brutal-faq__question">Large FAQ question with more prominent spacing?</summary>
+            <div class="brutal-faq__answer">Answer content with larger variant styling for prominent FAQ sections.</div>
+          </details>
+        </div>
+        <code class="brand-code">.brutal-faq--lg — larger FAQ variant with increased spacing and font size</code>
       </div>
     </div>
 
@@ -1972,6 +2035,77 @@ const palettes = [
           <a class="cta-button primary" href="#ui-library">Schedule a Call</a>
         </div>
         <code class="brand-code">.cta-box — primary border, centered layout, heading + description + CTA button</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Choice Button</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <button class="brutal-choice-btn" type="button">Default Choice</button>
+        <button class="brutal-choice-btn brutal-choice-btn--selected" type="button">Selected Choice</button>
+        <button class="brutal-choice-btn brutal-choice-btn--unsure" type="button">Unsure Choice</button>
+        <code class="brand-code">.brutal-choice-btn — monospace, bordered, no radius. Modifiers: --selected (primary accent), --unsure (secondary accent)</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Content Label</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <span class="brutal-content-label">Section Content Label</span>
+        <code class="brand-code">.brutal-content-label — uppercase monospace label for content sections</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Text Input</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <input class="brutal-input" type="text" placeholder="Brutalist text input" />
+        <code class="brand-code">.brutal-input — monospace, no radius, bordered, primary focus ring</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Bottom Sheet</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div style="position:relative;height:120px;border:1px solid var(--border-light);overflow:hidden;">
+          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg-light);border-top:2px solid var(--color-primary);padding:var(--spacing-md);">
+            <div class="brutal-bottom-sheet__handle" style="display:flex;justify-content:center;padding:var(--spacing-xs) 0;">
+              <div class="brutal-bottom-sheet__handle-bar" style="width:40px;height:4px;background:var(--border-light);"></div>
+            </div>
+            <div style="font-family:monospace;font-size:var(--text-sm);color:var(--text-secondary);">Bottom sheet content area</div>
+          </div>
+        </div>
+        <code class="brand-code">.brutal-bottom-sheet — slide-up mobile panel. Sub-elements: __handle, __handle-bar, __overlay</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Map Hint</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-map-hint" style="position:relative;display:inline-block;padding:var(--spacing-sm) var(--spacing-md);background:var(--bg-light);border:1px solid var(--border-light);font-family:monospace;font-size:var(--text-xs);color:var(--text-muted);">Click a region to view details</div>
+        <code class="brand-code">.brutal-map-hint — instructional overlay on map visualizations</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Map Tap Bar</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-map-tap-bar" style="display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-sm) var(--spacing-md);border:2px solid var(--color-primary);background:var(--bg-light);font-family:monospace;">
+          <span class="brutal-map-tap-bar__name" style="font-size:var(--text-sm);font-weight:var(--font-weight-bold);color:var(--text-primary);">Selected Region</span>
+          <button class="brutal-btn brutal-btn--primary brutal-map-tap-bar__action" type="button" style="font-size:var(--text-xs);padding:var(--spacing-xs) var(--spacing-md);">View Details</button>
+        </div>
+        <code class="brand-code">.brutal-map-tap-bar — mobile bottom bar for map selection. Sub-elements: __name, __action</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Quick Zoom</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-quick-zoom" style="display:inline-flex;flex-direction:column;border:1px solid var(--border-light);">
+          <button type="button" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;border-bottom:1px solid var(--border-light);background:var(--bg-light);font-family:monospace;font-size:var(--text-base);color:var(--text-primary);cursor:pointer;">+</button>
+          <button type="button" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:var(--bg-light);font-family:monospace;font-size:var(--text-base);color:var(--text-primary);cursor:pointer;">&minus;</button>
+        </div>
+        <code class="brand-code">.brutal-quick-zoom — compact zoom controls for map visualizations</code>
       </div>
     </div>
 
