@@ -285,6 +285,11 @@ html.dark-theme {
   --cta-box-text: rgba(200, 200, 200, 0.8);
   --stat-item-border: var(--color-primary-20);
 
+  /* Dark Border Scale */
+  --border-dark-subtle: rgba(255, 255, 255, 0.10);
+  --border-dark-default: rgba(255, 255, 255, 0.15);
+  --border-dark-prominent: rgba(255, 255, 255, 0.20);
+
   /* Misc */
   --checkerboard-line: rgba(255, 255, 255, 0.08);
   --theme-toggle-color: rgba(200, 200, 200, 0.8);

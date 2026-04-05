@@ -173,7 +173,7 @@ const dateStr = pubDate.toLocaleDateString('en-US', { month: 'short', day: 'nume
   }
 
   :global(html.dark-theme) .fyi-item__nested-take {
-    border-top-color: rgba(255, 255, 255, 0.15);
+    border-top-color: var(--border-dark-default);
   }
 
   .fyi-item__take p {
@@ -184,7 +184,7 @@ const dateStr = pubDate.toLocaleDateString('en-US', { month: 'short', day: 'nume
   }
 
   :global(html.dark-theme) .fyi-item {
-    border-bottom-color: rgba(255, 255, 255, 0.15);
+    border-bottom-color: var(--border-dark-default);
   }
 
   @media (max-width: 480px) {

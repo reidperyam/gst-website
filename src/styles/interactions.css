@@ -185,7 +185,7 @@ details[open] > summary .delta-chevron {
 }
 
 html.dark-theme .brutal-interactive {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-dark-default);
 }
 
 html.dark-theme .brutal-interactive:focus-visible {

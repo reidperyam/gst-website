@@ -1656,7 +1656,7 @@ import caData from '../../../../data/canada-provinces.json';
 
     /* Timeline dark theme */
     :global(html.dark-theme) .timeline-section {
-        border-top-color: rgba(255, 255, 255, 0.15);
+        border-top-color: var(--border-dark-default);
     }
 
     :global(html.dark-theme) .timeline-legend {
@@ -1668,11 +1668,11 @@ import caData from '../../../../data/canada-provinces.json';
     }
 
     :global(html.dark-theme) .timeline-scroll::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.15);
+        background: var(--border-dark-default);
     }
 
     :global(html.dark-theme .timeline-track::before) {
-        background: rgba(255, 255, 255, 0.15);
+        background: var(--border-dark-default);
     }
 
     /* Print-only elements (hidden on screen) */
