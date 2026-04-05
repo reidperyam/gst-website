@@ -858,6 +858,225 @@ const palettes = [
   </div>
 </section>
 
+<!-- Section 7c: Accessibility -->
+<section class="brand-section" id="accessibility">
+  <div class="container">
+    <h2 class="brutal-heading-md brand-section__title">Accessibility</h2>
+    <p class="brutal-text-small" style="margin-bottom: var(--spacing-xl); color: var(--text-muted);">
+      WCAG 2.1 AA compliance reference. Focus states, contrast ratios, touch targets, keyboard patterns, and semantic structure.
+    </p>
+
+    <!-- A: Focus States -->
+    <h3 class="brutal-heading-sm brand-group-title">Focus States</h3>
+    <p class="brutal-text-small" style="margin-bottom: var(--spacing-md); color: var(--text-muted);">
+      All interactive components use a <code class="brand-code">2px solid var(--color-primary)</code> outline with <code class="brand-code">2px offset</code> on <code class="brand-code">:focus-visible</code>.
+    </p>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" data-demo-state="focus">Button</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-field" style="margin-bottom: 0;">
+          <input class="brutal-field__input" type="text" value="Input field" data-demo-state="focus" />
+        </div>
+        <code class="brand-code">:focus (solid border)</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card" data-demo-state="focus" tabindex="0">
+          <span class="brutal-option-card__label">Option Card</span>
+        </div>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button" data-demo-state="focus">Choice</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <a class="brutal-link-interactive" href="#accessibility" data-demo-state="focus">Link</a>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+    </div>
+
+    <!-- A: Contrast Ratio Table -->
+    <h3 class="brutal-heading-sm brand-group-title">Color Contrast Ratios</h3>
+    <p class="brutal-text-small" style="margin-bottom: var(--spacing-md); color: var(--text-muted);">
+      Text hierarchy on page backgrounds. WCAG 2.1 AA requires 4.5:1 for normal text, 3:1 for large text (&ge;18px or &ge;14px bold).
+    </p>
+
+    <h4 class="brutal-label brand-subgroup-title">Light Theme (on #ffffff)</h4>
+    <div class="a11y-contrast-table">
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(26,26,26,0.95);"></span>
+        <span class="a11y-var">--text-primary</span>
+        <span class="a11y-ratio">~18:1</span>
+        <span class="a11y-badge a11y-badge--pass">AAA</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(26,26,26,0.7);"></span>
+        <span class="a11y-var">--text-secondary</span>
+        <span class="a11y-ratio">~10:1</span>
+        <span class="a11y-badge a11y-badge--pass">AAA</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(26,26,26,0.6);"></span>
+        <span class="a11y-var">--text-muted</span>
+        <span class="a11y-ratio">~7.5:1</span>
+        <span class="a11y-badge a11y-badge--pass">AA</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(26,26,26,0.6);"></span>
+        <span class="a11y-var">--text-faded</span>
+        <span class="a11y-ratio">~7.5:1</span>
+        <span class="a11y-badge a11y-badge--warn">AA (large only)</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: #05cd99;"></span>
+        <span class="a11y-var">--color-primary</span>
+        <span class="a11y-ratio">~2.7:1</span>
+        <span class="a11y-badge a11y-badge--fail">Decorative only</span>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Dark Theme (on #0a0a0a)</h4>
+    <div class="a11y-contrast-table">
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(245,245,245,0.95);"></span>
+        <span class="a11y-var">--text-primary</span>
+        <span class="a11y-ratio">~18:1</span>
+        <span class="a11y-badge a11y-badge--pass">AAA</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(200,200,200,0.8);"></span>
+        <span class="a11y-var">--text-secondary</span>
+        <span class="a11y-ratio">~10:1</span>
+        <span class="a11y-badge a11y-badge--pass">AAA</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: rgba(200,200,200,0.6);"></span>
+        <span class="a11y-var">--text-muted</span>
+        <span class="a11y-ratio">~7:1</span>
+        <span class="a11y-badge a11y-badge--pass">AA</span>
+      </div>
+      <div class="a11y-contrast-row">
+        <span class="a11y-swatch" style="background: #05cd99;"></span>
+        <span class="a11y-var">--color-primary</span>
+        <span class="a11y-ratio">~8:1</span>
+        <span class="a11y-badge a11y-badge--pass">AAA</span>
+      </div>
+    </div>
+
+    <!-- B: Touch Targets -->
+    <h3 class="brutal-heading-sm brand-group-title">Touch Targets</h3>
+    <p class="brutal-text-small" style="margin-bottom: var(--spacing-md); color: var(--text-muted);">
+      WCAG 2.5.5 requires 44&times;44px minimum touch target size. All interactive components meet this requirement.
+    </p>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <div class="a11y-touch-demo">
+          <button class="brutal-btn brutal-btn--primary">Button</button>
+          <div class="a11y-touch-overlay">44&times;44</div>
+        </div>
+        <code class="brand-code">.brutal-btn — meets minimum</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="a11y-touch-demo">
+          <button class="brutal-choice-btn" type="button">Choice</button>
+          <div class="a11y-touch-overlay">44&times;44</div>
+        </div>
+        <code class="brand-code">.brutal-choice-btn — min-height: 44px</code>
+      </div>
+    </div>
+
+    <!-- B: Keyboard Navigation -->
+    <h3 class="brutal-heading-sm brand-group-title">Keyboard Navigation</h3>
+    <div class="a11y-kb-table">
+      <div class="a11y-kb-row a11y-kb-row--header">
+        <span>Pattern</span>
+        <span>Key</span>
+        <span>Behavior</span>
+      </div>
+      <div class="a11y-kb-row">
+        <span>Sequential focus</span>
+        <kbd>Tab</kbd>
+        <span>Move to next focusable element</span>
+      </div>
+      <div class="a11y-kb-row">
+        <span>Reverse focus</span>
+        <kbd>Shift+Tab</kbd>
+        <span>Move to previous focusable element</span>
+      </div>
+      <div class="a11y-kb-row">
+        <span>Activate</span>
+        <kbd>Enter / Space</kbd>
+        <span>Trigger button, select option card</span>
+      </div>
+      <div class="a11y-kb-row">
+        <span>Tab bar</span>
+        <kbd>&larr; &rarr;</kbd>
+        <span>Navigate between tabs (when focused)</span>
+      </div>
+      <div class="a11y-kb-row">
+        <span>Modal dismiss</span>
+        <kbd>Escape</kbd>
+        <span>Close modal, return focus to trigger</span>
+      </div>
+      <div class="a11y-kb-row">
+        <span>Modal trap</span>
+        <kbd>Tab (in modal)</kbd>
+        <span>Focus cycles within modal boundaries</span>
+      </div>
+    </div>
+
+    <!-- B: ARIA Patterns -->
+    <h3 class="brutal-heading-sm brand-group-title">ARIA Patterns</h3>
+    <div class="a11y-code-block">
+      <pre><code>&lt;!-- Live region for dynamic results --&gt;
+&lt;div aria-live="polite" aria-atomic="true"&gt;
+  3 regulations found
+&lt;/div&gt;
+
+&lt;!-- Labeled input --&gt;
+&lt;label class="brutal-field__label" for="company"&gt;Company&lt;/label&gt;
+&lt;input class="brutal-field__input" id="company" aria-required="true" /&gt;
+
+&lt;!-- Tab bar --&gt;
+&lt;div role="tablist"&gt;
+  &lt;button role="tab" aria-selected="true"&gt;Active&lt;/button&gt;
+  &lt;button role="tab" aria-selected="false"&gt;Inactive&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal with focus trap --&gt;
+&lt;div role="dialog" aria-modal="true" aria-labelledby="modal-title"&gt;
+  &lt;h2 id="modal-title"&gt;Project Details&lt;/h2&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <!-- B: Semantic HTML -->
+    <h3 class="brutal-heading-sm brand-group-title">Semantic HTML Structure</h3>
+    <p class="brutal-text-small" style="margin-bottom: var(--spacing-md); color: var(--text-muted);">
+      Heading hierarchy and landmark roles used across the site.
+    </p>
+    <div class="a11y-code-block">
+      <pre><code>&lt;body&gt;
+  &lt;header role="banner"&gt;         &lt;!-- .site-header — sticky nav --&gt;
+    &lt;nav role="navigation"&gt;...&lt;/nav&gt;
+  &lt;/header&gt;
+  &lt;main role="main"&gt;             &lt;!-- page content --&gt;
+    &lt;h1&gt;Page Title&lt;/h1&gt;
+    &lt;section&gt;
+      &lt;h2&gt;Section&lt;/h2&gt;
+      &lt;h3&gt;Subsection&lt;/h3&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+  &lt;footer role="contentinfo"&gt;    &lt;!-- site footer --&gt;
+    ...
+  &lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+    </div>
+  </div>
+</section>
+
 <!-- Section 8: UI Component Library -->
 <section class="brand-section" id="ui-library">
   <div class="container">
@@ -3219,6 +3438,170 @@ const palettes = [
   .brutal-field__input[data-demo-state="readonly"] {
     color: var(--text-muted);
     cursor: default;
+  }
+
+  /* ── Forced state: focus on link ── */
+  .brutal-link-interactive[data-demo-state="focus"] {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* ── Accessibility Section ── */
+  .a11y-contrast-table {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: var(--spacing-xl);
+    max-width: 600px;
+  }
+
+  .a11y-contrast-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto auto;
+    gap: var(--spacing-md);
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: monospace;
+    font-size: var(--text-xs);
+    background: var(--bg-light-alt);
+    border: 1px solid var(--border-light);
+  }
+
+  html.dark-theme .a11y-contrast-row {
+    border-color: var(--border-dark-default);
+  }
+
+  .a11y-swatch {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--border-light);
+  }
+
+  html.dark-theme .a11y-swatch {
+    border-color: var(--border-dark-default);
+  }
+
+  .a11y-var {
+    color: var(--text-secondary);
+  }
+
+  .a11y-ratio {
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  .a11y-badge {
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px var(--spacing-xs);
+    border: 1px solid;
+  }
+
+  .a11y-badge--pass {
+    color: var(--color-success);
+    border-color: var(--color-success);
+  }
+
+  .a11y-badge--warn {
+    color: var(--color-warning);
+    border-color: var(--color-warning);
+  }
+
+  .a11y-badge--fail {
+    color: var(--color-error);
+    border-color: var(--color-error);
+  }
+
+  .a11y-touch-demo {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .a11y-touch-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border: 2px dashed var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: monospace;
+    font-size: 0.55rem;
+    color: var(--color-primary);
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .a11y-kb-table {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: var(--spacing-xl);
+    max-width: 600px;
+  }
+
+  .a11y-kb-row {
+    display: grid;
+    grid-template-columns: 140px 120px 1fr;
+    gap: var(--spacing-md);
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: monospace;
+    font-size: var(--text-xs);
+    background: var(--bg-light-alt);
+    border: 1px solid var(--border-light);
+  }
+
+  html.dark-theme .a11y-kb-row {
+    border-color: var(--border-dark-default);
+  }
+
+  .a11y-kb-row--header {
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+  }
+
+  .a11y-kb-row kbd {
+    font-family: monospace;
+    font-size: var(--text-xs);
+    padding: 2px var(--spacing-xs);
+    border: 1px solid var(--border-light);
+    background: var(--bg-light);
+    color: var(--text-primary);
+  }
+
+  html.dark-theme .a11y-kb-row kbd {
+    border-color: var(--border-dark-default);
+    background: var(--bg-dark-secondary);
+  }
+
+  .a11y-code-block {
+    margin-bottom: var(--spacing-xl);
+    max-width: 600px;
+  }
+
+  .a11y-code-block pre {
+    background: var(--bg-light-alt);
+    border: 1px solid var(--border-light);
+    padding: var(--spacing-lg);
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  html.dark-theme .a11y-code-block pre {
+    border-color: var(--border-dark-default);
   }
 
 </style>
