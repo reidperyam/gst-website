@@ -302,6 +302,7 @@ html.dark-theme .tool-action-bar--frosted {
     height: 1em;
     display: block;
     flex-shrink: 0;
+    color: var(--color-primary);
     font-size: 2rem;
 }
 
@@ -4818,6 +4819,7 @@ html.dark-theme .rec-na:hover {
     width: 14px;
     height: 14px;
     flex-shrink: 0;
+    color: var(--color-primary);
     margin-top: 5px;
     color: var(--color-primary);
 }
