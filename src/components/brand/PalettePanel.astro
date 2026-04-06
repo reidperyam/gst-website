@@ -1,11 +1,6 @@
 ---
 import SwatchControlStyles from './SwatchControlStyles.astro';
-
-interface Props {
-  palettes: { id: number; name: string; concept: string }[];
-}
-
-const { palettes } = Astro.props;
+import { palettes } from '../../data/palettes';
 ---
 
 <SwatchControlStyles />
@@ -28,6 +23,9 @@ const { palettes } = Astro.props;
         </button>
       ))}
     </div>
+    <button class="palette-panel__popout" id="panel-popout-toggle" type="button" title="Pop out palette to all pages" aria-label="Toggle site-wide palette">
+      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+    </button>
     <button class="palette-panel__theme-toggle" id="panel-theme-toggle" type="button" title="Toggle dark theme" aria-label="Toggle dark theme">
       <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
     </button>
@@ -103,6 +101,11 @@ const { palettes } = Astro.props;
     padding: var(--spacing-xs) var(--spacing-md) !important;
   }
 
+  /* ── Visibility: hidden unless on brand page or popped out ── */
+  :global(html:not(.palette-popped-out):not([data-palette-always])) .palette-panel {
+    display: none !important;
+  }
+
   /* ── Sticky Palette Panel ────────────────────────────────── */
   .palette-panel {
     position: fixed;
@@ -156,6 +159,35 @@ const { palettes } = Astro.props;
 
   .palette-panel.is-open .palette-panel__toggle .palette-panel__icon {
     transform: rotate(90deg);
+  }
+
+  .palette-panel__popout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .palette-panel__popout:hover {
+    color: var(--color-primary);
+  }
+
+  .palette-panel__popout .palette-panel__icon {
+    transform: rotate(90deg);
+  }
+
+  .palette-panel__popout.is-active .palette-panel__icon {
+    transform: rotate(-90deg);
+  }
+
+  .palette-panel__popout.is-active {
+    color: var(--color-primary);
   }
 
   .palette-panel__theme-toggle {
@@ -282,7 +314,11 @@ const { palettes } = Astro.props;
 
   @media (max-width: 768px) {
     .palette-panel {
-      display: none;
+      display: none !important;
     }
   }
 </style>
+
+<script>
+  import '../../scripts/palette-manager';
+</script>
