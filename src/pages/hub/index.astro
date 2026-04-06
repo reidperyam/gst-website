@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import CTASection from '../../components/CTASection.astro';
 import { trackPageView } from '../../utils/analytics';
+import DeltaIcon from '../../components/DeltaIcon.astro';
 
 trackPageView('hub', 'Strategic Intelligence Hub | GST');
 
@@ -104,7 +105,7 @@ const faqItems = [
                     <details class="brutal-faq__item brutal-frosted">
                         <summary class="brutal-faq__question">
                             <span>{item.question}</span>
-                            <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" class="delta-chevron" aria-hidden="true" />
+                            <DeltaIcon class="delta-chevron" />
                         </summary>
                         <div class="brutal-faq__answer" set:html={item.answer} />
                     </details>

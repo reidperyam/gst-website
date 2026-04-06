@@ -3,6 +3,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import HubHeader from '../../../../components/hub/HubHeader.astro';
 import { WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
 import { trackPageView } from '../../../../utils/analytics';
+import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
 trackPageView('diligence-machine', 'The Diligence Machine | GST');
 ---
@@ -112,7 +113,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                             type="button"
                                             aria-pressed="false"
                                         >
-                                            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="brutal-option-card__icon" width="10" height="10" loading="lazy" />{option.label}</span>
+                                            <span class="brutal-option-card__label"><DeltaIcon class="bullet-icon" />{option.label}</span>
                                             {option.description && (
                                                 <span class="brutal-option-card__description">{option.description}</span>
                                             )}
@@ -132,7 +133,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                             type="button"
                                             aria-pressed="false"
                                         >
-                                            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="brutal-option-card__icon" width="10" height="10" loading="lazy" />{option.label}</span>
+                                            <span class="brutal-option-card__label"><DeltaIcon class="bullet-icon" />{option.label}</span>
                                             {option.description && (
                                                 <span class="brutal-option-card__description">{option.description}</span>
                                             )}
@@ -158,14 +159,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                                         aria-pressed="false"
                                                     >
                                                         <span class="brutal-option-card__label">
-                                                            <img
-                                                                src="/images/gst-delta-icon-teal-stroke-thick.svg"
-                                                                alt=""
-                                                                aria-hidden="true"
-                                                                class="brutal-option-card__icon"
-                                                                width="10"
-                                                                height="10"
-                                                            />
+                                                            <DeltaIcon size={10} class="brutal-option-card__icon" />
                                                             {opt.label}
                                                         </span>
                                                     </button>
@@ -226,7 +220,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <!-- Document Header -->
                     <header class="doc-header" data-testid="doc-header">
                         <div class="doc-brand">
-                            <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" class="doc-brand-icon" width="24" height="24" loading="lazy" />
+                            <DeltaIcon class="bullet-icon" />
                             <span class="doc-brand-name">GST</span>
                         </div>
                         <h1 class="doc-title">Overview and Agenda</h1>
@@ -248,7 +242,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <!-- Attention Areas -->
                     <section class="doc-attention-anchors" id="attentionAreasSection" data-testid="attention-areas-section" style="display:none;" aria-label="Attention areas">
                         <h2 class="doc-section-heading">
-                            <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" loading="lazy" />
+                            <DeltaIcon class="bullet-icon" />
                             Attention Areas
                         </h2>
                         <p class="doc-section-subtitle">Critical risk factors and complexity areas requiring focused investigation during diligence</p>
@@ -262,7 +256,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                     <footer class="doc-footer">
                         <hr class="doc-divider" />
                         <div class="doc-footer-brand">
-                            <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="12" height="12" loading="lazy" />
+                            <DeltaIcon class="bullet-icon" />
                             <span>https://globalstrategic.tech</span>
                         </div>
                         <p class="doc-footer-disclaimer">These perspectives are presented from recurrent technology patterns. Extend, revise and replace these with others gathered during your discovery process.</p>
@@ -309,7 +303,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
             </details>
 
             <a href="/hub/tools" class="brutal-btn brutal-btn--secondary back-link" id="backToTools">
-                <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="10" height="10" loading="lazy" />
+                <DeltaIcon class="bullet-icon" />
                 Back to Tools
             </a>
         </div>
@@ -849,7 +843,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
         docMeta.innerHTML = `
             <h2 class="doc-section-heading">
-                <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" loading="lazy" />
+                <DeltaIcon class="bullet-icon" />
                 Target Parameters
             </h2>
             <div class="doc-meta-grid">
@@ -938,7 +932,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
         const docToc = document.getElementById('docToc')!;
         docToc.innerHTML = `
             <h2 class="doc-section-heading">
-                <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" loading="lazy" />
+                <DeltaIcon class="bullet-icon" />
                 Table of Contents
             </h2>
             <nav class="doc-toc-list" aria-label="Topic navigation">

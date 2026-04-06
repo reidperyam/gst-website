@@ -8,6 +8,7 @@ import {
 } from '../../../../utils/tech-debt-engine';
 
 trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
+import DeltaIcon from '../../../../components/DeltaIcon.astro';
 ---
 
 <BaseLayout
@@ -44,7 +45,7 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
             <!-- Print-only report header (hidden on screen) -->
             <div class="print-report-header" aria-hidden="true">
                 <div class="print-report-header__brand">
-                    <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" width="24" height="24" />
+                    <DeltaIcon class="bullet-icon" />
                     <span>GST</span>
                 </div>
                 <div class="print-report-header__title">Technical Debt Cost Report</div>

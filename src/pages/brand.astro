@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ColorSpecimens from '../components/brand/ColorSpecimens.astro';
 import { palettes } from '../data/palettes';
 import { trackPageView } from '../utils/analytics';
+import DeltaIcon from '../components/DeltaIcon.astro';
 
 trackPageView('brand', 'Brand Style Reference');
 ---
@@ -20,7 +21,7 @@ trackPageView('brand', 'Brand Style Reference');
 <div class="brand-layout">
   <nav class="brand-toc" aria-label="Table of contents">
     <h2 class="brand-toc__heading">
-      <img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" aria-hidden="true" width="14" height="14" loading="lazy" />
+      <DeltaIcon class="bullet-icon" />
       Contents
       <svg class="delta-chevron brand-toc__chevron" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
     </h2>
@@ -51,7 +52,7 @@ trackPageView('brand', 'Brand Style Reference');
     <div class="brand-identity-grid">
       <div class="brand-identity-logos">
         <div class="brand-logo-item">
-          <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="GST delta icon" width="80" height="80" />
+          <DeltaIcon class="bullet-icon" />
           <span class="brutal-text-small">Delta Icon</span>
         </div>
         <div class="brand-logo-item">
@@ -1217,7 +1218,7 @@ trackPageView('brand', 'Brand Style Reference');
     <div class="brand-component-row">
       <div class="brand-component-item">
         <div style="display:flex;align-items:center;gap:0.25rem;">
-          <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:2rem;height:2rem;" aria-hidden="true" />
+          <DeltaIcon class="bullet-icon" />
           <span class="logo" style="font-size:2rem;font-weight:900;font-family:monospace;color:var(--text-primary);letter-spacing:-0.05em;text-transform:uppercase;display:flex;align-items:center;gap:var(--spacing-sm);height:2rem;text-decoration:none;border-bottom:none;" data-specimen>G<span style="color:var(--color-primary);">S</span>T<span style="width:8px;height:8px;background:var(--color-primary);display:block;animation:pulse 2s infinite;"></span></span>
         </div>
         <code class="brand-code">.logo — monospace, 900 weight, uppercase, -0.05em tracking, primary "S" accent, pulsing dot</code>
@@ -1274,7 +1275,7 @@ trackPageView('brand', 'Brand Style Reference');
     <div class="brand-component-row">
       <div class="brand-component-item">
         <button style="background:transparent;border:none;color:var(--text-muted);cursor:pointer;transition:color var(--transition-fast);padding:0;line-height:1;display:flex;align-items:center;" title="Theme toggle specimen" aria-label="Theme toggle specimen">
-          <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:2rem;height:2rem;display:block;" aria-hidden="true" />
+          <DeltaIcon class="bullet-icon" />
         </button>
         <code class="brand-code">.theme-toggle — delta icon, no border/radius, var(--text-muted) color, var(--transition-fast)</code>
       </div>
@@ -1415,11 +1416,11 @@ trackPageView('brand', 'Brand Style Reference');
       <div class="brand-component-item brand-component-item--full">
         <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--gap-wide);padding:0;margin:0;">
           <li style="display:flex;align-items:center;gap:var(--spacing-lg);">
-            <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:1.25rem;height:1.25rem;" />
+            <DeltaIcon class="bullet-icon" />
             <span style="font-size:var(--text-base);font-family:monospace;color:var(--text-primary);line-height:1.6;" data-specimen>Private equity & investment teams</span>
           </li>
           <li style="display:flex;align-items:center;gap:var(--spacing-lg);">
-            <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:1.25rem;height:1.25rem;" />
+            <DeltaIcon class="bullet-icon" />
             <span style="font-size:var(--text-base);font-family:monospace;color:var(--text-primary);line-height:1.6;">SaaS and technology-enabled businesses</span>
           </li>
         </ul>
@@ -1447,11 +1448,11 @@ trackPageView('brand', 'Brand Style Reference');
       <div class="brand-component-item brand-component-item--full">
         <div style="max-width:500px;">
           <details style="background:transparent;border:2px solid var(--border-light);transition:background var(--transition-normal),border-color var(--transition-normal);margin-bottom:var(--spacing-sm);" open>
-            <summary style="padding:var(--spacing-lg);font-size:var(--text-lg);font-family:monospace;font-weight:var(--font-weight-semibold);color:var(--text-primary);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;" data-specimen>What does a diligence engagement include? <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:14px;height:14px;flex-shrink:0;transform:rotate(180deg);transition:transform var(--transition-fast);" aria-hidden="true" /></summary>
+            <summary style="padding:var(--spacing-lg);font-size:var(--text-lg);font-family:monospace;font-weight:var(--font-weight-semibold);color:var(--text-primary);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;" data-specimen>What does a diligence engagement include? <DeltaIcon class="bullet-icon" /></summary>
             <div style="padding:0 var(--spacing-lg) var(--spacing-lg);font-family:monospace;color:var(--text-secondary);line-height:1.7;">A comprehensive review of architecture, infrastructure, security posture, and development practices.</div>
           </details>
           <details style="background:transparent;border:2px solid var(--border-light);">
-            <summary style="padding:var(--spacing-lg);font-size:var(--text-lg);font-family:monospace;font-weight:var(--font-weight-semibold);color:var(--text-primary);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">How long does buy-side diligence take? <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:14px;height:14px;flex-shrink:0;transform:rotate(0deg);transition:transform var(--transition-fast);" aria-hidden="true" /></summary>
+            <summary style="padding:var(--spacing-lg);font-size:var(--text-lg);font-family:monospace;font-weight:var(--font-weight-semibold);color:var(--text-primary);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">How long does buy-side diligence take? <DeltaIcon class="bullet-icon" /></summary>
           </details>
         </div>
         <code class="brand-code">.faq-item — no radius, 2px border, delta icon up→down(180deg) on expand, monospace question/answer</code>
@@ -1555,7 +1556,7 @@ trackPageView('brand', 'Brand Style Reference');
             <span>Apr 2</span>
           </div>
           <div style="display:flex;align-items:center;gap:var(--spacing-sm);">
-            <img src="/images/logo/gst-delta-icon-teal-stroke-thick.svg" alt="" style="width:14px;height:14px;" aria-hidden="true" />
+            <DeltaIcon class="bullet-icon" />
             <span style="font-size:var(--text-base);font-family:monospace;font-weight:var(--font-weight-semibold);color:var(--text-primary);line-height:1.4;" data-specimen>Cloud infrastructure spend surges as AI workloads reshape enterprise budgets</span>
           </div>
         </div>
@@ -1722,15 +1723,15 @@ trackPageView('brand', 'Brand Style Reference');
       <div class="brand-component-item brand-component-item--full">
         <div class="options-grid">
           <button class="brutal-option-card" type="button" data-demo-option-brutal>
-            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" class="brutal-option-card__icon" width="10" height="10" />Full Acquisition</span>
+            <span class="brutal-option-card__label"><DeltaIcon class="brutal-option-card__icon" />Full Acquisition</span>
             <span class="brutal-option-card__description">Complete purchase of the target entity</span>
           </button>
           <button class="brutal-option-card brutal-option-card--selected" type="button" data-demo-option-brutal>
-            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" class="brutal-option-card__icon" width="10" height="10" />Carve-out</span>
+            <span class="brutal-option-card__label"><DeltaIcon class="brutal-option-card__icon" />Carve-out</span>
             <span class="brutal-option-card__description">Separation of a business unit from a parent company</span>
           </button>
           <button class="brutal-option-card" type="button" data-demo-option-brutal>
-            <span class="brutal-option-card__label"><img src="/images/gst-delta-icon-teal-stroke-thick.svg" alt="" class="brutal-option-card__icon" width="10" height="10" />Majority Stake</span>
+            <span class="brutal-option-card__label"><DeltaIcon class="brutal-option-card__icon" />Majority Stake</span>
             <span class="brutal-option-card__description">Controlling interest with existing ownership retained</span>
           </button>
         </div>
@@ -3876,13 +3877,21 @@ trackPageView('brand', 'Brand Style Reference');
 
       headings.forEach(h3 => {
         const li = document.createElement('li');
-        const icon = document.createElement('img');
-        icon.src = '/images/gst-delta-icon-teal-stroke-thick.svg';
-        icon.alt = '';
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('viewBox', '0 0 64 64');
+        icon.setAttribute('fill', 'none');
         icon.setAttribute('aria-hidden', 'true');
+        icon.setAttribute('width', '10');
+        icon.setAttribute('height', '10');
         icon.className = 'bullet-icon';
-        icon.width = 10;
-        icon.height = 10;
+        icon.style.flexShrink = '0';
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M32 8 L56 56 L8 56 Z');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'currentColor');
+        path.setAttribute('stroke-width', '5');
+        path.setAttribute('stroke-linejoin', 'miter');
+        icon.appendChild(path);
 
         const link = document.createElement('a');
         link.href = `#${h3.id}`;
