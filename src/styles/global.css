@@ -1,6 +1,7 @@
 @import './variables.css';
 @import './typography.css';
 @import './interactions.css';
+@import './palettes.css';
 
 * {
     margin: 0;
