@@ -38,14 +38,14 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
                     <DeltaIcon class="bullet-icon" />
                     Contents
                 </h2>
-                <ol class="vdr-toc-list">
+                <ul class="vdr-toc-list">
                     <li><a href="#what-this-is">What This Is</a></li>
                     <li><a href="#why-it-matters">Why VDR Structure Matters</a></li>
                     <li class="vdr-toc-taxonomy"><a href="#folder-taxonomy">Recommended Folder Taxonomy</a></li>
                     <li><a href="#common-pitfalls">Common Pitfalls</a></li>
                     <li><a href="#best-practices">Best Practices</a></li>
                     <li><a href="#vdr-platforms">VDR Platforms</a></li>
-                </ol>
+                </ul>
             </nav>
 
             <div class="vdr-content">
@@ -448,6 +448,7 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
     }
 
     .vdr-toc-list {
+        list-style: none;
         padding-left: var(--spacing-xl);
         margin: 0;
     }
@@ -843,7 +844,6 @@ trackPageView('vdr-structure-guide', 'VDR Structure Guide | GST');
 
         .vdr-toc-list {
             padding-left: var(--spacing-lg);
-            list-style: none;
             display: flex;
             flex-direction: column;
             gap: var(--spacing-xs);
