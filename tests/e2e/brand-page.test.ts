@@ -40,7 +40,7 @@ test.describe('Brand Page', () => {
       // Wait for JS to build sublists
       await page.waitForFunction(() =>
         document.querySelectorAll('.brand-toc__sublist').length > 0
-      );
+      , { timeout: 10000 });
 
       // Identity section has 3 h3s (brand-voice, wordmark, logo-usage)
       const identitySubs = page.locator('.brand-toc__layer[data-section="identity"] .brand-toc__sublist li');
@@ -62,14 +62,14 @@ test.describe('Brand Page', () => {
       // Wait for matchMedia listener to apply collapsed state
       await page.waitForFunction(() =>
         document.querySelector('.brand-toc')?.classList.contains('is-collapsed')
-      );
+      , { timeout: 10000 });
     });
 
     test('should expand TOC when heading is clicked on mobile', async ({ page }) => {
       await page.setViewportSize({ width: 480, height: 800 });
       await page.waitForFunction(() =>
         document.querySelector('.brand-toc')?.classList.contains('is-collapsed')
-      );
+      , { timeout: 10000 });
 
       // Click heading to expand
       await page.evaluate(() => {
@@ -80,14 +80,14 @@ test.describe('Brand Page', () => {
 
       await page.waitForFunction(() =>
         !document.querySelector('.brand-toc')?.classList.contains('is-collapsed')
-      );
+      , { timeout: 10000 });
     });
 
     test('should collapse TOC again on second click', async ({ page }) => {
       await page.setViewportSize({ width: 480, height: 800 });
       await page.waitForFunction(() =>
         document.querySelector('.brand-toc')?.classList.contains('is-collapsed')
-      );
+      , { timeout: 10000 });
 
       // Expand
       await page.evaluate(() => {
@@ -97,7 +97,7 @@ test.describe('Brand Page', () => {
       });
       await page.waitForFunction(() =>
         !document.querySelector('.brand-toc')?.classList.contains('is-collapsed')
-      );
+      , { timeout: 10000 });
 
       // Collapse again
       await page.evaluate(() => {
@@ -107,7 +107,7 @@ test.describe('Brand Page', () => {
       });
       await page.waitForFunction(() =>
         document.querySelector('.brand-toc')?.classList.contains('is-collapsed')
-      );
+      , { timeout: 10000 });
     });
   });
 
@@ -115,7 +115,7 @@ test.describe('Brand Page', () => {
     test('should highlight first section link on initial load', async ({ page }) => {
       await page.waitForFunction(() =>
         document.querySelector('.brand-toc__list a.is-active')?.getAttribute('href') === '#identity'
-      );
+      , { timeout: 10000 });
     });
 
     test('should only have one active link at a time', async ({ page }) => {

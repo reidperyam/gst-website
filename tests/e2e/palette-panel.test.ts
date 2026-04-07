@@ -54,13 +54,13 @@ test.describe('Palette Panel', () => {
       await clickPanelButton(page, 'panel-toggle');
       await page.waitForFunction(() =>
         document.getElementById('palette-panel')?.classList.contains('is-open')
-      );
+      , { timeout: 10000 });
 
       // Close
       await clickPanelButton(page, 'panel-toggle');
       await page.waitForFunction(() =>
         !document.getElementById('palette-panel')?.classList.contains('is-open')
-      );
+      , { timeout: 10000 });
     });
   });
 
@@ -77,7 +77,7 @@ test.describe('Palette Panel', () => {
 
       await page.waitForFunction(() =>
         document.documentElement.classList.contains('palette-2')
-      );
+      , { timeout: 10000 });
     });
 
     test('should remove previous palette class when switching', async ({ page }) => {
@@ -91,7 +91,7 @@ test.describe('Palette Panel', () => {
       });
       await page.waitForFunction(() =>
         document.documentElement.classList.contains('palette-2')
-      );
+      , { timeout: 10000 });
 
       await page.evaluate(() => {
         (document.querySelector('[data-palette="3"]') as HTMLElement)
@@ -134,7 +134,7 @@ test.describe('Palette Panel', () => {
 
       await page.waitForFunction(() =>
         localStorage.getItem('palette') === '4'
-      );
+      , { timeout: 10000 });
     });
 
     test('should restore palette from localStorage on page load', async ({ page }) => {
@@ -154,7 +154,7 @@ test.describe('Palette Panel', () => {
 
       await page.waitForFunction(() =>
         localStorage.getItem('palette-popped-out') === 'true'
-      );
+      , { timeout: 10000 });
     });
 
     test('should restore pop-out state from localStorage on reload', async ({ page }) => {
@@ -194,7 +194,7 @@ test.describe('Palette Panel', () => {
 
       await page.waitForFunction(() =>
         document.documentElement.classList.contains('palette-2')
-      );
+      , { timeout: 10000 });
 
       // Navigate to homepage
       await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -221,7 +221,7 @@ test.describe('Palette Panel', () => {
 
       await page.waitForFunction(() =>
         document.documentElement.style.getPropertyValue('--color-primary') === ''
-      );
+      , { timeout: 10000 });
     });
   });
 });
