@@ -1,4 +1,4 @@
-import { rgbToHex, hexToRgb } from '@/utils/palette-utils';
+import { rgbToHex, hexToRgb, parseAlpha } from '@/utils/palette-utils';
 
 describe('rgbToHex', () => {
   describe('standard RGB strings', () => {
@@ -24,16 +24,16 @@ describe('rgbToHex', () => {
       expect(rgbToHex('rgba(255, 0, 0, 1)')).toBe('#ff0000');
     });
 
-    it('should annotate partial alpha as percentage', () => {
-      expect(rgbToHex('rgba(255, 0, 0, 0.5)')).toBe('#ff0000 (50%)');
+    it('should return hex only for partial alpha (alpha tracked separately via parseAlpha)', () => {
+      expect(rgbToHex('rgba(255, 0, 0, 0.5)')).toBe('#ff0000');
     });
 
-    it('should annotate zero alpha as 0%', () => {
-      expect(rgbToHex('rgba(255, 0, 0, 0)')).toBe('#ff0000 (0%)');
+    it('should return hex only for zero alpha', () => {
+      expect(rgbToHex('rgba(255, 0, 0, 0)')).toBe('#ff0000');
     });
 
-    it('should round alpha percentage to nearest integer', () => {
-      expect(rgbToHex('rgba(0, 0, 0, 0.333)')).toBe('#000000 (33%)');
+    it('should return hex for semi-transparent text colors', () => {
+      expect(rgbToHex('rgba(26, 26, 26, 0.95)')).toBe('#1a1a1a');
     });
   });
 
@@ -108,6 +108,52 @@ describe('hexToRgb', () => {
 
     it('should return null for partial hex', () => {
       expect(hexToRgb('#ff00')).toBeNull();
+    });
+  });
+});
+
+describe('parseAlpha', () => {
+  describe('opaque colors', () => {
+    it('should return 1 for rgb() without alpha', () => {
+      expect(parseAlpha('rgb(255, 0, 0)')).toBe(1);
+    });
+
+    it('should return 1 for rgba() with alpha 1', () => {
+      expect(parseAlpha('rgba(255, 0, 0, 1)')).toBe(1);
+    });
+  });
+
+  describe('semi-transparent colors', () => {
+    it('should return 0.5 for 50% alpha', () => {
+      expect(parseAlpha('rgba(255, 0, 0, 0.5)')).toBe(0.5);
+    });
+
+    it('should return 0.95 for text-primary style alpha', () => {
+      expect(parseAlpha('rgba(26, 26, 26, 0.95)')).toBe(0.95);
+    });
+
+    it('should return 0.1 for border-light style alpha', () => {
+      expect(parseAlpha('rgba(26, 26, 26, 0.1)')).toBe(0.1);
+    });
+
+    it('should return 0.08 for accent-light-bg style alpha', () => {
+      expect(parseAlpha('rgba(5, 205, 153, 0.08)')).toBe(0.08);
+    });
+  });
+
+  describe('special values', () => {
+    it('should return 0 for transparent', () => {
+      expect(parseAlpha('transparent')).toBe(0);
+    });
+
+    it('should return 0 for rgba(0, 0, 0, 0)', () => {
+      expect(parseAlpha('rgba(0, 0, 0, 0)')).toBe(0);
+    });
+
+    it('should return 1 for non-matching strings', () => {
+      expect(parseAlpha('not-a-color')).toBe(1);
+      expect(parseAlpha('')).toBe(1);
+      expect(parseAlpha('#ff0000')).toBe(1);
     });
   });
 });

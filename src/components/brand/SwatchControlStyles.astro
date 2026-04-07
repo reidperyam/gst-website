@@ -139,4 +139,20 @@
   :global(.swatch-slider-label--r .swatch-slider)::-moz-range-thumb { background: #c44040; }
   :global(.swatch-slider-label--g .swatch-slider)::-moz-range-thumb { background: #16a34a; }
   :global(.swatch-slider-label--b .swatch-slider)::-moz-range-thumb { background: #3b82f6; }
+
+  /* ── Alpha slider & display ──────────────────────────────── */
+
+  :global(.swatch-slider-label--a) { color: var(--color-primary); }
+  :global(.swatch-slider-label--a .swatch-slider)::-webkit-slider-thumb { background: var(--color-primary); }
+  :global(.swatch-slider-label--a .swatch-slider)::-moz-range-thumb { background: var(--color-primary); }
+
+  :global(.swatch-alpha-display) {
+    font-family: monospace;
+    font-size: 9px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
 </style>

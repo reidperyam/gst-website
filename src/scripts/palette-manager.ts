@@ -4,7 +4,7 @@
  */
 
 import { PALETTE_NAMES, PALETTE_CONCEPTS, TOKEN_TIPS } from '../data/palettes';
-import { rgbToHex, hexToRgb } from '../utils/palette-utils';
+import { rgbToHex, hexToRgb, parseAlpha } from '../utils/palette-utils';
 
 // ── Read & Populate ────────────────────────────────────────
 
@@ -22,15 +22,18 @@ function readAndPopulate(): void {
 
     const resolved = getComputedStyle(colorEl).backgroundColor;
     const hex = rgbToHex(resolved);
+    const alpha = parseAlpha(resolved);
     const valueEl = el.querySelector('.brand-swatch__value');
-    if (valueEl) valueEl.textContent = hex;
+    if (valueEl) valueEl.textContent = alpha < 1 ? `${hex} @ ${Math.round(alpha * 100)}%` : hex;
 
     const picker = el.querySelector<HTMLInputElement>('.swatch-picker');
     const hexInput = el.querySelector<HTMLInputElement>('.swatch-hex');
     const sliderR = el.querySelector<HTMLInputElement>('.swatch-slider-r');
     const sliderG = el.querySelector<HTMLInputElement>('.swatch-slider-g');
     const sliderB = el.querySelector<HTMLInputElement>('.swatch-slider-b');
-    if (picker && hex !== 'transparent' && !hex.includes('(')) picker.value = hex;
+    const sliderA = el.querySelector<HTMLInputElement>('.swatch-slider-a');
+    const alphaDisplay = el.querySelector('.swatch-alpha-display');
+    if (picker && hex !== 'transparent') picker.value = hex;
     if (hexInput) hexInput.value = hex;
     const rgb = hexToRgb(hex);
     if (rgb && sliderR && sliderG && sliderB) {
@@ -38,6 +41,8 @@ function readAndPopulate(): void {
       sliderG.value = String(rgb[1]);
       sliderB.value = String(rgb[2]);
     }
+    if (sliderA) sliderA.value = String(Math.round(alpha * 100));
+    if (alphaDisplay) alphaDisplay.textContent = `@ ${Math.round(alpha * 100)}%`;
   });
 
   // Brand-page-only elements (guarded — no-op on other pages)
@@ -80,7 +85,12 @@ function readAndPopulate(): void {
 
 // ── Color Editing ──────────────────────────────────────────
 
-function applyColor(swatch: HTMLElement, hex: string) {
+function getSwatchAlpha(swatch: HTMLElement): number | undefined {
+  const slider = swatch.querySelector<HTMLInputElement>('.swatch-slider-a');
+  return slider ? parseInt(slider.value) / 100 : undefined;
+}
+
+function applyColor(swatch: HTMLElement, hex: string, alpha?: number) {
   const colorEl = swatch.querySelector<HTMLElement>('.brand-swatch__color');
   const valueEl = swatch.querySelector('.brand-swatch__value');
   const picker = swatch.querySelector<HTMLInputElement>('.swatch-picker');
@@ -88,24 +98,41 @@ function applyColor(swatch: HTMLElement, hex: string) {
   const sliderR = swatch.querySelector<HTMLInputElement>('.swatch-slider-r');
   const sliderG = swatch.querySelector<HTMLInputElement>('.swatch-slider-g');
   const sliderB = swatch.querySelector<HTMLInputElement>('.swatch-slider-b');
+  const sliderA = swatch.querySelector<HTMLInputElement>('.swatch-slider-a');
+  const alphaDisplay = swatch.querySelector('.swatch-alpha-display');
 
-  if (colorEl) colorEl.style.background = hex;
-  if (valueEl) valueEl.textContent = hex;
+  const hasAlpha = alpha !== undefined && alpha < 1;
+  const rgb = hexToRgb(hex);
+
+  if (colorEl) {
+    if (hasAlpha && rgb) {
+      colorEl.style.backgroundColor = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
+    } else {
+      colorEl.style.background = hex;
+    }
+  }
+
+  if (valueEl) valueEl.textContent = hasAlpha ? `${hex} @ ${Math.round(alpha! * 100)}%` : hex;
   if (picker) picker.value = hex;
   if (hexInput) hexInput.value = hex;
 
-  const rgb = hexToRgb(hex);
   if (rgb && sliderR && sliderG && sliderB) {
     sliderR.value = String(rgb[0]);
     sliderG.value = String(rgb[1]);
     sliderB.value = String(rgb[2]);
   }
+  if (sliderA && alpha !== undefined) sliderA.value = String(Math.round(alpha * 100));
+  if (alphaDisplay && alpha !== undefined) alphaDisplay.textContent = `@ ${Math.round(alpha * 100)}%`;
 
   swatch.dataset.userOverride = 'true';
 
   const varName = swatch.dataset.var;
   if (varName) {
-    document.documentElement.style.setProperty(varName, hex);
+    if (hasAlpha && rgb) {
+      document.documentElement.style.setProperty(varName, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`);
+    } else {
+      document.documentElement.style.setProperty(varName, hex);
+    }
   }
 }
 
@@ -122,8 +149,17 @@ function injectControls() {
     if (!colorEl) return;
     const resolved = getComputedStyle(colorEl).backgroundColor;
     const initialHex = rgbToHex(resolved);
-    if (initialHex === 'transparent' || initialHex.includes('(')) return;
+    if (initialHex === 'transparent') return;
     const rgb = hexToRgb(initialHex) || [0, 0, 0];
+    const initialAlpha = parseAlpha(resolved);
+    const hasAlpha = initialAlpha < 1;
+
+    const alphaDisplayHtml = hasAlpha
+      ? `<span class="swatch-alpha-display">@ ${Math.round(initialAlpha * 100)}%</span>`
+      : '';
+    const alphaSliderHtml = hasAlpha
+      ? `<label class="swatch-slider-label swatch-slider-label--a">A<input type="range" class="swatch-slider swatch-slider-a" min="0" max="100" value="${Math.round(initialAlpha * 100)}" /></label>`
+      : '';
 
     const controls = document.createElement('div');
     controls.className = 'swatch-controls';
@@ -131,12 +167,14 @@ function injectControls() {
       <div class="swatch-controls__row">
         <input type="color" class="swatch-picker" value="${initialHex}" />
         <input type="text" class="swatch-hex" value="${initialHex}" maxlength="7" spellcheck="false" />
+        ${alphaDisplayHtml}
         <button class="swatch-reset" title="Reset to palette default" type="button">&times;</button>
       </div>
       <div class="swatch-sliders">
         <label class="swatch-slider-label swatch-slider-label--r">R<input type="range" class="swatch-slider swatch-slider-r" min="0" max="255" value="${rgb[0]}" /></label>
         <label class="swatch-slider-label swatch-slider-label--g">G<input type="range" class="swatch-slider swatch-slider-g" min="0" max="255" value="${rgb[1]}" /></label>
         <label class="swatch-slider-label swatch-slider-label--b">B<input type="range" class="swatch-slider swatch-slider-b" min="0" max="255" value="${rgb[2]}" /></label>
+        ${alphaSliderHtml}
       </div>
     `;
     el.appendChild(controls);
@@ -146,14 +184,15 @@ function injectControls() {
     const sliderR = controls.querySelector<HTMLInputElement>('.swatch-slider-r')!;
     const sliderG = controls.querySelector<HTMLInputElement>('.swatch-slider-g')!;
     const sliderB = controls.querySelector<HTMLInputElement>('.swatch-slider-b')!;
+    const sliderA = controls.querySelector<HTMLInputElement>('.swatch-slider-a');
     const resetBtn = controls.querySelector<HTMLButtonElement>('.swatch-reset')!;
 
-    picker.addEventListener('input', () => applyColor(el, picker.value));
+    picker.addEventListener('input', () => applyColor(el, picker.value, getSwatchAlpha(el)));
 
     hexInput.addEventListener('input', () => {
       let v = hexInput.value.trim();
       if (!v.startsWith('#')) v = '#' + v;
-      if (/^#[0-9a-f]{6}$/i.test(v)) applyColor(el, v);
+      if (/^#[0-9a-f]{6}$/i.test(v)) applyColor(el, v, getSwatchAlpha(el));
     });
 
     const onSlider = () => {
@@ -161,32 +200,40 @@ function injectControls() {
       const g = parseInt(sliderG.value).toString(16).padStart(2, '0');
       const b = parseInt(sliderB.value).toString(16).padStart(2, '0');
       const hex = `#${r}${g}${b}`;
-      if (colorEl) colorEl.style.background = hex;
-      const valueEl = el.querySelector('.brand-swatch__value');
-      if (valueEl) valueEl.textContent = hex;
-      if (picker) picker.value = hex;
-      if (hexInput) hexInput.value = hex;
-      el.dataset.userOverride = 'true';
-      const varName = el.dataset.var;
-      if (varName) document.documentElement.style.setProperty(varName, hex);
+      applyColor(el, hex, getSwatchAlpha(el));
     };
 
     sliderR.addEventListener('input', onSlider);
     sliderG.addEventListener('input', onSlider);
     sliderB.addEventListener('input', onSlider);
 
+    if (sliderA) {
+      sliderA.addEventListener('input', () => {
+        const alpha = parseInt(sliderA.value) / 100;
+        const currentHex = hexInput.value;
+        applyColor(el, currentHex, alpha);
+      });
+    }
+
     resetBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const varName = el.dataset.var;
-      if (colorEl && varName) colorEl.style.background = `var(${varName})`;
+      if (colorEl && varName) {
+        if (hasAlpha) {
+          colorEl.style.backgroundColor = `var(${varName})`;
+        } else {
+          colorEl.style.background = `var(${varName})`;
+        }
+      }
       if (varName) document.documentElement.style.removeProperty(varName);
       delete el.dataset.userOverride;
       requestAnimationFrame(() => {
         const fresh = getComputedStyle(colorEl!).backgroundColor;
         const freshHex = rgbToHex(fresh);
+        const freshAlpha = parseAlpha(fresh);
         const valueEl = el.querySelector('.brand-swatch__value');
-        if (valueEl) valueEl.textContent = freshHex;
-        if (picker) picker.value = freshHex.includes('(') ? '#000000' : freshHex;
+        if (valueEl) valueEl.textContent = freshAlpha < 1 ? `${freshHex} @ ${Math.round(freshAlpha * 100)}%` : freshHex;
+        if (picker) picker.value = freshHex === 'transparent' ? '#000000' : freshHex;
         if (hexInput) hexInput.value = freshHex;
         const freshRgb = hexToRgb(freshHex);
         if (freshRgb) {
@@ -194,6 +241,9 @@ function injectControls() {
           sliderG.value = String(freshRgb[1]);
           sliderB.value = String(freshRgb[2]);
         }
+        if (sliderA) sliderA.value = String(Math.round(freshAlpha * 100));
+        const alphaDisplay = el.querySelector('.swatch-alpha-display');
+        if (alphaDisplay) alphaDisplay.textContent = `@ ${Math.round(freshAlpha * 100)}%`;
       });
     });
   });
@@ -233,7 +283,13 @@ function resetAllOverrides() {
     if (varName) html.style.removeProperty(varName);
     delete el.dataset.userOverride;
     const colorEl = el.querySelector<HTMLElement>('.brand-swatch__color');
-    if (colorEl && varName) colorEl.style.background = `var(${varName})`;
+    if (colorEl && varName) {
+      if (colorEl.classList.contains('brand-swatch__color--checker')) {
+        colorEl.style.backgroundColor = `var(${varName})`;
+      } else {
+        colorEl.style.background = `var(${varName})`;
+      }
+    }
   });
 
   requestAnimationFrame(() => readAndPopulate());

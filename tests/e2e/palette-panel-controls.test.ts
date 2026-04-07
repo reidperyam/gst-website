@@ -30,6 +30,9 @@ async function waitForSwatchControls(page: import('@playwright/test').Page): Pro
   , { timeout: 10000 });
 }
 
+/** CSS selector for the first semi-transparent swatch (--text-secondary, alpha 0.7). */
+const ALPHA_SWATCH = '.brand-swatch[data-var="--text-secondary"]';
+
 test.describe('Palette Panel Controls', () => {
 
   test.describe('Swatch Controls Injection', () => {
@@ -41,25 +44,14 @@ test.describe('Palette Panel Controls', () => {
       const result = await page.evaluate(() => {
         const swatches = document.querySelectorAll('.brand-swatch');
         const withControls = document.querySelectorAll('.brand-swatch .swatch-controls');
-        // injectControls() skips swatches whose computed background is
-        // transparent or semi-transparent (alpha < 1). Mirror that logic here
-        // so the assertion stays in sync with the production guard condition.
-        function rgbToHex(rgb: string): string {
-          if (rgb === 'transparent' || rgb === 'rgba(0, 0, 0, 0)') return 'transparent';
-          const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
-          if (!m) return rgb;
-          const r = parseInt(m[1]), g = parseInt(m[2]), b = parseInt(m[3]);
-          const a = m[4] !== undefined ? parseFloat(m[4]) : 1;
-          const hex = '#' + [r, g, b].map(c => c.toString(16).padStart(2, '0')).join('');
-          return a < 1 ? `${hex} (${Math.round(a * 100)}%)` : hex;
-        }
+        // injectControls() now supports semi-transparent swatches (alpha slider).
+        // Only fully transparent swatches (rgba(0,0,0,0)) are still skipped.
         let eligible = 0;
         swatches.forEach(el => {
           const colorEl = el.querySelector<HTMLElement>('.brand-swatch__color');
           if (!colorEl) return;
-          const resolved = getComputedStyle(colorEl).backgroundColor;
-          const hex = rgbToHex(resolved);
-          if (hex !== 'transparent' && !hex.includes('(')) eligible++;
+          const bg = getComputedStyle(colorEl).backgroundColor;
+          if (bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') eligible++;
         });
         return {
           totalSwatches: swatches.length,
@@ -70,6 +62,51 @@ test.describe('Palette Panel Controls', () => {
 
       expect(result.totalSwatches).toBeGreaterThan(0);
       expect(result.swatchesWithControls).toBe(result.eligibleSwatches);
+    });
+  });
+
+  test.describe('Alpha Slider', () => {
+    test('should show alpha slider only for semi-transparent swatches', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await openPanel(page);
+      await waitForSwatchControls(page);
+
+      const result = await page.evaluate(() => {
+        const alphaSliders = document.querySelectorAll('.swatch-slider-a');
+        const totalControls = document.querySelectorAll('.swatch-controls');
+        const alphaDisplays = document.querySelectorAll('.swatch-alpha-display');
+        return {
+          alphaSliderCount: alphaSliders.length,
+          alphaDisplayCount: alphaDisplays.length,
+          totalControlCount: totalControls.length,
+        };
+      });
+
+      // 9 semi-transparent swatches should have alpha sliders
+      expect(result.alphaSliderCount).toBe(9);
+      expect(result.alphaDisplayCount).toBe(9);
+      // Opaque swatches should not have alpha sliders
+      expect(result.totalControlCount).toBeGreaterThan(result.alphaSliderCount);
+    });
+
+    test('should update CSS variable with rgba when alpha slider changes', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await openPanel(page);
+      await waitForSwatchControls(page);
+
+      const result = await page.evaluate(() => {
+        const alphaSlider = document.querySelector<HTMLInputElement>('.swatch-slider-a');
+        if (!alphaSlider) return null;
+        const swatch = alphaSlider.closest<HTMLElement>('.brand-swatch');
+        const varName = swatch?.dataset.var;
+        alphaSlider.value = '50';
+        alphaSlider.dispatchEvent(new Event('input', { bubbles: true }));
+        const applied = document.documentElement.style.getPropertyValue(varName!);
+        return { varName, applied };
+      });
+
+      expect(result).toBeTruthy();
+      expect(result!.applied).toMatch(/rgba\(\d+,\s*\d+,\s*\d+,\s*0\.5\)/);
     });
   });
 
@@ -118,6 +155,55 @@ test.describe('Palette Panel Controls', () => {
       expect(result.g).toBe(51);
       expect(result.b).toBe(102);
     });
+
+    test('should preserve alpha when color picker changes on a semi-transparent swatch', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await openPanel(page);
+      await waitForSwatchControls(page);
+
+      const newColor = '#cc4400';
+
+      // Read the initial alpha value before editing
+      const initialAlpha = await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const slider = swatch?.querySelector<HTMLInputElement>('.swatch-slider-a');
+        return slider ? parseInt(slider.value) : null;
+      }, ALPHA_SWATCH);
+      expect(initialAlpha).toBeTruthy();
+
+      // Change the color picker on the alpha swatch
+      await page.evaluate(({ sel, color }) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const picker = swatch?.querySelector<HTMLInputElement>('.swatch-picker');
+        if (picker) {
+          picker.value = color;
+          picker.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, { sel: ALPHA_SWATCH, color: newColor });
+
+      // Wait for hex input to sync
+      await page.waitForFunction(({ sel, color }) => {
+        const swatch = document.querySelector(sel);
+        const hexInput = swatch?.querySelector<HTMLInputElement>('.swatch-hex');
+        return hexInput?.value === color;
+      }, { sel: ALPHA_SWATCH, color: newColor }, { timeout: 10000 });
+
+      const result = await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const varName = swatch?.dataset.var;
+        const alphaSlider = swatch?.querySelector<HTMLInputElement>('.swatch-slider-a');
+        const cssValue = varName ? document.documentElement.style.getPropertyValue(varName) : '';
+        return {
+          alphaSliderValue: alphaSlider ? parseInt(alphaSlider.value) : -1,
+          cssValue,
+        };
+      }, ALPHA_SWATCH);
+
+      // Alpha slider should be unchanged
+      expect(result.alphaSliderValue).toBe(initialAlpha);
+      // CSS variable should be rgba (not plain hex)
+      expect(result.cssValue).toMatch(/rgba\(/);
+    });
   });
 
   test.describe('Hex Input Sync', () => {
@@ -165,6 +251,39 @@ test.describe('Palette Panel Controls', () => {
       expect(result.g).toBe(204);
       expect(result.b).toBe(136);
     });
+
+    test('should preserve alpha when hex input changes on a semi-transparent swatch', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await openPanel(page);
+      await waitForSwatchControls(page);
+
+      const newHex = '#22cc88';
+
+      await page.evaluate(({ sel, hex }) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const hexInput = swatch?.querySelector<HTMLInputElement>('.swatch-hex');
+        if (hexInput) {
+          hexInput.value = hex;
+          hexInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, { sel: ALPHA_SWATCH, hex: newHex });
+
+      await page.waitForFunction(({ sel, hex }) => {
+        const swatch = document.querySelector(sel);
+        const picker = swatch?.querySelector<HTMLInputElement>('.swatch-picker');
+        return picker?.value === hex;
+      }, { sel: ALPHA_SWATCH, hex: newHex }, { timeout: 10000 });
+
+      const result = await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const varName = swatch?.dataset.var;
+        const cssValue = varName ? document.documentElement.style.getPropertyValue(varName) : '';
+        return { cssValue };
+      }, ALPHA_SWATCH);
+
+      // CSS variable should be rgba with preserved alpha
+      expect(result.cssValue).toMatch(/rgba\(34,\s*204,\s*136,\s*0\.7\)/);
+    });
   });
 
   test.describe('RGB Slider Sync', () => {
@@ -209,6 +328,43 @@ test.describe('Palette Panel Controls', () => {
 
       expect(result.picker).toBe(expectedHex);
       expect(result.hex).toBe(expectedHex);
+    });
+
+    test('should preserve alpha when RGB sliders change on a semi-transparent swatch', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await openPanel(page);
+      await waitForSwatchControls(page);
+
+      await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const sliderR = swatch?.querySelector<HTMLInputElement>('.swatch-slider-r');
+        const sliderG = swatch?.querySelector<HTMLInputElement>('.swatch-slider-g');
+        const sliderB = swatch?.querySelector<HTMLInputElement>('.swatch-slider-b');
+        if (sliderR && sliderG && sliderB) {
+          sliderR.value = '100';
+          sliderG.value = '200';
+          sliderB.value = '50';
+          sliderB.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, ALPHA_SWATCH);
+
+      const expectedHex = '#64c832';
+
+      await page.waitForFunction(({ sel, hex }) => {
+        const swatch = document.querySelector(sel);
+        const hexInput = swatch?.querySelector<HTMLInputElement>('.swatch-hex');
+        return hexInput?.value === hex;
+      }, { sel: ALPHA_SWATCH, hex: expectedHex }, { timeout: 10000 });
+
+      const result = await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const varName = swatch?.dataset.var;
+        const cssValue = varName ? document.documentElement.style.getPropertyValue(varName) : '';
+        return { cssValue };
+      }, ALPHA_SWATCH);
+
+      // CSS variable should be rgba with preserved alpha (0.7 for --text-secondary)
+      expect(result.cssValue).toMatch(/rgba\(100,\s*200,\s*50,\s*0\.7\)/);
     });
   });
 
@@ -260,6 +416,62 @@ test.describe('Palette Panel Controls', () => {
         // data-user-override should be removed
         return inlineValue === '' && swatch?.dataset.userOverride !== 'true';
       }, { timeout: 10000 });
+    });
+
+    test('should restore alpha slider and display when a semi-transparent swatch is reset', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await openPanel(page);
+      await waitForSwatchControls(page);
+
+      // Read the original alpha value
+      const originalAlpha = await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const slider = swatch?.querySelector<HTMLInputElement>('.swatch-slider-a');
+        return slider ? parseInt(slider.value) : null;
+      }, ALPHA_SWATCH);
+      expect(originalAlpha).toBeTruthy();
+
+      // Change both color and alpha on the swatch
+      await page.evaluate((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const picker = swatch?.querySelector<HTMLInputElement>('.swatch-picker');
+        const alphaSlider = swatch?.querySelector<HTMLInputElement>('.swatch-slider-a');
+        if (picker) {
+          picker.value = '#ff0000';
+          picker.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (alphaSlider) {
+          alphaSlider.value = '25';
+          alphaSlider.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, ALPHA_SWATCH);
+
+      // Verify override is applied
+      await page.waitForFunction((sel) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        return swatch?.dataset.userOverride === 'true';
+      }, ALPHA_SWATCH, { timeout: 10000 });
+
+      // Click reset
+      await page.evaluate((sel) => {
+        const swatch = document.querySelector(sel);
+        const resetBtn = swatch?.querySelector<HTMLButtonElement>('.swatch-reset');
+        resetBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      }, ALPHA_SWATCH);
+
+      // Wait for override to be cleared and alpha to restore
+      await page.waitForFunction(({ sel, expected }) => {
+        const swatch = document.querySelector<HTMLElement>(sel);
+        const varName = swatch?.dataset.var;
+        if (!varName) return false;
+        const inlineValue = document.documentElement.style.getPropertyValue(varName);
+        const slider = swatch?.querySelector<HTMLInputElement>('.swatch-slider-a');
+        const alphaDisplay = swatch?.querySelector('.swatch-alpha-display');
+        return inlineValue === '' &&
+               swatch?.dataset.userOverride !== 'true' &&
+               slider !== null && parseInt(slider!.value) === expected &&
+               alphaDisplay?.textContent === `@ ${expected}%`;
+      }, { sel: ALPHA_SWATCH, expected: originalAlpha }, { timeout: 10000 });
     });
   });
 
