@@ -5,6 +5,7 @@ import CompositeLogo from '../components/CompositeLogo.astro';
 import { palettes } from '../data/palettes';
 import { trackPageView } from '../utils/analytics';
 import DeltaIcon from '../components/DeltaIcon.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 
 trackPageView('brand', 'Brand Style Reference');
 ---
@@ -20,28 +21,26 @@ trackPageView('brand', 'Brand Style Reference');
 </div>
 
 <div class="brand-layout">
-  <nav class="brand-toc" aria-label="Table of contents" data-testid="brand-toc">
-    <h2 class="brand-toc__heading" data-testid="brand-toc-heading">
-      <DeltaIcon class="bullet-icon" />
-      Contents
-      <svg class="delta-chevron brand-toc__chevron" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 0 L56 48 L8 48 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
-    </h2>
-    <ul class="brand-toc__list" data-testid="brand-toc-list">
-      <li class="brand-toc__layer" data-section="identity"><a href="#identity">Brand Identity</a></li>
-      <li class="brand-toc__layer" data-section="colors"><a href="#colors">Color Palette</a></li>
-      <li class="brand-toc__layer" data-section="typography"><a href="#typography">Typography</a></li>
-      <li class="brand-toc__layer" data-section="spacing"><a href="#spacing">Spacing Scale</a></li>
-      <li><a href="#shadows">Shadows</a></li>
-      <li><a href="#transitions">Transitions</a></li>
-      <li class="brand-toc__separator" aria-hidden="true"></li>
-      <li class="brand-toc__layer" data-section="components"><a href="#components">Components</a></li>
-      <li class="brand-toc__layer" data-section="component-states"><a href="#component-states">Component States</a></li>
-      <li class="brand-toc__layer" data-section="accessibility"><a href="#accessibility">Accessibility</a></li>
-      <li class="brand-toc__layer" data-section="responsive-demos"><a href="#responsive-demos">Responsive Behavior</a></li>
-      <li class="brand-toc__separator" aria-hidden="true"></li>
-      <li class="brand-toc__layer" data-section="ui-library"><a href="#ui-library">UI Component Library</a></li>
-    </ul>
-  </nav>
+  <TableOfContents
+    testId="brand-toc"
+    collapsible={true}
+    scrollSpy={true}
+    separatorBefore={[6, 10]}
+    items={[
+      { href: "#identity", label: "Brand Identity", isLayer: true, sublistSource: { mode: "query", scopeId: "identity" }, dataAttrs: { section: "identity" } },
+      { href: "#colors", label: "Color Palette", isLayer: true, sublistSource: { mode: "query", scopeId: "colors" }, dataAttrs: { section: "colors" } },
+      { href: "#typography", label: "Typography", isLayer: true, sublistSource: { mode: "query", scopeId: "typography" }, dataAttrs: { section: "typography" } },
+      { href: "#spacing", label: "Spacing Scale", isLayer: true, sublistSource: { mode: "query", scopeId: "spacing" }, dataAttrs: { section: "spacing" } },
+      { href: "#shadows", label: "Shadows" },
+      { href: "#transitions", label: "Transitions" },
+      { href: "#components", label: "Components", isLayer: true, sublistSource: { mode: "query", scopeId: "components" }, dataAttrs: { section: "components" } },
+      { href: "#component-states", label: "Component States", isLayer: true, sublistSource: { mode: "query", scopeId: "component-states" }, dataAttrs: { section: "component-states" } },
+      { href: "#accessibility", label: "Accessibility", isLayer: true, sublistSource: { mode: "query", scopeId: "accessibility" }, dataAttrs: { section: "accessibility" } },
+      { href: "#responsive-demos", label: "Responsive Behavior", isLayer: true, sublistSource: { mode: "query", scopeId: "responsive-demos" }, dataAttrs: { section: "responsive-demos" } },
+      { href: "#ui-library", label: "UI Component Library", isLayer: true, sublistSource: { mode: "query", scopeId: "ui-library" }, dataAttrs: { section: "ui-library" } },
+      { href: "#toc-component", label: "Table of Contents", isLayer: true, sublistSource: { mode: "query", scopeId: "toc-component" }, dataAttrs: { section: "toc-component" } },
+    ]}
+  />
 
   <div class="brand-content palette-scope palette-0" id="palette-scope">
 
@@ -2574,6 +2573,49 @@ trackPageView('brand', 'Brand Style Reference');
   </div>
 </section>
 
+<!-- ═══════════════════════ TABLE OF CONTENTS COMPONENT ═══════════════════════ -->
+<section class="brand-section" id="toc-component">
+  <h2 class="brand-section-heading">
+    <DeltaIcon class="bullet-icon" />
+    Table of Contents Component
+  </h2>
+  <p class="brand-body">The <code>&lt;TableOfContents&gt;</code> component provides a reusable, props-driven table of contents with optional scroll-spy, mobile collapse, and auto-generated sublists from page headings.</p>
+
+  <div class="brand-component-row">
+    <div class="brand-component-item">
+      <h3 class="brutal-heading-sm" id="toc-basic">Basic</h3>
+      <div class="brand-toc-specimen">
+        <TableOfContents
+          heading="Demo: Basic"
+          items={[
+            { href: "#toc-basic", label: "Overview" },
+            { href: "#toc-collapsible", label: "Features", isLayer: true, sublistSource: { mode: "query", scopeId: "toc-component" } },
+            { href: "#toc-component", label: "API Reference" },
+          ]}
+          separatorBefore={[2]}
+        />
+      </div>
+      <code class="brand-code">&lt;TableOfContents items=&#123;[...]&#125; /&gt;</code>
+    </div>
+
+    <div class="brand-component-item">
+      <h3 class="brutal-heading-sm" id="toc-collapsible">Collapsible (resize to mobile)</h3>
+      <div class="brand-toc-specimen">
+        <TableOfContents
+          heading="Demo: Collapsible"
+          collapsible={true}
+          items={[
+            { href: "#toc-basic", label: "Section A" },
+            { href: "#toc-collapsible", label: "Section B" },
+            { href: "#toc-component", label: "Section C" },
+          ]}
+        />
+      </div>
+      <code class="brand-code">&lt;TableOfContents collapsible=&#123;true&#125; items=&#123;[...]&#125; /&gt;</code>
+    </div>
+  </div>
+</section>
+
   </div><!-- .brand-content .palette-scope -->
 </div><!-- .brand-layout -->
 
@@ -3524,6 +3566,13 @@ trackPageView('brand', 'Brand Style Reference');
     border-bottom-color: var(--border-dark-default);
   }
 
+  /* TOC specimen — prevent sticky positioning inside demo */
+  .brand-toc-specimen :global(.toc) {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+
   @media (max-width: 768px) {
     .responsive-demo-row {
       flex-direction: column;
@@ -3548,186 +3597,24 @@ trackPageView('brand', 'Brand Style Reference');
     min-width: 0;
   }
 
-  .brand-toc {
+  /* Layout positioning for shared TOC component */
+  .brand-layout :global(.toc) {
     position: sticky;
     top: var(--spacing-xl);
     max-height: calc(100vh - var(--spacing-2xl));
     overflow-y: auto;
-    padding: var(--spacing-lg);
-    background: transparent;
-    border: 2px solid var(--border-light);
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-primary) transparent;
   }
 
-  html.dark-theme .brand-toc {
-    border-color: var(--border-light);
-  }
-
-  .brand-toc__heading {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    font-family: monospace;
-    font-size: 1rem;
-    font-weight: var(--font-weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-primary);
-    margin: 0 0 var(--spacing-md);
-    padding: var(--spacing-xs) var(--spacing-md);
-    background: transparent;
-    border-left: 3px solid var(--color-primary);
-  }
-
-  .brand-toc__heading img {
-    flex-shrink: 0;
-  }
-
-  .brand-toc__chevron {
-    display: none;
-  }
-
-  .brand-toc__list {
-    list-style: none;
-    padding-left: var(--spacing-md);
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-
-  .brand-toc__list > li {
-    margin-bottom: 0;
-  }
-
-  .brand-toc__separator {
-    height: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    list-style: none;
-    display: none;
-  }
-
-  .brand-toc__list a {
-    font-family: monospace;
-    font-size: var(--text-sm);
-    color: var(--text-secondary);
-    text-decoration: none;
-    text-transform: none;
-    letter-spacing: normal;
-    transition: color var(--transition-fast), border-color var(--transition-fast);
-    display: block;
-    padding: 3px var(--spacing-sm);
-    border-left: 2px solid transparent;
-  }
-
-  .brand-toc__list a:hover {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-
-  .brand-toc__list a.is-active {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  /* Layer items — bold parent links matching arch-toc pattern */
-  .brand-toc__layer > a {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  /* Runtime-generated sublists (needs :global because elements created by script) */
-  .brand-toc__layer :global(.brand-toc__sublist) {
-    list-style: none;
-    padding-left: var(--spacing-md);
-    margin-top: var(--spacing-xs);
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .brand-toc__layer :global(.brand-toc__sublist li) {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-xs);
-  }
-
-  .brand-toc__layer :global(.brand-toc__sublist .bullet-icon) {
-    flex-shrink: 0;
-    opacity: 0.5;
-  }
-
-  .brand-toc__layer :global(.brand-toc__sublist a) {
-    font-family: monospace;
-    font-size: 0.8rem;
-    text-transform: none;
-    letter-spacing: normal;
-    color: var(--text-secondary);
-    text-decoration: none;
-    display: block;
-    padding: 2px var(--spacing-xs);
-    border-left: 2px solid transparent;
-    transition: color var(--transition-fast), border-color var(--transition-fast);
-    font-weight: 400;
-  }
-
-  .brand-toc__layer :global(.brand-toc__sublist a:hover) {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-
-  .brand-toc__layer :global(.brand-toc__sublist a.is-active) {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .brand-toc::-webkit-scrollbar { width: 4px; }
-  .brand-toc::-webkit-scrollbar-track { background: transparent; }
-  .brand-toc::-webkit-scrollbar-thumb { background: var(--color-primary); }
-
-  /* Responsive: stack layout on narrow screens */
   @media (max-width: 768px) {
     .brand-layout {
       display: block;
     }
 
-    .brand-toc {
+    .brand-layout :global(.toc) {
       position: static;
       max-height: none;
       overflow-y: visible;
       margin-bottom: var(--spacing-lg);
-    }
-
-    .brand-toc__heading {
-      cursor: pointer;
-      user-select: none;
-      margin-bottom: 0;
-    }
-
-    .brand-toc__chevron {
-      display: block;
-      margin-left: auto;
-    }
-
-    /* Collapsed state: hide list */
-    .brand-toc.is-collapsed .brand-toc__list {
-      display: none;
-    }
-
-    /* Expanded state: show top-level only, hide sublists, constrain height */
-    .brand-toc__list {
-      max-height: 50vh;
-      overflow-y: auto;
-      margin-top: var(--spacing-sm);
-    }
-
-    .brand-toc__layer :global(.brand-toc__sublist) {
-      display: none;
     }
   }
 
@@ -3872,86 +3759,6 @@ trackPageView('brand', 'Brand Style Reference');
         attCard.classList.toggle('is-dismissed');
       });
     }
-
-    // Build TOC sublists from actual h3[id] headings (DRY: heading text defined once)
-    document.querySelectorAll<HTMLElement>('.brand-toc__layer').forEach(tocLayer => {
-      const sectionId = tocLayer.dataset.section;
-      const section = document.getElementById(sectionId!);
-      if (!section) return;
-
-      const headings = section.querySelectorAll('h3[id]');
-      if (headings.length === 0) return;
-
-      const sublist = document.createElement('ul');
-      sublist.className = 'brand-toc__sublist';
-
-      headings.forEach(h3 => {
-        const li = document.createElement('li');
-        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        icon.setAttribute('viewBox', '0 0 64 64');
-        icon.setAttribute('fill', 'none');
-        icon.setAttribute('aria-hidden', 'true');
-        icon.setAttribute('width', '10');
-        icon.setAttribute('height', '10');
-        icon.setAttribute('class', 'bullet-icon');
-        icon.style.flexShrink = '0';
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', 'M32 0 L56 48 L8 48 Z');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', 'currentColor');
-        path.setAttribute('stroke-width', '5');
-        path.setAttribute('stroke-linejoin', 'miter');
-        icon.appendChild(path);
-
-        const link = document.createElement('a');
-        link.href = `#${h3.id}`;
-        link.textContent = h3.textContent;
-
-        li.appendChild(icon);
-        li.appendChild(link);
-        sublist.appendChild(li);
-      });
-
-      tocLayer.appendChild(sublist);
-    });
-
-    // Mobile TOC collapse: default collapsed, click heading to toggle
-    const brandToc = document.querySelector<HTMLElement>('.brand-toc');
-    const tocHeading = document.querySelector<HTMLElement>('.brand-toc__heading');
-    const mobileQuery = window.matchMedia('(max-width: 768px)');
-
-    const applyMobileState = (isMobile: boolean) => {
-      if (isMobile) {
-        brandToc?.classList.add('is-collapsed');
-      } else {
-        brandToc?.classList.remove('is-collapsed');
-      }
-    };
-
-    applyMobileState(mobileQuery.matches);
-    mobileQuery.addEventListener('change', (e) => applyMobileState(e.matches));
-
-    tocHeading?.addEventListener('click', () => {
-      if (mobileQuery.matches) {
-        brandToc?.classList.toggle('is-collapsed');
-      }
-    });
-
-    // TOC scroll-spy: highlight active section (includes sublists)
-    const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.brand-toc__list a');
-    const sectionIds = Array.from(tocLinks).map(a => a.getAttribute('href')!.slice(1));
-    const onScroll = () => {
-      let activeId = sectionIds[0];
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 80) activeId = id;
-      }
-      tocLinks.forEach(a => {
-        a.classList.toggle('is-active', a.getAttribute('href') === `#${activeId}`);
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
 
     // Responsive demo: sync theme to iframes
     const syncThemeToFrames = () => {
