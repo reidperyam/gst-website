@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ColorSpecimens from '../components/brand/ColorSpecimens.astro';
+import CompositeLogo from '../components/CompositeLogo.astro';
 import { palettes } from '../data/palettes';
 import { trackPageView } from '../utils/analytics';
 import DeltaIcon from '../components/DeltaIcon.astro';
@@ -52,12 +53,16 @@ trackPageView('brand', 'Brand Style Reference');
     <div class="brand-identity-grid">
       <div class="brand-identity-logos">
         <div class="brand-logo-item">
-          <DeltaIcon class="bullet-icon" />
+          <DeltaIcon size={80} class="brand-logo-delta" />
           <span class="brutal-text-small">Delta Icon</span>
         </div>
         <div class="brand-logo-item">
-          <img src="/images/icon.svg" alt="GST composite logo" width="120" height="120" />
+          <CompositeLogo size={120} class="brand-logo-composite" />
           <span class="brutal-text-small">Composite Logo</span>
+        </div>
+        <div class="brand-logo-item">
+          <img src="/images/icon.svg" alt="GST composite logo (static)" width="120" height="120" />
+          <span class="brutal-text-small">Static (PWA/OG)</span>
         </div>
       </div>
 
@@ -2641,11 +2646,17 @@ trackPageView('brand', 'Brand Style Reference');
     gap: var(--spacing-sm);
   }
 
-  .brand-logo-item img {
+  .brand-logo-item img,
+  .brand-logo-item :global(.brand-logo-composite) {
     border: 1px solid var(--border-light);
     border-radius: 6px;
     padding: var(--spacing-md);
     background: var(--bg-light-alt);
+  }
+
+  .brand-logo-delta,
+  .brand-logo-composite {
+    color: var(--color-primary);
   }
 
   .brand-identity-info h3 {
