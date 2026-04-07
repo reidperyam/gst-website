@@ -94,6 +94,15 @@ import { palettes } from '../../data/palettes';
   </div>
 </div>
 
+<script is:inline>
+// Set popout active state before transitions fire to prevent animation on page load
+try {
+  if (localStorage.getItem('palette-popped-out') === 'true') {
+    document.getElementById('panel-popout-toggle')?.classList.add('is-active');
+  }
+} catch (e) { /* ignore */ }
+</script>
+
 <style>
   .colors-reset-btn {
     flex-shrink: 0;
