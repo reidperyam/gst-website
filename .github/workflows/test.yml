@@ -2,7 +2,7 @@ name: Test Suite
 
 on:
   push:
-    branches: [master]
+    branches: [master, dev]
     paths-ignore:
       - '**.md'
       - 'src/docs/**'
@@ -15,7 +15,7 @@ on:
       - '.claude/**'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
