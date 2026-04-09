@@ -4,70 +4,14 @@
  */
 
 import { test, expect } from '@playwright/test';
-
-/**
- * Click the theme toggle via dispatchEvent to bypass WebKit hit-test issues.
- */
-async function clickThemeToggle(page: import('@playwright/test').Page): Promise<void> {
-  await page.evaluate(() => {
-    document.getElementById('themeToggle')?.dispatchEvent(
-      new MouseEvent('click', { bubbles: true })
-    );
-  });
-}
+import { clickThemeToggle } from './helpers/theme';
+import { setupAnalyticsMocking } from './helpers/analytics';
 
 test.describe('Google Analytics E2E Tests', () => {
-  // Helper function to setup gtag wrapping after page load
-  async function setupAnalyticsMocking(page: any) {
-    await page.evaluate(() => {
-      // Initialize event tracking arrays
-      (window as any).gtagEvents = [];
-      (window as any).gtagCalls = [];
-
-      // Store the original gtag function
-      const originalGtag = (window as any).gtag;
-
-      // Create wrapped gtag function
-      (window as any).gtag = function(...args: any[]) {
-        // Record all gtag calls
-        (window as any).gtagCalls.push({
-          timestamp: new Date().toISOString(),
-          args: JSON.parse(JSON.stringify(args)),
-        });
-
-        // Record event calls specifically
-        if (args[0] === 'event') {
-          (window as any).gtagEvents.push({
-            eventName: args[1],
-            eventData: args[2] || {},
-            timestamp: new Date().toISOString(),
-          });
-        }
-
-        // Call original gtag
-        if (typeof originalGtag === 'function') {
-          return originalGtag.apply(this, args);
-        }
-      };
-    });
-  }
-
   // Setup for each test
   test.beforeEach(async ({ page }) => {
-    // Setup route interception for GA requests BEFORE page load
-    await page.route('**/googletagmanager.com/**', route => {
-      route.abort();
-    });
-    await page.route('**/google-analytics.com/**', route => {
-      route.abort();
-    });
-
-    // Intercept and log GA events for verification
-    await page.on('console', msg => {
-      if (msg.type() === 'log') {
-        console.log('Page log:', msg.text());
-      }
-    });
+    // Setup analytics mocking (blocks GA requests + records events)
+    await setupAnalyticsMocking(page);
   });
 
   // Helper to setup mocking after navigation

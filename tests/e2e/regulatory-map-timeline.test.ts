@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForMapReady as waitForMapPaths } from './helpers/regulatory-map';
 
 /** Click an element via JS. Scrolls into view first, then uses dispatchEvent
  *  to bypass Playwright's coordinate-based click which can fail on WebKit
@@ -14,11 +15,13 @@ async function jsClick(page: import('@playwright/test').Page, selector: string):
 }
 
 /**
- * Wait for D3 map paths to finish rendering.
+ * Extended map readiness check for timeline page.
+ * Waits for base map paths (via shared helper), then additionally waits for
+ * timeline entries to render and D3 event handlers to bind.
  */
-async function waitForMapReady(page: import('@playwright/test').Page): Promise<void> {
+async function waitForMapAndTimelineReady(page: import('@playwright/test').Page): Promise<void> {
+  await waitForMapPaths(page);
   await page.waitForFunction(() =>
-    document.querySelectorAll('.country-path').length > 0 &&
     document.querySelectorAll('.brutal-timeline-entry').length > 0 &&
     (document.querySelector('.brutal-timeline-entry') as HTMLElement)?.offsetHeight > 0
   );
@@ -33,7 +36,7 @@ test.describe('Regulatory Map — Timeline', () => {
     // domcontentloaded is reliable under parallel worker contention; networkidle
     // can time out when many workers share the same dev server.
     await page.goto('/hub/tools/regulatory-map', { waitUntil: 'domcontentloaded' });
-    await waitForMapReady(page);
+    await waitForMapAndTimelineReady(page);
   });
 
   test.describe('1. Timeline Rendering', () => {
