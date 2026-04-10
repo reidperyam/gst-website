@@ -103,12 +103,30 @@ const clientConfig = JSON.stringify({
 </nav>
 
 <script>
+interface TocConfigItem {
+  href: string;
+  source: {
+    mode: 'query' | 'ids';
+    scopeId?: string;
+    selector?: string;
+    ids?: string[];
+    headingSelector?: string;
+  };
+}
+
+interface TocConfig {
+  collapsible: boolean;
+  scrollSpy: boolean;
+  sublistIconSize: number;
+  items: TocConfigItem[];
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll<HTMLElement>('[data-toc-config]').forEach((nav) => {
-    const config = JSON.parse(nav.dataset.tocConfig!);
+    const config: TocConfig = JSON.parse(nav.dataset.tocConfig!);
 
     // ── Sublist generation ──────────────────────────────
-    config.items.forEach((item: any) => {
+    config.items.forEach((item) => {
       const anchor = nav.querySelector<HTMLAnchorElement>(`a[href="${item.href}"]`);
       const layerLi = anchor?.parentElement;
       if (!layerLi) return;

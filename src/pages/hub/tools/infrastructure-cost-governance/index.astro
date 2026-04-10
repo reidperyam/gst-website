@@ -1313,7 +1313,7 @@ function radarChartSVG(domainScores: Array<{ name: string; score: number }>): st
   }).join('');
 
   // Data polygon
-  const dataPoints = buildRadarPoints(domainScores as any, cx, cy, r);
+  const dataPoints = buildRadarPoints(domainScores, cx, cy, r);
 
   return `<svg viewBox="0 0 300 300" role="img" aria-label="Radar chart showing domain scores" style="width:100%;max-width:300px;display:block;margin:0 auto">
     ${rings}${axes}${labels}

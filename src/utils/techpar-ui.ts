@@ -1,4 +1,5 @@
 import { Chart, registerables } from 'chart.js';
+import type { ChartDataset, TooltipItem } from 'chart.js';
 import { compute, buildTrajectory, buildHistoricalTrajectory, zoneColorVar, zoneBgVar, zoneLabel, kpiClass, formatDollars, formatPercent, serializeToParams, deserializeFromParams, buildSummaryText } from './techpar-engine';
 import type { TechParInputs, TechParResult, StageConfig, HistoricalPoint } from './techpar-engine';
 import { STAGES } from '../data/techpar/stages';
@@ -1157,7 +1158,7 @@ function renderTrajectory(r: TechParResult) {
         return 0;
     });
 
-    const datasets: any[] = [
+    const datasets: ChartDataset<'line'>[] = [
         { label: '_z', data: Array(totalLen).fill(0), borderColor: 'transparent', borderWidth: 0, pointRadius: 0, fill: false },
         { label: 'Underinvestment floor', data: underFloorData, borderColor: underBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: underFill, below: 'transparent' }, tension: 0.3 },
         { label: 'Efficiency band', data: bandLoData, borderColor: aheadBorder, borderWidth: 1, borderDash: [3, 3], pointRadius: 0, fill: { target: '-1', above: aheadFill, below: 'transparent' }, tension: 0.3 },
@@ -1240,7 +1241,7 @@ function renderTrajectory(r: TechParResult) {
     }
     const maxY = Math.max(...allSpend.filter(v => !isNaN(v))) * 1.12;
 
-    function syncDot(chart: any) {
+    function syncDot(chart: Chart) {
         const m = chart.getDatasetMeta(5);
         if (!m?.data?.[nowIdx]) return;
         const pt = m.data[nowIdx];
@@ -1255,8 +1256,8 @@ function renderTrajectory(r: TechParResult) {
 
     const dotPlugin = {
         id: 'positionDot',
-        resize(chart: any) { syncDot(chart); },
-        afterRender(chart: any) { syncDot(chart); },
+        resize(chart: Chart) { syncDot(chart); },
+        afterRender(chart: Chart) { syncDot(chart); },
     };
 
     trajChart = new Chart(canvas.getContext('2d')!, {
@@ -1278,10 +1279,10 @@ function renderTrajectory(r: TechParResult) {
                     padding: 8,
                     titleFont: { family: getStyle('--font-family') || "'Helvetica Neue', Arial, sans-serif", size: 9 },
                     bodyFont: { family: getStyle('--font-family') || "'Helvetica Neue', Arial, sans-serif", size: 9 },
-                    filter: (item: any) => item.dataset.label !== '_z',
+                    filter: (item: TooltipItem<'line'>) => item.dataset.label !== '_z',
                     callbacks: {
-                        title: (c: any) => `Month ${c[0].dataIndex}`,
-                        label: (c: any) => `${c.dataset.label}: ${fmtD(c.parsed.y)}/mo`,
+                        title: (c: TooltipItem<'line'>[]) => `Month ${c[0].dataIndex}`,
+                        label: (c: TooltipItem<'line'>) => `${c.dataset.label}: ${fmtD(c.parsed.y)}/mo`,
                     },
                 },
             },
@@ -1298,7 +1299,7 @@ function renderTrajectory(r: TechParResult) {
                     ticks: {
                         color: txtMuted,
                         font: { family: getStyle('--font-family') || "'Helvetica Neue', Arial, sans-serif", size: 9 },
-                        callback: (v: any) => fmtD(v as number),
+                        callback: (v: string | number) => fmtD(typeof v === 'number' ? v : Number(v)),
                         maxTicksLimit: window.innerWidth < 480 ? 5 : undefined,
                     },
                 },

@@ -10,7 +10,7 @@ export interface AnalyticsEvent {
   category: EventCategory;
   label?: string;
   value?: number | string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined;
 }
 
 /**
@@ -84,6 +84,6 @@ export function trackPageView(pageName: string, pageTitle: string): void {
 // Declare gtag on window for TypeScript
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (...args: unknown[]) => void;
   }
 }

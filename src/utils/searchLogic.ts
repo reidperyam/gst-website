@@ -32,7 +32,7 @@ export function performSearch(projects: Project[], searchTerm: string): Project[
  * @param delay - Delay in milliseconds
  * @returns Debounced function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {

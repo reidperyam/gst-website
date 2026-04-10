@@ -379,8 +379,13 @@ export function compareSnapshots(
 
 // ─── Radar chart ────────────────────────────────────────────────────────────
 
+/**
+ * Builds SVG polygon points for the radar chart.
+ * Accepts the minimal shape it actually reads — name+score — so callers
+ * with stricter or looser DomainScore types don't need casts.
+ */
 export function buildRadarPoints(
-  domainScores: DomainScore[],
+  domainScores: ReadonlyArray<Pick<DomainScore, 'name' | 'score'>>,
   cx: number,
   cy: number,
   radius: number,
