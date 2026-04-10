@@ -64,6 +64,13 @@ This document provides Claude with essential context about the GST Website proje
 - Before creating a PR, identify the last merge point and only include commits after it
 - Use `git log origin/dev..dev` to see what's actually new and unmerged
 
+### 11. Misc Cleanup Bucket (Platform Hardening Initiative)
+- When working on any phase of [PLATFORM_HARDENING_V1.md](../src/docs/development/PLATFORM_HARDENING_V1.md), if you discover a small drift item (legacy field name, doc count mismatch, dead helper, comment-vs-code drift) that does NOT fit the current commit's theme, **add it to Phase 9's backlog** rather than fixing it in scope
+- Inclusion criteria: ≤30 lines, isolated, mechanical, discovered as a side effect, not user-visible, not security
+- Format the entry with: file path, effort estimate, discovery context (which phase/commit), and a one-sentence description of the fix
+- This keeps phase commits focused and prevents drift items from being silently lost in commit messages
+- Phase 9 executes as its own standalone final sweep after Phase 8 completes
+
 ---
 
 ## 📋 Project Overview

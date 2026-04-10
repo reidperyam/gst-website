@@ -1,12 +1,12 @@
 # Platform Hardening V1
 
-An 8-phase initiative to harden the GST website platform for the next 6 months of business growth. Addresses data validation, CI/CD, code structure, test coverage, accessibility, SEO, tool analytics, error monitoring, security, and documentation.
+A 9-phase initiative to harden the GST website platform for the next 6 months of business growth. Addresses data validation, CI/CD, code structure, test coverage, accessibility, SEO, tool analytics, error monitoring, security, documentation, and a rolling miscellaneous-cleanup bucket for small drift items discovered along the way.
 
 **Status**: Proposed
 **Created**: April 9, 2026
 **Last Updated**: April 10, 2026
 **Priority**: High
-**Effort**: ~24-29 working days across 8 phases
+**Effort**: ~25-30 working days across 9 phases (Phase 9 grows during execution; planned ~1 day as a final sweep)
 **Goal**: Create a V1 platform that supports immediate business needs without structural friction
 
 **Next Steps**: See [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) for the follow-on initiative covering Cookie Consent / GDPR compliance and Email Capture, to be executed after this hardening initiative completes.
@@ -23,11 +23,12 @@ An 8-phase initiative to harden the GST website platform for the next 6 months o
 6. [Hub Tool Analytics Standardization](#phase-6-hub-tool-analytics-standardization)
 7. [Client-Side Error Monitoring](#phase-7-client-side-error-monitoring)
 8. [Astro Platform Alignment, Security & Documentation](#phase-8-astro-platform-alignment-security--documentation)
-9. [Summary Timeline](#summary-timeline)
-10. [Key Design Decisions](#key-design-decisions)
-11. [Commit Strategy](#commit-strategy)
-12. [Next Steps](#next-steps)
-13. [Related Documentation](#related-documentation)
+9. [Miscellaneous Cleanup Bucket](#phase-9-miscellaneous-cleanup-bucket)
+10. [Summary Timeline](#summary-timeline)
+11. [Key Design Decisions](#key-design-decisions)
+12. [Commit Strategy](#commit-strategy)
+13. [Next Steps](#next-steps)
+14. [Related Documentation](#related-documentation)
 
 ---
 
@@ -568,6 +569,75 @@ docs: fix broken references and update CLAUDE.md paths
 
 ---
 
+## Phase 9: Miscellaneous Cleanup Bucket
+
+**Status**: Open (rolling — items added during Phase 1-8 execution)
+**Priority**: Low
+**Effort**: ~1 day (grows during execution; cap at 1 day before deferring overflow to a follow-on initiative)
+**Dependencies**: All prior phases complete — Phase 9 is the final sweep of the hardening initiative
+**Execution**: Independent standalone phase, executed after Phase 8 completes. Each backlog item becomes its own commit so revert is granular.
+
+### Purpose
+
+Earlier phases routinely surface small drift items — outdated counts in docs, legacy field names, dead helpers, comment-vs-code mismatches — that don't fit any single phase's theme but are too small to warrant their own initiative. Without a designated home, these get noted in commit messages or PR descriptions and forgotten. This phase is the bucket.
+
+**Pattern for adding items**: When you find a small, isolated cleanup during Phase 1-8 work that you choose not to fix in scope, add it to the [Backlog](#backlog) below with: a one-sentence description, the file/location, the discovery context (which phase, which commit if relevant), and an effort estimate. Do NOT fix it in the unrelated commit. The whole point of this bucket is to keep phase commits focused.
+
+**Criteria for inclusion**:
+- ✅ Small (≤30 lines changed)
+- ✅ Isolated (no cross-cutting impact)
+- ✅ Mechanical (no design decisions required)
+- ✅ Discovered as a side effect of other work
+- ❌ Not a security issue (those go to Phase 8 directly)
+- ❌ Not a behavior change (those need their own commit/PR with justification)
+- ❌ Not an architecture decision (those need a Key Design Decision entry)
+
+If a single item exceeds 30 lines or touches multiple unrelated areas, promote it to its own phase scope item or its own follow-on initiative.
+
+### Backlog
+
+Items are added here as they're discovered. Each entry should link back to the discovering commit or phase so reviewers can understand the original context.
+
+#### Discovered during Phase 1 (Data Integrity)
+
+1. **ICG `Recommendation` legacy `threshold` → `triggerThreshold` field rename**
+   - **File**: [src/data/infrastructure-cost-governance/recommendations.ts](../../data/infrastructure-cost-governance/recommendations.ts)
+   - **Effort**: ~25 lines (mechanical find/replace + delete `.map()` shim)
+   - **Context**: The file's 22 literal records use `threshold:` while the public type, schema, and engine use `triggerThreshold:`. A trailing `.map()` translates between them. Discovered during Phase 1 Commit 3 (`feat(schemas): add Zod schemas for techpar, diligence, ICG data`); the schema validates the post-map shape so it's not blocking. The fix is to rename `threshold:` → `triggerThreshold:` in all 22 records and delete the `.map()` shim entirely. Pure mechanical change with zero functional impact.
+
+2. **Project count drift in documentation (51 vs 57)**
+   - **Files**: [.claude/CLAUDE.md](../../../.claude/CLAUDE.md), [src/docs/development/PLATFORM_HARDENING_V1.md](./PLATFORM_HARDENING_V1.md), [src/pages/ma-portfolio.astro](../../pages/ma-portfolio.astro) (page meta description)
+   - **Effort**: ~5 line changes across 3 files
+   - **Context**: Both CLAUDE.md and the Phase 1 problem statement in this doc say "51 projects" but `projects.json` actually contains 57. The page meta description also says "51 M&A advisory and implementation projects." Discovered during Phase 1 Commit 2 (`feat(schemas): add Zod schemas for portfolio data`) when running the pre-flight parse check. Sweep all references to a single accurate count (or replace literal numbers with `${projects.length}` in places where it's templated).
+
+<!-- Add new items below as Phase 2-7 work uncovers them. Use the same format. -->
+
+### Commits
+
+Commits in this phase use the `chore(cleanup):` prefix to distinguish them from substantive refactors. Each backlog item gets its own commit so revert is granular.
+
+```
+chore(cleanup): rename ICG threshold → triggerThreshold and drop map shim
+chore(cleanup): correct portfolio project count references (51 → 57)
+```
+
+### Success Criteria
+
+- Every backlog item is either resolved or explicitly deferred with rationale
+- No backlog item carries over to the post-hardening BUSINESS_ENABLEMENT_V1 initiative
+- Phase 9 effort stays ≤1 day; if the bucket grows past that during Phases 1-8 execution, surface to the project owner before Phase 9 begins so we can decide what to defer to a follow-on initiative
+
+### What does NOT belong here
+
+- **Security findings** → fix immediately or escalate to Phase 8 security headers work
+- **Failing tests** → fix in the discovering commit; never punt
+- **Performance regressions** → fix immediately; track in [PERFORMANCE_FUTURE_INITIATIVES.md](./PERFORMANCE_FUTURE_INITIATIVES.md) if structural
+- **Anything visible to users** (broken UI, copy errors, accessibility violations) → fix in the appropriate phase, not here
+- **Items requiring a design decision** → these need stakeholder input, not bucket cleanup; create a separate doc or Key Design Decision entry
+- **Items discovered during Phase 9 itself** → Phase 9 is not self-feeding. If Phase 9 execution surfaces new drift, log it in [DEVELOPMENT_OPPORTUNITIES.md](./DEVELOPMENT_OPPORTUNITIES.md) for a future initiative
+
+---
+
 ## Summary Timeline
 
 | Phase | Scope | Effort | Cumulative |
@@ -580,9 +650,10 @@ docs: fix broken references and update CLAUDE.md paths
 | 6 | Hub Tool Analytics Standardization | 2 days | Week 7-8 |
 | 7 | Client-Side Error Monitoring | 2 days | Week 8-9 |
 | 8 | Astro Alignment, Security & Docs | 3 days | Week 9-11 |
-| | **Total** | **24-29 days** | **~10-11 weeks at 50% allocation** |
+| 9 | Miscellaneous Cleanup Bucket | ~1 day | Week 11 |
+| | **Total** | **25-30 days** | **~11 weeks at 50% allocation** |
 
-After Phase 8 completes, proceed to [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) for Cookie Consent / GDPR and Email Capture (~4 additional days).
+After Phase 9 completes, proceed to [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) for Cookie Consent / GDPR and Email Capture (~4 additional days).
 
 ---
 
@@ -658,7 +729,7 @@ refactor: extract magic numbers into named constants
 
 ## Next Steps
 
-After all 8 phases of this initiative are complete, proceed to:
+After all 9 phases of this initiative are complete, proceed to:
 
 ### [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md)
 
@@ -689,4 +760,4 @@ Both benefit from the hardened foundation: CI pipeline (Phase 2), refactored com
 ---
 
 **Created**: April 9, 2026
-**Last Updated**: April 10, 2026 (refactored Phases 6 and 8 into separate BUSINESS_ENABLEMENT_V1.md initiative)
+**Last Updated**: April 10, 2026 (added Phase 9 Miscellaneous Cleanup Bucket; seeded with two items discovered during Phase 1 execution)
