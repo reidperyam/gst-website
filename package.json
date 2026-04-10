@@ -17,6 +17,8 @@
     "test:all": "npm run test:run && npm run test:e2e",
     "radar:seed": "npx tsx -e \"import { seedRadarCache } from './tests/e2e/fixtures/seed-radar-cache'; seedRadarCache();\"",
     "radar:unseed": "npx tsx -e \"import { clearRadarCache } from './tests/e2e/fixtures/seed-radar-cache'; clearRadarCache();\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "lint:css": "stylelint \"src/styles/*.css\"",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
