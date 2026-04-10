@@ -401,6 +401,58 @@ test(analytics): add unit and E2E tests for tool event tracking
 
 If a tool calculation fails or the Inoreader API errors, it's completely invisible. The codebase uses defensive null-checks and try-catch with silent fallbacks (good for UX, bad for observability). Only 5 files have try-catch, and only 3 log to `console.error`. No error tracking service exists.
 
+### Why not Vercel?
+
+Vercel's existing observability stack (Web Analytics, Speed Insights, Runtime Logs) does **not** cover this gap. Here's the breakdown:
+
+| Vercel Product | What it tracks | Covers client-side errors? |
+|----------------|---------------|---------------------------|
+| Web Analytics (already enabled) | Page views, visitor counts | No |
+| Speed Insights (already enabled) | Core Web Vitals (LCP, CLS, FCP, TTFB) | No — performance only |
+| Runtime Logs | Server-side `console.log/error` from SSR routes | Partial — only the Radar SSR route, not anything in the browser |
+| Observability / Log Drains | Pipes server logs to external services | No — same scope as Runtime Logs |
+
+**The critical gap**: Vercel monitors the server side. GST is almost entirely static HTML + client-side JavaScript — all tool calculations happen in the user's browser, not on Vercel's servers. When those fail, Vercel never sees them. Sentry fills this gap; the two are complementary, not overlapping.
+
+### Manual setup (one-time, ~15 minutes, performed by a human before implementation begins)
+
+These steps must be completed **before** the implementation commits can be merged, because the code requires `PUBLIC_SENTRY_DSN` to be configured in Vercel. Claude cannot perform these steps.
+
+1. **Create a Sentry account**
+   - Sign up at https://sentry.io (free tier: 5K errors/month, no credit card required)
+   - Create an organization, e.g., `global-strategic-technologies`
+
+2. **Create a Sentry project**
+   - Click "Create Project"
+   - Platform: select **Astro** (first-class integration via `@sentry/astro`)
+   - Project name: `gst-website`
+   - Alert frequency: "Alert me on every new issue" (can be tuned later)
+   - Copy the **DSN** shown on the setup page — it looks like `https://abc123@o456789.ingest.sentry.io/1234567`
+   - The DSN is a public identifier (safe to expose in client-side code); it only grants permission to *send* errors to your project, not read or modify them
+
+3. **Add the DSN to Vercel environment variables**
+   - Go to Vercel dashboard → `gst-website` project → Settings → Environment Variables
+   - Add a new variable:
+     - **Name**: `PUBLIC_SENTRY_DSN`
+     - **Value**: the DSN from step 2
+     - **Environments**: check "Production" and "Preview"; leave "Development" unchecked (local dev should not send errors)
+   - The `PUBLIC_` prefix is required so Astro exposes the variable to the client-side bundle (see [Astro env vars docs](https://docs.astro.build/en/guides/environment-variables/))
+
+4. **Configure Sentry alert rules** (optional but recommended — can be done after deployment)
+   - In Sentry: Alerts → Create Alert → Issue Alert
+   - Recommended rules:
+     - "When a new issue is first seen" → notify email
+     - "When >10 events in 1 hour on tag `area:techpar-calculation`" → notify email
+     - "When any event occurs with tag `area:inoreader-api`" → notify email
+     - "When any event occurs with tag `area:redis-connection`" → notify email
+   - Tags are set in the `Sentry.captureException()` calls during implementation
+
+5. **Optional: configure source maps upload**
+   - If stack traces in the Sentry dashboard show minified code, add a Sentry auth token to Vercel (`SENTRY_AUTH_TOKEN`) and enable source map upload in `astro.config.mjs` per the `@sentry/astro` docs
+   - Can be deferred until first error is debugged
+
+**Verification**: After setup, the Vercel project should have `PUBLIC_SENTRY_DSN` listed in environment variables, and Sentry should show an empty "gst-website" project waiting for its first event.
+
 ### Scope
 
 - **Evaluate and integrate Sentry**:
