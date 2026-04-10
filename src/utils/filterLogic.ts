@@ -81,6 +81,24 @@ export function categorizeGrowthStage(stage: string): 'growth' | 'mature' | 'oth
 }
 
 /**
+ * Returns true if the engagement type belongs to the value-creation category.
+ * Centralizes the readonly-array membership check so call sites don't repeat
+ * the cast pattern.
+ */
+export function isValueCreationEngagement(engagementType: string | undefined): boolean {
+  if (!engagementType) return false;
+  return (ENGAGEMENT_CATEGORIES.valueCreation as readonly string[]).includes(engagementType);
+}
+
+/**
+ * Returns true if the engagement type belongs to the technical-diligence category.
+ */
+export function isTechnicalDiligenceEngagement(engagementType: string | undefined): boolean {
+  if (!engagementType) return false;
+  return (ENGAGEMENT_CATEGORIES.technicalDiligence as readonly string[]).includes(engagementType);
+}
+
+/**
  * Categorizes an engagement type into predefined categories
  * Maps specific engagement types to broader categories for filtering
  * @param engagementType - The engagement type to categorize (may be undefined)
@@ -92,20 +110,8 @@ export function categorizeGrowthStage(stage: string): 'growth' | 'mature' | 'oth
 export function categorizeEngagementType(
   engagementType: string | undefined
 ): 'value-creation' | 'technical-diligence' | 'other' {
-  // Handle undefined or null engagement types
-  if (!engagementType) return 'other';
-
-  // Check if this is a value creation engagement
-  if (ENGAGEMENT_CATEGORIES.valueCreation.includes(engagementType as any)) {
-    return 'value-creation';
-  }
-
-  // Check if this is a technical diligence engagement
-  if (ENGAGEMENT_CATEGORIES.technicalDiligence.includes(engagementType as any)) {
-    return 'technical-diligence';
-  }
-
-  // Unknown engagement type
+  if (isValueCreationEngagement(engagementType)) return 'value-creation';
+  if (isTechnicalDiligenceEngagement(engagementType)) return 'technical-diligence';
   return 'other';
 }
 
@@ -239,11 +245,11 @@ export function filterProjects(
     // Engagement type filter - categorized by type
     if (criteria.engagement !== 'all') {
       if (criteria.engagement === 'value-creation') {
-        if (!ENGAGEMENT_CATEGORIES.valueCreation.includes(project.engagementType as any)) {
+        if (!isValueCreationEngagement(project.engagementType)) {
           return false;
         }
       } else if (criteria.engagement === 'technical-diligence') {
-        if (!ENGAGEMENT_CATEGORIES.technicalDiligence.includes(project.engagementType as any)) {
+        if (!isTechnicalDiligenceEngagement(project.engagementType)) {
           return false;
         }
       }

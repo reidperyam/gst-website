@@ -11,15 +11,16 @@ import {
   getGrowthStageProjects,
   getMatureStageProjects,
   getUniqueEngagementTypes,
-  ENGAGEMENT_CATEGORIES
+  isValueCreationEngagement,
+  isTechnicalDiligenceEngagement,
 } from '../../utils/filterLogic';
 
 // Use centralized filter logic
 const growthStages = getGrowthStageProjects(projects);
 const matureStages = getMatureStageProjects(projects);
 const uniqueEngagementTypes = getUniqueEngagementTypes(projects);
-const valueCreationEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.valueCreation.includes(e as any)).sort();
-const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.technicalDiligence.includes(e as any)).sort();
+const valueCreationEngagements = uniqueEngagementTypes.filter(isValueCreationEngagement).sort();
+const technicalDiligenceEngagements = uniqueEngagementTypes.filter(isTechnicalDiligenceEngagement).sort();
 ---
 
 <!-- Fixed Controls - Positioned independently at viewport level -->
