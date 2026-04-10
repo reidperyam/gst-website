@@ -1,12 +1,15 @@
 # Platform Hardening V1
 
-A 10-phase initiative to harden the GST website platform for the next 6 months of business growth. Addresses data validation, CI/CD, code structure, test coverage, accessibility, SEO, GDPR compliance, analytics, lead capture, error monitoring, security, and documentation.
+An 8-phase initiative to harden the GST website platform for the next 6 months of business growth. Addresses data validation, CI/CD, code structure, test coverage, accessibility, SEO, tool analytics, error monitoring, security, and documentation.
 
 **Status**: Proposed
 **Created**: April 9, 2026
+**Last Updated**: April 10, 2026
 **Priority**: High
-**Effort**: ~28-33 working days across 10 phases
+**Effort**: ~24-29 working days across 8 phases
 **Goal**: Create a V1 platform that supports immediate business needs without structural friction
+
+**Next Steps**: See [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) for the follow-on initiative covering Cookie Consent / GDPR compliance and Email Capture, to be executed after this hardening initiative completes.
 
 ---
 
@@ -17,15 +20,14 @@ A 10-phase initiative to harden the GST website platform for the next 6 months o
 3. [Code Structure & CSS Architecture](#phase-3-code-structure--css-architecture)
 4. [Test Coverage & Accessibility](#phase-4-test-coverage--accessibility)
 5. [SEO Hardening](#phase-5-seo-hardening)
-6. [Cookie Consent & GDPR Compliance](#phase-6-cookie-consent--gdpr-compliance)
-7. [Hub Tool Analytics Standardization](#phase-7-hub-tool-analytics-standardization)
-8. [Email Capture](#phase-8-email-capture)
-9. [Client-Side Error Monitoring](#phase-9-client-side-error-monitoring)
-10. [Astro Platform Alignment, Security & Documentation](#phase-10-astro-platform-alignment-security--documentation)
-11. [Summary Timeline](#summary-timeline)
-12. [Key Design Decisions](#key-design-decisions)
-13. [Commit Strategy](#commit-strategy)
-14. [Related Documentation](#related-documentation)
+6. [Hub Tool Analytics Standardization](#phase-6-hub-tool-analytics-standardization)
+7. [Client-Side Error Monitoring](#phase-7-client-side-error-monitoring)
+8. [Astro Platform Alignment, Security & Documentation](#phase-8-astro-platform-alignment-security--documentation)
+9. [Summary Timeline](#summary-timeline)
+10. [Key Design Decisions](#key-design-decisions)
+11. [Commit Strategy](#commit-strategy)
+12. [Next Steps](#next-steps)
+13. [Related Documentation](#related-documentation)
 
 ---
 
@@ -335,63 +337,12 @@ perf(seo): add font-display swap and preconnect to Calendly
 
 ---
 
-## Phase 6: Cookie Consent & GDPR Compliance
-
-**Status**: Proposed
-**Priority**: High
-**Effort**: 2 days
-**Dependencies**: Phase 2 (linting/CI catches regressions in analytics code)
-
-### Problem
-
-GA4 currently loads unconditionally via `src/components/GoogleAnalytics.astro` — EU visitors are tracked without explicit consent. The privacy policy (`src/pages/privacy.astro`) mentions cookies and GDPR rights but provides no consent mechanism. This must be resolved *before* expanding analytics coverage (Phase 7).
-
-### Scope
-
-- **Create `src/components/CookieConsent.astro`**:
-  - Minimal banner rendered in `BaseLayout.astro` (after Header, before main content)
-  - Two buttons: "Accept" and "Decline"
-  - Built with existing design system (`.brutal-btn`, frosted glass, CSS variables) — no external dependency
-  - Stores preference in `localStorage('cookie-consent')`: `'accepted'` | `'declined'`
-  - Banner re-appears if no stored preference
-- **Gate GA4 on consent** — modify `GoogleAnalytics.astro`:
-  - Check `localStorage('cookie-consent')` before loading gtag script
-  - Implement GA4 Consent Mode: `gtag('consent', 'default', { analytics_storage: 'denied' })` on page load; update to `'granted'` on acceptance
-  - If declined: GA4 does not load
-- **Update privacy policy** — expand `src/pages/privacy.astro` (cookie section, lines 67-71): consent banner explanation, what "Accept" enables, how to change preference
-- **Footer preference link** — add "Cookie Preferences" link in `src/components/Footer.astro` that re-opens the consent banner
-- **Tests**:
-  - Unit: GA4 does not fire events when consent declined; consent state persists
-  - E2E: banner appears on first visit, disappears after choice, does not reappear; GA4 loads only after acceptance
-
-**Not pursuing**: Heavy cookie consent libraries (Klaro, Osano, CookieConsent.js) — one tracking tool (GA4), no ad cookies; custom component is simpler and avoids external dependency.
-
-### Commits
-
-```
-feat(consent): add CookieConsent component with accept/decline
-feat(consent): gate GA4 loading on cookie consent via Consent Mode API
-docs(privacy): update privacy policy with consent mechanism disclosure
-feat(consent): add Cookie Preferences link to footer
-test(consent): add unit and E2E tests for consent flow
-```
-
-### Success Criteria
-
-- GA4 does not load until user explicitly accepts
-- Consent preference persists across page loads
-- Banner does not appear for returning users who have chosen
-- "Cookie Preferences" link in footer allows changing choice
-- Privacy policy reflects the consent mechanism
-
----
-
-## Phase 7: Hub Tool Analytics Standardization
+## Phase 6: Hub Tool Analytics Standardization
 
 **Status**: Proposed
 **Priority**: Medium
 **Effort**: 2 days
-**Dependencies**: Phase 6 (consent must gate all tracking before adding more events)
+**Dependencies**: Phase 2 (CI catches regressions in analytics code)
 
 ### Problem
 
@@ -435,69 +386,16 @@ test(analytics): add unit and E2E tests for tool event tracking
 - All 5 tools track start/complete/export funnel milestones
 - TechPar has ≥6 interaction events
 - Regulatory Map has zero unnamed events
-- All events respect cookie consent (Phase 6)
+- All events will be retroactively gated on cookie consent by the follow-on [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) initiative; this phase does not worsen the existing GDPR gap (GA4 already loads unconditionally) but does not close it either
 
 ---
 
-## Phase 8: Email Capture
+## Phase 7: Client-Side Error Monitoring
 
 **Status**: Proposed
 **Priority**: Medium
 **Effort**: 2 days
-**Dependencies**: Phase 6 (consent for tracking signup events), Phase 1 (Zod for validation if used client-side)
-
-### Problem
-
-No lead capture mechanism exists beyond Calendly. For PE firms, many decision-makers want to evaluate GST before committing to a calendar slot. Currently they either book or bounce — no middle ground.
-
-### Scope
-
-- **Choose email service** — evaluate Mailchimp, ConvertKit, Buttondown, or Resend:
-  - Selection criteria: free tier adequate for low volume, API-based submission (no embed iframes), GDPR-compliant, simple POST endpoint
-  - Document the decision
-- **Create `src/components/EmailSignup.astro`**:
-  - Minimal form: email input + submit button + privacy link
-  - Scoped `<style>` following design system (`.brutal-btn`, `--color-primary`, frosted glass)
-  - Inline `<script>` handles submission via `fetch()` to email service API
-  - States: default, submitting (disabled button), success, error
-  - No full name required — minimize friction
-- **Integrate into Footer** — add `<EmailSignup />` to `src/components/Footer.astro` below existing links. Brief copy: "Get GST insights delivered" or similar
-- **Evaluate CTA section integration** — optionally add to `CTASection.astro` as secondary action. Decision depends on whether dual CTAs dilute primary conversion
-- **Track signups** — `trackEvent({ event: 'email_signup', category: 'engagement', source: 'footer' | 'cta-section' })`
-- **Update privacy policy** — add email collection disclosure: what's collected (email only), usage (periodic updates), unsubscribe, storage service
-- **Validation** — email format validation client-side (Zod or simple regex)
-- **Tests**:
-  - Unit: form validation (empty, invalid email, valid email)
-  - E2E: form renders in footer, submit shows success, error state on network failure
-
-### Commits
-
-```
-docs(email): document email service evaluation and selection
-feat(email): add EmailSignup component with form validation
-feat(email): integrate EmailSignup into Footer
-feat(analytics): add email_signup event tracking
-docs(privacy): add email collection disclosure to privacy policy
-test(email): add unit and E2E tests for email signup flow
-```
-
-### Success Criteria
-
-- Email signup form visible in footer on all pages
-- Successful submissions recorded in email service
-- GA4 event fires on signup (when consent granted)
-- Privacy policy updated
-- Form handles error states gracefully
-- Zero PII stored in client-side code or localStorage
-
----
-
-## Phase 9: Client-Side Error Monitoring
-
-**Status**: Proposed
-**Priority**: Medium
-**Effort**: 2 days
-**Dependencies**: Phase 6 (consent gating), Phase 2 (CI catches instrumentation regressions)
+**Dependencies**: Phase 2 (CI catches instrumentation regressions)
 
 ### Problem
 
@@ -514,7 +412,7 @@ If a tool calculation fails or the Inoreader API errors, it's completely invisib
   - Loaded in `BaseLayout.astro` head (before `GoogleAnalytics.astro`)
   - DSN from environment variable (`PUBLIC_SENTRY_DSN`)
   - Disabled in development
-  - Respects cookie consent (or uses privacy-first config: no PII, no session replay, errors only)
+  - Use **privacy-first config**: no PII, no session replay, errors only. This allows Sentry to run pre-consent under legitimate-interest basis (error monitoring is not tracking). The follow-on [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) initiative will evaluate whether to additionally gate Sentry on consent once the banner ships.
 - **Instrument existing silent failures** — add `Sentry.captureException()` alongside existing graceful fallbacks:
   - `src/lib/inoreader/client.ts` — API fetch failures, token refresh, timeouts
   - `src/lib/inoreader/cache.ts` — Redis connection failures
@@ -524,7 +422,7 @@ If a tool calculation fails or the Inoreader API errors, it's completely invisib
 - **Global error boundary** — `window.addEventListener('error', ...)` and `window.addEventListener('unhandledrejection', ...)` in ErrorTracking.astro
 - **Alert rules** (documentation only) — recommended alerts: >10 errors/hour on tool pages, any Radar SSR error, any Redis failure
 - **Tests**:
-  - Unit: Sentry not initialized when consent declined; `captureException` called on instrumented paths
+  - Unit: verify privacy-first config (no PII fields captured); `captureException` called on instrumented paths
   - E2E: error tracking loads in production; no errors on clean page loads (baseline)
 
 **Not pursuing**: Session replay (LogRocket, Sentry Replay) — adds significant bundle size and privacy complexity for a low-traffic advisory site.
@@ -545,18 +443,18 @@ docs(monitoring): document recommended Sentry alert rules
 
 - Client-side JavaScript errors surfaced in Sentry dashboard
 - Silent failures in Inoreader client, palette manager, and tool scripts report to Sentry
-- Error monitoring respects cookie consent
+- Privacy-first Sentry config verified (no PII, no session replay); follow-on initiative will evaluate additional consent gating
 - Zero increase in console errors visible to users
 - Sentry DSN configured via environment variable (not hardcoded)
 
 ---
 
-## Phase 10: Astro Platform Alignment, Security & Documentation
+## Phase 8: Astro Platform Alignment, Security & Documentation
 
 **Status**: Proposed
 **Priority**: Low
 **Effort**: 3 days
-**Dependencies**: Phase 1 (Zod schemas for content collections), Phase 5 (sitemap integration), Phase 6 (security headers account for scripts from Phases 7-9)
+**Dependencies**: Phase 1 (Zod schemas for content collections), Phase 5 (sitemap integration), Phases 6-7 (security headers should account for new analytics and error monitoring scripts)
 
 ### Problem
 
@@ -620,19 +518,19 @@ docs: fix broken references and update CLAUDE.md paths
 
 ## Summary Timeline
 
-| Phase | Scope | Effort | Cumulative | Category |
-|-------|-------|--------|------------|----------|
-| 1 | Data Integrity (Zod, `any` elimination) | 3-4 days | Week 1-2 | Platform |
-| 2 | CI/CD & Developer Guardrails | 3 days | Week 2-3 | Platform |
-| 3 | Code Structure & CSS Architecture | 5-6 days | Week 3-5 | Platform |
-| 4 | Test Coverage & Accessibility | 5 days | Week 5-7 | Platform |
-| 5 | SEO Hardening | 1-2 days | Week 7 | Platform |
-| 6 | Cookie Consent & GDPR Compliance | 2 days | Week 7-8 | Business |
-| 7 | Hub Tool Analytics Standardization | 2 days | Week 8-9 | Business |
-| 8 | Email Capture | 2 days | Week 9-10 | Business |
-| 9 | Client-Side Error Monitoring | 2 days | Week 10 | Business |
-| 10 | Astro Alignment, Security & Docs | 3 days | Week 11-12 | Platform |
-| | **Total** | **28-33 days** | **~12 weeks at 50% allocation** | |
+| Phase | Scope | Effort | Cumulative |
+|-------|-------|--------|------------|
+| 1 | Data Integrity (Zod, `any` elimination) | 3-4 days | Week 1-2 |
+| 2 | CI/CD & Developer Guardrails | 3 days | Week 2-3 |
+| 3 | Code Structure & CSS Architecture | 5-6 days | Week 3-5 |
+| 4 | Test Coverage & Accessibility | 5 days | Week 5-7 |
+| 5 | SEO Hardening | 1-2 days | Week 7 |
+| 6 | Hub Tool Analytics Standardization | 2 days | Week 7-8 |
+| 7 | Client-Side Error Monitoring | 2 days | Week 8-9 |
+| 8 | Astro Alignment, Security & Docs | 3 days | Week 9-11 |
+| | **Total** | **24-29 days** | **~10-11 weeks at 50% allocation** |
+
+After Phase 8 completes, proceed to [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) for Cookie Consent / GDPR and Email Capture (~4 additional days).
 
 ---
 
@@ -650,13 +548,11 @@ docs: fix broken references and update CLAUDE.md paths
 
 6. **ESLint flat config** — modern format, works with Astro plugin, avoids deprecated `.eslintrc`
 
-7. **Custom cookie consent, no external library** — site uses one tracking tool (GA4) with no ad cookies; a custom Astro component is simpler and faster than Klaro/Osano/CookieConsent.js; uses GA4 Consent Mode API for standards-compliant gating
+7. **Tool analytics follow existing naming convention** — 3 of 5 tools already use `<tool_code>_<interaction>` pattern (dm_, tdc_, icg_); standardize the remaining 2 (tp_, rm_) rather than introducing a new pattern
 
-8. **Tool analytics follow existing naming convention** — 3 of 5 tools already use `<tool_code>_<interaction>` pattern (dm_, tdc_, icg_); standardize the remaining 2 (tp_, rm_) rather than introducing a new pattern
+8. **Sentry for error monitoring, not LogRocket/FullStory** — error tracking only, no session replay; privacy-first config (no PII) allows running pre-consent; minimizes bundle size and privacy surface; `@sentry/astro` provides first-class Astro integration
 
-9. **Email capture in footer, not modal/popup** — always visible, zero-friction, no interruption; avoids aggressive popup patterns that conflict with the professional PE advisory brand
-
-10. **Sentry for error monitoring, not LogRocket/FullStory** — error tracking only, no session replay; minimizes bundle size and privacy surface; `@sentry/astro` provides first-class Astro integration
+9. **Scope separation: platform vs. business** — Cookie Consent and Email Capture were originally scoped as Phases 6 and 8 of this initiative but have been refactored into a separate [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) initiative. Rationale: infrastructure hardening is distinct from net-new business capabilities that require vendor selection, legal review, and focused stakeholder conversations. Mixing them dilutes both.
 
 ---
 
@@ -668,7 +564,7 @@ Each phase should produce **atomic commits** — one logical change per commit, 
 
 - **Format**: `type(scope): description` per [Conventional Commits](https://www.conventionalcommits.org/)
 - **Types**: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `ci`, `perf`
-- **Scope**: component or area affected (e.g., `schemas`, `css`, `consent`, `analytics`, `seo`, `monitoring`)
+- **Scope**: component or area affected (e.g., `schemas`, `css`, `analytics`, `seo`, `monitoring`, `a11y`)
 - **Body**: explain *why*, not *what* (the diff shows what)
 
 ### Principles
@@ -708,8 +604,24 @@ refactor: extract magic numbers into named constants
 
 ---
 
+## Next Steps
+
+After all 8 phases of this initiative are complete, proceed to:
+
+### [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md)
+
+A 2-initiative follow-on (~4 days total) covering business-facing capabilities deferred from this hardening plan:
+
+1. **Cookie Consent & GDPR Compliance** — custom consent banner with GA4 Consent Mode integration; gates GA4 and optionally Sentry error monitoring; updates privacy policy; adds footer preference link
+2. **Email Capture** — minimal email signup form in footer with Zod validation, email service integration, GA4 event tracking, and privacy policy updates
+
+Both benefit from the hardened foundation: CI pipeline (Phase 2), refactored components (Phase 3), accessibility testing (Phase 4), Zod schemas (Phase 1), and error monitoring (Phase 7) must all be in place.
+
+---
+
 ## Related Documentation
 
+- [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) — **Next steps** post-hardening initiative (Cookie Consent + Email Capture)
 - [DEVELOPMENT_OPPORTUNITIES.md](./DEVELOPMENT_OPPORTUNITIES.md) — Performance monitoring initiatives (Lighthouse CI, E2E tests)
 - [DESIGN_SYSTEM_FUTURE_INITIATIVES.md](./DESIGN_SYSTEM_FUTURE_INITIATIVES.md) — Deferred design system enhancements
 - [HUB_TOOLS_UX_UNIFICATION.md](./HUB_TOOLS_UX_UNIFICATION.md) — Cross-tool UX patterns
@@ -725,3 +637,4 @@ refactor: extract magic numbers into named constants
 ---
 
 **Created**: April 9, 2026
+**Last Updated**: April 10, 2026 (refactored Phases 6 and 8 into separate BUSINESS_ENABLEMENT_V1.md initiative)

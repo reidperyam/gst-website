@@ -25,7 +25,11 @@ Exploration initiative evaluating whether ambient animated effects (grid pulses,
 
 ### [PLATFORM_HARDENING_V1.md](./PLATFORM_HARDENING_V1.md)
 
-Comprehensive 10-phase platform hardening initiative to support the next 6 months of business growth. Covers data validation (Zod schemas), CI/CD (ESLint, pre-commit hooks, 3-job pipeline), CSS architecture (Astro scoped styles migration), test coverage & accessibility (axe-core), SEO, cookie consent & GDPR, tool analytics standardization, email capture, error monitoring (Sentry), security headers, and documentation normalization. ~28-33 working days total effort.
+8-phase platform hardening initiative to support the next 6 months of business growth. Covers data validation (Zod schemas), CI/CD (ESLint, pre-commit hooks, 3-job pipeline), CSS architecture (Astro scoped styles migration), test coverage & accessibility (axe-core), SEO, tool analytics standardization, error monitoring (Sentry), security headers, and documentation normalization. ~24-29 working days total effort.
+
+### [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md)
+
+Post-hardening follow-on initiative (~4 days) covering business-facing capabilities that require vendor selection and legal review: Cookie Consent / GDPR compliance (custom banner with GA4 Consent Mode) and Email Capture (footer signup form with Zod validation). Depends on Platform Hardening V1 being complete.
 
 Each roadmap includes:
 - Current state assessment with strengths and known issues
@@ -43,7 +47,8 @@ Each roadmap includes:
 | Unit Error Tests | Medium | 1-2h | Soon |
 | Perf Dashboard | Low | 1-2h | Later |
 | Dynamic Visual Effects | Low | 2-4h prototype | Exploratory |
-| **Platform Hardening V1** | **High** | **28-33 days (10 phases)** | **Next** |
+| **Platform Hardening V1** | **High** | **24-29 days (8 phases)** | **In Progress** |
+| Business Enablement V1 | Medium-High | 4 days (2 initiatives) | Post-hardening |
 
 ### Hub Tools Control Consolidation
 
