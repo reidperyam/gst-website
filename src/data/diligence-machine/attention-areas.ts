@@ -3,20 +3,18 @@
  *
  * Attention areas are considerations injected into the output based on
  * combinations of tech archetype, company age, and other inputs.
- * They highlight structural areas that warrant attention during diligence.
+ * Validated at build time against `AttentionAreasArraySchema`.
  */
 
-import type { QuestionCondition } from './questions';
+import {
+  AttentionAreasArraySchema,
+  type AttentionArea,
+} from '../../schemas/diligence';
+import { validateDataSource } from '../../utils/validateData';
 
-export interface AttentionArea {
-  id: string;
-  title: string;
-  description: string;
-  relevance: 'high' | 'medium' | 'low';
-  conditions: QuestionCondition;
-}
+export type { AttentionArea };
 
-export const ATTENTION_AREAS: AttentionArea[] = [
+const attentionAreasData: AttentionArea[] = [
   {
     id: 'attention-hw-eol',
     title: 'Hardware End-of-Life Exposure',
@@ -321,3 +319,9 @@ export const ATTENTION_AREAS: AttentionArea[] = [
     },
   },
 ];
+
+export const ATTENTION_AREAS = validateDataSource(
+  AttentionAreasArraySchema,
+  attentionAreasData,
+  'diligence-machine/attention-areas.ts'
+);

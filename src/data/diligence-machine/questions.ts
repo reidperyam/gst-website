@@ -11,40 +11,18 @@
  * - All specified fields use AND logic across (all must match)
  * - excludeTransactionTypes: exclude if user selected any of these
  * - headcountMin/revenueMin/companyAgeMin: ordinal "at least" comparison
+ *
+ * Validated at build time against `DiligenceQuestionsArraySchema`.
  */
 
-export interface QuestionCondition {
-  transactionTypes?: string[];
-  productTypes?: string[];
-  techArchetypes?: string[];
-  growthStages?: string[];
-  geographies?: string[];
-  headcountMin?: string;
-  revenueMin?: string;
-  companyAgeMin?: string;
-  excludeTransactionTypes?: string[];
-  // v2 condition dimensions
-  businessModels?: string[];
-  scaleIntensity?: string[];
-  transformationStates?: string[];
-  dataSensitivity?: string[];
-  operatingModels?: string[];
-}
+import {
+  DiligenceQuestionsArraySchema,
+  type DiligenceQuestion,
+  type QuestionCondition,
+} from '../../schemas/diligence';
+import { validateDataSource } from '../../utils/validateData';
 
-export interface DiligenceQuestion {
-  id: string;
-  topic: 'architecture' | 'operations' | 'carveout-integration' | 'security-risk';
-  topicLabel: string;
-  audienceLevel: string;
-  text: string;
-  rationale: string;
-  priority: 'high' | 'medium' | 'standard';
-  conditions: QuestionCondition;
-  // v2 strategic metadata (optional for backward compat)
-  exitImpact?: 'Multiple Expander' | 'Valuation Drag' | 'Operational Risk';
-  lookoutSignal?: string;
-  track?: 'Architecture' | 'Operations' | 'Carve-out' | 'Security';
-}
+export type { DiligenceQuestion, QuestionCondition };
 
 export const TOPIC_META = {
   architecture: {
@@ -73,7 +51,7 @@ export const TOPIC_META = {
   },
 } as const;
 
-export const QUESTIONS: DiligenceQuestion[] = [
+const questionsData: DiligenceQuestion[] = [
   // ─── TOPIC 1: ARCHITECTURE & SCALABILITY ────────────────────────────
 
   {
@@ -950,3 +928,9 @@ export const QUESTIONS: DiligenceQuestion[] = [
     },
   },
 ];
+
+export const QUESTIONS = validateDataSource(
+  DiligenceQuestionsArraySchema,
+  questionsData,
+  'diligence-machine/questions.ts'
+);

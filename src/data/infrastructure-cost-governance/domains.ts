@@ -2,44 +2,40 @@
  * Infrastructure Cost Governance — domain and question definitions
  *
  * All question text, domain metadata, and answer options are defined here.
- * The engine imports this data but never modifies it.
+ * Validated at build time against `DomainsArraySchema` and
+ * `AnswerOptionsArraySchema` in `src/schemas/icg.ts`.
  */
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+import {
+  AnswerOptionsArraySchema,
+  DomainsArraySchema,
+  type AnswerOption,
+  type Domain,
+  type ICGQuestion as Question,
+} from '../../schemas/icg';
+import { validateDataSource } from '../../utils/validateData';
 
-export interface AnswerOption {
-  score: number;
-  label: string;
-}
-
-export interface Question {
-  id: string;
-  domain: string;
-  text: string;
-  rationale: string;
-}
-
-export interface Domain {
-  id: string;
-  name: string;
-  description: string;
-  questions: Question[];
-  weight: number;
-  foundational: boolean;
-}
+// Re-exports keep `import { Domain } from 'data/.../domains'` working.
+export type { AnswerOption, Domain, Question };
 
 // ─── Answer options ──────────────────────────────────────────────────────────
 
-export const ANSWER_OPTIONS: readonly AnswerOption[] = [
+const answerOptionsData: AnswerOption[] = [
   { score: 0, label: 'Not in place' },
   { score: 1, label: 'Ad hoc' },
   { score: 2, label: 'Established' },
   { score: 3, label: 'Optimized' },
-] as const;
+];
+
+export const ANSWER_OPTIONS = validateDataSource(
+  AnswerOptionsArraySchema,
+  answerOptionsData,
+  'icg/domains.ts (ANSWER_OPTIONS)'
+);
 
 // ─── Domain definitions ─────────────────────────────────────────────────────
 
-export const DOMAINS: readonly Domain[] = [
+const domainsData: Domain[] = [
   {
     id: 'd1',
     name: 'Visibility and Tagging',
@@ -214,7 +210,13 @@ export const DOMAINS: readonly Domain[] = [
       },
     ],
   },
-] as const;
+];
+
+export const DOMAINS = validateDataSource(
+  DomainsArraySchema,
+  domainsData,
+  'icg/domains.ts (DOMAINS)'
+);
 
 // ─── Derived constants ──────────────────────────────────────────────────────
 

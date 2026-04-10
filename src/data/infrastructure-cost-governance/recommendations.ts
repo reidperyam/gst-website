@@ -3,20 +3,22 @@
  *
  * Each recommendation is surfaced when the answer to its trigger question
  * scores at or below the trigger threshold. Sorted by impact tier at runtime.
+ * Validated at build time against `ICGRecommendationsArraySchema`.
+ *
+ * Note: the literal records below use `threshold` (a legacy field name);
+ * the trailing `.map()` translates this to the public `triggerThreshold`
+ * shape that the schema and engine consume.
  */
 
-export interface Recommendation {
-  id: string;
-  title: string;
-  description: string;
-  impact: 'high' | 'medium' | 'low';
-  effort: 'quick-win' | 'project' | 'initiative';
-  domain: string;
-  triggerQuestionId: string;
-  triggerThreshold: number;
-}
+import {
+  ICGRecommendationsArraySchema,
+  type ICGRecommendation as Recommendation,
+} from '../../schemas/icg';
+import { validateDataSource } from '../../utils/validateData';
 
-export const RECOMMENDATIONS: readonly Recommendation[] = [
+export type { Recommendation };
+
+const recommendationsData = [
   // ── Domain 1: Visibility and Tagging ──────────────────────────────────────
 
   {
@@ -304,7 +306,9 @@ export const RECOMMENDATIONS: readonly Recommendation[] = [
     title: 'Establish a cost incident response playbook',
     description: 'Document the response procedure when an anomaly fires: who owns it, the investigation process, and available rollback or throttling options.',
   },
-].map(r => ({
+];
+
+const mappedRecommendations = recommendationsData.map((r) => ({
   id: r.id,
   title: r.title,
   description: r.description,
@@ -313,4 +317,10 @@ export const RECOMMENDATIONS: readonly Recommendation[] = [
   domain: r.domain,
   triggerQuestionId: r.triggerQuestionId,
   triggerThreshold: r.threshold,
-})) as Recommendation[];
+}));
+
+export const RECOMMENDATIONS = validateDataSource(
+  ICGRecommendationsArraySchema,
+  mappedRecommendations,
+  'icg/recommendations.ts'
+);

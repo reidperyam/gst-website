@@ -9,33 +9,15 @@ import { STAGES } from '../data/techpar/stages';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export type Stage = 'seed' | 'series_a' | 'series_bc' | 'pe' | 'enterprise';
-export type Frame = 'convergence' | 'dollars';
-export type Zone = 'underinvest' | 'ahead' | 'healthy' | 'above' | 'elevated' | 'critical';
+// Data-shape types are inferred from Zod schemas in src/schemas/techpar.ts
+// (single source of truth) and re-exported here so existing imports stay
+// stable. Engine-only computation types (TechParInputs, TechParResult,
+// TrajectoryDataset, etc.) remain declared locally below.
+import type { Stage, Frame, Zone, StageConfig } from '../schemas/techpar';
+export type { Stage, Frame, Zone, StageConfig };
+
 export type Mode = 'quick' | 'deepdive';
 export type CapExView = 'cash' | 'gaap';
-
-export interface StageConfig {
-  key: Stage;
-  label: string;
-  frame: Frame;
-  note: string;
-  noteUnder?: string;
-  zones: {
-    underinvest: number;
-    lo: number;
-    hi: number;
-    above: number;
-    critical: number;
-  };
-  benchmarks: {
-    infraHosting: [number, number];
-    infraPersonnel: [number, number];
-    rdOpEx: [number, number];
-    rdCapExOfRD: [number, number];
-    total: [number, number];
-  };
-}
 
 export interface TechParInputs {
   arr: number;

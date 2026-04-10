@@ -4,17 +4,19 @@
  * 5 industry types with contextual guidance for the Analysis tab.
  * Benchmarks remain SaaS-derived; these notes explain how other
  * industries typically differ so users can apply professional judgment.
+ * Validated at build time against `IndustryNotesMapSchema`.
  */
 
-export type Industry = 'saas' | 'fintech' | 'marketplace' | 'infra_hw' | 'other';
+import {
+  IndustryNotesMapSchema,
+  type Industry,
+  type IndustryNote,
+} from '../../schemas/techpar';
+import { validateDataSource } from '../../utils/validateData';
 
-export interface IndustryNote {
-  label: string;
-  note: string;
-  disclaimer: string;
-}
+export type { Industry, IndustryNote };
 
-export const INDUSTRY_NOTES: Record<Industry, IndustryNote> = {
+const industryNotesData: Record<Industry, IndustryNote> = {
   saas: {
     label: 'SaaS',
     note: '',
@@ -42,4 +44,10 @@ export const INDUSTRY_NOTES: Record<Industry, IndustryNote> = {
   },
 };
 
-export const INDUSTRY_KEYS: Industry[] = ['saas', 'fintech', 'marketplace', 'infra_hw', 'other'];
+export const INDUSTRY_NOTES = validateDataSource(
+  IndustryNotesMapSchema,
+  industryNotesData,
+  'techpar/industry-notes.ts'
+);
+
+export { INDUSTRY_KEYS } from '../../schemas/techpar';

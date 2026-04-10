@@ -2,12 +2,14 @@
  * TechPar - Stage configuration data
  *
  * Five stage definitions with zone thresholds, per-category benchmark ranges,
- * and trajectory frame type. Populated from the POC's STAGES object.
+ * and trajectory frame type. Validated at build time against
+ * `StagesMapSchema` in `src/schemas/techpar.ts`.
  */
 
-import type { StageConfig } from '../../utils/techpar-engine';
+import { StagesMapSchema, type StageConfig, type Stage } from '../../schemas/techpar';
+import { validateDataSource } from '../../utils/validateData';
 
-export const STAGES: Record<string, StageConfig> = {
+const stagesData: Record<Stage, StageConfig> = {
   seed: {
     key: 'seed',
     label: 'Seed / Pre-A',
@@ -85,4 +87,6 @@ export const STAGES: Record<string, StageConfig> = {
   },
 };
 
-export const STAGE_KEYS = ['seed', 'series_a', 'series_bc', 'pe', 'enterprise'] as const;
+export const STAGES = validateDataSource(StagesMapSchema, stagesData, 'techpar/stages.ts');
+
+export { STAGE_KEYS } from '../../schemas/techpar';
