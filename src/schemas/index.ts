@@ -6,4 +6,5 @@
  * re-exported from `src/types/` for stable import paths.
  */
 
+export * from './portfolio';
 export * from './regulatory-map';

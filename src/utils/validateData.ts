@@ -22,9 +22,14 @@ export function validateDataSource<T>(
   const result = schema.safeParse(data);
 
   if (!result.success) {
-    console.error(`[Build Error] Invalid data in ${label}:`);
-    console.error(result.error.format());
-    throw new Error(`Invalid data in ${label}`);
+    const issues = result.error.issues
+      .map((issue) => {
+        const path = issue.path.length > 0 ? issue.path.join('.') : '(root)';
+        return `  at ${path}: ${issue.message}`;
+      })
+      .join('\n');
+    console.error(`[Build Error] Invalid data in ${label}:\n${issues}`);
+    throw new Error(`Invalid data in ${label}:\n${issues}`);
   }
 
   return result.data;
