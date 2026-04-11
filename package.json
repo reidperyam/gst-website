@@ -19,7 +19,7 @@
     "radar:unseed": "npx tsx -e \"import { clearRadarCache } from './tests/e2e/fixtures/seed-radar-cache'; clearRadarCache();\"",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:css": "stylelint \"src/styles/*.css\"",
+    "lint:css": "stylelint \"src/**/*.{css,astro}\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
@@ -61,9 +61,11 @@
     "jsdom": "^27.4.0",
     "lint-staged": "^16.4.0",
     "playwright": "^1.58.0",
+    "postcss-html": "^1.8.1",
     "prettier": "^3.8.2",
     "prettier-plugin-astro": "^0.14.1",
     "stylelint": "^17.5.0",
+    "stylelint-config-html": "^1.1.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.1",
@@ -73,8 +75,13 @@
     "path-to-regexp": "6.3.0"
   },
   "lint-staged": {
-    "*.{ts,tsx,astro,mjs,cjs,js}": [
+    "*.{ts,tsx,mjs,cjs,js}": [
       "eslint --fix",
+      "prettier --write"
+    ],
+    "*.astro": [
+      "eslint --fix",
+      "stylelint --fix",
       "prettier --write"
     ],
     "*.css": [

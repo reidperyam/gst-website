@@ -11,30 +11,55 @@ const { portfolioType = 'standard', projects = [] } = Astro.props;
 const title = portfolioType === 'ma' ? 'PORTFOLIO M&A ENGAGEMENTS' : 'CLIENT ENGAGEMENTS';
 
 // Extract unique values for filters
-const uniqueThemes = [...new Set(projects.map(p => p.theme))].sort();
-const uniqueYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
+const uniqueThemes = [...new Set(projects.map((p) => p.theme))].sort();
+const uniqueYears = [...new Set(projects.map((p) => p.year))].sort((a, b) => b - a);
 
 // Categorize growth stages
 const growthKeywords = ['growth', 'expansion', 'small', 'scaling', 'scale-up', 'startup', 'early'];
-const matureKeywords = ['mature', 'maturity', 'established', 'developed', 'legacy', 'modernizing', 'enterprise'];
+const matureKeywords = [
+  'mature',
+  'maturity',
+  'established',
+  'developed',
+  'legacy',
+  'modernizing',
+  'enterprise',
+];
 
-const uniqueStages = [...new Set(projects.map(p => p.growthStage))];
-const growthStages = uniqueStages.filter(s => growthKeywords.some(k => s.toLowerCase().includes(k))).sort();
-const matureStages = uniqueStages.filter(s => matureKeywords.some(k => s.toLowerCase().includes(k))).sort();
+const uniqueStages = [...new Set(projects.map((p) => p.growthStage))];
+const growthStages = uniqueStages
+  .filter((s) => growthKeywords.some((k) => s.toLowerCase().includes(k)))
+  .sort();
+const matureStages = uniqueStages
+  .filter((s) => matureKeywords.some((k) => s.toLowerCase().includes(k)))
+  .sort();
 
 // Categorize engagement types
-const valueCreationTypes = ['Value Creation - Growth', 'Value Creation - Integration', 'Value Creation - Modernization', 'Value Creation - Turnaround'];
-const technicalDiligenceTypes = ['Early Stage Assessment', 'Technical Assessment', 'Buy-Side Technical Diligence'];
+const valueCreationTypes = [
+  'Value Creation - Growth',
+  'Value Creation - Integration',
+  'Value Creation - Modernization',
+  'Value Creation - Turnaround',
+];
+const technicalDiligenceTypes = [
+  'Early Stage Assessment',
+  'Technical Assessment',
+  'Buy-Side Technical Diligence',
+];
 
 const uniqueEngagementTypes = [
   ...new Set(
     projects
-      .map(p => p.engagementType)
+      .map((p) => p.engagementType)
       .filter((e): e is Exclude<typeof e, undefined> => e !== undefined)
-  )
+  ),
 ].sort();
-const valueCreationEngagements = uniqueEngagementTypes.filter(e => valueCreationTypes.includes(e)).sort();
-const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technicalDiligenceTypes.includes(e)).sort();
+const valueCreationEngagements = uniqueEngagementTypes
+  .filter((e) => valueCreationTypes.includes(e))
+  .sort();
+const technicalDiligenceEngagements = uniqueEngagementTypes
+  .filter((e) => technicalDiligenceTypes.includes(e))
+  .sort();
 ---
 
 <div class="portfolio-header">
@@ -48,7 +73,15 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       <div class="portfolio-controls-fixed brutal-frosted--heavy">
         <div class="controls-wrapper brutal-frosted">
           <div class="search-box">
-            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              class="search-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.35-4.35"></path>
             </svg>
@@ -62,14 +95,31 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
             />
           </div>
 
-          <button id="filter-toggle" class="filter-button" aria-label="Open filters" aria-expanded="false" data-testid="portfolio-filter-toggle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button
+            id="filter-toggle"
+            class="filter-button"
+            aria-label="Open filters"
+            aria-expanded="false"
+            data-testid="portfolio-filter-toggle"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <line x1="4" y1="6" x2="20" y2="6"></line>
               <line x1="4" y1="12" x2="20" y2="12"></line>
               <line x1="4" y1="18" x2="20" y2="18"></line>
             </svg>
             <span class="filter-text">Filters</span>
-            <span id="filter-badge-header" class="filter-badge" aria-live="polite" data-testid="portfolio-filter-badge"></span>
+            <span
+              id="filter-badge-header"
+              class="filter-badge"
+              aria-live="polite"
+              data-testid="portfolio-filter-badge"></span>
           </button>
         </div>
       </div>
@@ -77,11 +127,27 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   </div>
 
   <!-- Filter Drawer (Slide-out) -->
-  <div id="filter-drawer" class="filter-drawer portfolio-filter-drawer brutal-frosted--overlay" data-testid="portfolio-filter-drawer">
+  <div
+    id="filter-drawer"
+    class="filter-drawer portfolio-filter-drawer brutal-frosted--overlay"
+    data-testid="portfolio-filter-drawer"
+  >
     <div class="drawer-header">
       <h2 class="drawer-title">FILTERS</h2>
-      <button id="drawer-close" class="drawer-close" aria-label="Close filters" data-testid="portfolio-drawer-close">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button
+        id="drawer-close"
+        class="drawer-close"
+        aria-label="Close filters"
+        data-testid="portfolio-drawer-close"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -89,50 +155,105 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     </div>
 
     <div class="drawer-content">
-      <button id="clear-filters" class="clear-filters-button" data-testid="clear-filters-button">Clear All Filters</button>
+      <button id="clear-filters" class="clear-filters-button" data-testid="clear-filters-button"
+        >Clear All Filters</button
+      >
 
       <div class="filter-section">
         <div class="filter-label">Company Growth Stage</div>
         <div class="filter-chips" id="stage-chips" data-testid="stage-filter-chips">
-          <div class="filter-chip active" data-value="all" data-testid="filter-chip-stage-all">All Stages</div>
-          <div class="filter-chip" data-value="growth-category" data-testid="filter-chip-stage-growth">Growth Stage</div>
-          <div class="filter-chip" data-value="mature-category" data-testid="filter-chip-stage-mature">Mature Stage</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-stage-all">
+            All Stages
+          </div>
+          <div
+            class="filter-chip"
+            data-value="growth-category"
+            data-testid="filter-chip-stage-growth"
+          >
+            Growth Stage
+          </div>
+          <div
+            class="filter-chip"
+            data-value="mature-category"
+            data-testid="filter-chip-stage-mature"
+          >
+            Mature Stage
+          </div>
         </div>
       </div>
 
       <div class="filter-section">
         <div class="filter-label">Theme</div>
         <div class="filter-chips" id="theme-chips" data-testid="theme-filter-chips">
-          <div class="filter-chip active" data-value="all" data-testid="filter-chip-theme-all">All Themes</div>
-          {uniqueThemes.map(theme => (
-            <div class="filter-chip" data-value={theme} data-testid={`filter-chip-theme-${theme.toLowerCase().replace(/\s+/g, '-')}`}>{theme}</div>
-          ))}
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-theme-all">
+            All Themes
+          </div>
+          {
+            uniqueThemes.map((theme) => (
+              <div
+                class="filter-chip"
+                data-value={theme}
+                data-testid={`filter-chip-theme-${theme.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                {theme}
+              </div>
+            ))
+          }
         </div>
       </div>
 
       <div class="filter-section">
         <div class="filter-label">Year</div>
         <div class="filter-chips" id="year-chips" data-testid="year-filter-chips">
-          <div class="filter-chip active" data-value="all" data-testid="filter-chip-year-all">All Years</div>
-          {uniqueYears.map(year => (
-            <div class="filter-chip" data-value={year.toString()} data-testid={`filter-chip-year-${year}`}>{year}</div>
-          ))}
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-year-all">
+            All Years
+          </div>
+          {
+            uniqueYears.map((year) => (
+              <div
+                class="filter-chip"
+                data-value={year.toString()}
+                data-testid={`filter-chip-year-${year}`}
+              >
+                {year}
+              </div>
+            ))
+          }
         </div>
       </div>
 
       <div class="filter-section">
         <div class="filter-label">Client Engagement</div>
         <div class="filter-chips" id="engagement-chips" data-testid="engagement-filter-chips">
-          <div class="filter-chip active" data-value="all" data-testid="filter-chip-engagement-all">All Types</div>
-          <div class="filter-chip" data-value="value-creation" data-testid="filter-chip-engagement-value-creation">Value Creation</div>
-          <div class="filter-chip" data-value="technical-diligence" data-testid="filter-chip-engagement-technical-diligence">Technical Diligence</div>
+          <div class="filter-chip active" data-value="all" data-testid="filter-chip-engagement-all">
+            All Types
+          </div>
+          <div
+            class="filter-chip"
+            data-value="value-creation"
+            data-testid="filter-chip-engagement-value-creation"
+          >
+            Value Creation
+          </div>
+          <div
+            class="filter-chip"
+            data-value="technical-diligence"
+            data-testid="filter-chip-engagement-technical-diligence"
+          >
+            Technical Diligence
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Drawer Overlay (Mobile & Desktop) -->
-  <div id="filter-overlay" class="filter-overlay portfolio-filter-overlay" data-testid="portfolio-filter-overlay"></div>
+  <div
+    id="filter-overlay"
+    class="filter-overlay portfolio-filter-overlay"
+    data-testid="portfolio-filter-overlay"
+  >
+  </div>
 </div>
 
 <style>
@@ -173,7 +294,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: position var(--transition-fast) ease-out, top var(--transition-fast) ease-out;
+    transition:
+      position var(--transition-fast) ease-out,
+      top var(--transition-fast) ease-out;
   }
 
   .portfolio-controls-fixed.sticky-active {
@@ -195,14 +318,13 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     background: transparent;
   }
 
-
   .search-box {
     position: relative;
     flex: 1;
     min-width: 375px;
     display: flex;
     align-items: center;
-    margin-left: 0rem;
+    margin-left: 0;
   }
 
   .search-icon {
@@ -233,8 +355,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   @keyframes badgePulse {
-    0% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .filter-text {
@@ -316,6 +442,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 
   /* Dark Theme Component Overrides */
+
   /* dark theme frosted glass handled by .brutal-frosted--heavy */
 
   :global(html.dark-theme) .portfolio-controls-fixed .container {
@@ -423,7 +550,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       width: 100%;
     }
 
-
     .search-box {
       flex: 1;
       min-width: 0;
@@ -489,7 +615,16 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   }
 </style>
 
-<script is:inline define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages, valueCreationList: valueCreationEngagements, technicalDiligenceList: technicalDiligenceEngagements }}>
+<script
+  is:inline
+  define:vars={{
+    projectsData: JSON.stringify(projects),
+    growthStagesList: growthStages,
+    matureStagesList: matureStages,
+    valueCreationList: valueCreationEngagements,
+    technicalDiligenceList: technicalDiligenceEngagements,
+  }}
+>
   // Initialize global state if it doesn't exist
   if (!window.portfolioState) {
     let allProjects;
@@ -508,12 +643,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         stage: 'all',
         theme: 'all',
         year: 'all',
-        engagement: 'all'
+        engagement: 'all',
       },
       growthStages: growthStagesList,
       matureStages: matureStagesList,
       valueCreationEngagements: valueCreationList,
-      technicalDiligenceEngagements: technicalDiligenceList
+      technicalDiligenceEngagements: technicalDiligenceList,
     };
   }
 
@@ -522,21 +657,18 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   const filters = window.portfolioState.filters;
 
   function filterProjects() {
-    window.portfolioState.filteredProjects = allProjects.filter(project => {
+    window.portfolioState.filteredProjects = allProjects.filter((project) => {
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const techs = Array.isArray(project.technologies)
           ? project.technologies
-          : (typeof project.technologies === 'string'
-              ? project.technologies.split(',').map(t => t.trim())
-              : []);
-        const searchableText = [
-          project.codeName,
-          project.industry,
-          project.summary,
-          ...techs
-        ].join(' ').toLowerCase();
+          : typeof project.technologies === 'string'
+            ? project.technologies.split(',').map((t) => t.trim())
+            : [];
+        const searchableText = [project.codeName, project.industry, project.summary, ...techs]
+          .join(' ')
+          .toLowerCase();
 
         if (!searchableText.includes(searchLower)) return false;
       }
@@ -560,8 +692,17 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
       // Engagement type filter - categorized by type
       if (filters.engagement !== 'all') {
-        const valueCreationTypes = ['Value Creation - Growth', 'Value Creation - Integration', 'Value Creation - Modernization', 'Value Creation - Turnaround'];
-        const technicalDiligenceTypes = ['Early Stage Assessment', 'Technical Assessment', 'Buy-Side Technical Diligence'];
+        const valueCreationTypes = [
+          'Value Creation - Growth',
+          'Value Creation - Integration',
+          'Value Creation - Modernization',
+          'Value Creation - Turnaround',
+        ];
+        const technicalDiligenceTypes = [
+          'Early Stage Assessment',
+          'Technical Assessment',
+          'Buy-Side Technical Diligence',
+        ];
 
         if (filters.engagement === 'value-creation') {
           if (!valueCreationTypes.includes(project.engagementType)) return false;
@@ -576,16 +717,18 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     filteredProjects = window.portfolioState.filteredProjects;
     updateGridDisplay();
     updateFilterBadge();
-    window.dispatchEvent(new CustomEvent('portfolioFiltered', { detail: { count: filteredProjects.length } }));
+    window.dispatchEvent(
+      new CustomEvent('portfolioFiltered', { detail: { count: filteredProjects.length } })
+    );
   }
 
   function updateGridDisplay() {
     const cards = document.querySelectorAll('.project-card');
     let visibleCount = 0;
 
-    cards.forEach(card => {
+    cards.forEach((card) => {
       const projectId = card.dataset.projectId;
-      const isVisible = window.portfolioState.filteredProjects.some(p => p.id === projectId);
+      const isVisible = window.portfolioState.filteredProjects.some((p) => p.id === projectId);
 
       if (isVisible) {
         card.style.display = '';
@@ -609,7 +752,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
         message = document.createElement('div');
         message.id = 'portfolio-no-results';
         message.className = 'no-results-message';
-        message.textContent = 'No projects match your filters. Try adjusting your search or filters.';
+        message.textContent =
+          'No projects match your filters. Try adjusting your search or filters.';
         const grid = document.querySelector('.grid');
         if (grid && grid.parentElement) {
           grid.parentElement.insertBefore(message, grid);
@@ -631,7 +775,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       stageChipsContainer.addEventListener('click', (e) => {
         const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#stage-chips .filter-chip').forEach(c => c.classList.remove('active'));
+          document
+            .querySelectorAll('#stage-chips .filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           chip.classList.add('active');
           filters.stage = chip.dataset.value;
           window.portfolioState.filters.stage = filters.stage;
@@ -645,7 +791,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       themeChipsContainer.addEventListener('click', (e) => {
         const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#theme-chips .filter-chip').forEach(c => c.classList.remove('active'));
+          document
+            .querySelectorAll('#theme-chips .filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           chip.classList.add('active');
           filters.theme = chip.dataset.value;
           window.portfolioState.filters.theme = filters.theme;
@@ -659,7 +807,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       yearChipsContainer.addEventListener('click', (e) => {
         const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#year-chips .filter-chip').forEach(c => c.classList.remove('active'));
+          document
+            .querySelectorAll('#year-chips .filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           chip.classList.add('active');
           filters.year = chip.dataset.value;
           window.portfolioState.filters.year = filters.year;
@@ -673,7 +823,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
       engagementChipsContainer.addEventListener('click', (e) => {
         const chip = e.target.closest('.filter-chip');
         if (chip) {
-          document.querySelectorAll('#engagement-chips .filter-chip').forEach(c => c.classList.remove('active'));
+          document
+            .querySelectorAll('#engagement-chips .filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           chip.classList.add('active');
           filters.engagement = chip.dataset.value;
           window.portfolioState.filters.engagement = filters.engagement;
@@ -705,7 +857,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
   function updateFilterBadge() {
     const headerBadge = document.getElementById('filter-badge-header');
     const stickyBadge = document.getElementById('filter-badge-sticky');
-    const activeCount = Object.values(filters).filter(v => v !== 'all' && v !== '').length;
+    const activeCount = Object.values(filters).filter((v) => v !== 'all' && v !== '').length;
 
     if (headerBadge) {
       if (activeCount > 0) {
@@ -786,8 +938,10 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
 
         const searchInput = document.getElementById('search-input-fixed');
         if (searchInput) searchInput.value = '';
-        document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('[data-value="all"]').forEach(c => c.classList.add('active'));
+        document
+          .querySelectorAll('.filter-chip.active')
+          .forEach((c) => c.classList.remove('active'));
+        document.querySelectorAll('[data-value="all"]').forEach((c) => c.classList.add('active'));
 
         filterProjects();
         updateFilterBadge();
@@ -820,13 +974,15 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => technica
     openFilterDrawer,
     closeFilterDrawer,
     getFilteredProjects: () => window.portfolioState.filteredProjects,
-    getFilters: () => window.portfolioState.filters
+    getFilters: () => window.portfolioState.filters,
   };
 </script>
 
 <script>
   function initStickyControls() {
-    const controlsElement = document.querySelector('.portfolio-controls-fixed') as HTMLElement | null;
+    const controlsElement = document.querySelector(
+      '.portfolio-controls-fixed'
+    ) as HTMLElement | null;
     const headerElement = document.querySelector('.portfolio-header') as HTMLElement | null;
     const navHeader = document.querySelector('header') as HTMLElement | null;
 

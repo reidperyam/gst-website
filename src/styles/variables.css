@@ -5,8 +5,8 @@
   --color-primary: #05cd99;
   --color-primary-rgb: 5, 205, 153;
   --color-primary-dark: #04a87a;
-  --color-secondary: #CC8800;
-  --color-secondary-dark: #FFAA33;
+  --color-secondary: #cc8800;
+  --color-secondary-dark: #ffaa33;
 
   /* Editor's Pick */
   --color-editors-pick: #b26622;
@@ -14,7 +14,7 @@
 
   /* Semantic Colors */
   --color-success: #2e8b57;
-  --color-warning: #CC8800;
+  --color-warning: #cc8800;
   --color-error: #d93636;
   --color-info: var(--color-primary);
 
@@ -50,18 +50,18 @@
   --color-primary-05: rgba(var(--color-primary-rgb), 0.05);
   --color-primary-06: rgba(var(--color-primary-rgb), 0.06);
   --color-primary-08: rgba(var(--color-primary-rgb), 0.08);
-  --color-primary-10: rgba(var(--color-primary-rgb), 0.10);
+  --color-primary-10: rgba(var(--color-primary-rgb), 0.1);
   --color-primary-12: rgba(var(--color-primary-rgb), 0.12);
   --color-primary-13: rgba(var(--color-primary-rgb), 0.13);
   --color-primary-15: rgba(var(--color-primary-rgb), 0.15);
   --color-primary-18: rgba(var(--color-primary-rgb), 0.18);
-  --color-primary-20: rgba(var(--color-primary-rgb), 0.20);
+  --color-primary-20: rgba(var(--color-primary-rgb), 0.2);
   --color-primary-25: rgba(var(--color-primary-rgb), 0.25);
-  --color-primary-30: rgba(var(--color-primary-rgb), 0.30);
+  --color-primary-30: rgba(var(--color-primary-rgb), 0.3);
   --color-primary-45: rgba(var(--color-primary-rgb), 0.45);
-  --color-primary-50: rgba(var(--color-primary-rgb), 0.50);
+  --color-primary-50: rgba(var(--color-primary-rgb), 0.5);
   --color-primary-55: rgba(var(--color-primary-rgb), 0.55);
-  --color-primary-60: rgba(var(--color-primary-rgb), 0.60);
+  --color-primary-60: rgba(var(--color-primary-rgb), 0.6);
   --color-primary-65: rgba(var(--color-primary-rgb), 0.65);
 
   /* Borders & Accents */
@@ -213,11 +213,11 @@
   /* TechPar — Chart Colors (opacity-tuned, kept independently) */
   --techpar-chart-band-fill: var(--color-primary-15);
   --techpar-chart-band-border: var(--color-primary-50);
-  --techpar-chart-ahead-fill: rgba(33, 118, 174, 0.10);
+  --techpar-chart-ahead-fill: rgba(33, 118, 174, 0.1);
   --techpar-chart-ahead-border: rgba(33, 118, 174, 0.5);
   --techpar-chart-under-fill: rgba(224, 123, 0, 0.12);
   --techpar-chart-under-border: rgba(224, 123, 0, 0.55);
-  --techpar-chart-above-fill: rgba(217, 54, 54, 0.10);
+  --techpar-chart-above-fill: rgba(217, 54, 54, 0.1);
   --techpar-chart-above-border: rgba(217, 54, 54, 0.45);
   --techpar-chart-revenue-line: rgba(26, 26, 26, 0.55);
 
@@ -249,7 +249,7 @@ html.dark-theme {
 
   /* Semantic Colors (dark theme) */
   --color-success: #3da868;
-  --color-warning: #FFAA33;
+  --color-warning: #ffaa33;
   --color-error: #e05050;
 
   /* Section Backgrounds */
@@ -286,9 +286,9 @@ html.dark-theme {
   --stat-item-border: var(--color-primary-20);
 
   /* Dark Border Scale */
-  --border-dark-subtle: rgba(255, 255, 255, 0.10);
+  --border-dark-subtle: rgba(255, 255, 255, 0.1);
   --border-dark-default: rgba(255, 255, 255, 0.15);
-  --border-dark-prominent: rgba(255, 255, 255, 0.20);
+  --border-dark-prominent: rgba(255, 255, 255, 0.2);
 
   /* Misc */
   --checkerboard-line: rgba(255, 255, 255, 0.08);
@@ -306,6 +306,7 @@ html.dark-theme {
   --color-subdued-rgb: 168, 152, 136;
 
   /* Tool derivations auto-resolve from updated core tokens above */
+
   /* Only override opacity variants that need dark-theme tuning */
   --color-subdued-bg: rgba(var(--color-subdued-rgb), 0.06);
   --color-authority-bg: rgba(var(--color-authority-rgb), 0.1);
@@ -326,7 +327,7 @@ html.dark-theme {
   --techpar-chart-under-fill: rgba(255, 140, 0, 0.12);
   --techpar-chart-under-border: rgba(255, 140, 0, 0.55);
   --techpar-chart-above-fill: rgba(240, 70, 70, 0.12);
-  --techpar-chart-above-border: rgba(240, 70, 70, 0.50);
+  --techpar-chart-above-border: rgba(240, 70, 70, 0.5);
   --techpar-chart-revenue-line: rgba(200, 200, 200, 0.6);
 }
 

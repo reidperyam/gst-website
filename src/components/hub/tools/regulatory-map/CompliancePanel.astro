@@ -5,16 +5,31 @@
  */
 ---
 
-<aside class="brutal-panel" id="compliancePanel" data-testid="compliance-panel" aria-live="polite" hidden>
+<aside
+  class="brutal-panel"
+  id="compliancePanel"
+  data-testid="compliance-panel"
+  aria-live="polite"
+  hidden
+>
   <div class="brutal-bottom-sheet__handle" id="bottomSheetHandle" aria-hidden="true">
     <span class="brutal-bottom-sheet__handle-bar"></span>
   </div>
   <div class="brutal-panel__header">
     <h2 class="brutal-panel__title" id="panelCountryName"></h2>
     <div class="brutal-panel__actions">
-      <button class="brutal-panel__copy" id="panelCopyLink" aria-label="Copy link to this view" title="Copy link">
+      <button
+        class="brutal-panel__copy"
+        id="panelCopyLink"
+        aria-label="Copy link to this view"
+        title="Copy link"
+      >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M6.5 9.5l3-3M5.5 7L4 8.5a2.12 2.12 0 003 3L8.5 10m-1-3.5L9 5l1.5-1.5a2.12 2.12 0 013 3L12 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path
+            d="M6.5 9.5l3-3M5.5 7L4 8.5a2.12 2.12 0 003 3L8.5 10m-1-3.5L9 5l1.5-1.5a2.12 2.12 0 013 3L12 8"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"></path>
         </svg>
       </button>
       <span class="brutal-panel__count" id="panelRegCount"></span>
@@ -32,6 +47,7 @@
   /* Dark theme */
   :global(html.dark-theme) .brutal-panel {
     background: var(--bg-dark-secondary);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
   }
 
   :global(html.dark-theme .brutal-reg-card) {
@@ -86,9 +102,5 @@
       height: 4px;
       background: rgba(128, 128, 128, 0.4);
     }
-  }
-
-  :global(html.dark-theme) .brutal-panel {
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
   }
 </style>

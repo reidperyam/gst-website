@@ -8,905 +8,1059 @@ import { trackPageView } from '../../../../utils/analytics';
 trackPageView('regulatory-map', 'Regulatory Map | GST');
 
 const faqItems = [
-    {
-        question: "Why does regulatory coverage matter for technology investments?",
-        answer: "Data privacy, AI governance, cybersecurity, and industry compliance obligations are embedded in nearly every modern business. They shape product decisions, customer engagement, and revenue. When a company operates across jurisdictions without a clear understanding of its regulatory exposure across these domains, the result is unchecked risk: fines, forced operational changes, or deal-killing liabilities discovered during diligence. For investors, regulatory posture is a direct indicator of operational maturity and risk."
-    },
-    {
-        question: "What regulations does the map cover?",
-        answer: "The map covers four categories of regulation across 120+ frameworks worldwide. Data privacy includes the EU's GDPR, California's CCPA/CPRA, Brazil's LGPD, Canada's PIPEDA, and dozens of other national and sub-national laws. AI governance covers the EU AI Act, China's algorithm and generative AI regulations, South Korea's AI Basic Act, and US state-level AI laws addressing algorithmic discrimination, transparency, and automated decision-making. Cybersecurity includes the EU's NIS2 Directive, the US CIRCIA and CMMC frameworks, Singapore's Cybersecurity Act, and national cyber strategies across the Middle East, Africa, and Asia-Pacific. Industry compliance covers frameworks like DORA for financial services, SOX, Basel III, HIPAA, and PCI DSS. Coverage is continually expanding as new frameworks are enacted worldwide."
-    },
-    {
-        question: "How current is the regulatory data shown here?",
-        answer: "Regulatory data is sourced from official government publications and authoritative legal databases. The dataset is updated periodically to reflect new legislation, amendments, and enforcement changes. For time-sensitive compliance decisions, we recommend validating against the relevant regulatory authority's most recent publications."
-    },
-    {
-        question: "How should I use this tool during due diligence?",
-        answer: "Start by identifying every jurisdiction where the target company operates, collects or processes data, deploys AI systems, or maintains critical infrastructure. Use the map to surface applicable regulations across data privacy, AI governance, cybersecurity, and industry compliance in those regions, then cross-reference the target's compliance posture against each framework's key requirements. This gives you a structured view of regulatory exposure across all four domains, highlighting gaps that could translate into remediation costs, integration delays, or post-close liabilities."
-    },
-    {
-        question: "Does GST provide regulatory compliance advisory?",
-        answer: "<p>Yes. The Regulatory Map is one component of GST's broader technology diligence capability. When regulatory exposure is identified during an engagement, whether in data privacy, AI governance, cybersecurity, or industry compliance, we assess the scope of non-compliance, estimate remediation costs, and build those findings into our overall risk analysis and integration roadmap.</p><p><a href='/services'>Learn more about our advisory services</a> or <a href='https://calendly.com/globalstrategictech'>schedule a consultation</a>.</p>"
-    },
+  {
+    question: 'Why does regulatory coverage matter for technology investments?',
+    answer:
+      'Data privacy, AI governance, cybersecurity, and industry compliance obligations are embedded in nearly every modern business. They shape product decisions, customer engagement, and revenue. When a company operates across jurisdictions without a clear understanding of its regulatory exposure across these domains, the result is unchecked risk: fines, forced operational changes, or deal-killing liabilities discovered during diligence. For investors, regulatory posture is a direct indicator of operational maturity and risk.',
+  },
+  {
+    question: 'What regulations does the map cover?',
+    answer:
+      "The map covers four categories of regulation across 120+ frameworks worldwide. Data privacy includes the EU's GDPR, California's CCPA/CPRA, Brazil's LGPD, Canada's PIPEDA, and dozens of other national and sub-national laws. AI governance covers the EU AI Act, China's algorithm and generative AI regulations, South Korea's AI Basic Act, and US state-level AI laws addressing algorithmic discrimination, transparency, and automated decision-making. Cybersecurity includes the EU's NIS2 Directive, the US CIRCIA and CMMC frameworks, Singapore's Cybersecurity Act, and national cyber strategies across the Middle East, Africa, and Asia-Pacific. Industry compliance covers frameworks like DORA for financial services, SOX, Basel III, HIPAA, and PCI DSS. Coverage is continually expanding as new frameworks are enacted worldwide.",
+  },
+  {
+    question: 'How current is the regulatory data shown here?',
+    answer:
+      "Regulatory data is sourced from official government publications and authoritative legal databases. The dataset is updated periodically to reflect new legislation, amendments, and enforcement changes. For time-sensitive compliance decisions, we recommend validating against the relevant regulatory authority's most recent publications.",
+  },
+  {
+    question: 'How should I use this tool during due diligence?',
+    answer:
+      "Start by identifying every jurisdiction where the target company operates, collects or processes data, deploys AI systems, or maintains critical infrastructure. Use the map to surface applicable regulations across data privacy, AI governance, cybersecurity, and industry compliance in those regions, then cross-reference the target's compliance posture against each framework's key requirements. This gives you a structured view of regulatory exposure across all four domains, highlighting gaps that could translate into remediation costs, integration delays, or post-close liabilities.",
+  },
+  {
+    question: 'Does GST provide regulatory compliance advisory?',
+    answer:
+      "<p>Yes. The Regulatory Map is one component of GST's broader technology diligence capability. When regulatory exposure is identified during an engagement, whether in data privacy, AI governance, cybersecurity, or industry compliance, we assess the scope of non-compliance, estimate remediation costs, and build those findings into our overall risk analysis and integration roadmap.</p><p><a href='/services'>Learn more about our advisory services</a> or <a href='https://calendly.com/globalstrategictech'>schedule a consultation</a>.</p>",
+  },
 ];
 
 import DeltaIcon from '../../../../components/DeltaIcon.astro';
 ---
 
 <BaseLayout
-    title="Regulatory Map | GST"
-    description="Interactive map of global data privacy and AI regulations. Explore GDPR, CCPA, the EU AI Act, and dozens of other frameworks across jurisdictions."
-    ogTitle="Regulatory Map | GST"
-    ogDescription="Explore data privacy and AI regulatory frameworks, including GDPR, CCPA, EU AI Act and more, across global jurisdictions."
-    ogImage="/og-image.png"
-    ogUrl="https://globalstrategic.tech/hub/tools/regulatory-map"
-    faqItems={faqItems}
+  title="Regulatory Map | GST"
+  description="Interactive map of global data privacy and AI regulations. Explore GDPR, CCPA, the EU AI Act, and dozens of other frameworks across jurisdictions."
+  ogTitle="Regulatory Map | GST"
+  ogDescription="Explore data privacy and AI regulatory frameworks, including GDPR, CCPA, EU AI Act and more, across global jurisdictions."
+  ogImage="/og-image.png"
+  ogUrl="https://globalstrategic.tech/hub/tools/regulatory-map"
+  faqItems={faqItems}
 >
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Regulatory Map",
-        "description": "Interactive map of 120+ global data privacy, AI governance, cybersecurity, and compliance regulations across jurisdictions",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Web",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "publisher": { "@type": "Organization", "name": "Global Strategic Technologies" },
-        "datePublished": "2026-01-15",
-        "dateModified": "2026-03-22",
-        "featureList": ["120+ regulations across 4 categories", "Interactive D3 world map", "Jurisdiction-specific compliance details", "Data privacy, AI governance, cybersecurity, and industry compliance"],
-        "author": { "@type": "Person", "name": "Reid Peryam", "jobTitle": "Strategic Technology Advisor", "sameAs": ["https://www.linkedin.com/in/reidperyam/"], "description": "Technology advisor with experience across 100+ PE technology diligence engagements", "knowsAbout": ["Regulatory Compliance", "Data Privacy", "AI Governance", "Technical Due Diligence", "M&A Tech Strategy"] }
-    })} />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: 'Regulatory Map',
+      description:
+        'Interactive map of 120+ global data privacy, AI governance, cybersecurity, and compliance regulations across jurisdictions',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      publisher: { '@type': 'Organization', name: 'Global Strategic Technologies' },
+      datePublished: '2026-01-15',
+      dateModified: '2026-03-22',
+      featureList: [
+        '120+ regulations across 4 categories',
+        'Interactive D3 world map',
+        'Jurisdiction-specific compliance details',
+        'Data privacy, AI governance, cybersecurity, and industry compliance',
+      ],
+      author: {
+        '@type': 'Person',
+        name: 'Reid Peryam',
+        jobTitle: 'Strategic Technology Advisor',
+        sameAs: ['https://www.linkedin.com/in/reidperyam/'],
+        description:
+          'Technology advisor with experience across 100+ PE technology diligence engagements',
+        knowsAbout: [
+          'Regulatory Compliance',
+          'Data Privacy',
+          'AI Governance',
+          'Technical Due Diligence',
+          'M&A Tech Strategy',
+        ],
+      },
+    })}
+  />
 
-    <section class="regulatory-map-section">
-        <div class="container">
-            <div class="print-report-header" aria-hidden="true">
-                <div class="print-report-header__brand">
-                    <DeltaIcon class="bullet-icon" />
-                    <span>GST</span>
-                </div>
-                <div class="print-report-header__title">Regulatory Map</div>
-                <div class="print-report-header__date" id="print-date"></div>
+  <section class="regulatory-map-section">
+    <div class="container">
+      <div class="print-report-header" aria-hidden="true">
+        <div class="print-report-header__brand">
+          <DeltaIcon class="bullet-icon" />
+          <span>GST</span>
+        </div>
+        <div class="print-report-header__title">Regulatory Map</div>
+        <div class="print-report-header__date" id="print-date"></div>
+      </div>
+
+      <HubHeader
+        title="Regulatory Map"
+        subtitle="Data privacy and artificial intelligence are among the most actively regulated areas in technology. Understanding the frameworks governing how data can be collected, stored, and transferred, and how AI can be developed and deployed, across jurisdictions is imperative."
+      />
+
+      <div class="map-layout" id="mapLayout">
+        <div class="map-wrapper">
+          <MapVisualizer />
+          <div class="brutal-legend map-legend-positioned">
+            <div class="brutal-legend__item">
+              <span class="brutal-legend__swatch brutal-legend__swatch--active" aria-hidden="true"
+              ></span>
+              <span class="brutal-legend__label">Regulation coverage</span>
             </div>
+            <div class="brutal-legend__item">
+              <span class="brutal-legend__swatch brutal-legend__swatch--neutral" aria-hidden="true"
+              ></span>
+              <span class="brutal-legend__label">No data</span>
+            </div>
+          </div>
+          <div class="brutal-map-cta" id="mapCta">
+            <svg
+              class="brutal-map-cta__icon"
+              width="20"
+              height="20"
+              viewBox="0 0 64 64"
+              fill="none"
+              aria-hidden="true"
+              ><path
+                d="M32 12 L52 52 L12 52 Z"
+                stroke="currentColor"
+                stroke-width="6"
+                stroke-linejoin="miter"></path></svg
+            >
+            <span class="brutal-map-cta__text"
+              >Select a highlighted region to view regulatory details</span
+            >
+          </div>
+        </div>
+        <CompliancePanel />
+        <div class="brutal-bottom-sheet__overlay" id="bottomSheetOverlay" hidden></div>
+      </div>
 
-            <HubHeader
-                title="Regulatory Map"
-                subtitle="Data privacy and artificial intelligence are among the most actively regulated areas in technology. Understanding the frameworks governing how data can be collected, stored, and transferred, and how AI can be developed and deployed, across jurisdictions is imperative."
+      <div class="regulation-filters" role="toolbar" aria-label="Filter regulations by category">
+        <div class="regulation-search" id="regulationSearch">
+          <div class="brutal-search">
+            <svg
+              class="brutal-search__icon"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"></circle>
+              <path
+                d="M10.5 10.5L14.5 14.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"></path>
+            </svg>
+            <input
+              type="search"
+              id="regulationSearchInput"
+              class="brutal-search__input"
+              placeholder="Search regulations..."
+              aria-label="Search regulations by name, summary, or requirements"
+              autocomplete="off"
             />
-
-            <div class="map-layout" id="mapLayout">
-                <div class="map-wrapper">
-                    <MapVisualizer />
-                    <div class="brutal-legend map-legend-positioned">
-                        <div class="brutal-legend__item">
-                            <span class="brutal-legend__swatch brutal-legend__swatch--active" aria-hidden="true"></span>
-                            <span class="brutal-legend__label">Regulation coverage</span>
-                        </div>
-                        <div class="brutal-legend__item">
-                            <span class="brutal-legend__swatch brutal-legend__swatch--neutral" aria-hidden="true"></span>
-                            <span class="brutal-legend__label">No data</span>
-                        </div>
-                    </div>
-                    <div class="brutal-map-cta" id="mapCta">
-                        <svg class="brutal-map-cta__icon" width="20" height="20" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 12 L52 52 L12 52 Z" stroke="currentColor" stroke-width="6" stroke-linejoin="miter"/></svg>
-                        <span class="brutal-map-cta__text">Select a highlighted region to view regulatory details</span>
-                    </div>
-                </div>
-                <CompliancePanel />
-                <div class="brutal-bottom-sheet__overlay" id="bottomSheetOverlay" hidden></div>
-            </div>
-
-            <div class="regulation-filters" role="toolbar" aria-label="Filter regulations by category">
-                <div class="regulation-search" id="regulationSearch">
-                    <div class="brutal-search">
-                        <svg class="brutal-search__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                            <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
-                            <path d="M10.5 10.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                        <input
-                            type="search"
-                            id="regulationSearchInput"
-                            class="brutal-search__input"
-                            placeholder="Search regulations..."
-                            aria-label="Search regulations by name, summary, or requirements"
-                            autocomplete="off"
-                        />
-                        <button id="searchClearBtn" class="brutal-search__clear" aria-label="Clear search" hidden>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="brutal-search__results" id="searchResults" role="listbox" aria-label="Search results" hidden></div>
-                </div>
-                <div class="brutal-filter-chips" id="regulation-filter-chips">
-                    <button class="brutal-filter-chip brutal-filter-chip--all brutal-filter-chip--active" data-category="all">All</button>
-                    <button class="brutal-filter-chip brutal-filter-chip--privacy" data-category="data-privacy">Data Privacy</button>
-                    <button class="brutal-filter-chip brutal-filter-chip--ai" data-category="ai-governance">AI Governance</button>
-                    <button class="brutal-filter-chip brutal-filter-chip--industry" data-category="industry-compliance">Industry Compliance</button>
-                    <button class="brutal-filter-chip brutal-filter-chip--cyber" data-category="cybersecurity">Cybersecurity</button>
-                </div>
-            </div>
-
-            <div class="timeline-section" id="timelineSection">
-                <h2 class="timeline-heading brutal-heading-md">Regulation Timeline</h2>
-                <div class="timeline-legend">
-                    <span class="timeline-legend__item"><span class="brutal-timeline-dot brutal-timeline-dot--privacy" aria-hidden="true"></span> Data Privacy</span>
-                    <span class="timeline-legend__item"><span class="brutal-timeline-dot brutal-timeline-dot--ai" aria-hidden="true"></span> AI Governance</span>
-                    <span class="timeline-legend__item"><span class="brutal-timeline-dot brutal-timeline-dot--industry" aria-hidden="true"></span> Industry Compliance</span>
-                    <span class="timeline-legend__item"><span class="brutal-timeline-dot brutal-timeline-dot--cyber" aria-hidden="true"></span> Cybersecurity</span>
-                </div>
-                <div class="timeline-scroll" id="timelineScroll">
-                    <div class="timeline-track" id="timelineTrack">
-                        <!-- Rendered by client JS -->
-                    </div>
-                </div>
-            </div>
-
+            <button
+              id="searchClearBtn"
+              class="brutal-search__clear"
+              aria-label="Clear search"
+              hidden
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path
+                  d="M3 3l8 8M11 3l-8 8"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"></path>
+              </svg>
+            </button>
+          </div>
+          <div
+            class="brutal-search__results"
+            id="searchResults"
+            role="listbox"
+            aria-label="Search results"
+            hidden
+          >
+          </div>
         </div>
-    </section>
-
-    <section class="faq-section">
-        <div class="container">
-            <h2 class="brutal-heading-lg">Frequently Asked Questions</h2>
-            <div class="brutal-faq brutal-faq--lg">
-                {faqItems.map((item) => (
-                    <details class="brutal-faq__item brutal-frosted">
-                        <summary class="brutal-faq__question">
-                            <span>{item.question}</span>
-                            <DeltaIcon class="delta-chevron" />
-                        </summary>
-                        <div class="brutal-faq__answer" set:html={item.answer} />
-                    </details>
-                ))}
-            </div>
-            <div class="print-report-footer" aria-hidden="true">
-                <p>Generated from globalstrategic.tech/hub/tools/regulatory-map</p>
-                <p>Data is informational only and does not constitute legal advice. Verify all regulatory requirements with qualified counsel.</p>
-            </div>
-            <a href="/hub/tools" class="cta-button secondary back-link">Back to Tools</a>
+        <div class="brutal-filter-chips" id="regulation-filter-chips">
+          <button
+            class="brutal-filter-chip brutal-filter-chip--all brutal-filter-chip--active"
+            data-category="all">All</button
+          >
+          <button
+            class="brutal-filter-chip brutal-filter-chip--privacy"
+            data-category="data-privacy">Data Privacy</button
+          >
+          <button class="brutal-filter-chip brutal-filter-chip--ai" data-category="ai-governance"
+            >AI Governance</button
+          >
+          <button
+            class="brutal-filter-chip brutal-filter-chip--industry"
+            data-category="industry-compliance">Industry Compliance</button
+          >
+          <button class="brutal-filter-chip brutal-filter-chip--cyber" data-category="cybersecurity"
+            >Cybersecurity</button
+          >
         </div>
-    </section>
+      </div>
+
+      <div class="timeline-section" id="timelineSection">
+        <h2 class="timeline-heading brutal-heading-md">Regulation Timeline</h2>
+        <div class="timeline-legend">
+          <span class="timeline-legend__item"
+            ><span class="brutal-timeline-dot brutal-timeline-dot--privacy" aria-hidden="true"
+            ></span> Data Privacy</span
+          >
+          <span class="timeline-legend__item"
+            ><span class="brutal-timeline-dot brutal-timeline-dot--ai" aria-hidden="true"></span> AI Governance</span
+          >
+          <span class="timeline-legend__item"
+            ><span class="brutal-timeline-dot brutal-timeline-dot--industry" aria-hidden="true"
+            ></span> Industry Compliance</span
+          >
+          <span class="timeline-legend__item"
+            ><span class="brutal-timeline-dot brutal-timeline-dot--cyber" aria-hidden="true"></span> Cybersecurity</span
+          >
+        </div>
+        <div class="timeline-scroll" id="timelineScroll">
+          <div class="timeline-track" id="timelineTrack">
+            <!-- Rendered by client JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="brutal-heading-lg">Frequently Asked Questions</h2>
+      <div class="brutal-faq brutal-faq--lg">
+        {
+          faqItems.map((item) => (
+            <details class="brutal-faq__item brutal-frosted">
+              <summary class="brutal-faq__question">
+                <span>{item.question}</span>
+                <DeltaIcon class="delta-chevron" />
+              </summary>
+              <div class="brutal-faq__answer" set:html={item.answer} />
+            </details>
+          ))
+        }
+      </div>
+      <div class="print-report-footer" aria-hidden="true">
+        <p>Generated from globalstrategic.tech/hub/tools/regulatory-map</p>
+        <p>
+          Data is informational only and does not constitute legal advice. Verify all regulatory
+          requirements with qualified counsel.
+        </p>
+      </div>
+      <a href="/hub/tools" class="cta-button secondary back-link">Back to Tools</a>
+    </div>
+  </section>
 </BaseLayout>
 
 <script>
-    import { geoEquirectangular, geoPath } from 'd3-geo';
-    import { select } from 'd3-selection';
-    import { zoom as d3Zoom, zoomIdentity } from 'd3-zoom';
-    import 'd3-transition';
-    import { feature } from 'topojson-client';
-    import type { Topology, GeometryCollection } from 'topojson-specification';
-    import type { FeatureCollection, Geometry } from 'geojson';
-    import type { Regulation, RegionSelectedDetail } from '../../../../types/regulatory-map';
-    import { numericToAlpha3, alpha3ToName } from '../../../../utils/countryCodeMap';
-    import { fipsToStateCode, stateCodeToName } from '../../../../utils/fipsToStateCode';
-    import { provinceCodeToName } from '../../../../utils/canadianProvinceMap';
-    import { trackEvent } from '../../../../utils/analytics';
+  import { geoEquirectangular, geoPath } from 'd3-geo';
+  import { select } from 'd3-selection';
+  import { zoom as d3Zoom, zoomIdentity } from 'd3-zoom';
+  import 'd3-transition';
+  import { feature } from 'topojson-client';
+  import type { Topology, GeometryCollection } from 'topojson-specification';
+  import type { FeatureCollection, Geometry } from 'geojson';
+  import type { Regulation, RegionSelectedDetail } from '../../../../types/regulatory-map';
+  import { numericToAlpha3, alpha3ToName } from '../../../../utils/countryCodeMap';
+  import { fipsToStateCode, stateCodeToName } from '../../../../utils/fipsToStateCode';
+  import { provinceCodeToName } from '../../../../utils/canadianProvinceMap';
+  import { trackEvent } from '../../../../utils/analytics';
 
-    // --- Fetch geodata and regulation data in parallel ---
-    const [regionMap, topology, usTopo, caTopo] = await Promise.all([
-        fetch('/data/regulations.json').then(r => r.json()) as Promise<Record<string, Regulation[]>>,
-        fetch('/data/world-110m.json').then(r => r.json()) as Promise<Topology>,
-        fetch('/data/us-states-10m.json').then(r => r.json()) as Promise<Topology>,
-        fetch('/data/canada-provinces.json').then(r => r.json()) as Promise<Topology>,
-    ]);
+  // --- Fetch geodata and regulation data in parallel ---
+  const [regionMap, topology, usTopo, caTopo] = await Promise.all([
+    fetch('/data/regulations.json').then((r) => r.json()) as Promise<Record<string, Regulation[]>>,
+    fetch('/data/world-110m.json').then((r) => r.json()) as Promise<Topology>,
+    fetch('/data/us-states-10m.json').then((r) => r.json()) as Promise<Topology>,
+    fetch('/data/canada-provinces.json').then((r) => r.json()) as Promise<Topology>,
+  ]);
 
-    const usStates = feature(
-        usTopo as unknown as Topology<{ states: GeometryCollection }>,
-        usTopo.objects.states as GeometryCollection
-    ) as unknown as FeatureCollection<Geometry, { name?: string }>;
+  const usStates = feature(
+    usTopo as unknown as Topology<{ states: GeometryCollection }>,
+    usTopo.objects.states as GeometryCollection
+  ) as unknown as FeatureCollection<Geometry, { name?: string }>;
 
-    const caProvinces = feature(
-        caTopo as unknown as Topology<{ collection: GeometryCollection }>,
-        caTopo.objects.collection as GeometryCollection
-    ) as unknown as FeatureCollection<Geometry, { iso_3166_2?: string; name?: string }>;
+  const caProvinces = feature(
+    caTopo as unknown as Topology<{ collection: GeometryCollection }>,
+    caTopo.objects.collection as GeometryCollection
+  ) as unknown as FeatureCollection<Geometry, { iso_3166_2?: string; name?: string }>;
 
-    // --- Mobile detection ---
-    const isMobile = (): boolean => window.innerWidth < 1024;
+  // --- Mobile detection ---
+  const isMobile = (): boolean => window.innerWidth < 1024;
 
-    // --- Bottom sheet (mobile panel) ---
-    const overlay = document.getElementById('bottomSheetOverlay');
+  // --- Bottom sheet (mobile panel) ---
+  const overlay = document.getElementById('bottomSheetOverlay');
 
-    function openBottomSheet(): void {
-        if (!isMobile()) return;
-        compliancePanel.hidden = false;
-        // Force reflow before adding class for transition
-        void compliancePanel.offsetHeight;
-        compliancePanel.classList.add('brutal-panel--sheet-open');
-        document.body.style.overflow = 'hidden';
-        if (overlay) {
-            overlay.hidden = false;
-            void overlay.offsetHeight;
-            overlay.classList.add('visible');
-        }
+  function openBottomSheet(): void {
+    if (!isMobile()) return;
+    compliancePanel.hidden = false;
+    // Force reflow before adding class for transition
+    void compliancePanel.offsetHeight;
+    compliancePanel.classList.add('brutal-panel--sheet-open');
+    document.body.style.overflow = 'hidden';
+    if (overlay) {
+      overlay.hidden = false;
+      void overlay.offsetHeight;
+      overlay.classList.add('visible');
     }
+  }
 
-    function closeBottomSheet(): void {
-        compliancePanel.classList.remove('brutal-panel--sheet-open');
-        document.body.style.overflow = '';
-        overlay?.classList.remove('visible');
+  function closeBottomSheet(): void {
+    compliancePanel.classList.remove('brutal-panel--sheet-open');
+    document.body.style.overflow = '';
+    overlay?.classList.remove('visible');
+    setTimeout(() => {
+      if (overlay) overlay.hidden = true;
+    }, 300);
+  }
+
+  overlay?.addEventListener('click', closeBottomSheet);
+
+  // Swipe-down-to-dismiss
+  const sheetHandle = document.getElementById('bottomSheetHandle');
+  let sheetStartY = 0;
+  let sheetCurrentY = 0;
+
+  sheetHandle?.addEventListener(
+    'touchstart',
+    (e) => {
+      sheetStartY = e.touches[0].clientY;
+      sheetCurrentY = sheetStartY;
+      compliancePanel.style.transition = 'none';
+    },
+    { passive: true }
+  );
+
+  sheetHandle?.addEventListener(
+    'touchmove',
+    (e) => {
+      sheetCurrentY = e.touches[0].clientY;
+      const dy = Math.max(0, sheetCurrentY - sheetStartY);
+      compliancePanel.style.transform = `translateY(${dy}px)`;
+    },
+    { passive: true }
+  );
+
+  sheetHandle?.addEventListener('touchend', () => {
+    compliancePanel.style.transition = '';
+    compliancePanel.style.transform = '';
+    const dy = sheetCurrentY - sheetStartY;
+    if (dy > 80) {
+      closeBottomSheet();
+      compliancePanel.hidden = true;
+    } else {
+      compliancePanel.classList.add('brutal-panel--sheet-open');
+    }
+  });
+
+  // --- Filter & timeline state ---
+  let activeCategory = 'all';
+  let currentRegionId: string | null = null;
+  let activeTimelineEntry: HTMLElement | null = null;
+
+  // --- URL bookmarking helpers ---
+  const VALID_FILTERS = new Set([
+    'data-privacy',
+    'ai-governance',
+    'industry-compliance',
+    'cybersecurity',
+  ]);
+
+  function syncUrlParams(): void {
+    const params = new URLSearchParams();
+    if (currentRegionId) params.set('region', currentRegionId);
+    if (activeCategory !== 'all') params.set('filter', activeCategory);
+    const qs = params.toString();
+    history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname);
+  }
+
+  function getUrlParams(): { region: string | null; filter: string | null } {
+    const params = new URLSearchParams(location.search);
+    const filter = params.get('filter');
+    return {
+      region: params.get('region'),
+      filter: filter && VALID_FILTERS.has(filter) ? filter : null,
+    };
+  }
+
+  // --- Copy link button ---
+  document.getElementById('panelCopyLink')?.addEventListener('click', () => {
+    const btn = document.getElementById('panelCopyLink')!;
+    const showCopied = () => {
+      btn.classList.add('brutal-panel__copy--copied');
+      btn.setAttribute('aria-label', 'Link copied!');
+      setTimeout(() => {
+        btn.classList.remove('brutal-panel__copy--copied');
+        btn.setAttribute('aria-label', 'Copy link to this view');
+      }, 2000);
+    };
+    showCopied();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(location.href).catch(() => {});
+    }
+  });
+
+  // --- Regulation lookup by ID ---
+  const regById: Record<string, Regulation> = {};
+  for (const regs of Object.values(regionMap)) {
+    for (const reg of regs) {
+      if (!regById[reg.id]) regById[reg.id] = reg;
+    }
+  }
+
+  // --- Search index ---
+  interface SearchableReg {
+    reg: Regulation;
+    searchText: string;
+  }
+
+  const searchIndex: SearchableReg[] = Object.values(regById).map((reg) => ({
+    reg,
+    searchText: [reg.name, reg.summary, ...(reg.keyRequirements ?? [])].join(' ').toLowerCase(),
+  }));
+
+  let activeSearchTerm = '';
+  let searchResults: Regulation[] = [];
+  let activeResultIndex = -1;
+
+  function clearRegionHighlights(): void {
+    select('#mapSvg')
+      .selectAll('.country-path--highlighted')
+      .classed('country-path--highlighted', false);
+    select('#mapSvg')
+      .selectAll('.state-path--highlighted')
+      .classed('state-path--highlighted', false);
+  }
+
+  function highlightRegulationRegions(reg: Regulation): void {
+    clearRegionHighlights();
+
+    const regionSet = new Set(reg.regions);
+
+    // Highlight country paths
+    select('#mapSvg')
+      .selectAll('path[data-alpha3]')
+      .each(function () {
+        const el = this as SVGPathElement;
+        const alpha3 = el.dataset.alpha3 ?? '';
+        if (regionSet.has(alpha3)) {
+          el.classList.add('country-path--highlighted');
+        }
+      });
+
+    // Highlight state/province paths
+    select('#mapSvg')
+      .selectAll('path[data-state-code]')
+      .each(function () {
+        const el = this as SVGPathElement;
+        const code = el.dataset.stateCode ?? '';
+        if (regionSet.has(code)) {
+          el.classList.add('state-path--highlighted');
+        }
+      });
+  }
+
+  function getFilteredRegionMap(): Record<string, Regulation[]> {
+    if (activeCategory === 'all') return regionMap;
+    const filtered: Record<string, Regulation[]> = {};
+    for (const [code, regs] of Object.entries(regionMap)) {
+      const matching = regs.filter((r) => r.category === activeCategory);
+      if (matching.length > 0) filtered[code] = matching;
+    }
+    return filtered;
+  }
+
+  // --- D3 Setup ---
+  // Convert TopoJSON to GeoJSON first so we can fit the projection to the data
+  const countries = feature(
+    topology as unknown as Topology<{ countries: GeometryCollection }>,
+    topology.objects.countries as GeometryCollection
+  ) as unknown as FeatureCollection<Geometry, { name?: string }>;
+
+  // Exclude Antarctica to reclaim vertical space
+  const visibleCountries: FeatureCollection<Geometry, { name?: string }> = {
+    type: 'FeatureCollection',
+    features: countries.features.filter((f) => f.id !== '010'),
+  };
+
+  // Equirectangular fills the rectangle perfectly — no wasted corner space.
+  // Clip latitude to ~60°S (post-Antarctica removal) to maximize land area.
+  const MAP_WIDTH = 960;
+  const MAP_HEIGHT = 440;
+
+  const svg = select<SVGSVGElement, unknown>('#mapSvg').attr(
+    'viewBox',
+    `0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`
+  );
+
+  const projection = geoEquirectangular().fitSize([MAP_WIDTH, MAP_HEIGHT], visibleCountries);
+
+  const pathGenerator = geoPath(projection);
+
+  // --- Zoom behavior ---
+  const g = svg.append('g');
+
+  const zoomBehavior = d3Zoom<SVGSVGElement, unknown>()
+    .scaleExtent([1, 8])
+    .translateExtent([
+      [0, 0],
+      [MAP_WIDTH, MAP_HEIGHT],
+    ])
+    .on('zoom', (event) => {
+      g.attr('transform', event.transform);
+    });
+
+  // Apply zoom to SVG — on touch devices require two-finger pinch (touchAction: pan-x pan-y
+  // lets single-finger scroll pass through to the page)
+  svg.call(zoomBehavior).on('dblclick.zoom', null); // disable double-click zoom to avoid conflicts with clicks
+
+  const svgNode = svg.node() as SVGSVGElement;
+  svgNode.style.touchAction = 'pan-x pan-y';
+
+  // Zoom controls
+  const zoomInBtn = document.getElementById('zoomIn');
+  const zoomOutBtn = document.getElementById('zoomOut');
+  const zoomResetBtn = document.getElementById('zoomReset');
+
+  zoomInBtn?.addEventListener('click', () => {
+    svg.transition().duration(300).call(zoomBehavior.scaleBy, 1.5);
+  });
+  zoomOutBtn?.addEventListener('click', () => {
+    svg
+      .transition()
+      .duration(300)
+      .call(zoomBehavior.scaleBy, 1 / 1.5);
+  });
+  zoomResetBtn?.addEventListener('click', () => {
+    svg.transition().duration(300).call(zoomBehavior.transform, zoomIdentity);
+  });
+
+  // --- Quick-zoom regions (mobile) ---
+  // Translate values: tx = vw/2 - k*cx, ty = vh/2 - k*cy
+  // where (cx,cy) is the SVG center of the region on the 960x440 equirectangular projection
+  const REGION_VIEWS: Record<string, { x: number; y: number; k: number }> = {
+    americas: { x: -107, y: -257, k: 2.2 },
+    europe: { x: -1340, y: -148, k: 3.5 },
+    'asia-pacific': { x: -1488, y: -283, k: 2.5 },
+    'africa-mideast': { x: -1088, y: -432, k: 2.8 },
+  };
+
+  document.getElementById('mapQuickZoom')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.brutal-quick-zoom') as HTMLElement | null;
+    if (!btn) return;
+    const region = btn.dataset.region ?? '';
+    const view = REGION_VIEWS[region];
+    if (!view) return;
+
+    const transform = zoomIdentity.translate(view.x, view.y).scale(view.k);
+    svg.transition().duration(500).call(zoomBehavior.transform, transform);
+
+    trackEvent({
+      event: 'quick_zoom',
+      category: 'engagement',
+      region: region,
+      page: 'regulatory-map',
+    });
+  });
+
+  // --- Pinch-to-zoom hint (mobile, first touch only) ---
+  const pinchHint = document.getElementById('mapPinchHint');
+  let pinchHintShown = false;
+
+  svgNode.addEventListener(
+    'touchstart',
+    () => {
+      if (pinchHintShown || !isMobile() || !pinchHint) return;
+      pinchHintShown = true;
+      pinchHint.hidden = false;
+      requestAnimationFrame(() => {
+        pinchHint.classList.add('visible');
+      });
+      setTimeout(() => {
+        pinchHint.classList.remove('visible');
         setTimeout(() => {
-            if (overlay) overlay.hidden = true;
+          pinchHint.hidden = true;
         }, 300);
+      }, 2000);
+    },
+    { once: true, passive: true }
+  );
+
+  // --- Render countries ---
+  let selectedPath: SVGPathElement | null = null;
+
+  g.selectAll('path')
+    .data(visibleCountries.features)
+    .enter()
+    .append('path')
+    .attr('d', (d) => pathGenerator(d) ?? '')
+    .attr('class', (d) => {
+      const alpha3 = numericToAlpha3[d.id as string];
+      // USA and CAN are handled at state/province level — don't mark them active
+      if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
+      const hasRegulations = alpha3 && regionMap[alpha3];
+      return `country-path${hasRegulations ? ' country-path--active' : ''}`;
+    })
+    .attr('data-id', (d) => d.id as string)
+    .attr('data-alpha3', (d) => numericToAlpha3[d.id as string] ?? '')
+    .attr('aria-label', (d) => {
+      const alpha3 = numericToAlpha3[d.id as string];
+      return alpha3ToName[alpha3] ?? '';
+    })
+    .attr('role', (d) => {
+      const alpha3 = numericToAlpha3[d.id as string];
+      if (alpha3 === 'USA' || alpha3 === 'CAN') return 'presentation';
+      return alpha3 && regionMap[alpha3] ? 'button' : 'presentation';
+    })
+    .attr('tabindex', (d) => {
+      const alpha3 = numericToAlpha3[d.id as string];
+      if (alpha3 === 'USA' || alpha3 === 'CAN') return null;
+      return alpha3 && regionMap[alpha3] ? '0' : null;
+    })
+    .on('click', function (event: MouseEvent) {
+      if (this.classList.contains('country-path--active')) handleCountryClick(event);
+    })
+    .on('keydown', function (event: KeyboardEvent) {
+      if (
+        this.classList.contains('country-path--active') &&
+        (event.key === 'Enter' || event.key === ' ')
+      ) {
+        event.preventDefault();
+        handleCountryClick(event);
+      }
+    })
+    .on('mouseenter', handleMouseEnter)
+    .on('mouseleave', handleMouseLeave);
+
+  // --- Render US state paths ---
+  g.selectAll('path.state-path')
+    .data(usStates.features)
+    .enter()
+    .append('path')
+    .attr('d', (d) => pathGenerator(d) ?? '')
+    .attr('class', (d) => {
+      const code = fipsToStateCode[d.id as string];
+      const hasRegs = code && regionMap[code];
+      return `state-path${hasRegs ? ' state-path--active' : ''}`;
+    })
+    .attr('data-state-code', (d) => fipsToStateCode[d.id as string] ?? '')
+    .attr('aria-label', (d) => {
+      const code = fipsToStateCode[d.id as string];
+      return code ? (stateCodeToName[code] ?? '') : '';
+    })
+    .attr('role', (d) => {
+      const code = fipsToStateCode[d.id as string];
+      return code && regionMap[code] ? 'button' : 'presentation';
+    })
+    .attr('tabindex', (d) => {
+      const code = fipsToStateCode[d.id as string];
+      return code && regionMap[code] ? '0' : null;
+    })
+    .on('click', function (event: MouseEvent) {
+      if (this.classList.contains('state-path--active')) handleStateClick(event);
+    })
+    .on('keydown', function (event: KeyboardEvent) {
+      if (
+        this.classList.contains('state-path--active') &&
+        (event.key === 'Enter' || event.key === ' ')
+      ) {
+        event.preventDefault();
+        handleStateClick(event);
+      }
+    })
+    .on('mouseenter', handleMouseEnter)
+    .on('mouseleave', handleMouseLeave);
+
+  // --- Render Canadian province paths ---
+  g.selectAll('path.province-path')
+    .data(caProvinces.features)
+    .enter()
+    .append('path')
+    .attr('d', (d) => pathGenerator(d) ?? '')
+    .attr('class', (d) => {
+      const code = d.properties?.iso_3166_2 ?? '';
+      const hasRegs = code && regionMap[code];
+      return `state-path${hasRegs ? ' state-path--active' : ''}`;
+    })
+    .attr('data-state-code', (d) => d.properties?.iso_3166_2 ?? '')
+    .attr('aria-label', (d) => {
+      const code = d.properties?.iso_3166_2 ?? '';
+      return provinceCodeToName[code] ?? '';
+    })
+    .attr('role', (d) => {
+      const code = d.properties?.iso_3166_2 ?? '';
+      return code && regionMap[code] ? 'button' : 'presentation';
+    })
+    .attr('tabindex', (d) => {
+      const code = d.properties?.iso_3166_2 ?? '';
+      return code && regionMap[code] ? '0' : null;
+    })
+    .on('click', function (event: MouseEvent) {
+      if (this.classList.contains('state-path--active')) handleStateClick(event);
+    })
+    .on('keydown', function (event: KeyboardEvent) {
+      if (
+        this.classList.contains('state-path--active') &&
+        (event.key === 'Enter' || event.key === ' ')
+      ) {
+        event.preventDefault();
+        handleStateClick(event);
+      }
+    })
+    .on('mouseenter', handleMouseEnter)
+    .on('mouseleave', handleMouseLeave);
+
+  // --- Tooltip ---
+  const tooltip = document.getElementById('mapTooltip')!;
+
+  function handleMouseEnter(event: MouseEvent): void {
+    const target = event.currentTarget as SVGPathElement;
+    // Resolve name from either country alpha3 or state code
+    const alpha3 = target.dataset.alpha3 ?? '';
+    const stateCode = target.dataset.stateCode ?? '';
+    const name = stateCode
+      ? (stateCodeToName[stateCode] ?? provinceCodeToName[stateCode])
+      : alpha3ToName[alpha3];
+    if (!name) return;
+
+    tooltip.textContent = name;
+    tooltip.classList.add('visible');
+
+    const rect = document.getElementById('mapContainer')!.getBoundingClientRect();
+    const x = event.clientX - rect.left + 12;
+    const y = event.clientY - rect.top - 28;
+    tooltip.style.left = `${x}px`;
+    tooltip.style.top = `${y}px`;
+  }
+
+  function handleMouseLeave(): void {
+    tooltip.classList.remove('visible');
+  }
+
+  // --- Region selection (shared by country + state clicks) ---
+  function selectRegion(target: SVGPathElement, regionId: string, selectedClass: string): void {
+    // Clear any timeline-driven highlights
+    clearRegionHighlights();
+    if (activeTimelineEntry) {
+      activeTimelineEntry.classList.remove('brutal-timeline-entry--active');
+      activeTimelineEntry = null;
     }
 
-    overlay?.addEventListener('click', closeBottomSheet);
+    if (selectedPath) {
+      selectedPath.classList.remove('country-path--selected', 'state-path--selected');
+    }
+    target.classList.add(selectedClass);
+    selectedPath = target;
 
-    // Swipe-down-to-dismiss
-    const sheetHandle = document.getElementById('bottomSheetHandle');
-    let sheetStartY = 0;
-    let sheetCurrentY = 0;
+    document.dispatchEvent(
+      new CustomEvent<RegionSelectedDetail>('regionSelected', {
+        detail: { regionId },
+      })
+    );
+  }
 
-    sheetHandle?.addEventListener('touchstart', (e) => {
-        sheetStartY = e.touches[0].clientY;
-        sheetCurrentY = sheetStartY;
-        compliancePanel.style.transition = 'none';
-    }, { passive: true });
+  // --- Mobile tap bar ---
+  const tapBar = document.getElementById('mapTapBar');
+  const tapBarName = document.getElementById('tapBarName');
+  const tapBarAction = document.getElementById('tapBarAction');
+  let pendingTapTarget: SVGPathElement | null = null;
+  let pendingTapRegionId: string | null = null;
+  let pendingTapSelectedClass: string | null = null;
 
-    sheetHandle?.addEventListener('touchmove', (e) => {
-        sheetCurrentY = e.touches[0].clientY;
-        const dy = Math.max(0, sheetCurrentY - sheetStartY);
-        compliancePanel.style.transform = `translateY(${dy}px)`;
-    }, { passive: true });
+  function showTapBar(
+    name: string,
+    target: SVGPathElement,
+    regionId: string,
+    selectedClass: string
+  ): void {
+    if (!tapBar || !tapBarName) return;
+    document.getElementById('mapCta')?.remove();
+    tapBarName.textContent = name;
+    tapBar.hidden = false;
+    pendingTapTarget = target;
+    pendingTapRegionId = regionId;
+    pendingTapSelectedClass = selectedClass;
+  }
 
-    sheetHandle?.addEventListener('touchend', () => {
-        compliancePanel.style.transition = '';
-        compliancePanel.style.transform = '';
-        const dy = sheetCurrentY - sheetStartY;
-        if (dy > 80) {
-            closeBottomSheet();
-            compliancePanel.hidden = true;
-        } else {
-            compliancePanel.classList.add('brutal-panel--sheet-open');
-        }
+  tapBarAction?.addEventListener('click', () => {
+    if (pendingTapTarget && pendingTapRegionId && pendingTapSelectedClass) {
+      selectRegion(pendingTapTarget, pendingTapRegionId, pendingTapSelectedClass);
+    }
+  });
+
+  // --- Country click ---
+  function handleCountryClick(event: Event): void {
+    const target = (event.currentTarget ?? event.target) as SVGPathElement;
+    const alpha3 = target.dataset.alpha3 ?? '';
+    if (!alpha3) return;
+
+    if (isMobile()) {
+      const name = alpha3ToName[alpha3] ?? alpha3;
+      showTapBar(name, target, alpha3, 'country-path--selected');
+    } else {
+      selectRegion(target, alpha3, 'country-path--selected');
+    }
+  }
+
+  // --- State click ---
+  function handleStateClick(event: Event): void {
+    const target = (event.currentTarget ?? event.target) as SVGPathElement;
+    const stateCode = target.dataset.stateCode ?? '';
+    if (!stateCode) return;
+
+    if (isMobile()) {
+      const name = stateCodeToName[stateCode] ?? provinceCodeToName[stateCode] ?? stateCode;
+      showTapBar(name, target, stateCode, 'state-path--selected');
+    } else {
+      selectRegion(target, stateCode, 'state-path--selected');
+    }
+  }
+
+  // --- Panel updates ---
+  const compliancePanel = document.getElementById('compliancePanel')!;
+  const panelCountryName = document.getElementById('panelCountryName')!;
+  const panelRegCount = document.getElementById('panelRegCount')!;
+  const panelRegulations = document.getElementById('panelRegulations')!;
+
+  function renderPanel(regionId: string): void {
+    const countryName =
+      stateCodeToName[regionId] ??
+      provinceCodeToName[regionId] ??
+      alpha3ToName[regionId] ??
+      regionId;
+    const filteredMap = getFilteredRegionMap();
+    const regs = filteredMap[regionId] ?? [];
+
+    panelCountryName.textContent = countryName;
+
+    const count = regs.length;
+    panelRegCount.textContent = `${count} regulation${count !== 1 ? 's' : ''}`;
+    panelRegulations.innerHTML = regs.map(renderRegulationCard).join('');
+  }
+
+  document.addEventListener('regionSelected', ((event: CustomEvent<RegionSelectedDetail>) => {
+    const { regionId } = event.detail;
+    currentRegionId = regionId;
+    syncUrlParams();
+    const countryName =
+      stateCodeToName[regionId] ??
+      provinceCodeToName[regionId] ??
+      alpha3ToName[regionId] ??
+      regionId;
+
+    renderPanel(regionId);
+
+    document.getElementById('mapCta')?.remove();
+    compliancePanel.hidden = false;
+    if (isMobile()) openBottomSheet();
+
+    const totalRegs = regionMap[regionId]?.length ?? 0;
+    trackEvent({
+      event: 'region_selected',
+      category: 'engagement',
+      region_id: regionId,
+      region_name: countryName,
+      regulation_count: totalRegs,
+      page: 'regulatory-map',
     });
 
-    // --- Filter & timeline state ---
-    let activeCategory = 'all';
-    let currentRegionId: string | null = null;
-    let activeTimelineEntry: HTMLElement | null = null;
-
-    // --- URL bookmarking helpers ---
-    const VALID_FILTERS = new Set(['data-privacy', 'ai-governance', 'industry-compliance', 'cybersecurity']);
-
-    function syncUrlParams(): void {
-        const params = new URLSearchParams();
-        if (currentRegionId) params.set('region', currentRegionId);
-        if (activeCategory !== 'all') params.set('filter', activeCategory);
-        const qs = params.toString();
-        history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname);
+    // On mobile, open the bottom sheet
+    if (isMobile()) {
+      openBottomSheet();
     }
+  }) as EventListener);
 
-    function getUrlParams(): { region: string | null; filter: string | null } {
-        const params = new URLSearchParams(location.search);
-        const filter = params.get('filter');
-        return {
-            region: params.get('region'),
-            filter: filter && VALID_FILTERS.has(filter) ? filter : null,
-        };
-    }
-
-    // --- Copy link button ---
-    document.getElementById('panelCopyLink')?.addEventListener('click', () => {
-        const btn = document.getElementById('panelCopyLink')!;
-        const showCopied = () => {
-            btn.classList.add('brutal-panel__copy--copied');
-            btn.setAttribute('aria-label', 'Link copied!');
-            setTimeout(() => {
-                btn.classList.remove('brutal-panel__copy--copied');
-                btn.setAttribute('aria-label', 'Copy link to this view');
-            }, 2000);
-        };
-        showCopied();
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(location.href).catch(() => {});
-        }
+  function renderRegulationCard(reg: Regulation): string {
+    const date = new Date(reg.effectiveDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
 
-    // --- Regulation lookup by ID ---
-    const regById: Record<string, Regulation> = {};
-    for (const regs of Object.values(regionMap)) {
-        for (const reg of regs) {
-            if (!regById[reg.id]) regById[reg.id] = reg;
-        }
-    }
-
-    // --- Search index ---
-    interface SearchableReg {
-        reg: Regulation;
-        searchText: string;
-    }
-
-    const searchIndex: SearchableReg[] = Object.values(regById).map(reg => ({
-        reg,
-        searchText: [
-            reg.name,
-            reg.summary,
-            ...(reg.keyRequirements ?? []),
-        ].join(' ').toLowerCase(),
-    }));
-
-    let activeSearchTerm = '';
-    let searchResults: Regulation[] = [];
-    let activeResultIndex = -1;
-
-    function clearRegionHighlights(): void {
-        select('#mapSvg').selectAll('.country-path--highlighted')
-            .classed('country-path--highlighted', false);
-        select('#mapSvg').selectAll('.state-path--highlighted')
-            .classed('state-path--highlighted', false);
-    }
-
-    function highlightRegulationRegions(reg: Regulation): void {
-        clearRegionHighlights();
-
-        const regionSet = new Set(reg.regions);
-
-        // Highlight country paths
-        select('#mapSvg').selectAll('path[data-alpha3]')
-            .each(function() {
-                const el = this as SVGPathElement;
-                const alpha3 = el.dataset.alpha3 ?? '';
-                if (regionSet.has(alpha3)) {
-                    el.classList.add('country-path--highlighted');
-                }
-            });
-
-        // Highlight state/province paths
-        select('#mapSvg').selectAll('path[data-state-code]')
-            .each(function() {
-                const el = this as SVGPathElement;
-                const code = el.dataset.stateCode ?? '';
-                if (regionSet.has(code)) {
-                    el.classList.add('state-path--highlighted');
-                }
-            });
-    }
-
-    function getFilteredRegionMap(): Record<string, Regulation[]> {
-        if (activeCategory === 'all') return regionMap;
-        const filtered: Record<string, Regulation[]> = {};
-        for (const [code, regs] of Object.entries(regionMap)) {
-            const matching = regs.filter(r => r.category === activeCategory);
-            if (matching.length > 0) filtered[code] = matching;
-        }
-        return filtered;
-    }
-
-    // --- D3 Setup ---
-    // Convert TopoJSON to GeoJSON first so we can fit the projection to the data
-    const countries = feature(
-        topology as unknown as Topology<{ countries: GeometryCollection }>,
-        topology.objects.countries as GeometryCollection
-    ) as unknown as FeatureCollection<Geometry, { name?: string }>;
-
-    // Exclude Antarctica to reclaim vertical space
-    const visibleCountries: FeatureCollection<Geometry, { name?: string }> = {
-        type: 'FeatureCollection',
-        features: countries.features.filter((f) => f.id !== '010'),
-    };
-
-    // Equirectangular fills the rectangle perfectly — no wasted corner space.
-    // Clip latitude to ~60°S (post-Antarctica removal) to maximize land area.
-    const MAP_WIDTH = 960;
-    const MAP_HEIGHT = 440;
-
-    const svg = select<SVGSVGElement, unknown>('#mapSvg')
-        .attr('viewBox', `0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`);
-
-    const projection = geoEquirectangular()
-        .fitSize([MAP_WIDTH, MAP_HEIGHT], visibleCountries);
-
-    const pathGenerator = geoPath(projection);
-
-    // --- Zoom behavior ---
-    const g = svg.append('g');
-
-    const zoomBehavior = d3Zoom<SVGSVGElement, unknown>()
-        .scaleExtent([1, 8])
-        .translateExtent([[0, 0], [MAP_WIDTH, MAP_HEIGHT]])
-        .on('zoom', (event) => {
-            g.attr('transform', event.transform);
-        });
-
-    // Apply zoom to SVG — on touch devices require two-finger pinch (touchAction: pan-x pan-y
-    // lets single-finger scroll pass through to the page)
-    svg.call(zoomBehavior)
-        .on('dblclick.zoom', null); // disable double-click zoom to avoid conflicts with clicks
-
-    const svgNode = svg.node() as SVGSVGElement;
-    svgNode.style.touchAction = 'pan-x pan-y';
-
-    // Zoom controls
-    const zoomInBtn = document.getElementById('zoomIn');
-    const zoomOutBtn = document.getElementById('zoomOut');
-    const zoomResetBtn = document.getElementById('zoomReset');
-
-    zoomInBtn?.addEventListener('click', () => {
-        svg.transition().duration(300).call(zoomBehavior.scaleBy, 1.5);
-    });
-    zoomOutBtn?.addEventListener('click', () => {
-        svg.transition().duration(300).call(zoomBehavior.scaleBy, 1 / 1.5);
-    });
-    zoomResetBtn?.addEventListener('click', () => {
-        svg.transition().duration(300).call(zoomBehavior.transform, zoomIdentity);
-    });
-
-    // --- Quick-zoom regions (mobile) ---
-    // Translate values: tx = vw/2 - k*cx, ty = vh/2 - k*cy
-    // where (cx,cy) is the SVG center of the region on the 960x440 equirectangular projection
-    const REGION_VIEWS: Record<string, { x: number; y: number; k: number }> = {
-        'americas':       { x: -107, y: -257, k: 2.2 },
-        'europe':         { x: -1340, y: -148, k: 3.5 },
-        'asia-pacific':   { x: -1488, y: -283, k: 2.5 },
-        'africa-mideast': { x: -1088, y: -432, k: 2.8 },
-    };
-
-    document.getElementById('mapQuickZoom')?.addEventListener('click', (e) => {
-        const btn = (e.target as HTMLElement).closest('.brutal-quick-zoom') as HTMLElement | null;
-        if (!btn) return;
-        const region = btn.dataset.region ?? '';
-        const view = REGION_VIEWS[region];
-        if (!view) return;
-
-        const transform = zoomIdentity.translate(view.x, view.y).scale(view.k);
-        svg.transition().duration(500).call(zoomBehavior.transform, transform);
-
-        trackEvent({
-            event: 'quick_zoom',
-            category: 'engagement',
-            region: region,
-            page: 'regulatory-map',
-        });
-    });
-
-    // --- Pinch-to-zoom hint (mobile, first touch only) ---
-    const pinchHint = document.getElementById('mapPinchHint');
-    let pinchHintShown = false;
-
-    svgNode.addEventListener('touchstart', () => {
-        if (pinchHintShown || !isMobile() || !pinchHint) return;
-        pinchHintShown = true;
-        pinchHint.hidden = false;
-        requestAnimationFrame(() => {
-            pinchHint.classList.add('visible');
-        });
-        setTimeout(() => {
-            pinchHint.classList.remove('visible');
-            setTimeout(() => { pinchHint.hidden = true; }, 300);
-        }, 2000);
-    }, { once: true, passive: true });
-
-    // --- Render countries ---
-    let selectedPath: SVGPathElement | null = null;
-
-    g.selectAll('path')
-        .data(visibleCountries.features)
-        .enter()
-        .append('path')
-        .attr('d', (d) => pathGenerator(d) ?? '')
-        .attr('class', (d) => {
-            const alpha3 = numericToAlpha3[d.id as string];
-            // USA and CAN are handled at state/province level — don't mark them active
-            if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
-            const hasRegulations = alpha3 && regionMap[alpha3];
-            return `country-path${hasRegulations ? ' country-path--active' : ''}`;
-        })
-        .attr('data-id', (d) => d.id as string)
-        .attr('data-alpha3', (d) => numericToAlpha3[d.id as string] ?? '')
-        .attr('aria-label', (d) => {
-            const alpha3 = numericToAlpha3[d.id as string];
-            return alpha3ToName[alpha3] ?? '';
-        })
-        .attr('role', (d) => {
-            const alpha3 = numericToAlpha3[d.id as string];
-            if (alpha3 === 'USA' || alpha3 === 'CAN') return 'presentation';
-            return alpha3 && regionMap[alpha3] ? 'button' : 'presentation';
-        })
-        .attr('tabindex', (d) => {
-            const alpha3 = numericToAlpha3[d.id as string];
-            if (alpha3 === 'USA' || alpha3 === 'CAN') return null;
-            return alpha3 && regionMap[alpha3] ? '0' : null;
-        })
-        .on('click', function (event: MouseEvent) {
-            if (this.classList.contains('country-path--active')) handleCountryClick(event);
-        })
-        .on('keydown', function (event: KeyboardEvent) {
-            if (this.classList.contains('country-path--active') && (event.key === 'Enter' || event.key === ' ')) {
-                event.preventDefault();
-                handleCountryClick(event);
-            }
-        })
-        .on('mouseenter', handleMouseEnter)
-        .on('mouseleave', handleMouseLeave);
-
-    // --- Render US state paths ---
-    g.selectAll('path.state-path')
-        .data(usStates.features)
-        .enter()
-        .append('path')
-        .attr('d', (d) => pathGenerator(d) ?? '')
-        .attr('class', (d) => {
-            const code = fipsToStateCode[d.id as string];
-            const hasRegs = code && regionMap[code];
-            return `state-path${hasRegs ? ' state-path--active' : ''}`;
-        })
-        .attr('data-state-code', (d) => fipsToStateCode[d.id as string] ?? '')
-        .attr('aria-label', (d) => {
-            const code = fipsToStateCode[d.id as string];
-            return code ? (stateCodeToName[code] ?? '') : '';
-        })
-        .attr('role', (d) => {
-            const code = fipsToStateCode[d.id as string];
-            return code && regionMap[code] ? 'button' : 'presentation';
-        })
-        .attr('tabindex', (d) => {
-            const code = fipsToStateCode[d.id as string];
-            return code && regionMap[code] ? '0' : null;
-        })
-        .on('click', function (event: MouseEvent) {
-            if (this.classList.contains('state-path--active')) handleStateClick(event);
-        })
-        .on('keydown', function (event: KeyboardEvent) {
-            if (this.classList.contains('state-path--active') && (event.key === 'Enter' || event.key === ' ')) {
-                event.preventDefault();
-                handleStateClick(event);
-            }
-        })
-        .on('mouseenter', handleMouseEnter)
-        .on('mouseleave', handleMouseLeave);
-
-    // --- Render Canadian province paths ---
-    g.selectAll('path.province-path')
-        .data(caProvinces.features)
-        .enter()
-        .append('path')
-        .attr('d', (d) => pathGenerator(d) ?? '')
-        .attr('class', (d) => {
-            const code = d.properties?.iso_3166_2 ?? '';
-            const hasRegs = code && regionMap[code];
-            return `state-path${hasRegs ? ' state-path--active' : ''}`;
-        })
-        .attr('data-state-code', (d) => d.properties?.iso_3166_2 ?? '')
-        .attr('aria-label', (d) => {
-            const code = d.properties?.iso_3166_2 ?? '';
-            return provinceCodeToName[code] ?? '';
-        })
-        .attr('role', (d) => {
-            const code = d.properties?.iso_3166_2 ?? '';
-            return code && regionMap[code] ? 'button' : 'presentation';
-        })
-        .attr('tabindex', (d) => {
-            const code = d.properties?.iso_3166_2 ?? '';
-            return code && regionMap[code] ? '0' : null;
-        })
-        .on('click', function (event: MouseEvent) {
-            if (this.classList.contains('state-path--active')) handleStateClick(event);
-        })
-        .on('keydown', function (event: KeyboardEvent) {
-            if (this.classList.contains('state-path--active') && (event.key === 'Enter' || event.key === ' ')) {
-                event.preventDefault();
-                handleStateClick(event);
-            }
-        })
-        .on('mouseenter', handleMouseEnter)
-        .on('mouseleave', handleMouseLeave);
-
-    // --- Tooltip ---
-    const tooltip = document.getElementById('mapTooltip')!;
-
-    function handleMouseEnter(event: MouseEvent): void {
-        const target = event.currentTarget as SVGPathElement;
-        // Resolve name from either country alpha3 or state code
-        const alpha3 = target.dataset.alpha3 ?? '';
-        const stateCode = target.dataset.stateCode ?? '';
-        const name = stateCode
-            ? (stateCodeToName[stateCode] ?? provinceCodeToName[stateCode])
-            : alpha3ToName[alpha3];
-        if (!name) return;
-
-        tooltip.textContent = name;
-        tooltip.classList.add('visible');
-
-        const rect = document.getElementById('mapContainer')!.getBoundingClientRect();
-        const x = event.clientX - rect.left + 12;
-        const y = event.clientY - rect.top - 28;
-        tooltip.style.left = `${x}px`;
-        tooltip.style.top = `${y}px`;
-    }
-
-    function handleMouseLeave(): void {
-        tooltip.classList.remove('visible');
-    }
-
-    // --- Region selection (shared by country + state clicks) ---
-    function selectRegion(target: SVGPathElement, regionId: string, selectedClass: string): void {
-        // Clear any timeline-driven highlights
-        clearRegionHighlights();
-        if (activeTimelineEntry) {
-            activeTimelineEntry.classList.remove('brutal-timeline-entry--active');
-            activeTimelineEntry = null;
-        }
-
-        if (selectedPath) {
-            selectedPath.classList.remove('country-path--selected', 'state-path--selected');
-        }
-        target.classList.add(selectedClass);
-        selectedPath = target;
-
-        document.dispatchEvent(
-            new CustomEvent<RegionSelectedDetail>('regionSelected', {
-                detail: { regionId },
-            })
-        );
-    }
-
-    // --- Mobile tap bar ---
-    const tapBar = document.getElementById('mapTapBar');
-    const tapBarName = document.getElementById('tapBarName');
-    const tapBarAction = document.getElementById('tapBarAction');
-    let pendingTapTarget: SVGPathElement | null = null;
-    let pendingTapRegionId: string | null = null;
-    let pendingTapSelectedClass: string | null = null;
-
-    function showTapBar(name: string, target: SVGPathElement, regionId: string, selectedClass: string): void {
-        if (!tapBar || !tapBarName) return;
-        document.getElementById('mapCta')?.remove();
-        tapBarName.textContent = name;
-        tapBar.hidden = false;
-        pendingTapTarget = target;
-        pendingTapRegionId = regionId;
-        pendingTapSelectedClass = selectedClass;
-    }
-
-    tapBarAction?.addEventListener('click', () => {
-        if (pendingTapTarget && pendingTapRegionId && pendingTapSelectedClass) {
-            selectRegion(pendingTapTarget, pendingTapRegionId, pendingTapSelectedClass);
-        }
-    });
-
-    // --- Country click ---
-    function handleCountryClick(event: Event): void {
-        const target = (event.currentTarget ?? event.target) as SVGPathElement;
-        const alpha3 = target.dataset.alpha3 ?? '';
-        if (!alpha3) return;
-
-        if (isMobile()) {
-            const name = alpha3ToName[alpha3] ?? alpha3;
-            showTapBar(name, target, alpha3, 'country-path--selected');
-        } else {
-            selectRegion(target, alpha3, 'country-path--selected');
-        }
-    }
-
-    // --- State click ---
-    function handleStateClick(event: Event): void {
-        const target = (event.currentTarget ?? event.target) as SVGPathElement;
-        const stateCode = target.dataset.stateCode ?? '';
-        if (!stateCode) return;
-
-        if (isMobile()) {
-            const name = stateCodeToName[stateCode] ?? provinceCodeToName[stateCode] ?? stateCode;
-            showTapBar(name, target, stateCode, 'state-path--selected');
-        } else {
-            selectRegion(target, stateCode, 'state-path--selected');
-        }
-    }
-
-    // --- Panel updates ---
-    const compliancePanel = document.getElementById('compliancePanel')!;
-    const panelCountryName = document.getElementById('panelCountryName')!;
-    const panelRegCount = document.getElementById('panelRegCount')!;
-    const panelRegulations = document.getElementById('panelRegulations')!;
-
-    function renderPanel(regionId: string): void {
-        const countryName = stateCodeToName[regionId] ?? provinceCodeToName[regionId] ?? alpha3ToName[regionId] ?? regionId;
-        const filteredMap = getFilteredRegionMap();
-        const regs = filteredMap[regionId] ?? [];
-
-        panelCountryName.textContent = countryName;
-
-        const count = regs.length;
-        panelRegCount.textContent = `${count} regulation${count !== 1 ? 's' : ''}`;
-        panelRegulations.innerHTML = regs.map(renderRegulationCard).join('');
-    }
-
-    document.addEventListener('regionSelected', ((event: CustomEvent<RegionSelectedDetail>) => {
-        const { regionId } = event.detail;
-        currentRegionId = regionId;
-        syncUrlParams();
-        const countryName = stateCodeToName[regionId] ?? provinceCodeToName[regionId] ?? alpha3ToName[regionId] ?? regionId;
-
-        renderPanel(regionId);
-
-        document.getElementById('mapCta')?.remove();
-        compliancePanel.hidden = false;
-        if (isMobile()) openBottomSheet();
-
-        const totalRegs = regionMap[regionId]?.length ?? 0;
-        trackEvent({
-            event: 'region_selected',
-            category: 'engagement',
-            region_id: regionId,
-            region_name: countryName,
-            regulation_count: totalRegs,
-            page: 'regulatory-map',
-        });
-
-        // On mobile, open the bottom sheet
-        if (isMobile()) {
-            openBottomSheet();
-        }
-    }) as EventListener);
-
-    function renderRegulationCard(reg: Regulation): string {
-        const date = new Date(reg.effectiveDate).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-
-        let html = `
+    let html = `
             <div class="brutal-reg-card">
                 <h3 class="brutal-reg-card__name">${escapeHtml(reg.name)}</h3>
                 <p class="brutal-reg-card__date">Effective: ${escapeHtml(date)}</p>
                 <p class="brutal-reg-card__summary">${escapeHtml(reg.summary)}</p>`;
 
-        if (reg.scope) {
-            html += `<p class="brutal-reg-card__scope">Applies to: ${escapeHtml(reg.scope)}</p>`;
+    if (reg.scope) {
+      html += `<p class="brutal-reg-card__scope">Applies to: ${escapeHtml(reg.scope)}</p>`;
+    }
+
+    if (reg.keyRequirements && reg.keyRequirements.length > 0) {
+      html += '<ul class="brutal-reg-card__requirements">';
+      for (const req of reg.keyRequirements) {
+        html += `<li>${escapeHtml(req)}</li>`;
+      }
+      html += '</ul>';
+    }
+
+    if (reg.penalties) {
+      html += `<p class="brutal-reg-card__penalties">Penalties: ${escapeHtml(reg.penalties)}</p>`;
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  function escapeHtml(str: string): string {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // --- Sync panel max-height to map height so the back-link stays stable ---
+  function syncPanelHeight(): void {
+    if (window.innerWidth < 1024) return;
+    const mapEl = document.getElementById('mapContainer');
+    if (!mapEl) return;
+    compliancePanel.style.maxHeight = `${mapEl.offsetHeight}px`;
+  }
+  syncPanelHeight();
+  window.addEventListener('resize', syncPanelHeight);
+
+  // --- Category filter ---
+  function updateMapHighlighting(): void {
+    const filteredMap = getFilteredRegionMap();
+
+    // Update country paths
+    select('#mapSvg')
+      .selectAll('path.country-path')
+      .attr('class', function () {
+        const el = this as unknown as SVGPathElement;
+        const d = select(el).datum() as
+          | { id?: string; properties?: { iso_3166_2?: string } }
+          | undefined;
+        if (!d || !d.id) return 'country-path';
+        const alpha3 = numericToAlpha3[d.id as string];
+        if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
+        const hasRegs = alpha3 && filteredMap[alpha3];
+        return `country-path${hasRegs ? ' country-path--active' : ''}`;
+      });
+
+    // Update US state and Canadian province paths
+    select('#mapSvg')
+      .selectAll('path[class^="state-path"]')
+      .attr('class', function () {
+        const el = this as unknown as SVGPathElement;
+        const code = el.dataset.stateCode ?? '';
+        const hasRegs = code && filteredMap[code];
+        return `state-path${hasRegs ? ' state-path--active' : ''}`;
+      });
+  }
+
+  document.getElementById('regulation-filter-chips')?.addEventListener('click', (e) => {
+    const chip = (e.target as HTMLElement).closest('.brutal-filter-chip') as HTMLElement | null;
+    if (!chip) return;
+
+    document
+      .querySelectorAll('#regulation-filter-chips .brutal-filter-chip')
+      .forEach((c) => c.classList.remove('brutal-filter-chip--active'));
+    chip.classList.add('brutal-filter-chip--active');
+    activeCategory = chip.dataset.category ?? 'all';
+    syncUrlParams();
+
+    updateMapHighlighting();
+
+    // Re-run search with new category filter
+    if (activeSearchTerm.trim()) {
+      searchResults = performSearch(activeSearchTerm);
+      renderSearchResults(searchResults);
+      updateMapForSearch(searchResults, activeSearchTerm);
+    }
+
+    if (currentRegionId && !compliancePanel.hidden) {
+      const filteredMap = getFilteredRegionMap();
+      const regs = filteredMap[currentRegionId] ?? [];
+      if (regs.length > 0) {
+        renderPanel(currentRegionId);
+      } else {
+        // Deselect region when it has no regulations for the new filter
+        if (selectedPath) {
+          selectedPath.classList.remove('country-path--selected', 'state-path--selected');
+          selectedPath = null;
         }
-
-        if (reg.keyRequirements && reg.keyRequirements.length > 0) {
-            html += '<ul class="brutal-reg-card__requirements">';
-            for (const req of reg.keyRequirements) {
-                html += `<li>${escapeHtml(req)}</li>`;
-            }
-            html += '</ul>';
-        }
-
-        if (reg.penalties) {
-            html += `<p class="brutal-reg-card__penalties">Penalties: ${escapeHtml(reg.penalties)}</p>`;
-        }
-
-        html += '</div>';
-        return html;
-    }
-
-    function escapeHtml(str: string): string {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    // --- Sync panel max-height to map height so the back-link stays stable ---
-    function syncPanelHeight(): void {
-        if (window.innerWidth < 1024) return;
-        const mapEl = document.getElementById('mapContainer');
-        if (!mapEl) return;
-        compliancePanel.style.maxHeight = `${mapEl.offsetHeight}px`;
-    }
-    syncPanelHeight();
-    window.addEventListener('resize', syncPanelHeight);
-
-    // --- Category filter ---
-    function updateMapHighlighting(): void {
-        const filteredMap = getFilteredRegionMap();
-
-        // Update country paths
-        select('#mapSvg').selectAll('path.country-path')
-            .attr('class', function() {
-                const el = this as unknown as SVGPathElement;
-                const d = select(el).datum() as { id?: string; properties?: { iso_3166_2?: string } } | undefined;
-                if (!d || !d.id) return 'country-path';
-                const alpha3 = numericToAlpha3[d.id as string];
-                if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
-                const hasRegs = alpha3 && filteredMap[alpha3];
-                return `country-path${hasRegs ? ' country-path--active' : ''}`;
-            });
-
-        // Update US state and Canadian province paths
-        select('#mapSvg').selectAll('path[class^="state-path"]')
-            .attr('class', function() {
-                const el = this as unknown as SVGPathElement;
-                const code = el.dataset.stateCode ?? '';
-                const hasRegs = code && filteredMap[code];
-                return `state-path${hasRegs ? ' state-path--active' : ''}`;
-            });
-    }
-
-    document.getElementById('regulation-filter-chips')?.addEventListener('click', (e) => {
-        const chip = (e.target as HTMLElement).closest('.brutal-filter-chip') as HTMLElement | null;
-        if (!chip) return;
-
-        document.querySelectorAll('#regulation-filter-chips .brutal-filter-chip').forEach(c => c.classList.remove('brutal-filter-chip--active'));
-        chip.classList.add('brutal-filter-chip--active');
-        activeCategory = chip.dataset.category ?? 'all';
+        currentRegionId = null;
         syncUrlParams();
-
-        updateMapHighlighting();
-
-        // Re-run search with new category filter
-        if (activeSearchTerm.trim()) {
-            searchResults = performSearch(activeSearchTerm);
-            renderSearchResults(searchResults);
-            updateMapForSearch(searchResults, activeSearchTerm);
+        if (isMobile()) {
+          closeBottomSheet();
         }
-
-        if (currentRegionId && !compliancePanel.hidden) {
-            const filteredMap = getFilteredRegionMap();
-            const regs = filteredMap[currentRegionId] ?? [];
-            if (regs.length > 0) {
-                renderPanel(currentRegionId);
-            } else {
-                // Deselect region when it has no regulations for the new filter
-                if (selectedPath) {
-                    selectedPath.classList.remove('country-path--selected', 'state-path--selected');
-                    selectedPath = null;
-                }
-                currentRegionId = null;
-                syncUrlParams();
-                if (isMobile()) {
-                    closeBottomSheet();
-                }
-                compliancePanel.hidden = true;
-            }
-        }
-
-        renderTimeline();
-
-        trackEvent({
-            event: 'regulation_filter_applied',
-            category: 'engagement',
-            filter_value: activeCategory,
-            page: 'regulatory-map',
-        });
-    });
-
-    // --- Search ---
-    const categoryColorMap: Record<string, string> = {
-        'data-privacy': 'privacy',
-        'ai-governance': 'ai',
-        'industry-compliance': 'industry',
-        'cybersecurity': 'cyber',
-    };
-
-    const categoryLabelMap: Record<string, string> = {
-        'data-privacy': 'Privacy',
-        'ai-governance': 'AI',
-        'industry-compliance': 'Industry',
-        'cybersecurity': 'Cyber',
-    };
-
-    function performSearch(query: string): Regulation[] {
-        if (!query.trim()) return [];
-        const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-        return searchIndex
-            .filter(({ searchText, reg }) => {
-                if (activeCategory !== 'all' && reg.category !== activeCategory) return false;
-                return terms.every(term => searchText.includes(term));
-            })
-            .map(({ reg }) => reg);
+        compliancePanel.hidden = true;
+      }
     }
 
-    function renderSearchResults(results: Regulation[]): void {
-        const container = document.getElementById('searchResults')!;
+    renderTimeline();
 
-        if (!activeSearchTerm.trim()) {
-            container.hidden = true;
-            container.innerHTML = '';
-            return;
-        }
+    trackEvent({
+      event: 'regulation_filter_applied',
+      category: 'engagement',
+      filter_value: activeCategory,
+      page: 'regulatory-map',
+    });
+  });
 
-        if (results.length === 0) {
-            container.innerHTML = '<div class="brutal-search__no-results">No regulations found</div>';
-            container.hidden = false;
-            return;
-        }
+  // --- Search ---
+  const categoryColorMap: Record<string, string> = {
+    'data-privacy': 'privacy',
+    'ai-governance': 'ai',
+    'industry-compliance': 'industry',
+    cybersecurity: 'cyber',
+  };
 
-        container.innerHTML = results.slice(0, 15).map((reg, i) => {
-            const catColor = categoryColorMap[reg.category] ?? 'privacy';
-            const catLabel = categoryLabelMap[reg.category] ?? reg.category;
-            const regionCount = reg.regions.length;
-            return `
+  const categoryLabelMap: Record<string, string> = {
+    'data-privacy': 'Privacy',
+    'ai-governance': 'AI',
+    'industry-compliance': 'Industry',
+    cybersecurity: 'Cyber',
+  };
+
+  function performSearch(query: string): Regulation[] {
+    if (!query.trim()) return [];
+    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    return searchIndex
+      .filter(({ searchText, reg }) => {
+        if (activeCategory !== 'all' && reg.category !== activeCategory) return false;
+        return terms.every((term) => searchText.includes(term));
+      })
+      .map(({ reg }) => reg);
+  }
+
+  function renderSearchResults(results: Regulation[]): void {
+    const container = document.getElementById('searchResults')!;
+
+    if (!activeSearchTerm.trim()) {
+      container.hidden = true;
+      container.innerHTML = '';
+      return;
+    }
+
+    if (results.length === 0) {
+      container.innerHTML = '<div class="brutal-search__no-results">No regulations found</div>';
+      container.hidden = false;
+      return;
+    }
+
+    container.innerHTML = results
+      .slice(0, 15)
+      .map((reg, i) => {
+        const catColor = categoryColorMap[reg.category] ?? 'privacy';
+        const catLabel = categoryLabelMap[reg.category] ?? reg.category;
+        const regionCount = reg.regions.length;
+        return `
                 <div class="brutal-search__result"
                      role="option"
                      id="search-result-${i}"
@@ -918,272 +1072,291 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                         <span class="brutal-search__result-regions">${regionCount} region${regionCount !== 1 ? 's' : ''}</span>
                     </span>
                 </div>`;
-        }).join('');
+      })
+      .join('');
 
-        if (results.length > 15) {
-            container.innerHTML += `<div class="brutal-search__overflow">${results.length - 15} more results\u2026</div>`;
-        }
-
-        container.hidden = false;
-        activeResultIndex = -1;
+    if (results.length > 15) {
+      container.innerHTML += `<div class="brutal-search__overflow">${results.length - 15} more results\u2026</div>`;
     }
 
-    function updateMapForSearch(results: Regulation[], query: string): void {
-        if (!query.trim()) {
-            updateMapHighlighting();
-            return;
-        }
+    container.hidden = false;
+    activeResultIndex = -1;
+  }
 
-        const matchingRegions = new Set<string>();
-        for (const reg of results) {
-            for (const region of reg.regions) {
-                matchingRegions.add(region);
-            }
-        }
-
-        select('#mapSvg').selectAll('path.country-path')
-            .attr('class', function() {
-                const el = this as unknown as SVGPathElement;
-                const d = select(el).datum() as { id?: string } | undefined;
-                if (!d || !d.id) return 'country-path';
-                const alpha3 = numericToAlpha3[d.id as string];
-                if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
-                return `country-path${matchingRegions.has(alpha3) ? ' country-path--active' : ''}`;
-            });
-
-        select('#mapSvg').selectAll('path[class^="state-path"]')
-            .attr('class', function() {
-                const el = this as unknown as SVGPathElement;
-                const code = el.dataset.stateCode ?? '';
-                return `state-path${matchingRegions.has(code) ? ' state-path--active' : ''}`;
-            });
+  function updateMapForSearch(results: Regulation[], query: string): void {
+    if (!query.trim()) {
+      updateMapHighlighting();
+      return;
     }
 
-    function selectSearchResult(regId: string): void {
-        const reg = regById[regId];
-        if (!reg) return;
+    const matchingRegions = new Set<string>();
+    for (const reg of results) {
+      for (const region of reg.regions) {
+        matchingRegions.add(region);
+      }
+    }
 
-        highlightRegulationRegions(reg);
+    select('#mapSvg')
+      .selectAll('path.country-path')
+      .attr('class', function () {
+        const el = this as unknown as SVGPathElement;
+        const d = select(el).datum() as { id?: string } | undefined;
+        if (!d || !d.id) return 'country-path';
+        const alpha3 = numericToAlpha3[d.id as string];
+        if (alpha3 === 'USA' || alpha3 === 'CAN') return 'country-path';
+        return `country-path${matchingRegions.has(alpha3) ? ' country-path--active' : ''}`;
+      });
 
-        const regionCount = reg.regions.length;
-        panelCountryName.textContent = reg.name;
-        panelRegCount.textContent = `${regionCount} region${regionCount !== 1 ? 's' : ''}`;
-        panelRegulations.innerHTML = renderRegulationCard(reg);
-        document.getElementById('mapCta')?.remove();
-        compliancePanel.hidden = false;
+    select('#mapSvg')
+      .selectAll('path[class^="state-path"]')
+      .attr('class', function () {
+        const el = this as unknown as SVGPathElement;
+        const code = el.dataset.stateCode ?? '';
+        return `state-path${matchingRegions.has(code) ? ' state-path--active' : ''}`;
+      });
+  }
 
-        if (isMobile()) {
-            openBottomSheet();
-        }
+  function selectSearchResult(regId: string): void {
+    const reg = regById[regId];
+    if (!reg) return;
 
-        document.getElementById('searchResults')!.hidden = true;
+    highlightRegulationRegions(reg);
 
+    const regionCount = reg.regions.length;
+    panelCountryName.textContent = reg.name;
+    panelRegCount.textContent = `${regionCount} region${regionCount !== 1 ? 's' : ''}`;
+    panelRegulations.innerHTML = renderRegulationCard(reg);
+    document.getElementById('mapCta')?.remove();
+    compliancePanel.hidden = false;
+
+    if (isMobile()) {
+      openBottomSheet();
+    }
+
+    document.getElementById('searchResults')!.hidden = true;
+
+    trackEvent({
+      event: 'regulation_search_result_clicked',
+      category: 'engagement',
+      regulation_id: regId,
+      regulation_name: reg.name,
+      search_term: activeSearchTerm,
+      page: 'regulatory-map',
+    });
+  }
+
+  // Search input handler with debounce
+  const searchInput = document.getElementById('regulationSearchInput') as HTMLInputElement;
+  const searchClearBtn = document.getElementById('searchClearBtn')!;
+  let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value;
+    activeSearchTerm = query;
+    searchClearBtn.hidden = !query;
+
+    if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      searchResults = performSearch(query);
+      renderSearchResults(searchResults);
+      updateMapForSearch(searchResults, query);
+
+      if (query.trim()) {
         trackEvent({
-            event: 'regulation_search_result_clicked',
-            category: 'engagement',
-            regulation_id: regId,
-            regulation_name: reg.name,
-            search_term: activeSearchTerm,
-            page: 'regulatory-map',
+          event: 'regulation_search',
+          category: 'engagement',
+          search_term: query,
+          result_count: searchResults.length,
+          page: 'regulatory-map',
         });
+      }
+    }, 200);
+  });
+
+  // Re-show results on focus
+  searchInput.addEventListener('focus', () => {
+    if (activeSearchTerm.trim() && searchResults.length > 0) {
+      document.getElementById('searchResults')!.hidden = false;
+    }
+  });
+
+  // Keyboard navigation
+  searchInput.addEventListener('keydown', (e) => {
+    const resultsEl = document.getElementById('searchResults')!;
+    const items = resultsEl.querySelectorAll('.brutal-search__result');
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeResultIndex = Math.min(activeResultIndex + 1, items.length - 1);
+      updateActiveSearchResult(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeResultIndex = Math.max(activeResultIndex - 1, -1);
+      updateActiveSearchResult(items);
+    } else if (e.key === 'Enter' && activeResultIndex >= 0 && activeResultIndex < items.length) {
+      e.preventDefault();
+      const item = items[activeResultIndex] as HTMLElement;
+      selectSearchResult(item.dataset.regId ?? '');
+    } else if (e.key === 'Escape') {
+      resultsEl.hidden = true;
+      activeResultIndex = -1;
+      searchInput.blur();
+    }
+  });
+
+  function updateActiveSearchResult(items: NodeListOf<Element>): void {
+    items.forEach((item, i) => {
+      item.classList.toggle('search-result-item--active', i === activeResultIndex);
+      if (i === activeResultIndex) {
+        (item as HTMLElement).scrollIntoView({ block: 'nearest' });
+      }
+    });
+    searchInput.setAttribute(
+      'aria-activedescendant',
+      activeResultIndex >= 0 ? `search-result-${activeResultIndex}` : ''
+    );
+  }
+
+  // Click on search result
+  document.getElementById('searchResults')?.addEventListener('click', (e) => {
+    const item = (e.target as HTMLElement).closest('.brutal-search__result') as HTMLElement | null;
+    if (!item) return;
+    selectSearchResult(item.dataset.regId ?? '');
+  });
+
+  // Clear button
+  searchClearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    activeSearchTerm = '';
+    searchResults = [];
+    document.getElementById('searchResults')!.hidden = true;
+    searchClearBtn.hidden = true;
+    activeResultIndex = -1;
+    updateMapHighlighting();
+    searchInput.focus();
+  });
+
+  // Close dropdown on outside click
+  document.addEventListener('click', (e) => {
+    const searchContainer = document.getElementById('regulationSearch')!;
+    if (!searchContainer.contains(e.target as Node)) {
+      document.getElementById('searchResults')!.hidden = true;
+      activeResultIndex = -1;
+    }
+  });
+
+  // --- Timeline ---
+  function buildTimelineData(): Regulation[] {
+    const seen = new Set<string>();
+    const all: Regulation[] = [];
+    for (const regs of Object.values(regionMap)) {
+      for (const reg of regs) {
+        if (!seen.has(reg.id)) {
+          seen.add(reg.id);
+          all.push(reg);
+        }
+      }
+    }
+    return all.sort((a, b) => a.effectiveDate.localeCompare(b.effectiveDate));
+  }
+
+  /**
+   * Position the Today marker absolutely over the timeline track.
+   * Finds the year group matching the current year (or the gap between
+   * the closest past and future year groups) and centers the marker there.
+   */
+  function positionTodayMarker(track: HTMLElement): void {
+    const marker = document.getElementById('timelineTodayMarker');
+    if (!marker) return;
+
+    const currentYear = new Date().getFullYear();
+    const yearGroups = Array.from(track.querySelectorAll('.brutal-timeline-year-group'));
+    if (yearGroups.length === 0) return;
+
+    // Find the year group for the current year
+    let targetLeft = 0;
+    let found = false;
+
+    for (const group of yearGroups) {
+      const label = group.querySelector('.brutal-timeline-year');
+      const year = parseInt(label?.textContent ?? '0');
+      if (year === currentYear) {
+        // Center on the current year group
+        targetLeft = (group as HTMLElement).offsetLeft + (group as HTMLElement).offsetWidth / 2;
+        found = true;
+        break;
+      }
+      if (year > currentYear) {
+        // Current year has no entries — position between previous group and this one
+        const prev = group.previousElementSibling as HTMLElement | null;
+        if (prev && prev.classList.contains('timeline-year-group')) {
+          targetLeft =
+            prev.offsetLeft +
+            prev.offsetWidth +
+            ((group as HTMLElement).offsetLeft - prev.offsetLeft - prev.offsetWidth) / 2;
+        } else {
+          targetLeft = (group as HTMLElement).offsetLeft;
+        }
+        found = true;
+        break;
+      }
     }
 
-    // Search input handler with debounce
-    const searchInput = document.getElementById('regulationSearchInput') as HTMLInputElement;
-    const searchClearBtn = document.getElementById('searchClearBtn')!;
-    let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
-
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value;
-        activeSearchTerm = query;
-        searchClearBtn.hidden = !query;
-
-        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
-        searchDebounceTimer = setTimeout(() => {
-            searchResults = performSearch(query);
-            renderSearchResults(searchResults);
-            updateMapForSearch(searchResults, query);
-
-            if (query.trim()) {
-                trackEvent({
-                    event: 'regulation_search',
-                    category: 'engagement',
-                    search_term: query,
-                    result_count: searchResults.length,
-                    page: 'regulatory-map',
-                });
-            }
-        }, 200);
-    });
-
-    // Re-show results on focus
-    searchInput.addEventListener('focus', () => {
-        if (activeSearchTerm.trim() && searchResults.length > 0) {
-            document.getElementById('searchResults')!.hidden = false;
-        }
-    });
-
-    // Keyboard navigation
-    searchInput.addEventListener('keydown', (e) => {
-        const resultsEl = document.getElementById('searchResults')!;
-        const items = resultsEl.querySelectorAll('.brutal-search__result');
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            activeResultIndex = Math.min(activeResultIndex + 1, items.length - 1);
-            updateActiveSearchResult(items);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            activeResultIndex = Math.max(activeResultIndex - 1, -1);
-            updateActiveSearchResult(items);
-        } else if (e.key === 'Enter' && activeResultIndex >= 0 && activeResultIndex < items.length) {
-            e.preventDefault();
-            const item = items[activeResultIndex] as HTMLElement;
-            selectSearchResult(item.dataset.regId ?? '');
-        } else if (e.key === 'Escape') {
-            resultsEl.hidden = true;
-            activeResultIndex = -1;
-            searchInput.blur();
-        }
-    });
-
-    function updateActiveSearchResult(items: NodeListOf<Element>): void {
-        items.forEach((item, i) => {
-            item.classList.toggle('search-result-item--active', i === activeResultIndex);
-            if (i === activeResultIndex) {
-                (item as HTMLElement).scrollIntoView({ block: 'nearest' });
-            }
-        });
-        searchInput.setAttribute('aria-activedescendant',
-            activeResultIndex >= 0 ? `search-result-${activeResultIndex}` : '');
+    if (!found) {
+      // All entries are in the past — place after last group
+      const last = yearGroups[yearGroups.length - 1] as HTMLElement;
+      targetLeft = last.offsetLeft + last.offsetWidth + 20;
     }
 
-    // Click on search result
-    document.getElementById('searchResults')?.addEventListener('click', (e) => {
-        const item = (e.target as HTMLElement).closest('.brutal-search__result') as HTMLElement | null;
-        if (!item) return;
-        selectSearchResult(item.dataset.regId ?? '');
-    });
+    marker.style.left = `${targetLeft}px`;
+  }
 
-    // Clear button
-    searchClearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        activeSearchTerm = '';
-        searchResults = [];
-        document.getElementById('searchResults')!.hidden = true;
-        searchClearBtn.hidden = true;
-        activeResultIndex = -1;
-        updateMapHighlighting();
-        searchInput.focus();
-    });
+  function renderTimeline(): void {
+    const track = document.getElementById('timelineTrack')!;
+    const allRegs = buildTimelineData();
+    const filteredRegs =
+      activeCategory === 'all' ? allRegs : allRegs.filter((r) => r.category === activeCategory);
 
-    // Close dropdown on outside click
-    document.addEventListener('click', (e) => {
-        const searchContainer = document.getElementById('regulationSearch')!;
-        if (!searchContainer.contains(e.target as Node)) {
-            document.getElementById('searchResults')!.hidden = true;
-            activeResultIndex = -1;
-        }
-    });
+    const today = new Date().toISOString().slice(0, 10);
 
-    // --- Timeline ---
-    function buildTimelineData(): Regulation[] {
-        const seen = new Set<string>();
-        const all: Regulation[] = [];
-        for (const regs of Object.values(regionMap)) {
-            for (const reg of regs) {
-                if (!seen.has(reg.id)) {
-                    seen.add(reg.id);
-                    all.push(reg);
-                }
-            }
-        }
-        return all.sort((a, b) => a.effectiveDate.localeCompare(b.effectiveDate));
+    // Sort chronologically so year groups render in order
+    filteredRegs.sort((a, b) => a.effectiveDate.localeCompare(b.effectiveDate));
+
+    // Group by year (Map preserves insertion order of sorted data)
+    const byYear = new Map<number, Regulation[]>();
+    for (const reg of filteredRegs) {
+      const year = parseInt(reg.effectiveDate.slice(0, 4));
+      if (!byYear.has(year)) byYear.set(year, []);
+      byYear.get(year)!.push(reg);
     }
 
-    /**
-     * Position the Today marker absolutely over the timeline track.
-     * Finds the year group matching the current year (or the gap between
-     * the closest past and future year groups) and centers the marker there.
-     */
-    function positionTodayMarker(track: HTMLElement): void {
-        const marker = document.getElementById('timelineTodayMarker');
-        if (!marker) return;
+    let html = '';
 
-        const currentYear = new Date().getFullYear();
-        const yearGroups = Array.from(track.querySelectorAll('.brutal-timeline-year-group'));
-        if (yearGroups.length === 0) return;
-
-        // Find the year group for the current year
-        let targetLeft = 0;
-        let found = false;
-
-        for (const group of yearGroups) {
-            const label = group.querySelector('.brutal-timeline-year');
-            const year = parseInt(label?.textContent ?? '0');
-            if (year === currentYear) {
-                // Center on the current year group
-                targetLeft = (group as HTMLElement).offsetLeft + (group as HTMLElement).offsetWidth / 2;
-                found = true;
-                break;
-            }
-            if (year > currentYear) {
-                // Current year has no entries — position between previous group and this one
-                const prev = group.previousElementSibling as HTMLElement | null;
-                if (prev && prev.classList.contains('timeline-year-group')) {
-                    targetLeft = prev.offsetLeft + prev.offsetWidth +
-                                 ((group as HTMLElement).offsetLeft - prev.offsetLeft - prev.offsetWidth) / 2;
-                } else {
-                    targetLeft = (group as HTMLElement).offsetLeft;
-                }
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            // All entries are in the past — place after last group
-            const last = yearGroups[yearGroups.length - 1] as HTMLElement;
-            targetLeft = last.offsetLeft + last.offsetWidth + 20;
-        }
-
-        marker.style.left = `${targetLeft}px`;
-    }
-
-    function renderTimeline(): void {
-        const track = document.getElementById('timelineTrack')!;
-        const allRegs = buildTimelineData();
-        const filteredRegs = activeCategory === 'all'
-            ? allRegs
-            : allRegs.filter(r => r.category === activeCategory);
-
-        const today = new Date().toISOString().slice(0, 10);
-
-        // Sort chronologically so year groups render in order
-        filteredRegs.sort((a, b) => a.effectiveDate.localeCompare(b.effectiveDate));
-
-        // Group by year (Map preserves insertion order of sorted data)
-        const byYear = new Map<number, Regulation[]>();
-        for (const reg of filteredRegs) {
-            const year = parseInt(reg.effectiveDate.slice(0, 4));
-            if (!byYear.has(year)) byYear.set(year, []);
-            byYear.get(year)!.push(reg);
-        }
-
-        let html = '';
-
-        for (const [year, regs] of byYear) {
-            html += `<div class="brutal-timeline-year-group">`;
-            html += `<span class="brutal-timeline-year">${year}</span>`;
-            html += `<div class="brutal-timeline-year-entries">`;
-            for (const reg of regs) {
-                const isUpcoming = reg.effectiveDate > today;
-                const catClass = categoryColorMap[reg.category] ?? 'privacy';
-                const [y, m] = reg.effectiveDate.split('-');
-                const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                const shortDate = `${monthNames[parseInt(m, 10) - 1]} ${y}`;
-                const truncName = reg.name.length > 35 ? reg.name.slice(0, 33) + '\u2026' : reg.name;
-                html += `
+    for (const [year, regs] of byYear) {
+      html += `<div class="brutal-timeline-year-group">`;
+      html += `<span class="brutal-timeline-year">${year}</span>`;
+      html += `<div class="brutal-timeline-year-entries">`;
+      for (const reg of regs) {
+        const isUpcoming = reg.effectiveDate > today;
+        const catClass = categoryColorMap[reg.category] ?? 'privacy';
+        const [y, m] = reg.effectiveDate.split('-');
+        const monthNames = [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ];
+        const shortDate = `${monthNames[parseInt(m, 10) - 1]} ${y}`;
+        const truncName = reg.name.length > 35 ? reg.name.slice(0, 33) + '\u2026' : reg.name;
+        html += `
                     <div class="brutal-timeline-entry brutal-timeline-entry--${catClass}${isUpcoming ? ' brutal-timeline-entry--upcoming' : ''}"
                          data-reg-id="${escapeHtml(reg.id)}"
                          title="${escapeHtml(reg.name)} \u2014 ${shortDate}">
@@ -1191,593 +1364,607 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                         <span class="brutal-timeline-entry__name">${escapeHtml(truncName)}</span>
                         <span class="brutal-timeline-entry__date">${shortDate}</span>
                     </div>`;
-            }
-            html += `</div></div>`;
-        }
-
-        // Today marker — absolutely positioned based on chronological position
-        // among the rendered year groups. This is filter-independent.
-        html += `<div class="brutal-timeline-today" id="timelineTodayMarker"><span class="brutal-timeline-today__label">Today</span></div>`;
-
-        track.innerHTML = html;
-
-        // Position the Today marker over the correct year group
-        positionTodayMarker(track);
-
-        // Auto-scroll to "today" marker
-        const todayMarker = document.getElementById('timelineTodayMarker');
-        if (todayMarker) {
-            const scroll = document.getElementById('timelineScroll')!;
-            scroll.scrollLeft = todayMarker.offsetLeft - scroll.clientWidth / 3;
-        }
+      }
+      html += `</div></div>`;
     }
 
-    // Timeline click handler
-    document.getElementById('timelineTrack')?.addEventListener('click', (e) => {
-        const entry = (e.target as HTMLElement).closest('.brutal-timeline-entry') as HTMLElement | null;
-        if (!entry) return;
+    // Today marker — absolutely positioned based on chronological position
+    // among the rendered year groups. This is filter-independent.
+    html += `<div class="brutal-timeline-today" id="timelineTodayMarker"><span class="brutal-timeline-today__label">Today</span></div>`;
 
-        const regId = entry.dataset.regId ?? '';
-        const reg = regById[regId];
-        if (!reg) return;
+    track.innerHTML = html;
 
-        // Toggle active state on timeline entry
-        if (activeTimelineEntry) {
-            activeTimelineEntry.classList.remove('brutal-timeline-entry--active');
-        }
+    // Position the Today marker over the correct year group
+    positionTodayMarker(track);
 
-        if (activeTimelineEntry === entry) {
-            // Clicking same entry again — deselect
-            activeTimelineEntry = null;
-            clearRegionHighlights();
-            // Restore panel to previously selected region if any
-            if (currentRegionId && !compliancePanel.hidden) {
-                renderPanel(currentRegionId);
-            }
-        } else {
-            entry.classList.add('brutal-timeline-entry--active');
-            activeTimelineEntry = entry;
+    // Auto-scroll to "today" marker
+    const todayMarker = document.getElementById('timelineTodayMarker');
+    if (todayMarker) {
+      const scroll = document.getElementById('timelineScroll')!;
+      scroll.scrollLeft = todayMarker.offsetLeft - scroll.clientWidth / 3;
+    }
+  }
 
-            // Highlight regions on map
-            highlightRegulationRegions(reg);
+  // Timeline click handler
+  document.getElementById('timelineTrack')?.addEventListener('click', (e) => {
+    const entry = (e.target as HTMLElement).closest('.brutal-timeline-entry') as HTMLElement | null;
+    if (!entry) return;
 
-            // Show this single regulation in the panel
-            const regionCount = reg.regions.length;
-            panelCountryName.textContent = reg.name;
-            panelRegCount.textContent = `${regionCount} region${regionCount !== 1 ? 's' : ''}`;
-            panelRegulations.innerHTML = renderRegulationCard(reg);
-            document.getElementById('mapCta')?.remove();
-            compliancePanel.hidden = false;
+    const regId = entry.dataset.regId ?? '';
+    const reg = regById[regId];
+    if (!reg) return;
 
-            // On mobile, open the bottom sheet
-            if (isMobile()) {
-                openBottomSheet();
-            }
-        }
+    // Toggle active state on timeline entry
+    if (activeTimelineEntry) {
+      activeTimelineEntry.classList.remove('brutal-timeline-entry--active');
+    }
 
-        trackEvent({
-            event: 'timeline_interaction',
-            category: 'engagement',
-            regulation_id: regId,
-            regulation_name: reg.name,
-            page: 'regulatory-map',
-        });
+    if (activeTimelineEntry === entry) {
+      // Clicking same entry again — deselect
+      activeTimelineEntry = null;
+      clearRegionHighlights();
+      // Restore panel to previously selected region if any
+      if (currentRegionId && !compliancePanel.hidden) {
+        renderPanel(currentRegionId);
+      }
+    } else {
+      entry.classList.add('brutal-timeline-entry--active');
+      activeTimelineEntry = entry;
+
+      // Highlight regions on map
+      highlightRegulationRegions(reg);
+
+      // Show this single regulation in the panel
+      const regionCount = reg.regions.length;
+      panelCountryName.textContent = reg.name;
+      panelRegCount.textContent = `${regionCount} region${regionCount !== 1 ? 's' : ''}`;
+      panelRegulations.innerHTML = renderRegulationCard(reg);
+      document.getElementById('mapCta')?.remove();
+      compliancePanel.hidden = false;
+
+      // On mobile, open the bottom sheet
+      if (isMobile()) {
+        openBottomSheet();
+      }
+    }
+
+    trackEvent({
+      event: 'timeline_interaction',
+      category: 'engagement',
+      regulation_id: regId,
+      regulation_name: reg.name,
+      page: 'regulatory-map',
     });
+  });
 
-    // --- Click-drag scrolling for timeline ---
-    const timelineScroll = document.getElementById('timelineScroll')!;
-    let isDragging = false;
-    let dragStartX = 0;
-    let scrollStartX = 0;
-    let hasDragged = false;
+  // --- Click-drag scrolling for timeline ---
+  const timelineScroll = document.getElementById('timelineScroll')!;
+  let isDragging = false;
+  let dragStartX = 0;
+  let scrollStartX = 0;
+  let hasDragged = false;
 
-    timelineScroll.addEventListener('mousedown', (e) => {
-        isDragging = true;
+  timelineScroll.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    hasDragged = false;
+    dragStartX = e.clientX;
+    scrollStartX = timelineScroll.scrollLeft;
+    timelineScroll.style.cursor = 'grabbing';
+    timelineScroll.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStartX;
+    if (Math.abs(dx) > 3) hasDragged = true;
+    timelineScroll.scrollLeft = scrollStartX - dx;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    timelineScroll.style.cursor = '';
+    timelineScroll.style.userSelect = '';
+  });
+
+  // Suppress click on timeline entries after a drag
+  timelineScroll.addEventListener(
+    'click',
+    (e) => {
+      if (hasDragged) {
+        e.stopPropagation();
         hasDragged = false;
-        dragStartX = e.clientX;
-        scrollStartX = timelineScroll.scrollLeft;
-        timelineScroll.style.cursor = 'grabbing';
-        timelineScroll.style.userSelect = 'none';
-        e.preventDefault();
-    });
+      }
+    },
+    true
+  );
 
-    window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - dragStartX;
-        if (Math.abs(dx) > 3) hasDragged = true;
-        timelineScroll.scrollLeft = scrollStartX - dx;
-    });
+  // Initial render
+  renderTimeline();
 
-    window.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        timelineScroll.style.cursor = '';
-        timelineScroll.style.userSelect = '';
-    });
+  // --- Restore bookmarked state from URL ---
+  (function restoreFromUrl() {
+    const { region, filter } = getUrlParams();
 
-    // Suppress click on timeline entries after a drag
-    timelineScroll.addEventListener('click', (e) => {
-        if (hasDragged) {
-            e.stopPropagation();
-            hasDragged = false;
-        }
-    }, true);
-
-    // Initial render
-    renderTimeline();
-
-    // --- Restore bookmarked state from URL ---
-    (function restoreFromUrl() {
-        const { region, filter } = getUrlParams();
-
-        if (filter) {
-            activeCategory = filter;
-            document.querySelectorAll('#regulation-filter-chips .brutal-filter-chip').forEach(c => {
-                c.classList.toggle('brutal-filter-chip--active', (c as HTMLElement).dataset.category === filter);
-            });
-            updateMapHighlighting();
-            renderTimeline();
-        }
-
-        if (region) {
-            const isSubnational = region.includes('-');
-            const selector = isSubnational
-                ? `path[data-state-code="${CSS.escape(region)}"]`
-                : `path[data-alpha3="${CSS.escape(region)}"]`;
-            const pathEl = document.querySelector(selector) as SVGPathElement | null;
-
-            if (pathEl && (pathEl.classList.contains('country-path--active')
-                        || pathEl.classList.contains('state-path--active'))) {
-                selectRegion(pathEl, region, isSubnational ? 'state-path--selected' : 'country-path--selected');
-            }
-        }
-    })();
-</script>
-
-<script>
-    import { trackEvent } from '../../../../utils/analytics';
-
-    document.querySelectorAll('.brutal-faq__item').forEach((item) => {
-        item.addEventListener('toggle', () => {
-            const details = item as HTMLDetailsElement;
-            const question = details.querySelector('.brutal-faq__question')?.textContent?.trim() || '';
-            trackEvent({
-                event: 'faq_interaction',
-                category: 'engagement',
-                question,
-                action: details.open ? 'open' : 'close',
-                page: 'regulatory-map',
-            });
-        });
-    });
-</script>
-
-<script>
-    const printDate = document.getElementById('print-date');
-    if (printDate) {
-        printDate.textContent = `Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+    if (filter) {
+      activeCategory = filter;
+      document.querySelectorAll('#regulation-filter-chips .brutal-filter-chip').forEach((c) => {
+        c.classList.toggle(
+          'brutal-filter-chip--active',
+          (c as HTMLElement).dataset.category === filter
+        );
+      });
+      updateMapHighlighting();
+      renderTimeline();
     }
+
+    if (region) {
+      const isSubnational = region.includes('-');
+      const selector = isSubnational
+        ? `path[data-state-code="${CSS.escape(region)}"]`
+        : `path[data-alpha3="${CSS.escape(region)}"]`;
+      const pathEl = document.querySelector(selector) as SVGPathElement | null;
+
+      if (
+        pathEl &&
+        (pathEl.classList.contains('country-path--active') ||
+          pathEl.classList.contains('state-path--active'))
+      ) {
+        selectRegion(
+          pathEl,
+          region,
+          isSubnational ? 'state-path--selected' : 'country-path--selected'
+        );
+      }
+    }
+  })();
+</script>
+
+<script>
+  import { trackEvent } from '../../../../utils/analytics';
+
+  document.querySelectorAll('.brutal-faq__item').forEach((item) => {
+    item.addEventListener('toggle', () => {
+      const details = item as HTMLDetailsElement;
+      const question = details.querySelector('.brutal-faq__question')?.textContent?.trim() || '';
+      trackEvent({
+        event: 'faq_interaction',
+        category: 'engagement',
+        question,
+        action: details.open ? 'open' : 'close',
+        page: 'regulatory-map',
+      });
+    });
+  });
+</script>
+
+<script>
+  const printDate = document.getElementById('print-date');
+  if (printDate) {
+    printDate.textContent = `Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+  }
 </script>
 
 <style>
-    .regulatory-map-section {
-        padding-bottom: var(--spacing-3xl);
-    }
+  .regulatory-map-section {
+    padding-bottom: var(--spacing-3xl);
+  }
 
-    /* Bottom sheet overlay (mobile) */
+  /* Bottom sheet overlay (mobile) */
+  .brutal-bottom-sheet__overlay {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
     .brutal-bottom-sheet__overlay {
-        display: none;
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-slow);
     }
 
-    @media (max-width: 1023px) {
-        .brutal-bottom-sheet__overlay {
-            display: block;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 50;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity var(--transition-slow);
-        }
-
-        .brutal-bottom-sheet__overlay.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
+    .brutal-bottom-sheet__overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
     }
+  }
 
+  .regulation-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  @media (max-width: 1023px) {
     .regulation-filters {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: var(--spacing-sm);
-        margin-top: var(--spacing-xl);
-        margin-bottom: var(--spacing-sm);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--bg-light);
+      padding: var(--spacing-sm) 0;
+      border-bottom: 1px solid var(--border-light);
     }
 
-    @media (max-width: 1023px) {
-        .regulation-filters {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: var(--bg-light);
-            padding: var(--spacing-sm) 0;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        :global(html.dark-theme) .regulation-filters {
-            border-bottom-color: var(--border-dark);
-        }
+    :global(html.dark-theme) .regulation-filters {
+      border-bottom-color: var(--border-dark);
     }
+  }
 
-    /* Search */
+  /* Search */
+  .regulation-search {
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+  }
+
+  /* Search — uses global .brutal-search classes; scoped overrides only */
+
+  @media (max-width: 1023px) {
     .regulation-search {
-        width: 100%;
-        max-width: 480px;
-        position: relative;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    :global(.brutal-search__results) {
+      max-height: 50vh;
+    }
+  }
+
+  /* Filter chips use global .brutal-filter-chip classes — see global.css */
+  .brutal-filter-chips {
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .map-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .map-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Legend & CTA — uses global .brutal-legend / .brutal-map-cta; scoped positioning only */
+  .map-legend-positioned {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    left: var(--spacing-sm);
+    flex-direction: row;
+    gap: var(--spacing-md);
+    z-index: 5;
+  }
+
+  .brutal-map-cta {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    right: var(--spacing-sm);
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: var(--spacing-2xl);
+  }
+
+  /* Mobile: legend static below map, hide CTA (tap bar covers this UX) */
+  @media (max-width: 1023px) {
+    .map-legend-positioned {
+      position: static;
+      background: transparent;
+      border: none;
+      justify-content: center;
+      padding: var(--spacing-sm) 0;
+      z-index: auto;
     }
 
-    /* Search — uses global .brutal-search classes; scoped overrides only */
+    .brutal-map-cta {
+      display: none;
+    }
+  }
 
-    @media (max-width: 1023px) {
-        .regulation-search {
-            max-width: none;
-        }
+  /* Responsive */
+  @media (min-width: 1024px) {
+    .map-layout:has(.brutal-panel:not([hidden])) {
+      grid-template-columns: 1fr 380px;
+      gap: var(--spacing-xl);
+      max-width: none;
+    }
+  }
+
+  /* FAQ Section */
+  .faq-section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* FAQ — uses global .brutal-faq classes; scoped layout only */
+  .faq-section .brutal-heading-lg {
+    margin-bottom: var(--spacing-2xl);
+    text-align: center;
+  }
+
+  .brutal-faq {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .faq-section {
+      padding: var(--spacing-2xl) 0;
+    }
+  }
+
+  /* Timeline — uses global .brutal-timeline-* classes; scoped layout for horizontal scroll */
+  .timeline-section {
+    margin-top: var(--spacing-3xl);
+    padding-top: var(--spacing-2xl);
+    border-top: 2px solid var(--border-light);
+  }
+
+  .timeline-heading {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .timeline-legend {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    font-family: monospace;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  .timeline-legend__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .timeline-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 14px;
+    padding-bottom: var(--spacing-sm);
+    cursor: grab;
+  }
+
+  .timeline-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .timeline-scroll::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.05);
+    border-radius: 0;
+  }
+
+  .timeline-scroll::-webkit-scrollbar-thumb {
+    background: rgba(26, 26, 26, 0.15);
+    border-radius: 0;
+  }
+
+  :global(.timeline-track) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    min-width: max-content;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    position: relative;
+  }
+
+  :global(.timeline-track::before) {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: var(--spacing-lg);
+    right: var(--spacing-lg);
+    height: 2px;
+    background: var(--border-light);
+    z-index: 0;
+  }
+
+  /* Horizontal scroll overrides for .brutal-timeline-* base classes.
+       Use .timeline-track parent to beat global.css specificity
+       regardless of Astro's production CSS chunk load order. */
+  :global(.timeline-track .brutal-timeline-entry) {
+    position: relative;
+    z-index: 1;
+  }
+
+  :global(.timeline-track .brutal-timeline-entry__name) {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Today marker — absolute positioned in horizontal timeline */
+  :global(.timeline-track .brutal-timeline-today) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: -6px;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  :global(.timeline-track .brutal-timeline-today::after) {
+    content: '';
+    width: 2px;
+    flex: 1;
+    min-height: 60px;
+    background: var(--color-primary);
+    opacity: 0.6;
+  }
+
+  :global(.timeline-track .brutal-timeline-today__label) {
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+
+  /* Timeline dark theme */
+  :global(html.dark-theme) .timeline-section {
+    border-top-color: var(--border-dark-default);
+  }
+
+  :global(html.dark-theme) .timeline-legend {
+    color: var(--text-dark-muted);
+  }
+
+  :global(html.dark-theme) .timeline-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  :global(html.dark-theme) .timeline-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-dark-default);
+  }
+
+  :global(html.dark-theme .timeline-track::before) {
+    background: var(--border-dark-default);
+  }
+
+  /* Print-only elements (hidden on screen) */
+  .print-report-header,
+  .print-report-footer {
+    display: none;
+  }
+
+  @media print {
+    /* Hide interactive chrome */
+    :global(.site-header),
+    :global(footer),
+    .regulation-filters,
+    .map-controls,
+    .map-quick-zoom,
+    .brutal-map-cta,
+    .brutal-map-hint,
+    .brutal-bottom-sheet__overlay,
+    .brutal-bottom-sheet__handle,
+    .back-link,
+    :global(.hub-header__breadcrumb) {
+      display: none !important;
     }
 
-    @media (max-width: 767px) {
-        :global(.brutal-search__results) {
-            max-height: 50vh;
-        }
+    /* Show print header/footer */
+    .print-report-header {
+      display: flex !important;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 0 var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      border-bottom: 3px solid #05cd99;
     }
 
-    /* Filter chips use global .brutal-filter-chip classes — see global.css */
-    .brutal-filter-chips {
-        justify-content: center;
-        gap: var(--spacing-md);
+    .print-report-header__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-family: monospace;
+      font-size: 14pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #1a1a1a;
+    }
+
+    .print-report-header__title {
+      font-family: monospace;
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+    }
+
+    .print-report-header__date {
+      font-family: monospace;
+      font-size: 9pt;
+      color: #999;
+    }
+
+    .print-report-footer {
+      display: block !important;
+      margin-top: var(--spacing-2xl);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid #ccc;
+    }
+
+    .print-report-footer p {
+      font-family: monospace;
+      font-size: 8pt;
+      color: #999;
+      margin: 0 0 4px;
+      line-height: 1.4;
+    }
+
+    /* Map: static, bordered */
+    .map-wrapper {
+      page-break-inside: avoid;
+    }
+
+    :global(.brutal-map-container) {
+      border: 1px solid #ccc !important;
+      overflow: visible;
+    }
+
+    /* Panel: static layout */
+    :global(.brutal-panel) {
+      position: static !important;
+      max-height: none !important;
+      overflow: visible !important;
+      transform: none !important;
+      transition: none !important;
+      border: 1px solid #ccc !important;
+      border-top: 3px solid #05cd99 !important;
+      page-break-inside: avoid;
+    }
+
+    :global(.brutal-reg-card) {
+      border: 1px solid #ccc !important;
+      border-left: 3px solid #05cd99 !important;
+      break-inside: avoid;
+    }
+
+    /* Timeline: no scroll, static */
+    .timeline-scroll {
+      overflow: visible;
+      max-width: 100%;
+    }
+
+    :global(.timeline-track .brutal-timeline-entry) {
+      color: #333;
+    }
+
+    /* FAQ: readable, no collapse */
+    :global(.brutal-faq__item) {
+      border: 1px solid #ccc !important;
+      break-inside: avoid;
     }
 
     .map-layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-        align-items: start;
-        max-width: 960px;
-        margin: 0 auto;
+      grid-template-columns: 1fr !important;
+      max-width: 100%;
     }
 
-    .map-wrapper {
-        position: relative;
-        overflow: hidden;
+    @page {
+      margin: 1.5cm;
     }
-
-    /* Legend & CTA — uses global .brutal-legend / .brutal-map-cta; scoped positioning only */
-    .map-legend-positioned {
-        position: absolute;
-        bottom: var(--spacing-sm);
-        left: var(--spacing-sm);
-        flex-direction: row;
-        gap: var(--spacing-md);
-        z-index: 5;
-    }
-    .brutal-map-cta {
-        position: absolute;
-        bottom: var(--spacing-sm);
-        right: var(--spacing-sm);
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    .back-link {
-        display: inline-block;
-        margin-top: var(--spacing-2xl);
-    }
-
-    /* Mobile: legend static below map, hide CTA (tap bar covers this UX) */
-    @media (max-width: 1023px) {
-        .map-legend-positioned {
-            position: static;
-            background: transparent;
-            border: none;
-            justify-content: center;
-            padding: var(--spacing-sm) 0;
-            z-index: auto;
-        }
-
-        .brutal-map-cta {
-            display: none;
-        }
-    }
-
-    /* Responsive */
-    @media (min-width: 1024px) {
-        .map-layout:has(.brutal-panel:not([hidden])) {
-            grid-template-columns: 1fr 380px;
-            gap: var(--spacing-xl);
-            max-width: none;
-        }
-    }
-
-    /* FAQ Section */
-    .faq-section {
-        padding: var(--spacing-3xl) 0;
-    }
-
-    /* FAQ — uses global .brutal-faq classes; scoped layout only */
-    .faq-section .brutal-heading-lg {
-        margin-bottom: var(--spacing-2xl);
-        text-align: center;
-    }
-
-    .brutal-faq {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    @media (max-width: 768px) {
-        .faq-section {
-            padding: var(--spacing-2xl) 0;
-        }
-    }
-
-
-    /* Timeline — uses global .brutal-timeline-* classes; scoped layout for horizontal scroll */
-    .timeline-section {
-        margin-top: var(--spacing-3xl);
-        padding-top: var(--spacing-2xl);
-        border-top: 2px solid var(--border-light);
-    }
-
-    .timeline-heading {
-        text-align: center;
-        margin-bottom: var(--spacing-md);
-    }
-
-    .timeline-legend {
-        display: flex;
-        justify-content: center;
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-xl);
-        font-family: monospace;
-        font-size: var(--text-xs);
-        color: var(--text-secondary);
-    }
-
-    .timeline-legend__item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: var(--spacing-xs);
-    }
-
-    .timeline-scroll {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-top: 14px;
-        padding-bottom: var(--spacing-sm);
-        cursor: grab;
-    }
-
-    .timeline-scroll::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    .timeline-scroll::-webkit-scrollbar-track {
-        background: rgba(26, 26, 26, 0.05);
-        border-radius: 0;
-    }
-
-    .timeline-scroll::-webkit-scrollbar-thumb {
-        background: rgba(26, 26, 26, 0.15);
-        border-radius: 0;
-    }
-
-    :global(.timeline-track) {
-        display: flex;
-        align-items: flex-start;
-        gap: 0;
-        min-width: max-content;
-        padding: var(--spacing-sm) var(--spacing-lg);
-        position: relative;
-    }
-
-    :global(.timeline-track::before) {
-        content: '';
-        position: absolute;
-        top: 28px;
-        left: var(--spacing-lg);
-        right: var(--spacing-lg);
-        height: 2px;
-        background: var(--border-light);
-        z-index: 0;
-    }
-
-    /* Horizontal scroll overrides for .brutal-timeline-* base classes.
-       Use .timeline-track parent to beat global.css specificity
-       regardless of Astro's production CSS chunk load order. */
-    :global(.timeline-track .brutal-timeline-entry) {
-        position: relative;
-        z-index: 1;
-    }
-
-    :global(.timeline-track .brutal-timeline-entry__name) {
-        max-width: 180px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* Today marker — absolute positioned in horizontal timeline */
-    :global(.timeline-track .brutal-timeline-today) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: absolute;
-        top: -6px;
-        transform: translateX(-50%);
-        z-index: 2;
-        pointer-events: none;
-    }
-
-    :global(.timeline-track .brutal-timeline-today::after) {
-        content: '';
-        width: 2px;
-        flex: 1;
-        min-height: 60px;
-        background: var(--color-primary);
-        opacity: 0.6;
-    }
-
-    :global(.timeline-track .brutal-timeline-today__label) {
-        white-space: nowrap;
-        margin-bottom: 2px;
-    }
-
-    /* Timeline dark theme */
-    :global(html.dark-theme) .timeline-section {
-        border-top-color: var(--border-dark-default);
-    }
-
-    :global(html.dark-theme) .timeline-legend {
-        color: var(--text-dark-muted);
-    }
-
-    :global(html.dark-theme) .timeline-scroll::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    :global(html.dark-theme) .timeline-scroll::-webkit-scrollbar-thumb {
-        background: var(--border-dark-default);
-    }
-
-    :global(html.dark-theme .timeline-track::before) {
-        background: var(--border-dark-default);
-    }
-
-    /* Print-only elements (hidden on screen) */
-    .print-report-header,
-    .print-report-footer {
-        display: none;
-    }
-
-    @media print {
-        /* Hide interactive chrome */
-        :global(.site-header),
-        :global(footer),
-        .regulation-filters,
-        .map-controls,
-        .map-quick-zoom,
-        .brutal-map-cta,
-        .brutal-map-hint,
-        .brutal-bottom-sheet__overlay,
-        .brutal-bottom-sheet__handle,
-        .back-link,
-        :global(.hub-header__breadcrumb) {
-            display: none !important;
-        }
-
-        /* Show print header/footer */
-        .print-report-header {
-            display: flex !important;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding: 0 0 var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
-            border-bottom: 3px solid #05cd99;
-        }
-
-        .print-report-header__brand {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            font-family: monospace;
-            font-size: 14pt;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: #1a1a1a;
-        }
-
-        .print-report-header__title {
-            font-family: monospace;
-            font-size: 11pt;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #666;
-        }
-
-        .print-report-header__date {
-            font-family: monospace;
-            font-size: 9pt;
-            color: #999;
-        }
-
-        .print-report-footer {
-            display: block !important;
-            margin-top: var(--spacing-2xl);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid #ccc;
-        }
-
-        .print-report-footer p {
-            font-family: monospace;
-            font-size: 8pt;
-            color: #999;
-            margin: 0 0 4px;
-            line-height: 1.4;
-        }
-
-        /* Map: static, bordered */
-        .map-wrapper {
-            page-break-inside: avoid;
-        }
-
-        :global(.brutal-map-container) {
-            border: 1px solid #ccc !important;
-            overflow: visible;
-        }
-
-        /* Panel: static layout */
-        :global(.brutal-panel) {
-            position: static !important;
-            max-height: none !important;
-            overflow: visible !important;
-            transform: none !important;
-            transition: none !important;
-            border: 1px solid #ccc !important;
-            border-top: 3px solid #05cd99 !important;
-            page-break-inside: avoid;
-        }
-
-        :global(.brutal-reg-card) {
-            border: 1px solid #ccc !important;
-            border-left: 3px solid #05cd99 !important;
-            break-inside: avoid;
-        }
-
-        /* Timeline: no scroll, static */
-        .timeline-scroll {
-            overflow: visible;
-            max-width: 100%;
-        }
-
-        :global(.timeline-track .brutal-timeline-entry) {
-            color: #333;
-        }
-
-        /* FAQ: readable, no collapse */
-        :global(.brutal-faq__item) {
-            border: 1px solid #ccc !important;
-            break-inside: avoid;
-        }
-
-        .map-layout {
-            grid-template-columns: 1fr !important;
-            max-width: 100%;
-        }
-
-        @page {
-            margin: 1.5cm;
-        }
-    }
+  }
 </style>

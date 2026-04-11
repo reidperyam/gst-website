@@ -18,7 +18,7 @@ Project-specific reference for the quality tooling installed during Phase 2 of [
 | Type-check the whole project           | `npx astro check`                                                            |
 | Lint all JS/TS/Astro                   | `npm run lint`                                                               |
 | Lint and auto-fix                      | `npm run lint:fix`                                                           |
-| Lint CSS                               | `npm run lint:css`                                                           |
+| Lint CSS and Astro scoped styles       | `npm run lint:css`                                                           |
 | Format all files                       | `npm run format`                                                             |
 | Check formatting without writing       | `npm run format:check`                                                       |
 | Build for production                   | `npm run build`                                                              |
@@ -53,9 +53,14 @@ git commit -m "..."
   ├─▶ lint-staged reads staged files and matches them against
   │    the globs in package.json's "lint-staged" config
   │
-  ├─▶ For *.{ts,tsx,astro,mjs,cjs,js}:
+  ├─▶ For *.{ts,tsx,mjs,cjs,js}:
   │     1. eslint --fix   (auto-fix lint violations)
   │     2. prettier --write (reformat)
+  │
+  ├─▶ For *.astro:
+  │     1. eslint --fix    (JS/TS in frontmatter + script tags)
+  │     2. stylelint --fix (scoped <style> blocks)
+  │     3. prettier --write
   │
   ├─▶ For *.css:
   │     1. stylelint --fix
@@ -133,7 +138,9 @@ All three jobs are **required status checks** on the `master` branch protection 
 | [typescript-eslint](https://typescript-eslint.io/)                                 | ESLint plugin that adds TypeScript-aware rules                                                                                    | (extends from eslint.config.mjs)                                                           |
 | [eslint-plugin-astro](https://github.com/ota-meshi/eslint-plugin-astro)            | ESLint plugin for `.astro` file parsing and rules                                                                                 | (extends from eslint.config.mjs)                                                           |
 | [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)       | Disables ESLint rules that would conflict with Prettier's formatting                                                              | (extends from eslint.config.mjs)                                                           |
-| [stylelint](https://stylelint.io/)                                                 | Lint CSS files                                                                                                                    | [.stylelintrc.json](../../../.stylelintrc.json)                                            |
+| [stylelint](https://stylelint.io/)                                                 | Lint CSS files AND scoped `<style>` blocks inside `.astro` files (via postcss-html custom syntax)                                 | [.stylelintrc.json](../../../.stylelintrc.json)                                            |
+| [postcss-html](https://github.com/ota-meshi/postcss-html)                          | PostCSS custom syntax used by stylelint to parse `<style>` blocks inside `.astro` files                                           | (referenced from .stylelintrc.json `overrides`)                                            |
+| [stylelint-config-html](https://github.com/ota-meshi/stylelint-config-html)        | Shared stylelint config for HTML-like files; provides the `/astro` sub-export used in the `.astro` override                       | (referenced from .stylelintrc.json `overrides`)                                            |
 | [@astrojs/check](https://docs.astro.build/en/reference/cli-reference/#astro-check) | TypeScript type-check for `.astro` files (`astro check`)                                                                          | [tsconfig.json](../../../tsconfig.json)                                                    |
 | [husky](https://typicode.github.io/husky)                                          | Installs git hooks automatically on `npm install`                                                                                 | [.husky/pre-commit](../../../.husky/pre-commit)                                            |
 | [lint-staged](https://github.com/lint-staged/lint-staged)                          | Scope git-hook commands to only the staged files (keeps hooks fast)                                                               | `package.json` → `"lint-staged"`                                                           |
@@ -208,6 +215,51 @@ The following files are explicitly excluded from linting:
 - Minified vendor assets: `**/*.min.js`, `**/*.min.css`
 - Stale one-shot migration scripts at repo root: `abbreviate-arr.js`, `sort-projects.js` (tracked in Phase 9 backlog for deletion)
 - `src/pages/hub/tools/techpar/index.astro` — `astro-eslint-parser` emits a spurious parsing error at the `<style>` block boundary on this one file. Other large `.astro` files (including the 3778-line `brand.astro`) parse cleanly. Tracked in Phase 9 backlog for investigation.
+
+---
+
+## stylelint configuration notes
+
+[.stylelintrc.json](../../../.stylelintrc.json) uses a **base config** (for plain `.css` files) plus a dedicated **`.astro` override** that enables stylelint to parse `<style>` blocks inside Astro components.
+
+### How .astro scoped-style linting works
+
+The `.astro` override uses two packages:
+
+- **[postcss-html](https://github.com/ota-meshi/postcss-html)** — a PostCSS custom syntax that knows how to skip frontmatter and HTML, pluck out `<style>` contents, and hand them to stylelint for parsing
+- **[stylelint-config-html/astro](https://github.com/ota-meshi/stylelint-config-html)** — a shared stylelint config that registers the Astro-specific file type and wires up defaults
+
+The override block in `.stylelintrc.json`:
+
+```json
+"overrides": [
+  {
+    "files": ["**/*.astro"],
+    "extends": ["stylelint-config-standard", "stylelint-config-html/astro"],
+    "customSyntax": "postcss-html",
+    "rules": { /* same rule set as base config */ }
+  }
+]
+```
+
+The base rules are duplicated inside the `.astro` override because stylelint's `extends` + `overrides` interaction does not inherit rules from the parent config. Keep the two rule sets in sync when editing.
+
+### Running stylelint
+
+```bash
+npm run lint:css           # lint src/**/*.{css,astro}
+npx stylelint "src/**/*.{css,astro}" --fix   # auto-fix what can be fixed
+```
+
+The pre-commit hook runs `stylelint --fix` on staged `.css` and `.astro` files. `.astro` files ALSO pass through `eslint --fix` and `prettier --write` in the same hook.
+
+### `@layer` support
+
+The base and override configs both register `layer` as an allowed at-rule (`at-rule-no-unknown: [true, { "ignoreAtRules": ["import", "layer"] }]`) so CSS cascade layer declarations parse cleanly. This supports the `@layer reset, tokens, utilities, components, theme, overrides;` scheme introduced in Phase 3 commit 0b.
+
+### Latent specimen-override disables in global.css
+
+[src/styles/global.css](../../styles/global.css) contains two `stylelint-disable no-duplicate-selectors` blocks around the brand-page specimen section (search/filter cluster and stats/cta cluster). These specimens deliberately re-declare production component styles. Phase 3 commits 10a/10b/10c will move them into `brand.astro` scoped styles (with a `.brand-specimen` guard), at which point the disable comments should be removed.
 
 ---
 

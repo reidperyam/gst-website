@@ -20,7 +20,7 @@ import {
   deserializeFromParams,
   buildSummaryText,
 } from '../../src/utils/techpar-engine';
-import type { TechParInputs, StageConfig } from '../../src/utils/techpar-engine';
+import type { TechParInputs, StageConfig, Zone } from '../../src/utils/techpar-engine';
 import { STAGES, STAGE_KEYS } from '../../src/data/techpar/stages';
 import { SIGNAL_COPY } from '../../src/data/techpar/signal-copy';
 
@@ -56,13 +56,15 @@ describe('compute() null guards', () => {
 
 describe('compute() basis calculations', () => {
   it('cash basis includes rdCapEx in total', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      rdOpEx: 2_000_000,
-      rdCapEx: 500_000,
-      capexView: 'cash',
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        rdOpEx: 2_000_000,
+        rdCapEx: 500_000,
+        capexView: 'cash',
+      })
+    );
     expect(result).not.toBeNull();
     // total = (50000*12) + 0 + 2000000 + 500000 = 3100000
     expect(result!.totalCash).toBe(3_100_000);
@@ -70,13 +72,15 @@ describe('compute() basis calculations', () => {
   });
 
   it('GAAP basis excludes rdCapEx from total', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      rdOpEx: 2_000_000,
-      rdCapEx: 500_000,
-      capexView: 'gaap',
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        rdOpEx: 2_000_000,
+        rdCapEx: 500_000,
+        capexView: 'gaap',
+      })
+    );
     expect(result).not.toBeNull();
     // totalGAAP = (50000*12) + 0 + 2000000 = 2600000
     expect(result!.totalGAAP).toBe(2_600_000);
@@ -88,63 +92,75 @@ describe('compute() basis calculations', () => {
 
 describe('compute() KPI formulas', () => {
   it('totalTechPct is correct at known input values', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      rdOpEx: 3_000_000,
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        rdOpEx: 3_000_000,
+      })
+    );
     // total = 600000 + 3000000 = 3600000; pct = 36%
     expect(result!.totalTechPct).toBeCloseTo(36, 1);
   });
 
   it('infraHostingPct annualizes monthly correctly', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+      })
+    );
     // (50000 * 12) / 10M * 100 = 6%
     expect(result!.kpis.infraHostingPct).toBeCloseTo(6, 1);
   });
 
   it('blendedInfra includes both hosting and personnel', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      infraPersonnel: 400_000,
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        infraPersonnel: 400_000,
+      })
+    );
     // (600000 + 400000) / 10M * 100 = 10%
     expect(result!.kpis.blendedInfra).toBeCloseTo(10, 1);
   });
 
   it('revenuePerEngineer is null when engFTE is 0', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      engFTE: 0,
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        engFTE: 0,
+      })
+    );
     expect(result!.kpis.revenuePerEngineer).toBeNull();
   });
 
   it('rdCapExOfRD is null when both rdOpEx and rdCapEx are 0', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      rdOpEx: 0,
-      rdCapEx: 0,
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        rdOpEx: 0,
+        rdCapEx: 0,
+      })
+    );
     expect(result!.kpis.rdCapExOfRD).toBeNull();
   });
 
   it('Deep Dive rdOpEx sums engCost + prodCost + toolingCost', () => {
-    const result = compute(makeInputs({
-      arr: 10_000_000,
-      infraHosting: 50_000,
-      mode: 'deepdive',
-      engCost: 1_500_000,
-      prodCost: 500_000,
-      toolingCost: 200_000,
-      rdOpEx: 999_999, // should be ignored in deep dive
-    }));
+    const result = compute(
+      makeInputs({
+        arr: 10_000_000,
+        infraHosting: 50_000,
+        mode: 'deepdive',
+        engCost: 1_500_000,
+        prodCost: 500_000,
+        toolingCost: 200_000,
+        rdOpEx: 999_999, // should be ignored in deep dive
+      })
+    );
     // rdOpEx = 1500000 + 500000 + 200000 = 2200000
     // total = 600000 + 2200000 = 2800000; pct = 28%
     expect(result!.totalTechPct).toBeCloseTo(28, 1);
@@ -339,12 +355,14 @@ describe('R&D CapEx benchmark range', () => {
     });
     const result = compute(inputs);
     expect(result).not.toBeNull();
-    const capExCat = result!.categories.find(c => c.label === 'R&D CapEx');
+    const capExCat = result!.categories.find((c) => c.label === 'R&D CapEx');
     expect(capExCat).toBeDefined();
     expect(capExCat!.benchmarkLo).toBeGreaterThan(0);
     expect(capExCat!.benchmarkHi).toBeGreaterThan(capExCat!.benchmarkLo);
     // Zone is now computed from benchmarks instead of always 'healthy'
-    expect(['underinvest', 'ahead', 'healthy', 'above', 'elevated', 'critical']).toContain(capExCat!.zone);
+    expect(['underinvest', 'ahead', 'healthy', 'above', 'elevated', 'critical']).toContain(
+      capExCat!.zone
+    );
   });
 
   it('should classify R&D CapEx zone properly', () => {
@@ -357,10 +375,12 @@ describe('R&D CapEx benchmark range', () => {
     });
     const result = compute(inputs);
     expect(result).not.toBeNull();
-    const capExCat = result!.categories.find(c => c.label === 'R&D CapEx');
+    const capExCat = result!.categories.find((c) => c.label === 'R&D CapEx');
     if (capExCat) {
       // Zone should be based on actual benchmark comparison, not always 'healthy'
-      expect(['underinvest', 'ahead', 'healthy', 'above', 'elevated', 'critical']).toContain(capExCat.zone);
+      expect(['underinvest', 'ahead', 'healthy', 'above', 'elevated', 'critical']).toContain(
+        capExCat.zone
+      );
     }
   });
 });
@@ -548,7 +568,7 @@ describe('gap.annualExcess', () => {
     });
     const result = compute(inputs)!;
     expect(result.totalTechPct).toBeGreaterThan(40);
-    const expectedExcess = (result.totalTechPct - 40) / 100 * 10_000_000;
+    const expectedExcess = ((result.totalTechPct - 40) / 100) * 10_000_000;
     expect(result.gap.annualExcess).toBeCloseTo(expectedExcess, 0);
   });
 
