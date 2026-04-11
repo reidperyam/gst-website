@@ -21,7 +21,8 @@
     "lint:fix": "eslint . --fix",
     "lint:css": "stylelint \"src/styles/*.css\"",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -70,5 +71,18 @@
   },
   "overrides": {
     "path-to-regexp": "6.3.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,astro,mjs,cjs,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.css": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yaml,yml}": [
+      "prettier --write"
+    ]
   }
 }
