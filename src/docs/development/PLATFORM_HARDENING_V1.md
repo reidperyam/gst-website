@@ -109,11 +109,13 @@ The existing CI pipeline runs tests but has no linting, no type-checking beyond 
                                   ├──> E2E Tests + axe (~17 min)
   Unit & Integration Tests (~14s) ──┘
   ```
+
   - **Job 1: Lint & Type Check** (new) — `astro check`, `npm run lint`, `npm run lint:css`, `npm audit --audit-level=moderate`
   - **Job 2: Unit & Integration Tests** (existing) — unchanged, runs in parallel with Job 1
   - **Job 3: E2E Tests** (existing) — `needs: [lint-and-typecheck, unit-and-integration]`
   - Net impact: ~1 minute added to total wall-clock time; lint failure surfaces in ~30-60s
-- **Fix the `paths-ignore` / required-checks deadlock** — the current workflow uses `paths-ignore` for `**.md`, `src/docs/**`, and `.claude/**`, so docs-only PRs do not trigger any runs. But the master branch ruleset (`Protect master branch`, ID `12237842`) requires `Unit & Integration Tests` and `E2E Tests (Playwright)` to report success. When no run executes, no status is reported, and the PR is permanently blocked in "Expected — Waiting for status to be reported" state. **Observed during PR #78** (docs-only merge), requiring a temporary ruleset disable/re-enable to unblock. **Fix**: replace `paths-ignore` with the *dummy skip job* pattern using `dorny/paths-filter@v3`:
+- **Fix the `paths-ignore` / required-checks deadlock** — the current workflow uses `paths-ignore` for `**.md`, `src/docs/**`, and `.claude/**`, so docs-only PRs do not trigger any runs. But the master branch ruleset (`Protect master branch`, ID `12237842`) requires `Unit & Integration Tests` and `E2E Tests (Playwright)` to report success. When no run executes, no status is reported, and the PR is permanently blocked in "Expected — Waiting for status to be reported" state. **Observed during PR #78** (docs-only merge), requiring a temporary ruleset disable/re-enable to unblock. **Fix**: replace `paths-ignore` with the _dummy skip job_ pattern using `dorny/paths-filter@v3`:
+
   ```yaml
   jobs:
     changes:
@@ -138,7 +140,9 @@ The existing CI pipeline runs tests but has no linting, no type-checking beyond 
         - if: needs.changes.outputs.code != 'true'
           run: echo "Skipped — docs-only change"
   ```
+
   This keeps the required job names visible to branch protection (so they always report a status), while skipping the expensive work for docs-only changes. Same pattern applied to `lint-and-typecheck` and `e2e-tests`. Remove the `paths-ignore` blocks entirely from the `on:` section.
+
 - **500 error page** — create `src/pages/500.astro` (only 404 exists; Radar SSR route has no branded error page)
 
 ### Commits
@@ -177,6 +181,7 @@ feat(error): add branded 500 error page
 ### CSS Strategy
 
 **Follow Astro conventions: scoped `<style>` tags.** The project already uses Astro scoped styles in 23 components and 18 pages. CSS custom properties defined in `variables.css` cascade into scoped `<style>` blocks because Astro uses generated class attributes (not shadow DOM). Benefits over `@import` splitting:
+
 - Automatic dead CSS elimination (Astro only ships styles for rendered components)
 - Co-located discoverability (styles live with their component)
 - Collision safety (scoped by default, explicit via `:global()` when needed)
@@ -316,6 +321,7 @@ The SEO foundation is strong (JSON-LD, canonical URLs, unique meta descriptions 
 - **Evaluate Astro `<Image>` component** — only ~5 `<img>` tags across the site; adopt if straightforward, document decision if skipped
 
 **Not pursuing** (documented decisions):
+
 - **ViewTransitions** — UX enhancement, not SEO; adds complexity for minimal navigation
 - **RSS feed** — Radar sources from Inoreader; would duplicate the source feed
 - **`getStaticPaths`** — no dynamic collections; all routes are static
@@ -351,13 +357,13 @@ Tool analytics coverage is uneven. Diligence Machine has 8 tracked events, ICG h
 
 ### Current Coverage
 
-| Tool | Page View | Interaction Events | Gap |
-|------|-----------|-------------------|-----|
-| Diligence Machine | Yes | 8 (dm_edit, dm_step_advance, dm_generate, dm_copy, dm_print, dm_restart, dm_go_back, calendly) | Adequate |
-| ICG | Yes | 11 (icg_assessment_start/advance/complete, icg_review, icg_start_over, icg_send_email, icg_print, icg_export_json, icg_copy_summary/link, icg_recommendation_toggle) | Adequate |
-| Tech Debt Calculator | Yes | 6 (tdc_slider_change, tdc_deploy_frequency, tdc_advanced_toggle, tdc_currency_change, tdc_export_pdf, tdc_copy_link/summary) | Adequate |
-| TechPar | Yes | **0** | No interaction tracking |
-| Regulatory Map | Yes | **Partial** (quick_zoom + unnamed events at lines 454, 726, 856, 981, 1008, 1258, 1344) | Inconsistent naming |
+| Tool                 | Page View | Interaction Events                                                                                                                                                   | Gap                     |
+| -------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| Diligence Machine    | Yes       | 8 (dm_edit, dm_step_advance, dm_generate, dm_copy, dm_print, dm_restart, dm_go_back, calendly)                                                                       | Adequate                |
+| ICG                  | Yes       | 11 (icg_assessment_start/advance/complete, icg_review, icg_start_over, icg_send_email, icg_print, icg_export_json, icg_copy_summary/link, icg_recommendation_toggle) | Adequate                |
+| Tech Debt Calculator | Yes       | 6 (tdc_slider_change, tdc_deploy_frequency, tdc_advanced_toggle, tdc_currency_change, tdc_export_pdf, tdc_copy_link/summary)                                         | Adequate                |
+| TechPar              | Yes       | **0**                                                                                                                                                                | No interaction tracking |
+| Regulatory Map       | Yes       | **Partial** (quick_zoom + unnamed events at lines 454, 726, 856, 981, 1008, 1258, 1344)                                                                              | Inconsistent naming     |
 
 ### Scope
 
@@ -406,12 +412,12 @@ If a tool calculation fails or the Inoreader API errors, it's completely invisib
 
 Vercel's existing observability stack (Web Analytics, Speed Insights, Runtime Logs) does **not** cover this gap. Here's the breakdown:
 
-| Vercel Product | What it tracks | Covers client-side errors? |
-|----------------|---------------|---------------------------|
-| Web Analytics (already enabled) | Page views, visitor counts | No |
-| Speed Insights (already enabled) | Core Web Vitals (LCP, CLS, FCP, TTFB) | No — performance only |
-| Runtime Logs | Server-side `console.log/error` from SSR routes | Partial — only the Radar SSR route, not anything in the browser |
-| Observability / Log Drains | Pipes server logs to external services | No — same scope as Runtime Logs |
+| Vercel Product                   | What it tracks                                  | Covers client-side errors?                                      |
+| -------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
+| Web Analytics (already enabled)  | Page views, visitor counts                      | No                                                              |
+| Speed Insights (already enabled) | Core Web Vitals (LCP, CLS, FCP, TTFB)           | No — performance only                                           |
+| Runtime Logs                     | Server-side `console.log/error` from SSR routes | Partial — only the Radar SSR route, not anything in the browser |
+| Observability / Log Drains       | Pipes server logs to external services          | No — same scope as Runtime Logs                                 |
 
 **The critical gap**: Vercel monitors the server side. GST is almost entirely static HTML + client-side JavaScript — all tool calculations happen in the user's browser, not on Vercel's servers. When those fail, Vercel never sees them. Sentry fills this gap; the two are complementary, not overlapping.
 
@@ -429,7 +435,7 @@ These steps must be completed **before** the implementation commits can be merge
    - Project name: `gst-website`
    - Alert frequency: "Alert me on every new issue" (can be tuned later)
    - Copy the **DSN** shown on the setup page — it looks like `https://abc123@o456789.ingest.sentry.io/1234567`
-   - The DSN is a public identifier (safe to expose in client-side code); it only grants permission to *send* errors to your project, not read or modify them
+   - The DSN is a public identifier (safe to expose in client-side code); it only grants permission to _send_ errors to your project, not read or modify them
 
 3. **Add the DSN to Vercel environment variables**
    - Go to Vercel dashboard → `gst-website` project → Settings → Environment Variables
@@ -521,6 +527,7 @@ Developer experience gaps (manual sitemap, no content collections, no security h
 - **Documentation restructure** — normalize all 6 doc directories:
 
   **Standard structure** (every directory follows the same pattern):
+
   ```
   src/docs/
   ├── README.md                ← master index linking all directories
@@ -584,6 +591,7 @@ Earlier phases routinely surface small drift items — outdated counts in docs, 
 **Pattern for adding items**: When you find a small, isolated cleanup during Phase 1-8 work that you choose not to fix in scope, add it to the [Backlog](#backlog) below with: a one-sentence description, the file/location, the discovery context (which phase, which commit if relevant), and an effort estimate. Do NOT fix it in the unrelated commit. The whole point of this bucket is to keep phase commits focused.
 
 **Criteria for inclusion**:
+
 - ✅ Small (≤30 lines changed)
 - ✅ Isolated (no cross-cutting impact)
 - ✅ Mechanical (no design decisions required)
@@ -609,6 +617,23 @@ Items are added here as they're discovered. Each entry should link back to the d
    - **Files**: [.claude/CLAUDE.md](../../../.claude/CLAUDE.md), [src/docs/development/PLATFORM_HARDENING_V1.md](./PLATFORM_HARDENING_V1.md), [src/pages/ma-portfolio.astro](../../pages/ma-portfolio.astro) (page meta description)
    - **Effort**: ~5 line changes across 3 files
    - **Context**: Both CLAUDE.md and the Phase 1 problem statement in this doc say "51 projects" but `projects.json` actually contains 57. The page meta description also says "51 M&A advisory and implementation projects." Discovered during Phase 1 Commit 2 (`feat(schemas): add Zod schemas for portfolio data`) when running the pre-flight parse check. Sweep all references to a single accurate count (or replace literal numbers with `${projects.length}` in places where it's templated).
+
+#### Discovered during Phase 2 (CI/CD & Developer Guardrails)
+
+3. **Full-codebase Prettier sweep**
+   - **Scope**: Run `npm run format` (`prettier --write .`) on the entire codebase once and commit the result. Then add `npm run format:check` back into the `lint-and-typecheck` CI job.
+   - **Effort**: ~1 commit, large diff (estimate: ~50-80 files reformatted, pure whitespace/quote changes). Review burden is the main cost; functional risk is near zero.
+   - **Context**: Phase 2 Commit 4 added `.prettierrc.json` but deliberately did NOT run `prettier --write` on the codebase to avoid a large, review-expensive diff with no functional value. Instead, lint-staged formats files incrementally as they're touched via the pre-commit hook (Phase 2 Commit 7). Phase 2 Commit 9 adds `npm audit` + `astro check` + ESLint + stylelint to CI but omits `prettier --check` because it would fail on the legacy files. Once enough of the codebase has been organically formatted (or when a dedicated sweep is convenient), run the full `prettier --write`, commit, and re-enable `format:check` in `.github/workflows/test.yml`.
+
+4. **`techpar/index.astro` astro-eslint-parser failure**
+   - **File**: [src/pages/hub/tools/techpar/index.astro](../../pages/hub/tools/techpar/index.astro)
+   - **Effort**: Investigation only; fix depends on root cause.
+   - **Context**: `astro-eslint-parser` fails on this file with `Parsing error: Declaration or statement expected` at the `<style>` block boundary (line 601). Other large `.astro` files including `brand.astro` (3778 lines) and `hub/tools/diligence-machine/index.astro` parse correctly. Prettier's Astro parser handles the file fine. As a workaround, Phase 2 Commit 5 added the file to the ESLint ignore list. Investigate whether the file contains an unusual construct the parser doesn't handle, or whether this is a bug in `astro-eslint-parser` worth filing upstream. Either fix the file or upgrade/patch the parser, then remove the ignore.
+
+5. **Stale one-shot migration scripts at repo root**
+   - **Files**: [abbreviate-arr.js](../../../abbreviate-arr.js), [sort-projects.js](../../../sort-projects.js)
+   - **Effort**: ~2 line changes (file deletions).
+   - **Context**: Two one-shot data migration scripts left over from 2026-02 commits (`eb18718` and the projects.json move). Neither has imports anywhere in the codebase; the only remaining reference is a historical mention in `src/docs/testing/TEST_STRATEGY.md`. Phase 2 Commit 5 added them to the ESLint ignore list to unblock the baseline. Delete both files and remove the corresponding entries from `eslint.config.mjs` ignores.
 
 <!-- Add new items below as Phase 2-7 work uncovers them. Use the same format. -->
 
@@ -640,18 +665,18 @@ chore(cleanup): correct portfolio project count references (51 → 57)
 
 ## Summary Timeline
 
-| Phase | Scope | Effort | Cumulative |
-|-------|-------|--------|------------|
-| 1 | Data Integrity (Zod, `any` elimination) | 3-4 days | Week 1-2 |
-| 2 | CI/CD & Developer Guardrails | 3 days | Week 2-3 |
-| 3 | Code Structure & CSS Architecture | 5-6 days | Week 3-5 |
-| 4 | Test Coverage & Accessibility | 5 days | Week 5-7 |
-| 5 | SEO Hardening | 1-2 days | Week 7 |
-| 6 | Hub Tool Analytics Standardization | 2 days | Week 7-8 |
-| 7 | Client-Side Error Monitoring | 2 days | Week 8-9 |
-| 8 | Astro Alignment, Security & Docs | 3 days | Week 9-11 |
-| 9 | Miscellaneous Cleanup Bucket | ~1 day | Week 11 |
-| | **Total** | **25-30 days** | **~11 weeks at 50% allocation** |
+| Phase | Scope                                   | Effort         | Cumulative                      |
+| ----- | --------------------------------------- | -------------- | ------------------------------- |
+| 1     | Data Integrity (Zod, `any` elimination) | 3-4 days       | Week 1-2                        |
+| 2     | CI/CD & Developer Guardrails            | 3 days         | Week 2-3                        |
+| 3     | Code Structure & CSS Architecture       | 5-6 days       | Week 3-5                        |
+| 4     | Test Coverage & Accessibility           | 5 days         | Week 5-7                        |
+| 5     | SEO Hardening                           | 1-2 days       | Week 7                          |
+| 6     | Hub Tool Analytics Standardization      | 2 days         | Week 7-8                        |
+| 7     | Client-Side Error Monitoring            | 2 days         | Week 8-9                        |
+| 8     | Astro Alignment, Security & Docs        | 3 days         | Week 9-11                       |
+| 9     | Miscellaneous Cleanup Bucket            | ~1 day         | Week 11                         |
+|       | **Total**                               | **25-30 days** | **~11 weeks at 50% allocation** |
 
 After Phase 9 completes, proceed to [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) for Cookie Consent / GDPR and Email Capture (~4 additional days).
 
@@ -671,7 +696,7 @@ After Phase 9 completes, proceed to [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABL
 
 6. **ESLint flat config** — modern format, works with Astro plugin, avoids deprecated `.eslintrc`
 
-7. **Tool analytics follow existing naming convention** — 3 of 5 tools already use `<tool_code>_<interaction>` pattern (dm_, tdc_, icg_); standardize the remaining 2 (tp_, rm_) rather than introducing a new pattern
+7. **Tool analytics follow existing naming convention** — 3 of 5 tools already use `<tool_code>_<interaction>` pattern (dm*, tdc*, icg*); standardize the remaining 2 (tp*, rm\_) rather than introducing a new pattern
 
 8. **Sentry for error monitoring, not LogRocket/FullStory** — error tracking only, no session replay; privacy-first config (no PII) allows running pre-consent; minimizes bundle size and privacy surface; `@sentry/astro` provides first-class Astro integration
 
@@ -688,7 +713,7 @@ Each phase should produce **atomic commits** — one logical change per commit, 
 - **Format**: `type(scope): description` per [Conventional Commits](https://www.conventionalcommits.org/)
 - **Types**: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `ci`, `perf`
 - **Scope**: component or area affected (e.g., `schemas`, `css`, `analytics`, `seo`, `monitoring`, `a11y`)
-- **Body**: explain *why*, not *what* (the diff shows what)
+- **Body**: explain _why_, not _what_ (the diff shows what)
 
 ### Principles
 

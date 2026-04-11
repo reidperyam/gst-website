@@ -23,6 +23,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Astro type check
+        run: npx astro check
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Stylelint
+        run: npm run lint:css
+
+      # Prettier is enforced per-file via the husky pre-commit hook
+      # (lint-staged runs `prettier --write` on staged files). A full
+      # `prettier --check .` pass is deferred until the legacy codebase
+      # has been progressively formatted — see PLATFORM_HARDENING_V1.md
+      # Phase 9 backlog for the planned catch-up sweep.
+
+      - name: npm audit (production dependencies only)
+        run: npm audit --audit-level=moderate --omit=dev
+
   unit-and-integration:
     name: Unit & Integration Tests
     runs-on: ubuntu-latest
@@ -64,7 +100,7 @@ jobs:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: unit-and-integration
+    needs: [lint-and-typecheck, unit-and-integration]
 
     steps:
       - name: Checkout code
