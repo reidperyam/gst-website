@@ -9,115 +9,116 @@ import PalettePanel from '../components/brand/PalettePanel.astro';
 import '../styles/global.css';
 
 interface Props {
-    title: string;
-    description?: string;
-    showPalettePanel?: boolean;
-    ogTitle?: string;
-    ogDescription?: string;
-    ogImage?: string;
-    ogUrl?: string;
-    // Enhanced social media meta tags
-    ogImageAlt?: string;
-    ogImageWidth?: number;
-    ogImageHeight?: number;
-    twitterSite?: string;
-    faqItems?: Array<{ question: string; answer: string }>;
+  title: string;
+  description?: string;
+  showPalettePanel?: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogUrl?: string;
+  // Enhanced social media meta tags
+  ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  twitterSite?: string;
+  faqItems?: Array<{ question: string; answer: string }>;
 }
 
 const isProduction = import.meta.env.PROD;
 const {
-    title,
-    description = 'Global Strategic Technologies - Technology Advisory & Execution',
-    ogTitle,
-    ogDescription,
-    ogImage,
-    ogUrl,
-    ogImageAlt,
-    ogImageWidth,
-    ogImageHeight,
-    twitterSite,
-    faqItems,
-    showPalettePanel,
+  title,
+  description = 'Global Strategic Technologies - Technology Advisory & Execution',
+  ogTitle,
+  ogDescription,
+  ogImage,
+  ogUrl,
+  ogImageAlt,
+  ogImageWidth,
+  ogImageHeight,
+  twitterSite,
+  faqItems,
+  showPalettePanel,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const isHubSubPage = currentPath.startsWith('/hub/') && currentPath !== '/hub/';
 const isHomepage = currentPath === '/' || currentPath === '';
-const is404 = currentPath === '/404' || currentPath === '/404/';
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-palette-always={showPalettePanel || undefined}>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content={description} />
-        <title>{title}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
 
-        <!-- SEO Component (JSON-LD, Open Graph, Meta Tags) -->
-        <SEO
-            title={title}
-            ogTitle={ogTitle}
-            ogDescription={ogDescription}
-            ogImage={ogImage}
-            ogUrl={ogUrl}
-            ogImageAlt={ogImageAlt}
-            ogImageWidth={ogImageWidth}
-            ogImageHeight={ogImageHeight}
-            twitterSite={twitterSite}
-            faqItems={faqItems}
-        />
+    <!-- SEO Component (JSON-LD, Open Graph, Meta Tags) -->
+    <SEO
+      title={title}
+      ogTitle={ogTitle}
+      ogDescription={ogDescription}
+      ogImage={ogImage}
+      ogUrl={ogUrl}
+      ogImageAlt={ogImageAlt}
+      ogImageWidth={ogImageWidth}
+      ogImageHeight={ogImageHeight}
+      twitterSite={twitterSite}
+      faqItems={faqItems}
+    />
 
-        <!-- Favicons and Icons -->
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+    <!-- Favicons and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
-        <!-- Theme Colors -->
-        <meta name="theme-color" content="#05cd99" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#05cd99" media="(prefers-color-scheme: dark)" />
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#05cd99" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#05cd99" media="(prefers-color-scheme: dark)" />
 
-        <!-- Preconnect to Google Analytics to reduce critical path latency -->
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    <!-- Preconnect to Google Analytics to reduce critical path latency -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-        <!-- Initialize theme synchronously to prevent FOUC and race conditions in E2E tests -->
-        <script is:inline>
-            try {
-                const theme = localStorage.getItem('theme');
-                if (theme === 'dark') {
-                    document.documentElement.classList.add('dark-theme');
-                }
-            } catch {
-                // localStorage not available (e.g., private browsing)
-                // Default to light theme silently
-            }
-            // Initialize palette synchronously to prevent color flash
-            try {
-                const p = localStorage.getItem('palette');
-                if (p && p !== '0') document.documentElement.classList.add('palette-' + p);
-                if (localStorage.getItem('palette-popped-out') === 'true')
-                    document.documentElement.classList.add('palette-popped-out');
-            } catch {
-                // localStorage not available — palette init silently skipped
-            }
-        </script>
+    <!-- Initialize theme synchronously to prevent FOUC and race conditions in E2E tests -->
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark-theme');
+        }
+      } catch {
+        // localStorage not available (e.g., private browsing)
+        // Default to light theme silently
+      }
+      // Initialize palette synchronously to prevent color flash
+      try {
+        const p = localStorage.getItem('palette');
+        if (p && p !== '0') document.documentElement.classList.add('palette-' + p);
+        if (localStorage.getItem('palette-popped-out') === 'true')
+          document.documentElement.classList.add('palette-popped-out');
+      } catch {
+        // localStorage not available — palette init silently skipped
+      }
+    </script>
 
-        <GoogleAnalytics />
-    </head>
-    <body>
-        <a href="#main-content" class="skip-nav">Skip to main content</a>
-        <Header currentPath={currentPath} staticHeader={isHubSubPage} />
-        <main id="main-content" role="main">
-            {!isHomepage && !is404 && (
-                <div class="container">
-                    <Breadcrumb />
-                </div>
-            )}
-            <slot />
-        </main>
-        <Footer />
-        <PalettePanel />
-        {isProduction && <SpeedInsights />}
-    </body>
+    <GoogleAnalytics />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+    <Header currentPath={currentPath} staticHeader={isHubSubPage} />
+    <main id="main-content" role="main">
+      {
+        !isHomepage && (
+          <div class="container">
+            <Breadcrumb />
+          </div>
+        )
+      }
+      <slot />
+    </main>
+    <Footer />
+    <PalettePanel />
+    {isProduction && <SpeedInsights />}
+  </body>
 </html>
