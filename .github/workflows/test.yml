@@ -6,48 +6,69 @@ permissions:
 on:
   push:
     branches: [master, dev]
-    paths-ignore:
-      - '**.md'
-      - 'src/docs/**'
-      - '.claude/**'
   pull_request:
     branches: [master]
     types: [opened, synchronize, reopened]
-    paths-ignore:
-      - '**.md'
-      - 'src/docs/**'
-      - '.claude/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
+  # ─────────────────────────────────────────────────────────────────────
+  # Gate job: detects whether the PR/push contains any code-relevant
+  # changes. Docs-only changes (**.md, src/docs/**, .claude/**) short-
+  # circuit the expensive work but each required check still reports a
+  # success status — this is the "dummy skip job" pattern that unblocks
+  # the paths-ignore / branch-protection deadlock observed in PR #78.
+  # ─────────────────────────────────────────────────────────────────────
+  changes:
+    name: Detect Code Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - '!(**.md|src/docs/**|.claude/**)'
+
   lint-and-typecheck:
     name: Lint & Type Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    needs: changes
 
     steps:
       - name: Checkout code
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: npm ci
 
       - name: Astro type check
+        if: needs.changes.outputs.code == 'true'
         run: npx astro check
 
       - name: ESLint
+        if: needs.changes.outputs.code == 'true'
         run: npm run lint
 
       - name: Stylelint
+        if: needs.changes.outputs.code == 'true'
         run: npm run lint:css
 
       # Prettier is enforced per-file via the husky pre-commit hook
@@ -57,27 +78,37 @@ jobs:
       # Phase 9 backlog for the planned catch-up sweep.
 
       - name: npm audit (production dependencies only)
+        if: needs.changes.outputs.code == 'true'
         run: npm audit --audit-level=moderate --omit=dev
+
+      - name: Skipped (docs-only change)
+        if: needs.changes.outputs.code != 'true'
+        run: echo "Skipped — no code changes in this push/PR."
 
   unit-and-integration:
     name: Unit & Integration Tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    needs: changes
 
     steps:
       - name: Checkout code
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: npm ci
 
       - name: Run tests with coverage
+        if: needs.changes.outputs.code == 'true'
         run: |
           npm run test:coverage 2>&1 | tee coverage-output.txt
           SUMMARY=$(grep "^All files" coverage-output.txt || echo "")
@@ -96,30 +127,39 @@ jobs:
             echo "| Lines | ${LINES}% |" >> $GITHUB_STEP_SUMMARY
           fi
 
+      - name: Skipped (docs-only change)
+        if: needs.changes.outputs.code != 'true'
+        run: echo "Skipped — no code changes in this push/PR."
+
   e2e-tests:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: [lint-and-typecheck, unit-and-integration]
+    needs: [changes, lint-and-typecheck, unit-and-integration]
 
     steps:
       - name: Checkout code
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: npm ci
 
       - name: Get Playwright version
+        if: needs.changes.outputs.code == 'true'
         id: playwright-version
         run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
       - name: Cache Playwright browsers
+        if: needs.changes.outputs.code == 'true'
         uses: actions/cache@v5
         id: playwright-cache
         with:
@@ -127,23 +167,29 @@ jobs:
           key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
 
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        if: needs.changes.outputs.code == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
       - name: Install Playwright deps (cached browsers)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        if: needs.changes.outputs.code == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps
 
       - name: Build application
+        if: needs.changes.outputs.code == 'true'
         run: npm run build
 
       - name: Run E2E tests
+        if: needs.changes.outputs.code == 'true'
         run: npm run test:e2e
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
-        if: always()
+        if: always() && needs.changes.outputs.code == 'true'
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+      - name: Skipped (docs-only change)
+        if: needs.changes.outputs.code != 'true'
+        run: echo "Skipped — no code changes in this push/PR."
