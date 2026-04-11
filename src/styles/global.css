@@ -3,6 +3,37 @@
 @import './interactions.css';
 @import './palettes.css';
 
+/* ─── CSS Cascade Layer Order ──────────────────────────────────────────────
+ *
+ * Layer precedence (lowest → highest), per CSS Cascading Level 5:
+ *
+ *   reset      — normalization, box-sizing, skip-nav, body base
+ *   tokens     — design tokens (variables.css) — intentionally unlayered
+ *                today; custom properties cascade via inheritance, not
+ *                selector specificity, so layer membership has no effect
+ *                on how they resolve for component consumers
+ *   utilities  — typography.css, interactions.css utility classes
+ *   components — component-specific global rules (bulk of global.css)
+ *   theme      — html.dark-theme overrides, palette class overrides
+ *   overrides  — escape hatch for late-binding overrides (empty today)
+ *
+ * IMPORTANT: Unlayered rules beat ALL layered rules. Astro scoped <style>
+ * blocks inside .astro files are unlayered by design — this is correct
+ * behavior: scoped component styles should win over global defaults.
+ * They still respect palette/dark-theme because those work via CSS
+ * custom property redefinition, which cascades via inheritance, not
+ * via rule specificity.
+ *
+ * Content wrapping is progressive. Phase 3 commits 5-10c move sections
+ * of global.css into their appropriate layers as part of the scoped-
+ * styles migration. The declaration below reserves the layer names so
+ * subsequent commits can add `@layer <name> { ... }` wrappers without
+ * having to introduce layer ordering at that point.
+ *
+ * See src/docs/development/PLATFORM_HARDENING_V1.md Phase 3 for rationale.
+ */
+@layer reset, tokens, utilities, components, theme, overrides;
+
 * {
   margin: 0;
   padding: 0;
