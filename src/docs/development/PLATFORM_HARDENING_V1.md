@@ -104,6 +104,7 @@ The existing CI pipeline runs tests but has no linting, no type-checking beyond 
   - Configure lint-staged for `.ts`, `.astro`, `.css` files
   - Wire existing `stylelint` into hooks
 - **Restructure CI pipeline** — 3-job parallel-then-gate structure in `.github/workflows/test.yml`:
+
   ```
   Lint & Type Check (~30-60s)  ──┐
                                   ├──> E2E Tests + axe (~17 min)
@@ -114,6 +115,7 @@ The existing CI pipeline runs tests but has no linting, no type-checking beyond 
   - **Job 2: Unit & Integration Tests** (existing) — unchanged, runs in parallel with Job 1
   - **Job 3: E2E Tests** (existing) — `needs: [lint-and-typecheck, unit-and-integration]`
   - Net impact: ~1 minute added to total wall-clock time; lint failure surfaces in ~30-60s
+
 - **Fix the `paths-ignore` / required-checks deadlock** — the current workflow uses `paths-ignore` for `**.md`, `src/docs/**`, and `.claude/**`, so docs-only PRs do not trigger any runs. But the master branch ruleset (`Protect master branch`, ID `12237842`) requires `Unit & Integration Tests` and `E2E Tests (Playwright)` to report success. When no run executes, no status is reported, and the PR is permanently blocked in "Expected — Waiting for status to be reported" state. **Observed during PR #78** (docs-only merge), requiring a temporary ruleset disable/re-enable to unblock. **Fix**: replace `paths-ignore` with the _dummy skip job_ pattern using `dorny/paths-filter@v3`:
 
   ```yaml
@@ -164,6 +166,68 @@ feat(error): add branded 500 error page
 - 500 page renders correctly in both themes
 - Total pipeline wall-clock time increases by ≤1 minute
 - Docs-only PRs merge cleanly without bypassing branch protection (verified by creating a test docs-only PR and confirming required checks report success within ~5s)
+
+### Post-Merge Manual Steps
+
+**⚠️ REQUIRED — do not skip.** These steps cannot be automated via commits because they depend on GitHub API state that only exists after merge to master.
+
+#### 1. Update branch protection ruleset to require `Lint & Type Check`
+
+**Why this is manual**: The `Lint & Type Check` status check didn't exist on `master` before Phase 2's CI restructure merged. Adding it to the required-checks list _before_ merge would block every PR waiting for a check GitHub doesn't yet recognize. Adding it _during_ merge would race against the first workflow run. The only safe ordering is: **merge the Phase 2 PR first, wait for at least one successful run of the new job on `master`, then update the ruleset.**
+
+**When to execute**: After the first successful run of `Lint & Type Check` on `master` (typically within minutes of the Phase 2 PR merging). Check the Actions tab and confirm the job appears and succeeds.
+
+**How to execute** (via `gh` CLI):
+
+```bash
+# 1. Fetch the current ruleset JSON and write it to a file
+gh api /repos/reidperyam/gst-website/rulesets/12237842 > /tmp/ruleset.json
+
+# 2. Edit /tmp/ruleset.json and add this entry to the
+#    rules[].parameters.required_status_checks array inside the
+#    `required_status_checks` rule object (the same array that already
+#    contains "E2E Tests (Playwright)" and "Unit & Integration Tests"):
+#
+#    {
+#      "context": "Lint & Type Check",
+#      "integration_id": 15368
+#    }
+#
+#    integration_id 15368 is GitHub Actions — use the same value as the
+#    existing entries in the array.
+
+# 3. PATCH the ruleset with the updated JSON
+gh api --method PATCH /repos/reidperyam/gst-website/rulesets/12237842 \
+  --input /tmp/ruleset.json
+```
+
+**Verification** (blocking — do not consider Phase 2 complete without this):
+
+1. **Create a test docs-only PR**: touch any file under `src/docs/**` (e.g., a trailing whitespace change to a README), commit, push, open a PR to `master`.
+2. **Confirm all three required checks appear** on the PR within ~10 seconds: `Lint & Type Check`, `Unit & Integration Tests`, `E2E Tests (Playwright)`.
+3. **Confirm all three report success** (not "Expected — Waiting for status to be reported"). This proves both the ruleset update AND the skip-job pattern from Commit 10 work together.
+4. **Merge or close the test PR**.
+
+**If verification fails**: The ruleset update and the skip-job pattern are independent fixes. If checks hang in "Expected — Waiting" state, the skip-job pattern isn't working (investigate `dorny/paths-filter@v3` output). If checks never appear on the PR, the ruleset update didn't take effect (re-run the PATCH call, then re-check the ruleset via `gh api /repos/reidperyam/gst-website/rulesets/12237842`).
+
+#### 2. Verify `Content config not loaded` warning is silenced
+
+**Why this is manual**: This is a dev-server-only warning (not a CI check), so it has no automated test. Astro 6 requires `src/content.config.ts` even when no collections are defined. Phase 2 creates a minimal empty file, but the warning only disappears on a fresh `astro dev` startup — no commit can verify it.
+
+**How to verify**:
+
+```bash
+# Kill any running dev server, then restart
+npm run dev
+```
+
+Confirm the startup output does NOT include:
+
+```
+[WARN] [content] Content config not loaded
+```
+
+If it still appears, confirm `src/content.config.ts` exists and exports `export const collections = {}`. This file will be populated by Phase 8's regulatory-map content collection migration.
 
 ---
 
