@@ -276,6 +276,9 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
   import { provinceCodeToName } from '../../../../utils/canadianProvinceMap';
   import { trackEvent } from '../../../../utils/analytics';
 
+  // Analytics: fire rm_start once per page load on first interaction
+  let rmStartFired = false;
+
   // --- Fetch geodata and regulation data in parallel ---
   const [regionMap, topology, usTopo, caTopo] = await Promise.all([
     fetch('/data/regulations.json').then((r) => r.json()) as Promise<Record<string, Regulation[]>>,
@@ -565,8 +568,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     svg.transition().duration(500).call(zoomBehavior.transform, transform);
 
     trackEvent({
-      event: 'quick_zoom',
-      category: 'engagement',
+      event: 'rm_region_zoom',
+      category: 'tool',
       region: region,
       page: 'regulatory-map',
     });
@@ -845,6 +848,15 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     const count = regs.length;
     panelRegCount.textContent = `${count} regulation${count !== 1 ? 's' : ''}`;
     panelRegulations.innerHTML = regs.map(renderRegulationCard).join('');
+    if (count > 0) {
+      trackEvent({
+        event: 'rm_complete',
+        category: 'tool',
+        region_id: regionId,
+        regulation_count: count,
+        page: 'regulatory-map',
+      });
+    }
   }
 
   document.addEventListener('regionSelected', ((event: CustomEvent<RegionSelectedDetail>) => {
@@ -864,9 +876,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     if (isMobile()) openBottomSheet();
 
     const totalRegs = regionMap[regionId]?.length ?? 0;
+    if (!rmStartFired) {
+      trackEvent({ event: 'rm_start', category: 'tool', page: 'regulatory-map' });
+      rmStartFired = true;
+    }
     trackEvent({
-      event: 'region_selected',
-      category: 'engagement',
+      event: 'rm_region_select',
+      category: 'tool',
       region_id: regionId,
       region_name: countryName,
       regulation_count: totalRegs,
@@ -1001,8 +1017,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     renderTimeline();
 
     trackEvent({
-      event: 'regulation_filter_applied',
-      category: 'engagement',
+      event: 'rm_filter_change',
+      category: 'tool',
       filter_value: activeCategory,
       page: 'regulatory-map',
     });
@@ -1131,8 +1147,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     document.getElementById('searchResults')!.hidden = true;
 
     trackEvent({
-      event: 'regulation_search_result_clicked',
-      category: 'engagement',
+      event: 'rm_search_result_click',
+      category: 'tool',
       regulation_id: regId,
       regulation_name: reg.name,
       search_term: activeSearchTerm,
@@ -1158,8 +1174,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
       if (query.trim()) {
         trackEvent({
-          event: 'regulation_search',
-          category: 'engagement',
+          event: 'rm_search',
+          category: 'tool',
           search_term: query,
           result_count: searchResults.length,
           page: 'regulatory-map',
@@ -1424,8 +1440,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     trackEvent({
-      event: 'timeline_interaction',
-      category: 'engagement',
+      event: 'rm_timeline_click',
+      category: 'tool',
       regulation_id: regId,
       regulation_name: reg.name,
       page: 'regulatory-map',
@@ -1524,8 +1540,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       const details = item as HTMLDetailsElement;
       const question = details.querySelector('.brutal-faq__question')?.textContent?.trim() || '';
       trackEvent({
-        event: 'faq_interaction',
-        category: 'engagement',
+        event: 'rm_faq_toggle',
+        category: 'tool',
         question,
         action: details.open ? 'open' : 'close',
         page: 'regulatory-map',
