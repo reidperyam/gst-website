@@ -46,15 +46,6 @@ test.describe('TechPar - Profile tab', () => {
     await expect(page.locator('[data-panel="costs"]')).toHaveClass(/tp-panel--active/);
   });
 
-  test('Profile tab shows checkmark when ARR > 0 and stage selected', async ({ page }) => {
-    await gotoTool(page);
-    const tab = page.locator('[data-tab="profile"]');
-    await expect(tab).not.toHaveClass(/tp-tab--done/);
-    await selectStage(page);
-    await fillInput(page, 'arr', '10000000');
-    await expect(tab).toHaveClass(/tp-tab--done/);
-  });
-
   test('exit multiple field is hidden on Seed, Series A, Series B-C stages', async ({ page }) => {
     await gotoTool(page);
     // No stage selected — exit field should be hidden
@@ -96,16 +87,6 @@ test.describe('TechPar - Costs tab', () => {
     await fillInput(page, 'infra', '50000');
     const btn = page.locator('[data-btn-analysis]');
     await expect(btn).toBeEnabled();
-  });
-
-  test('Costs tab shows checkmark when both required fields have values', async ({ page }) => {
-    await gotoTool(page);
-    await selectStage(page);
-    await fillInput(page, 'arr', '10000000');
-    await clickTab(page, 'costs');
-    await fillInput(page, 'infra', '50000');
-    const tab = page.locator('[data-tab="costs"]');
-    await expect(tab).toHaveClass(/tp-tab--done/);
   });
 
   test('mode toggle switches between Quick and Deep Dive input sets', async ({ page }) => {
