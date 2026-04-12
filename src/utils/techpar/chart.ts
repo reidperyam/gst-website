@@ -17,12 +17,20 @@ import { SIGNAL_COPY } from '../../data/techpar/signal-copy';
 import { INDUSTRY_NOTES } from '../../data/techpar/industry-notes';
 import { RECOMMENDATIONS } from '../../data/techpar/recommendations';
 import { tp } from './state';
+import { trackEvent } from '../analytics';
 import { g, $$, getInput, getStyle, fmtD, buildInputs, renderScenarios } from './dom';
 
 Chart.register(...registerables);
 
 // ─── Analysis render ──────────────────────────────────────
 export function renderAnalysis(r: TechParResult, updateAll: () => void) {
+  trackEvent({
+    event: 'tp_complete',
+    category: 'tool',
+    zone: r.zone,
+    tech_pct: String(r.totalTechPct.toFixed(1)),
+    page: 'techpar',
+  });
   const zoneCol = getStyle(zoneColorVar(r.zone));
   const zoneBg = getStyle(zoneBgVar(r.zone));
   const s = r.stageConfig;

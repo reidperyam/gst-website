@@ -8,6 +8,7 @@
  */
 import { compute } from './techpar-engine';
 import type { Industry } from '../data/techpar/industry-notes';
+import { trackEvent } from './analytics';
 import { tp, MAX_HISTORICAL, VISITED_KEY } from './techpar/state';
 import {
   $$,
@@ -42,6 +43,9 @@ import { renderAnalysis, renderTrajectory } from './techpar/chart';
 // import them (circular). We pass them as callbacks.
 
 const goTabBound = (tab: string) => goTab(tab, { runCompute, renderTrajectory });
+
+// Analytics: fire tp_start once per page load on first stage selection
+let tpStartFired = false;
 
 // ─── Main update loop ─────────────────────────────────────
 function updateAll() {
@@ -156,7 +160,9 @@ function updateAll() {
 // Tab buttons
 $$('.tp-tab').forEach((btn) => {
   btn.addEventListener('click', () => {
-    goTabBound((btn as HTMLElement).dataset.tab || 'profile');
+    const tab = (btn as HTMLElement).dataset.tab || 'profile';
+    trackEvent({ event: 'tp_tab_change', category: 'tool', tab, page: 'techpar' });
+    goTabBound(tab);
   });
 });
 
@@ -169,13 +175,14 @@ document.querySelectorAll('[data-action]').forEach((btn) => {
     else if (action === 'go-analysis') goTabBound('analysis');
     else if (action === 'go-trajectory') goTabBound('trajectory');
     else if (action === 'reset')
-      handleReset(btn as HTMLButtonElement, () =>
+      handleReset(btn as HTMLButtonElement, () => {
+        trackEvent({ event: 'tp_reset', category: 'tool', page: 'techpar' });
         resetAll({
           goTab: goTabBound,
           updateAll,
           renderHistRows: () => renderHistRows(updateAll),
-        })
-      );
+        });
+      });
     else if (action === 'copy-link') copyLink(btn as HTMLButtonElement);
     else if (action === 'copy-summary') copySummary(btn as HTMLButtonElement);
     else if (action === 'export-pdf') exportPdf({ runCompute, renderTrajectory });
@@ -191,6 +198,11 @@ $$('.tp-stage-card').forEach((card) => {
     $$('.tp-stage-card').forEach((c) => c.classList.remove('tp-stage-card--active'));
     card.classList.add('tp-stage-card--active');
     tp.stageKey = (card as HTMLElement).dataset.stage || 'series_bc';
+    trackEvent({ event: 'tp_stage_select', category: 'tool', stage: tp.stageKey, page: 'techpar' });
+    if (!tpStartFired) {
+      trackEvent({ event: 'tp_start', category: 'tool', page: 'techpar' });
+      tpStartFired = true;
+    }
     if (tp.trajChart) {
       tp.trajChart.destroy();
       tp.trajChart = null;
@@ -229,6 +241,7 @@ $$('[data-mode]').forEach((btn) => {
     $$('[data-mode]').forEach((b) => b.classList.remove('tp-seg__btn--active'));
     btn.classList.add('tp-seg__btn--active');
     tp.mode = ((btn as HTMLElement).dataset.mode || 'quick') as 'quick' | 'deepdive';
+    trackEvent({ event: 'tp_mode_change', category: 'tool', mode: tp.mode, page: 'techpar' });
     const rdQuick = g('rd-quick');
     const rdDeep = g('rd-deep');
     if (rdQuick) rdQuick.style.display = tp.mode === 'quick' ? 'block' : 'none';

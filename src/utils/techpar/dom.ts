@@ -8,6 +8,7 @@ import { STAGES } from '../../data/techpar/stages';
 import { tp, MAX_HISTORICAL, MAX_SCENARIOS } from './state';
 import { compute } from '../techpar-engine';
 import { copyWithFeedback } from '../copy-feedback';
+import { trackEvent } from '../analytics';
 import { serializeToParams, deserializeFromParams, buildSummaryText } from '../techpar-engine';
 import type { Industry } from '../../data/techpar/industry-notes';
 import { LS_KEY } from './state';
@@ -49,11 +50,13 @@ export function goTab(
 
 // ─── Copy link ────────────────────────────────────────────
 export function copyLink(btn: HTMLButtonElement) {
+  trackEvent({ event: 'tp_copy_link', category: 'tool', page: 'techpar' });
   copyWithFeedback(window.location.href, btn, { copiedClass: 'tp-btn-share--copied' });
 }
 
 // ─── Copy summary ─────────────────────────────────────────
 export function copySummary(btn: HTMLButtonElement) {
+  trackEvent({ event: 'tp_copy_summary', category: 'tool', page: 'techpar' });
   const inputs = buildInputs();
   if (!inputs) return;
   const result = compute(inputs);
@@ -73,6 +76,7 @@ export function exportPdf(deps: {
   runCompute: () => TechParResult | null;
   renderTrajectory: (r: TechParResult) => void;
 }) {
+  trackEvent({ event: 'tp_export_pdf', category: 'tool', page: 'techpar' });
   const result = deps.runCompute();
   const trajPanel = document.querySelector('[data-panel="trajectory"]') as HTMLElement | null;
   const trajContent = g('traj-content');
@@ -96,6 +100,7 @@ export function setBaseline(updateAll: () => void) {
   if (!inputs) return;
   const result = compute(inputs);
   if (!result) return;
+  trackEvent({ event: 'tp_baseline_set', category: 'tool', page: 'techpar' });
   tp.baselineResult = result;
   tp.baselineInputs = inputs;
   const barLabel = document.querySelector('.tp-baseline-bar__label');
@@ -123,6 +128,7 @@ export function saveScenario(updateAll: () => void) {
   if (!inputs) return;
   const result = compute(inputs);
   if (!result) return;
+  trackEvent({ event: 'tp_scenario_save', category: 'tool', page: 'techpar' });
   if (tp.scenarios.length >= MAX_SCENARIOS) tp.scenarios.shift();
   tp.scenarios.push({ name: `Scenario ${tp.scenarios.length + 1}`, inputs, result });
   updateAll();
