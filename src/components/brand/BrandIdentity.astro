@@ -1,0 +1,46 @@
+---
+import DeltaIcon from '../DeltaIcon.astro';
+import CompositeLogo from '../CompositeLogo.astro';
+---
+
+<section class="brand-section" id="identity">
+  <div class="container">
+    <h2 class="brutal-heading-md brand-section__title">Brand Identity</h2>
+
+    <div class="brand-identity-grid">
+      <div class="brand-identity-logos">
+        <div class="brand-logo-item">
+          <DeltaIcon size={80} class="brand-logo-delta" />
+          <span class="brutal-text-small">Delta Icon</span>
+        </div>
+        <div class="brand-logo-item">
+          <CompositeLogo size={120} class="brand-logo-composite" />
+          <span class="brutal-text-small">Composite Logo</span>
+        </div>
+        <div class="brand-logo-item">
+          <img src="/images/icon.svg" alt="GST composite logo (static)" width="120" height="120" />
+          <span class="brutal-text-small">Static (PWA/OG)</span>
+        </div>
+      </div>
+
+      <div class="brand-identity-info">
+        <h3 class="brutal-heading-sm" id="brand-voice">Brand Voice</h3>
+        <p class="brutal-text-base">
+          Authoritative, precise, technical. No jargon for jargon's sake — clarity over complexity.
+        </p>
+
+        <h3 class="brutal-heading-sm" id="wordmark">Wordmark</h3>
+        <p class="brutal-text-base">
+          <strong>Global Strategic Technologies</strong> — formal contexts, first mention, legal.
+          <strong>GST</strong> — shorthand, UI labels, repeat references.
+        </p>
+
+        <h3 class="brutal-heading-sm" id="logo-usage">Logo Usage</h3>
+        <p class="brutal-text-base">
+          Single teal-stroke delta variant. Works on both light and dark backgrounds without
+          modification. Minimum clear space: the icon's own width on all sides.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,444 @@
+---
+
+---
+
+<!-- Section 7: Components -->
+<section class="brand-section" id="components">
+  <div class="container">
+    <h2 class="brutal-heading-md brand-section__title">Components</h2>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-hub-buttons">Hub Buttons</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <button class="brutal-btn brutal-btn--primary">Primary</button>
+        <code class="brand-code">.brutal-btn--primary</code>
+      </div>
+      <div class="brand-component-item">
+        <button class="brutal-btn brutal-btn--secondary">Secondary</button>
+        <code class="brand-code">.brutal-btn--secondary</code>
+      </div>
+      <div class="brand-component-item">
+        <button class="brutal-btn brutal-btn--primary" disabled>Disabled</button>
+        <code class="brand-code">:disabled</code>
+      </div>
+    </div>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <button class="brutal-btn brutal-btn--primary brutal-btn--full">Full Width</button>
+        <code class="brand-code">.brutal-btn--full</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-cta-buttons">CTA Buttons</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <a class="cta-button primary" href="#components">CTA Primary</a>
+        <code class="brand-code">.cta-button.primary</code>
+      </div>
+      <div class="brand-component-item">
+        <a class="cta-button secondary" href="#components">CTA Secondary</a>
+        <code class="brand-code">.cta-button.secondary</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-tool-patterns">Tool Patterns</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tool-shell__authority">Authority Line Specimen</div>
+        <code class="brand-code">.brutal-tool-shell__authority</code>
+      </div>
+    </div>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tool-shell__section-label">Section Label Specimen</div>
+        <code class="brand-code">.brutal-tool-shell__section-label</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-tool-shell">Tool Shell</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tool-shell">
+          <div class="brutal-tool-shell__content">
+            <div class="brutal-tool-shell__authority">Tool Authority Line</div>
+            <div class="brutal-tool-shell__section-label">Section Label</div>
+            <p class="brutal-text-small">
+              Default shell — <code class="brand-code">700px</code> max-width
+            </p>
+          </div>
+        </div>
+        <code class="brand-code"
+          >.tool-shell (brutalist) — no radius, transparent bg, top-border accent</code
+        >
+      </div>
+    </div>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tool-shell brutal-tool-shell--narrow">
+          <div class="brutal-tool-shell__content">
+            <span class="brutal-text-tiny">narrow — 660px</span>
+          </div>
+        </div>
+        <code class="brand-code">.brutal-tool-shell--narrow</code>
+      </div>
+    </div>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tool-shell brutal-tool-shell--wide">
+          <div class="brutal-tool-shell__content">
+            <span class="brutal-text-tiny">wide — 760px</span>
+          </div>
+        </div>
+        <code class="brand-code">--wide</code>
+      </div>
+    </div>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tool-shell brutal-tool-shell--document">
+          <div class="brutal-tool-shell__content">
+            <span class="brutal-text-tiny">document — 800px</span>
+          </div>
+        </div>
+        <code class="brand-code">--document</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-interactions">Interaction States</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-interactive" tabindex="0">Hover / Focus</div>
+        <code class="brand-code">.interactive</code>
+      </div>
+      <div class="brand-component-item">
+        <a class="brutal-link-interactive" href="#components">Link Interactive</a>
+        <code class="brand-code">.link-interactive</code>
+      </div>
+      <div class="brand-component-item">
+        <div class="brutal-focus-outline">Focus Outline</div>
+        <code class="brand-code">.focus-outline</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-skeleton-current">
+      Skeleton Loading (Current)
+    </h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brand-skeleton-demo">
+          <div class="skeleton-bar" style="width: 80%;"></div>
+          <div class="skeleton-bar" style="width: 60%;"></div>
+          <div class="skeleton-bar skeleton-bar--sm" style="width: 40%;"></div>
+          <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+            <div class="skeleton-dot"></div>
+            <div class="skeleton-dot"></div>
+            <div class="skeleton-dot"></div>
+          </div>
+        </div>
+        <code class="brand-code"
+          >.skeleton-bar, .skeleton-bar--sm, .skeleton-dot — rounded, accent tint, pulse animation</code
+        >
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-skeleton-next">Skeleton Loading</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-skeleton-demo">
+          <div class="brutal-skeleton-bar" style="width: 80%;"></div>
+          <div class="brutal-skeleton-bar" style="width: 60%;"></div>
+          <div class="brutal-skeleton-bar brutal-skeleton-bar--sm" style="width: 40%;"></div>
+          <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+            <div class="brutal-skeleton-dot"></div>
+            <div class="brutal-skeleton-dot"></div>
+            <div class="brutal-skeleton-dot"></div>
+          </div>
+        </div>
+        <code class="brand-code"
+          >skeleton (brutalist) — no radius, border-only, blink animation</code
+        >
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-tab-bar">Tab Bar</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-tab-bar" style="position: static;">
+          <button class="brutal-tab brutal-tab--active" type="button">
+            <span class="brutal-tab__label">Active</span>
+          </button>
+          <button class="brutal-tab brutal-tab--done" type="button">
+            <span class="brutal-tab__label">Done</span>
+          </button>
+          <button class="brutal-tab" type="button">
+            <span class="brutal-tab__label">Default</span>
+            <span class="brutal-tab__badge brutal-tab__badge--on"></span>
+          </button>
+          <button class="brutal-tab" type="button">
+            <span class="brutal-tab__label">Inactive</span>
+          </button>
+        </div>
+        <code class="brand-code"
+          >.brutal-tab-bar / .brutal-tab — monospace uppercase, hard underline, square badge</code
+        >
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-segmented-control">
+      Segmented Control
+    </h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item">
+        <div class="brutal-segmented">
+          <button class="brutal-segmented__btn brutal-segmented__btn--active" type="button"
+            >Option A</button
+          >
+          <button class="brutal-segmented__btn" type="button">Option B</button>
+          <button class="brutal-segmented__btn" type="button">Option C</button>
+        </div>
+        <code class="brand-code">.brutal-segmented — default (320px)</code>
+      </div>
+      <div class="brand-component-item">
+        <div class="brutal-segmented brutal-segmented--sm">
+          <button class="brutal-segmented__btn brutal-segmented__btn--active" type="button"
+            >On</button
+          >
+          <button class="brutal-segmented__btn" type="button">Off</button>
+        </div>
+        <code class="brand-code">.brutal-segmented--sm (180px)</code>
+      </div>
+    </div>
+
+    <h4 class="brutal-label brand-subgroup-title">Segmented Control Wide</h4>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-segmented brutal-segmented--wide">
+          <button class="brutal-segmented__btn brutal-segmented__btn--active" type="button"
+            >Active</button
+          >
+          <button class="brutal-segmented__btn" type="button">Option B</button>
+          <button class="brutal-segmented__btn" type="button">Option C</button>
+        </div>
+        <code class="brand-code">.brutal-segmented--wide — full-width segmented control</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-form-field">Form Field</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item brand-component-item--full">
+        <div class="brutal-field">
+          <label class="brutal-field__label"
+            >Field label <span class="brutal-field__req">(required)</span></label
+          >
+          <input class="brutal-field__input" type="text" placeholder="Placeholder text" />
+        </div>
+        <code class="brand-code"
+          >.brutal-field — monospace label + dashed-border input, solid on focus</code
+        >
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="comp-delta-chevron">Delta Chevron</h3>
+    <div class="brand-component-row">
+      <div class="brand-component-item" id="chevron-demo">
+        <div
+          style="display: flex; align-items: center; gap: var(--spacing-sm); cursor: pointer;"
+          id="chevron-toggle"
+        >
+          <span class="brutal-text-small">Toggle collapse</span>
+          <svg
+            class="delta-chevron"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M32 8 L56 56 L8 56 Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="5"
+              stroke-linejoin="miter"></path>
+          </svg>
+        </div>
+        <code class="brand-code">.delta-chevron</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 7b: Component States -->
+<section class="brand-section" id="component-states">
+  <div class="container">
+    <h2 class="brutal-heading-md brand-section__title">Component States</h2>
+    <p
+      class="brutal-text-small"
+      style="margin-bottom: var(--spacing-xl); color: var(--text-muted);"
+    >
+      Interactive components rendered in each visual state. Forced via <code class="brand-code"
+        >data-demo-state</code
+      > attributes.
+    </p>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="states-button">Button States</h3>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary">Default</button>
+        <code class="brand-code">default</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" data-demo-state="hover">Hover</button>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" data-demo-state="focus">Focus</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--primary" disabled>Disabled</button>
+        <code class="brand-code">:disabled</code>
+      </div>
+    </div>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary">Default</button>
+        <code class="brand-code">secondary</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary" data-demo-state="hover">Hover</button>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary" data-demo-state="focus">Focus</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-btn brutal-btn--secondary" disabled>Disabled</button>
+        <code class="brand-code">:disabled</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="states-form-field">Form Field States</h3>
+    <div class="brand-state-grid">
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Default</label>
+          <input class="brutal-field__input" type="text" placeholder="Placeholder text" />
+        </div>
+        <code class="brand-code">default — dashed border</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Focused</label>
+          <input
+            class="brutal-field__input"
+            type="text"
+            value="Entered text"
+            data-demo-state="focus"
+          />
+        </div>
+        <code class="brand-code">:focus — solid border, teal</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Disabled</label>
+          <input class="brutal-field__input" type="text" value="Cannot edit" disabled />
+        </div>
+        <code class="brand-code">:disabled — reduced opacity</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label"
+            >Error <span class="brutal-field__req" style="color: var(--color-error);"
+              >(invalid)</span
+            ></label
+          >
+          <input
+            class="brutal-field__input"
+            type="text"
+            value="Bad input"
+            data-demo-state="error"
+          />
+        </div>
+        <code class="brand-code">error — red border</code>
+      </div>
+      <div class="brand-state-item brand-state-item--wide">
+        <div class="brutal-field">
+          <label class="brutal-field__label">Read-only</label>
+          <input
+            class="brutal-field__input"
+            type="text"
+            value="Locked value"
+            readonly
+            data-demo-state="readonly"
+          />
+        </div>
+        <code class="brand-code">readonly — muted text, no cursor</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="states-option-card">Option Card States</h3>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <div class="brutal-option-card">
+          <span class="brutal-option-card__label">Default</span>
+          <span class="brutal-option-card__description">Base state</span>
+        </div>
+        <code class="brand-code">default</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card" data-demo-state="hover">
+          <span class="brutal-option-card__label">Hover</span>
+          <span class="brutal-option-card__description">Teal border + subtle bg</span>
+        </div>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card" data-demo-state="focus">
+          <span class="brutal-option-card__label">Focus</span>
+          <span class="brutal-option-card__description">Outline ring</span>
+        </div>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <div class="brutal-option-card brutal-option-card--selected">
+          <span class="brutal-option-card__label">Selected</span>
+          <span class="brutal-option-card__description">Teal border + label</span>
+        </div>
+        <code class="brand-code">--selected</code>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="states-choice-button">
+      Choice Button States
+    </h3>
+    <div class="brand-state-row">
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button">Default</button>
+        <code class="brand-code">default</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button" data-demo-state="hover">Hover</button>
+        <code class="brand-code">:hover</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn" type="button" data-demo-state="focus">Focus</button>
+        <code class="brand-code">:focus-visible</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn brutal-choice-btn--selected" type="button">Selected</button
+        >
+        <code class="brand-code">--selected</code>
+      </div>
+      <div class="brand-state-item">
+        <button class="brutal-choice-btn brutal-choice-btn--unsure" type="button">Unsure</button>
+        <code class="brand-code">--unsure</code>
+      </div>
+      <div class="brand-state-item">
+        <button
+          class="brutal-choice-btn brutal-choice-btn--unsure brutal-choice-btn--selected"
+          type="button">Unsure+Sel</button
+        >
+        <code class="brand-code">--unsure --selected</code>
+      </div>
+    </div>
+  </div>
+</section>
