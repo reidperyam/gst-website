@@ -85,12 +85,6 @@ function updateAll() {
     }
   }
 
-  // Analysis badge
-  const analysisAlert = r && (r.zone === 'above' || r.zone === 'elevated' || r.zone === 'critical');
-  document
-    .querySelector('[data-badge="analysis"]')
-    ?.classList.toggle('tp-tab__badge--on', !!analysisAlert);
-
   if (!r) {
     const missingStage = !tp.stageKey;
     const missingArr = !inputs || !inputs.arr;
