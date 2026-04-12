@@ -233,7 +233,7 @@ If it still appears, confirm `src/content.config.ts` exists and exports `export 
 
 ## Phase 3: Code Structure & CSS Architecture
 
-**Status**: In Progress
+**Status**: Complete
 **Priority**: High
 **Effort**: 6-7 days
 **Dependencies**: Phase 2 (linting catches regressions during refactoring)
@@ -340,14 +340,15 @@ refactor(css): move theme-toggle styles to ThemeToggle.astro scoped             
 # brand-page-only. Will be addressed when brand.astro is decomposed.
 
 # Large decompositions
-refactor(brand): decompose brand.astro into section sub-components                      # 11
-refactor(techpar): modularize techpar-ui.ts into chart, dom, state modules              # 12
+refactor(brand): decompose brand.astro into section sub-components                      # 11 ✓
+refactor(techpar): modularize techpar-ui.ts into chart, dom, state modules              # 12 ✓
+fix(techpar): infra value corruption, tab-done/badge UX, regression tests              # 12a-d ✓
 
 # Constants cleanup
-refactor: extract magic numbers into named constants                                    # 13
+refactor(icg): extract maturity magic numbers into named constants                      # 13 ✓
 
 # Final guardrail — turn refactor discipline into permanent rule
-chore(lint): enable strict-value color token enforcement (warning severity)             # 14
+chore(lint): enable strict-value color token enforcement (warning severity)             # 14 ✓
 ```
 
 ### Success Criteria
