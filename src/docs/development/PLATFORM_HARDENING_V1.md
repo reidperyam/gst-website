@@ -812,6 +812,16 @@ Items are added here as they're discovered. Each entry should link back to the d
     - **Effort**: ~10 min to remove, ~2 hours to actually wrap sections
     - **Context**: Phase 3 commit 0b added the `@layer` declaration (`reset, tokens, utilities, components, theme, overrides`) as a progressive step, but no CSS rules were wrapped in `@layer` blocks because unlayered rules beat layered rules for normal declarations — the original plan to wrap was based on a cascade-direction misconception. The declaration is currently a no-op. Either wrap at least the reset/tokens sections to prove the pattern, or remove the declaration to avoid dead code.
 
+11. **Enable CI/CD on feature branches (not just PRs to master)**
+    - **Files**: [.github/workflows/test.yml](../../../.github/workflows/test.yml), GitHub repository settings (branch rulesets)
+    - **Effort**: ~30 min (workflow trigger change + optional branch ruleset)
+    - **Context**: The `test.yml` workflow currently triggers on `push` to `master` and on `pull_request` to `master`. Feature branches like `feat/platform-hardening` run no CI until a PR is opened. This means test failures accumulate undetected across many commits and are only discovered at PR time (or locally if the developer remembers to run the full suite). Enabling CI on feature branch pushes surfaces failures early — before they compound.
+    - **Options**:
+      - **(a) Workflow trigger change**: Add `push: branches: ['feat/**', 'fix/**', 'dev']` to `test.yml`'s `on:` block. Cheapest option; runs lint + unit tests on every push to any feature branch. E2E can be limited to PR-only to save CI minutes.
+      - **(b) Branch ruleset**: Create a GitHub branch ruleset matching `feat/**` that requires the `Unit & Integration Tests` check. This prevents pushing commits that break tests but adds friction for WIP branches. Better suited for team environments.
+      - **(c) Hybrid**: Workflow triggers on all branches (option a), but only `master` branch ruleset blocks merge. Feature branch CI is advisory (failures visible but non-blocking).
+    - **Recommendation**: Option (c) — maximum visibility, minimum friction. Developers see CI status on every push without being blocked on WIP branches.
+
 <!-- Add new items below as Phase 2-8 work uncovers them. Use the same format. -->
 
 ### Commits
