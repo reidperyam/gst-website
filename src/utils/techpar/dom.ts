@@ -530,6 +530,11 @@ export function syncUrlState() {
   if (inputs) {
     const validHist = tp.historicalPoints.filter((p) => p.arr > 0 || p.totalTechSpend > 0);
     const params = serializeToParams(inputs, validHist.length ? validHist : undefined);
+    // Override infraHosting with the raw DOM value — buildInputs() converts
+    // annual→monthly for the engine, but the URL must store what the user sees
+    // so that hydration doesn't double-convert on reload.
+    const rawInfra = getInput('infra');
+    if (rawInfra) params.set('h', String(rawInfra));
     if (tp.currencySymbol !== '$') params.set('u', tp.currencySymbol);
     if (tp.infraPeriod !== 'monthly') params.set('b', tp.infraPeriod);
     if (tp.industry !== 'saas') params.set('n', tp.industry);
