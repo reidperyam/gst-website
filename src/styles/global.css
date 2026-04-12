@@ -401,39 +401,6 @@ a:hover {
   outline-offset: 0.25rem;
 }
 
-/* Dark Theme Toggle */
-.theme-toggle {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 5rem;
-  transition: color var(--transition-fast);
-  padding: 0;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  height: 0.85rem;
-}
-
-.theme-toggle:hover {
-  color: var(--color-primary);
-}
-
-.theme-toggle:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 0.25rem;
-}
-
-.theme-toggle:focus:not(:focus-visible) {
-  outline: none;
-}
-
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 0.25rem;
-}
-
 /* Dark Theme - Background Grid Pattern */
 html.dark-theme body::before {
   background-color: var(--bg-dark);
