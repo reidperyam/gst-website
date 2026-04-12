@@ -7,6 +7,12 @@ export default defineConfig({
     environment: 'node',
     include: ['tests/**/*.test.ts'],
     exclude: ['tests/e2e/**'],
+    coverage: {
+      include: ['src/utils/**', 'src/data/**/*.ts', 'src/scripts/**'],
+      thresholds: {
+        lines: 35,
+      },
+    },
   },
   resolve: {
     alias: {
