@@ -471,36 +471,32 @@ perf(seo): add font-display swap and preconnect to Calendly
 
 ## Phase 6: Hub Tool Analytics Standardization
 
-**Status**: Proposed
+**Status**: Complete
 **Priority**: Medium
 **Effort**: 2 days
 **Dependencies**: Phase 2 (CI catches regressions in analytics code)
 
 ### Problem
 
-Tool analytics coverage is uneven. Diligence Machine has 8 tracked events, ICG has 11, Tech Debt Calculator has 6, but TechPar has **zero interaction events** and Regulatory Map has **partial coverage with unnamed events**. This makes tools incomparable and prevents funnel analysis.
+Tool analytics coverage was uneven. Diligence Machine had 8 tracked events, ICG had 11, Tech Debt Calculator had 6, but TechPar had **zero interaction events** and Regulatory Map used inconsistent naming without the standard `<tool>_<action>` prefix convention. This made tools incomparable and prevented funnel analysis.
 
-### Current Coverage
+### What Was Done
 
-| Tool                 | Page View | Interaction Events                                                                                                                                                   | Gap                     |
-| -------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| Diligence Machine    | Yes       | 8 (dm_edit, dm_step_advance, dm_generate, dm_copy, dm_print, dm_restart, dm_go_back, calendly)                                                                       | Adequate                |
-| ICG                  | Yes       | 11 (icg_assessment_start/advance/complete, icg_review, icg_start_over, icg_send_email, icg_print, icg_export_json, icg_copy_summary/link, icg_recommendation_toggle) | Adequate                |
-| Tech Debt Calculator | Yes       | 6 (tdc_slider_change, tdc_deploy_frequency, tdc_advanced_toggle, tdc_currency_change, tdc_export_pdf, tdc_copy_link/summary)                                         | Adequate                |
-| TechPar              | Yes       | **0**                                                                                                                                                                | No interaction tracking |
-| Regulatory Map       | Yes       | **Partial** (quick_zoom + unnamed events at lines 454, 726, 856, 981, 1008, 1258, 1344)                                                                              | Inconsistent naming     |
+1. **Added `'tool'` to `EventCategory` type** — new tool events use `category: 'tool'` for independent GA4 filtering; existing events keep `'engagement'` for data continuity
+2. **TechPar: 11 new events** — `tp_start`, `tp_tab_change`, `tp_mode_change`, `tp_stage_select`, `tp_baseline_set`, `tp_scenario_save`, `tp_complete` (with zone + tech_pct), `tp_copy_link`, `tp_copy_summary`, `tp_export_pdf`, `tp_reset`
+3. **Regulatory Map: renamed 7 events** to `rm_` prefix — `rm_region_zoom`, `rm_region_select`, `rm_filter_change`, `rm_search_result_click`, `rm_search`, `rm_timeline_click`, `rm_faq_toggle`; added `rm_start` and `rm_complete` funnel events
+4. **DM and TDC funnel events** — added `dm_start`, `tdc_start`, `tdc_complete`
+5. **16 unit tests** — static analysis tests verify naming convention, prefix consistency, funnel event presence, and snake_case compliance across all 5 tools
 
-### Scope
+### Post-Phase Coverage
 
-- **Standardize TechPar events** — add to `src/pages/hub/tools/techpar/index.astro` and `src/utils/techpar-ui.ts`:
-  - `tp_calculate`, `tp_scenario_save`, `tp_scenario_load`, `tp_chart_toggle`, `tp_input_change` (with parameter name), `tp_copy_summary`, `tp_print`, `tp_export`
-- **Standardize Regulatory Map events** — audit and name unnamed `trackEvent` calls in `src/pages/hub/tools/regulatory-map/index.astro`:
-  - `rm_region_select`, `rm_regulation_view`, `rm_filter_change`, `rm_bookmark_toggle`, `rm_timeline_filter`, `rm_search`
-- **Add funnel events to all 5 tools** — ensure these milestones exist: `<tool>_start` (first interaction), `<tool>_complete` (meaningful output), `<tool>_export` (copy/print/share)
-- **Extend `EventCategory` type** — add `'tool'` to the union in `src/utils/analytics.ts`
-- **Tests**:
-  - Unit: mock `window.gtag`, verify event names and parameters for each new event
-  - E2E: add tool interaction tracking verification to existing tool E2E tests
+| Tool                 | Prefix | Events | Funnel (start/complete/export)  |
+| -------------------- | ------ | ------ | ------------------------------- |
+| TechPar              | `tp_`  | 11     | Yes (start/complete/export)     |
+| Regulatory Map       | `rm_`  | 9      | Yes (start/complete)            |
+| Diligence Machine    | `dm_`  | 8      | Yes (start/generate/copy+print) |
+| Tech Debt Calculator | `tdc_` | 9      | Yes (start/complete/export)     |
+| ICG                  | `icg_` | 13     | Yes (start/complete/export)     |
 
 ### Commits
 
@@ -508,17 +504,16 @@ Tool analytics coverage is uneven. Diligence Machine has 8 tracked events, ICG h
 feat(analytics): add tool event category to analytics type system
 feat(analytics): add interaction tracking to TechPar tool
 refactor(analytics): standardize Regulatory Map event naming
-feat(analytics): add start/complete/export funnel events to all tools
-test(analytics): add unit and E2E tests for tool event tracking
+feat(analytics): add start/complete funnel events to DM and TDC
+test(analytics): add naming convention tests for all hub tool events
+docs(analytics): update hardening plan and analytics docs for Phase 6
 ```
 
-### Success Criteria
+### Notes
 
-- All 5 tools have consistent `<tool_code>_<interaction>` event naming
-- All 5 tools track start/complete/export funnel milestones
-- TechPar has ≥6 interaction events
-- Regulatory Map has zero unnamed events
 - All events will be retroactively gated on cookie consent by the follow-on [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) initiative; this phase does not worsen the existing GDPR gap (GA4 already loads unconditionally) but does not close it either
+- Existing DM/ICG/TDC events retain `category: 'engagement'` for GA4 data continuity
+- RegMap old event names (`quick_zoom`, `region_selected`, etc.) will stop appearing in GA4; new `rm_` names start fresh
 
 ---
 

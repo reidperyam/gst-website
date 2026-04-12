@@ -13,6 +13,7 @@ Google Analytics 4 is integrated into the website to capture user engagement met
 **File:** `src/components/GoogleAnalytics.astro`
 
 The Google Analytics script is loaded via a dedicated Astro component that:
+
 - Loads the GA4 gtag script from Google's CDN
 - Initializes the dataLayer for event tracking
 - Exposes the `gtag` function globally for event dispatch
@@ -38,8 +39,8 @@ The GA4 component is integrated in the root layout (`src/layouts/BaseLayout.astr
 
 ```astro
 <head>
-    ...
-    <GoogleAnalytics />
+  ...
+  <GoogleAnalytics />
 </head>
 ```
 
@@ -62,12 +63,14 @@ TypeScript utility module providing type-safe event tracking functions:
 **Event Name:** `navigation_click`
 **Category:** `navigation`
 **Parameters:**
+
 - `label` - Human-readable name of the link (e.g., "Services", "M&A Portfolio")
 - `destination` - The href of the clicked link
 
 **Triggered By:** Header navigation links
 
 **Use Cases:**
+
 - Understand which sections users navigate to most
 - Identify user journeys through the site
 - Analyze link effectiveness
@@ -79,6 +82,7 @@ TypeScript utility module providing type-safe event tracking functions:
 **Event Name:** `portfolio_view_details`
 **Category:** `portfolio`
 **Parameters:**
+
 - `project_id` - Unique identifier for the project
 - `project_name` - Code name of the project
 - `industry` - Industry segment (e.g., "AI", "Healthcare")
@@ -86,6 +90,7 @@ TypeScript utility module providing type-safe event tracking functions:
 **Triggered By:** Clicking "View Project Details" on a project card or clicking the card itself
 
 **Use Cases:**
+
 - Identify most viewed/engaging projects
 - Understand which industries attract the most interest
 - Analyze project engagement patterns
@@ -102,6 +107,7 @@ TypeScript utility module providing type-safe event tracking functions:
 **Triggered By:** Closing the project details modal (X button, backdrop click, or Escape key)
 
 **Use Cases:**
+
 - Measure modal engagement duration
 - Analyze how long users spend viewing project details
 - Identify drop-off points
@@ -113,12 +119,14 @@ TypeScript utility module providing type-safe event tracking functions:
 **Event Name:** `filter_applied`
 **Category:** `portfolio`
 **Parameters:**
+
 - `filter_type` - Type of filter applied (e.g., "stage", "theme", "year")
 - `filter_value` - The specific value selected (e.g., "Series A", "AI", "2024")
 
 **Triggered By:** Applying any filter on the M&A portfolio page (Growth Stage, Theme, Year filters)
 
 **Use Cases:**
+
 - Understand which project attributes users search for
 - Identify most popular themes/stages
 - Analyze discovery patterns
@@ -131,12 +139,14 @@ TypeScript utility module providing type-safe event tracking functions:
 **Event Name:** `cta_click`
 **Category:** `engagement`
 **Parameters:**
+
 - `cta_type` - Type of CTA (e.g., "calendly")
 - `location` - Where the CTA is located (e.g., "cta-section", "hero")
 
 **Triggered By:** Clicking the Calendly booking link in CTA sections
 
 **Use Cases:**
+
 - Track conversion interest (booking intent)
 - Identify which CTAs drive the most engagement
 - Measure call-to-action effectiveness
@@ -149,6 +159,7 @@ TypeScript utility module providing type-safe event tracking functions:
 **Event Name:** `faq_interaction`
 **Category:** `engagement`
 **Parameters:**
+
 - `question` - The text of the FAQ question that was toggled
 - `action` - Whether the FAQ was opened or closed ("open" or "close")
 - `page` - The page where the FAQ is located (e.g., "services", "hub")
@@ -156,6 +167,7 @@ TypeScript utility module providing type-safe event tracking functions:
 **Triggered By:** Opening or closing a FAQ accordion (`<details>` element) on the Services or Hub pages
 
 **Use Cases:**
+
 - Identify which questions visitors ask most
 - Understand user information needs by page
 - Optimize FAQ content and ordering
@@ -168,11 +180,13 @@ TypeScript utility module providing type-safe event tracking functions:
 **Event Name:** `theme_toggle`
 **Category:** `ui`
 **Parameters:**
+
 - `theme` - The theme switched to ("light" or "dark")
 
 **Triggered By:** Clicking the theme toggle button in the header
 
 **Use Cases:**
+
 - Understand user UI preferences
 - Track dark mode adoption
 - Analyze user behavior patterns by theme preference
@@ -180,12 +194,43 @@ TypeScript utility module providing type-safe event tracking functions:
 
 ---
 
+### 8. Hub Tool Events
+
+**Convention:** All hub tool events follow `<tool_prefix>_<action>` naming with `category: 'tool'` (new events) or `category: 'engagement'` (legacy events).
+
+| Tool                 | Prefix | Events | Funnel Events                                                               |
+| -------------------- | ------ | ------ | --------------------------------------------------------------------------- |
+| TechPar              | `tp_`  | 11     | `tp_start`, `tp_complete`, `tp_copy_link`/`tp_copy_summary`/`tp_export_pdf` |
+| Regulatory Map       | `rm_`  | 9      | `rm_start`, `rm_complete`                                                   |
+| Diligence Machine    | `dm_`  | 8      | `dm_start`, `dm_generate`, `dm_copy`/`dm_print`                             |
+| Tech Debt Calculator | `tdc_` | 9      | `tdc_start`, `tdc_complete`, `tdc_export_pdf`/`tdc_copy_*`                  |
+| ICG                  | `icg_` | 13     | `icg_assessment_start`, `icg_assessment_complete`, `icg_export_json`        |
+
+**Funnel milestones** (comparable across tools):
+
+- **Start**: First meaningful interaction (once per session)
+- **Complete**: Meaningful output rendered (analysis, results, regulation list)
+- **Export**: Copy, print, PDF, or share action
+
+**Adding events to a new tool:**
+
+1. Choose a 2-4 character prefix (e.g., `xx_`)
+2. Use `category: 'tool'`
+3. Include `page: '<tool-slug>'` parameter on every event
+4. Add funnel events: `xx_start`, `xx_complete`, `xx_export`
+5. Add the tool to `tests/unit/tool-analytics.test.ts` for convention enforcement
+6. Event names must be `snake_case` — no camelCase or kebab-case
+
+---
+
 ## Component Integration Points
 
 ### Header Component
+
 **File:** `src/components/Header.astro`
 
 Tracks navigation clicks on:
+
 - Logo (destination: "/")
 - Services link (destination: "/#services")
 - M&A Portfolio link (destination: "/ma-portfolio")
@@ -193,35 +238,43 @@ Tracks navigation clicks on:
 - Contact link (destination: "/#contact")
 
 ### CTA Section Component
+
 **File:** `src/components/CTASection.astro`
 
 Tracks Calendly booking button clicks with location metadata.
 
 ### Project Modal Component
+
 **File:** `src/components/portfolio/ProjectModal.astro`
 
 Tracks:
+
 - Project details view (when modal opens)
 - Modal close actions
 
 ### Portfolio Grid Component
+
 **File:** `src/components/portfolio/PortfolioGrid.astro`
 
 Tracks:
+
 - Filter applications (listens to `portfolioFiltered` custom events)
 - Passes filter_type and filter_value to analytics
 
 ### Services Page
+
 **File:** `src/pages/services.astro`
 
 Tracks FAQ accordion open/close interactions via `trackEvent` directly.
 
 ### Hub Page
+
 **File:** `src/pages/hub/index.astro`
 
 Tracks FAQ accordion open/close interactions via `trackEvent` directly.
 
 ### Theme Toggle Component
+
 **File:** `src/components/ThemeToggle.astro`
 
 Tracks theme toggle actions with the selected theme.
