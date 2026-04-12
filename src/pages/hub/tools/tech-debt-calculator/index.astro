@@ -1335,6 +1335,9 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
   import { trackEvent } from '../../../../utils/analytics';
   import { copyWithFeedback } from '../../../../utils/copy-feedback';
 
+  // Analytics: fire tdc_start once per page load on first slider interaction
+  let tdcStartFired = false;
+
   // ─── DOM helpers ─────────────────────────────────────────────────────────────
 
   function getInput(key: string): HTMLInputElement {
@@ -1420,8 +1423,18 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
 
   // ─── Render ───────────────────────────────────────────────────────────────────
 
+  let tdcCompleteFired = false;
   function render(): void {
     const result = calculate(state);
+    if (tdcStartFired && !tdcCompleteFired) {
+      trackEvent({
+        event: 'tdc_complete',
+        category: 'tool',
+        annual_cost: String(result.annualCost),
+        page: 'tech-debt-calculator',
+      });
+      tdcCompleteFired = true;
+    }
     const teamSize = posToTeamSize(state.teamSizePos);
 
     // ── Core results ──
@@ -1693,6 +1706,10 @@ trackPageView('tech-debt-calculator', 'Technical Debt Cost Calculator | GST');
     ] as const;
     sliderIds.forEach((id) => {
       getInput(id).addEventListener('change', (e) => {
+        if (!tdcStartFired) {
+          trackEvent({ event: 'tdc_start', category: 'tool', page: 'tech-debt-calculator' });
+          tdcStartFired = true;
+        }
         trackEvent({
           event: 'tdc_slider_change',
           category: 'engagement',

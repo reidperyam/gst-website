@@ -572,6 +572,9 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
   import { copyWithFeedback } from '../../../../utils/copy-feedback';
   import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
+  // Analytics: fire dm_start once per page load on first wizard interaction
+  let dmStartFired = false;
+
   const STORAGE_KEY = 'diligence-machine-state';
   const STORAGE_VERSION = 3;
 
@@ -1543,6 +1546,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
   btnNext.addEventListener('click', () => {
     if (currentStep < totalSteps && isStepValid(currentStep)) {
+      if (!dmStartFired) {
+        trackEvent({ event: 'dm_start', category: 'tool', page: 'diligence-machine' });
+        dmStartFired = true;
+      }
       const nextStep = currentStep + 1;
       trackEvent({
         event: 'dm_step_advance',
