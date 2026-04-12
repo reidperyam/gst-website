@@ -172,11 +172,15 @@ test.describe('TechPar - Costs tab', () => {
 // ─── Analysis tab ────────────────────────────────────────────────────────────
 
 test.describe('TechPar - Analysis tab', () => {
-  test('Analysis tab empty state shows when navigating before costs are entered', async ({ page }) => {
+  test('Analysis tab empty state shows when navigating before costs are entered', async ({
+    page,
+  }) => {
     await gotoTool(page);
     await clickTab(page, 'analysis');
     await expect(page.locator('[data-analysis-empty]')).toBeVisible();
-    await expect(page.locator('[data-analysis-content]')).not.toHaveClass(/tp-analysis-content--on/);
+    await expect(page.locator('[data-analysis-content]')).not.toHaveClass(
+      /tp-analysis-content--on/
+    );
   });
 
   test('Analysis tab renders primary KPI when required inputs are present', async ({ page }) => {
@@ -476,5 +480,69 @@ test.describe('TechPar - EEAT enhancements', () => {
     await page.click('[data-action="save-scenario"]');
     const saveBtn = page.locator('[data-action="save-scenario"]');
     await expect(saveBtn).toBeDisabled();
+  });
+});
+
+// ─── Regression tests ───────────────────────────────────────────────────────
+
+test.describe('TechPar - Regression', () => {
+  test('infrastructure value is stable across annual-mode page reload', async ({ page }) => {
+    await gotoTool(page);
+    await selectStage(page);
+    await fillInput(page, 'arr', '10000000');
+    await clickTab(page, 'costs');
+
+    // Switch to annual period and enter a value
+    await page.click('[data-infra-period="annual"]');
+    await fillInput(page, 'infra', '1200000');
+
+    // Wait for URL state to persist
+    await page.waitForTimeout(500);
+    const urlBefore = page.url();
+    const paramsBefore = new URL(urlBefore).searchParams;
+    const hBefore = paramsBefore.get('h');
+
+    // Reload the page and check the value is unchanged
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForSelector('[data-panel="profile"]', { timeout: 5000 });
+    await page.waitForTimeout(500);
+
+    const urlAfter = page.url();
+    const paramsAfter = new URL(urlAfter).searchParams;
+    const hAfter = paramsAfter.get('h');
+
+    expect(hAfter).toBe(hBefore);
+
+    // Verify the DOM input also matches
+    const infraValue = await page.locator('[data-input="infra"]').inputValue();
+    expect(parseFloat(infraValue)).toBeCloseTo(1200000, 0);
+  });
+
+  test('reset button clears all inputs after two-click confirmation', async ({ page }) => {
+    await gotoTool(page);
+    await selectStage(page);
+    await fillInput(page, 'arr', '10000000');
+    await clickTab(page, 'costs');
+    await fillInput(page, 'infra', '50000');
+
+    // Verify state is populated
+    expect(page.url()).toContain('a=10000000');
+
+    // First click — confirmation prompt
+    const resetBtn = page.locator('[data-action="reset"]');
+    await resetBtn.click();
+    await expect(resetBtn).toContainText('Click again to reset');
+
+    // Second click — actual reset
+    await resetBtn.click();
+
+    // Should return to profile tab with clean URL
+    await expect(page.locator('[data-panel="profile"]')).toHaveClass(/tp-panel--active/);
+    expect(page.url()).not.toContain('a=10000000');
+    expect(page.url()).not.toContain('h=');
+
+    // Stage should be deselected
+    await expect(page.locator('.tp-stage-card--active')).toHaveCount(0);
   });
 });
