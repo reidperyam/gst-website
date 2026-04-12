@@ -112,15 +112,7 @@ const { currentPath = '/', staticHeader = false } = Astro.props;
     animation: pulse 2s infinite;
   }
 
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.3;
-    }
-  }
+  /* @keyframes pulse is defined in global.css (shared with skeleton loaders) */
 
   .site-header nav ul {
     display: flex;

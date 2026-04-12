@@ -4,7 +4,7 @@
  * All module-level state lives here as a single exported object so that
  * dom.ts and chart.ts can read/write without circular imports.
  */
-import { Chart } from 'chart.js';
+import type { Chart } from 'chart.js';
 import type { TechParInputs, TechParResult, HistoricalPoint } from '../techpar-engine';
 import type { Industry } from '../../data/techpar/industry-notes';
 

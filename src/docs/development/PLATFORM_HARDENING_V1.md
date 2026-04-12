@@ -802,7 +802,17 @@ Items are added here as they're discovered. Each entry should link back to the d
    - **Why pilot and not sweep**: A full sweep of the dark-theme override block is a behavior-equivalent refactor that touches 200+ lines, which exceeds Phase 9's inclusion criteria (≤30 lines, isolated, mechanical). The pilot proves the pattern works with LightningCSS compilation and the existing palette system; a broader sweep is deferred to [DEVELOPMENT_OPPORTUNITIES.md](./DEVELOPMENT_OPPORTUNITIES.md) as a follow-on initiative entry.
    - **Success signal for promoting to a broader sweep**: pilot commit passes all tests, visual regression check shows zero diff in both themes across all 6 palettes, and LightningCSS output is confirmed stable.
 
-<!-- Add new items below as Phase 2-7 work uncovers them. Use the same format. -->
+9. **Migrate brand-page specimen styles from global.css to brand.astro scoped** (deferred Phase 3 commits 10a/10b/10c)
+   - **Files**: [src/styles/global.css](../../styles/global.css) (lines ~4049-4430, guarded by `stylelint-disable no-duplicate-selectors`), [src/pages/brand.astro](../../pages/brand.astro) (`<style is:global>` block)
+   - **Effort**: ~2-3 hours across 3 sub-commits (colors, typography, components)
+   - **Context**: Phase 3 analysis revealed that most brutalist component CSS classes (`.brutal-btn`, `.brutal-frosted`, `.brutal-heading-*`, etc.) are genuinely shared across the site (used by 10+ files), not brand-page-only. The specimen blocks in global.css duplicate some of these selectors for the brand-page style guide. The planned 10a/10b/10c commits were deferred because moving them requires merging with the brand.astro `<style is:global>` block rather than simple cut-paste. The `stylelint-disable` comment at global.css line 4049 tracks this.
+
+10. **`@layer` declaration — wrap sections or remove** (deferred Phase 3 commit 0b)
+    - **Files**: [src/styles/global.css](../../styles/global.css) line 35
+    - **Effort**: ~10 min to remove, ~2 hours to actually wrap sections
+    - **Context**: Phase 3 commit 0b added the `@layer` declaration (`reset, tokens, utilities, components, theme, overrides`) as a progressive step, but no CSS rules were wrapped in `@layer` blocks because unlayered rules beat layered rules for normal declarations — the original plan to wrap was based on a cascade-direction misconception. The declaration is currently a no-op. Either wrap at least the reset/tokens sections to prove the pattern, or remove the declaration to avoid dead code.
+
+<!-- Add new items below as Phase 2-8 work uncovers them. Use the same format. -->
 
 ### Commits
 
