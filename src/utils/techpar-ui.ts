@@ -85,12 +85,6 @@ function updateAll() {
     }
   }
 
-  // Tab completion
-  const profileDone = !!inputs && inputs.arr > 0 && !!tp.stageKey;
-  const costsDone = r !== null;
-  document.querySelector('[data-tab="profile"]')?.classList.toggle('tp-tab--done', profileDone);
-  document.querySelector('[data-tab="costs"]')?.classList.toggle('tp-tab--done', costsDone);
-
   // Analysis badge
   const analysisAlert = r && (r.zone === 'above' || r.zone === 'elevated' || r.zone === 'critical');
   document
