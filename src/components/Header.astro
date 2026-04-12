@@ -26,13 +26,15 @@ const { currentPath = '/', staticHeader = false } = Astro.props;
           <a
             href="/ma-portfolio"
             onclick="trackNavigation('/ma-portfolio', 'M&A Portfolio')"
-            class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a>
+            class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a
+          >
         </li>
         <li>
           <a
             href="/hub"
             onclick="trackNavigation('/hub', 'Hub')"
-            class={currentPath?.startsWith('/hub') ? 'active' : ''}>Hub</a>
+            class={currentPath?.startsWith('/hub') ? 'active' : ''}>Hub</a
+          >
         </li>
         <li><a href="/about" onclick="trackNavigation('/about', 'About')">About</a></li>
       </ul>
@@ -66,7 +68,9 @@ const { currentPath = '/', staticHeader = false } = Astro.props;
     gap: 0.25rem;
   }
 
-  .delta-icon {
+  /* :global() needed — .delta-icon is on a DeltaIcon child component
+     whose rendered <svg> gets DeltaIcon's scope, not Header's */
+  .logo-wrapper :global(.delta-icon) {
     width: 1em;
     height: 1em;
     display: block;
