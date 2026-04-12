@@ -427,7 +427,7 @@ test(e2e): add accessibility test suite with violation ratchet
 
 ## Phase 5: SEO Hardening
 
-**Status**: Proposed
+**Status**: Complete
 **Priority**: Medium
 **Effort**: 1-2 days
 **Dependencies**: Phase 2 (CI catches regressions), Phase 4 (heading fixes align with accessibility)
