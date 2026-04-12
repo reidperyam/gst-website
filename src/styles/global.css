@@ -129,7 +129,6 @@ body::before {
     max-width: 100%;
     background: #fff !important;
     backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
     border: none;
   }
 }
@@ -169,7 +168,6 @@ html.dark-theme .tool-action-bar--bordered {
 .tool-action-bar--frosted {
   background: rgba(0, 0, 0, 0.005);
   backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
 }
 
 html.dark-theme .tool-action-bar--frosted {
@@ -1820,7 +1818,6 @@ html.dark-theme .filter-drawer {
     color var(--transition-fast),
     border-color var(--transition-fast);
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.04);
@@ -1932,7 +1929,6 @@ html.dark-theme .brutal-btn--secondary:hover {
   margin: 0 auto;
   background: rgba(0, 0, 0, 0.005);
   backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
   border: 2px solid var(--border-light);
   border-top: 3px solid var(--color-primary);
   border-radius: 0;
@@ -2314,7 +2310,6 @@ html.dark-theme .brutal-transition:hover {
     color var(--transition-fast);
   text-align: left;
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.04);
@@ -2562,7 +2557,6 @@ html.dark-theme .brutal-filter-chip--active {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.04);
@@ -3099,7 +3093,6 @@ html.dark-theme .brutal-slider__direct {
 .brutal-frosted {
   background: rgba(0, 0, 0, 0.005);
   backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
 }
 
 html.dark-theme .brutal-frosted {
@@ -3111,7 +3104,6 @@ html.dark-theme .brutal-frosted {
 .brutal-frosted--heavy {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 html.dark-theme .brutal-frosted--heavy {
@@ -3123,7 +3115,6 @@ html.dark-theme .brutal-frosted--heavy {
    with a subtle wet reflection and light refraction at edges. */
 .brutal-frosted--blur-only {
   backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.04);
@@ -3132,7 +3123,6 @@ html.dark-theme .brutal-frosted--heavy {
 html.dark-theme .brutal-frosted--blur-only {
   background: rgba(200, 220, 255, 0.03);
   backdrop-filter: blur(2px) contrast(1.1) brightness(1.1);
-  -webkit-backdrop-filter: blur(2px) contrast(1.1) brightness(1.1);
   box-shadow:
     inset 0 1px 0 var(--border-dark-subtle),
     0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -3143,7 +3133,6 @@ html.dark-theme .brutal-frosted--blur-only {
 .brutal-frosted--overlay {
   background: rgba(245, 245, 245, 0.92);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 html.dark-theme .brutal-frosted--overlay {

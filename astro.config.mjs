@@ -1,6 +1,17 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+import browserslist from 'browserslist';
+import { browserslistToTargets } from 'lightningcss';
+
+// Phase 3 Commit 0e: read browser targets from the project's browserslist
+// config (package.json "browserslist" field) and feed them to LightningCSS
+// via its native browserslistToTargets helper. Without this wiring, Vite
+// does NOT automatically forward browserslist to LightningCSS, and
+// LightningCSS falls back to an internal default that strips unprefixed
+// backdrop-filter for Firefox users. See Phase 3 commit 0e commit message
+// and src/docs/development/DEVELOPER_TOOLING.md "Browser support" section.
+const lightningcssTargets = browserslistToTargets(browserslist());
 
 export default defineConfig({
   site: 'https://globalstrategic.tech',
@@ -22,6 +33,9 @@ export default defineConfig({
       // and stricter syntax validation. Reversible by removing this block.
       // See src/docs/development/DEVELOPER_TOOLING.md for details.
       transformer: 'lightningcss',
+      lightningcss: {
+        targets: lightningcssTargets,
+      },
     },
   },
 });

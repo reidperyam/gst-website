@@ -131,21 +131,22 @@ All three jobs are **required status checks** on the `master` branch protection 
 
 ## Tools installed
 
-| Tool                                                                               | Role                                                                                                                                         | Config file                                                                                |
-| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [Prettier](https://prettier.io/)                                                   | Opinionated code formatter. Normalizes whitespace, quote style, trailing commas, line wrapping. Does NOT change program behavior.            | [.prettierrc.json](../../../.prettierrc.json), [.prettierignore](../../../.prettierignore) |
-| [ESLint](https://eslint.org/)                                                      | Lint JS, TS, and Astro files. Catches real bugs (unused vars, unsafe types, dead code) — not style.                                          | [eslint.config.mjs](../../../eslint.config.mjs)                                            |
-| [typescript-eslint](https://typescript-eslint.io/)                                 | ESLint plugin that adds TypeScript-aware rules                                                                                               | (extends from eslint.config.mjs)                                                           |
-| [eslint-plugin-astro](https://github.com/ota-meshi/eslint-plugin-astro)            | ESLint plugin for `.astro` file parsing and rules                                                                                            | (extends from eslint.config.mjs)                                                           |
-| [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)       | Disables ESLint rules that would conflict with Prettier's formatting                                                                         | (extends from eslint.config.mjs)                                                           |
-| [stylelint](https://stylelint.io/)                                                 | Lint CSS files AND scoped `<style>` blocks inside `.astro` files (via postcss-html custom syntax)                                            | [.stylelintrc.json](../../../.stylelintrc.json)                                            |
-| [postcss-html](https://github.com/ota-meshi/postcss-html)                          | PostCSS custom syntax used by stylelint to parse `<style>` blocks inside `.astro` files                                                      | (referenced from .stylelintrc.json `overrides`)                                            |
-| [stylelint-config-html](https://github.com/ota-meshi/stylelint-config-html)        | Shared stylelint config for HTML-like files; provides the `/astro` sub-export used in the `.astro` override                                  | (referenced from .stylelintrc.json `overrides`)                                            |
-| [@astrojs/check](https://docs.astro.build/en/reference/cli-reference/#astro-check) | TypeScript type-check for `.astro` files (`astro check`)                                                                                     | [tsconfig.json](../../../tsconfig.json)                                                    |
-| [Lightning CSS](https://lightningcss.dev/)                                         | Vite CSS transformer: parsing, bundling, minification, autoprefixing, modern-CSS down-leveling (nesting, `oklch`, `color-mix`, `light-dark`) | [astro.config.mjs](../../../astro.config.mjs) → `vite.css.transformer`                     |
-| [husky](https://typicode.github.io/husky)                                          | Installs git hooks automatically on `npm install`                                                                                            | [.husky/pre-commit](../../../.husky/pre-commit)                                            |
-| [lint-staged](https://github.com/lint-staged/lint-staged)                          | Scope git-hook commands to only the staged files (keeps hooks fast)                                                                          | `package.json` → `"lint-staged"`                                                           |
-| [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro)        | Prettier plugin for parsing `.astro` files                                                                                                   | (referenced from .prettierrc.json)                                                         |
+| Tool                                                                               | Role                                                                                                                                             | Config file                                                                                |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| [Prettier](https://prettier.io/)                                                   | Opinionated code formatter. Normalizes whitespace, quote style, trailing commas, line wrapping. Does NOT change program behavior.                | [.prettierrc.json](../../../.prettierrc.json), [.prettierignore](../../../.prettierignore) |
+| [ESLint](https://eslint.org/)                                                      | Lint JS, TS, and Astro files. Catches real bugs (unused vars, unsafe types, dead code) — not style.                                              | [eslint.config.mjs](../../../eslint.config.mjs)                                            |
+| [typescript-eslint](https://typescript-eslint.io/)                                 | ESLint plugin that adds TypeScript-aware rules                                                                                                   | (extends from eslint.config.mjs)                                                           |
+| [eslint-plugin-astro](https://github.com/ota-meshi/eslint-plugin-astro)            | ESLint plugin for `.astro` file parsing and rules                                                                                                | (extends from eslint.config.mjs)                                                           |
+| [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)       | Disables ESLint rules that would conflict with Prettier's formatting                                                                             | (extends from eslint.config.mjs)                                                           |
+| [stylelint](https://stylelint.io/)                                                 | Lint CSS files AND scoped `<style>` blocks inside `.astro` files (via postcss-html custom syntax)                                                | [.stylelintrc.json](../../../.stylelintrc.json)                                            |
+| [postcss-html](https://github.com/ota-meshi/postcss-html)                          | PostCSS custom syntax used by stylelint to parse `<style>` blocks inside `.astro` files                                                          | (referenced from .stylelintrc.json `overrides`)                                            |
+| [stylelint-config-html](https://github.com/ota-meshi/stylelint-config-html)        | Shared stylelint config for HTML-like files; provides the `/astro` sub-export used in the `.astro` override                                      | (referenced from .stylelintrc.json `overrides`)                                            |
+| [@astrojs/check](https://docs.astro.build/en/reference/cli-reference/#astro-check) | TypeScript type-check for `.astro` files (`astro check`)                                                                                         | [tsconfig.json](../../../tsconfig.json)                                                    |
+| [Lightning CSS](https://lightningcss.dev/)                                         | Vite CSS transformer: parsing, bundling, minification, autoprefixing, modern-CSS down-leveling (nesting, `oklch`, `color-mix`, `light-dark`)     | [astro.config.mjs](../../../astro.config.mjs) → `vite.css.transformer`                     |
+| [browserslist](https://github.com/browserslist/browserslist)                       | Canonical browser target list. Read by LightningCSS via `browserslistToTargets()` in `astro.config.mjs`; any future CSS/JS tool respects it too. | [package.json](../../../package.json) → `"browserslist"` field                             |
+| [husky](https://typicode.github.io/husky)                                          | Installs git hooks automatically on `npm install`                                                                                                | [.husky/pre-commit](../../../.husky/pre-commit)                                            |
+| [lint-staged](https://github.com/lint-staged/lint-staged)                          | Scope git-hook commands to only the staged files (keeps hooks fast)                                                                              | `package.json` → `"lint-staged"`                                                           |
+| [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro)        | Prettier plugin for parsing `.astro` files                                                                                                       | (referenced from .prettierrc.json)                                                         |
 
 ---
 
@@ -273,6 +274,64 @@ Two rules from the original Phase 3 plan — `selector-max-specificity: "0,3,0"`
 ### Latent specimen-override disables in global.css
 
 [src/styles/global.css](../../styles/global.css) contains two `stylelint-disable no-duplicate-selectors` blocks around the brand-page specimen section (search/filter cluster and stats/cta cluster). These specimens deliberately re-declare production component styles. Phase 3 commits 10a/10b/10c will move them into `brand.astro` scoped styles (with a `.brand-specimen` guard), at which point the disable comments should be removed.
+
+---
+
+## Browser support
+
+The project declares its supported browsers in the `"browserslist"` field of [package.json](../../../package.json):
+
+```json
+"browserslist": [
+  "defaults",
+  "Safari >= 14",
+  "not IE 11"
+]
+```
+
+- **`"defaults"`** resolves via [browserslist](https://github.com/browserslist/browserslist) to `> 0.5%, last 2 versions, Firefox ESR, not dead` — a standard modern-browser target set covering ~95%+ of global traffic.
+- **`"Safari >= 14"`** is an explicit floor that keeps older Safari in the target set. This is load-bearing: without it, LightningCSS would decide the `-webkit-` prefixed form of properties like `backdrop-filter` is unnecessary and strip it, breaking legacy Safari.
+- **`"not IE 11"`** is a defensive exclusion; IE is already dead in `defaults` but the explicit line documents the decision.
+
+### How browser targets are used
+
+Several parts of the build read from the `browserslist` field automatically:
+
+1. **LightningCSS** (via [astro.config.mjs](../../../astro.config.mjs)) — reads browserslist at config load time via `browserslistToTargets(browserslist())`, then uses the resolved targets to:
+   - Down-level modern CSS features (nesting, `oklch`, `color-mix`, `light-dark`)
+   - Add vendor prefixes where needed (`-webkit-backdrop-filter`, `-moz-appearance`, etc.)
+   - Strip unnecessary vendor prefixes when all targets support the unprefixed form
+2. **Any future tools** that respect the [browserslist standard](https://github.com/browserslist/browserslist#shareable-configs) — autoprefixer, stylelint browser-compat rules, ESLint compat plugins, Vite's own esbuild fallback — will all read from the same source of truth without extra config.
+
+### Vendor prefix policy (load-bearing)
+
+**Do not manually write vendor-prefixed CSS properties** (`-webkit-backdrop-filter`, `-moz-user-select`, etc.) in source. LightningCSS is the authoritative prefix-adder, driven by the browserslist config.
+
+If source contains BOTH a prefixed and unprefixed form of the same property with identical values, LightningCSS treats them as duplicates and ships only one (normally the one matching its internal target logic), which can silently break support in browsers that need the other form. The only safe pattern is to write the unprefixed form and let LightningCSS handle prefixes:
+
+```css
+/* Correct — LightningCSS adds -webkit- prefix for Safari 14 automatically */
+.frosted {
+  backdrop-filter: blur(3px);
+}
+
+/* WRONG — caused the Phase 3 regression where Firefox users lost frosted glass */
+.frosted {
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px); /* don't do this */
+}
+```
+
+This policy is enforced socially (code review + STYLES_GUIDE.md note) rather than mechanically. A future stylelint rule could catch it — tracked as a Phase 9 opportunity.
+
+### Changing browser support
+
+If you need to add or remove supported browsers:
+
+1. Edit the `"browserslist"` field in `package.json`.
+2. Run `npx browserslist` to see the resolved target list and confirm it's what you expect.
+3. Run `npm run build` and eyeball the CSS output diff for any unexpected prefix additions or removals.
+4. If shipping a visible behavior change, coordinate with the design review.
 
 ---
 

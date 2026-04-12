@@ -14,11 +14,11 @@ import DeltaIcon from '../components/DeltaIcon.astro';
 trackPageView('ma-portfolio', 'M&A Portfolio | Strategic Advisory & Implementation');
 
 // Calculate statistics
-const uniqueIndustries = new Set(projects.map(p => p.industry)).size;
+const uniqueIndustries = new Set(projects.map((p) => p.industry)).size;
 const totalARR = projects.reduce((sum, p) => sum + p.arrNumeric, 0);
 const combinedARRLabel = `$${(totalARR / 1e9).toFixed(1)}B+`;
-const minYear = Math.min(...projects.map(p => p.year));
-const maxYear = Math.max(...projects.map(p => p.year));
+const minYear = Math.min(...projects.map((p) => p.year));
+const maxYear = Math.max(...projects.map((p) => p.year));
 const yearSpan = maxYear - minYear + 1;
 
 const stats: Stat[] = [
@@ -43,7 +43,11 @@ const portfolioType = 'ma';
       <span>GST</span>
     </div>
     <div class="print-report-header__title">M&A Portfolio</div>
-    <div class="print-report-header__date">Generated {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+    <div class="print-report-header__date">
+      Generated {
+        new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+      }
+    </div>
   </div>
 
   <StickyControls projects={projects} />
@@ -75,7 +79,6 @@ const portfolioType = 'ma';
     :global(.brutal-frosted),
     :global(.portfolio-grid-container) {
       backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
       background: transparent !important;
     }
 
@@ -89,7 +92,6 @@ const portfolioType = 'ma';
       border: 1px solid #ccc !important;
       background: #fff !important;
       backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
       margin-bottom: 1rem;
     }
 

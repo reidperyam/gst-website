@@ -22,6 +22,7 @@ Conventions, best practices, and patterns for all CSS work on the GST Website.
 ## Quick Start by Task
 
 **Adding a new component:**
+
 1. Use CSS variables for all colors, spacing, and typography — see [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md)
 2. Use typography utility classes — see [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md)
 3. Test in both light and dark themes
@@ -48,19 +49,19 @@ Centralized CSS variable-based design system. Single source of truth in `variabl
 
 ### Core Tokens (Summary)
 
-| Category | Examples | Count |
-|----------|---------|-------|
-| Colors (brand + text) | `--color-primary`, `--bg-light`, `--text-primary` | 35 |
-| Primary opacity scale | `--color-primary-02` through `--color-primary-65` | 19 |
-| Component colors | `--filter-chip-bg`, `--service-card-text`, `--footer-bg` | 31 |
-| Tool-domain colors | `--hub-authority-blue`, `--dm-*`, `--icg-*`, `--techpar-*` | 33 |
-| Misc colors | `--checkerboard-line`, `--theme-toggle-color` | 6 |
-| Spacing | `--spacing-xs` through `--spacing-3xl` + `--spacing-2_5xl` | 8 |
-| Gaps | `--gap-tight` through `--gap-extra-wide` | 4 |
-| Typography | `--font-family`, `--font-weight-*`, `--text-*` | 10 |
-| Transitions | `--transition-fast`, `--transition-normal`, `--transition-slow` | 3 |
-| Shadows | `--shadow-sm`, `--shadow-md`, `--shadow-lg` | 3 |
-| **Total** | | **160** |
+| Category              | Examples                                                        | Count   |
+| --------------------- | --------------------------------------------------------------- | ------- |
+| Colors (brand + text) | `--color-primary`, `--bg-light`, `--text-primary`               | 35      |
+| Primary opacity scale | `--color-primary-02` through `--color-primary-65`               | 19      |
+| Component colors      | `--filter-chip-bg`, `--service-card-text`, `--footer-bg`        | 31      |
+| Tool-domain colors    | `--hub-authority-blue`, `--dm-*`, `--icg-*`, `--techpar-*`      | 33      |
+| Misc colors           | `--checkerboard-line`, `--theme-toggle-color`                   | 6       |
+| Spacing               | `--spacing-xs` through `--spacing-3xl` + `--spacing-2_5xl`      | 8       |
+| Gaps                  | `--gap-tight` through `--gap-extra-wide`                        | 4       |
+| Typography            | `--font-family`, `--font-weight-*`, `--text-*`                  | 10      |
+| Transitions           | `--transition-fast`, `--transition-normal`, `--transition-slow` | 3       |
+| Shadows               | `--shadow-sm`, `--shadow-md`, `--shadow-lg`                     | 3       |
+| **Total**             |                                                                 | **160** |
 
 > Note: Dark theme defines 85 variable overrides (including `--border-dark-subtle/default/prominent`), not new variables. 13 utility classes are defined across `variables.css`, `typography.css`, and `interactions.css`.
 
@@ -84,22 +85,22 @@ src/styles/
 In stylesheets, always import in cascade order:
 
 ```css
-@import './variables.css';    /* 1. Design tokens */
-@import './typography.css';   /* 2. Typography utilities */
+@import './variables.css'; /* 1. Design tokens */
+@import './typography.css'; /* 2. Typography utilities */
 @import './interactions.css'; /* 3. Interaction utilities */
-@import './palettes.css';    /* 4. Palette overrides (must follow variables.css) */
+@import './palettes.css'; /* 4. Palette overrides (must follow variables.css) */
 ```
 
 ### CSS File Ownership
 
-| File | Modify When |
-|------|-------------|
-| `variables.css` | Adding/updating design tokens or utility classes |
-| `palettes.css` | Adding/updating alternative color palette definitions |
-| `typography.css` | Adding reusable text styles |
-| `interactions.css` | Adding focus/hover/active patterns |
-| `global.css` | Page layout, responsive rules, dark theme overrides for page-level components |
-| Component `.astro` `<style>` | Single-use component-specific styling |
+| File                         | Modify When                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `variables.css`              | Adding/updating design tokens or utility classes                              |
+| `palettes.css`               | Adding/updating alternative color palette definitions                         |
+| `typography.css`             | Adding reusable text styles                                                   |
+| `interactions.css`           | Adding focus/hover/active patterns                                            |
+| `global.css`                 | Page layout, responsive rules, dark theme overrides for page-level components |
+| Component `.astro` `<style>` | Single-use component-specific styling                                         |
 
 ---
 
@@ -107,13 +108,13 @@ In stylesheets, always import in cascade order:
 
 ### Scoped vs. Global Styles — Decision Tree
 
-| Scenario | Use |
-|----------|-----|
-| Design system tokens, resets, page layout | Global CSS in `src/styles/` |
-| Single-component visual styles | Scoped `<style>` in the `.astro` file |
-| Styling dynamically injected HTML (`innerHTML`) | `:global()` wrapper on the selector |
-| Dark theme override for parent state | `:global(html.dark-theme)` prefix — but prefer CSS variables that auto-switch |
-| Global keyframes or animations | `src/styles/global.css` |
+| Scenario                                        | Use                                                                           |
+| ----------------------------------------------- | ----------------------------------------------------------------------------- |
+| Design system tokens, resets, page layout       | Global CSS in `src/styles/`                                                   |
+| Single-component visual styles                  | Scoped `<style>` in the `.astro` file                                         |
+| Styling dynamically injected HTML (`innerHTML`) | `:global()` wrapper on the selector                                           |
+| Dark theme override for parent state            | `:global(html.dark-theme)` prefix — but prefer CSS variables that auto-switch |
+| Global keyframes or animations                  | `src/styles/global.css`                                                       |
 
 ### `class:list` — Conditional Classes
 
@@ -122,9 +123,9 @@ Use Astro's `class:list` directive for conditionally applying classes. Preferred
 ```astro
 <!-- Preferred -->
 <div class:list={['card', { active: isActive, highlighted: score > 90 }]}>
-
-<!-- Avoid in new code -->
-<div class={`card ${isActive ? 'active' : ''}`}>
+  <!-- Avoid in new code -->
+  <div class={`card ${isActive ? 'active' : ''}`}></div>
+</div>
 ```
 
 ### `define:vars` — JS-to-CSS Bridging
@@ -135,8 +136,11 @@ Use `define:vars` to pass frontmatter variables into scoped `<style>` blocks as 
 ---
 const accentColor = getThemeColor(category);
 ---
+
 <style define:vars={{ accentColor }}>
-  .card { border-left: 3px solid var(--accentColor); }
+  .card {
+    border-left: 3px solid var(--accentColor);
+  }
 </style>
 ```
 
@@ -147,13 +151,18 @@ const accentColor = getThemeColor(category);
 `:global()` breaks Astro's scoping. Only use it when:
 
 1. **Styling dynamically injected content** — Elements created via `innerHTML` in `<script>` blocks don't have Astro's scoping attributes:
+
    ```css
-   :global(.question-card) { padding: var(--spacing-md); }
+   :global(.question-card) {
+     padding: var(--spacing-md);
+   }
    ```
 
 2. **Parent state selectors** — When a component's appearance depends on a class on `<html>` or a parent element:
    ```css
-   :global(html.dark-theme) .my-card { background: var(--bg-dark-secondary); }
+   :global(html.dark-theme) .my-card {
+     background: var(--bg-dark-secondary);
+   }
    ```
 
 **Prefer CSS variables over `:global()`** when possible. If a value changes in dark theme, define a CSS variable with a dark override in `variables.css` rather than adding `:global(html.dark-theme)` selectors.
@@ -223,6 +232,7 @@ import '../../styles/my-component.css';
 ### Available Utility Classes
 
 **From `variables.css`:**
+
 - `.flex-center` — centered flexbox
 - `.flex-between` — space-between flexbox
 - `.text-uppercase` — uppercase + letter-spacing
@@ -231,6 +241,7 @@ import '../../styles/my-component.css';
 - `.interactive-focus` — 2px primary outline
 
 **From `interactions.css`:**
+
 - `.interactive` — transition + primary hover + focus-visible outline
 - `.link-interactive` — link with underline animation
 - `.control-hover` / `.control-active` — button state classes
@@ -239,6 +250,7 @@ import '../../styles/my-component.css';
 - `.delta-chevron` — collapse/expand toggle indicator using the brand delta triangle
 
 **From `global.css`:**
+
 - `.sr-only` — screen reader only (visually hidden)
 
 ### Brand Delta Icon
@@ -251,6 +263,7 @@ The GST delta icon is available in two forms:
 ---
 import DeltaIcon from '../components/DeltaIcon.astro';
 ---
+
 <DeltaIcon size={14} class="bullet-icon" />
 ```
 
@@ -277,6 +290,7 @@ Renders an inline SVG with `stroke="currentColor"`, so the icon inherits color f
 Use this pattern only for `::before`/`::after` pseudo-elements where an Astro component can't be used. Inherits color via `background-color`.
 
 **Guidelines:**
+
 - Always prefer `DeltaIcon.astro` over `<img>` tags — `<img>` cannot inherit CSS colors
 - `.bullet-icon` and `.delta-icon` classes include `color: var(--color-primary)` for palette awareness
 - The static SVG file (`public/images/logo/gst-delta-icon-teal-stroke-thick.svg`) has hardcoded teal — keep it for favicon, RSS, and external contexts only
@@ -301,7 +315,7 @@ html.dark-theme {
 
 /* Component just references the variable */
 .filter-chip {
-  background: var(--filter-chip-bg);  /* Switches automatically */
+  background: var(--filter-chip-bg); /* Switches automatically */
 }
 ```
 
@@ -321,15 +335,15 @@ html.dark-theme {
 
 ### Common Dark Theme Variables for New Components
 
-| Use Case | Variable |
-|----------|----------|
-| Primary text | `--text-primary` (auto-switches in dark theme) |
-| Secondary text | `--text-secondary` (auto-switches) |
-| Muted text | `--text-muted` (auto-switches) |
-| Page background | `--bg-light` (auto-switches to `#0a0a0a`) |
-| Alt background | `--bg-light-alt` (auto-switches to `#141414`) |
-| Primary accent | `--color-primary` (same in both themes) |
-| Borders | `--border-light` or `--color-primary` |
+| Use Case        | Variable                                       |
+| --------------- | ---------------------------------------------- |
+| Primary text    | `--text-primary` (auto-switches in dark theme) |
+| Secondary text  | `--text-secondary` (auto-switches)             |
+| Muted text      | `--text-muted` (auto-switches)                 |
+| Page background | `--bg-light` (auto-switches to `#0a0a0a`)      |
+| Alt background  | `--bg-light-alt` (auto-switches to `#141414`)  |
+| Primary accent  | `--color-primary` (same in both themes)        |
+| Borders         | `--border-light` or `--color-primary`          |
 
 ---
 
@@ -352,19 +366,20 @@ The project uses a **desktop-first** approach with `max-width` breakpoints:
 ```
 
 Additional breakpoints used sparingly:
+
 - `@media (min-width: 768px)` — desktop-only styles (used in some components)
 - `@media (min-width: 480px) and (max-width: 767px)` — tablet-only range
 - `@media print` — print stylesheet
 
 ### Z-Index Scale
 
-| Value | Usage |
-|-------|-------|
-| `0` | Checkerboard background (`body::before`) |
-| `1` | Container, main content |
-| `10` | Site header (sticky) |
-| `1000` | Filter overlay, mockup labels |
-| `1001` | Filter drawer (above overlay) |
+| Value  | Usage                                    |
+| ------ | ---------------------------------------- |
+| `0`    | Checkerboard background (`body::before`) |
+| `1`    | Container, main content                  |
+| `10`   | Site header (sticky)                     |
+| `1000` | Filter overlay, mockup labels            |
+| `1001` | Filter drawer (above overlay)            |
 
 ---
 
@@ -375,12 +390,19 @@ All `.brutal-btn` buttons include a frosted-glass aesthetic by default:
 ```css
 .brutal-btn {
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),  /* wet-glass highlight */
-    0 0 0 1px rgba(0, 0, 0, 0.04);             /* subtle edge */
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    /* wet-glass highlight */ 0 0 0 1px rgba(0, 0, 0, 0.04); /* subtle edge */
 }
 ```
+
+> **Do NOT manually write `-webkit-backdrop-filter`** (or any other vendor-prefixed property).
+> LightningCSS, wired to the project's [browserslist config](../../../package.json) via
+> [astro.config.mjs](../../../astro.config.mjs), automatically adds vendor prefixes based on
+> the browser target set at build time. Manually writing both forms caused a production
+> regression in Phase 3 where LightningCSS deduplicated the pair and shipped only the
+> webkit version, breaking frosted glass for Firefox users. See
+> [DEVELOPER_TOOLING.md § Browser support](../development/DEVELOPER_TOOLING.md) for details.
 
 - **Primary buttons** use semi-transparent `rgba(5, 205, 153, 0.15)` background instead of solid teal
 - **Secondary buttons** use `rgba(0, 0, 0, 0.02)` tint instead of fully transparent
@@ -388,12 +410,12 @@ All `.brutal-btn` buttons include a frosted-glass aesthetic by default:
 
 Additional frosted-glass utilities in `global.css`:
 
-| Class | Blur | Use Case |
-|-------|------|----------|
-| `.brutal-frosted` | 3px | Standard containers, action bars |
-| `.brutal-frosted--heavy` | 12px | Drawers, sticky bars over content |
-| `.brutal-frosted--blur-only` | 1.5px | Subtle wet-glass sheen |
-| `.brutal-frosted--overlay` | 12px + 92% opacity | Modal/panel overlays |
+| Class                        | Blur               | Use Case                          |
+| ---------------------------- | ------------------ | --------------------------------- |
+| `.brutal-frosted`            | 3px                | Standard containers, action bars  |
+| `.brutal-frosted--heavy`     | 12px               | Drawers, sticky bars over content |
+| `.brutal-frosted--blur-only` | 1.5px              | Subtle wet-glass sheen            |
+| `.brutal-frosted--overlay`   | 12px + 92% opacity | Modal/panel overlays              |
 
 ---
 
@@ -408,12 +430,16 @@ All hub tools include a `@media print` block in their scoped styles with a consi
 ```css
 @media print {
   /* Hide interactive elements */
-  .site-header, footer, .actions, [data-view="landing"], [data-view="wizard"] {
+  .site-header,
+  footer,
+  .actions,
+  [data-view='landing'],
+  [data-view='wizard'] {
     display: none !important;
   }
 
   /* Show results */
-  [data-view="results"] {
+  [data-view='results'] {
     display: block !important;
   }
 
@@ -477,14 +503,16 @@ Hub tools use the standardized `.brutal-tool-shell` class defined in `global.css
 ```
 
 **Content wrapper**: Use `.brutal-tool-shell__content` inside the shell for automatic responsive padding:
+
 ```css
 .brutal-tool-shell__content {
-  padding: var(--spacing-xl) var(--spacing-lg);   /* Desktop */
+  padding: var(--spacing-xl) var(--spacing-lg); /* Desktop */
 }
 /* Automatically reduces to var(--spacing-lg) var(--spacing-md) at 480px */
 ```
 
 **HTML template**:
+
 ```html
 <section class="tool-section">
   <div class="container">
@@ -508,11 +536,11 @@ For components that load content asynchronously (API calls, server islands), use
 
 **Global classes** (defined in `global.css`):
 
-| Class | Description |
-|-------|-------------|
-| `.skeleton-bar` | Rectangular placeholder bar (0.875rem height) |
-| `.skeleton-bar--sm` | Smaller bar variant (0.625rem height) |
-| `.skeleton-dot` | Circular placeholder (8px) |
+| Class               | Description                                   |
+| ------------------- | --------------------------------------------- |
+| `.skeleton-bar`     | Rectangular placeholder bar (0.875rem height) |
+| `.skeleton-bar--sm` | Smaller bar variant (0.625rem height)         |
+| `.skeleton-dot`     | Circular placeholder (8px)                    |
 
 All use `var(--accent-light-bg-hover)` for background color (auto-switches in dark theme) and the `pulse` animation.
 
@@ -523,11 +551,13 @@ All use `var(--accent-light-bg-hover)` for background color (auto-switches in da
 ```
 
 **Convention**:
+
 - Vary bar widths via inline `style` to suggest natural content variation
 - Add `aria-hidden="true"` to the skeleton container
 - Stagger animation delays on consecutive elements (e.g., `animation-delay: 0.3s`)
 
 **Content swap pattern**:
+
 1. Render the skeleton as the default visible state
 2. Set `aria-hidden="true"` on the skeleton wrapper so screen readers skip it
 3. When real content loads (via client-side JS), hide the skeleton and show the content
@@ -540,19 +570,28 @@ All use `var(--accent-light-bg-hover)` for background color (auto-switches in da
 The `.delta-chevron` utility (defined in `interactions.css`) provides a collapse/expand toggle indicator using the brand delta triangle SVG. It points down when expanded and up when collapsed, rotating via CSS transition.
 
 **HTML:**
+
 ```html
 <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/>
+  <path
+    d="M32 8 L56 56 L8 56 Z"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="5"
+    stroke-linejoin="miter"
+  />
 </svg>
 ```
 
 **Behavior:**
+
 - Default state (expanded): triangle points down (`rotate(180deg)`), teal (`--color-primary`)
 - When a parent has `.is-collapsed`: triangle points up (`rotate(0deg)`), muted color
 - Color transitions smoothly between states via `var(--transition-fast)`
 - Dark theme collapsed color handled automatically via `var(--text-dark-muted)`
 
 **Convention:**
+
 - Place the SVG as the last child inside the collapsible header/title row
 - Toggle `.is-collapsed` on the card/container element, not the chevron itself
 - In print styles, hide with `:global(.delta-chevron) { display: none !important; }`
@@ -566,8 +605,14 @@ The `.delta-chevron` utility (defined in `interactions.css`) provides a collapse
 ### 1. Hardcoded Colors
 
 ```css
-/* BAD */  .text { color: #1a1a1a; }
-/* GOOD */ .text { color: var(--text-primary); }
+/* BAD */
+.text {
+  color: #1a1a1a;
+}
+/* GOOD */
+.text {
+  color: var(--text-primary);
+}
 ```
 
 Colors must use CSS variables so dark theme works automatically.
@@ -576,18 +621,33 @@ Colors must use CSS variables so dark theme works automatically.
 
 ```css
 /* BAD — 50+ manual overrides */
-html.dark-theme .button { color: #05cd99; }
-html.dark-theme .link { color: #f5f5f5; }
+html.dark-theme .button {
+  color: #05cd99;
+}
+html.dark-theme .link {
+  color: #f5f5f5;
+}
 
 /* GOOD — override the variable, components inherit */
-html.dark-theme { --button-color: #05cd99; --text-color: #f5f5f5; }
+html.dark-theme {
+  --button-color: #05cd99;
+  --text-color: #f5f5f5;
+}
 ```
 
 ### 3. Hardcoded Spacing
 
 ```css
-/* BAD */  .card { padding: 14px; margin: 23px; }
-/* GOOD */ .card { padding: var(--spacing-lg); margin: var(--spacing-md); }
+/* BAD */
+.card {
+  padding: 14px;
+  margin: 23px;
+}
+/* GOOD */
+.card {
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md);
+}
 ```
 
 **Micro-spacing exception**: Values below `--spacing-xs` (4px) are acceptable for badge padding, border-radius fine-tuning, and optical alignment. Use `1px` or `2px` directly since the spacing scale does not cover sub-4px values. Example: `padding: 2px var(--spacing-sm)` is acceptable for compact badges.
@@ -595,9 +655,15 @@ html.dark-theme { --button-color: #05cd99; --text-color: #f5f5f5; }
 ### 4. Hardcoded Font Sizes
 
 ```css
-/* BAD */  .title { font-size: 32px; }
-/* GOOD */ <h1 class="brutal-heading-lg">Title</h1>
-/* or */   .title { font-size: var(--text-xl); }
+/* BAD */
+.title {
+  font-size: 32px;
+}
+/* GOOD */
+<h1 class="brutal-heading-lg">Title</h1>
+/* or */   .title {
+  font-size: var(--text-xl);
+}
 ```
 
 ### 5. Inline Styles and `!important`
@@ -607,8 +673,14 @@ Defeats the cascade. Use component or utility classes instead.
 ### 6. Hardcoded Transitions
 
 ```css
-/* BAD */  .card { transition: all 0.3s; }
-/* GOOD */ .card { transition: all var(--transition-normal); }
+/* BAD */
+.card {
+  transition: all 0.3s;
+}
+/* GOOD */
+.card {
+  transition: all var(--transition-normal);
+}
 ```
 
 ### 7. Creating Unnecessary Variables
@@ -622,9 +694,18 @@ Delete dead styles. Version control has the history.
 ### 9. Hardcoded Primary Opacity
 
 ```css
-/* BAD */  .tag { background: rgba(5, 205, 153, 0.1); }
-/* GOOD */ .tag { background: var(--color-primary-10); }
-/* BEST */ .tag { background: var(--accent-dark-bg); }  /* when a semantic alias exists */
+/* BAD */
+.tag {
+  background: rgba(5, 205, 153, 0.1);
+}
+/* GOOD */
+.tag {
+  background: var(--color-primary-10);
+}
+/* BEST */
+.tag {
+  background: var(--accent-dark-bg);
+} /* when a semantic alias exists */
 ```
 
 Use `--color-primary-XX` opacity tokens (see [VARIABLES_REFERENCE — Opacity Scale](./VARIABLES_REFERENCE.md#primary-color-opacity-scale)). Prefer the semantic alias (`--accent-*-bg`, `--accent-border-*`) when one matches your intent.
@@ -632,8 +713,14 @@ Use `--color-primary-XX` opacity tokens (see [VARIABLES_REFERENCE — Opacity Sc
 ### 10. Hardcoded Dark-Theme Borders
 
 ```css
-/* BAD */  html.dark-theme .card { border: 1px solid rgba(255, 255, 255, 0.15); }
-/* GOOD */ html.dark-theme .card { border: 1px solid var(--border-dark-default); }
+/* BAD */
+html.dark-theme .card {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+/* GOOD */
+html.dark-theme .card {
+  border: 1px solid var(--border-dark-default);
+}
 ```
 
 Three tiers: `--border-dark-subtle` (0.10), `--border-dark-default` (0.15), `--border-dark-prominent` (0.20).
