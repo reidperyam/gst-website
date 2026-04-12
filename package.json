@@ -34,6 +34,7 @@
     "not IE 11"
   ],
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.4",
     "@upstash/redis": "^1.36.4",
     "@vercel/speed-insights": "^1.3.1",

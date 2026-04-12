@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 import browserslist from 'browserslist';
 import { browserslistToTargets } from 'lightningcss';
 
@@ -15,6 +16,11 @@ const lightningcssTargets = browserslistToTargets(browserslist());
 
 export default defineConfig({
   site: 'https://globalstrategic.tech',
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/brand') && !page.includes('/colors'),
+    }),
+  ],
   adapter: vercel({
     webAnalytics: { enabled: true },
     isr: {
