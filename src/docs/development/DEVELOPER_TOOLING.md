@@ -15,6 +15,7 @@ Project-specific reference for the quality tooling installed during Phase 2 of [
 | Run unit and integration tests (watch) | `npm run test`                                                               |
 | Run tests with coverage                | `npm run test:coverage`                                                      |
 | Run E2E tests                          | `npm run test:e2e` (Chromium only: `npm run test:e2e -- --project=chromium`) |
+| Run accessibility scan (axe-core)      | `npm run test:a11y`                                                          |
 | Type-check the whole project           | `npx astro check`                                                            |
 | Lint all JS/TS/Astro                   | `npm run lint`                                                               |
 | Lint and auto-fix                      | `npm run lint:fix`                                                           |
@@ -274,6 +275,41 @@ Two rules from the original Phase 3 plan — `selector-max-specificity: "0,3,0"`
 ### Latent specimen-override disables in global.css
 
 [src/styles/global.css](../../styles/global.css) contains two `stylelint-disable no-duplicate-selectors` blocks around the brand-page specimen section (search/filter cluster and stats/cta cluster). These specimens deliberately re-declare production component styles. Phase 3 commits 10a/10b/10c will move them into `brand.astro` scoped styles (with a `.brand-specimen` guard), at which point the disable comments should be removed.
+
+---
+
+## Accessibility testing
+
+The project uses [axe-core](https://github.com/dequelabs/axe-core) via `@axe-core/playwright` for automated WCAG 2.1 AA scanning.
+
+### Running locally
+
+```bash
+npm run test:a11y        # Scans 6 critical pages (Chromium, ~6 seconds)
+```
+
+This runs `tests/e2e/accessibility.test.ts` which scans: Homepage, Services, About, M&A Portfolio, Hub, and TechPar.
+
+### How the ratchet works
+
+- **Critical violations**: must always be zero — blocks merge
+- **Serious violations**: new violation IDs must be zero; pre-existing violations (color-contrast, nested-interactive) are tracked in a `KNOWN_SERIOUS` map with per-page max node counts that can only decrease
+- **Moderate/minor**: logged for visibility, not enforced
+
+### Shared helper
+
+`tests/e2e/helpers/a11y.ts` exports `checkA11y(page)` which returns violations categorized by severity. Import it in any E2E test:
+
+```typescript
+import { checkA11y, formatViolations } from './helpers/a11y';
+
+const results = await checkA11y(page);
+expect(results.critical).toHaveLength(0);
+```
+
+### Coverage reporting
+
+`npm run test:coverage` reports line coverage via `@vitest/coverage-v8`. Source files under `src/utils/`, `src/data/*.ts`, and `src/scripts/` are instrumented. Current threshold: 35% lines (ratchet — can only increase).
 
 ---
 
