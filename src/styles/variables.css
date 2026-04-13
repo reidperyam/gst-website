@@ -1,6 +1,8 @@
 /* Design System Variables - Single Source of Truth */
 
 :root {
+  color-scheme: light;
+
   /* Primary Colors */
   --color-primary: #05cd99;
   --color-primary-rgb: 5, 205, 153;
@@ -13,7 +15,7 @@
   --color-editors-pick-hover: #d4923a;
 
   /* Semantic Colors */
-  --color-success: #2e8b57;
+  --color-success: light-dark(#2e8b57, #3da868);
   --color-warning: #cc8800;
   --color-error: #d93636;
   --color-info: var(--color-primary);
@@ -245,6 +247,8 @@
 
 /* Dark Theme Overrides */
 html.dark-theme {
+  color-scheme: dark;
+
   --bg-light: #0a0a0a;
   --bg-light-alt: #141414;
   --text-light-primary: var(--text-dark-primary);
@@ -265,8 +269,7 @@ html.dark-theme {
   --accent-faint-bg: var(--color-primary-05);
   --accent-tint-bg: var(--color-primary-08);
 
-  /* Semantic Colors (dark theme) */
-  --color-success: #3da868;
+  /* Semantic Colors (dark theme) — --color-success uses light-dark() in :root */
   --color-warning: #ffaa33;
   --color-error: #e05050;
 
