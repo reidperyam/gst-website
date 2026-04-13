@@ -10,8 +10,6 @@ export async function copyWithFeedback(
   options?: {
     /** Feedback text shown on success (default: 'Copied!') */
     label?: string;
-    /** Feedback text shown on failure (default: 'Failed') */
-    failLabel?: string;
     /** Reset delay in ms (default: 2000) */
     duration?: number;
     /** CSS class added during feedback period */

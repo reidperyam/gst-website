@@ -266,8 +266,12 @@ function switchPalette(id: number) {
   // Persist
   try {
     localStorage.setItem('palette', String(id));
-  } catch (e) {
-    Sentry.captureException(e, { tags: { area: 'palette-manager' } });
+  } catch {
+    Sentry.addBreadcrumb({
+      category: 'palette-manager',
+      message: 'localStorage write failed',
+      level: 'warning',
+    });
   }
 
   // Update brand-page-specific UI (no-op on other pages)
@@ -359,8 +363,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const isDark = document.documentElement.classList.contains('dark-theme');
       try {
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      } catch (e) {
-        Sentry.captureException(e, { tags: { area: 'palette-manager' } });
+      } catch {
+        Sentry.addBreadcrumb({
+          category: 'palette-manager',
+          message: 'localStorage write failed',
+          level: 'warning',
+        });
       }
       themeObserverPaused = false;
       resetAllOverrides();
@@ -382,8 +390,12 @@ document.addEventListener('DOMContentLoaded', () => {
       popoutBtn.classList.toggle('is-active');
       try {
         localStorage.setItem('palette-popped-out', wasPopped ? 'false' : 'true');
-      } catch (e) {
-        Sentry.captureException(e, { tags: { area: 'palette-manager' } });
+      } catch {
+        Sentry.addBreadcrumb({
+          category: 'palette-manager',
+          message: 'localStorage write failed',
+          level: 'warning',
+        });
       }
     });
   }

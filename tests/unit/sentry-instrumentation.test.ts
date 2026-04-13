@@ -98,13 +98,13 @@ describe('Client-side Sentry instrumentation', () => {
       expect(src).toContain("import * as Sentry from '@sentry/browser'");
     });
 
-    it('should have ≥3 captureException calls for localStorage', () => {
-      const captures = countMatches(src, /Sentry\.captureException/g);
+    it('should have ≥3 addBreadcrumb calls for localStorage failures', () => {
+      const captures = countMatches(src, /Sentry\.addBreadcrumb/g);
       expect(captures).toBeGreaterThanOrEqual(3);
     });
 
-    it('should tag palette-manager errors', () => {
-      expect(src).toContain("area: 'palette-manager'");
+    it('should tag palette-manager breadcrumbs', () => {
+      expect(src).toContain("category: 'palette-manager'");
     });
   });
 

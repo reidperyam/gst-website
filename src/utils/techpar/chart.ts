@@ -24,15 +24,20 @@ import { g, $$, getInput, getStyle, fmtD, buildInputs, renderScenarios } from '.
 Chart.register(...registerables);
 
 // ─── Analysis render ──────────────────────────────────────
+let lastReportedZone: string | null = null;
+
 export function renderAnalysis(r: TechParResult, updateAll: () => void) {
   try {
-    trackEvent({
-      event: 'tp_complete',
-      category: 'tool',
-      zone: r.zone,
-      tech_pct: String(r.totalTechPct.toFixed(1)),
-      page: 'techpar',
-    });
+    if (r.zone !== lastReportedZone) {
+      trackEvent({
+        event: 'tp_complete',
+        category: 'tool',
+        zone: r.zone,
+        tech_pct: String(r.totalTechPct.toFixed(1)),
+        page: 'techpar',
+      });
+      lastReportedZone = r.zone;
+    }
     const zoneCol = getStyle(zoneColorVar(r.zone));
     const zoneBg = getStyle(zoneBgVar(r.zone));
     const s = r.stageConfig;
