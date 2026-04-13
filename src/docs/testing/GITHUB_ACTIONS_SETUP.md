@@ -92,16 +92,19 @@ Vercel deploys to production (simultaneous, independent)
 ## Key Differences from Before
 
 ### Before (Vercel Only)
+
 ```
 git push master → Vercel deploys → Hope nothing broke
 ```
 
 ### After (Tests + Vercel)
+
 ```
 git push master → Tests run → Vercel deploys → Proof it works
 ```
 
 ### Before (PR Workflow)
+
 ```
 Create PR → Vercel preview → Review → Merge
                                         ↓
@@ -109,6 +112,7 @@ Create PR → Vercel preview → Review → Merge
 ```
 
 ### After (PR Workflow)
+
 ```
 Create PR → Tests run → Vercel preview → Review → Merge
               ↓
@@ -120,6 +124,7 @@ Create PR → Tests run → Vercel preview → Review → Merge
 ## Viewing Test Results
 
 ### GitHub Actions Tab
+
 1. Go to your repo
 2. Click **Actions** tab
 3. See all workflow runs
@@ -127,13 +132,17 @@ Create PR → Tests run → Vercel preview → Review → Merge
 5. Click a job to see logs
 
 ### PR Comments
+
 Tests automatically post results to PRs:
+
 - ✅ Pass: "All tests passed!"
 - ❌ Fail: Lists what failed
 - 🚀 Deploy: "Preview Deployed - [View Preview]"
 
 ### Playwright Report
+
 If E2E tests fail:
+
 1. Go to **Actions** tab
 2. Click the failed run
 3. Scroll to **Artifacts**
@@ -142,7 +151,9 @@ If E2E tests fail:
 6. View screenshots and traces
 
 ### Coverage Report
+
 Unit test coverage:
+
 1. Go to **Actions** tab
 2. Click a test run
 3. Expand the **Unit & Integration Tests** job
@@ -157,6 +168,7 @@ Unit test coverage:
 Tests fail but Vercel still deploys (because they run in parallel).
 
 **What to do:**
+
 1. Check GitHub Actions tab for error
 2. Fix code locally
 3. Commit and push again
@@ -170,6 +182,7 @@ No need to revert - you can always rollback later.
 PR is marked "Changes Required" and you can't merge.
 
 **What to do:**
+
 1. See test failure in PR comment
 2. Fix code locally
 3. Push to same branch
@@ -181,6 +194,7 @@ PR is marked "Changes Required" and you can't merge.
 Sometimes they pass, sometimes fail randomly.
 
 **What to do:**
+
 1. Look at Playwright report
 2. Increase timeouts: `await page.waitForTimeout(1000)`
 3. Use better selectors: `[data-testid="..."]` not text
@@ -191,6 +205,7 @@ Sometimes they pass, sometimes fail randomly.
 Unit tests pass but Astro build errors.
 
 **What to do:**
+
 1. Run locally: `npm run build`
 2. Fix build error
 3. Push, tests auto-rerun
@@ -225,6 +240,7 @@ If any are missing, add them before committing.
 ## Monitoring & Troubleshooting
 
 ### Check Workflow Status
+
 ```bash
 # List recent workflow runs
 gh run list
@@ -239,17 +255,20 @@ gh run view <run-id> --log
 ### Common Issues
 
 #### Tests pass locally but fail in CI
+
 - Check Node version: `node --version`
 - Run with CI env: `CI=true npm test`
 - Timing issues? Add explicit waits
 - File paths? Use absolute paths with `__dirname`
 
 #### Build fails in CI but passes locally
+
 - Try: `npm ci` instead of `npm install`
 - Same Node version? `nvm use 20`
 - Check for hardcoded paths or env vars
 
 #### E2E tests timeout
+
 - Increase timeout in `playwright.config.ts`
 - Use explicit waits instead of sleeps
 - Check if dev server is running
@@ -259,6 +278,7 @@ gh run view <run-id> --log
 ## Next Steps
 
 ### 1. Install Test Dependencies
+
 ```bash
 npm install --save-dev \
   vitest \
@@ -270,15 +290,19 @@ npm install --save-dev \
 ```
 
 ### 2. Create vitest and Playwright Config
+
 Copy from TEST_STRATEGY.md sections 5.1 and 5.2
 
 ### 3. Add data-testid Attributes
+
 Instrument components with test selectors (TEST_STRATEGY.md section 8)
 
 ### 4. Write Tests
+
 Start with unit tests (TEST_STRATEGY.md section 3.1)
 
 ### 5. Monitor First Run
+
 Push a test commit and watch Actions tab
 
 ---
@@ -286,6 +310,7 @@ Push a test commit and watch Actions tab
 ## Quick Reference
 
 ### Commands
+
 ```bash
 # Run all tests locally
 npm test
@@ -307,6 +332,7 @@ open coverage/index.html
 ```
 
 ### Files
+
 ```
 .github/
 └── workflows/
@@ -314,6 +340,7 @@ open coverage/index.html
 ```
 
 ### GitHub Actions Links
+
 - [Workflow runs](https://github.com/YOUR_ORG/gst-website/actions)
 - [Branch protection rules](https://github.com/YOUR_ORG/gst-website/settings/branches)
 - [Secrets & variables](https://github.com/YOUR_ORG/gst-website/settings/secrets/actions)
@@ -323,15 +350,47 @@ open coverage/index.html
 ## Support
 
 ### If something breaks:
+
 1. Check Actions tab for error logs
 2. Run tests locally to reproduce
 3. Review test output
 4. Check test documentation (TEST_STRATEGY.md)
 
 ### If you need to disable:
+
 1. Rename `.github/workflows/*.yml` to `*.yml.bak`
 2. Push to disable workflows
 3. Tests won't run (but Vercel still deploys)
+
+---
+
+## Pipeline Architecture
+
+```
+git push / PR opened
+        ↓
+  ┌─────────────────────┐
+  │ Unit & Integration  │  Node 22.x
+  │ Tests + Coverage    │  timeout: 10 min
+  └─────────┬───────────┘
+            ↓ (must pass)
+  ┌─────────────────────┐
+  │ E2E Tests           │  Playwright (3 browsers)
+  │ + Build Verify      │  timeout: 20 min
+  └─────────────────────┘
+
+  Vercel deploys simultaneously (independent)
+```
+
+### Concurrency Deduplication
+
+When a PR is open and you push to the branch, both `push` and `pull_request` events fire. Both resolve to the same concurrency group, so the earlier run is cancelled — only one completes.
+
+| Scenario                   | Events fired            | Runs to completion    |
+| -------------------------- | ----------------------- | --------------------- |
+| Push to branch, no PR open | `push`                  | 1                     |
+| Push to branch, PR open    | `push` + `pull_request` | 1 (earlier cancelled) |
+| Merge to `master`          | `push`                  | 1                     |
 
 ---
 
