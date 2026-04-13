@@ -1,24 +1,17 @@
-import { RegulationSchema } from '../schemas/regulatory-map';
 import type { Regulation } from '../types/regulatory-map';
-import { validateDataSource } from './validateData';
 
 /**
- * Loads and validates all regulatory JSON files at build time.
- * Called in Astro frontmatter to produce static data for the page.
+ * Loads and validates all regulatory JSON files via Astro content collections.
+ * Schema validation happens at build time via the collection definition in
+ * content.config.ts. Called from the regulations.json.ts API endpoint.
+ *
+ * Uses dynamic import for astro:content so this module can also be imported
+ * in vitest (which only uses getRegulationsByRegion, not this function).
  */
 export async function fetchAllRegulations(): Promise<Regulation[]> {
-  const modules = import.meta.glob<{ default: unknown }>('../data/regulatory-map/*.json', {
-    eager: true,
-  });
-
-  const regulations: Regulation[] = [];
-
-  for (const path in modules) {
-    const raw = modules[path].default ?? modules[path];
-    regulations.push(validateDataSource(RegulationSchema, raw, path));
-  }
-
-  return regulations;
+  const { getCollection } = await import('astro:content');
+  const entries = await getCollection('regulatory-map');
+  return entries.map((entry) => entry.data as Regulation);
 }
 
 /**
