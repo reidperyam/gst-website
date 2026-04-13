@@ -8,9 +8,6 @@
   padding: 0;
   box-sizing: border-box;
   user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 /* Skip navigation link — visible only on keyboard focus */
@@ -201,9 +198,6 @@ html.dark-theme .tool-action-bar--frosted {
   mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
-  -webkit-mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
 }
 
 .tool-methodology--delta[open] > .tool-methodology__trigger::before {
@@ -1845,7 +1839,6 @@ html.dark-theme .brutal-filter-drawer {
 }
 
 .brutal-slider__input {
-  -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 24px;
@@ -1919,7 +1912,6 @@ html.dark-theme .brutal-filter-drawer {
     border-color var(--transition-fast),
     color var(--transition-fast),
     border-style var(--transition-fast);
-  -moz-appearance: textfield;
   appearance: textfield;
 }
 
@@ -3633,7 +3625,6 @@ html.dark-theme .brutal-bottom-sheet__handle-bar {
 }
 
 .calc-slider {
-  -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 24px;
@@ -3716,7 +3707,6 @@ html.dark-theme .calc-slider::-moz-range-track {
     border-color var(--transition-fast),
     color var(--transition-fast),
     border-style var(--transition-fast);
-  -moz-appearance: textfield;
   appearance: textfield;
 }
 
