@@ -273,7 +273,12 @@ Phase 3 commit 0c enabled a tighter complexity rule set in the `.astro` override
 - `shorthand-property-no-redundant-values` — flags `padding: 0 0 4px 0` (redundant trailing `0`) and similar; auto-fixable
 - `declaration-block-no-redundant-longhand-properties` — flags patterns where multiple longhand declarations could be consolidated into a shorthand
 
-Two rules from the original Phase 3 plan — `selector-max-specificity: "0,3,0"` and `no-descending-specificity: true` — were deferred to Phase 9 backlog (item #7) because they surfaced ~100 pre-existing violations in monolithic hub tool files. Those will be addressed once the Phase 3 main migration (commits 5-10c) has relocated most offending selectors out of those files.
+Phase 9 (item #7) enabled two specificity rules at **warning** severity in both the base and `.astro` override:
+
+- `selector-max-specificity: "0,4,1"` — caps specificity to 4 classes + 1 element. The `0,4,1` threshold accommodates `:global(html.dark-theme) .foo .bar .baz` patterns common in hub tool dark-theme overrides
+- `no-descending-specificity: true` — flags selectors whose specificity is lower than a preceding selector for the same property, which often indicates unintended cascade order
+
+**Baseline ratchet** (2026-04-13): 4 `selector-max-specificity` + 54 `no-descending-specificity` = 58 total warnings. New code must not increase this count. Existing violations should be reduced opportunistically during future refactors.
 
 ### Latent specimen-override disables in global.css
 
