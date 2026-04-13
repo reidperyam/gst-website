@@ -871,14 +871,33 @@ Items are added here as they're discovered. Each entry should link back to the d
 Commits in this phase use the `chore(cleanup):` prefix to distinguish them from substantive refactors. Each backlog item gets its own commit so revert is granular.
 
 ```
-chore(cleanup): rename ICG threshold → triggerThreshold and drop map shim
-chore(cleanup): correct portfolio project count references (51 → 57)
-chore(cleanup): run full-codebase Prettier sweep and re-enable format:check in CI
-chore(cleanup): investigate/fix techpar-eslint parser failure
-chore(cleanup): delete stale one-shot migration scripts
-refactor(css): remove remaining manual vendor-prefix declarations
-chore(lint): tighten selector-max-specificity and enable no-descending-specificity
-refactor(css): pilot light-dark() single-declaration theme switching
+# Group A: Quick mechanical fixes
+chore(cleanup): rename ICG threshold → triggerThreshold and drop map shim           # #1
+chore(cleanup): correct portfolio project count references (51 → 57)                # #2
+chore(cleanup): remove dead failLabel option from copy-feedback.ts                  # #5
+chore(cleanup): remove @layer declaration (no-op after Phase 3 analysis)            # #10
+chore(cleanup): consolidate DM dual-import of diligence-engine.ts                   # #13
+
+# Group B: CI/CD & Tooling
+chore(ci): enable CI on feature branches + GitHub branch ruleset                    # #11
+chore(cleanup): run full-codebase Prettier sweep and re-enable format:check in CI   # #3
+chore(cleanup): remove stale ESLint ignores (abbreviate-arr, sort-projects, techpar)# #4
+
+# Group C: CSS Architecture
+refactor(css): remove manual vendor prefixes handled by LightningCSS                # #6
+refactor(css): enable stylelint specificity rules at warning severity               # #7
+feat(css): pilot light-dark() with color-scheme declarations                        # #8
+refactor(css): migrate brand specimen styles from global.css to brand.astro         # #9
+
+# Group D: Sentry Follow-ups
+docs(sentry): document alert rules, source maps, and consent evaluation             # #14-16
+
+# Group E: Documentation Organization
+docs(development): reorganize initiative docs with roadmap view                     # #17-19
+docs(development): mark Platform Hardening V1 initiative complete                   # final
+
+# Post-Phase 9: E2E stability
+fix(e2e): remediate 42 flaky test failures under parallel load
 ```
 
 ### Success Criteria
