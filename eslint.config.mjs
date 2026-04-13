@@ -30,10 +30,6 @@ export default [
       // Generated / vendored
       '**/*.min.js',
       '**/*.min.css',
-      // Stale one-shot migration scripts at repo root — tracked in
-      // PLATFORM_HARDENING_V1.md Phase 9 backlog for deletion.
-      'abbreviate-arr.js',
-      'sort-projects.js',
       // astro-eslint-parser trips on this file with a spurious
       // "Declaration or statement expected" error at the <style>
       // block boundary (line 601). Other large .astro files including
