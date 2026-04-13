@@ -280,9 +280,9 @@ Phase 9 (item #7) enabled two specificity rules at **warning** severity in both 
 
 **Baseline ratchet** (2026-04-13): 4 `selector-max-specificity` + 54 `no-descending-specificity` = 58 total warnings. New code must not increase this count. Existing violations should be reduced opportunistically during future refactors.
 
-### Latent specimen-override disables in global.css
+### Specimen styles in brand.astro
 
-[src/styles/global.css](../../styles/global.css) contains two `stylelint-disable no-duplicate-selectors` blocks around the brand-page specimen section (search/filter cluster and stats/cta cluster). These specimens deliberately re-declare production component styles. Phase 3 commits 10a/10b/10c will move them into `brand.astro` scoped styles (with a `.brand-specimen` guard), at which point the disable comments should be removed.
+Brand-page specimen overrides (search, filter, modal, stats, CTA box) were moved from `global.css` into [brand.astro](../../pages/brand.astro) `<style is:global>` during Phase 9. The `stylelint-disable no-duplicate-selectors` guards were removed since the styles are now colocated with their only consumer.
 
 ---
 
