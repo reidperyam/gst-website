@@ -47,18 +47,18 @@ A modern, high-performance static site for GST built with Astro and deployed to 
 
 All commands are run from the root of the project:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Install dependencies                             |
-| `npm run dev`             | Start dev server at `http://localhost:4321`      |
-| `npm run build`           | Build production site to `./dist/`               |
-| `npm run preview`         | Preview production build locally                 |
-| `npm run astro ...`       | Run Astro CLI commands                           |
-| `npm run test`            | Run tests in watch mode                          |
-| `npm run test:run`        | Run all tests once                               |
-| `npm run test:coverage`   | Run tests with coverage report                   |
-| `npm run test:e2e`        | Run end-to-end tests                             |
-| `npm run test:all`        | Run all tests (unit + integration + e2e)         |
+| Command                 | Action                                      |
+| :---------------------- | :------------------------------------------ |
+| `npm install`           | Install dependencies                        |
+| `npm run dev`           | Start dev server at `http://localhost:4321` |
+| `npm run build`         | Build production site to `./dist/`          |
+| `npm run preview`       | Preview production build locally            |
+| `npm run astro ...`     | Run Astro CLI commands                      |
+| `npm run test`          | Run tests in watch mode                     |
+| `npm run test:run`      | Run all tests once                          |
+| `npm run test:coverage` | Run tests with coverage report              |
+| `npm run test:e2e`      | Run end-to-end tests                        |
+| `npm run test:all`      | Run all tests (unit + integration + e2e)    |
 
 ## 🔧 Development
 
@@ -100,6 +100,7 @@ The site is configured to deploy to Vercel as a static site.
 ## 📝 Content & Data Management
 
 ### Portfolio Data
+
 Portfolio project data is stored in `src/data/ma-portfolio/projects.json` as the single source of truth:
 
 - **51 active projects** with validated schema
@@ -108,12 +109,14 @@ Portfolio project data is stored in `src/data/ma-portfolio/projects.json` as the
 - **Auto-validated on commit** via CI/CD pipeline
 
 To update portfolio data:
+
 1. Edit `src/data/ma-portfolio/projects.json` directly
 2. Commit changes to GitHub
 3. CI/CD tests validate data integrity automatically
 4. Push triggers Vercel deployment
 
 ### Page Content
+
 Page content is hardcoded in Astro components. To make it dynamic, consider:
 
 - Using **Markdown files** in `src/pages/` for content pages
@@ -125,12 +128,14 @@ Page content is hardcoded in Astro components. To make it dynamic, consider:
 The project includes comprehensive automated tests to ensure code quality and data integrity:
 
 ### Test Coverage
+
 - **Unit & Integration Tests** (857 tests via Vitest):
   - Data validation, utility functions, component logic, engine calculations
 - **E2E Tests** (393 test cases via Playwright, across 3 browsers):
   - Critical user journeys, portfolio discovery, hub tools, mobile navigation
 
 ### Running Tests
+
 ```bash
 # Run all tests once
 npm run test:run
@@ -149,10 +154,11 @@ npm run test:all
 ```
 
 ### CI/CD Integration
+
 - Tests run automatically on every push and pull request
 - Coverage reports uploaded to Codecov
 - Test failures block PR merges (branch protection)
-- See [Testing Documentation](./src/docs/testing/INDEX.md) for detailed testing strategy
+- See [Testing Documentation](./src/docs/testing/README.md) for detailed testing strategy
 
 ## 🎨 Design System
 
@@ -167,6 +173,7 @@ npm run test:all
 This website includes Google Analytics 4 integration for tracking user engagement and understanding portfolio interaction patterns.
 
 **See [GOOGLE_ANALYTICS.md](./src/docs/analytics/GOOGLE_ANALYTICS.md) for:**
+
 - GA4 architecture and integration points
 - Complete event documentation (6 tracked event types)
 - Component integration details
@@ -174,6 +181,7 @@ This website includes Google Analytics 4 integration for tracking user engagemen
 - Testing and troubleshooting guide
 
 **Tracked Events:**
+
 - Navigation clicks
 - Portfolio project views
 - Portfolio filter applications

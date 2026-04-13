@@ -19,7 +19,6 @@ export default defineConfig({
   site: 'https://globalstrategic.tech',
   integrations: [
     sentry({
-      dsn: import.meta.env.PUBLIC_SENTRY_DSN,
       sourceMapsUploadOptions: {
         enabled: !!process.env.SENTRY_AUTH_TOKEN,
         org: process.env.SENTRY_ORG,
