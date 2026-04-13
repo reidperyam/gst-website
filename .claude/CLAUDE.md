@@ -140,7 +140,7 @@ gst-website/
 │   │   └── radar/            # Radar feed components (FyiItem, CategoryFilter)
 │   ├── data/                 # Structured data
 │   │   ├── ma-portfolio/
-│   │   │   └── projects.json # 51 validated projects
+│   │   │   └── projects.json # 57 validated projects
 │   │   ├── palettes.ts       # Shared palette metadata (names, concepts, tips)
 │   │   ├── diligence-machine/# Attention areas, questions, wizard config
 │   │   ├── infrastructure-cost-governance/  # Domains, recommendations
@@ -268,7 +268,7 @@ Specialized agents in `.claude/agents/`. Use the right agent for the task:
 ### Portfolio Data
 
 - **Source**: `src/data/ma-portfolio/projects.json`
-- **Content**: 51 active projects with validated schema
+- **Content**: 57 active projects with validated schema
 - **Fields**: id, codeName, industry, theme, summary, arr, arrNumeric, currency, growthStage, year, technologies
 - **Validation**: Unit tests covering schema integrity; auto-validated on commit via CI/CD
 

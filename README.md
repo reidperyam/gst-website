@@ -103,7 +103,7 @@ The site is configured to deploy to Vercel as a static site.
 
 Portfolio project data is stored in `src/data/ma-portfolio/projects.json` as the single source of truth:
 
-- **51 active projects** with validated schema
+- **57 active projects** with validated schema
 - Fields: id, codeName, industry, theme, summary, arr, arrNumeric, currency, growthStage, year, technologies
 - **Validated automatically** with 20 unit tests covering schema integrity and data quality
 - **Auto-validated on commit** via CI/CD pipeline
