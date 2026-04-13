@@ -30,13 +30,6 @@ export default [
       // Generated / vendored
       '**/*.min.js',
       '**/*.min.css',
-      // astro-eslint-parser trips on this file with a spurious
-      // "Declaration or statement expected" error at the <style>
-      // block boundary (line 601). Other large .astro files including
-      // brand.astro (3778 lines) and diligence-machine/index.astro
-      // parse fine, so this is file-specific. Tracked in Phase 9 for
-      // further investigation. Prettier parses it correctly.
-      'src/pages/hub/tools/techpar/index.astro',
     ],
   },
 
