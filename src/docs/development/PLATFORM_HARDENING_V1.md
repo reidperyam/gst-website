@@ -846,6 +846,23 @@ Items are added here as they're discovered. Each entry should link back to the d
     - **Effort**: ~2-4 hours (depends on consent banner implementation)
     - **Context**: Phase 7 runs Sentry under legitimate-interest basis (error monitoring, not user tracking). The follow-on [BUSINESS_ENABLEMENT_V1.md](./BUSINESS_ENABLEMENT_V1.md) initiative will ship a cookie consent banner — at that point, evaluate whether to additionally gate Sentry on consent or keep it under legitimate interest. Error-only replay (`replaysOnErrorSampleRate: 1.0`) is the main consideration; pure error capture is generally accepted as legitimate interest under GDPR.
 
+#### Documentation Organization Initiative (discovered during Phase 8 planning)
+
+17. **Consolidate development initiative docs into a combined roadmap**
+    - **Files**: `src/docs/development/` (PLATFORM_HARDENING_V1.md, BUSINESS_ENABLEMENT_V1.md, DEVELOPMENT_OPPORTUNITIES.md, PERFORMANCE_FUTURE_INITIATIVES.md)
+    - **Effort**: ~2-4 hours
+    - **Context**: Four separate initiative documents with overlapping scope and cross-references. Evaluate consolidating into a single roadmap view. Archive completed initiatives to reduce active file count. Assess which docs are still active vs. historical.
+
+18. **Prune outdated or low-value documentation**
+    - **Files**: All 41 markdown files in `src/docs/`
+    - **Effort**: ~2-3 hours (audit + deletions)
+    - **Context**: Audit for staleness, accuracy, and ongoing utility. Delete docs that duplicate information better maintained elsewhere (e.g., CI_CD_SUMMARY.md vs GITHUB_ACTIONS_SETUP.md). Remove docs for completed one-time tasks that have no reference value.
+
+19. **Optimize documentation content and structure**
+    - **Files**: `src/docs/` (multiple directories)
+    - **Effort**: ~2-3 hours
+    - **Context**: Merge related docs that are split unnecessarily (e.g., testing has 8 files — some could combine). Ensure every doc has a clear audience, purpose, and is reachable from a parent README. Reduce total file count where consolidation improves discoverability without losing information.
+
 <!-- Add new items below as Phase 2-8 work uncovers them. Use the same format. -->
 
 ### Commits
