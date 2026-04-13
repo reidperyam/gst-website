@@ -82,7 +82,7 @@ git commit -m "..."
 
 **Important**: the hook runs **before** the commit is recorded. A file you staged with double-quotes and 4-space indent may end up in the commit with single-quotes and 2-space indent — that's Prettier doing its job between the stash and the record. If you see your commit look different than your working tree expected, that's why.
 
-### On every push and PR to `master`
+### On every push to `master`, `dev`, `feat/**`, `fix/**` and PRs to `master`
 
 The GitHub Actions workflow [.github/workflows/test.yml](../../../.github/workflows/test.yml) runs a 3-job parallel-then-gate pipeline:
 
@@ -126,7 +126,10 @@ The GitHub Actions workflow [.github/workflows/test.yml](../../../.github/workfl
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-All three jobs are **required status checks** on the `master` branch protection ruleset — a PR cannot merge until all three report success.
+All three jobs are **required status checks** on two branch rulesets:
+
+- **`master`** (ruleset 12237842) — PRs cannot merge until all checks pass
+- **`feat/**` and `fix/**`** (ruleset 15011377) — pushes to feature/fix branches are blocked until checks pass, shifting test failures left instead of deferring to PR time
 
 ---
 
