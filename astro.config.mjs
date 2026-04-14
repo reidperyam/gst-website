@@ -6,13 +6,8 @@ import sitemap from '@astrojs/sitemap';
 import browserslist from 'browserslist';
 import { browserslistToTargets } from 'lightningcss';
 
-// Phase 3 Commit 0e: read browser targets from the project's browserslist
-// config (package.json "browserslist" field) and feed them to LightningCSS
-// via its native browserslistToTargets helper. Without this wiring, Vite
-// does NOT automatically forward browserslist to LightningCSS, and
-// LightningCSS falls back to an internal default that strips unprefixed
-// backdrop-filter for Firefox users. See Phase 3 commit 0e commit message
-// and src/docs/development/DEVELOPER_TOOLING.md "Browser support" section.
+// Load-bearing: Vite does NOT forward browserslist to LightningCSS automatically.
+// Without this, LightningCSS strips -webkit-backdrop-filter, breaking frosted glass in Firefox.
 const lightningcssTargets = browserslistToTargets(browserslist());
 
 export default defineConfig({
@@ -90,12 +85,8 @@ export default defineConfig({
   },
   vite: {
     css: {
-      // Phase 3 Commit 0d: replace Vite's default esbuild CSS pipeline with
-      // LightningCSS — a single Rust-based parser/transformer/minifier that
-      // handles autoprefixing, minification, modern-CSS down-leveling (CSS
-      // nesting, oklch(), color-mix(), light-dark()), vendor-prefix cleanup,
-      // and stricter syntax validation. Reversible by removing this block.
-      // See src/docs/development/DEVELOPER_TOOLING.md for details.
+      // LightningCSS replaces esbuild for CSS: autoprefixing, minification,
+      // and modern-CSS down-leveling (nesting, oklch, color-mix, light-dark).
       transformer: 'lightningcss',
       lightningcss: {
         targets: lightningcssTargets,
