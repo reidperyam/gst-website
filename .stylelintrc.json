@@ -1,8 +1,10 @@
 {
+  "plugins": ["stylelint-declaration-strict-value"],
   "extends": "stylelint-config-standard",
   "rules": {
     "import-notation": null,
-    "no-descending-specificity": null,
+    "no-descending-specificity": [true, { "severity": "warning" }],
+    "selector-max-specificity": ["0,4,1", { "severity": "warning" }],
     "selector-class-pattern": null,
     "custom-property-pattern": null,
     "keyframes-name-pattern": null,
@@ -20,16 +22,86 @@
     "no-duplicate-selectors": true,
     "declaration-block-no-duplicate-properties": true,
     "color-named": "never",
-    "selector-pseudo-class-no-unknown": [true, {
-      "ignorePseudoClasses": ["global"]
-    }],
-    "at-rule-no-unknown": [true, {
-      "ignoreAtRules": ["import"]
-    }]
+    "rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "at-rule-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "custom-property-empty-line-before": null,
+    "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global"] }],
+    "at-rule-no-unknown": [true, { "ignoreAtRules": ["import", "layer"] }],
+    "scale-unlimited/declaration-strict-value": [
+      ["/color$/", "fill", "stroke", "background-color"],
+      {
+        "ignoreValues": [
+          "transparent",
+          "inherit",
+          "currentColor",
+          "currentcolor",
+          "none",
+          "unset",
+          "initial",
+          "0"
+        ],
+        "ignoreFunctions": true,
+        "severity": "warning"
+      }
+    ]
   },
-  "ignoreFiles": [
-    "dist/**",
-    "node_modules/**",
-    ".astro/**"
-  ]
+  "overrides": [
+    {
+      "files": ["**/*.astro"],
+      "extends": ["stylelint-config-standard", "stylelint-config-html/astro"],
+      "customSyntax": "postcss-html",
+      "rules": {
+        "import-notation": null,
+        "selector-class-pattern": null,
+        "custom-property-pattern": null,
+        "keyframes-name-pattern": null,
+        "alpha-value-notation": null,
+        "color-function-alias-notation": null,
+        "color-function-notation": null,
+        "media-feature-range-notation": null,
+        "property-no-vendor-prefix": null,
+        "value-no-vendor-prefix": null,
+        "color-hex-length": null,
+        "value-keyword-case": null,
+        "property-no-deprecated": null,
+        "no-duplicate-selectors": true,
+        "declaration-block-no-duplicate-properties": true,
+        "color-named": "never",
+        "rule-empty-line-before": null,
+        "comment-empty-line-before": null,
+        "at-rule-empty-line-before": null,
+        "declaration-empty-line-before": null,
+        "custom-property-empty-line-before": null,
+        "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global"] }],
+        "at-rule-no-unknown": [true, { "ignoreAtRules": ["import", "layer"] }],
+        "no-descending-specificity": [true, { "severity": "warning" }],
+        "selector-max-specificity": ["0,4,1", { "severity": "warning" }],
+        "max-nesting-depth": [3, { "ignoreAtRules": ["media", "supports", "container"] }],
+        "selector-max-compound-selectors": 4,
+        "declaration-block-no-shorthand-property-overrides": true,
+        "shorthand-property-no-redundant-values": true,
+        "declaration-block-no-redundant-longhand-properties": true,
+        "scale-unlimited/declaration-strict-value": [
+          ["/color$/", "fill", "stroke", "background-color"],
+          {
+            "ignoreValues": [
+              "transparent",
+              "inherit",
+              "currentColor",
+              "currentcolor",
+              "none",
+              "unset",
+              "initial",
+              "0"
+            ],
+            "ignoreFunctions": true,
+            "severity": "warning"
+          }
+        ]
+      }
+    }
+  ],
+  "ignoreFiles": ["dist/**", "node_modules/**", ".astro/**"]
 }

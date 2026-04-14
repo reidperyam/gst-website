@@ -1,0 +1,244 @@
+---
+import ColorSpecimens from './ColorSpecimens.astro';
+import { palettes } from '../../data/palettes';
+---
+
+<section class="brand-section" id="colors">
+  <div class="container">
+    <h2 class="brutal-heading-md brand-section__title">Color Palette</h2>
+    <p class="brutal-text-small brand-section__note brand-section__note--desktop">
+      Toggle dark mode via the header to see theme-specific values. Open the palette panel (right
+      edge) to switch palettes and edit colors live.
+    </p>
+    <p class="brutal-text-small brand-section__note brand-section__note--mobile">
+      Toggle dark mode via the header to see theme-specific values. Color swatches are read-only on
+      mobile. Use a desktop browser for the interactive palette explorer.
+    </p>
+    <p class="brutal-text-base colors-palette-concept" id="palette-concept">
+      {palettes[0].concept}
+    </p>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="colors-primary">Primary &amp; Secondary</h3>
+    <div class="brand-swatch-grid">
+      <div class="brand-swatch" data-var="--color-primary">
+        <div class="brand-swatch__color" style="background: var(--color-primary);"></div>
+        <div class="brand-swatch__label">--color-primary</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Primary actions, active states, accents</div>
+      </div>
+      <div class="brand-swatch" data-var="--color-primary-dark">
+        <div class="brand-swatch__color" style="background: var(--color-primary-dark);"></div>
+        <div class="brand-swatch__label">--color-primary-dark</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Hover/pressed state for primary</div>
+      </div>
+      <div class="brand-swatch" data-var="--color-secondary">
+        <div class="brand-swatch__color" style="background: var(--color-secondary);"></div>
+        <div class="brand-swatch__label">--color-secondary</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Secondary emphasis, amber highlights</div>
+      </div>
+      <div class="brand-swatch" data-var="--color-secondary-dark">
+        <div class="brand-swatch__color" style="background: var(--color-secondary-dark);"></div>
+        <div class="brand-swatch__label">--color-secondary-dark</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Dark-theme secondary variant</div>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="colors-semantic">Semantic</h3>
+    <div class="brand-swatch-grid">
+      <div class="brand-swatch" data-var="--color-success">
+        <div class="brand-swatch__color" style="background: var(--color-success);"></div>
+        <div class="brand-swatch__label">--color-success</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Positive outcomes, passing states</div>
+      </div>
+      <div class="brand-swatch" data-var="--color-warning">
+        <div class="brand-swatch__color" style="background: var(--color-warning);"></div>
+        <div class="brand-swatch__label">--color-warning</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Caution indicators, attention-needed</div>
+      </div>
+      <div class="brand-swatch" data-var="--color-error">
+        <div class="brand-swatch__color" style="background: var(--color-error);"></div>
+        <div class="brand-swatch__label">--color-error</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Errors, critical states, negative deltas</div>
+      </div>
+      <div class="brand-swatch" data-var="--color-info">
+        <div class="brand-swatch__color" style="background: var(--color-info);"></div>
+        <div class="brand-swatch__label">--color-info</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Informational highlights (alias of primary)</div>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="colors-text">Text Hierarchy</h3>
+    <div class="brand-swatch-grid">
+      <div class="brand-swatch" data-var="--text-primary">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--text-primary);"
+        >
+        </div>
+        <div class="brand-swatch__label">--text-primary</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Headings, high-emphasis body text</div>
+      </div>
+      <div class="brand-swatch" data-var="--text-secondary">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--text-secondary);"
+        >
+        </div>
+        <div class="brand-swatch__label">--text-secondary</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Body text, descriptions</div>
+      </div>
+      <div class="brand-swatch" data-var="--text-muted">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--text-muted);"
+        >
+        </div>
+        <div class="brand-swatch__label">--text-muted</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Labels, captions, supporting text</div>
+      </div>
+      <div class="brand-swatch" data-var="--text-faded">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--text-faded);"
+        >
+        </div>
+        <div class="brand-swatch__label">--text-faded</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Placeholders, disabled text, timestamps</div>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="colors-backgrounds">Backgrounds</h3>
+    <div class="brand-swatch-grid">
+      <div class="brand-swatch" data-var="--bg-light">
+        <div class="brand-swatch__color" style="background: var(--bg-light);"></div>
+        <div class="brand-swatch__label">--bg-light</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Page background, card surfaces</div>
+      </div>
+      <div class="brand-swatch" data-var="--bg-light-alt">
+        <div class="brand-swatch__color" style="background: var(--bg-light-alt);"></div>
+        <div class="brand-swatch__label">--bg-light-alt</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Alternate sections, tool shells</div>
+      </div>
+      <div class="brand-swatch" data-var="--bg-dark">
+        <div class="brand-swatch__color" style="background: var(--bg-dark);"></div>
+        <div class="brand-swatch__label">--bg-dark</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Dark-theme page bg, service cards</div>
+      </div>
+      <div class="brand-swatch" data-var="--bg-dark-secondary">
+        <div class="brand-swatch__color" style="background: var(--bg-dark-secondary);"></div>
+        <div class="brand-swatch__label">--bg-dark-secondary</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Elevated dark surfaces, modals</div>
+      </div>
+      <div class="brand-swatch" data-var="--bg-dark-tertiary">
+        <div class="brand-swatch__color" style="background: var(--bg-dark-tertiary);"></div>
+        <div class="brand-swatch__label">--bg-dark-tertiary</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Footer, section backgrounds (dark)</div>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="colors-borders">Borders &amp; Accents</h3>
+    <div class="brand-swatch-grid">
+      <div class="brand-swatch" data-var="--border-light">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--border-light);"
+        >
+        </div>
+        <div class="brand-swatch__label">--border-light</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Dividers, card borders, table lines</div>
+      </div>
+      <div class="brand-swatch" data-var="--accent-light-bg">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--accent-light-bg);"
+        >
+        </div>
+        <div class="brand-swatch__label">--accent-light-bg</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Active row highlights, accent fills</div>
+      </div>
+      <div class="brand-swatch" data-var="--accent-light-bg-hover">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--accent-light-bg-hover);"
+        >
+        </div>
+        <div class="brand-swatch__label">--accent-light-bg-hover</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Hover state for accent backgrounds</div>
+      </div>
+      <div class="brand-swatch" data-var="--accent-border-light">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--accent-border-light);"
+        >
+        </div>
+        <div class="brand-swatch__label">--accent-border-light</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Subtle accent borders, badge outlines</div>
+      </div>
+      <div class="brand-swatch" data-var="--accent-border-medium">
+        <div
+          class="brand-swatch__color brand-swatch__color--checker"
+          style="background-color: var(--accent-border-medium);"
+        >
+        </div>
+        <div class="brand-swatch__label">--accent-border-medium</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">Stronger accent borders, focus rings</div>
+      </div>
+    </div>
+
+    <h3 class="brutal-heading-sm brand-group-title" id="colors-expanded">Expanded Palette</h3>
+    <p class="brutal-text-small brand-section__note">
+      Purpose-named tokens shared across all tools. Tool-specific variables (TechPar zones, ICG
+      maturity, DM domain, RegMap categories) derive from these.
+    </p>
+    <div class="brand-swatch-grid">
+      <div class="brand-swatch" data-var="--color-authority">
+        <div class="brand-swatch__color" style="background: var(--color-authority);"></div>
+        <div class="brand-swatch__label">--color-authority</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">
+          Institutional credibility — hub authority line, DM results, TechPar personnel
+        </div>
+      </div>
+      <div class="brand-swatch" data-var="--color-distinguish">
+        <div class="brand-swatch__color" style="background: var(--color-distinguish);"></div>
+        <div class="brand-swatch__label">--color-distinguish</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">
+          Differentiation accent — RegMap industry, TechPar R&amp;D OpEx, chart series
+        </div>
+      </div>
+      <div class="brand-swatch" data-var="--color-subdued">
+        <div class="brand-swatch__color" style="background: var(--color-subdued);"></div>
+        <div class="brand-swatch__label">--color-subdued</div>
+        <div class="brand-swatch__value"></div>
+        <div class="brand-swatch__usage">
+          Muted neutral — DM methodology, process/background contexts
+        </div>
+      </div>
+    </div>
+
+    <!-- Palette specimens and derived tool colors -->
+    <ColorSpecimens />
+  </div>
+</section>

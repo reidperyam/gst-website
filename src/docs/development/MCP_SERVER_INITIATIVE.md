@@ -11,12 +11,12 @@
 
 GST already has structured, high-value data and tools that AI agents could consume:
 
-| Asset | Current Form | MCP Potential |
-|---|---|---|
-| **Portfolio data** | 51 projects in `ma-portfolio/projects.json` with rich schema | `search_portfolio`, `filter_by_industry`, `get_engagement_stats` tools |
-| **Diligence Machine** | Client-side wizard generating M&A diligence agendas | `generate_diligence_agenda` tool — the crown jewel |
-| **Radar feed** | Inoreader-powered curated intelligence | `search_radar`, `get_latest_insights` tools |
-| **Domain expertise** | Embedded in question banks, project summaries | Structured knowledge accessible to agents |
+| Asset                 | Current Form                                                 | MCP Potential                                                          |
+| --------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| **Portfolio data**    | 57 projects in `ma-portfolio/projects.json` with rich schema | `search_portfolio`, `filter_by_industry`, `get_engagement_stats` tools |
+| **Diligence Machine** | Client-side wizard generating M&A diligence agendas          | `generate_diligence_agenda` tool — the crown jewel                     |
+| **Radar feed**        | Inoreader-powered curated intelligence                       | `search_radar`, `get_latest_insights` tools                            |
+| **Domain expertise**  | Embedded in question banks, project summaries                | Structured knowledge accessible to agents                              |
 
 ---
 
@@ -97,13 +97,13 @@ More tightly coupled, requires adding Next.js, but keeps everything on one platf
 ### Official TypeScript SDK
 
 ```typescript
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
 
-const server = new McpServer({ name: "gst-server", version: "1.0.0" });
+const server = new McpServer({ name: 'gst-server', version: '1.0.0' });
 
-server.registerTool("generate_diligence_agenda", {
-  description: "Generate a custom M&A technical diligence agenda",
+server.registerTool('generate_diligence_agenda', {
+  description: 'Generate a custom M&A technical diligence agenda',
   inputSchema: {
     industry: z.string(),
     dealSize: z.string(),
@@ -113,38 +113,38 @@ server.registerTool("generate_diligence_agenda", {
   handler: async ({ industry, dealSize, engagementType, concerns }) => {
     // Wraps existing diligence-engine.ts logic
     const agenda = await generateAgenda({ industry, dealSize, engagementType, concerns });
-    return { content: [{ type: "text", text: JSON.stringify(agenda) }] };
-  }
+    return { content: [{ type: 'text', text: JSON.stringify(agenda) }] };
+  },
 });
 ```
 
 ### Transport Mechanisms
 
-| Transport | Use Case | Auth |
-|---|---|---|
-| **Stdio** | Local/internal — Claude Desktop, VS Code | Environment variables |
-| **Streamable HTTP** | Remote/external — client AI agents over internet | OAuth 2.1 with PKCE |
+| Transport           | Use Case                                         | Auth                  |
+| ------------------- | ------------------------------------------------ | --------------------- |
+| **Stdio**           | Local/internal — Claude Desktop, VS Code         | Environment variables |
+| **Streamable HTTP** | Remote/external — client AI agents over internet | OAuth 2.1 with PKCE   |
 
 ### Hosting Comparison
 
-| Platform | Pros | Cons |
-|---|---|---|
+| Platform               | Pros                                                    | Cons                                |
+| ---------------------- | ------------------------------------------------------- | ----------------------------------- |
 | **Cloudflare Workers** | Free tier, global edge, fast cold starts, OAuth support | Separate infrastructure from Vercel |
-| **Vercel + Next.js** | Same platform as site, official adapter | Requires Next.js, adds complexity |
-| **AWS Lambda** | Enterprise-grade, existing AWS infra | Higher setup cost, cold starts |
+| **Vercel + Next.js**   | Same platform as site, official adapter                 | Requires Next.js, adds complexity   |
+| **AWS Lambda**         | Enterprise-grade, existing AWS infra                    | Higher setup cost, cold starts      |
 
 ---
 
 ## Strategic Assessment
 
-| Factor | Verdict |
-|---|---|
-| **Technical feasibility** | High — existing code is well-structured for wrapping as tools |
-| **Internal value** | Moderate — useful but small team, marginal time savings |
-| **External value** | **High** — differentiator in a market where PE firms are adopting AI agents rapidly |
-| **Competitive moat** | Strong — boutique advisory + AI-native tooling is rare |
-| **Risk** | Low if internal-only; moderate if public (security surface) |
-| **Effort** | Low for prototype; moderate for production-grade |
+| Factor                    | Verdict                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------- |
+| **Technical feasibility** | High — existing code is well-structured for wrapping as tools                       |
+| **Internal value**        | Moderate — useful but small team, marginal time savings                             |
+| **External value**        | **High** — differentiator in a market where PE firms are adopting AI agents rapidly |
+| **Competitive moat**      | Strong — boutique advisory + AI-native tooling is rare                              |
+| **Risk**                  | Low if internal-only; moderate if public (security surface)                         |
+| **Effort**                | Low for prototype; moderate for production-grade                                    |
 
 ---
 

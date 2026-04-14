@@ -2,17 +2,15 @@
  * TechPar - Signal card copy
  *
  * 5 stages x 6 zones = 30 combinations of headline and body text.
- * Extracted from the POC's STAGES[key].copy structure.
+ * Validated at build time against `SignalCopyMapSchema`.
  */
 
-import type { Stage, Zone } from '../../utils/techpar-engine';
+import { SignalCopyMapSchema, type Stage, type Zone, type SignalCopy } from '../../schemas/techpar';
+import { validateDataSource } from '../../utils/validateData';
 
-export interface SignalCopy {
-  headline: string;
-  body: string;
-}
+export type { SignalCopy };
 
-export const SIGNAL_COPY: Record<Stage, Record<Zone, SignalCopy>> = {
+const signalCopyData: Record<Stage, Record<Zone, SignalCopy>> = {
   seed: {
     underinvest: {
       headline: 'Possible underinvestment.',
@@ -144,3 +142,9 @@ export const SIGNAL_COPY: Record<Stage, Record<Zone, SignalCopy>> = {
     },
   },
 };
+
+export const SIGNAL_COPY = validateDataSource(
+  SignalCopyMapSchema,
+  signalCopyData,
+  'techpar/signal-copy.ts'
+);

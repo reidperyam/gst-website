@@ -7,10 +7,14 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
     // can time out when many workers share the same dev server.
     await page.goto('/ma-portfolio', { waitUntil: 'domcontentloaded' });
     // Wait for portfolio initialization
-    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, { timeout: 10000 });
+    await page.waitForFunction(() => (window as any).__portfolioInitialized === true, {
+      timeout: 10000,
+    });
   });
 
-  test('should verify filter drawer is initially hidden with correct positioning', async ({ page }) => {
+  test('should verify filter drawer is initially hidden with correct positioning', async ({
+    page,
+  }) => {
     const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
 
     // Get the initial right position (should be negative/off-screen)
@@ -123,7 +127,6 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
 
   test('should verify filter button toggle state changes correctly', async ({ page }) => {
     const filterButton = page.locator('[data-testid="portfolio-filter-toggle"]');
-    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
 
     // Initial state should be collapsed
     let ariaExpanded = await filterButton.getAttribute('aria-expanded');
@@ -132,15 +135,17 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
     // Click to open
     await openFilterDrawer(page);
 
-    // Should be expanded
+    // Wait for drawer to fully open (class + aria state)
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector('[data-testid="portfolio-filter-overlay"]');
+        return el && el.classList.contains('open');
+      },
+      { timeout: 10000 }
+    );
+
     ariaExpanded = await filterButton.getAttribute('aria-expanded');
     expect(ariaExpanded).toBe('true');
-
-    // Wait for overlay to have open class (drawer is fully open)
-    await page.waitForFunction(() => {
-      const el = document.querySelector('[data-testid="portfolio-filter-overlay"]');
-      return el && el.classList.contains('open');
-    });
 
     // Close using dispatchEvent to avoid z-index pointer-event interception
     await page.evaluate(() => {
@@ -149,10 +154,13 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
     });
 
     // Wait for drawer to close
-    await page.waitForFunction(() => {
-      const el = document.querySelector('[data-testid="portfolio-filter-drawer"]');
-      return el && !el.classList.contains('open');
-    });
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector('[data-testid="portfolio-filter-drawer"]');
+        return el && !el.classList.contains('open');
+      },
+      { timeout: 10000 }
+    );
 
     // Should be collapsed again
     ariaExpanded = await filterButton.getAttribute('aria-expanded');
@@ -177,12 +185,15 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
       });
 
       // Wait for drawer to close (class removed AND transition settled)
-      await page.waitForFunction(() => {
-        const el = document.querySelector('[data-testid="portfolio-filter-drawer"]');
-        if (!el || el.classList.contains('open')) return false;
-        const right = parseFloat(window.getComputedStyle(el).right);
-        return right < -100;
-      }, { timeout: 5000 });
+      await page.waitForFunction(
+        () => {
+          const el = document.querySelector('[data-testid="portfolio-filter-drawer"]');
+          if (!el || el.classList.contains('open')) return false;
+          const right = parseFloat(window.getComputedStyle(el).right);
+          return right < -100;
+        },
+        { timeout: 5000 }
+      );
 
       hasOpenClass = await drawer.evaluate((el) => el.classList.contains('open'));
       expect(hasOpenClass).toBe(false);
@@ -190,7 +201,6 @@ test.describe('Filter Drawer Z-Index & Layering - MA Portfolio Page', () => {
   });
 
   test('should verify clear filters button is accessible and functional', async ({ page }) => {
-    const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
     const clearButton = page.locator('[data-testid="clear-filters-button"]');
 
     // Open the drawer

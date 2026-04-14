@@ -1,42 +1,83 @@
 ---
 // ThemeToggle.astro - Theme switcher component
+// Note: trackThemeToggle is imported in the <script> block below — the
+// frontmatter does not need it.
 import DeltaIcon from './DeltaIcon.astro';
-import { trackThemeToggle } from '../utils/analytics';
 ---
 
-<button class="theme-toggle" id="themeToggle" data-testid="theme-toggle" title="Toggle dark theme" aria-label="Toggle dark theme">
-    <DeltaIcon class="theme-toggle-icon" />
+<button
+  class="theme-toggle"
+  id="themeToggle"
+  data-testid="theme-toggle"
+  title="Toggle dark theme"
+  aria-label="Toggle dark theme"
+>
+  <DeltaIcon class="theme-toggle-icon" />
 </button>
 
-<style is:global>
-    .theme-toggle .theme-toggle-icon {
-        width: 0.67em;
-        height: 0.67em;
-        display: block;
-    }
+<style>
+  .theme-toggle {
+    background: transparent;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: 5rem;
+    transition: color var(--transition-fast);
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    height: 0.85rem;
+  }
+
+  .theme-toggle:hover {
+    color: var(--color-primary);
+  }
+
+  .theme-toggle:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0.25rem;
+  }
+
+  .theme-toggle:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0.25rem;
+  }
+
+  /* :global() needed — .theme-toggle-icon is on a DeltaIcon child component
+     whose rendered <svg> gets DeltaIcon's scope, not ThemeToggle's */
+  .theme-toggle :global(.theme-toggle-icon) {
+    width: 0.67em;
+    height: 0.67em;
+    display: block;
+  }
 </style>
 
 <script>
-    import { trackThemeToggle } from '../utils/analytics';
+  import { trackThemeToggle } from '../utils/analytics';
 
-    const themeToggle = document.getElementById('themeToggle');
+  const themeToggle = document.getElementById('themeToggle');
 
-    // Theme initialization is now handled synchronously in BaseLayout.astro
-    // This script only handles the toggle interaction
+  // Theme initialization is now handled synchronously in BaseLayout.astro
+  // This script only handles the toggle interaction
 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark-theme');
-            const isDark = document.documentElement.classList.contains('dark-theme');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark-theme');
+      const isDark = document.documentElement.classList.contains('dark-theme');
 
-            try {
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            } catch (e) {
-                console.error('Failed to save theme preference:', e);
-            }
+      try {
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      } catch (e) {
+        console.error('Failed to save theme preference:', e);
+      }
 
-            // Track theme toggle in analytics
-            trackThemeToggle(isDark ? 'dark' : 'light');
-        });
-    }
+      // Track theme toggle in analytics
+      trackThemeToggle(isDark ? 'dark' : 'light');
+    });
+  }
 </script>

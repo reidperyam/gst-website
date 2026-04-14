@@ -1,4 +1,4 @@
-import type { Project } from '../types/portfolio';
+import type { Project, EngagementType } from '../types/portfolio';
 
 /**
  * Engagement type categorization constants
@@ -8,13 +8,13 @@ export const ENGAGEMENT_CATEGORIES = {
     'Value Creation - Growth',
     'Value Creation - Integration',
     'Value Creation - Modernization',
-    'Value Creation - Turnaround'
+    'Value Creation - Turnaround',
   ],
   technicalDiligence: [
     'Early Stage Assessment',
     'Technical Assessment',
-    'Buy-Side Technical Diligence'
-  ]
+    'Buy-Side Technical Diligence',
+  ],
 } as const;
 
 /**
@@ -27,7 +27,7 @@ export const GROWTH_KEYWORDS = [
   'scaling',
   'scale-up',
   'startup',
-  'early'
+  'early',
 ];
 
 /**
@@ -40,7 +40,7 @@ export const MATURE_KEYWORDS = [
   'developed',
   'legacy',
   'modernizing',
-  'enterprise'
+  'enterprise',
 ];
 
 /**
@@ -67,17 +67,35 @@ export function categorizeGrowthStage(stage: string): 'growth' | 'mature' | 'oth
   const stageLower = stage.toLowerCase();
 
   // Check for growth stage indicators
-  if (GROWTH_KEYWORDS.some(keyword => stageLower.includes(keyword))) {
+  if (GROWTH_KEYWORDS.some((keyword) => stageLower.includes(keyword))) {
     return 'growth';
   }
 
   // Check for mature stage indicators
-  if (MATURE_KEYWORDS.some(keyword => stageLower.includes(keyword))) {
+  if (MATURE_KEYWORDS.some((keyword) => stageLower.includes(keyword))) {
     return 'mature';
   }
 
   // Unknown or unclassified stage
   return 'other';
+}
+
+/**
+ * Returns true if the engagement type belongs to the value-creation category.
+ * Centralizes the readonly-array membership check so call sites don't repeat
+ * the cast pattern.
+ */
+export function isValueCreationEngagement(engagementType: string | undefined): boolean {
+  if (!engagementType) return false;
+  return (ENGAGEMENT_CATEGORIES.valueCreation as readonly string[]).includes(engagementType);
+}
+
+/**
+ * Returns true if the engagement type belongs to the technical-diligence category.
+ */
+export function isTechnicalDiligenceEngagement(engagementType: string | undefined): boolean {
+  if (!engagementType) return false;
+  return (ENGAGEMENT_CATEGORIES.technicalDiligence as readonly string[]).includes(engagementType);
 }
 
 /**
@@ -92,20 +110,8 @@ export function categorizeGrowthStage(stage: string): 'growth' | 'mature' | 'oth
 export function categorizeEngagementType(
   engagementType: string | undefined
 ): 'value-creation' | 'technical-diligence' | 'other' {
-  // Handle undefined or null engagement types
-  if (!engagementType) return 'other';
-
-  // Check if this is a value creation engagement
-  if (ENGAGEMENT_CATEGORIES.valueCreation.includes(engagementType as any)) {
-    return 'value-creation';
-  }
-
-  // Check if this is a technical diligence engagement
-  if (ENGAGEMENT_CATEGORIES.technicalDiligence.includes(engagementType as any)) {
-    return 'technical-diligence';
-  }
-
-  // Unknown engagement type
+  if (isValueCreationEngagement(engagementType)) return 'value-creation';
+  if (isTechnicalDiligenceEngagement(engagementType)) return 'technical-diligence';
   return 'other';
 }
 
@@ -115,7 +121,7 @@ export function categorizeEngagementType(
  * @returns Array of unique growth stages
  */
 export function getUniqueGrowthStages(projects: Project[]): string[] {
-  return [...new Set(projects.map(p => p.growthStage))];
+  return [...new Set(projects.map((p) => p.growthStage))];
 }
 
 /**
@@ -125,9 +131,7 @@ export function getUniqueGrowthStages(projects: Project[]): string[] {
  */
 export function getGrowthStageProjects(projects: Project[]): string[] {
   const uniqueStages = getUniqueGrowthStages(projects);
-  return uniqueStages
-    .filter(stage => categorizeGrowthStage(stage) === 'growth')
-    .sort();
+  return uniqueStages.filter((stage) => categorizeGrowthStage(stage) === 'growth').sort();
 }
 
 /**
@@ -137,9 +141,7 @@ export function getGrowthStageProjects(projects: Project[]): string[] {
  */
 export function getMatureStageProjects(projects: Project[]): string[] {
   const uniqueStages = getUniqueGrowthStages(projects);
-  return uniqueStages
-    .filter(stage => categorizeGrowthStage(stage) === 'mature')
-    .sort();
+  return uniqueStages.filter((stage) => categorizeGrowthStage(stage) === 'mature').sort();
 }
 
 /**
@@ -148,7 +150,7 @@ export function getMatureStageProjects(projects: Project[]): string[] {
  * @returns Sorted array of unique themes
  */
 export function getUniqueThemes(projects: Project[]): string[] {
-  return [...new Set(projects.map(p => p.theme))].sort();
+  return [...new Set(projects.map((p) => p.theme))].sort();
 }
 
 /**
@@ -157,7 +159,7 @@ export function getUniqueThemes(projects: Project[]): string[] {
  * @returns Array of unique years sorted in descending order
  */
 export function getUniqueYears(projects: Project[]): number[] {
-  return [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
+  return [...new Set(projects.map((p) => p.year))].sort((a, b) => b - a);
 }
 
 /**
@@ -165,13 +167,11 @@ export function getUniqueYears(projects: Project[]): number[] {
  * @param projects - Array of projects to analyze
  * @returns Sorted array of unique engagement types
  */
-export function getUniqueEngagementTypes(projects: Project[]): string[] {
+export function getUniqueEngagementTypes(projects: Project[]): EngagementType[] {
   return [
     ...new Set(
-      projects
-        .map(p => p.engagementType)
-        .filter((e): e is string => e !== undefined)
-    )
+      projects.map((p) => p.engagementType).filter((e): e is EngagementType => e !== undefined)
+    ),
   ].sort();
 }
 
@@ -181,13 +181,7 @@ export function getUniqueEngagementTypes(projects: Project[]): string[] {
  * @returns Combined searchable text
  */
 export function createSearchableText(project: Project): string {
-  const techs = Array.isArray(project.technologies)
-    ? project.technologies
-    : typeof project.technologies === 'string'
-      ? project.technologies.split(',').map(t => t.trim())
-      : [];
-
-  return [project.codeName, project.industry, project.summary, ...techs]
+  return [project.codeName, project.industry, project.summary, ...project.technologies]
     .join(' ')
     .toLowerCase();
 }
@@ -206,7 +200,7 @@ export function filterProjects(
   growthStages: string[] = [],
   matureStages: string[] = []
 ): Project[] {
-  return projects.filter(project => {
+  return projects.filter((project) => {
     // Search filter
     if (criteria.search) {
       const searchLower = criteria.search.toLowerCase();
@@ -239,11 +233,11 @@ export function filterProjects(
     // Engagement type filter - categorized by type
     if (criteria.engagement !== 'all') {
       if (criteria.engagement === 'value-creation') {
-        if (!ENGAGEMENT_CATEGORIES.valueCreation.includes(project.engagementType as any)) {
+        if (!isValueCreationEngagement(project.engagementType)) {
           return false;
         }
       } else if (criteria.engagement === 'technical-diligence') {
-        if (!ENGAGEMENT_CATEGORIES.technicalDiligence.includes(project.engagementType as any)) {
+        if (!isTechnicalDiligenceEngagement(project.engagementType)) {
           return false;
         }
       }

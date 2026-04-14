@@ -11,15 +11,18 @@ import {
   getGrowthStageProjects,
   getMatureStageProjects,
   getUniqueEngagementTypes,
-  ENGAGEMENT_CATEGORIES
+  isValueCreationEngagement,
+  isTechnicalDiligenceEngagement,
 } from '../../utils/filterLogic';
 
 // Use centralized filter logic
 const growthStages = getGrowthStageProjects(projects);
 const matureStages = getMatureStageProjects(projects);
 const uniqueEngagementTypes = getUniqueEngagementTypes(projects);
-const valueCreationEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.valueCreation.includes(e as any)).sort();
-const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEMENT_CATEGORIES.technicalDiligence.includes(e as any)).sort();
+const valueCreationEngagements = uniqueEngagementTypes.filter(isValueCreationEngagement).sort();
+const technicalDiligenceEngagements = uniqueEngagementTypes
+  .filter(isTechnicalDiligenceEngagement)
+  .sort();
 ---
 
 <!-- Fixed Controls - Positioned independently at viewport level -->
@@ -27,7 +30,15 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   <div class="portfolio-controls-fixed brutal-frosted--heavy">
     <div class="controls-wrapper brutal-frosted">
       <div class="search-box">
-        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          class="search-icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
@@ -41,14 +52,31 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
         />
       </div>
 
-      <button id="filter-toggle-sticky" class="filter-button" aria-label="Open filters" aria-expanded="false" data-testid="sticky-filter-toggle">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button
+        id="filter-toggle-sticky"
+        class="filter-button"
+        aria-label="Open filters"
+        aria-expanded="false"
+        data-testid="sticky-filter-toggle"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <line x1="4" y1="6" x2="20" y2="6"></line>
           <line x1="4" y1="12" x2="20" y2="12"></line>
           <line x1="4" y1="18" x2="20" y2="18"></line>
         </svg>
         <span class="filter-text">Filters</span>
-        <span id="filter-badge-sticky" class="filter-badge" aria-live="polite" data-testid="sticky-filter-badge"></span>
+        <span
+          id="filter-badge-sticky"
+          class="filter-badge"
+          aria-live="polite"
+          data-testid="sticky-filter-badge"></span>
       </button>
     </div>
   </div>
@@ -74,7 +102,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform var(--transition-fast) ease-out, opacity var(--transition-fast) ease-out;
+    transition:
+      transform var(--transition-fast) ease-out,
+      opacity var(--transition-fast) ease-out;
     position: fixed;
     left: 50%;
     width: fit-content;
@@ -91,7 +121,6 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
-
 
   .search-box {
     position: relative;
@@ -150,8 +179,12 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   @keyframes badgePulse {
-    0% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .portfolio-filter-drawer {
@@ -297,10 +330,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
   .portfolio-filter-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgba(0, 0, 0, 0);
     z-index: 10000;
     display: none;
@@ -321,6 +351,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 
   /* Dark Theme */
+
   /* dark theme frosted glass handled by .brutal-frosted--heavy */
 
   :global(html.dark-theme) .controls-wrapper {
@@ -454,10 +485,19 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   }
 </style>
 
-<script define:vars={{ projectsData: JSON.stringify(projects), growthStagesList: growthStages, matureStagesList: matureStages, valueCreationList: valueCreationEngagements, technicalDiligenceList: technicalDiligenceEngagements }}>
+<script
+  is:inline
+  define:vars={{
+    projectsData: JSON.stringify(projects),
+    growthStagesList: growthStages,
+    matureStagesList: matureStages,
+    valueCreationList: valueCreationEngagements,
+    technicalDiligenceList: technicalDiligenceEngagements,
+  }}
+>
   // Initialize global state
   if (!window.portfolioState) {
-    let allProjects = [];
+    let allProjects;
     try {
       allProjects = JSON.parse(projectsData);
     } catch (e) {
@@ -473,35 +513,32 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
         stage: 'all',
         theme: 'all',
         year: 'all',
-        engagement: 'all'
+        engagement: 'all',
       },
       growthStages: growthStagesList,
       matureStages: matureStagesList,
       valueCreationEngagements: valueCreationList,
-      technicalDiligenceEngagements: technicalDiligenceList
+      technicalDiligenceEngagements: technicalDiligenceList,
     };
   }
 
-  let allProjects = window.portfolioState.allProjects;
+  const allProjects = window.portfolioState.allProjects;
   let filteredProjects = window.portfolioState.filteredProjects;
-  let filters = window.portfolioState.filters;
+  const filters = window.portfolioState.filters;
 
   function filterProjects() {
-    window.portfolioState.filteredProjects = allProjects.filter(project => {
+    window.portfolioState.filteredProjects = allProjects.filter((project) => {
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const techs = Array.isArray(project.technologies)
           ? project.technologies
-          : (typeof project.technologies === 'string'
-              ? project.technologies.split(',').map(t => t.trim())
-              : []);
-        const searchableText = [
-          project.codeName,
-          project.industry,
-          project.summary,
-          ...techs
-        ].join(' ').toLowerCase();
+          : typeof project.technologies === 'string'
+            ? project.technologies.split(',').map((t) => t.trim())
+            : [];
+        const searchableText = [project.codeName, project.industry, project.summary, ...techs]
+          .join(' ')
+          .toLowerCase();
 
         if (!searchableText.includes(searchLower)) return false;
       }
@@ -525,8 +562,17 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
 
       // Engagement type filter
       if (filters.engagement !== 'all') {
-        const valueCreationTypes = ['Value Creation - Growth', 'Value Creation - Integration', 'Value Creation - Modernization', 'Value Creation - Turnaround'];
-        const technicalDiligenceTypes = ['Early Stage Assessment', 'Technical Assessment', 'Buy-Side Technical Diligence'];
+        const valueCreationTypes = [
+          'Value Creation - Growth',
+          'Value Creation - Integration',
+          'Value Creation - Modernization',
+          'Value Creation - Turnaround',
+        ];
+        const technicalDiligenceTypes = [
+          'Early Stage Assessment',
+          'Technical Assessment',
+          'Buy-Side Technical Diligence',
+        ];
 
         if (filters.engagement === 'value-creation') {
           if (!valueCreationTypes.includes(project.engagementType)) return false;
@@ -541,16 +587,18 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     filteredProjects = window.portfolioState.filteredProjects;
     updateGridDisplay();
     updateFilterBadge();
-    window.dispatchEvent(new CustomEvent('portfolioFiltered', { detail: { count: filteredProjects.length } }));
+    window.dispatchEvent(
+      new CustomEvent('portfolioFiltered', { detail: { count: filteredProjects.length } })
+    );
   }
 
   function updateGridDisplay() {
     const cards = document.querySelectorAll('.project-card');
     let visibleCount = 0;
 
-    cards.forEach(card => {
+    cards.forEach((card) => {
       const projectId = card.dataset.projectId;
-      const isVisible = window.portfolioState.filteredProjects.some(p => p.id === projectId);
+      const isVisible = window.portfolioState.filteredProjects.some((p) => p.id === projectId);
 
       if (isVisible) {
         card.style.display = '';
@@ -574,7 +622,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
         message = document.createElement('div');
         message.id = 'portfolio-no-results';
         message.className = 'no-results-message';
-        message.textContent = 'No projects match your filters. Try adjusting your search or filters.';
+        message.textContent =
+          'No projects match your filters. Try adjusting your search or filters.';
         const grid = document.querySelector('.grid');
         if (grid && grid.parentElement) {
           grid.parentElement.insertBefore(message, grid);
@@ -593,9 +642,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     const engagementChipsContainer = document.getElementById('engagement-chips');
 
     if (stageChipsContainer && !stageChipsContainer.hasListener) {
-      stageChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-          stageChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      stageChipsContainer.querySelectorAll('.filter-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          stageChipsContainer
+            .querySelectorAll('.filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           this.classList.add('active');
           filters.stage = chip.dataset.value;
           window.portfolioState.filters.stage = filters.stage;
@@ -606,9 +657,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     }
 
     if (themeChipsContainer && !themeChipsContainer.hasListener) {
-      themeChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-          themeChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      themeChipsContainer.querySelectorAll('.filter-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          themeChipsContainer
+            .querySelectorAll('.filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           this.classList.add('active');
           filters.theme = chip.dataset.value;
           window.portfolioState.filters.theme = filters.theme;
@@ -619,9 +672,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     }
 
     if (yearChipsContainer && !yearChipsContainer.hasListener) {
-      yearChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-          yearChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      yearChipsContainer.querySelectorAll('.filter-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          yearChipsContainer
+            .querySelectorAll('.filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           this.classList.add('active');
           filters.year = chip.dataset.value;
           window.portfolioState.filters.year = filters.year;
@@ -632,9 +687,11 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
     }
 
     if (engagementChipsContainer && !engagementChipsContainer.hasListener) {
-      engagementChipsContainer.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-          engagementChipsContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      engagementChipsContainer.querySelectorAll('.filter-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          engagementChipsContainer
+            .querySelectorAll('.filter-chip')
+            .forEach((c) => c.classList.remove('active'));
           this.classList.add('active');
           filters.engagement = chip.dataset.value;
           window.portfolioState.filters.engagement = filters.engagement;
@@ -666,7 +723,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes.filter(e => ENGAGEME
   function updateFilterBadge() {
     const headerBadge = document.getElementById('filter-badge-header');
     const stickyBadge = document.getElementById('filter-badge-sticky');
-    const activeCount = Object.values(filters).filter(v => v !== 'all' && v !== '').length;
+    const activeCount = Object.values(filters).filter((v) => v !== 'all' && v !== '').length;
 
     if (headerBadge) {
       if (activeCount > 0) {

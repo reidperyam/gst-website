@@ -1,0 +1,46 @@
+# Generated and build output
+dist/
+.astro/
+.vercel/
+coverage/
+playwright-report/
+test-results/
+.cache/
+
+# Dependencies
+node_modules/
+
+# Lock files
+package-lock.json
+
+# Hand-curated JSON data files — preserve existing formatting
+src/data/ma-portfolio/projects.json
+src/data/canada-provinces.json
+
+# Regulatory map (120 files, curated manually)
+src/data/regulatory-map/
+
+# Public static assets (topojson, minified, generated)
+public/data/
+public/favicon.svg
+
+# Test coverage artifacts (if generated locally)
+*.lcov
+
+# Claude Code skill definitions (external to project)
+.claude/skills/
+
+# Files where Prettier's parser fails on embedded code blocks
+# (inline scripts in .astro, code fences in markdown)
+src/components/GoogleAnalytics.astro
+src/docs/analytics/ANALYTICS_TESTING.md
+src/docs/development/DEVELOPER_TOOLING.md
+src/docs/hub/DILIGENCE_MACHINE.md
+src/docs/hub/REGULATORY_MAP.md
+src/docs/seo/CREDENTIALS_REFERENCE.md
+src/docs/seo/JSON_LD_SCHEMA.md
+src/docs/seo/SEO_COMPONENT.md
+src/docs/seo/SEO_IMPLEMENTATION.md
+src/docs/styles/STYLES_GUIDE.md
+src/docs/testing/QUICK_REFERENCE.md
+src/docs/testing/TEST_STRATEGY.md

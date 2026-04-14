@@ -12,7 +12,7 @@ import {
   getUniqueEngagementTypes,
   createSearchableText,
   filterProjects,
-  type FilterCriteria
+  type FilterCriteria,
 } from '@/utils/filterLogic';
 import type { Project } from '@/types/portfolio';
 
@@ -30,7 +30,7 @@ const mockProjects: Project[] = [
     growthStage: 'Early-Stage Growth',
     year: 2024,
     technologies: ['Node.js', 'React'],
-    engagementType: 'Value Creation - Growth'
+    engagementType: 'Value Creation - Growth',
   },
   {
     id: 'project-2',
@@ -44,7 +44,7 @@ const mockProjects: Project[] = [
     growthStage: 'Mature Enterprise',
     year: 2023,
     technologies: ['Python', 'AWS'],
-    engagementType: 'Value Creation - Modernization'
+    engagementType: 'Value Creation - Modernization',
   },
   {
     id: 'project-3',
@@ -55,10 +55,10 @@ const mockProjects: Project[] = [
     arr: '£75M',
     arrNumeric: 75000000,
     currency: 'GBP',
-    growthStage: 'Scaling Stage',
+    growthStage: 'Scaling Growth',
     year: 2024,
     technologies: ['Go', 'Kubernetes'],
-    engagementType: 'Early Stage Assessment'
+    engagementType: 'Early Stage Assessment',
   },
   {
     id: 'project-4',
@@ -72,8 +72,8 @@ const mockProjects: Project[] = [
     growthStage: 'Established Market Leader',
     year: 2022,
     technologies: ['Java', 'Microservices'],
-    engagementType: undefined
-  }
+    engagementType: undefined,
+  },
 ];
 
 describe('filterLogic', () => {
@@ -126,7 +126,7 @@ describe('filterLogic', () => {
       const stages = getUniqueGrowthStages(mockProjects);
       expect(stages).toContain('Early-Stage Growth');
       expect(stages).toContain('Mature Enterprise');
-      expect(stages).toContain('Scaling Stage');
+      expect(stages).toContain('Scaling Growth');
       expect(stages).toHaveLength(4);
     });
 
@@ -139,7 +139,7 @@ describe('filterLogic', () => {
     it('should filter and sort growth stage projects', () => {
       const growthStages = getGrowthStageProjects(mockProjects);
       expect(growthStages).toContain('Early-Stage Growth');
-      expect(growthStages).toContain('Scaling Stage');
+      expect(growthStages).toContain('Scaling Growth');
       expect(growthStages).not.toContain('Mature Enterprise');
       expect(growthStages.length).toBeLessThan(4);
     });
@@ -198,13 +198,6 @@ describe('filterLogic', () => {
       expect(text).toContain('react');
     });
 
-    it('should handle projects with string technologies', () => {
-      const projectWithStringTechs = { ...mockProjects[0], technologies: 'Node.js, React' as any };
-      const text = createSearchableText(projectWithStringTechs);
-      expect(text).toContain('node.js');
-      expect(text).toContain('react');
-    });
-
     it('should handle projects without technologies', () => {
       const projectNoTechs = { ...mockProjects[0], technologies: [] };
       const text = createSearchableText(projectNoTechs);
@@ -223,7 +216,7 @@ describe('filterLogic', () => {
       stage: 'all',
       theme: 'all',
       year: 'all',
-      engagement: 'all'
+      engagement: 'all',
     };
 
     it('should return all projects with default criteria', () => {
@@ -249,7 +242,7 @@ describe('filterLogic', () => {
       const yearCriteria = { ...criteria, year: '2024' };
       const result = filterProjects(mockProjects, yearCriteria);
       expect(result.length).toBe(2);
-      expect(result.map(p => p.year)).toEqual([2024, 2024]);
+      expect(result.map((p) => p.year)).toEqual([2024, 2024]);
     });
 
     it('should filter by growth stage category', () => {
@@ -258,14 +251,14 @@ describe('filterLogic', () => {
       const stageCriteria = { ...criteria, stage: 'growth-category' };
       const result = filterProjects(mockProjects, stageCriteria, growthStages, matureStages);
       expect(result.length).toBeGreaterThan(0);
-      expect(result.every(p => growthStages.includes(p.growthStage))).toBe(true);
+      expect(result.every((p) => growthStages.includes(p.growthStage))).toBe(true);
     });
 
     it('should filter by value creation engagement type', () => {
       const engagementCriteria = { ...criteria, engagement: 'value-creation' };
       const result = filterProjects(mockProjects, engagementCriteria);
       expect(result.length).toBe(2);
-      expect(result.map(p => p.id)).toEqual(['project-1', 'project-2']);
+      expect(result.map((p) => p.id)).toEqual(['project-1', 'project-2']);
     });
 
     it('should filter by technical diligence engagement type', () => {
@@ -281,7 +274,7 @@ describe('filterLogic', () => {
         stage: 'all',
         theme: 'Healthcare',
         year: '2023',
-        engagement: 'all'
+        engagement: 'all',
       };
       const result = filterProjects(mockProjects, multiCriteria);
       expect(result).toHaveLength(1);

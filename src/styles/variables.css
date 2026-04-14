@@ -1,20 +1,22 @@
 /* Design System Variables - Single Source of Truth */
 
 :root {
+  color-scheme: light;
+
   /* Primary Colors */
   --color-primary: #05cd99;
   --color-primary-rgb: 5, 205, 153;
   --color-primary-dark: #04a87a;
-  --color-secondary: #CC8800;
-  --color-secondary-dark: #FFAA33;
+  --color-secondary: #cc8800;
+  --color-secondary-dark: #ffaa33;
 
   /* Editor's Pick */
   --color-editors-pick: #b26622;
   --color-editors-pick-hover: #d4923a;
 
   /* Semantic Colors */
-  --color-success: #2e8b57;
-  --color-warning: #CC8800;
+  --color-success: light-dark(#2e8b57, #3da868);
+  --color-warning: #cc8800;
   --color-error: #d93636;
   --color-info: var(--color-primary);
 
@@ -50,18 +52,18 @@
   --color-primary-05: rgba(var(--color-primary-rgb), 0.05);
   --color-primary-06: rgba(var(--color-primary-rgb), 0.06);
   --color-primary-08: rgba(var(--color-primary-rgb), 0.08);
-  --color-primary-10: rgba(var(--color-primary-rgb), 0.10);
+  --color-primary-10: rgba(var(--color-primary-rgb), 0.1);
   --color-primary-12: rgba(var(--color-primary-rgb), 0.12);
   --color-primary-13: rgba(var(--color-primary-rgb), 0.13);
   --color-primary-15: rgba(var(--color-primary-rgb), 0.15);
   --color-primary-18: rgba(var(--color-primary-rgb), 0.18);
-  --color-primary-20: rgba(var(--color-primary-rgb), 0.20);
+  --color-primary-20: rgba(var(--color-primary-rgb), 0.2);
   --color-primary-25: rgba(var(--color-primary-rgb), 0.25);
-  --color-primary-30: rgba(var(--color-primary-rgb), 0.30);
+  --color-primary-30: rgba(var(--color-primary-rgb), 0.3);
   --color-primary-45: rgba(var(--color-primary-rgb), 0.45);
-  --color-primary-50: rgba(var(--color-primary-rgb), 0.50);
+  --color-primary-50: rgba(var(--color-primary-rgb), 0.5);
   --color-primary-55: rgba(var(--color-primary-rgb), 0.55);
-  --color-primary-60: rgba(var(--color-primary-rgb), 0.60);
+  --color-primary-60: rgba(var(--color-primary-rgb), 0.6);
   --color-primary-65: rgba(var(--color-primary-rgb), 0.65);
 
   /* Borders & Accents */
@@ -117,6 +119,24 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
   --shadow-lg: -4px 0 20px rgba(0, 0, 0, 0.15);
+
+  /* Z-index scale (Phase 3 commit 1) —
+   * Canonical tiers for stacking context. Replace raw numeric z-index
+   * values with these variables. Higher number → higher in stack.
+   * Tool-internal layers (map annotations, chart overlays) may use
+   * direct values for contextual reasons; prefer variables otherwise.
+   */
+  --z-negative: -1; /* body::before background grid */
+  --z-base: 1; /* normal content stacking */
+  --z-raised: 5; /* tool content layers (maps, charts) */
+  --z-sticky: 10; /* sticky headers, dropdowns anchored to content */
+  --z-dropdown: 20; /* floating menus, dropdowns */
+  --z-palette-panel: 30; /* palette panel (brand.astro) */
+  --z-overlay: 50; /* general overlays */
+  --z-compliance-panel: 60; /* regulatory map compliance panel */
+  --z-modal: 1000; /* modal base */
+  --z-modal-overlay: 1001; /* modal backdrop */
+  --z-skip-nav: 10000; /* skip-nav link (top of page) */
 
   /* Section Backgrounds */
   --services-bg: #eeeeee;
@@ -213,11 +233,11 @@
   /* TechPar — Chart Colors (opacity-tuned, kept independently) */
   --techpar-chart-band-fill: var(--color-primary-15);
   --techpar-chart-band-border: var(--color-primary-50);
-  --techpar-chart-ahead-fill: rgba(33, 118, 174, 0.10);
+  --techpar-chart-ahead-fill: rgba(33, 118, 174, 0.1);
   --techpar-chart-ahead-border: rgba(33, 118, 174, 0.5);
   --techpar-chart-under-fill: rgba(224, 123, 0, 0.12);
   --techpar-chart-under-border: rgba(224, 123, 0, 0.55);
-  --techpar-chart-above-fill: rgba(217, 54, 54, 0.10);
+  --techpar-chart-above-fill: rgba(217, 54, 54, 0.1);
   --techpar-chart-above-border: rgba(217, 54, 54, 0.45);
   --techpar-chart-revenue-line: rgba(26, 26, 26, 0.55);
 
@@ -227,6 +247,8 @@
 
 /* Dark Theme Overrides */
 html.dark-theme {
+  color-scheme: dark;
+
   --bg-light: #0a0a0a;
   --bg-light-alt: #141414;
   --text-light-primary: var(--text-dark-primary);
@@ -247,9 +269,8 @@ html.dark-theme {
   --accent-faint-bg: var(--color-primary-05);
   --accent-tint-bg: var(--color-primary-08);
 
-  /* Semantic Colors (dark theme) */
-  --color-success: #3da868;
-  --color-warning: #FFAA33;
+  /* Semantic Colors (dark theme) — --color-success uses light-dark() in :root */
+  --color-warning: #ffaa33;
   --color-error: #e05050;
 
   /* Section Backgrounds */
@@ -286,9 +307,9 @@ html.dark-theme {
   --stat-item-border: var(--color-primary-20);
 
   /* Dark Border Scale */
-  --border-dark-subtle: rgba(255, 255, 255, 0.10);
+  --border-dark-subtle: rgba(255, 255, 255, 0.1);
   --border-dark-default: rgba(255, 255, 255, 0.15);
-  --border-dark-prominent: rgba(255, 255, 255, 0.20);
+  --border-dark-prominent: rgba(255, 255, 255, 0.2);
 
   /* Misc */
   --checkerboard-line: rgba(255, 255, 255, 0.08);
@@ -306,6 +327,7 @@ html.dark-theme {
   --color-subdued-rgb: 168, 152, 136;
 
   /* Tool derivations auto-resolve from updated core tokens above */
+
   /* Only override opacity variants that need dark-theme tuning */
   --color-subdued-bg: rgba(var(--color-subdued-rgb), 0.06);
   --color-authority-bg: rgba(var(--color-authority-rgb), 0.1);
@@ -326,7 +348,7 @@ html.dark-theme {
   --techpar-chart-under-fill: rgba(255, 140, 0, 0.12);
   --techpar-chart-under-border: rgba(255, 140, 0, 0.55);
   --techpar-chart-above-fill: rgba(240, 70, 70, 0.12);
-  --techpar-chart-above-border: rgba(240, 70, 70, 0.50);
+  --techpar-chart-above-border: rgba(240, 70, 70, 0.5);
   --techpar-chart-revenue-line: rgba(200, 200, 200, 0.6);
 }
 

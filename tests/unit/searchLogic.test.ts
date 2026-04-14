@@ -4,7 +4,7 @@ import {
   createDebouncedSearch,
   highlightSearchTerm,
   getSearchRelevance,
-  sortBySearchRelevance
+  sortBySearchRelevance,
 } from '@/utils/searchLogic';
 import type { Project } from '@/types/portfolio';
 
@@ -19,10 +19,10 @@ const mockProjects: Project[] = [
     arr: '$100M',
     arrNumeric: 100000000,
     currency: 'USD',
-    growthStage: 'Growth',
+    growthStage: 'Scaling Growth',
     year: 2024,
     technologies: ['Node.js', 'React', 'AWS'],
-    engagementType: 'Value Creation - Growth'
+    engagementType: 'Value Creation - Growth',
   },
   {
     id: 'project-2',
@@ -33,10 +33,10 @@ const mockProjects: Project[] = [
     arr: '€50M',
     arrNumeric: 50000000,
     currency: 'EUR',
-    growthStage: 'Mature',
+    growthStage: 'Mature Enterprise',
     year: 2023,
     technologies: ['Python', 'PostgreSQL', 'AWS'],
-    engagementType: 'Value Creation - Modernization'
+    engagementType: 'Value Creation - Modernization',
   },
   {
     id: 'project-3',
@@ -47,10 +47,10 @@ const mockProjects: Project[] = [
     arr: '£75M',
     arrNumeric: 75000000,
     currency: 'GBP',
-    growthStage: 'Growth',
+    growthStage: 'Scaling Growth',
     year: 2024,
     technologies: ['React', 'TypeScript', 'D3.js'],
-    engagementType: 'Early Stage Assessment'
+    engagementType: 'Early Stage Assessment',
   },
   {
     id: 'project-4',
@@ -61,11 +61,11 @@ const mockProjects: Project[] = [
     arr: '$200M',
     arrNumeric: 200000000,
     currency: 'USD',
-    growthStage: 'Mature',
+    growthStage: 'Mature Enterprise',
     year: 2022,
     technologies: ['Go', 'Kubernetes'],
-    engagementType: undefined
-  }
+    engagementType: undefined,
+  },
 ];
 
 describe('searchLogic', () => {
@@ -93,8 +93,8 @@ describe('searchLogic', () => {
     it('should find projects by technology', () => {
       const result = performSearch(mockProjects, 'React');
       expect(result).toHaveLength(2); // Projects 1 and 3
-      expect(result.map(p => p.id)).toContain('project-1');
-      expect(result.map(p => p.id)).toContain('project-3');
+      expect(result.map((p) => p.id)).toContain('project-1');
+      expect(result.map((p) => p.id)).toContain('project-3');
     });
 
     it('should find projects by summary text', () => {

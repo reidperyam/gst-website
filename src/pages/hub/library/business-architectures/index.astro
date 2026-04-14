@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import HubHeader from '../../../../components/hub/HubHeader.astro';
+import PrintReportHeader from '../../../../components/PrintReportHeader.astro';
 import { trackPageView } from '../../../../utils/analytics';
 import DeltaIcon from '../../../../components/DeltaIcon.astro';
 import TableOfContents from '../../../../components/TableOfContents.astro';
@@ -9,1045 +10,2018 @@ trackPageView('business-architectures-guide', 'Business & Technology Architectur
 ---
 
 <BaseLayout
-    title="Business & Technology Architectures | GST"
-    description="How technology architecture choices cascade into business outcomes: a guide for investors, executives, and board members navigating technology-driven decisions."
-    ogTitle="Business & Technology Architectures | GST"
-    ogDescription="A business leader's guide to understanding how technology architecture choices create, constrain, or destroy business value."
-    ogImage="/og-image.png"
-    ogUrl="https://globalstrategic.tech/hub/library/business-architectures"
+  title="Business & Technology Architectures | GST"
+  description="How technology architecture choices cascade into business outcomes: a guide for investors, executives, and board members navigating technology-driven decisions."
+  ogTitle="Business & Technology Architectures | GST"
+  ogDescription="A business leader's guide to understanding how technology architecture choices create, constrain, or destroy business value."
+  ogImage="/og-image.png"
+  ogImageAlt="Business and Technology Architecture Patterns Guide"
+  ogUrl="https://globalstrategic.tech/hub/library/business-architectures"
 >
-    <section class="arch-guide">
-        <div class="container">
-            <HubHeader
-                title="Business & Technology Architectures"
-                subtitle="How technology architecture choices cascade into business outcomes, and what every investor, executive, and board member should understand before the next deal."
-            />
+  <section class="arch-guide">
+    <div class="container">
+      <HubHeader
+        title="Business & Technology Architectures"
+        subtitle="How technology architecture choices cascade into business outcomes, and what every investor, executive, and board member should understand before the next deal."
+      />
 
-            <!-- Print-only report header (hidden on screen) -->
-            <div class="print-report-header" aria-hidden="true">
-              <div class="print-report-header__brand">
-                <DeltaIcon class="bullet-icon" />
-                <span>GST</span>
+      <PrintReportHeader title="Business & Technology Architectures" />
+
+      <blockquote class="arch-epigraph">
+        <p>
+          Architecture defines business affordance: what a business can do easily, what it can do
+          only with difficulty, and what it effectively cannot do at all. It shapes how fast the
+          organization can move, what it costs to change direction, and where value is compounding
+          or eroding.
+        </p>
+      </blockquote>
+
+      <div class="arch-layout">
+        <TableOfContents
+          collapsible={true}
+          separatorBefore={[1, 7]}
+          items={[
+            {
+              href: '#why-architecture-matters',
+              label: 'Why Architecture Matters to Business Leaders',
+            },
+            {
+              href: '#layer-1',
+              label: 'Software Architecture',
+              isLayer: true,
+              sublistSource: { mode: 'query', scopeId: 'layer-1' },
+              dataAttrs: { layer: '1' },
+            },
+            {
+              href: '#layer-2',
+              label: 'Operational Architecture',
+              isLayer: true,
+              sublistSource: { mode: 'query', scopeId: 'layer-2' },
+              dataAttrs: { layer: '2' },
+            },
+            {
+              href: '#layer-3',
+              label: 'Product Architecture',
+              isLayer: true,
+              sublistSource: { mode: 'query', scopeId: 'layer-3' },
+              dataAttrs: { layer: '3' },
+            },
+            {
+              href: '#layer-4',
+              label: 'Organizational Architecture',
+              isLayer: true,
+              sublistSource: { mode: 'query', scopeId: 'layer-4' },
+              dataAttrs: { layer: '4' },
+            },
+            {
+              href: '#layer-5',
+              label: 'Industry & Regulatory Architecture (Externalities)',
+              isLayer: true,
+              sublistSource: { mode: 'query', scopeId: 'layer-5' },
+              dataAttrs: { layer: '5' },
+            },
+            { href: '#interactions', label: 'How the Layers Interact' },
+            { href: '#applying', label: 'Applying This Framework' },
+            { href: '#further-reading', label: 'Further Reading' },
+          ]}
+        />
+
+        <div class="arch-content">
+          <!-- Why Architecture Matters -->
+          <section class="arch-section" id="why-architecture-matters">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Why Architecture Matters to Business Leaders
+            </h2>
+            <p class="arch-body">
+              For investors evaluating an acquisition, architecture is the difference between a
+              platform that scales with investment and one that collapses under it. For executives
+              navigating their own technology landscape, it's the lens that reveals which strategic
+              initiatives the current architecture can support and which ones it will quietly
+              resist. For executives inheriting a technology stack post-close, it determines whether
+              the first hundred days produce a credible integration plan or reveal the need for a
+              multi-year rebuild. For founders, it's the set of early choices that either preserves
+              optionality or silently forecloses it.
+            </p>
+            <p class="arch-body">
+              Technology architectures exist within every business, whether or not they have been
+              consciously designed. The five architectural layers presented here are one useful way
+              to decompose them, chosen because each one surfaces different challenges and
+              opportunities for different parts of the business. Other reasonable decompositions
+              exist, but this framing gives investors, executives, and operators a shared vocabulary
+              for reasoning about where value is created, where challenges accumulate, and where the
+              layers constrain or enable one another.
+            </p>
+            <p class="arch-body">
+              This guide walks through each layer from the foundation up, translating the structural
+              realities of technology into business enablement (affordance), risk, and value
+              creation. It begins where the constraints are most concrete, the software itself, and
+              works upward through operations, product, organization, and industry, because each
+              layer inherits the possibilities and limitations of the one below it.
+            </p>
+          </section>
+
+          <!-- Layer 1: Software Architecture -->
+          <section class="arch-section" id="layer-1">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Layer 1: Software Architecture
+            </h2>
+            <p class="arch-layer-label">The Foundation</p>
+
+            <div class="arch-defn">
+              <p class="arch-defn-what">
+                <strong>What it is:</strong> The engineering principles and patterns that govern how code
+                is organized, how components communicate, and how the system behaves under real-world
+                conditions.
+              </p>
+              <p class="arch-defn-why">
+                <strong>Why it matters to you:</strong> Software architecture is where abstract strategy
+                meets concrete reality. The principles operating at this layer determine whether the higher-level
+                architectural choices (product modularity, operational agility, organizational flexibility)
+                are actually achievable or merely aspirational. Poor software architecture is a common
+                source of hidden cost in technology acquisitions and often an important focus of a buy-side
+                technology diligence.
+              </p>
+            </div>
+
+            <p class="arch-body">
+              This isn't about "clean code" as an aesthetic preference. It's about disposability
+              (how quickly systems recover and restart under stress), scalability, and the cost
+              structure they enable. You don't need to understand every engineering principle at
+              work here, but you need to recognize the <em>categories</em> of risk and opportunity they
+              represent.
+            </p>
+
+            <p class="arch-business-meaning">
+              <strong>Business meaning:</strong> Developer productivity · Defect rates · Cost of change
+              · Security exposure
+            </p>
+
+            <h3 class="arch-subheading" id="layer-1-sublayers">
+              Software Architecture Is Not Just Code
+            </h3>
+            <p class="arch-body">
+              Software architecture is more than source code. The term 'architecture' is not
+              metaphorical. In their landmark work on software design patterns, Gamma, Helm,
+              Johnson, and Vlissides (known collectively as the Gang of Four) drew directly on
+              Christopher Alexander's research in building architecture to demonstrate that
+              software, like physical structures, is composed of recurring structural patterns that
+              solve known problems.
+            </p>
+            <p class="arch-body">
+              Design patterns are proven structural solutions to problems that appear again and
+              again across software systems: how components communicate, how data flows between
+              services, how systems handle failure and recovery. Mature engineering organizations
+              recognize these patterns and apply them deliberately. The business implication is
+              significant: pattern-driven architecture is assessable and comparable. Its failure
+              modes are known. Its maintenance costs are predictable. Its quality can be evaluated
+              by any competent technical diligence team. Ad-hoc architecture, built without
+              reference to established patterns, is none of these things.
+            </p>
+            <p class="arch-body">
+              These patterns operate at every level of software architecture, and the ones that
+              matter most to business outcomes shift as you move up through the stack. It is a set
+              of structural decisions organized across multiple levels of abstraction, each one
+              aggregating complexity from the level below. Understanding where you are in this
+              hierarchy changes what you're looking for and who needs to be in the room to address
+              it.
+            </p>
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Code</strong><span class="arch-label-desc"
+                    >Individual functions, classes, and modules. This is where quality is most
+                    visible and most measurable, but also where it matters least in isolation. Clean
+                    code inside a poorly designed system is a polished component in a failing
+                    machine.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Systems</strong><span class="arch-label-desc"
+                    >Code gets organized into discrete capabilities: a payment processor, an
+                    authentication service, a notification engine. The boundaries between these
+                    systems determine how independently teams can work, how safely components can be
+                    replaced, and how gracefully failures are contained. This is where Conway's Law
+                    (Layer 4) first makes itself felt; system boundaries tend to mirror team
+                    boundaries, for better or worse.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Integrations</strong><span class="arch-label-desc"
+                    >Where systems interact, connect, communicate to others (services, third-party
+                    APIs, partner platforms, and data providers). Integration architecture is where
+                    vendor lock-in hides, where data sovereignty risk accumulates, and where the
+                    true cost of switching providers or absorbing acquisitions becomes apparent. In
+                    diligence, this sub-layer frequently reveals liabilities that the code itself
+                    won't show you.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>End-to-end experiences</strong><span class="arch-label-desc"
+                    >The complete user journeys that comprise multiple system integrations. A
+                    customer completing a purchase touches authentication, inventory, payment
+                    processing, tax calculation, notification, and fulfillment, each a distinct
+                    system, several involving external integrations, all of which must coordinate
+                    seamlessly. This is where the sub-layers visibly compound: code quality affects
+                    system reliability, system boundaries determine failure isolation, and
+                    integration design dictates whether a third-party outage degrades one feature or
+                    takes down the entire checkout flow. The business impact (churn, support cost,
+                    brand damage) concentrates at this level regardless of which sub-layer contains
+                    the actual deficiency.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <p class="arch-body">
+              The reason this decomposition matters for business leaders: problems at each sub-layer
+              have different cost profiles, different remediation timelines, and different owners. A
+              code quality issue is a team-level fix. A systems boundary problem is an
+              organizational restructuring. An integration liability is a vendor negotiation or a
+              rebuild. Conflating them, treating "the software" as a single thing, leads to
+              transformation plans that underestimate scope and misallocate investment.
+            </p>
+
+            <p class="arch-body">
+              Once you know where to look in that hierarchy, the next question is how to assess what
+              you find. Three principles consistently distinguish architectures that support
+              business agility from those that resist it.
+            </p>
+
+            <h3 class="arch-subheading" id="layer-1-principles">
+              Three Principles That Signal Architectural Health
+            </h3>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Separation of Responsibilities</strong><span class="arch-label-desc"
+                    >Good architecture assigns each component a clear, singular purpose. When a
+                    single component handles authentication, payment processing, and customer
+                    notifications, a change to any one of those capabilities risks breaking the
+                    others. The quick test: <em>does one piece of code do ten things?</em> If yes, it's
+                    a maintenance nightmare waiting to become an investor's problem. For business leaders,
+                    this translates directly to <em>change cost and change risk</em>. Systems with
+                    poor separation of responsibilities are expensive to modify, slow to extend, and
+                    prone to cascading failures that affect seemingly unrelated capabilities.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Least Knowledge (Information Hiding)</strong><span
+                    class="arch-label-desc"
+                    >Components should know as little as possible about each other's internal
+                    workings. When components are tightly coupled, when changing one requires
+                    intimate knowledge of another's implementation, development velocity drops and
+                    integration complexity increases. During M&amp;A, tight coupling between
+                    components is one of the primary drivers of integration difficulty and timeline
+                    risk.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Least Privilege</strong><span class="arch-label-desc"
+                    >Systems and users should have only the minimum access required to perform their
+                    function. This is fundamentally a security and compliance principle, but it also
+                    signals architectural maturity. Organizations that implement least privilege
+                    well tend to have clearer system boundaries, better audit capabilities, and
+                    lower regulatory risk.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading" id="layer-1-wellarchitected">
+              Signals of Architectural Health
+            </h3>
+            <p class="arch-body">
+              The software engineering community has codified best practices into frameworks like
+              the Twelve-Factor App methodology and the SOLID principles. You don't need to know the
+              frameworks by name, but you should recognize what healthy architecture looks like in
+              practice, because each signal maps directly to a business outcome:
+            </p>
+
+            <p class="arch-body">
+              Configuration is separated from code, meaning the same application can move between
+              environments, infrastructure providers, or post-acquisition tech stacks without being
+              rewritten. The business implication: faster integration, safer deployments, lower
+              migration risk.
+            </p>
+
+            <p class="arch-body">
+              Dependencies are explicitly declared and isolated, so the system's exposure to supply
+              chain vulnerabilities, licensing liabilities, and third-party risk is visible and
+              manageable. In diligence, opaque dependency chains are a recurring source of
+              unpleasant surprises.
+            </p>
+
+            <p class="arch-body">
+              The system scales horizontally. Capacity increases by adding instances, not by
+              upgrading to larger and more expensive hardware. Infrastructure costs scale
+              proportionally with demand rather than in expensive step functions.
+            </p>
+
+            <p class="arch-body">
+              Build, release, and run stages are cleanly separated, giving the organization
+              auditability, reproducibility, and the ability to roll back quickly when something
+              goes wrong. These directly affect operational risk and downtime cost.
+            </p>
+
+            <p class="arch-body">
+              Operational data is treated as a stream of events: captured, analyzed, and actionable.
+              This is the foundation of the data-driven decision-making that separates mature
+              technology organizations from ones that are flying blind.
+            </p>
+
+            <p class="arch-body">
+              New capabilities can be added without modifying existing, working code. This is
+              perhaps the single most important architectural quality for post-acquisition value
+              creation. The quick test: can the team add features without risking what already
+              works? If the answer is no, every new capability carries compounding regression risk,
+              and the cost of change will increase with every release cycle.
+            </p>
+
+            <h3 class="arch-subheading" id="layer-1-cost">The Cost of Getting It Wrong</h3>
+            <p class="arch-body">
+              Software architecture sins compound over time. Technical debt, the accumulated cost of
+              architectural shortcuts and deferred maintenance, grows with interest. What starts as
+              a minor inconvenience in a startup's early days becomes a material liability at scale.
+              The symptoms are familiar: releases that take weeks instead of days, "simple" features
+              that require months of development, production incidents that cascade across unrelated
+              systems, and an engineering team that spends more time maintaining existing code than
+              building new capabilities.
+            </p>
+            <p class="arch-body">
+              For investors, the software architecture layer is where hidden liabilities most often
+              reside. It's also where the greatest leverage for post-acquisition value creation
+              exists, because architectural improvements at this layer propagate upward through
+              every layer above it.
+            </p>
+
+            <div class="arch-diligence-callout">
+              <p class="arch-diligence-label">What to look for in diligence</p>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Signals to look for</p>
+                <p class="arch-diligence-text">
+                  Deployment frequency and release cycle duration: mature architectures ship
+                  frequently with low incident rates. The ratio of maintenance effort to new
+                  development: teams spending more than 60% on maintenance are signaling
+                  architectural constraints. Whether architectural principles are applied
+                  consistently or only aspirationally.
+                </p>
               </div>
-              <div class="print-report-header__title">Business & Technology Architectures</div>
-              <div class="print-report-header__date">Generated {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Questions to ask</p>
+                <p class="arch-diligence-text">
+                  How long does it take to deploy a single-line change to production? What happens
+                  when a third-party dependency has a critical vulnerability, and how quickly can it
+                  be patched? Where does the team spend most of its time: building new capabilities
+                  or maintaining existing ones?
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Artifacts to request</p>
+                <p class="arch-diligence-text">
+                  Dependency manifest and license audit. Deployment logs showing frequency and
+                  rollback history. Technical debt register or backlog with trending. Incident
+                  postmortems from the past 12 months. System architecture diagrams (and whether
+                  they match the actual implementation).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Layer 2: Operational Architecture -->
+          <section class="arch-section" id="layer-2">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Layer 2: Operational Architecture
+            </h2>
+            <p class="arch-layer-label">Infrastructure</p>
+
+            <div class="arch-defn">
+              <p class="arch-defn-what">
+                <strong>What it is:</strong> Operations is the discipline of delivering products and services
+                reliably, efficiently, and at the right scale. In any business, this means managing capacity,
+                controlling quality, optimizing throughput, and balancing the cost of readiness against
+                the cost of failure. In technology organizations, the operational domain includes the
+                physical and cloud infrastructure that hosts the software, the pipelines that build and
+                deploy changes, the monitoring systems that observe production behavior, and the incident
+                response processes that govern recovery. These are technology-specific expressions of
+                the same operational fundamentals that govern a factory floor, a supply chain, or a logistics
+                network.
+              </p>
+              <p class="arch-defn-why">
+                <strong>Why it matters to you:</strong> Two companies with identical product architectures
+                can have radically different unit economics, reliability characteristics, and speed of
+                innovation depending on how well their operational architecture is designed. This is the
+                layer where margin is either preserved or quietly burned, where scalability is real or
+                theoretical, and where the gap between "we can handle growth" and what actually happens
+                under load becomes visible. For acquirers, it's often where the most actionable value
+                creation opportunities reside, because operational improvements translate directly to
+                cost structure and customer experience.
+              </p>
             </div>
 
-            <blockquote class="arch-epigraph">
-                <p>Architecture defines business affordance: what a business can do easily, what it can do only with difficulty, and what it effectively cannot do at all. It shapes how fast the organization can move, what it costs to change direction, and where value is compounding or eroding.</p>
-            </blockquote>
-
-            <div class="arch-layout">
-            <TableOfContents
-                collapsible={true}
-                separatorBefore={[1, 7]}
-                items={[
-                    { href: "#why-architecture-matters", label: "Why Architecture Matters to Business Leaders" },
-                    { href: "#layer-1", label: "Software Architecture", isLayer: true, sublistSource: { mode: "query", scopeId: "layer-1" }, dataAttrs: { layer: "1" } },
-                    { href: "#layer-2", label: "Operational Architecture", isLayer: true, sublistSource: { mode: "query", scopeId: "layer-2" }, dataAttrs: { layer: "2" } },
-                    { href: "#layer-3", label: "Product Architecture", isLayer: true, sublistSource: { mode: "query", scopeId: "layer-3" }, dataAttrs: { layer: "3" } },
-                    { href: "#layer-4", label: "Organizational Architecture", isLayer: true, sublistSource: { mode: "query", scopeId: "layer-4" }, dataAttrs: { layer: "4" } },
-                    { href: "#layer-5", label: "Industry & Regulatory Architecture (Externalities)", isLayer: true, sublistSource: { mode: "query", scopeId: "layer-5" }, dataAttrs: { layer: "5" } },
-                    { href: "#interactions", label: "How the Layers Interact" },
-                    { href: "#applying", label: "Applying This Framework" },
-                    { href: "#further-reading", label: "Further Reading" },
-                ]}
-            />
-
-            <div class="arch-content">
-
-                <!-- Why Architecture Matters -->
-                <section class="arch-section" id="why-architecture-matters">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Why Architecture Matters to Business Leaders
-                    </h2>
-                    <p class="arch-body">For investors evaluating an acquisition, architecture is the difference between a platform that scales with investment and one that collapses under it. For executives navigating their own technology landscape, it's the lens that reveals which strategic initiatives the current architecture can support and which ones it will quietly resist. For executives inheriting a technology stack post-close, it determines whether the first hundred days produce a credible integration plan or reveal the need for a multi-year rebuild. For founders, it's the set of early choices that either preserves optionality or silently forecloses it.</p>
-                    <p class="arch-body">Technology architectures exist within every business, whether or not they have been consciously designed. The five architectural layers presented here are one useful way to decompose them, chosen because each one surfaces different challenges and opportunities for different parts of the business. Other reasonable decompositions exist, but this framing gives investors, executives, and operators a shared vocabulary for reasoning about where value is created, where challenges accumulate, and where the layers constrain or enable one another.</p>
-                    <p class="arch-body">This guide walks through each layer from the foundation up, translating the structural realities of technology into business enablement (affordance), risk, and value creation. It begins where the constraints are most concrete, the software itself, and works upward through operations, product, organization, and industry, because each layer inherits the possibilities and limitations of the one below it.</p>
-                </section>
-
-                <!-- Layer 1: Software Architecture -->
-                <section class="arch-section" id="layer-1">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Layer 1: Software Architecture
-                    </h2>
-                    <p class="arch-layer-label">The Foundation</p>
-
-                    <div class="arch-defn">
-                        <p class="arch-defn-what"><strong>What it is:</strong> The engineering principles and patterns that govern how code is organized, how components communicate, and how the system behaves under real-world conditions.</p>
-                        <p class="arch-defn-why"><strong>Why it matters to you:</strong> Software architecture is where abstract strategy meets concrete reality. The principles operating at this layer determine whether the higher-level architectural choices (product modularity, operational agility, organizational flexibility) are actually achievable or merely aspirational. Poor software architecture is a common source of hidden cost in technology acquisitions and often an important focus of a buy-side technology diligence.</p>
-                    </div>
-
-                    <p class="arch-body">This isn't about "clean code" as an aesthetic preference. It's about disposability (how quickly systems recover and restart under stress), scalability, and the cost structure they enable. You don't need to understand every engineering principle at work here, but you need to recognize the <em>categories</em> of risk and opportunity they represent.</p>
-
-                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Developer productivity · Defect rates · Cost of change · Security exposure</p>
-
-                    <h3 class="arch-subheading" id="layer-1-sublayers">Software Architecture Is Not Just Code</h3>
-                    <p class="arch-body">Software architecture is more than source code. The term 'architecture' is not metaphorical. In their landmark work on software design patterns, Gamma, Helm, Johnson, and Vlissides (known collectively as the Gang of Four) drew directly on Christopher Alexander's research in building architecture to demonstrate that software, like physical structures, is composed of recurring structural patterns that solve known problems.</p>
-                    <p class="arch-body">Design patterns are proven structural solutions to problems that appear again and again across software systems: how components communicate, how data flows between services, how systems handle failure and recovery. Mature engineering organizations recognize these patterns and apply them deliberately. The business implication is significant: pattern-driven architecture is assessable and comparable. Its failure modes are known. Its maintenance costs are predictable. Its quality can be evaluated by any competent technical diligence team. Ad-hoc architecture, built without reference to established patterns, is none of these things.</p>
-                    <p class="arch-body">These patterns operate at every level of software architecture, and the ones that matter most to business outcomes shift as you move up through the stack. It is a set of structural decisions organized across multiple levels of abstraction, each one aggregating complexity from the level below. Understanding where you are in this hierarchy changes what you're looking for and who needs to be in the room to address it.</p>
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Code</strong><span class="arch-label-desc">Individual functions, classes, and modules. This is where quality is most visible and most measurable, but also where it matters least in isolation. Clean code inside a poorly designed system is a polished component in a failing machine.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Systems</strong><span class="arch-label-desc">Code gets organized into discrete capabilities: a payment processor, an authentication service, a notification engine. The boundaries between these systems determine how independently teams can work, how safely components can be replaced, and how gracefully failures are contained. This is where Conway's Law (Layer 4) first makes itself felt; system boundaries tend to mirror team boundaries, for better or worse.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Integrations</strong><span class="arch-label-desc">Where systems interact, connect, communicate to others (services, third-party APIs, partner platforms, and data providers). Integration architecture is where vendor lock-in hides, where data sovereignty risk accumulates, and where the true cost of switching providers or absorbing acquisitions becomes apparent. In diligence, this sub-layer frequently reveals liabilities that the code itself won't show you.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>End-to-end experiences</strong><span class="arch-label-desc">The complete user journeys that comprise multiple system integrations. A customer completing a purchase touches authentication, inventory, payment processing, tax calculation, notification, and fulfillment, each a distinct system, several involving external integrations, all of which must coordinate seamlessly. This is where the sub-layers visibly compound: code quality affects system reliability, system boundaries determine failure isolation, and integration design dictates whether a third-party outage degrades one feature or takes down the entire checkout flow. The business impact (churn, support cost, brand damage) concentrates at this level regardless of which sub-layer contains the actual deficiency.</span></span></li>
-                    </ul>
-
-                    <p class="arch-body">The reason this decomposition matters for business leaders: problems at each sub-layer have different cost profiles, different remediation timelines, and different owners. A code quality issue is a team-level fix. A systems boundary problem is an organizational restructuring. An integration liability is a vendor negotiation or a rebuild. Conflating them, treating "the software" as a single thing, leads to transformation plans that underestimate scope and misallocate investment.</p>
-
-                    <p class="arch-body">Once you know where to look in that hierarchy, the next question is how to assess what you find. Three principles consistently distinguish architectures that support business agility from those that resist it.</p>
-
-                    <h3 class="arch-subheading" id="layer-1-principles">Three Principles That Signal Architectural Health</h3>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Separation of Responsibilities</strong><span class="arch-label-desc">Good architecture assigns each component a clear, singular purpose. When a single component handles authentication, payment processing, and customer notifications, a change to any one of those capabilities risks breaking the others. The quick test: <em>does one piece of code do ten things?</em> If yes, it's a maintenance nightmare waiting to become an investor's problem. For business leaders, this translates directly to <em>change cost and change risk</em>. Systems with poor separation of responsibilities are expensive to modify, slow to extend, and prone to cascading failures that affect seemingly unrelated capabilities.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Least Knowledge (Information Hiding)</strong><span class="arch-label-desc">Components should know as little as possible about each other's internal workings. When components are tightly coupled, when changing one requires intimate knowledge of another's implementation, development velocity drops and integration complexity increases. During M&amp;A, tight coupling between components is one of the primary drivers of integration difficulty and timeline risk.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Least Privilege</strong><span class="arch-label-desc">Systems and users should have only the minimum access required to perform their function. This is fundamentally a security and compliance principle, but it also signals architectural maturity. Organizations that implement least privilege well tend to have clearer system boundaries, better audit capabilities, and lower regulatory risk.</span></span></li>
-                    </ul>
-
-                    <h3 class="arch-subheading" id="layer-1-wellarchitected">Signals of Architectural Health</h3>
-                    <p class="arch-body">The software engineering community has codified best practices into frameworks like the Twelve-Factor App methodology and the SOLID principles. You don't need to know the frameworks by name, but you should recognize what healthy architecture looks like in practice, because each signal maps directly to a business outcome:</p>
-
-                    <p class="arch-body">Configuration is separated from code, meaning the same application can move between environments, infrastructure providers, or post-acquisition tech stacks without being rewritten. The business implication: faster integration, safer deployments, lower migration risk.</p>
-
-                    <p class="arch-body">Dependencies are explicitly declared and isolated, so the system's exposure to supply chain vulnerabilities, licensing liabilities, and third-party risk is visible and manageable. In diligence, opaque dependency chains are a recurring source of unpleasant surprises.</p>
-
-                    <p class="arch-body">The system scales horizontally. Capacity increases by adding instances, not by upgrading to larger and more expensive hardware. Infrastructure costs scale proportionally with demand rather than in expensive step functions.</p>
-
-                    <p class="arch-body">Build, release, and run stages are cleanly separated, giving the organization auditability, reproducibility, and the ability to roll back quickly when something goes wrong. These directly affect operational risk and downtime cost.</p>
-
-                    <p class="arch-body">Operational data is treated as a stream of events: captured, analyzed, and actionable. This is the foundation of the data-driven decision-making that separates mature technology organizations from ones that are flying blind.</p>
-
-                    <p class="arch-body">New capabilities can be added without modifying existing, working code. This is perhaps the single most important architectural quality for post-acquisition value creation. The quick test: can the team add features without risking what already works? If the answer is no, every new capability carries compounding regression risk, and the cost of change will increase with every release cycle.</p>
-
-                    <h3 class="arch-subheading" id="layer-1-cost">The Cost of Getting It Wrong</h3>
-                    <p class="arch-body">Software architecture sins compound over time. Technical debt, the accumulated cost of architectural shortcuts and deferred maintenance, grows with interest. What starts as a minor inconvenience in a startup's early days becomes a material liability at scale. The symptoms are familiar: releases that take weeks instead of days, "simple" features that require months of development, production incidents that cascade across unrelated systems, and an engineering team that spends more time maintaining existing code than building new capabilities.</p>
-                    <p class="arch-body">For investors, the software architecture layer is where hidden liabilities most often reside. It's also where the greatest leverage for post-acquisition value creation exists, because architectural improvements at this layer propagate upward through every layer above it.</p>
-
-                    <div class="arch-diligence-callout">
-                        <p class="arch-diligence-label">What to look for in diligence</p>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Signals to look for</p>
-                            <p class="arch-diligence-text">Deployment frequency and release cycle duration: mature architectures ship frequently with low incident rates. The ratio of maintenance effort to new development: teams spending more than 60% on maintenance are signaling architectural constraints. Whether architectural principles are applied consistently or only aspirationally.</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Questions to ask</p>
-                            <p class="arch-diligence-text">How long does it take to deploy a single-line change to production? What happens when a third-party dependency has a critical vulnerability, and how quickly can it be patched? Where does the team spend most of its time: building new capabilities or maintaining existing ones?</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Artifacts to request</p>
-                            <p class="arch-diligence-text">Dependency manifest and license audit. Deployment logs showing frequency and rollback history. Technical debt register or backlog with trending. Incident postmortems from the past 12 months. System architecture diagrams (and whether they match the actual implementation).</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Layer 2: Operational Architecture -->
-                <section class="arch-section" id="layer-2">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Layer 2: Operational Architecture
-                    </h2>
-                    <p class="arch-layer-label">Infrastructure</p>
-
-                    <div class="arch-defn">
-                        <p class="arch-defn-what"><strong>What it is:</strong> Operations is the discipline of delivering products and services reliably, efficiently, and at the right scale. In any business, this means managing capacity, controlling quality, optimizing throughput, and balancing the cost of readiness against the cost of failure. In technology organizations, the operational domain includes the physical and cloud infrastructure that hosts the software, the pipelines that build and deploy changes, the monitoring systems that observe production behavior, and the incident response processes that govern recovery. These are technology-specific expressions of the same operational fundamentals that govern a factory floor, a supply chain, or a logistics network.</p>
-                        <p class="arch-defn-why"><strong>Why it matters to you:</strong> Two companies with identical product architectures can have radically different unit economics, reliability characteristics, and speed of innovation depending on how well their operational architecture is designed. This is the layer where margin is either preserved or quietly burned, where scalability is real or theoretical, and where the gap between "we can handle growth" and what actually happens under load becomes visible. For acquirers, it's often where the most actionable value creation opportunities reside, because operational improvements translate directly to cost structure and customer experience.</p>
-                    </div>
-
-                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Reliability and uptime · Cost to operate · Speed to ship · Elasticity and scalability to meet demand</p>
-
-                    <h3 class="arch-subheading">The Core Challenge: Matching Supply with Demand</h3>
-                    <p class="arch-body">At its most fundamental, technology operations is about matching computing capacity and system reliability with customer demand. The metrics are familiar to any business leader: throughput, availability, cost-per-transaction, time-to-recovery. The architectural choices that underpin those metrics, however, have profound strategic implications.</p>
-
-                    <h3 class="arch-subheading" id="layer-2-risk">Two Philosophies of Managing Risk</h3>
-                    <p class="arch-body">Technology operations has historically been dominated by two competing approaches to risk management, and the tension between them explains much of what investors encounter during diligence. The distinction maps to a familiar one in finance. Traditional insurance underwriting attempts to eliminate risk before it materializes: exhaustive actuarial modeling, rigorous exclusions, and a deep reluctance to pay claims. A venture portfolio approach accepts that individual bets will fail and instead optimizes for rapid detection, contained losses, and recovery speed across the portfolio. Both manage risk. They differ fundamentally in where they spend their effort.</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>"Anticipate and Prevent" (Traditional / Waterfall)</strong><span class="arch-label-desc">This approach assumes that failures are expensive and irreversible, so the correct response is exhaustive upfront planning, comprehensive testing, and rigorous change control. It's the default mindset of traditional enterprise IT, and it's not wrong; it's appropriate for environments where the cost of failure is catastrophic. In practice, however, this philosophy produces heavy approval processes, infrequent releases, long planning cycles, and a cultural resistance to experimentation.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>"Find and Fix" (DevOps / Continuous Delivery)</strong><span class="arch-label-desc">This approach accepts that failures will occur and focuses on making them small, detectable, and quickly recoverable. It's built on the insight that in most software environments, it doesn't matter if there are failures. What matters is whether they can be detected and resolved before a customer is meaningfully affected. DevOps practices push toward more modular architectures because modularity enables faster detection, isolation, and recovery.</span></span></li>
-                    </ul>
-
-                    <h3 class="arch-subheading">The Organizational Dimension of Operational Change</h3>
-                    <p class="arch-body">Asking a traditional IT organization to adopt DevOps practices is not a technology change. It's a cultural and organizational transformation. You're asking people who built their careers on "anticipate and prevent" to shift into a "find and fix" mindset. That's a change in professional identity, not just tooling.</p>
-                    <p class="arch-body">Organizations that have made this transition tend to share common characteristics: leadership that understands and supports the shift, incentive structures that reward learning from failures rather than punishing them, and an investment in automation that makes rapid iteration safe rather than reckless.</p>
-
-                    <h3 class="arch-subheading" id="layer-2-context">Why DevOps Is Harder in Some Contexts</h3>
-                    <p class="arch-body">Not every company can or should adopt the same operational approach. Several factors affect the feasibility and appropriateness of modern operational practices:</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Cost of iteration</strong><span class="arch-label-desc">Software companies can deploy dozens of times per day because each iteration is essentially free to produce. Companies building physical products face material costs and lead times that constrain iteration speed.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Product lifecycle duration</strong><span class="arch-label-desc">Software can be updated continuously. Hardware deployed in the field has a fixed operational life where updates range from difficult to impossible. Operational architecture must account for this difference.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>External dependencies and externalities</strong><span class="arch-label-desc">Companies that operate platforms or ecosystems must consider how operational changes affect partners, integrators, and customers who have built on their interfaces.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Market position and customer expectations</strong><span class="arch-label-desc">A startup can afford operational practices that accept higher rates of visible failure in exchange for speed. An enterprise serving Fortune 500 customers cannot. Operational architecture must match the company's position and promises.</span></span></li>
-                    </ul>
-
-                    <div class="arch-diligence-callout">
-                        <p class="arch-diligence-label">What to look for in diligence</p>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Signals to look for</p>
-                            <p class="arch-diligence-text">Deployment frequency and mean time to recovery (MTTR) as indicators of operational maturity. Infrastructure costs as a percentage of revenue, and whether that ratio improves or degrades as the business scales. Automation coverage across build, test, and deployment pipelines.</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Questions to ask</p>
-                            <p class="arch-diligence-text">What is the gap between the current operational model and what the go-forward strategy requires? If we need to 3x throughput in 18 months, what breaks first? How does the on-call rotation work, and what does incident response look like at 2 AM?</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Artifacts to request</p>
-                            <p class="arch-diligence-text">Infrastructure cost breakdown with 12-month trend. Incident log with severity classification and resolution times. CI/CD pipeline configuration and deployment history. Capacity planning documentation or load test results.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Layer 3: Product Architecture -->
-                <section class="arch-section" id="layer-3">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Layer 3: Product Architecture
-                    </h2>
-
-                    <div class="arch-defn">
-                        <p class="arch-defn-what"><strong>What it is:</strong> The choices about what a product does, how its components fit together, and where the boundaries are drawn between what's built internally and what's sourced externally.</p>
-                        <p class="arch-defn-why"><strong>Why it matters to you:</strong> Product architecture decisions are strategy decisions. They determine a company's core competency, its cost structure, its ability to respond to market changes, and its options for future growth. When a CTO makes a product architecture choice, they are making a fundamental statement about who the company's customer is, how the company competes, and where it believes value will accrue in the future. This connection between product architecture and business strategy is frequently underweighted in executive-level planning, and it creates blind spots that surface at the worst possible time: mid-deal, mid-integration, or mid-transformation.</p>
-                    </div>
-
-                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Gross margin potential · Innovation velocity · Ability to pursue M&amp;A · Integration and customization complexity</p>
-
-                    <h3 class="arch-subheading" id="layer-3-strategy">The Architecture-Strategy Connection</h3>
-                    <p class="arch-body">Product architecture is not a technical concern that can be delegated entirely to engineering. It's a strategic choice that sits at the intersection of technology capability, organizational structure, and business model.</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Vertically integrated architectures</strong><span class="arch-label-desc">Vertically integrated architectures bring the full value chain in-house. Historically, this was the dominant approach: General Motors owning Fisher Body, Kodak integrating film chemistry through camera design. Tesla represents a modern version of this pattern, controlling everything from battery cell manufacturing and chip design to sales channels and charging infrastructure. The advantage is control and speed of iteration across the entire stack. The risk is calcification: when the market shifts, the entire value chain has to shift with it.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Integrated but focused architectures</strong><span class="arch-label-desc">control fewer stages but maintain tight coupling between the ones they own. Apple represents this pattern. They design their own silicon but don't fabricate it. They define the hardware, the OS, and the interface layer so precisely that the product experience is indistinguishable from a fully integrated system, while outsourcing physical manufacturing to partners. This creates competitive moats through the difficulty of replication without the capital burden of owning every stage.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Modular architectures</strong><span class="arch-label-desc">define clear interfaces between components, allowing each to be developed, replaced, or scaled independently. The open-source software ecosystem is modularity at its most extreme: thousands of independently maintained packages, each solving a specific problem, composed together through standardized interfaces. A modern application might depend on hundreds of these modules, gaining enormous development speed and capability without building from scratch. Modularity enables speed, specialization, and ecosystem development, but competitive advantage must come from something other than the modules themselves, because they're available to everyone. The strategic question becomes: what does this company do with the same building blocks that its competitors also have access to? In diligence, modular architectures also surface a distinct risk profile: dependency health, licensing exposure, and supply chain vulnerabilities that don't exist in integrated systems.</span></span></li>
-                    </ul>
-
-                    <p class="arch-body">The critical insight for business leaders: <em>When a technology leader decides what to build internally versus what to buy, integrate, or deliberately leave out, they're not making a procurement decision. They're defining the company's core competency and its opportunity costs.</em> Every capability that gets built is a capability that didn't get built instead. That choice has implications for talent strategy, competitive positioning, organizational structure, and long-term defensibility. So does the choice of how the product reaches the customer. Tesla delivers software updates over the air, turning every vehicle into a platform that improves after purchase. Amazon invests in drone delivery to reshape the economics of last-mile logistics. Apple releases new hardware annually, creating an upgrade cycle that drives recurring revenue. These are product architecture decisions with direct business model consequences. It's a board-level conversation disguised as a technical one.</p>
-
-                    <h3 class="arch-subheading">Product Architecture Choices Don't Happen in a Vacuum</h3>
-                    <p class="arch-body">Product architecture choices are simultaneously:</p>
-                    <ul class="arch-list">
-                        <li><strong>Constrained by the existing organizational architecture.</strong> Team structures create communication patterns that shape system boundaries. Existing processes create inertia that favors certain architectural patterns over others.</li>
-                        <li><strong>Shaping the future organizational architecture.</strong> New product architecture choices create demand for new skills, new team structures, and new processes. If the organizational architecture doesn't adapt, the product architecture migration will stall or fail.</li>
-                        <li><strong>Reflective of the business model.</strong> A services-oriented business model implies different architectural choices than a product-led one. Architecture and business model need to evolve together.</li>
-                    </ul>
-
-                    <h3 class="arch-subheading" id="layer-3-problem">Defining the Right Problem Before Building the Right Solution</h3>
-                    <p class="arch-body">Product architecture doesn't emerge fully formed. It evolves in response to market signals, and the quality of those signals determines whether the architecture converges on real opportunity or drifts toward expensive irrelevance. Two frameworks are particularly useful for keeping that evolution disciplined.</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>The Minimal Viable Problem (MVP)</strong><span class="arch-label-desc">The strongest product architectures don't start with a grand vision. They start with the smallest version of a real customer problem that, if solved, justifies further investment. Each iteration expands the problem scope only when the previous solution has been validated in the market. Architecture then grows to match proven demand rather than speculative projections. For PE-backed companies with defined value creation timelines, this discipline is critical: it ensures that engineering investment tracks to revenue opportunity rather than running ahead of it. In diligence, ask whether the target's architecture evolved through validated iterations or was designed around assumptions that were never tested.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Jobs to Be Done</strong><span class="arch-label-desc">Clayton Christensen popularized the idea that customers don't buy products; they "hire" them to accomplish specific jobs. The classic example: a fast-food chain discovered that customers hiring a milkshake in the morning had completely different needs than those buying one in the afternoon. The architectural implication is significant. When a company understands the job its product is hired to do, it can make sharper decisions about what to build, what to integrate, and what to leave out entirely. Architecture that is shaped by a clear job-to-be-done tends to be leaner, more focused, and better positioned to expand into adjacent opportunities. Architecture built without that clarity tends to accumulate features without strategic coherence, creating maintenance burden without corresponding market advantage.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>When the Operational Architecture Is the Product</strong><span class="arch-label-desc">The founding of McDonald's illustrates how value can migrate between architectural layers. The McDonald brothers built what was, in this article's framing, an exceptional operational architecture (Layer 2): a stripped-down menu, a kitchen layout iterated on a tennis court with chalk, every movement optimized for speed and consistency. They had solved the operational throughput problem for a single location. Ray Kroc looked at the same operation and made a product architecture decision: the operational system itself, its standardization, its independence from any individual operator's skill, its predictable economics, was more valuable than anything on the menu. He didn't change the architecture. He recognized that packaging and replicating it was the product. For investors, this is a question worth asking: is the target selling a product, or has it built an operational architecture whose replicability is itself the defensible asset? The answer changes how you value it, how you plan integration, and where the realistic ceiling on post-acquisition growth actually sits. It also changes the diligence focus: when the operations are the product, the operational architecture layer deserves the scrutiny you would normally reserve for the product itself.</span></span></li>
-                    </ul>
-
-                    <h3 class="arch-subheading" id="layer-3-selection">Selection Principles for Evaluating Product Architecture in M&amp;A</h3>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>YAGNI ("You Aren't Gonna Need It")</strong><span class="arch-label-desc">Is the architecture built for actual, demonstrated customer needs, or for hypothetical future requirements that may never materialize? Over-engineered architecture is a cost center disguised as foresight.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>KISS ("Keep It Simple, Stupid")</strong><span class="arch-label-desc">Is the architecture as simple as the problem permits, or has complexity been introduced without corresponding value? Unnecessary complexity is a predictor of future integration difficulty and ongoing maintenance cost.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Two-Way Doors</strong><span class="arch-label-desc">Jeff Bezos distinguished between decisions that are reversible (two-way doors) and decisions that are not (one-way doors). One-way doors deserve deliberation. Two-way doors should be made quickly and adjusted based on what you learn. Choosing which cloud provider hosts your infrastructure is a two-way door: it takes effort to migrate, but it can be done. Rewriting your core platform in a proprietary programming language, or committing your data model to a vendor-specific database that doesn't support standard export formats, is a one-way door: reversing it means rebuilding, not reconfiguring. In product architecture, the question is: how many one-way doors has this company walked through? Architectures with a high ratio of irreversible decisions are harder to integrate, harder to modernize, and more expensive to exit.</span></span></li>
-                    </ul>
-
-                    <p class="arch-body">Agile product management principles offer a useful lens for assessing product maturity:</p>
-                    <ul class="arch-list">
-                        <li><DeltaIcon class="bullet-icon" />Deliver to known, narrowly-defined customer needs rather than speculative requirements. Over-engineering for imaginary use cases is a common and expensive architectural error.</li>
-                        <li><DeltaIcon class="bullet-icon" />Ship frequently. Architecture that supports frequent, low-risk releases is fundamentally different from architecture that requires large, coordinated deployments.</li>
-                        <li><DeltaIcon class="bullet-icon" />Build around small, empowered, cross-functional teams. Systems built by small teams tend to be more modular, better-defined, and easier to maintain.</li>
-                        <li><DeltaIcon class="bullet-icon" />Substitute modularity and flexible decision-making for over-engineering. As Jeff Bezos observed: "If you're good at course correcting, being wrong may be less costly than you think."</li>
-                    </ul>
-
-                    <div class="arch-diligence-callout">
-                        <p class="arch-diligence-label">What to look for in diligence</p>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Signals to look for</p>
-                            <p class="arch-diligence-text">The relationship between product architecture and stated business strategy: do they reinforce each other or contradict? Evidence of architectural decisions driven by validated customer needs vs. internal convenience or technical enthusiasm. The degree of modularity and what it implies for integration complexity.</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Questions to ask</p>
-                            <p class="arch-diligence-text">What was the last major product capability the team chose not to build, and why? How many one-way doors has this architecture walked through? Does the architecture support or constrain the go-forward growth plan, and can the team articulate specific constraints?</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Artifacts to request</p>
-                            <p class="arch-diligence-text">Product roadmap with architecture dependency mapping. Build-vs-buy decision log (formal or informal). Third-party and open-source dependency inventory with licensing review. Customer-requested features that were declined or deferred due to architectural limitations.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Layer 4: Organizational Architecture -->
-                <section class="arch-section" id="layer-4">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Layer 4: Organizational Architecture
-                    </h2>
-
-                    <div class="arch-defn">
-                        <p class="arch-defn-what"><strong>What it is:</strong> The internal structure of people, processes, incentives, and decision-making that determines how a company actually operates, and how effectively it can execute technology change.</p>
-                        <p class="arch-defn-why"><strong>Why it matters to you:</strong> There's a well-known principle in systems design called Conway's Law: <em>organizations design systems that mirror their own communication structures.</em> The mechanism is straightforward. Teams that don't talk to each other build components that don't integrate well. Teams that share a manager tend to build tightly coupled systems, whether or not coupling is the right design choice. If three separate groups are responsible for billing, onboarding, and reporting, the software will almost inevitably become three separate systems with awkward handoffs between them, regardless of whether that's the best architecture for the customer. The organizational chart becomes the system architecture, not by intention but by gravity. In practice, this means a company's technology architecture is a reflection of its organizational architecture, and vice versa. You cannot change one without confronting the other.</p>
-                    </div>
-
-                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Key-person dependencies · Capability gaps · Leadership decision rights and accountability · Incentive alignment · Organizational capacity to absorb change</p>
-
-                    <h3 class="arch-subheading" id="layer-4-congruence">The Congruence Model: Four Levers of Organizational Architecture</h3>
-                    <p class="arch-body">The Tushman-Nadler Congruence Model provides a practical framework for understanding how organizational architecture either enables or constrains execution. It applies to any organization, but its implications for technology-driven businesses are particularly acute because of Conway's Law: misalignment between these four components doesn't just slow the organization down, it deforms the technology itself. The model identifies four components that must be aligned for effective execution:</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>People</strong><span class="arch-label-desc">Not just headcount and skills, but the distribution of expertise, the depth of institutional knowledge, and the ratio of builders to maintainers. During diligence, the question isn't just "how many engineers?" but "what can this team actually <em>do</em>?"</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Rewards</strong><span class="arch-label-desc">What gets measured, recognized, and compensated. If the incentive structure rewards system stability above all else, don't expect the organization to embrace the calculated risk that modern technology practices require. If it rewards feature velocity without measuring quality, expect technical debt to be accumulating faster than the balance sheet suggests.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Processes</strong><span class="arch-label-desc">The formal and informal workflows that govern how work gets done. Heavyweight processes in technology organizations often signal a history of production failures that created institutional caution, which may be justified or may be a legacy constraint that adds cost without reducing risk.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Structure</strong><span class="arch-label-desc">Reporting lines, team boundaries, and the allocation of decision-making authority. Because of Conway's Law, the architecture of the software will tend to mirror the architecture of the teams that build it. Reorganizing teams without considering the implications for system architecture creates friction that burns time and budget.</span></span></li>
-                    </ul>
-
-                    <p class="arch-body">The Congruence Model's key insight is that these four components are <em>interdependent</em>. Changing one without adjusting the others creates misalignment that shows up as execution failures, cultural resistance, or the quiet departure of key talent. This is why post-acquisition technology transformations that focus only on the technology itself so frequently underdeliver.</p>
-
-                    <p class="arch-body">The diagnostic questions are straightforward: <em>Does the organization reinforce strategy, or fight it? Are teams empowered or blocked? Do incentives reward the outcomes that matter?</em></p>
-
-                    <p class="arch-body">A common pattern in diligence illustrates how this plays out: a company announces a transition from a monolithic application to a microservices architecture, a technically sound decision, but the engineering organization is still structured around a single shared codebase with centralized release management. Conway's Law predicts exactly what happens next. The teams build services that still depend on coordinated deployments, the "microservices" share databases and release cycles, and eighteen months later the company has all the operational complexity of a distributed system with none of the independence benefits. The architecture couldn't outrun the org chart. The technology decision was correct; the organizational architecture wasn't changed to support it. In diligence, this pattern shows up as a team that uses modern architectural vocabulary but whose deployment metrics, incident patterns, and velocity data tell a different story.</p>
-
-                    <div class="arch-diligence-callout">
-                        <p class="arch-diligence-label">What to look for in diligence</p>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Signals to look for</p>
-                            <p class="arch-diligence-text">Alignment or misalignment between the four Congruence Model levers (people, rewards, processes, structure). Whether the organizational structure reflects deliberate architectural choices or historical accident. Key-person dependencies that suggest the architecture's complexity exceeds the organization's ability to manage it.</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Questions to ask</p>
-                            <p class="arch-diligence-text">If the two most senior engineers left tomorrow, what would the team be unable to do? How are engineering trade-offs escalated and resolved, and who has final decision authority? Do incentives reward the behaviors the go-forward strategy requires, or the ones the current strategy rewards?</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Artifacts to request</p>
-                            <p class="arch-diligence-text">Organization chart with reporting lines and team-to-system ownership mapping. Attrition data for engineering over the past 24 months. Engineering compensation and bonus structure. Decision logs or architecture decision records (ADRs) if they exist.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Layer 5: Industry & Regulatory Architecture -->
-                <section class="arch-section" id="layer-5">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Layer 5: Industry &amp; Regulatory Architecture (Externalities)
-                    </h2>
-
-                    <div class="arch-defn">
-                        <p class="arch-defn-what"><strong>What it is:</strong> The external forces, standards, and competitive dynamics that shape what's possible, and what's required, before a single internal decision gets made.</p>
-                        <p class="arch-defn-why"><strong>Why it matters to you:</strong> No company's technology exists in a vacuum. Industry structure dictates which architectural choices create competitive advantage and which simply keep the lights on. Regulatory requirements can turn a minor design decision into a material compliance liability.</p>
-                    </div>
-
-                    <p class="arch-body"><em>GST's <a href="/hub/tools/regulatory-map" target="_blank" rel="noopener">Regulatory Map</a> tracks 120 regulations across data privacy, AI governance, cybersecurity, and industry compliance — a starting point for understanding which requirements apply to a target's geography and sector.</em></p>
-
-                    <p class="arch-business-meaning"><strong>Business meaning:</strong> Which business models are viable · Where margins concentrate · How defensible advantage can be built · Which constraints are non-negotiable</p>
-
-                    <h3 class="arch-subheading" id="layer-5-impedance">Industry Standards and Impedance Mismatch</h3>
-                    <p class="arch-body">Every industry develops its own interfaces: the points where one company's products, data, or services need to connect with another's. When these interfaces are well-established, they become industry standards. When they aren't, or when they shift, the resulting friction creates what engineers call an <em>impedance mismatch</em>: the cost and complexity of operating within an industry structure your architecture wasn't designed for.</p>
-                    <p class="arch-body">Microsoft under Steve Ballmer is a vivid example. The company's entire architecture, organizational, product, and operational, was optimized around Windows as the industry's dominant interface. Every initiative, phone, cloud, search, mobile, had to be compatible with that Windows-centric model. When the industry's interfaces shifted toward mobile, cloud, and platform-agnostic services, Microsoft faced a structural mismatch between how it was built and where the market was going. Satya Nadella's transformation was fundamentally an exercise in resolving that impedance mismatch: Office on iOS, Azure as a platform-agnostic cloud, Windows decoupled from the rest of the portfolio. The market rewarded the realignment accordingly.</p>
-                    <p class="arch-body">Dell illustrates the same pattern from a different angle. Their business model was perfectly optimized for a modular industry architecture: standardized PC components, direct-to-consumer sales, build-to-order manufacturing. When the industry shifted toward integrated mobile devices where those standardized interfaces no longer defined the market, Dell's operational and product architecture were exquisitely tuned for an industry structure that was losing relevance.</p>
-                    <p class="arch-body">For investors evaluating a target, the key question is: <em>Where does this company sit in its industry's architecture?</em> A business that depends on proprietary interfaces it doesn't control faces fundamentally different risks than one that owns a critical standard or operates within a mature, modular ecosystem. A business whose architecture is optimized for an industry structure that is shifting faces uncertainty: everything works, until it won't.</p>
-
-                    <h3 class="arch-subheading" id="layer-5-innovation">Managing the Innovation Portfolio</h3>
-                    <p class="arch-body">How companies respond to industry-level change reveals their strategic maturity, and for acquirers, their future trajectory. There are typically three mechanisms:</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Mergers &amp; acquisitions</strong><span class="arch-label-desc">Allow organizations to buy architectural capabilities they can't build fast enough. But the very architectural differences that make a target valuable are often the same ones that make integration difficult.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Corporate venture capital and partnerships</strong><span class="arch-label-desc">Provide exposure to emerging architectural patterns without full commitment. They're a hedge against uncertainty about which industry standards will win.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Organic innovation</strong><span class="arch-label-desc">Works best when the trajectory is clear and internal architecture supports iterative development. It struggles when the required changes cut across too many existing architectural layers.</span></span></li>
-                    </ul>
-
-                    <h3 class="arch-subheading" id="layer-5-disruption">Disruptive Innovation as a Filter</h3>
-                    <p class="arch-body">In The Innovator's Dilemma, Clayton Christensen identified a pattern that has repeated across industries: established companies lose market position not because they execute poorly, but because they execute well on a strategy that the market is moving away from. The mechanism is architectural. Incumbents optimize their technology, operations, and organization around their most profitable customers. A new entrant arrives with a simpler, cheaper alternative built on fundamentally different architectural choices. It initially serves customers the incumbent considers low-value or unprofitable. By the time the alternative is good enough to compete for the incumbent's core market, the incumbent's architecture is too optimized for the old model to adapt quickly enough.</p>
-                    <p class="arch-body">The question for investors isn't just "Is this company's technology current?" but "Is this company's architecture optimized for a market structure that is about to shift?" A target with a beautifully optimized architecture for today's competitive landscape can still be a poor investment if that landscape is being disrupted from below.</p>
-
-                    <div class="arch-diligence-callout">
-                        <p class="arch-diligence-label">What to look for in diligence</p>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Signals to look for</p>
-                            <p class="arch-diligence-text">Industry interface dependencies: which external standards, platforms, or protocols does the architecture depend on, and who controls them? Whether regulatory compliance is treated as an architectural constraint (built in) or an afterthought (bolted on). The target's position in the industry value chain and the durability of its competitive moat relative to platform shifts.</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Questions to ask</p>
-                            <p class="arch-diligence-text">Which industry standards or platform interfaces could shift in the next 3–5 years, and how exposed is this architecture? Is there a regulatory change on the horizon that would require architectural modification, and has that been scoped? Where are the company's technology bets placing it relative to emerging industry standards?</p>
-                        </div>
-                        <div class="arch-diligence-section">
-                            <p class="arch-diligence-sublabel">Artifacts to request</p>
-                            <p class="arch-diligence-text">Regulatory compliance matrix mapping requirements to architectural components (GST's <a href="/hub/tools/regulatory-map" target="_blank" rel="noopener">Regulatory Map</a> can serve as a baseline). Vendor and platform dependency map with contract renewal dates. Competitive landscape analysis identifying architectural differentiation vs. table stakes. Industry standards roadmap or participation in standards bodies (if applicable).</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- How the Layers Interact -->
-                <section class="arch-section" id="interactions">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        How the Layers Interact
-                    </h2>
-                    <p class="arch-body">These five architectural layers don't operate independently. They form a system of mutual constraints and enablements (affordances):</p>
-
-                    <ul class="arch-list arch-list--labeled">
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Bottom-up enablement</strong><span class="arch-label-desc">Strong software architecture enables operational agility. Operational agility supports product iteration speed. Product flexibility enables competitive response to industry shifts.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Top-down constraints</strong><span class="arch-label-desc">Industry standards limit product architecture choices. Product architecture dictates operational requirements. Operational requirements shape what software architecture must support.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>Lateral coupling</strong><span class="arch-label-desc">Organizational architecture (the people, incentives, processes, and structure) runs alongside every layer and either amplifies or dampens the effectiveness of choices made at each level.</span></span></li>
-                        <li><DeltaIcon class="bullet-icon" /><span class="arch-label-group"><strong>The cross-layer diagnostic</strong><span class="arch-label-desc">A failure at the software architecture layer is usually a symptom of a decision made at the organizational layer. To fix the technology, you must often fix the organization first. Great companies exhibit coherence across all five layers. Technology diligence is about identifying where that coherence exists and where it breaks down.</span></span></li>
-                    </ul>
-
-                    <p class="arch-body">A common failure pattern in technology-driven organizations is attempting to change one layer without addressing the others. A product architecture migration that ignores organizational readiness. An operational transformation that doesn't account for the software architecture's limitations. A software modernization that proceeds without clarity on the product strategy it's meant to enable.</p>
-                    <p class="arch-body">For investors and executives, the framework offers a structured way to assess technology risk and opportunity across the full stack, from source code to market forces, and to ensure that value creation plans address all the layers that matter, not just the ones that are most visible.</p>
-                </section>
-
-                <!-- Applying This Framework -->
-                <section class="arch-section" id="applying">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Applying This Framework
-                    </h2>
-
-                    <h3 class="arch-subheading">For Investors Evaluating a Deal</h3>
-                    <p class="arch-body">Use the layered architecture framework during diligence to identify where value is created and where risk resides at each level. Ask how the target's architectural choices at each layer align with the investment thesis. Pay particular attention to the interactions between layers: the organizational readiness to execute the product roadmap, the operational maturity to support the growth plan, and the software architecture's ability to sustain the required pace of change.</p>
-
-                    <h3 class="arch-subheading">For Executives Post-Acquisition</h3>
-                    <p class="arch-body">Map the inherited technology across all five layers before committing to a transformation plan. Identify the binding constraint, the layer where limitations will slow or prevent progress at every other level, and address it first. Recognize that changing technology architecture without adjusting organizational architecture is an exercise in frustration.</p>
-
-                    <h3 class="arch-subheading">For Operating Executives</h3>
-                    <p class="arch-body">Use the framework to diagnose why strategic initiatives stall. When growth targets slip, product launches lag, or integration efforts drag on, the root cause is almost always an architectural mismatch between layers. Identifying the binding constraint across all five layers turns vague "execution problems" into specific, addressable structural gaps.</p>
-
-                    <p class="arch-body">Consider a common scenario: a PE-backed SaaS company commits to launching a self-service tier to expand its addressable market. Six months in, the initiative is behind schedule and over budget. The product architecture review reveals the platform was built for enterprise customers with high-touch onboarding: there's no API-first interface, no usage-based metering, and no self-service provisioning. But the product architecture is itself constrained by the software architecture: the billing system is tightly coupled to a contract-based model, and adding usage tracking requires changes that cascade across multiple services. Meanwhile, the organizational architecture is working against the initiative: the engineering team is structured around enterprise feature delivery, and there's no dedicated team with authority over the self-service experience. The incentive structure rewards enterprise deal support, not platform capabilities. Each layer is individually rational. Together, they form a system that resists the very strategy the board approved. The framework's value is in making that resistance visible before it consumes the timeline.</p>
-
-                    <h3 class="arch-subheading">For Founders</h3>
-                    <p class="arch-body">The framework applies in reverse for founders: rather than diagnosing an existing architecture, you're making the choices that will be diagnosed later. Three practices make that future evaluation go better.</p>
-
-                    <p class="arch-body">First, maintain a deliberate record of one-way door decisions: the database you commit your data model to, the third-party platforms you build core workflows around, the team structure that will shape your system boundaries via Conway's Law. You don't need to get these right. You need to know which ones you chose and why, so you can explain the trade-offs to a future acquirer or board.</p>
-
-                    <p class="arch-body">Second, distinguish between technical debt taken on strategically and technical debt accumulated by accident. Both show up in diligence. The first signals a team that understood its constraints and made rational trade-offs. The second signals a team that wasn't paying attention. When an acquirer eventually looks under the hood, that distinction will be visible, and it will affect what they're willing to pay.</p>
-
-                    <p class="arch-body">Third, resist the temptation to optimize all five layers from the start. Resource-constrained companies should be deliberate about which layers they invest in and which ones they consciously defer. The framework's value for founders is in making those deferrals explicit rather than invisible.</p>
-
-                    <div class="arch-closing">
-                        <p>The difference between a good technology investment and a bad one often comes down to architectural affordance: what the technology allows the business to do easily, what it allows only with difficulty, and what it effectively prevents. Architecture isn't an engineering concern. It's the invisible infrastructure of business strategy.</p>
-                    </div>
-                </section>
-
-                <!-- Further Reading -->
-                <section class="arch-section" id="further-reading">
-                    <h2 class="arch-section-heading">
-                        <DeltaIcon class="bullet-icon" />
-                        Further Reading
-                    </h2>
-                    <p class="arch-body">The concepts in this guide draw on established frameworks from both software engineering and business strategy. For readers who want to go deeper:</p>
-
-                    <h3 class="arch-subheading">Software Architecture &amp; Patterns</h3>
-                    <ul class="arch-reading-list">
-                        <li>Gamma, Helm, Johnson, Vlissides, <em>Design Patterns: Elements of Reusable Object-Oriented Software</em> (the "Gang of Four" work referenced in Layer 1)</li>
-                        <li>Christopher Alexander, <em>A Pattern Language</em> (the building architecture research that inspired software design patterns)</li>
-                        <li>The Twelve-Factor App methodology, twelve-factor.net (the operational principles referenced in the Signals of Architectural Health section)</li>
-                    </ul>
-
-                    <h3 class="arch-subheading">Organizational Architecture</h3>
-                    <ul class="arch-reading-list">
-                        <li>Melvin Conway, "How Do Committees Invent?" (the original 1968 paper articulating Conway's Law)</li>
-                        <li>Tushman &amp; Nadler, the Congruence Model (the organizational alignment framework referenced in Layer 4)</li>
-                        <li>Matthew Skelton &amp; Manuel Pais, <em>Team Topologies</em> (a modern treatment of Conway's Law applied to software team design)</li>
-                    </ul>
-
-                    <h3 class="arch-subheading">Business Strategy &amp; Innovation</h3>
-                    <ul class="arch-reading-list">
-                        <li>Clayton Christensen, <em>The Innovator's Dilemma</em> (the disruption framework referenced in Layer 5)</li>
-                        <li>Clayton Christensen, <em>Competing Against Luck</em> (the Jobs to Be Done framework referenced in Layer 3)</li>
-                        <li>Jeff Bezos, annual shareholder letters (the source of the "two-way doors" and "course correcting" principles cited in Layer 3)</li>
-                    </ul>
-
-                    <h3 class="arch-subheading">Architecture Communication</h3>
-                    <ul class="arch-reading-list">
-                        <li>Simon Brown, the C4 Model (a practical framework for communicating software architecture at multiple levels of abstraction that complements the Layer 1 hierarchy discussed in this guide)</li>
-                    </ul>
-                </section>
-
+            <p class="arch-business-meaning">
+              <strong>Business meaning:</strong> Reliability and uptime · Cost to operate · Speed to ship
+              · Elasticity and scalability to meet demand
+            </p>
+
+            <h3 class="arch-subheading">The Core Challenge: Matching Supply with Demand</h3>
+            <p class="arch-body">
+              At its most fundamental, technology operations is about matching computing capacity
+              and system reliability with customer demand. The metrics are familiar to any business
+              leader: throughput, availability, cost-per-transaction, time-to-recovery. The
+              architectural choices that underpin those metrics, however, have profound strategic
+              implications.
+            </p>
+
+            <h3 class="arch-subheading" id="layer-2-risk">Two Philosophies of Managing Risk</h3>
+            <p class="arch-body">
+              Technology operations has historically been dominated by two competing approaches to
+              risk management, and the tension between them explains much of what investors
+              encounter during diligence. The distinction maps to a familiar one in finance.
+              Traditional insurance underwriting attempts to eliminate risk before it materializes:
+              exhaustive actuarial modeling, rigorous exclusions, and a deep reluctance to pay
+              claims. A venture portfolio approach accepts that individual bets will fail and
+              instead optimizes for rapid detection, contained losses, and recovery speed across the
+              portfolio. Both manage risk. They differ fundamentally in where they spend their
+              effort.
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>"Anticipate and Prevent" (Traditional / Waterfall)</strong><span
+                    class="arch-label-desc"
+                    >This approach assumes that failures are expensive and irreversible, so the
+                    correct response is exhaustive upfront planning, comprehensive testing, and
+                    rigorous change control. It's the default mindset of traditional enterprise IT,
+                    and it's not wrong; it's appropriate for environments where the cost of failure
+                    is catastrophic. In practice, however, this philosophy produces heavy approval
+                    processes, infrequent releases, long planning cycles, and a cultural resistance
+                    to experimentation.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>"Find and Fix" (DevOps / Continuous Delivery)</strong><span
+                    class="arch-label-desc"
+                    >This approach accepts that failures will occur and focuses on making them
+                    small, detectable, and quickly recoverable. It's built on the insight that in
+                    most software environments, it doesn't matter if there are failures. What
+                    matters is whether they can be detected and resolved before a customer is
+                    meaningfully affected. DevOps practices push toward more modular architectures
+                    because modularity enables faster detection, isolation, and recovery.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading">The Organizational Dimension of Operational Change</h3>
+            <p class="arch-body">
+              Asking a traditional IT organization to adopt DevOps practices is not a technology
+              change. It's a cultural and organizational transformation. You're asking people who
+              built their careers on "anticipate and prevent" to shift into a "find and fix"
+              mindset. That's a change in professional identity, not just tooling.
+            </p>
+            <p class="arch-body">
+              Organizations that have made this transition tend to share common characteristics:
+              leadership that understands and supports the shift, incentive structures that reward
+              learning from failures rather than punishing them, and an investment in automation
+              that makes rapid iteration safe rather than reckless.
+            </p>
+
+            <h3 class="arch-subheading" id="layer-2-context">
+              Why DevOps Is Harder in Some Contexts
+            </h3>
+            <p class="arch-body">
+              Not every company can or should adopt the same operational approach. Several factors
+              affect the feasibility and appropriateness of modern operational practices:
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Cost of iteration</strong><span class="arch-label-desc"
+                    >Software companies can deploy dozens of times per day because each iteration is
+                    essentially free to produce. Companies building physical products face material
+                    costs and lead times that constrain iteration speed.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Product lifecycle duration</strong><span class="arch-label-desc"
+                    >Software can be updated continuously. Hardware deployed in the field has a
+                    fixed operational life where updates range from difficult to impossible.
+                    Operational architecture must account for this difference.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>External dependencies and externalities</strong><span
+                    class="arch-label-desc"
+                    >Companies that operate platforms or ecosystems must consider how operational
+                    changes affect partners, integrators, and customers who have built on their
+                    interfaces.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Market position and customer expectations</strong><span
+                    class="arch-label-desc"
+                    >A startup can afford operational practices that accept higher rates of visible
+                    failure in exchange for speed. An enterprise serving Fortune 500 customers
+                    cannot. Operational architecture must match the company's position and promises.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <div class="arch-diligence-callout">
+              <p class="arch-diligence-label">What to look for in diligence</p>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Signals to look for</p>
+                <p class="arch-diligence-text">
+                  Deployment frequency and mean time to recovery (MTTR) as indicators of operational
+                  maturity. Infrastructure costs as a percentage of revenue, and whether that ratio
+                  improves or degrades as the business scales. Automation coverage across build,
+                  test, and deployment pipelines.
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Questions to ask</p>
+                <p class="arch-diligence-text">
+                  What is the gap between the current operational model and what the go-forward
+                  strategy requires? If we need to 3x throughput in 18 months, what breaks first?
+                  How does the on-call rotation work, and what does incident response look like at 2
+                  AM?
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Artifacts to request</p>
+                <p class="arch-diligence-text">
+                  Infrastructure cost breakdown with 12-month trend. Incident log with severity
+                  classification and resolution times. CI/CD pipeline configuration and deployment
+                  history. Capacity planning documentation or load test results.
+                </p>
+              </div>
             </div>
+          </section>
+
+          <!-- Layer 3: Product Architecture -->
+          <section class="arch-section" id="layer-3">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Layer 3: Product Architecture
+            </h2>
+
+            <div class="arch-defn">
+              <p class="arch-defn-what">
+                <strong>What it is:</strong> The choices about what a product does, how its components
+                fit together, and where the boundaries are drawn between what's built internally and what's
+                sourced externally.
+              </p>
+              <p class="arch-defn-why">
+                <strong>Why it matters to you:</strong> Product architecture decisions are strategy decisions.
+                They determine a company's core competency, its cost structure, its ability to respond
+                to market changes, and its options for future growth. When a CTO makes a product architecture
+                choice, they are making a fundamental statement about who the company's customer is, how
+                the company competes, and where it believes value will accrue in the future. This connection
+                between product architecture and business strategy is frequently underweighted in executive-level
+                planning, and it creates blind spots that surface at the worst possible time: mid-deal,
+                mid-integration, or mid-transformation.
+              </p>
             </div>
 
-            <a href="/hub/library" class="cta-button secondary back-link">Back to The Library</a>
+            <p class="arch-business-meaning">
+              <strong>Business meaning:</strong> Gross margin potential · Innovation velocity · Ability
+              to pursue M&amp;A · Integration and customization complexity
+            </p>
+
+            <h3 class="arch-subheading" id="layer-3-strategy">
+              The Architecture-Strategy Connection
+            </h3>
+            <p class="arch-body">
+              Product architecture is not a technical concern that can be delegated entirely to
+              engineering. It's a strategic choice that sits at the intersection of technology
+              capability, organizational structure, and business model.
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Vertically integrated architectures</strong><span class="arch-label-desc"
+                    >Vertically integrated architectures bring the full value chain in-house.
+                    Historically, this was the dominant approach: General Motors owning Fisher Body,
+                    Kodak integrating film chemistry through camera design. Tesla represents a
+                    modern version of this pattern, controlling everything from battery cell
+                    manufacturing and chip design to sales channels and charging infrastructure. The
+                    advantage is control and speed of iteration across the entire stack. The risk is
+                    calcification: when the market shifts, the entire value chain has to shift with
+                    it.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Integrated but focused architectures</strong><span
+                    class="arch-label-desc"
+                    >control fewer stages but maintain tight coupling between the ones they own.
+                    Apple represents this pattern. They design their own silicon but don't fabricate
+                    it. They define the hardware, the OS, and the interface layer so precisely that
+                    the product experience is indistinguishable from a fully integrated system,
+                    while outsourcing physical manufacturing to partners. This creates competitive
+                    moats through the difficulty of replication without the capital burden of owning
+                    every stage.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Modular architectures</strong><span class="arch-label-desc"
+                    >define clear interfaces between components, allowing each to be developed,
+                    replaced, or scaled independently. The open-source software ecosystem is
+                    modularity at its most extreme: thousands of independently maintained packages,
+                    each solving a specific problem, composed together through standardized
+                    interfaces. A modern application might depend on hundreds of these modules,
+                    gaining enormous development speed and capability without building from scratch.
+                    Modularity enables speed, specialization, and ecosystem development, but
+                    competitive advantage must come from something other than the modules
+                    themselves, because they're available to everyone. The strategic question
+                    becomes: what does this company do with the same building blocks that its
+                    competitors also have access to? In diligence, modular architectures also
+                    surface a distinct risk profile: dependency health, licensing exposure, and
+                    supply chain vulnerabilities that don't exist in integrated systems.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <p class="arch-body">
+              The critical insight for business leaders: <em
+                >When a technology leader decides what to build internally versus what to buy,
+                integrate, or deliberately leave out, they're not making a procurement decision.
+                They're defining the company's core competency and its opportunity costs.</em
+              > Every capability that gets built is a capability that didn't get built instead. That choice
+              has implications for talent strategy, competitive positioning, organizational structure,
+              and long-term defensibility. So does the choice of how the product reaches the customer.
+              Tesla delivers software updates over the air, turning every vehicle into a platform that
+              improves after purchase. Amazon invests in drone delivery to reshape the economics of last-mile
+              logistics. Apple releases new hardware annually, creating an upgrade cycle that drives recurring
+              revenue. These are product architecture decisions with direct business model consequences.
+              It's a board-level conversation disguised as a technical one.
+            </p>
+
+            <h3 class="arch-subheading">Product Architecture Choices Don't Happen in a Vacuum</h3>
+            <p class="arch-body">Product architecture choices are simultaneously:</p>
+            <ul class="arch-list">
+              <li>
+                <strong>Constrained by the existing organizational architecture.</strong> Team structures
+                create communication patterns that shape system boundaries. Existing processes create
+                inertia that favors certain architectural patterns over others.
+              </li>
+              <li>
+                <strong>Shaping the future organizational architecture.</strong> New product architecture
+                choices create demand for new skills, new team structures, and new processes. If the organizational
+                architecture doesn't adapt, the product architecture migration will stall or fail.
+              </li>
+              <li>
+                <strong>Reflective of the business model.</strong> A services-oriented business model
+                implies different architectural choices than a product-led one. Architecture and business
+                model need to evolve together.
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading" id="layer-3-problem">
+              Defining the Right Problem Before Building the Right Solution
+            </h3>
+            <p class="arch-body">
+              Product architecture doesn't emerge fully formed. It evolves in response to market
+              signals, and the quality of those signals determines whether the architecture
+              converges on real opportunity or drifts toward expensive irrelevance. Two frameworks
+              are particularly useful for keeping that evolution disciplined.
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>The Minimal Viable Problem (MVP)</strong><span class="arch-label-desc"
+                    >The strongest product architectures don't start with a grand vision. They start
+                    with the smallest version of a real customer problem that, if solved, justifies
+                    further investment. Each iteration expands the problem scope only when the
+                    previous solution has been validated in the market. Architecture then grows to
+                    match proven demand rather than speculative projections. For PE-backed companies
+                    with defined value creation timelines, this discipline is critical: it ensures
+                    that engineering investment tracks to revenue opportunity rather than running
+                    ahead of it. In diligence, ask whether the target's architecture evolved through
+                    validated iterations or was designed around assumptions that were never tested.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Jobs to Be Done</strong><span class="arch-label-desc"
+                    >Clayton Christensen popularized the idea that customers don't buy products;
+                    they "hire" them to accomplish specific jobs. The classic example: a fast-food
+                    chain discovered that customers hiring a milkshake in the morning had completely
+                    different needs than those buying one in the afternoon. The architectural
+                    implication is significant. When a company understands the job its product is
+                    hired to do, it can make sharper decisions about what to build, what to
+                    integrate, and what to leave out entirely. Architecture that is shaped by a
+                    clear job-to-be-done tends to be leaner, more focused, and better positioned to
+                    expand into adjacent opportunities. Architecture built without that clarity
+                    tends to accumulate features without strategic coherence, creating maintenance
+                    burden without corresponding market advantage.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>When the Operational Architecture Is the Product</strong><span
+                    class="arch-label-desc"
+                    >The founding of McDonald's illustrates how value can migrate between
+                    architectural layers. The McDonald brothers built what was, in this article's
+                    framing, an exceptional operational architecture (Layer 2): a stripped-down
+                    menu, a kitchen layout iterated on a tennis court with chalk, every movement
+                    optimized for speed and consistency. They had solved the operational throughput
+                    problem for a single location. Ray Kroc looked at the same operation and made a
+                    product architecture decision: the operational system itself, its
+                    standardization, its independence from any individual operator's skill, its
+                    predictable economics, was more valuable than anything on the menu. He didn't
+                    change the architecture. He recognized that packaging and replicating it was the
+                    product. For investors, this is a question worth asking: is the target selling a
+                    product, or has it built an operational architecture whose replicability is
+                    itself the defensible asset? The answer changes how you value it, how you plan
+                    integration, and where the realistic ceiling on post-acquisition growth actually
+                    sits. It also changes the diligence focus: when the operations are the product,
+                    the operational architecture layer deserves the scrutiny you would normally
+                    reserve for the product itself.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading" id="layer-3-selection">
+              Selection Principles for Evaluating Product Architecture in M&amp;A
+            </h3>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>YAGNI ("You Aren't Gonna Need It")</strong><span class="arch-label-desc"
+                    >Is the architecture built for actual, demonstrated customer needs, or for
+                    hypothetical future requirements that may never materialize? Over-engineered
+                    architecture is a cost center disguised as foresight.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>KISS ("Keep It Simple, Stupid")</strong><span class="arch-label-desc"
+                    >Is the architecture as simple as the problem permits, or has complexity been
+                    introduced without corresponding value? Unnecessary complexity is a predictor of
+                    future integration difficulty and ongoing maintenance cost.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Two-Way Doors</strong><span class="arch-label-desc"
+                    >Jeff Bezos distinguished between decisions that are reversible (two-way doors)
+                    and decisions that are not (one-way doors). One-way doors deserve deliberation.
+                    Two-way doors should be made quickly and adjusted based on what you learn.
+                    Choosing which cloud provider hosts your infrastructure is a two-way door: it
+                    takes effort to migrate, but it can be done. Rewriting your core platform in a
+                    proprietary programming language, or committing your data model to a
+                    vendor-specific database that doesn't support standard export formats, is a
+                    one-way door: reversing it means rebuilding, not reconfiguring. In product
+                    architecture, the question is: how many one-way doors has this company walked
+                    through? Architectures with a high ratio of irreversible decisions are harder to
+                    integrate, harder to modernize, and more expensive to exit.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <p class="arch-body">
+              Agile product management principles offer a useful lens for assessing product
+              maturity:
+            </p>
+            <ul class="arch-list">
+              <li>
+                <DeltaIcon class="bullet-icon" />Deliver to known, narrowly-defined customer needs
+                rather than speculative requirements. Over-engineering for imaginary use cases is a
+                common and expensive architectural error.
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" />Ship frequently. Architecture that supports
+                frequent, low-risk releases is fundamentally different from architecture that
+                requires large, coordinated deployments.
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" />Build around small, empowered, cross-functional
+                teams. Systems built by small teams tend to be more modular, better-defined, and
+                easier to maintain.
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" />Substitute modularity and flexible decision-making
+                for over-engineering. As Jeff Bezos observed: "If you're good at course correcting,
+                being wrong may be less costly than you think."
+              </li>
+            </ul>
+
+            <div class="arch-diligence-callout">
+              <p class="arch-diligence-label">What to look for in diligence</p>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Signals to look for</p>
+                <p class="arch-diligence-text">
+                  The relationship between product architecture and stated business strategy: do
+                  they reinforce each other or contradict? Evidence of architectural decisions
+                  driven by validated customer needs vs. internal convenience or technical
+                  enthusiasm. The degree of modularity and what it implies for integration
+                  complexity.
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Questions to ask</p>
+                <p class="arch-diligence-text">
+                  What was the last major product capability the team chose not to build, and why?
+                  How many one-way doors has this architecture walked through? Does the architecture
+                  support or constrain the go-forward growth plan, and can the team articulate
+                  specific constraints?
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Artifacts to request</p>
+                <p class="arch-diligence-text">
+                  Product roadmap with architecture dependency mapping. Build-vs-buy decision log
+                  (formal or informal). Third-party and open-source dependency inventory with
+                  licensing review. Customer-requested features that were declined or deferred due
+                  to architectural limitations.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Layer 4: Organizational Architecture -->
+          <section class="arch-section" id="layer-4">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Layer 4: Organizational Architecture
+            </h2>
+
+            <div class="arch-defn">
+              <p class="arch-defn-what">
+                <strong>What it is:</strong> The internal structure of people, processes, incentives,
+                and decision-making that determines how a company actually operates, and how effectively
+                it can execute technology change.
+              </p>
+              <p class="arch-defn-why">
+                <strong>Why it matters to you:</strong> There's a well-known principle in systems design
+                called Conway's Law: <em
+                  >organizations design systems that mirror their own communication structures.</em
+                > The mechanism is straightforward. Teams that don't talk to each other build components
+                that don't integrate well. Teams that share a manager tend to build tightly coupled systems,
+                whether or not coupling is the right design choice. If three separate groups are responsible
+                for billing, onboarding, and reporting, the software will almost inevitably become three
+                separate systems with awkward handoffs between them, regardless of whether that's the
+                best architecture for the customer. The organizational chart becomes the system architecture,
+                not by intention but by gravity. In practice, this means a company's technology architecture
+                is a reflection of its organizational architecture, and vice versa. You cannot change
+                one without confronting the other.
+              </p>
+            </div>
+
+            <p class="arch-business-meaning">
+              <strong>Business meaning:</strong> Key-person dependencies · Capability gaps · Leadership
+              decision rights and accountability · Incentive alignment · Organizational capacity to absorb
+              change
+            </p>
+
+            <h3 class="arch-subheading" id="layer-4-congruence">
+              The Congruence Model: Four Levers of Organizational Architecture
+            </h3>
+            <p class="arch-body">
+              The Tushman-Nadler Congruence Model provides a practical framework for understanding
+              how organizational architecture either enables or constrains execution. It applies to
+              any organization, but its implications for technology-driven businesses are
+              particularly acute because of Conway's Law: misalignment between these four components
+              doesn't just slow the organization down, it deforms the technology itself. The model
+              identifies four components that must be aligned for effective execution:
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>People</strong><span class="arch-label-desc"
+                    >Not just headcount and skills, but the distribution of expertise, the depth of
+                    institutional knowledge, and the ratio of builders to maintainers. During
+                    diligence, the question isn't just "how many engineers?" but "what can this team
+                    actually <em>do</em>?"</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Rewards</strong><span class="arch-label-desc"
+                    >What gets measured, recognized, and compensated. If the incentive structure
+                    rewards system stability above all else, don't expect the organization to
+                    embrace the calculated risk that modern technology practices require. If it
+                    rewards feature velocity without measuring quality, expect technical debt to be
+                    accumulating faster than the balance sheet suggests.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Processes</strong><span class="arch-label-desc"
+                    >The formal and informal workflows that govern how work gets done. Heavyweight
+                    processes in technology organizations often signal a history of production
+                    failures that created institutional caution, which may be justified or may be a
+                    legacy constraint that adds cost without reducing risk.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Structure</strong><span class="arch-label-desc"
+                    >Reporting lines, team boundaries, and the allocation of decision-making
+                    authority. Because of Conway's Law, the architecture of the software will tend
+                    to mirror the architecture of the teams that build it. Reorganizing teams
+                    without considering the implications for system architecture creates friction
+                    that burns time and budget.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <p class="arch-body">
+              The Congruence Model's key insight is that these four components are <em
+                >interdependent</em
+              >. Changing one without adjusting the others creates misalignment that shows up as
+              execution failures, cultural resistance, or the quiet departure of key talent. This is
+              why post-acquisition technology transformations that focus only on the technology
+              itself so frequently underdeliver.
+            </p>
+
+            <p class="arch-body">
+              The diagnostic questions are straightforward: <em
+                >Does the organization reinforce strategy, or fight it? Are teams empowered or
+                blocked? Do incentives reward the outcomes that matter?</em
+              >
+            </p>
+
+            <p class="arch-body">
+              A common pattern in diligence illustrates how this plays out: a company announces a
+              transition from a monolithic application to a microservices architecture, a
+              technically sound decision, but the engineering organization is still structured
+              around a single shared codebase with centralized release management. Conway's Law
+              predicts exactly what happens next. The teams build services that still depend on
+              coordinated deployments, the "microservices" share databases and release cycles, and
+              eighteen months later the company has all the operational complexity of a distributed
+              system with none of the independence benefits. The architecture couldn't outrun the
+              org chart. The technology decision was correct; the organizational architecture wasn't
+              changed to support it. In diligence, this pattern shows up as a team that uses modern
+              architectural vocabulary but whose deployment metrics, incident patterns, and velocity
+              data tell a different story.
+            </p>
+
+            <div class="arch-diligence-callout">
+              <p class="arch-diligence-label">What to look for in diligence</p>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Signals to look for</p>
+                <p class="arch-diligence-text">
+                  Alignment or misalignment between the four Congruence Model levers (people,
+                  rewards, processes, structure). Whether the organizational structure reflects
+                  deliberate architectural choices or historical accident. Key-person dependencies
+                  that suggest the architecture's complexity exceeds the organization's ability to
+                  manage it.
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Questions to ask</p>
+                <p class="arch-diligence-text">
+                  If the two most senior engineers left tomorrow, what would the team be unable to
+                  do? How are engineering trade-offs escalated and resolved, and who has final
+                  decision authority? Do incentives reward the behaviors the go-forward strategy
+                  requires, or the ones the current strategy rewards?
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Artifacts to request</p>
+                <p class="arch-diligence-text">
+                  Organization chart with reporting lines and team-to-system ownership mapping.
+                  Attrition data for engineering over the past 24 months. Engineering compensation
+                  and bonus structure. Decision logs or architecture decision records (ADRs) if they
+                  exist.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Layer 5: Industry & Regulatory Architecture -->
+          <section class="arch-section" id="layer-5">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Layer 5: Industry &amp; Regulatory Architecture (Externalities)
+            </h2>
+
+            <div class="arch-defn">
+              <p class="arch-defn-what">
+                <strong>What it is:</strong> The external forces, standards, and competitive dynamics
+                that shape what's possible, and what's required, before a single internal decision gets
+                made.
+              </p>
+              <p class="arch-defn-why">
+                <strong>Why it matters to you:</strong> No company's technology exists in a vacuum. Industry
+                structure dictates which architectural choices create competitive advantage and which
+                simply keep the lights on. Regulatory requirements can turn a minor design decision into
+                a material compliance liability.
+              </p>
+            </div>
+
+            <p class="arch-body">
+              <em
+                >GST's <a href="/hub/tools/regulatory-map" target="_blank" rel="noopener"
+                  >Regulatory Map</a
+                > tracks 120 regulations across data privacy, AI governance, cybersecurity, and industry
+                compliance — a starting point for understanding which requirements apply to a target's
+                geography and sector.</em
+              >
+            </p>
+
+            <p class="arch-business-meaning">
+              <strong>Business meaning:</strong> Which business models are viable · Where margins concentrate
+              · How defensible advantage can be built · Which constraints are non-negotiable
+            </p>
+
+            <h3 class="arch-subheading" id="layer-5-impedance">
+              Industry Standards and Impedance Mismatch
+            </h3>
+            <p class="arch-body">
+              Every industry develops its own interfaces: the points where one company's products,
+              data, or services need to connect with another's. When these interfaces are
+              well-established, they become industry standards. When they aren't, or when they
+              shift, the resulting friction creates what engineers call an <em
+                >impedance mismatch</em
+              >: the cost and complexity of operating within an industry structure your architecture
+              wasn't designed for.
+            </p>
+            <p class="arch-body">
+              Microsoft under Steve Ballmer is a vivid example. The company's entire architecture,
+              organizational, product, and operational, was optimized around Windows as the
+              industry's dominant interface. Every initiative, phone, cloud, search, mobile, had to
+              be compatible with that Windows-centric model. When the industry's interfaces shifted
+              toward mobile, cloud, and platform-agnostic services, Microsoft faced a structural
+              mismatch between how it was built and where the market was going. Satya Nadella's
+              transformation was fundamentally an exercise in resolving that impedance mismatch:
+              Office on iOS, Azure as a platform-agnostic cloud, Windows decoupled from the rest of
+              the portfolio. The market rewarded the realignment accordingly.
+            </p>
+            <p class="arch-body">
+              Dell illustrates the same pattern from a different angle. Their business model was
+              perfectly optimized for a modular industry architecture: standardized PC components,
+              direct-to-consumer sales, build-to-order manufacturing. When the industry shifted
+              toward integrated mobile devices where those standardized interfaces no longer defined
+              the market, Dell's operational and product architecture were exquisitely tuned for an
+              industry structure that was losing relevance.
+            </p>
+            <p class="arch-body">
+              For investors evaluating a target, the key question is: <em
+                >Where does this company sit in its industry's architecture?</em
+              > A business that depends on proprietary interfaces it doesn't control faces fundamentally
+              different risks than one that owns a critical standard or operates within a mature, modular
+              ecosystem. A business whose architecture is optimized for an industry structure that is
+              shifting faces uncertainty: everything works, until it won't.
+            </p>
+
+            <h3 class="arch-subheading" id="layer-5-innovation">
+              Managing the Innovation Portfolio
+            </h3>
+            <p class="arch-body">
+              How companies respond to industry-level change reveals their strategic maturity, and
+              for acquirers, their future trajectory. There are typically three mechanisms:
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Mergers &amp; acquisitions</strong><span class="arch-label-desc"
+                    >Allow organizations to buy architectural capabilities they can't build fast
+                    enough. But the very architectural differences that make a target valuable are
+                    often the same ones that make integration difficult.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Corporate venture capital and partnerships</strong><span
+                    class="arch-label-desc"
+                    >Provide exposure to emerging architectural patterns without full commitment.
+                    They're a hedge against uncertainty about which industry standards will win.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Organic innovation</strong><span class="arch-label-desc"
+                    >Works best when the trajectory is clear and internal architecture supports
+                    iterative development. It struggles when the required changes cut across too
+                    many existing architectural layers.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading" id="layer-5-disruption">
+              Disruptive Innovation as a Filter
+            </h3>
+            <p class="arch-body">
+              In The Innovator's Dilemma, Clayton Christensen identified a pattern that has repeated
+              across industries: established companies lose market position not because they execute
+              poorly, but because they execute well on a strategy that the market is moving away
+              from. The mechanism is architectural. Incumbents optimize their technology,
+              operations, and organization around their most profitable customers. A new entrant
+              arrives with a simpler, cheaper alternative built on fundamentally different
+              architectural choices. It initially serves customers the incumbent considers low-value
+              or unprofitable. By the time the alternative is good enough to compete for the
+              incumbent's core market, the incumbent's architecture is too optimized for the old
+              model to adapt quickly enough.
+            </p>
+            <p class="arch-body">
+              The question for investors isn't just "Is this company's technology current?" but "Is
+              this company's architecture optimized for a market structure that is about to shift?"
+              A target with a beautifully optimized architecture for today's competitive landscape
+              can still be a poor investment if that landscape is being disrupted from below.
+            </p>
+
+            <div class="arch-diligence-callout">
+              <p class="arch-diligence-label">What to look for in diligence</p>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Signals to look for</p>
+                <p class="arch-diligence-text">
+                  Industry interface dependencies: which external standards, platforms, or protocols
+                  does the architecture depend on, and who controls them? Whether regulatory
+                  compliance is treated as an architectural constraint (built in) or an afterthought
+                  (bolted on). The target's position in the industry value chain and the durability
+                  of its competitive moat relative to platform shifts.
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Questions to ask</p>
+                <p class="arch-diligence-text">
+                  Which industry standards or platform interfaces could shift in the next 3–5 years,
+                  and how exposed is this architecture? Is there a regulatory change on the horizon
+                  that would require architectural modification, and has that been scoped? Where are
+                  the company's technology bets placing it relative to emerging industry standards?
+                </p>
+              </div>
+              <div class="arch-diligence-section">
+                <p class="arch-diligence-sublabel">Artifacts to request</p>
+                <p class="arch-diligence-text">
+                  Regulatory compliance matrix mapping requirements to architectural components
+                  (GST's <a href="/hub/tools/regulatory-map" target="_blank" rel="noopener"
+                    >Regulatory Map</a
+                  > can serve as a baseline). Vendor and platform dependency map with contract renewal
+                  dates. Competitive landscape analysis identifying architectural differentiation vs.
+                  table stakes. Industry standards roadmap or participation in standards bodies (if applicable).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- How the Layers Interact -->
+          <section class="arch-section" id="interactions">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              How the Layers Interact
+            </h2>
+            <p class="arch-body">
+              These five architectural layers don't operate independently. They form a system of
+              mutual constraints and enablements (affordances):
+            </p>
+
+            <ul class="arch-list arch-list--labeled">
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Bottom-up enablement</strong><span class="arch-label-desc"
+                    >Strong software architecture enables operational agility. Operational agility
+                    supports product iteration speed. Product flexibility enables competitive
+                    response to industry shifts.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Top-down constraints</strong><span class="arch-label-desc"
+                    >Industry standards limit product architecture choices. Product architecture
+                    dictates operational requirements. Operational requirements shape what software
+                    architecture must support.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>Lateral coupling</strong><span class="arch-label-desc"
+                    >Organizational architecture (the people, incentives, processes, and structure)
+                    runs alongside every layer and either amplifies or dampens the effectiveness of
+                    choices made at each level.</span
+                  ></span
+                >
+              </li>
+              <li>
+                <DeltaIcon class="bullet-icon" /><span class="arch-label-group"
+                  ><strong>The cross-layer diagnostic</strong><span class="arch-label-desc"
+                    >A failure at the software architecture layer is usually a symptom of a decision
+                    made at the organizational layer. To fix the technology, you must often fix the
+                    organization first. Great companies exhibit coherence across all five layers.
+                    Technology diligence is about identifying where that coherence exists and where
+                    it breaks down.</span
+                  ></span
+                >
+              </li>
+            </ul>
+
+            <p class="arch-body">
+              A common failure pattern in technology-driven organizations is attempting to change
+              one layer without addressing the others. A product architecture migration that ignores
+              organizational readiness. An operational transformation that doesn't account for the
+              software architecture's limitations. A software modernization that proceeds without
+              clarity on the product strategy it's meant to enable.
+            </p>
+            <p class="arch-body">
+              For investors and executives, the framework offers a structured way to assess
+              technology risk and opportunity across the full stack, from source code to market
+              forces, and to ensure that value creation plans address all the layers that matter,
+              not just the ones that are most visible.
+            </p>
+          </section>
+
+          <!-- Applying This Framework -->
+          <section class="arch-section" id="applying">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Applying This Framework
+            </h2>
+
+            <h3 class="arch-subheading">For Investors Evaluating a Deal</h3>
+            <p class="arch-body">
+              Use the layered architecture framework during diligence to identify where value is
+              created and where risk resides at each level. Ask how the target's architectural
+              choices at each layer align with the investment thesis. Pay particular attention to
+              the interactions between layers: the organizational readiness to execute the product
+              roadmap, the operational maturity to support the growth plan, and the software
+              architecture's ability to sustain the required pace of change.
+            </p>
+
+            <h3 class="arch-subheading">For Executives Post-Acquisition</h3>
+            <p class="arch-body">
+              Map the inherited technology across all five layers before committing to a
+              transformation plan. Identify the binding constraint, the layer where limitations will
+              slow or prevent progress at every other level, and address it first. Recognize that
+              changing technology architecture without adjusting organizational architecture is an
+              exercise in frustration.
+            </p>
+
+            <h3 class="arch-subheading">For Operating Executives</h3>
+            <p class="arch-body">
+              Use the framework to diagnose why strategic initiatives stall. When growth targets
+              slip, product launches lag, or integration efforts drag on, the root cause is almost
+              always an architectural mismatch between layers. Identifying the binding constraint
+              across all five layers turns vague "execution problems" into specific, addressable
+              structural gaps.
+            </p>
+
+            <p class="arch-body">
+              Consider a common scenario: a PE-backed SaaS company commits to launching a
+              self-service tier to expand its addressable market. Six months in, the initiative is
+              behind schedule and over budget. The product architecture review reveals the platform
+              was built for enterprise customers with high-touch onboarding: there's no API-first
+              interface, no usage-based metering, and no self-service provisioning. But the product
+              architecture is itself constrained by the software architecture: the billing system is
+              tightly coupled to a contract-based model, and adding usage tracking requires changes
+              that cascade across multiple services. Meanwhile, the organizational architecture is
+              working against the initiative: the engineering team is structured around enterprise
+              feature delivery, and there's no dedicated team with authority over the self-service
+              experience. The incentive structure rewards enterprise deal support, not platform
+              capabilities. Each layer is individually rational. Together, they form a system that
+              resists the very strategy the board approved. The framework's value is in making that
+              resistance visible before it consumes the timeline.
+            </p>
+
+            <h3 class="arch-subheading">For Founders</h3>
+            <p class="arch-body">
+              The framework applies in reverse for founders: rather than diagnosing an existing
+              architecture, you're making the choices that will be diagnosed later. Three practices
+              make that future evaluation go better.
+            </p>
+
+            <p class="arch-body">
+              First, maintain a deliberate record of one-way door decisions: the database you commit
+              your data model to, the third-party platforms you build core workflows around, the
+              team structure that will shape your system boundaries via Conway's Law. You don't need
+              to get these right. You need to know which ones you chose and why, so you can explain
+              the trade-offs to a future acquirer or board.
+            </p>
+
+            <p class="arch-body">
+              Second, distinguish between technical debt taken on strategically and technical debt
+              accumulated by accident. Both show up in diligence. The first signals a team that
+              understood its constraints and made rational trade-offs. The second signals a team
+              that wasn't paying attention. When an acquirer eventually looks under the hood, that
+              distinction will be visible, and it will affect what they're willing to pay.
+            </p>
+
+            <p class="arch-body">
+              Third, resist the temptation to optimize all five layers from the start.
+              Resource-constrained companies should be deliberate about which layers they invest in
+              and which ones they consciously defer. The framework's value for founders is in making
+              those deferrals explicit rather than invisible.
+            </p>
+
+            <div class="arch-closing">
+              <p>
+                The difference between a good technology investment and a bad one often comes down
+                to architectural affordance: what the technology allows the business to do easily,
+                what it allows only with difficulty, and what it effectively prevents. Architecture
+                isn't an engineering concern. It's the invisible infrastructure of business
+                strategy.
+              </p>
+            </div>
+          </section>
+
+          <!-- Further Reading -->
+          <section class="arch-section" id="further-reading">
+            <h2 class="arch-section-heading">
+              <DeltaIcon class="bullet-icon" />
+              Further Reading
+            </h2>
+            <p class="arch-body">
+              The concepts in this guide draw on established frameworks from both software
+              engineering and business strategy. For readers who want to go deeper:
+            </p>
+
+            <h3 class="arch-subheading">Software Architecture &amp; Patterns</h3>
+            <ul class="arch-reading-list">
+              <li>
+                Gamma, Helm, Johnson, Vlissides, <em
+                  >Design Patterns: Elements of Reusable Object-Oriented Software</em
+                > (the "Gang of Four" work referenced in Layer 1)
+              </li>
+              <li>
+                Christopher Alexander, <em>A Pattern Language</em> (the building architecture research
+                that inspired software design patterns)
+              </li>
+              <li>
+                The Twelve-Factor App methodology, twelve-factor.net (the operational principles
+                referenced in the Signals of Architectural Health section)
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading">Organizational Architecture</h3>
+            <ul class="arch-reading-list">
+              <li>
+                Melvin Conway, "How Do Committees Invent?" (the original 1968 paper articulating
+                Conway's Law)
+              </li>
+              <li>
+                Tushman &amp; Nadler, the Congruence Model (the organizational alignment framework
+                referenced in Layer 4)
+              </li>
+              <li>
+                Matthew Skelton &amp; Manuel Pais, <em>Team Topologies</em> (a modern treatment of Conway's
+                Law applied to software team design)
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading">Business Strategy &amp; Innovation</h3>
+            <ul class="arch-reading-list">
+              <li>
+                Clayton Christensen, <em>The Innovator's Dilemma</em> (the disruption framework referenced
+                in Layer 5)
+              </li>
+              <li>
+                Clayton Christensen, <em>Competing Against Luck</em> (the Jobs to Be Done framework referenced
+                in Layer 3)
+              </li>
+              <li>
+                Jeff Bezos, annual shareholder letters (the source of the "two-way doors" and
+                "course correcting" principles cited in Layer 3)
+              </li>
+            </ul>
+
+            <h3 class="arch-subheading">Architecture Communication</h3>
+            <ul class="arch-reading-list">
+              <li>
+                Simon Brown, the C4 Model (a practical framework for communicating software
+                architecture at multiple levels of abstraction that complements the Layer 1
+                hierarchy discussed in this guide)
+              </li>
+            </ul>
+          </section>
         </div>
-    </section>
+      </div>
+
+      <a href="/hub/library" class="cta-button secondary back-link">Back to The Library</a>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-    .arch-guide {
-        padding: var(--spacing-3xl) 0 5rem;
+  .arch-guide {
+    padding: var(--spacing-3xl) 0 5rem;
+  }
+
+  /* Epigraph */
+  .arch-epigraph {
+    max-width: 700px;
+    margin: 0 auto var(--spacing-3xl);
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    border-left: 3px solid var(--color-primary);
+    background: transparent;
+  }
+
+  .arch-epigraph p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-style: italic;
+    margin: 0;
+  }
+
+  :global(html.dark-theme) .arch-epigraph {
+    background: transparent;
+  }
+
+  /* Table of Contents */
+
+  /* Layout positioning for shared TOC component (non-sidebar default) */
+  .arch-layout :global(.toc) {
+    display: block;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-3xl);
+  }
+
+  /* Content */
+  .arch-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .arch-section {
+    margin-bottom: var(--spacing-3xl);
+    padding: var(--spacing-xl);
+  }
+
+  .arch-section:nth-child(even) {
+    background: transparent;
+  }
+
+  :global(html.dark-theme) .arch-section:nth-child(even) {
+    background: transparent;
+  }
+
+  .arch-section-heading {
+    font-family: monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: transparent;
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .arch-section-heading :global(.bullet-icon) {
+    margin-top: 0;
+  }
+
+  .arch-section-heading img {
+    width: 20px;
+    height: 20px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  :global(html.dark-theme) .arch-section-heading {
+    background: transparent;
+    border-bottom-color: var(--border-light);
+  }
+
+  /* Layer label (e.g. "The Foundation", "Infrastructure") */
+  .arch-layer-label {
+    font-family: monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xl);
+    opacity: 0.85;
+  }
+
+  /* Definition block */
+  .arch-defn {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: transparent;
+    border: 2px solid var(--border-light);
+  }
+
+  :global(html.dark-theme) .arch-defn {
+    background: transparent;
+    border-color: var(--border-light);
+  }
+
+  .arch-defn p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .arch-defn p + p {
+    margin-top: var(--spacing-md);
+  }
+
+  .arch-defn strong {
+    color: var(--text-primary);
+  }
+
+  /* Business meaning callout */
+  .arch-business-meaning {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: transparent;
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .arch-business-meaning strong {
+    font-family: monospace;
+    color: var(--color-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+  }
+
+  :global(html.dark-theme) .arch-business-meaning {
+    background: transparent;
+    border-left-color: var(--color-primary);
+  }
+
+  /* Sub-headings (h3) */
+  .arch-subheading {
+    font-family: monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  :global(html.dark-theme) .arch-subheading {
+    border-bottom-color: var(--border-light);
+  }
+
+  .arch-body {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .arch-body em {
+    color: var(--text-primary);
+    font-style: italic;
+  }
+
+  /* Lists */
+  .arch-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .arch-list li {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    transition: border-color var(--transition-fast);
+  }
+
+  .bullet-icon {
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  .arch-list strong {
+    color: var(--text-primary);
+  }
+
+  /* Labeled lists */
+  .arch-list--labeled {
+    gap: var(--spacing-lg);
+  }
+
+  .arch-list--labeled li {
+    padding: var(--spacing-lg);
+    background: transparent;
+    border: 2px solid var(--border-light);
+    border-left: 3px solid var(--color-primary);
+    transition: all var(--transition-normal);
+  }
+
+  :global(html.dark-theme) .arch-list--labeled li {
+    background: transparent;
+    border-color: var(--border-light);
+    border-left-color: var(--color-primary);
+  }
+
+  .arch-label-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+  }
+
+  .arch-label-desc {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .arch-label-desc em {
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Diligence callout */
+  .arch-diligence-callout {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background: transparent;
+    border: 2px solid var(--border-light);
+    width: fit-content;
+  }
+
+  :global(html.dark-theme) .arch-diligence-callout {
+    background: transparent;
+    border-color: var(--border-light);
+  }
+
+  .arch-diligence-label {
+    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .arch-diligence-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .arch-diligence-list li {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+  }
+
+  .arch-diligence-list .bullet-icon {
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  /* Diligence section (Signals / Questions / Artifacts) */
+  .arch-diligence-section {
+    margin-top: var(--spacing-md);
+  }
+
+  .arch-diligence-section:first-of-type {
+    margin-top: var(--spacing-sm);
+  }
+
+  .arch-diligence-sublabel {
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .arch-diligence-text {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Closing statement */
+  .arch-closing {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    border-left: 3px solid var(--color-primary);
+    background: transparent;
+  }
+
+  :global(html.dark-theme) .arch-closing {
+    background: transparent;
+  }
+
+  .arch-closing p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* Reading list */
+  .arch-reading-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .arch-reading-list li {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    padding-left: var(--spacing-lg);
+    position: relative;
+  }
+
+  .arch-reading-list li::before {
+    content: '';
+    position: absolute;
+    left: var(--spacing-xs);
+    top: 0.85em;
+    width: 6px;
+    height: 6px;
+    border: 1.5px solid var(--color-primary);
+    opacity: 0.6;
+  }
+
+  .arch-reading-list em {
+    color: var(--text-primary);
+    font-style: italic;
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-top: var(--spacing-2xl);
+  }
+
+  /* Hover effects (pointer devices only) */
+  @media (hover: hover) {
+    .arch-list li:hover {
+      border-color: var(--color-primary);
     }
 
-    /* Epigraph */
-    .arch-epigraph {
-        max-width: 700px;
-        margin: 0 auto var(--spacing-3xl);
-        padding: var(--spacing-xl) var(--spacing-2xl);
-        border-left: 3px solid var(--color-primary);
-        background: transparent;
+    :global(html.dark-theme) .arch-list li:hover {
+      border-color: var(--color-primary);
     }
 
-    .arch-epigraph p {
-        font-size: var(--text-base);
-        color: var(--text-secondary);
-        line-height: 1.8;
-        font-style: italic;
-        margin: 0;
+    .arch-list--labeled li:hover {
+      border-color: var(--color-primary);
     }
 
-    :global(html.dark-theme) .arch-epigraph {
-        background: transparent;
+    :global(html.dark-theme) .arch-list--labeled li:hover {
+      border-color: var(--color-primary);
+    }
+  }
+
+  /* Desktop sidebar layout */
+  @media (min-width: 1025px) {
+    .arch-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--spacing-2xl);
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
     }
 
-    /* Table of Contents */
-    /* Layout positioning for shared TOC component (non-sidebar default) */
     .arch-layout :global(.toc) {
-        display: block;
-        max-width: 800px;
-        margin: 0 auto var(--spacing-3xl);
+      position: sticky;
+      top: var(--spacing-xl);
+      max-width: none;
+      margin: 0;
+      max-height: calc(100vh - var(--spacing-2xl));
+      overflow-y: auto;
     }
 
-    /* Content */
+    .arch-layout :global(.toc .toc__heading) {
+      font-size: 1rem;
+      padding: var(--spacing-xs) var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+
     .arch-content {
-        max-width: 800px;
-        margin: 0 auto;
+      max-width: none;
+      margin: 0;
+    }
+  }
+
+  /* Tablet: slightly wider content */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .arch-content {
+      max-width: 900px;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .arch-guide {
+      padding: var(--spacing-2xl) 0 var(--spacing-3xl);
+    }
+
+    .arch-epigraph {
+      padding: var(--spacing-lg);
     }
 
     .arch-section {
-        margin-bottom: var(--spacing-3xl);
-        padding: var(--spacing-xl);
+      padding: var(--spacing-lg);
     }
 
-    .arch-section:nth-child(even) {
-        background: transparent;
-    }
-
-    :global(html.dark-theme) .arch-section:nth-child(even) {
-        background: transparent;
-    }
-
-    .arch-section-heading {
-        font-family: monospace;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-lg);
-        padding: var(--spacing-sm) var(--spacing-lg);
-        background: transparent;
-        border-left: 3px solid var(--color-primary);
-    }
-
-    .arch-section-heading :global(.bullet-icon) {
-        margin-top: 0;
-    }
-
-    .arch-section-heading img {
-        width: 20px;
-        height: 20px;
-        border-bottom: 1px solid var(--border-light);
-    }
-
-    :global(html.dark-theme) .arch-section-heading {
-        background: transparent;
-        border-bottom-color: var(--border-light);
-    }
-
-    /* Layer label (e.g. "The Foundation", "Infrastructure") */
-    .arch-layer-label {
-        font-family: monospace;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--color-primary);
-        margin-bottom: var(--spacing-xl);
-        opacity: 0.85;
-    }
-
-    /* Definition block */
     .arch-defn {
-        margin-bottom: var(--spacing-xl);
-        padding: var(--spacing-lg);
-        background: transparent;
-        border: 2px solid var(--border-light);
-    }
-
-    :global(html.dark-theme) .arch-defn {
-        background: transparent;
-        border-color: var(--border-light);
-    }
-
-    .arch-defn p {
-        font-size: var(--text-base);
-        color: var(--text-secondary);
-        line-height: 1.8;
-        margin: 0;
-    }
-
-    .arch-defn p + p {
-        margin-top: var(--spacing-md);
-    }
-
-    .arch-defn strong {
-        color: var(--text-primary);
-    }
-
-    /* Business meaning callout */
-    .arch-business-meaning {
-        font-size: var(--text-sm);
-        color: var(--text-secondary);
-        line-height: 1.6;
-        margin-bottom: var(--spacing-xl);
-        padding: var(--spacing-sm) var(--spacing-lg);
-        background: transparent;
-        border-left: 3px solid var(--color-primary);
-    }
-
-    .arch-business-meaning strong {
-        font-family: monospace;
-        color: var(--color-primary);
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 0.75rem;
-    }
-
-    :global(html.dark-theme) .arch-business-meaning {
-        background: transparent;
-        border-left-color: var(--color-primary);
-    }
-
-    /* Sub-headings (h3) */
-    .arch-subheading {
-        font-family: monospace;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        letter-spacing: 0.02em;
-        margin-top: var(--spacing-2xl);
-        margin-bottom: var(--spacing-lg);
-        padding-bottom: var(--spacing-xs);
-        border-bottom: 1px solid var(--border-light);
-    }
-
-    :global(html.dark-theme) .arch-subheading {
-        border-bottom-color: var(--border-light);
-    }
-
-    .arch-body {
-        font-size: var(--text-base);
-        color: var(--text-secondary);
-        line-height: 1.8;
-        margin-bottom: var(--spacing-xl);
-    }
-
-    .arch-body em {
-        color: var(--text-primary);
-        font-style: italic;
-    }
-
-    /* Lists */
-    .arch-list {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 var(--spacing-xl);
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-sm);
-    }
-
-    .arch-list li {
-        font-size: var(--text-base);
-        color: var(--text-secondary);
-        line-height: 1.7;
-        display: flex;
-        align-items: flex-start;
-        gap: var(--spacing-sm);
-        padding: var(--spacing-xs) var(--spacing-sm);
-        transition: border-color var(--transition-fast);
-    }
-
-    .bullet-icon {
-        flex-shrink: 0;
-        opacity: 0.8;
-    }
-
-    .arch-list strong {
-        color: var(--text-primary);
-    }
-
-    /* Labeled lists */
-    .arch-list--labeled {
-        gap: var(--spacing-lg);
-    }
-
-    .arch-list--labeled li {
-        padding: var(--spacing-lg);
-        background: transparent;
-        border: 2px solid var(--border-light);
-        border-left: 3px solid var(--color-primary);
-        transition: all var(--transition-normal);
-    }
-
-    :global(html.dark-theme) .arch-list--labeled li {
-        background: transparent;
-        border-color: var(--border-light);
-        border-left-color: var(--color-primary);
+      padding: var(--spacing-md);
     }
 
     .arch-label-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2em;
+      gap: 0.3em;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .arch-guide {
+      padding: var(--spacing-xl) 0 var(--spacing-2xl);
+    }
+
+    .arch-epigraph {
+      padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .arch-section {
+      padding: var(--spacing-md);
+    }
+
+    .arch-section-heading {
+      font-size: 1.05rem;
+      padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    .arch-subheading {
+      font-size: 0.95rem;
+    }
+
+    .arch-body {
+      line-height: 1.7;
+    }
+
+    .arch-list li {
+      gap: var(--spacing-xs);
+    }
+
+    .arch-list--labeled li {
+      padding: var(--spacing-md);
+    }
+
+    .arch-label-group {
+      gap: 0.35em;
     }
 
     .arch-label-desc {
-        font-size: var(--text-sm);
-        color: var(--text-muted);
-        line-height: 1.6;
+      line-height: 1.7;
     }
 
-    .arch-label-desc em {
-        color: var(--text-secondary);
-        font-style: italic;
+    .arch-defn {
+      padding: var(--spacing-sm);
     }
 
-    /* Diligence callout */
     .arch-diligence-callout {
-        margin-top: var(--spacing-2xl);
-        padding: var(--spacing-lg);
-        background: transparent;
-        border: 2px solid var(--border-light);
-        width: fit-content;
+      padding: var(--spacing-md);
     }
 
-    :global(html.dark-theme) .arch-diligence-callout {
-        background: transparent;
-        border-color: var(--border-light);
-    }
-
-    .arch-diligence-label {
-        font-family: monospace;
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--color-primary);
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .arch-diligence-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-xs);
-    }
-
-    .arch-diligence-list li {
-        font-size: var(--text-sm);
-        color: var(--text-secondary);
-        line-height: 1.6;
-        display: flex;
-        align-items: baseline;
-        gap: var(--spacing-sm);
-    }
-
-    .arch-diligence-list .bullet-icon {
-        flex-shrink: 0;
-        opacity: 0.5;
-    }
-
-    /* Diligence section (Signals / Questions / Artifacts) */
-    .arch-diligence-section {
-        margin-top: var(--spacing-md);
-    }
-
-    .arch-diligence-section:first-of-type {
-        margin-top: var(--spacing-sm);
-    }
-
-    .arch-diligence-sublabel {
-        font-family: monospace;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--text-primary);
-        margin-bottom: var(--spacing-xs);
-    }
-
-    .arch-diligence-text {
-        font-size: var(--text-sm);
-        color: var(--text-secondary);
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    /* Closing statement */
     .arch-closing {
-        margin-top: var(--spacing-2xl);
-        padding: var(--spacing-xl) var(--spacing-2xl);
-        border-left: 3px solid var(--color-primary);
-        background: transparent;
+      padding: var(--spacing-lg);
+    }
+  }
+
+  /* Print layout */
+  @media print {
+    /* Neutralize desktop grid for print */
+    .arch-layout {
+      display: block;
     }
 
-    :global(html.dark-theme) .arch-closing {
-        background: transparent;
+    .arch-guide {
+      padding: 0;
     }
 
-    .arch-closing p {
-        font-size: var(--text-base);
-        color: var(--text-secondary);
-        line-height: 1.8;
-        font-style: italic;
-        margin: 0;
+    .arch-epigraph {
+      margin-bottom: var(--spacing-lg);
     }
 
-    /* Reading list */
-    .arch-reading-list {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 var(--spacing-xl);
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-sm);
+    .arch-layout :global(.toc) {
+      display: none;
     }
 
-    .arch-reading-list li {
-        font-size: var(--text-sm);
-        color: var(--text-secondary);
-        line-height: 1.6;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        padding-left: var(--spacing-lg);
-        position: relative;
+    .arch-section {
+      page-break-before: always;
+      break-before: page;
+      break-inside: avoid;
+      margin-bottom: 0;
+      padding: var(--spacing-md);
     }
 
-    .arch-reading-list li::before {
-        content: '';
-        position: absolute;
-        left: var(--spacing-xs);
-        top: 0.85em;
-        width: 6px;
-        height: 6px;
-        border: 1.5px solid var(--color-primary);
-        opacity: 0.6;
+    .arch-section:first-child {
+      page-break-before: auto;
+      break-before: auto;
     }
 
-    .arch-reading-list em {
-        color: var(--text-primary);
-        font-style: italic;
+    .arch-list {
+      gap: 2px;
     }
 
-    /* Back link */
+    .arch-list li {
+      padding: 2px var(--spacing-xs);
+    }
+
+    .arch-list--labeled {
+      gap: var(--spacing-sm);
+    }
+
+    .arch-list--labeled li {
+      padding: var(--spacing-sm);
+      break-inside: avoid;
+    }
+
+    .arch-body {
+      margin-bottom: var(--spacing-sm);
+      line-height: 1.5;
+    }
+
+    .arch-section-heading {
+      margin-bottom: var(--spacing-sm);
+      padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .arch-diligence-callout {
+      break-inside: avoid;
+    }
+
     .back-link {
-        display: inline-block;
-        margin-top: var(--spacing-2xl);
+      display: none;
     }
-
-    /* Hover effects (pointer devices only) */
-    @media (hover: hover) {
-        .arch-list li:hover {
-            border-color: var(--color-primary);
-        }
-
-        :global(html.dark-theme) .arch-list li:hover {
-            border-color: var(--color-primary);
-        }
-
-        .arch-list--labeled li:hover {
-            border-color: var(--color-primary);
-        }
-
-        :global(html.dark-theme) .arch-list--labeled li:hover {
-            border-color: var(--color-primary);
-        }
-    }
-
-    /* Desktop sidebar layout */
-    @media (min-width: 1025px) {
-        .arch-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: var(--spacing-2xl);
-            max-width: 1200px;
-            margin: 0 auto;
-            align-items: start;
-        }
-
-        .arch-layout :global(.toc) {
-            position: sticky;
-            top: var(--spacing-xl);
-            max-width: none;
-            margin: 0;
-            max-height: calc(100vh - var(--spacing-2xl));
-            overflow-y: auto;
-        }
-
-        .arch-layout :global(.toc .toc__heading) {
-            font-size: 1rem;
-            padding: var(--spacing-xs) var(--spacing-md);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .arch-content {
-            max-width: none;
-            margin: 0;
-        }
-
-    }
-
-    /* Tablet: slightly wider content */
-    @media (min-width: 769px) and (max-width: 1024px) {
-        .arch-content {
-            max-width: 900px;
-        }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .arch-guide {
-            padding: var(--spacing-2xl) 0 var(--spacing-3xl);
-        }
-
-        .arch-epigraph {
-            padding: var(--spacing-lg);
-        }
-
-        .arch-section {
-            padding: var(--spacing-lg);
-        }
-
-        .arch-defn {
-            padding: var(--spacing-md);
-        }
-
-        .arch-label-group {
-            gap: 0.3em;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .arch-guide {
-            padding: var(--spacing-xl) 0 var(--spacing-2xl);
-        }
-
-        .arch-epigraph {
-            padding: var(--spacing-md) var(--spacing-lg);
-        }
-
-        .arch-section {
-            padding: var(--spacing-md);
-        }
-
-        .arch-section-heading {
-            font-size: 1.05rem;
-            padding: var(--spacing-xs) var(--spacing-md);
-        }
-
-        .arch-subheading {
-            font-size: 0.95rem;
-        }
-
-        .arch-body {
-            line-height: 1.7;
-        }
-
-        .arch-list li {
-            gap: var(--spacing-xs);
-        }
-
-        .arch-list--labeled li {
-            padding: var(--spacing-md);
-        }
-
-        .arch-label-group {
-            gap: 0.35em;
-        }
-
-        .arch-label-desc {
-            line-height: 1.7;
-        }
-
-        .arch-defn {
-            padding: var(--spacing-sm);
-        }
-
-        .arch-diligence-callout {
-            padding: var(--spacing-md);
-        }
-
-        .arch-closing {
-            padding: var(--spacing-lg);
-        }
-    }
-
-    /* Print layout */
-    @media print {
-        /* Neutralize desktop grid for print */
-        .arch-layout {
-            display: block;
-        }
-
-        .arch-guide {
-            padding: 0;
-        }
-
-        .arch-epigraph {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .arch-layout :global(.toc) {
-            display: none;
-        }
-
-        .arch-section {
-            page-break-before: always;
-            break-before: page;
-            break-inside: avoid;
-            margin-bottom: 0;
-            padding: var(--spacing-md);
-        }
-
-        .arch-section:first-child {
-            page-break-before: auto;
-            break-before: auto;
-        }
-
-        .arch-list {
-            gap: 2px;
-        }
-
-        .arch-list li {
-            padding: 2px var(--spacing-xs);
-        }
-
-        .arch-list--labeled {
-            gap: var(--spacing-sm);
-        }
-
-        .arch-list--labeled li {
-            padding: var(--spacing-sm);
-            break-inside: avoid;
-        }
-
-        .arch-body {
-            margin-bottom: var(--spacing-sm);
-            line-height: 1.5;
-        }
-
-        .arch-section-heading {
-            margin-bottom: var(--spacing-sm);
-            padding: var(--spacing-xs) var(--spacing-sm);
-        }
-
-        .arch-diligence-callout {
-            break-inside: avoid;
-        }
-
-        .back-link {
-            display: none;
-        }
-    }
+  }
 </style>

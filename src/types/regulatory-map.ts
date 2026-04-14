@@ -1,21 +1,12 @@
 /**
  * Domain types for the Interactive Regulatory Map feature.
- * Used by build-time data validation (Zod) and client-side rendering (D3).
+ *
+ * Types are inferred from the Zod schema in `src/schemas/regulatory-map.ts`
+ * (single source of truth). This file re-exports them so existing imports
+ * from `../types/regulatory-map` keep working.
  */
 
-export type RegulationCategory = 'data-privacy' | 'ai-governance' | 'industry-compliance' | 'cybersecurity';
-
-export interface Regulation {
-  id: string;
-  name: string;
-  regions: string[];
-  effectiveDate: string;
-  summary: string;
-  category: RegulationCategory;
-  scope?: string;
-  keyRequirements?: string[];
-  penalties?: string;
-}
+export type { Regulation, RegulationCategory } from '../schemas/regulatory-map';
 
 export interface RegionSelectedDetail {
   regionId: string;

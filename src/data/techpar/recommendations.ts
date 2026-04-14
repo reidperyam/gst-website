@@ -3,11 +3,13 @@
  *
  * 5 stages x 6 zones = 30 combinations, each with 2-3 specific
  * actions the user can take based on their zone classification.
+ * Validated at build time against `TechParRecommendationsSchema`.
  */
 
-import type { Stage, Zone } from '../../utils/techpar-engine';
+import { TechParRecommendationsSchema, type Stage, type Zone } from '../../schemas/techpar';
+import { validateDataSource } from '../../utils/validateData';
 
-export const RECOMMENDATIONS: Record<Stage, Record<Zone, string[]>> = {
+const recommendationsData: Record<Stage, Record<Zone, string[]>> = {
   seed: {
     underinvest: [
       'Ensure core infrastructure (CI/CD, monitoring, incident response) is resourced before optimising for cost efficiency.',
@@ -154,3 +156,9 @@ export const RECOMMENDATIONS: Record<Stage, Record<Zone, string[]>> = {
     ],
   },
 };
+
+export const RECOMMENDATIONS = validateDataSource(
+  TechParRecommendationsSchema,
+  recommendationsData,
+  'techpar/recommendations.ts'
+);

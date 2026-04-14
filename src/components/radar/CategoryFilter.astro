@@ -14,15 +14,13 @@ const { categories } = Astro.props;
 
 <nav class="category-filter" aria-label="Filter by category">
   <button class="filter-btn active" data-filter="all">All</button>
-  {Object.entries(categories).map(([key, cat]) => (
-    <button
-      class="filter-btn"
-      data-filter={key}
-      style={`--btn-color: ${cat.color}`}
-    >
-      {cat.label}
-    </button>
-  ))}
+  {
+    Object.entries(categories).map(([key, cat]) => (
+      <button class="filter-btn" data-filter={key} style={`--btn-color: ${cat.color}`}>
+        {cat.label}
+      </button>
+    ))
+  }
 </nav>
 
 <script>
@@ -38,18 +36,18 @@ const { categories } = Astro.props;
       (btn as HTMLElement).style.setProperty('--d', d.toFixed(3));
     });
 
-    buttons.forEach(btn => {
+    buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const filter = (btn as HTMLElement).dataset.filter;
 
-        buttons.forEach(b => b.classList.remove('active'));
+        buttons.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
 
         // Query items at click time — RadarFeed is a server island
         // that streams in after DOMContentLoaded, so items don't
         // exist during initial script setup.
         const items = document.querySelectorAll('[data-category]');
-        items.forEach(item => {
+        items.forEach((item) => {
           const el = item as HTMLElement;
           if (filter === 'all' || el.dataset.category === filter) {
             el.style.display = '';
@@ -84,6 +82,7 @@ const { categories } = Astro.props;
     letter-spacing: 0.05em;
     cursor: pointer;
     transition: all var(--transition-normal);
+
     /* Gravity: --d is distance from center (0 = center, 1 = edge).
        Margin grows quadratically so center buttons cluster tight. */
     margin: var(--spacing-xs) calc(var(--spacing-xs) + var(--d, 0) * var(--d, 0) * 1.6rem);

@@ -1,36 +1,226 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
 import DeltaIcon from './DeltaIcon.astro';
-import { trackNavigation } from '../utils/analytics';
+// Note: trackNavigation is imported in the <script> block below to wire
+// it to window for inline onclick handlers.
 
 interface Props {
-    currentPath?: string;
-    staticHeader?: boolean;
+  currentPath?: string;
+  staticHeader?: boolean;
 }
 
 const { currentPath = '/', staticHeader = false } = Astro.props;
 ---
 
 <header class={`site-header${staticHeader ? ' site-header--static' : ''}`} role="banner">
-    <div class="container">
-        <nav role="navigation" aria-label="Main navigation">
-            <div class="logo-wrapper">
-                <DeltaIcon size={32} class="delta-icon" />
-                <a href="/" class="logo" aria-label="GST" onclick="trackNavigation('/', 'Logo')">G<span>S</span>T</a>
-            </div>
-            <ul>
-                <li><a href="/services" onclick="trackNavigation('/services', 'Services')">Services</a></li>
-                <li><a href="/ma-portfolio" onclick="trackNavigation('/ma-portfolio', 'M&A Portfolio')" class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a></li>
-                <li><a href="/hub" onclick="trackNavigation('/hub', 'Hub')" class={currentPath?.startsWith('/hub') ? 'active' : ''}>Hub</a></li>
-                <li><a href="/about" onclick="trackNavigation('/about', 'About')">About</a></li>
-            </ul>
-        </nav>
-    </div>
+  <div class="container">
+    <nav role="navigation" aria-label="Main navigation">
+      <div class="logo-wrapper">
+        <DeltaIcon size={32} class="delta-icon" />
+        <a href="/" class="logo" aria-label="GST" onclick="trackNavigation('/', 'Logo')"
+          >G<span>S</span>T</a
+        >
+      </div>
+      <ul>
+        <li>
+          <a
+            href="/services"
+            onclick="trackNavigation('/services', 'Services')"
+            class={currentPath?.startsWith('/services') ? 'active' : ''}>Services</a
+          >
+        </li>
+        <li>
+          <a
+            href="/ma-portfolio"
+            onclick="trackNavigation('/ma-portfolio', 'M&A Portfolio')"
+            class={currentPath?.startsWith('/ma-portfolio') ? 'active' : ''}>M&A</a
+          >
+        </li>
+        <li>
+          <a
+            href="/hub"
+            onclick="trackNavigation('/hub', 'Hub')"
+            class={currentPath?.startsWith('/hub') ? 'active' : ''}>Hub</a
+          >
+        </li>
+        <li>
+          <a
+            href="/about"
+            onclick="trackNavigation('/about', 'About')"
+            class={currentPath?.startsWith('/about') ? 'active' : ''}>About</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
-<script>
-    import { trackNavigation } from '../utils/analytics';
+<style>
+  .site-header {
+    padding: 1.275rem 0;
+    background: var(--bg-light-alt);
+    border-bottom: 2px solid var(--color-primary);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+  }
 
-    // Make trackNavigation available to inline onclick handlers
-    (window as any).trackNavigation = trackNavigation;
+  .site-header--static {
+    position: static;
+  }
+
+  .site-header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* :global() needed — .delta-icon is on a DeltaIcon child component
+     whose rendered <svg> gets DeltaIcon's scope, not Header's */
+  .logo-wrapper :global(.delta-icon) {
+    width: 1em;
+    height: 1em;
+    display: block;
+    flex-shrink: 0;
+    color: var(--color-primary);
+    font-size: 2rem;
+  }
+
+  .logo {
+    font-size: 2rem;
+    font-weight: 900;
+    font-family: monospace;
+    color: var(--text-primary);
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    height: 2rem;
+    text-decoration: none;
+    border-bottom: none;
+    transition: color var(--transition-fast);
+  }
+
+  .logo:hover {
+    color: var(--color-primary);
+  }
+
+  .logo span {
+    color: var(--color-primary);
+  }
+
+  .logo::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    display: block;
+    animation: pulse 2s infinite;
+  }
+
+  /* @keyframes pulse is defined in global.css (shared with skeleton loaders) */
+
+  .site-header nav ul {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+  }
+
+  .site-header nav a:not(.logo) {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    font-family: monospace;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition:
+      color var(--transition-fast),
+      border-bottom var(--transition-fast);
+    position: relative;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .site-header nav a:not(.logo):hover {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .site-header nav a:not(.logo):focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0.25rem;
+  }
+
+  .site-header nav a:not(.logo).active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .site-header {
+    background: var(--bg-dark);
+    border-bottom-color: var(--color-primary);
+  }
+
+  :global(html.dark-theme) .logo:hover {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .site-header {
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+    }
+
+    .site-header nav ul {
+      gap: 1.5rem;
+    }
+
+    .site-header nav a:not(.logo) {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-header {
+      padding: 0.75rem 0;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+    }
+
+    .site-header nav ul {
+      gap: 1rem;
+    }
+
+    .site-header nav a:not(.logo) {
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  @media print {
+    .site-header {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { trackNavigation } from '../utils/analytics';
+
+  // Make trackNavigation available to inline onclick handlers.
+  // TODO(phase-3): replace with proper ambient `Window` type declaration.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).trackNavigation = trackNavigation;
 </script>

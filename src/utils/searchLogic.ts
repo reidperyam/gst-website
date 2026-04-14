@@ -20,25 +20,29 @@ export function performSearch(projects: Project[], searchTerm: string): Project[
 
   const searchLower = searchTerm.toLowerCase();
 
-  return projects.filter(project => {
+  return projects.filter((project) => {
     const searchableText = createSearchableText(project);
     return searchableText.includes(searchLower);
   });
 }
 
 /**
- * Debounces a function to delay its execution
+ * Debounces a function to delay its execution.
+ * Uses split generics (A for args, R for return) so callers with any
+ * argument shape can bind cleanly — a `(...args: unknown[]) => unknown`
+ * constraint is too strict for concrete callers like `(term: string) => void`.
+ *
  * @param func - Function to debounce
  * @param delay - Delay in milliseconds
  * @returns Debounced function
  */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
+export function debounce<A extends unknown[], R>(
+  func: (...args: A) => R,
   delay: number
-): (...args: Parameters<T>) => void {
+): (...args: A) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  return function debounced(...args: Parameters<T>) {
+  return function debounced(...args: A) {
     if (timeoutId !== null) {
       clearTimeout(timeoutId);
     }
@@ -114,11 +118,7 @@ export function getSearchRelevance(project: Project, searchTerm: string): number
 
   // Match in technologies - medium-low priority (25 points)
   if (Array.isArray(project.technologies)) {
-    if (
-      project.technologies.some(t =>
-        t.toLowerCase().includes(searchLower)
-      )
-    ) {
+    if (project.technologies.some((t) => t.toLowerCase().includes(searchLower))) {
       score += 25;
     }
   }
@@ -137,10 +137,7 @@ export function getSearchRelevance(project: Project, searchTerm: string): number
  * @param searchTerm - Search term for relevance calculation
  * @returns Projects sorted by relevance (highest first)
  */
-export function sortBySearchRelevance(
-  projects: Project[],
-  searchTerm: string
-): Project[] {
+export function sortBySearchRelevance(projects: Project[], searchTerm: string): Project[] {
   if (!searchTerm.trim()) {
     return projects;
   }

@@ -1,25 +1,111 @@
 ---
 interface Stat {
-    value: string;
-    label: string;
+  value: string;
+  label: string;
 }
 
 interface Props {
-    stats: Stat[];
+  stats: Stat[];
 }
 
 const { stats } = Astro.props;
 ---
 
-<section class="stats-bar">
-    <div class="container">
-        <div class="stats-grid">
-            {stats.map((stat) => (
-                <div class="stat-item">
-                    <div class="stat-value brutal-stat__value">{stat.value}</div>
-                    <div class="stat-label brutal-stat__label">{stat.label}</div>
-                </div>
-            ))}
-        </div>
+<section class="stats-bar" aria-label="Key metrics">
+  <div class="container">
+    <div class="stats-grid">
+      {
+        stats.map((stat) => (
+          <div class="stat-item">
+            <div class="stat-value brutal-stat__value">{stat.value}</div>
+            <div class="stat-label brutal-stat__label">{stat.label}</div>
+          </div>
+        ))
+      }
     </div>
+  </div>
 </section>
+
+<style>
+  .stats-bar {
+    background: var(--color-primary);
+    padding: 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .stat-value {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--bg-dark);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--bg-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  :global(html.dark-theme) .stat-item {
+    border-right-color: transparent;
+  }
+
+  :global(html.dark-theme) .stat-value {
+    color: var(--bg-light);
+  }
+
+  :global(html.dark-theme) .stat-label {
+    color: var(--bg-light);
+  }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-bar {
+      padding: 0;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+    }
+
+    .stat-item {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+    }
+  }
+</style>

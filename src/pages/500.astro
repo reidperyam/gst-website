@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+---
+
+<BaseLayout
+  title="500 | Server Error"
+  description="Something went wrong on our end. Please try again or return to the homepage."
+>
+  <Hero
+    title="500"
+    subtitle="Something Went Wrong"
+    description="An unexpected error occurred on our end. The issue has been logged. Try refreshing the page, or navigate back to explore what GST has to offer."
+    primaryCTA={{ text: 'Return Home', href: '/' }}
+    secondaryCTA={{ text: 'View Services', href: '/services' }}
+  />
+</BaseLayout>

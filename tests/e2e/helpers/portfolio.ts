@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 /**
  * Open the filter drawer and wait for its slide-in transition to complete.
@@ -14,10 +14,13 @@ export async function openFilterDrawer(page: Page): Promise<void> {
   const drawer = page.locator('[data-testid="portfolio-filter-drawer"]');
   await expect(drawer).toBeVisible({ timeout: 5000 });
 
-  await page.waitForFunction(() => {
-    const el = document.querySelector('[data-testid="portfolio-filter-drawer"]');
-    if (!el || !el.classList.contains('open')) return false;
-    const right = parseFloat(window.getComputedStyle(el).right);
-    return right >= -1;
-  }, { timeout: 5000 });
+  await page.waitForFunction(
+    () => {
+      const el = document.querySelector('[data-testid="portfolio-filter-drawer"]');
+      if (!el || !el.classList.contains('open')) return false;
+      const right = parseFloat(window.getComputedStyle(el).right);
+      return right >= -1;
+    },
+    { timeout: 5000 }
+  );
 }

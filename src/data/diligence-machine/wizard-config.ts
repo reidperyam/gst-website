@@ -3,32 +3,20 @@
  *
  * Each step is a typed config object. Adding, removing, or reordering steps
  * requires only changes to this file — the UI renders from this data.
+ * Validated at build time against `WizardStepsArraySchema`.
  */
 
-export interface WizardOption {
-  id: string;
-  label: string;
-  description?: string;
-}
+import {
+  WizardStepsArraySchema,
+  type WizardOption,
+  type WizardField,
+  type WizardStep,
+} from '../../schemas/diligence';
+import { validateDataSource } from '../../utils/validateData';
 
-export interface WizardField {
-  id: string;
-  label: string;
-  inputType: 'select';
-  options: WizardOption[];
-}
+export type { WizardOption, WizardField, WizardStep };
 
-export interface WizardStep {
-  id: string;
-  title: string;
-  navLabel: string;
-  subtitle: string;
-  inputType: 'single-select' | 'multi-select' | 'compound';
-  options?: WizardOption[];
-  fields?: WizardField[];
-}
-
-export const WIZARD_STEPS: WizardStep[] = [
+const wizardStepsData: WizardStep[] = [
   {
     id: 'transaction-type',
     title: 'Transaction Type',
@@ -130,7 +118,7 @@ export const WIZARD_STEPS: WizardStep[] = [
     id: 'company-profile',
     title: 'Company Profile',
     navLabel: 'Company',
-    subtitle: 'Describe the target company\'s scale and maturity.',
+    subtitle: "Describe the target company's scale and maturity.",
     inputType: 'compound',
     fields: [
       {
@@ -370,6 +358,12 @@ export const WIZARD_STEPS: WizardStep[] = [
   },
 ];
 
+export const WIZARD_STEPS = validateDataSource(
+  WizardStepsArraySchema,
+  wizardStepsData,
+  'diligence-machine/wizard-config.ts'
+);
+
 /** Ordinal bracket ordering for comparative conditions */
 export const BRACKET_ORDER = {
   headcount: ['1-50', '51-200', '201-500', '500+'],
@@ -379,17 +373,17 @@ export const BRACKET_ORDER = {
 
 /** Human-readable labels for input summary display */
 export function getOptionLabel(stepId: string, optionId: string): string {
-  const step = WIZARD_STEPS.find(s => s.id === stepId);
+  const step = WIZARD_STEPS.find((s) => s.id === stepId);
   if (!step) return optionId;
 
   if (step.options) {
-    const opt = step.options.find(o => o.id === optionId);
+    const opt = step.options.find((o) => o.id === optionId);
     return opt?.label ?? optionId;
   }
 
   if (step.fields) {
     for (const field of step.fields) {
-      const opt = field.options.find(o => o.id === optionId);
+      const opt = field.options.find((o) => o.id === optionId);
       if (opt) return opt.label;
     }
   }

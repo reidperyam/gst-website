@@ -10,20 +10,17 @@ export async function copyWithFeedback(
   options?: {
     /** Feedback text shown on success (default: 'Copied!') */
     label?: string;
-    /** Feedback text shown on failure (default: 'Failed') */
-    failLabel?: string;
     /** Reset delay in ms (default: 2000) */
     duration?: number;
     /** CSS class added during feedback period */
     copiedClass?: string;
     /** Element to show feedback text on instead of button (e.g. a child <span>) */
     feedbackTarget?: HTMLElement;
-  },
+  }
 ): Promise<void> {
   const target = options?.feedbackTarget ?? button;
   const duration = options?.duration ?? 2000;
   const successLabel = options?.label ?? 'Copied!';
-  const failLabel = options?.failLabel ?? 'Failed';
 
   // Use stored original to survive rapid re-clicks while feedback is showing
   const DATA_KEY = 'data-copy-original';

@@ -21,14 +21,15 @@ async function jsClick(page: import('@playwright/test').Page, selector: string):
  */
 async function waitForMapAndTimelineReady(page: import('@playwright/test').Page): Promise<void> {
   await waitForMapPaths(page);
-  await page.waitForFunction(() =>
-    document.querySelectorAll('.brutal-timeline-entry').length > 0 &&
-    (document.querySelector('.brutal-timeline-entry') as HTMLElement)?.offsetHeight > 0
+  await page.waitForFunction(
+    () =>
+      document.querySelectorAll('.brutal-timeline-entry').length > 0 &&
+      (document.querySelector('.brutal-timeline-entry') as HTMLElement)?.offsetHeight > 0
   );
   // Brief pause for D3 event handler binding after DOM render.
   // No positive condition to poll — D3 binds synchronously after paint
   // but we need the microtask queue to flush.
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise((r) => setTimeout(r, 200));
 }
 
 test.describe('Regulatory Map — Timeline', () => {
@@ -104,8 +105,6 @@ test.describe('Regulatory Map — Timeline', () => {
       await expect(panel).toBeHidden();
 
       // Click the first timeline entry
-      const firstEntry = page.locator('.brutal-timeline-entry').first();
-      const entryName = await firstEntry.locator('.brutal-timeline-entry__name').textContent();
       await jsClick(page, '.brutal-timeline-entry');
 
       // Panel should become visible
@@ -131,8 +130,10 @@ test.describe('Regulatory Map — Timeline', () => {
 
       // Wait for highlights to appear on the map
       await page.waitForFunction(() => {
-        return document.querySelectorAll('.country-path--highlighted').length > 0 ||
-               document.querySelectorAll('.state-path--highlighted').length > 0;
+        return (
+          document.querySelectorAll('.country-path--highlighted').length > 0 ||
+          document.querySelectorAll('.state-path--highlighted').length > 0
+        );
       });
 
       const highlightedCountries = await page.locator('.country-path--highlighted').count();
@@ -182,24 +183,27 @@ test.describe('Regulatory Map — Timeline', () => {
     });
 
     test('should clear map highlights when deactivating a timeline entry', async ({ page }) => {
-      const firstEntry = page.locator('.brutal-timeline-entry').first();
-
       // Activate — highlights appear
       await jsClick(page, '.brutal-timeline-entry');
       await page.waitForFunction(() => {
-        return document.querySelectorAll('.country-path--highlighted').length > 0 ||
-               document.querySelectorAll('.state-path--highlighted').length > 0;
+        return (
+          document.querySelectorAll('.country-path--highlighted').length > 0 ||
+          document.querySelectorAll('.state-path--highlighted').length > 0
+        );
       });
 
       // Deactivate — highlights should be cleared
       await jsClick(page, '.brutal-timeline-entry');
       await page.waitForFunction(() => {
-        return document.querySelectorAll('.country-path--highlighted').length === 0 &&
-               document.querySelectorAll('.state-path--highlighted').length === 0;
+        return (
+          document.querySelectorAll('.country-path--highlighted').length === 0 &&
+          document.querySelectorAll('.state-path--highlighted').length === 0
+        );
       });
 
-      const highlighted = await page.locator('.country-path--highlighted').count() +
-                           await page.locator('.state-path--highlighted').count();
+      const highlighted =
+        (await page.locator('.country-path--highlighted').count()) +
+        (await page.locator('.state-path--highlighted').count());
       expect(highlighted).toBe(0);
     });
   });

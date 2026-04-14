@@ -8,32 +8,81 @@ import { palettes } from '../../data/palettes';
 <div class="palette-panel" id="palette-panel" data-testid="palette-panel">
   <div class="palette-panel__resize" id="panel-resize" title="Drag to resize"></div>
   <div class="palette-panel__edge">
-    <button class="palette-panel__toggle" id="panel-toggle" type="button" title="Toggle palette editor" data-testid="palette-panel-toggle">
-      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+    <button
+      class="palette-panel__toggle"
+      id="panel-toggle"
+      type="button"
+      aria-label="Toggle palette editor"
+      data-testid="palette-panel-toggle"
+    >
+      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"
+        ><path
+          d="M32 8 L56 56 L8 56 Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="5"
+          stroke-linejoin="miter"></path></svg
+      >
     </button>
     <div class="palette-panel__tabs" id="palette-tabs" data-testid="palette-tabs">
-      {palettes.map((p, i) => (
-        <button
-          class={`palette-panel__tab${i === 0 ? ' palette-panel__tab--active' : ''}`}
-          type="button"
-          data-palette={p.id}
-          title={p.name}
-        >
-          {p.id}
-        </button>
-      ))}
+      {
+        palettes.map((p, i) => (
+          <button
+            class={`palette-panel__tab${i === 0 ? ' palette-panel__tab--active' : ''}`}
+            type="button"
+            data-palette={p.id}
+            title={p.name}
+          >
+            {p.id}
+          </button>
+        ))
+      }
     </div>
-    <button class="palette-panel__popout" id="panel-popout-toggle" type="button" title="Pop out palette to all pages" aria-label="Toggle site-wide palette" data-testid="palette-popout-toggle">
-      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+    <button
+      class="palette-panel__popout"
+      id="panel-popout-toggle"
+      type="button"
+      title="Pop out palette to all pages"
+      aria-label="Toggle site-wide palette"
+      data-testid="palette-popout-toggle"
+    >
+      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"
+        ><path
+          d="M32 8 L56 56 L8 56 Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="5"
+          stroke-linejoin="miter"></path></svg
+      >
     </button>
-    <button class="palette-panel__theme-toggle" id="panel-theme-toggle" type="button" title="Toggle dark theme" aria-label="Toggle dark theme" data-testid="palette-theme-toggle">
-      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+    <button
+      class="palette-panel__theme-toggle"
+      id="panel-theme-toggle"
+      type="button"
+      title="Toggle dark theme"
+      aria-label="Toggle dark theme"
+      data-testid="palette-theme-toggle"
+    >
+      <svg viewBox="0 0 64 64" fill="none" class="palette-panel__icon"
+        ><path
+          d="M32 8 L56 56 L8 56 Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="5"
+          stroke-linejoin="miter"></path></svg
+      >
     </button>
   </div>
   <div class="palette-panel__body" id="panel-body">
     <div class="palette-panel__header">
       <span class="brutal-label" id="panel-palette-name">0. Current</span>
-      <button class="brutal-btn brutal-btn--secondary colors-reset-btn" type="button" id="reset-all" data-testid="palette-reset-all" title="Clear all color edits and restore the current palette defaults">Reset</button>
+      <button
+        class="brutal-btn brutal-btn--secondary colors-reset-btn"
+        type="button"
+        id="reset-all"
+        data-testid="palette-reset-all"
+        title="Clear all color edits and restore the current palette defaults">Reset</button
+      >
     </div>
 
     <div class="palette-panel__section">
@@ -95,12 +144,14 @@ import { palettes } from '../../data/palettes';
 </div>
 
 <script is:inline>
-// Set popout active state before transitions fire to prevent animation on page load
-try {
-  if (localStorage.getItem('palette-popped-out') === 'true') {
-    document.getElementById('panel-popout-toggle')?.classList.add('is-active');
+  // Set popout active state before transitions fire to prevent animation on page load
+  try {
+    if (localStorage.getItem('palette-popped-out') === 'true') {
+      document.getElementById('panel-popout-toggle')?.classList.add('is-active');
+    }
+  } catch {
+    /* ignore — localStorage unavailable */
   }
-} catch (e) { /* ignore */ }
 </script>
 
 <style>
@@ -111,7 +162,7 @@ try {
   }
 
   /* ── Visibility: hidden unless on brand page or popped out ── */
-  :global(html:not(.palette-popped-out):not([data-palette-always])) .palette-panel {
+  :global(html:not(.palette-popped-out, [data-palette-always])) .palette-panel {
     display: none !important;
   }
 
@@ -121,7 +172,7 @@ try {
     top: 50%;
     right: 0;
     transform: translateY(-50%);
-    z-index: 30;
+    z-index: var(--z-palette-panel);
     display: flex;
     align-items: stretch;
   }
@@ -226,7 +277,6 @@ try {
     transition: background var(--transition-fast);
     flex-shrink: 0;
     user-select: none;
-    -webkit-user-select: none;
   }
 
   .palette-panel.is-open .palette-panel__resize {
@@ -283,7 +333,10 @@ try {
     border: none;
     border-right: 2px solid transparent;
     cursor: pointer;
-    transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      background var(--transition-fast);
   }
 
   .palette-panel__tab:hover:not(.palette-panel__tab--active) {

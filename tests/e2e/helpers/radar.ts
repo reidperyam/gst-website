@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 /**
  * Wait for the Radar page to be ready.
@@ -12,8 +12,10 @@ import { Page, expect } from '@playwright/test';
  * this cache during SSR, so content is always available during E2E runs.
  */
 export async function waitForRadarReady(page: Page): Promise<void> {
-  // SSR page delivers full HTML — just confirm the radar structure rendered
-  await expect(page.locator('.hub-header')).toBeVisible();
+  // SSR page delivers full HTML — confirm header and content area rendered.
+  // Under parallel load, webkit takes longer; use explicit timeout.
+  await expect(page.locator('.hub-header')).toBeVisible({ timeout: 10000 });
+  await page.waitForLoadState('domcontentloaded');
 }
 
 /**
@@ -30,10 +32,7 @@ export async function hasRadarContent(page: Page): Promise<boolean> {
  * Click a category filter button and wait for the DOM to update.
  * Uses page.evaluate() for WebKit stability.
  */
-export async function clickCategoryFilter(
-  page: Page,
-  category: string,
-): Promise<void> {
+export async function clickCategoryFilter(page: Page, category: string): Promise<void> {
   await page.evaluate((cat) => {
     const btn = document.querySelector(`.filter-btn[data-filter="${cat}"]`);
     if (!btn) throw new Error(`Filter button not found: ${cat}`);
@@ -47,7 +46,7 @@ export async function clickCategoryFilter(
       return btn?.classList.contains('active');
     },
     category,
-    { timeout: 2000 },
+    { timeout: 2000 }
   );
 }
 
@@ -55,14 +54,9 @@ export async function clickCategoryFilter(
  * Get visible item count for items matching a data-category value.
  * Items hidden by the category filter (display: none) are excluded.
  */
-export async function getVisibleItemCount(
-  page: Page,
-  category?: string,
-): Promise<number> {
+export async function getVisibleItemCount(page: Page, category?: string): Promise<number> {
   return page.evaluate((cat) => {
-    const selector = cat
-      ? `[data-category="${cat}"]`
-      : '[data-category]';
+    const selector = cat ? `[data-category="${cat}"]` : '[data-category]';
     const items = document.querySelectorAll(selector);
     let count = 0;
     items.forEach((el) => {
