@@ -872,6 +872,9 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
           if (drawer.contains(target)) return;
           // Ignore clicks on the filter-toggle button — it owns open/close.
           if (toggle.contains(target)) return;
+          // Ignore clicks on the sticky filter-toggle — it also owns open/close.
+          const stickyToggle = document.getElementById('filter-toggle-sticky');
+          if (stickyToggle && stickyToggle.contains(target)) return;
           closeFilterDrawer();
         };
         document.addEventListener('click', drawerDocumentClickHandler);
