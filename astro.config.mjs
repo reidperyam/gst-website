@@ -19,12 +19,14 @@ export default defineConfig({
   site: 'https://globalstrategic.tech',
   integrations: [
     sentry({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
       sourceMapsUploadOptions: {
         enabled: !!process.env.SENTRY_AUTH_TOKEN,
-        org: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
-        authToken: process.env.SENTRY_AUTH_TOKEN,
+        filesToDeleteAfterUpload: ['dist/**/*.map', '.vercel/output/**/*.map'],
       },
+      telemetry: false,
     }),
     sitemap({
       filter: (page) => !page.includes('/brand') && !page.includes('/colors'),
