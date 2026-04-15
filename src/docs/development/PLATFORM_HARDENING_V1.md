@@ -443,7 +443,7 @@ The SEO foundation is strong (JSON-LD, canonical URLs, unique meta descriptions 
 - **Fix hub/index.astro heading hierarchy** (~5 min) — jumps H1 → H3; add H2 wrappers for Tools, Library, Radar sections
 - **Integrate `@astrojs/sitemap`** (~1 hour) — `site` property already set in `astro.config.mjs`; add integration, configure filter (exclude brand/responsive-frame), delete manual `public/sitemap.xml`
 - **Font loading optimization** (~10 min) — add `font-display: swap` to `typography.css`; add `<link rel="preload">` for primary font in `BaseLayout.astro`
-- **Preconnect to Calendly** (~2 min) — add `<link rel="preconnect" href="https://calendly.com">` in `BaseLayout.astro`
+- **Preconnect to CalendarBridge** (~2 min) — add `<link rel="preconnect" href="https://calendarbridge.com">` in `BaseLayout.astro`
 - **Evaluate Astro `<Image>` component** — only ~5 `<img>` tags across the site; adopt if straightforward, document decision if skipped
 
 **Not pursuing** (documented decisions):
@@ -458,7 +458,7 @@ The SEO foundation is strong (JSON-LD, canonical URLs, unique meta descriptions 
 fix(seo): add Open Graph metadata to 10 pages missing ogImageAlt
 fix(seo): fix heading hierarchy on hub index page (H1 -> H2 -> H3)
 feat(seo): integrate @astrojs/sitemap and remove manual sitemap.xml
-perf(seo): add font-display swap and preconnect to Calendly
+perf(seo): add font-display swap and preconnect to CalendarBridge
 ```
 
 ### Success Criteria

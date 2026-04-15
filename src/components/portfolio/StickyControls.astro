@@ -341,7 +341,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
   .portfolio-filter-overlay.open {
     display: block;
     background: rgba(0, 0, 0, 0.3);
-    pointer-events: auto;
+    pointer-events: none;
   }
 
   /* Drawer container for proper z-index stacking */
@@ -745,59 +745,26 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
   }
 
   function attachDrawerListeners() {
-    // Use event delegation on the document for click events
+    // Delegate to PortfolioHeader's shared open/close API so click-outside,
+    // Escape-key, and scroll behaviour stay consistent across both toggles.
     document.addEventListener('click', (e) => {
       const toggle = e.target.closest('#filter-toggle-sticky');
-      const closeBtn = e.target.closest('#drawer-close');
-      const overlayClick = e.target.closest('#filter-overlay');
+      if (!toggle) return;
 
-      // Get drawer and overlay each time to ensure they exist
+      e.preventDefault();
+      e.stopPropagation();
+
+      const api = window.portfolioFilters;
       const drawer = document.getElementById('filter-drawer');
-      const overlay = document.getElementById('filter-overlay');
+      if (!api || !drawer) return;
 
-      if (toggle) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (drawer && overlay) {
-          const isOpen = drawer.classList.contains('open');
-          if (isOpen) {
-            drawer.classList.remove('open');
-            overlay.classList.remove('open');
-            toggle.setAttribute('aria-expanded', 'false');
-            document.body.style.overflow = '';
-          } else {
-            drawer.classList.add('open');
-            overlay.classList.add('open');
-            toggle.setAttribute('aria-expanded', 'true');
-            document.body.style.overflow = 'hidden';
-          }
-        }
+      if (drawer.classList.contains('open')) {
+        api.closeFilterDrawer();
+      } else {
+        api.openFilterDrawer();
       }
-
-      if (closeBtn && drawer && overlay) {
-        e.preventDefault();
-        e.stopPropagation();
-        drawer.classList.remove('open');
-        overlay.classList.remove('open');
-        const toggle2 = document.getElementById('filter-toggle-sticky');
-        if (toggle2) {
-          toggle2.setAttribute('aria-expanded', 'false');
-        }
-        document.body.style.overflow = '';
-      }
-
-      if (overlayClick && drawer && overlay) {
-        e.preventDefault();
-        e.stopPropagation();
-        drawer.classList.remove('open');
-        overlay.classList.remove('open');
-        const toggle2 = document.getElementById('filter-toggle-sticky');
-        if (toggle2) {
-          toggle2.setAttribute('aria-expanded', 'false');
-        }
-        document.body.style.overflow = '';
-      }
+      // Sync sticky toggle's aria-expanded with drawer state
+      toggle.setAttribute('aria-expanded', String(drawer.classList.contains('open')));
     });
   }
 

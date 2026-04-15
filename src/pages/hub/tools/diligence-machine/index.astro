@@ -98,7 +98,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M32 8 L56 56 L8 56 Z"
+                    d="M32 12 L52 52 L12 52 Z"
                     fill="none"
                     stroke="currentColor"
                     stroke-width="4"
@@ -137,7 +137,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                 >
                   <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
-                      d="M32 8 L56 56 L8 56 Z"
+                      d="M32 12 L52 52 L12 52 Z"
                       fill="none"
                       stroke="currentColor"
                       stroke-width="6"
@@ -414,7 +414,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
           <!-- Document Header -->
           <header class="doc-header" data-testid="doc-header">
             <div class="doc-brand">
-              <DeltaIcon class="bullet-icon" />
+              <DeltaIcon size={20} class="doc-brand-icon" />
               <span class="doc-brand-name">GST</span>
             </div>
             <h1 class="doc-title">Overview and Agenda</h1>
@@ -945,7 +945,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                         <div class="doc-attention-header">
                             <h3 class="doc-attention-title">${escapeHtml(area.title)}</h3>
                             <button class="brutal-na-btn" data-dismiss-attention="${escapeHtml(area.id)}" type="button" title="${dismissedAttention.has(area.id) ? 'Restore this item' : 'Mark as not applicable'}">${dismissedAttention.has(area.id) ? 'Restore' : 'N/A'}</button>
-                            <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+                            <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter"/></svg>
                         </div>
                         <div class="doc-attention-divider"></div>
                         <p class="doc-attention-desc">${escapeHtml(area.description)}${area.id === 'attention-tech-debt' ? ' <a href="/hub/tools/tech-debt-calculator" target="_blank" rel="noopener noreferrer" style="color:var(--color-secondary);text-decoration:underline;">Quantify it with the Tech Debt Cost Calculator →</a>' : ''}${['attention-high-scale-architecture', 'attention-multi-infra-cost'].includes(area.id) ? ' <a href="/hub/tools/infrastructure-cost-governance" target="_blank" rel="noopener noreferrer" style="color:var(--color-secondary);text-decoration:underline;">Assess cost governance maturity with ICG →</a>' : ''}</p>
@@ -982,7 +982,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                                         <span class="doc-q-priority">${escapeHtml(q.priority)}</span>
                                         <button class="brutal-na-btn" data-dismiss-question="${escapeHtml(q.id)}" type="button" title="${dismissedQuestions.has(q.id) ? 'Restore this item' : 'Mark as not applicable'}">${dismissedQuestions.has(q.id) ? 'Restore' : 'N/A'}</button>
                                     </div>
-                                    <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 8 L56 56 L8 56 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/></svg>
+                                    <svg class="delta-chevron" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter"/></svg>
                                 </div>
                                 <p class="doc-q-text">${escapeHtml(q.text)}</p>
                                 <div class="dm-card-body">
@@ -1169,7 +1169,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     docMeta.innerHTML = `
             <h2 class="doc-section-heading">
-                <DeltaIcon class="bullet-icon" />
+                <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" width="14" height="14" class="bullet-icon" style="flex-shrink:0;color:var(--color-primary)"><path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter"></path></svg>
                 Target Parameters
             </h2>
             <div class="doc-meta-grid">
@@ -1206,7 +1206,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
                    data-testid="techpar-cross-link">
                     Run costs through TechPar &rarr;
                 </a>
-                <a href="https://calendly.com/globalstrategictech"
+                <a href="https://calendarbridge.com/book/globalstrategictech/"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="brutal-btn brutal-btn--primary doc-meta-cta-button"
@@ -1228,7 +1228,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     const metaCtaButton = document.getElementById('metaCtaButton');
     if (metaCtaButton) {
       metaCtaButton.addEventListener('click', () => {
-        trackCTA('calendly', 'diligence-machine-target-parameters');
+        trackCTA('calendarbridge', 'diligence-machine-target-parameters');
       });
     }
 
@@ -1267,7 +1267,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     const docToc = document.getElementById('docToc')!;
     docToc.innerHTML = `
             <h2 class="doc-section-heading">
-                <DeltaIcon class="bullet-icon" />
+                <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" width="14" height="14" class="bullet-icon" style="flex-shrink:0;color:var(--color-primary)"><path d="M32 12 L52 52 L12 52 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="miter"></path></svg>
                 Table of Contents
             </h2>
             <nav class="doc-toc-list" aria-label="Topic navigation">
@@ -1677,8 +1677,8 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
   }
 
   .progress-number {
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     flex-shrink: 0;
     color: var(--border-light);
     transition:
@@ -1698,7 +1698,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
   .progress-number-text {
     font-family: monospace;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: var(--font-weight-bold);
     fill: var(--text-muted);
     transition: fill var(--transition-normal);
@@ -2046,14 +2046,15 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     margin-bottom: var(--spacing-xs);
   }
 
-  .doc-brand-icon {
+  .doc-brand :global(.doc-brand-icon) {
     flex-shrink: 0;
+    color: var(--color-primary);
   }
 
   .doc-brand-name {
     font-family: monospace;
-    font-size: var(--text-xs);
-    font-weight: var(--font-weight-bold);
+    font-size: var(--text-sm);
+    font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     color: var(--text-muted);
@@ -2836,7 +2837,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .wizard-nav {
-      flex-direction: column;
+      flex-direction: row;
     }
 
     /* Document output mobile overrides */
@@ -2859,9 +2860,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-meta :global(.doc-meta-grid) {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       padding: 0 var(--spacing-md);
       gap: var(--spacing-xs);
+    }
+
+    .doc-meta :global(.doc-meta-card) {
+      align-items: flex-start;
+      text-align: left;
     }
 
     .doc-meta :global(.doc-meta-card--identifier) {
@@ -2887,7 +2893,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
       text-align: left;
     }
 
-    /* Right-align second column in 2-col grid */
+    /* Right-align every second card in the 2-col grid */
     .doc-meta :global(.doc-meta-card:nth-child(2n + 1):not(.doc-meta-card--identifier)) {
       align-items: flex-end;
       text-align: right;
@@ -2909,10 +2915,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     .doc-toc :global(.doc-toc-list) {
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     .doc-toc :global(.doc-toc-link) {
       border-left: none;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: var(--text-xs);
     }
 
     .doc-attention-grid {
@@ -2922,10 +2931,14 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     .doc-action-bar {
       margin-left: var(--spacing-sm);
       margin-right: var(--spacing-sm);
+      flex-wrap: wrap;
+      gap: var(--spacing-xs);
     }
 
     .doc-action-btn {
       flex: 1 1 auto;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: var(--text-xs);
     }
 
     .doc-topics :global(.doc-topic-header) {

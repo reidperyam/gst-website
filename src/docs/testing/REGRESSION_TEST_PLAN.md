@@ -91,7 +91,7 @@ Toggle to dark theme, then visit **every page** and verify:
 ### 4.1 Homepage (`/`)
 
 - [ ] Hero section renders with headline and two CTAs
-- [ ] "Schedule an Intro Call" links to Calendly (external)
+- [ ] "Schedule an Intro Call" links to CalendarBridge (external)
 - [ ] "View Advisory Services" links to `/services`
 - [ ] Stats bar displays numeric figures (not empty or NaN)
 - [ ] All content sections visible: Who We Support, What We Do, Why Clients Trust Us

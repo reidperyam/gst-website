@@ -24,6 +24,7 @@ Complete documentation for GA4 integration on the GST website.
 | `filter_applied`         | User applies portfolio filter  | Portfolio page     |
 | `theme_toggle`           | User switches light/dark theme | Theme toggle       |
 | `cta_click`              | User clicks call-to-action     | Various CTAs       |
+| `booking_confirmed`      | User completes a booking       | /booking-confirmed |
 | `faq_interaction`        | User opens/closes FAQ item     | Services, Hub      |
 
 For complete event documentation, see [GOOGLE_ANALYTICS.md](./GOOGLE_ANALYTICS.md#tracked-events).
@@ -60,7 +61,7 @@ import { trackNavigation, trackCTA, trackThemeToggle, trackEvent } from '../util
 trackNavigation('/ma-portfolio', 'M&A Portfolio');
 
 // CTA events (helper)
-trackCTA('calendly', 'hero');
+trackCTA('calendarbridge', 'hero');
 
 // Theme events (helper)
 trackThemeToggle('dark');

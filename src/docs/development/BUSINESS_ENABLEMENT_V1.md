@@ -38,7 +38,7 @@ These two initiatives were originally scoped as Phases 6 and 8 of [PLATFORM_HARD
 ### Known gaps that persist until this initiative runs
 
 - **GDPR exposure**: GA4 continues to load unconditionally for EU visitors until Initiative 1 ships. The privacy policy (`src/pages/privacy.astro`) mentions cookies and GDPR rights but provides no consent mechanism. This is a pre-existing gap — not created by Platform Hardening V1 — but remains uncorrected until this initiative runs.
-- **Lead capture**: Calendly remains the only conversion path. Prospects not ready to book a call have no alternative way to express interest until Initiative 2 ships.
+- **Lead capture**: CalendarBridge remains the only conversion path. Prospects not ready to book a call have no alternative way to express interest until Initiative 2 ships.
 
 Both gaps are acceptable to defer because they are not worsened by the hardening work, and hardening delivers more leveraged value in the same calendar time.
 
@@ -117,7 +117,7 @@ test(consent): verify banner passes axe-core WCAG 2.1 AA checks
 
 ### Problem
 
-No lead capture mechanism exists beyond Calendly. For PE firms, many decision-makers want to evaluate GST before committing to a calendar slot. Currently they either book or bounce — there is no middle ground. Email capture creates a low-friction alternative and builds a contact database over time.
+No lead capture mechanism exists beyond CalendarBridge. For PE firms, many decision-makers want to evaluate GST before committing to a calendar slot. Currently they either book or bounce — there is no middle ground. Email capture creates a low-friction alternative and builds a contact database over time.
 
 ### Scope
 
@@ -132,7 +132,7 @@ No lead capture mechanism exists beyond Calendly. For PE firms, many decision-ma
   - No full name required — minimize friction
   - WCAG 2.1 AA compliant: proper label association, error announcements via `aria-live`, focus management on state change
 - **Integrate into Footer** — add `<EmailSignup />` to `src/components/Footer.astro` below existing links. Brief copy: "Get GST insights delivered" or similar — one line, not a paragraph. Visible on every page.
-- **Evaluate CTA section integration** — optionally add to `src/components/CTASection.astro` as secondary action alongside Calendly: "Not ready to talk? Get updates instead." Decision depends on whether dual CTAs dilute the primary conversion
+- **Evaluate CTA section integration** — optionally add to `src/components/CTASection.astro` as secondary action alongside CalendarBridge: "Not ready to talk? Get updates instead." Decision depends on whether dual CTAs dilute the primary conversion
 - **Track signups** — `trackEvent({ event: 'email_signup', category: 'engagement', source: 'footer' | 'cta-section' })` — respects cookie consent from Initiative 1
 - **Update privacy policy** — add email collection disclosure to `src/pages/privacy.astro`: what data is collected (email only), how it's used (periodic updates), how to unsubscribe, which service stores it
 - **Zod validation** — validate email format with Zod schemas from hardening Phase 1 (or simple regex if Zod isn't loaded client-side); reuse the build-time validation infrastructure

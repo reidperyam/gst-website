@@ -185,7 +185,7 @@ This website includes Google Analytics 4 integration for tracking user engagemen
 - Navigation clicks
 - Portfolio project views
 - Portfolio filter applications
-- Call-to-action (Calendly) clicks
+- Call-to-action (CalendarBridge) clicks
 - Theme toggle (light/dark mode)
 - Modal interactions
 
