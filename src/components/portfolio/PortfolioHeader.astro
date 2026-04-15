@@ -98,10 +98,24 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
     </div>
   </div>
 
-  <!-- Filter Drawer (Slide-out) -->
+  <!--
+    Filter Drawer (Slide-out)
+
+    Uses `.brutal-frosted--blur-only` for a near-fully-transparent pane with
+    only a subtle backdrop blur (no opaque tint). This is a deliberate
+    aesthetic choice favoring transparency over the usual frosted overlay.
+
+    Revert path if readability becomes a problem: swap
+    `brutal-frosted--blur-only` → `brutal-frosted--overlay` to restore the
+    high-opacity (0.92) frosted pane. Known edge case under the current
+    choice: in light theme, the drawer's section labels (e.g. "COMPANY
+    GROWTH STAGE") can drop to marginal contrast when the drawer overlaps
+    the green stats band. Filter chips themselves have their own fill and
+    remain readable.
+  -->
   <div
     id="filter-drawer"
-    class="filter-drawer portfolio-filter-drawer brutal-frosted--overlay"
+    class="filter-drawer portfolio-filter-drawer brutal-frosted--blur-only"
     data-testid="portfolio-filter-drawer"
   >
     <div class="drawer-header">
