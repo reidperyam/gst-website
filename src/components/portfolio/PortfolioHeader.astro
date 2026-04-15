@@ -395,6 +395,7 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
   .drawer-content {
     padding: 1.5rem;
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
   }
 
@@ -494,7 +495,8 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
       right: -100%;
       width: 100%;
       top: 133px;
-      height: calc(100vh - 133px);
+      bottom: 0;
+      height: auto;
       border-left: none;
       border-top: 2px solid var(--color-primary);
     }
@@ -1041,5 +1043,41 @@ const technicalDiligenceEngagements = uniqueEngagementTypes
     document.addEventListener('DOMContentLoaded', initStickyControls);
   } else {
     initStickyControls();
+  }
+
+  // Keep the filter drawer flush with (never behind) the page footer.
+  // Sets `drawer.style.bottom` in px whenever the footer is within the
+  // viewport, raising the drawer's bottom edge to sit exactly at the
+  // footer's top edge. The drawer's CSS default is `bottom: 0` (plus
+  // `top: 133px`) so height is implicit; this listener only needs to
+  // update `bottom`.
+  function initDrawerFooterClearance() {
+    const drawer = document.getElementById('filter-drawer');
+    const footer = document.querySelector('footer[role="contentinfo"]') as HTMLElement | null;
+    if (!drawer || !footer) return;
+
+    let pending = false;
+    function update() {
+      pending = false;
+      if (!drawer || !footer) return;
+      const footerTop = footer.getBoundingClientRect().top;
+      const clearance = Math.max(0, window.innerHeight - footerTop);
+      drawer.style.bottom = clearance + 'px';
+    }
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    update();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDrawerFooterClearance);
+  } else {
+    initDrawerFooterClearance();
   }
 </script>

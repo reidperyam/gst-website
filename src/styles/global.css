@@ -580,19 +580,26 @@ main {
 }
 
 /* Filter Drawer - Base Styles
-   Background + blur are provided by the .brutal-frosted--overlay utility
-   co-applied in markup. Keep layout/position/border here only. */
+   Background + blur are provided by a frosted-glass utility (e.g.
+   `.brutal-frosted--blur-only`) co-applied in markup. Keep layout /
+   position / border here only.
+
+   Positioning model: anchored by `top` and `bottom` (not `height`) so a
+   scroll listener in PortfolioHeader.astro can raise `bottom` when the
+   page footer enters the viewport, keeping the drawer flush with (never
+   behind) the footer. The box-shadow intentionally uses a clipped offset
+   so it doesn't bleed past the drawer's own bounds onto the footer. */
 .filter-drawer {
   position: fixed;
   right: -400px;
   top: 133px;
+  bottom: 0;
   width: 350px;
-  height: calc(100vh - 133px);
   border-left: 2px solid var(--color-primary);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: -4px 0 20px -4px rgba(0, 0, 0, 0.15);
   transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: var(--z-modal-overlay);
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
