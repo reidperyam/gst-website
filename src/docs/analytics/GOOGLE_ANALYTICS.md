@@ -140,10 +140,10 @@ TypeScript utility module providing type-safe event tracking functions:
 **Category:** `engagement`
 **Parameters:**
 
-- `cta_type` - Type of CTA (e.g., "calendly")
+- `cta_type` - Type of CTA (e.g., "calendarbridge")
 - `location` - Where the CTA is located (e.g., "cta-section", "hero")
 
-**Triggered By:** Clicking the Calendly booking link in CTA sections
+**Triggered By:** Clicking the CalendarBridge booking link in CTA sections
 
 **Use Cases:**
 
@@ -154,7 +154,25 @@ TypeScript utility module providing type-safe event tracking functions:
 
 ---
 
-### 6. FAQ Interaction Events
+### 6. Booking Confirmation Events
+
+**Event Name:** `booking_confirmed`
+**Category:** `engagement`
+**Parameters:** none
+
+**Triggered By:** Page load on `/booking-confirmed` — CalendarBridge redirects here after a successful booking
+
+**Implementation:** `src/pages/booking-confirmed.astro` fires the event via `gtag()` on page load. Unlike the previous Calendly integration (which used postMessage), CalendarBridge uses a redirect-based confirmation flow, so the page load itself is the confirmation signal.
+
+**Use Cases:**
+
+- Track completed bookings (conversion)
+- Measure booking funnel completion rate (CTA click → booking confirmed)
+- Attribute bookings to source pages via GA4 session data
+
+---
+
+### 7. FAQ Interaction Events
 
 **Event Name:** `faq_interaction`
 **Category:** `engagement`
@@ -175,7 +193,7 @@ TypeScript utility module providing type-safe event tracking functions:
 
 ---
 
-### 7. Theme Toggle Events
+### 8. Theme Toggle Events
 
 **Event Name:** `theme_toggle`
 **Category:** `ui`
@@ -194,7 +212,7 @@ TypeScript utility module providing type-safe event tracking functions:
 
 ---
 
-### 8. Hub Tool Events
+### 9. Hub Tool Events
 
 **Convention:** All hub tool events follow `<tool_prefix>_<action>` naming with `category: 'tool'` (new events) or `category: 'engagement'` (legacy events).
 
@@ -241,7 +259,7 @@ Tracks navigation clicks on:
 
 **File:** `src/components/CTASection.astro`
 
-Tracks Calendly booking button clicks with location metadata.
+Tracks CalendarBridge booking button clicks with location metadata.
 
 ### Project Modal Component
 

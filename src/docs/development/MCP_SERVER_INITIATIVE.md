@@ -87,7 +87,7 @@ More tightly coupled, requires adding Next.js, but keeps everything on one platf
 ### What's NOT Worth MCP-ifying
 
 - Static page content (About, Services) — no structured query value
-- Calendly scheduling — already has its own integration path
+- CalendarBridge scheduling — already has its own integration path
 - Analytics data — internal only, better accessed via GA4 directly
 
 ---
