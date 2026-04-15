@@ -385,7 +385,7 @@
     "codeName": "Shield",
     "industry": "Public Safety",
     "theme": "Public Sector",
-    "summary": "Comprehensive public safety suite helping police, fire, and dispatch teams manage training, quality assurance, and community engagement.",
+    "summary": "Public safety SaaS suite of nine products for police, fire, and dispatch teams, covering policy management, training, quality assurance, and community engagement.",
     "arr": "$4M",
     "arrNumeric": 4070000,
     "currency": "USD",
@@ -396,13 +396,20 @@
       ".NET",
       "SQL Server",
       "Azure",
-      "Angular"
+      "Azure Government Cloud",
+      "Angular",
+      "OAuth 2.0",
+      "OpenID Connect",
+      "Azure Entra ID",
+      "GitLab",
+      "Azure DevOps",
+      "SonarQube"
     ],
     "engagementType": "Technical Diligence",
     "engagementTypeTag": "technical-diligence",
     "engagementTypeDescription": "Technical diligence for M&A transactions",
-    "challenge": null,
-    "solution": null,
+    "challenge": "Assessing whether a small-team, informal-SDLC SaaS platform built on a single multi-tenant SQL Server database and mixed legacy .NET versions can support the acquirer's expected revenue growth and enterprise-scale customers without disproportionate investment.",
+    "solution": "Confirmed that the cohesive Microsoft stack (C#/.NET/SQL Server/Azure Government Cloud) and stateless OAuth/OIDC identity layer provide a sound basis for scaling; identified targeted, low-complexity investments — managed-services migration, multi-tenant schema audit, read-replicas plus caching, .NET 8 consolidation, MVC pagination, full-scope third-party pen test, engineering-leader hire, and product management maturation — all absorbable by the acquirer's existing resources.",
     "engagementCategory": "Buy-Side"
   },
   {
@@ -528,7 +535,7 @@
     "arr": "$100K",
     "arrNumeric": 10000,
     "currency": "USD",
-    "growthStage": "Established Market Leader",
+    "growthStage": "Early-Stage Growth",
     "year": 2025,
     "technologies": [
       "GCP",
@@ -536,14 +543,18 @@
       "TypeScript",
       "Node.js",
       "Vue.js",
+      "Vuetify",
+      "Express.js",
+      "Algolia",
+      "BigQuery",
       "Google Gemini AI"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
-    "challenge": null,
-    "solution": null,
-    "engagementCategory": "Buy-Side"
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
+    "challenge": "Producing an independent technology overview to validate scalability, extensibility, and security posture of a single-founder-built cloud-native real estate rentals SaaS platform ahead of investor outreach.",
+    "solution": "Confirmed a modern serverless architecture on Firebase/GCP with TypeScript/Vue/Nuxt frontend and event-driven backend supports growth without disproportionate investment; validated fit-for-purpose security including AES-256 encryption, RBAC, passwordless login, and 30-day PII expiry; flagged opportunities to broaden MLS data integrations, mature generative AI capabilities, extend the enterprise API for partner ecosystem, and expand into commercial real estate and lease/deposit handling.",
+    "engagementCategory": "Sell-Side"
   },
   {
     "id": "maverick",
