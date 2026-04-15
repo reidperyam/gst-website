@@ -287,9 +287,9 @@
       ".NET",
       "PHP"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Showcasing a high-volume data platform processing high-volume data processing.",
     "solution": "Produced an external report validating the Python/Django architecture and the modernization roadmap for legacy 'legacy product' products.",
     "engagementCategory": "Sell-Side"
@@ -512,9 +512,9 @@
       "API",
       "Cloud-Native Architecture"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Developing the 'Product & Technology aspects of the Investment Thesis' for an airline cargo platform.",
     "solution": "Helped the client demonstrate 'increased revenue potential for airline partners' to potential buyers.",
     "engagementCategory": "Sell-Side"
@@ -594,9 +594,9 @@
       "NLP",
       "LLM"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Preparing a substantial revenue document management platform for transaction.",
     "solution": "Coached the team to handle 'Rude Q&A' regarding legacy code and validated the metadata-centric 'platform consolidation' consolidation strategy.",
     "engagementCategory": "Sell-Side"
@@ -648,9 +648,9 @@
       "PostgreSQL",
       "MySQL"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Demonstrating scalability for a substantial revenue event management platform handling substantial data volume.",
     "solution": "Validated the customer data platform and AWS RDS architecture to support a clean external investor report.",
     "engagementCategory": "Sell-Side"
@@ -868,9 +868,9 @@
       "RDS",
       "Aurora"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Proving integration readiness for a data integration service company.",
     "solution": "Demonstrated that the SaaS-based back-office operations would require 'minimal technical consolidation' for the acquirer.",
     "engagementCategory": "Sell-Side"
@@ -1060,9 +1060,9 @@
       "PowerBI",
       "Salesforce"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Preparing a food & beverage manufacturer with legacy BPCS ERP systems for sale.",
     "solution": "Delivered internal recommendations to articulate the IT turnaround story and defend technical debt in Oracle/legacy ERP systems to potential buyers.",
     "engagementCategory": "Sell-Side"
@@ -1124,9 +1124,9 @@
       "WordPress",
       "Stripe"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Proving the platform readiness of a real estate investing community.",
     "solution": "Highlighted an exceptional strong customer satisfaction metrics and a clear roadmap to demonstrate long-term growth potential.",
     "engagementCategory": "Sell-Side"
@@ -1152,9 +1152,9 @@
       "Snowflake",
       "RESTful APIs"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Positioning a complex payments platform with 7 distinct products for exit.",
     "solution": "Validated the 'microservices architecture' microservices architecture and highlighted a majority of resources to maintenance to prove operational maturity to investors.",
     "engagementCategory": "Sell-Side"
@@ -1278,9 +1278,9 @@
       "Angular SPA",
       "React JS"
     ],
-    "engagementType": "Technical Diligence",
-    "engagementTypeTag": "technical-diligence",
-    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Sell-side product competitiveness and technical diligence assessment",
     "challenge": "Sell-side preparation for a driver safety and compliance platform.",
     "solution": "Verified the maturity of the RESTful API and Service-Oriented Architecture (SOA) to support a smooth transition for the buyer.",
     "engagementCategory": "Sell-Side"
