@@ -181,3 +181,14 @@ import DeltaIcon from '../components/DeltaIcon.astro';
     }
   }
 </style>
+
+<script>
+  // Fire GA4 booking_confirmed event on page load.
+  // CalendarBridge redirects here after a successful booking,
+  // so reaching this page is the confirmation signal.
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'booking_confirmed', {
+      event_category: 'engagement',
+    });
+  }
+</script>
