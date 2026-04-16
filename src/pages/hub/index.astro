@@ -286,10 +286,6 @@ const faqItems = [
     outline-offset: 2px;
   }
 
-  .hub-card:focus:not(:focus-visible) {
-    outline: none;
-  }
-
   .hub-card:focus-visible {
     outline: 3px solid var(--color-secondary);
     outline-offset: 2px;
@@ -298,6 +294,10 @@ const faqItems = [
   :global(html.dark-theme) .hub-card {
     border-color: var(--border-dark-default);
     border-top-color: var(--color-primary);
+  }
+
+  .hub-card:focus:not(:focus-visible) {
+    outline: none;
   }
 
   :global(html.dark-theme) .hub-card:hover {

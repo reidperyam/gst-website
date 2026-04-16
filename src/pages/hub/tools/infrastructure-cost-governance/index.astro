@@ -955,7 +955,7 @@ const domainCount = DOMAINS.length;
   }
 
   :global(.icg-snapshot-row__delete:hover) {
-    color: #e24b4a;
+    color: var(--color-error);
   }
 
   .icg-snapshot-clear {
@@ -1007,7 +1007,7 @@ const domainCount = DOMAINS.length;
   }
 
   :global(.icg-delta--negative) {
-    color: #e24b4a;
+    color: var(--color-error);
   }
 
   :global(.icg-delta--neutral) {
@@ -1174,10 +1174,7 @@ const domainCount = DOMAINS.length;
       justify-content: center;
     }
 
-    /* Hide "Return to Tools" during wizard/results to reduce clutter */
-    .icg-view:not(.is-hidden) ~ .icg-view ~ .icg-view ~ .icg-back-link {
-      /* Handled via JS class toggle instead */
-    }
+    /* Return-to-Tools visibility is handled via JS class toggle on .icg-back-link */
   }
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -1312,12 +1309,12 @@ const domainCount = DOMAINS.length;
       font-size: 14px;
       font-weight: 600;
       font-family: monospace;
-      color: #05cd99;
+      color: var(--color-primary);
       text-transform: uppercase;
       letter-spacing: 0.08em;
       margin-bottom: 1.5rem;
       padding-bottom: 0.75rem;
-      border-bottom: 2px solid #05cd99;
+      border-bottom: 2px solid var(--color-primary);
     }
 
     .icg-card {

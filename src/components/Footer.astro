@@ -68,13 +68,13 @@ import ThemeToggle from './ThemeToggle.astro';
     outline-offset: 0.25rem;
   }
 
-  .footer-links a:focus:not(:focus-visible) {
-    outline: none;
-  }
-
   .footer-links a:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 0.25rem;
+  }
+
+  .footer-links a:focus:not(:focus-visible) {
+    outline: none;
   }
 
   :global(html.dark-theme) footer {

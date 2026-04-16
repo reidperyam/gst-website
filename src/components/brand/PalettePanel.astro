@@ -185,11 +185,6 @@ import { palettes } from '../../data/palettes';
     padding: var(--spacing-xs) var(--spacing-md) !important;
   }
 
-  /* ── Visibility: hidden unless on brand page or popped out ── */
-  :global(html:not(.palette-popped-out, [data-palette-always])) .palette-panel {
-    display: none !important;
-  }
-
   /* ── Sticky Palette Panel ────────────────────────────────── */
   .palette-panel {
     position: fixed;
@@ -199,6 +194,11 @@ import { palettes } from '../../data/palettes';
     z-index: var(--z-palette-panel);
     display: flex;
     align-items: stretch;
+  }
+
+  /* ── Visibility: hidden unless on brand page or popped out ── */
+  :global(html:not(.palette-popped-out, [data-palette-always])) .palette-panel {
+    display: none !important;
   }
 
   .palette-panel__edge {
@@ -241,10 +241,6 @@ import { palettes } from '../../data/palettes';
     transition: transform var(--transition-fast);
   }
 
-  .palette-panel.is-open .palette-panel__toggle .palette-panel__icon {
-    transform: rotate(90deg);
-  }
-
   .palette-panel__popout {
     display: flex;
     align-items: center;
@@ -268,6 +264,10 @@ import { palettes } from '../../data/palettes';
 
   .palette-panel__popout.is-active .palette-panel__icon {
     transform: rotate(-90deg);
+  }
+
+  .palette-panel.is-open .palette-panel__toggle .palette-panel__icon {
+    transform: rotate(90deg);
   }
 
   .palette-panel__popout.is-active {
@@ -303,13 +303,13 @@ import { palettes } from '../../data/palettes';
     user-select: none;
   }
 
-  .palette-panel.is-open .palette-panel__resize {
-    display: block;
-  }
-
   .palette-panel__resize:hover,
   .palette-panel__resize.is-dragging {
     background: var(--color-primary);
+  }
+
+  .palette-panel.is-open .palette-panel__resize {
+    display: block;
   }
 
   .palette-panel__body {

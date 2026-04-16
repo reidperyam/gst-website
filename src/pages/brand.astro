@@ -372,14 +372,6 @@ trackPageView('brand', 'Brand Style Reference');
     width: 100%;
   }
 
-  /* Left-align specimens (override global margin: 0 auto) */
-  .brand-component-item .brutal-tool-shell,
-  .brand-component-item .cta-box {
-    margin-left: 0;
-    margin-right: auto;
-    text-align: left;
-  }
-
   .brand-skeleton-demo {
     display: flex;
     flex-direction: column;
@@ -463,18 +455,13 @@ trackPageView('brand', 'Brand Style Reference');
       transform var(--transition-normal);
   }
 
-  html.dark-theme .brand-progress-number {
-    color: rgba(255, 255, 255, 0.3);
-  }
-
   .brand-progress-segment--active .brand-progress-number {
     color: var(--color-primary);
     transform: scale(1.15);
   }
 
-  .brand-progress-segment--completed .brand-progress-number path {
-    fill: var(--color-primary);
-    stroke: var(--color-primary);
+  html.dark-theme .brand-progress-number {
+    color: rgba(255, 255, 255, 0.3);
   }
 
   .brand-progress-number-text {
@@ -579,6 +566,11 @@ trackPageView('brand', 'Brand Style Reference');
   }
 
   .brand-progress-dot--completed svg path {
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+  }
+
+  .brand-progress-segment--completed .brand-progress-number path {
     fill: var(--color-primary);
     stroke: var(--color-primary);
   }
@@ -1466,6 +1458,14 @@ trackPageView('brand', 'Brand Style Reference');
     max-width: 600px;
     text-align: center;
     position: relative;
+  }
+
+  /* Left-align specimens (override global margin: 0 auto) */
+  .brand-component-item .brutal-tool-shell,
+  .brand-component-item .cta-box {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
   }
 
   html.dark-theme .cta-box {
