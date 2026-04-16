@@ -141,12 +141,12 @@
       "Kafka",
       "Rhapsody"
     ],
-    "engagementType": "Value Creation",
-    "engagementTypeTag": "value-creation",
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
     "engagementTypeDescription": "Post-acquisition value creation work",
     "challenge": "Creating a technology roadmap for a surgical platform.",
     "solution": "Designed a 12-month plan to containerize legacy applications (Docker) and move to a modern multi-tenant AWS architecture.",
-    "engagementCategory": "Value Creation"
+    "engagementCategory": "Sell-Side"
   },
   {
     "id": "fender",
@@ -1465,12 +1465,12 @@
       "C#",
       "AWS"
     ],
-    "engagementType": "Value Creation",
-    "engagementTypeTag": "value-creation",
+    "engagementType": "Technical Diligence",
+    "engagementTypeTag": "technical-diligence",
     "engagementTypeDescription": "Post-acquisition value creation work",
-    "challenge": "Value-creation readiness assessment of whether a charter-bus marketplace growing at 300% YoY can sustain that trajectory for five to eight years, and whether it is prepared to run as both a marketplace and a SaaS company after its imminent TMS launch.",
+    "challenge": "Technology Diligence to determine whether a charter-bus marketplace growing at 300% YoY can sustain that trajectory for five to eight years, and whether it is prepared to run as both a marketplace and a SaaS company after its imminent TMS launch.",
     "solution": "Confirmed the architecture supports continued growth and leadership is cohesive, with a 1–2 week release cadence as a key strength; flagged under-resourcing, missing technical-roadmap ownership, lack of integrated incident management, and below-average Infrastructure/SDLC/Organization scores; recommended assigning technical-roadmap ownership (OTC $50k–$100k, AC $250k–$500k), multi-AZ/multi-region cloud, a backlog-prioritization framework, and funding TMS R&D independently once early-adopter PoC is achieved.",
-    "engagementCategory": "Sell-Side"
+    "engagementCategory": "Buy-Side"
   },
   {
     "id": "zoolander",
@@ -1516,8 +1516,8 @@
     "industry": "Logistics",
     "theme": "Logistics",
     "summary": "Last-mile delivery logistics SaaS for B2B companies, providing dispatching dashboards, native driver apps, and route optimization for 1,200+ clients across 90 countries processing over four million deliveries monthly, built on a Node.js monolith with selective AWS Lambda serverless components.",
-    "arr": "Not in source",
-    "arrNumeric": 0,
+    "arr": "$180M",
+    "arrNumeric": 180000000,
     "currency": "USD",
     "growthStage": "Scaling Growth",
     "year": 2022,
@@ -1707,5 +1707,29 @@
     "challenge": "Pre-diligence AI/ML readiness and data-strategy engagement preparing the company to present its data science capabilities, algorithm choices, and personalized-storefront technology for investor TDD, after prior missteps with third-party ML/AI.",
     "solution": "Validated AI/ML maturity behind the personalized rewards storefront and savings engine against the product's external positioning; ran a data SWOT and audited the data asset inventory; framed the seven-question test for when customer data creates durable competitive advantage; coached leadership on accurately communicating strengths and proactively mitigating risks during an investor TDD.",
     "engagementCategory": "Sell-Side"
+  },
+  {
+    "id": "regatta",
+    "codeName": "Regatta",
+    "industry": "Data Integration & Analytics",
+    "theme": "Software",
+    "summary": "Single-tenant Azure-hosted SaaS that ingests data from on-premise and cloud systems for private-equity portfolio companies, exposing configurable connectors and a managed 10-day onboarding flow with emerging business-analytics capabilities.",
+    "arr": "$5M",
+    "arrNumeric": 5000000,
+    "currency": "USD",
+    "growthStage": "Early-Stage Growth",
+    "year": 2024,
+    "technologies": [
+      "Azure",
+      "Azure SQL",
+      "Cosmos DB",
+      "Azure Functions"
+    ],
+    "engagementType": "Technical Assessment",
+    "engagementTypeTag": "technical-assessment",
+    "engagementTypeDescription": "Pre-bid preliminary technical impressions",
+    "challenge": "Pre-bid light-touch assessment of whether a single-tenant Azure data-integration SaaS is modern and scalable enough to back, how exposed it is to AI risk, and which organizational roles are missing — giving the investor conviction to lean in or pause on the bid.",
+    "solution": "Stack is not modern but serviceable and cost-efficient (infra 5.2% of revenue); single-tenant design is defensible for varied customer ontologies. Flagged missing IaC/CI/CD, automated QA, observability, and incident response; an emerging product and data strategy with no articulated AI roadmap; and key organizational gaps — DevOps leader, Cloud Data Architect, and interim CTO — to address before pursuing 5–10× scale.",
+    "engagementCategory": "Buy-Side"
   }
 ]
