@@ -46,6 +46,7 @@ const { projects } = Astro.props;
 
             <div class="tags">
               <div class="tag theme">{project.theme}</div>
+              <div class="tag engagement">{project.engagementCategory}</div>
             </div>
           </div>
         ))
@@ -214,7 +215,8 @@ const { projects } = Astro.props;
     letter-spacing: 0.05em;
   }
 
-  .tag.theme {
+  .tag.theme,
+  .tag.engagement {
     background: var(--accent-light-bg-hover);
     color: var(--color-tertiary);
   }

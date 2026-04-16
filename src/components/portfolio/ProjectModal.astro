@@ -58,6 +58,13 @@
     <div class="modal-section">
       <h3 class="modal-section-title">Engagement Type</h3>
       <p
+        id="modal-engagement-category-2"
+        class="modal-engagement-category"
+        data-testid="project-modal-engagement-category"
+      >
+        Category
+      </p>
+      <p
         id="modal-engagement-type-2"
         class="modal-engagement-type"
         data-testid="project-modal-engagement-type"
@@ -285,6 +292,16 @@
     letter-spacing: 0.04em;
   }
 
+  .modal-engagement-category {
+    font-size: var(--text-2xs);
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 var(--spacing-xs);
+  }
+
   .modal-engagement-type {
     font-size: var(--text-base);
     font-family: monospace;
@@ -425,6 +442,7 @@
       const modalArr = document.getElementById('modal-arr-2');
       const modalStage = document.getElementById('modal-stage-2');
       const modalTheme = document.getElementById('modal-theme-2');
+      const modalEngagementCategory = document.getElementById('modal-engagement-category-2');
       const modalEngagementType = document.getElementById('modal-engagement-type-2');
       const modalEngagementDesc = document.getElementById('modal-engagement-description-2');
       const modalSummary = document.getElementById('modal-summary-2');
@@ -435,6 +453,8 @@
       if (modalArr) modalArr.textContent = project.arr === 'Not in source' ? '--' : project.arr;
       if (modalStage) modalStage.textContent = project.growthStage;
       if (modalTheme) modalTheme.textContent = project.theme;
+      if (modalEngagementCategory)
+        modalEngagementCategory.textContent = project.engagementCategory || '';
       if (modalEngagementType) modalEngagementType.textContent = project.engagementType || 'N/A';
       if (modalEngagementDesc)
         modalEngagementDesc.textContent = project.engagementTypeDescription || '';
