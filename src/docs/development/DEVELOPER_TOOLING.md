@@ -89,11 +89,19 @@ The GitHub Actions workflow [.github/workflows/test.yml](../../../.github/workfl
 ```
 ┌───────────────────────────────────────────────────────────────┐
 │                                                                │
-│   changes (gate job, ~5s)                                      │
+│   changes (gate job, ~10s)                                     │
 │    │                                                            │
-│    │ Detects whether the PR touches any non-docs files using   │
-│    │ dorny/paths-filter@v4. Outputs `code: true | false` and    │
-│    │ logs the matched file list for diagnostics.                │
+│    │ Two independent checks gate the expensive jobs:            │
+│    │  1. dorny/paths-filter@v4 — does this push/PR touch any   │
+│    │     non-docs files? Outputs `code: true | false`.          │
+│    │  2. fkirc/skip-duplicate-actions@v5 — has a prior run     │
+│    │     already completed successfully with the same TREE     │
+│    │     hash? Outputs `duplicate: true | false`. Catches       │
+│    │     push→PR redundancy: push to dev passes, PR dev→master │
+│    │     fires on a different commit SHA but identical tree.   │
+│    │                                                            │
+│    │ Combined output `should_run = code && !duplicate`.         │
+│    │ Downstream jobs key off should_run.                        │
 │    ▼                                                            │
 │                                                                │
 │   ┌─ Lint & Type Check ──────────┐                             │
@@ -120,9 +128,10 @@ The GitHub Actions workflow [.github/workflows/test.yml](../../../.github/workfl
 │                   │   changed)                    │              │
 │                   └───────────────────────────────┘              │
 │                                                                  │
-│   Docs-only changes (code: false): each job runs a trailing      │
-│   "Skipped" step that reports success, so branch protection      │
-│   requirements are satisfied without burning CI minutes.         │
+│   When should_run is false (docs-only OR duplicate run): each    │
+│   job runs a trailing "Skipped" step that reports success, so    │
+│   branch protection requirements are satisfied without burning   │
+│   CI minutes.                                                    │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -156,7 +165,19 @@ filters: |
 
 The job also sets `permissions: { contents: read, pull-requests: read }` so paths-filter can use the GitHub API on PR events instead of falling back to git-based detection.
 
-If the gate misbehaves, check the **"Log gate decision"** step output — it prints `code=true/false` and the JSON-formatted list of matched files, so you can see exactly what the filter saw without having to re-derive the evaluation. If the matched-file count looks suspiciously large (e.g. dozens of files for a single-file push), the `base` configuration is wrong — paths-filter is diffing against the default branch instead of the previous commit.
+If the gate misbehaves, check the **"Log gate decision"** step output — it prints `code=true/false`, `duplicate=true/false`, `should_run=true/false`, and the JSON-formatted list of matched files, so you can see exactly what the gate saw without having to re-derive the evaluation. If the matched-file count looks suspiciously large (e.g. dozens of files for a single-file push), the `base` configuration is wrong — paths-filter is diffing against the default branch instead of the previous commit.
+
+#### Duplicate-run dedup (fkirc/skip-duplicate-actions)
+
+The gate job also runs [`fkirc/skip-duplicate-actions@v5`](https://github.com/fkirc/skip-duplicate-actions) before paths-filter, which dedupes on **tree hash** (content) rather than commit SHA. The canonical case it catches: push to `dev` passes all three checks → PR `dev→master` fires the same workflow on a synthetic merge-ref SHA whose tree is identical (since master hasn't moved), so the second run is redundant work on content that's already been validated. The action returns `should_skip=true` and the gate's `duplicate` output is `true`; each downstream job's real steps skip and the "Skipped (docs-only or duplicate run)" step runs instead, reporting success to satisfy branch protection.
+
+Key configuration choices:
+
+- `concurrent_skipping: 'never'` — we already have `concurrency.cancel-in-progress: true` at the workflow level, so older runs on the same branch are cancelled. Letting skip-duplicate-actions also do concurrent-skipping would be double work.
+- `skip_after_successful_duplicate: 'true'` (default) — only skip when the duplicate has a **successful** conclusion. A duplicate of a failed run still triggers a fresh test run.
+- `do_not_skip: '["workflow_dispatch", "schedule", "merge_group"]'` — manual re-runs via the UI use `workflow_dispatch` and intentionally want to re-test; scheduled runs are cron-driven and shouldn't skip; merge-queue runs must run fresh because the queue may have updated `master` between the PR and the merge-queue entry. Notably `push` and `pull_request` are NOT in this list — they dedupe as expected.
+
+The `actions: write` permission on the gate job is required by skip-duplicate-actions to query prior workflow runs via the REST API.
 
 ---
 
@@ -559,13 +580,15 @@ If all six pass, the failure is likely E2E-only or environment-specific. Check:
 - Timezone or locale dependency (CI runs in UTC)
 - Network requests the test accidentally makes (all production traffic should be mocked)
 
-### "My docs-only push ran E2E tests instead of skipping"
+### "My push/PR ran tests when I expected it to skip"
 
-Open the failing run on the Actions tab and expand the **Detect Code Changes** job's "Log gate decision" step. It prints `code=true|false` and the matched file list — that's exactly what the paths-filter saw.
+Open the run on the Actions tab and expand the **Detect Code Changes** job's "Log gate decision" step. It prints `code`, `duplicate`, `should_run`, and the matched file list — that's exactly what the gate saw.
 
-- **Large matched-file count (dozens of files for a one-file push)**: paths-filter is diffing against the wrong base. Confirm the `base: ${{ github.ref_name }}` line is present on the paths-filter step; without it, the action defaults to the repo's default branch (`master`) and the filter sees every unmerged commit on the current branch
-- **`code=false` but jobs still ran full flow**: there's a step missing the `if: needs.changes.outputs.code == 'true'` guard somewhere
-- **`code=true` with a sensible matched-file list on a pure docs push**: the filter matched a file you didn't expect — inspect the list. Adjust the negations or add a new one (docs directory? config file? auto-generated artifact? lock file?)
+- **`should_run=true`, large `matched-files` list (dozens of files for a one-file push)**: paths-filter is diffing against the wrong base. Confirm `base: ${{ github.ref_name }}` is present on the paths-filter step; without it, the action defaults to the repo's default branch (`master`) and the filter sees every unmerged commit on the current branch
+- **`should_run=false` but jobs still ran full flow**: a step is missing the `if: needs.changes.outputs.should_run == 'true'` guard somewhere
+- **`code=true`, sensible file list on a pure docs push**: the filter matched a file you didn't expect — inspect the list. Adjust the negations or add a new one (docs directory? config file? auto-generated artifact? lock file?)
+- **`duplicate=false` when a prior successful run had the same content**: the prior run may have failed or been cancelled (only `success` conclusions dedupe), or the tree hash differs (one file changed that you didn't realize — check `git diff <prior-sha>..HEAD --stat`). Manual re-runs via the UI intentionally bypass dedup via `do_not_skip: ["workflow_dispatch", ...]`
+- **`duplicate=true` but you wanted a re-run**: trigger via "Re-run all jobs" in the Actions UI (uses `workflow_dispatch`, bypasses dedup) rather than pushing a no-op commit
 
 Never remove the positive `**` catch-all when adding more negations — with `predicate-quantifier: 'every'`, a negation-only list always produces `code=false` regardless of the actual changeset.
 
