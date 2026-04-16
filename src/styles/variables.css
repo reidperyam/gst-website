@@ -33,7 +33,7 @@
   --text-light-primary: rgba(26, 26, 26, 0.95);
   --text-light-secondary: rgba(26, 26, 26, 0.7);
   --text-light-muted: rgba(26, 26, 26, 0.6);
-  --text-light-faded: rgba(26, 26, 26, 0.6);
+  --text-light-faded: rgba(26, 26, 26, 0.65);
 
   /* Text Colors - Dark Theme */
   --text-dark-primary: rgba(245, 245, 245, 0.95);
