@@ -11,7 +11,13 @@ on:
     types: [opened, synchronize, reopened]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  # Include event_name in the group so push and pull_request runs on the
+  # same ref do NOT cross-cancel. A push to dev with an open PR previously
+  # had both events fire with identical group keys; cancel-in-progress
+  # then killed the push run, leaving branch protection with a cancelled
+  # required check. Separating the groups lets push run to completion
+  # while skip-duplicate-actions short-circuits the concurrent PR run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -52,14 +58,24 @@ jobs:
       - id: skip_dup
         uses: fkirc/skip-duplicate-actions@v5
         with:
-          # Dedupe on tree hash: push to dev and PR(dev→master) produce
-          # different commit SHAs but identical trees (master has no new
-          # content), so the action recognises the second run as
-          # redundant and returns should_skip=true. Required status
-          # checks still report success because we still run the "Skipped"
-          # fallback step in each downstream job (step-level guard per
-          # the action's branch-protection guidance).
-          concurrent_skipping: 'never'
+          # Dedupe on tree hash across two scenarios:
+          #
+          # 1. Successive duplicate (post-hoc): push to dev passes, later
+          #    PR(dev→master) fires on a synthetic merge SHA with identical
+          #    tree. `skip_after_successful_duplicate: true` catches this.
+          #
+          # 2. Concurrent duplicate (simultaneous): push to dev AND open PR
+          #    fire both events on the same commit. Without this handling,
+          #    the workflow runs twice in parallel with the same content.
+          #    `same_content_newer` skips whichever run started second
+          #    (by created_at), so exactly one run does the work and the
+          #    other short-circuits. Combined with the event_name-scoped
+          #    concurrency group above, neither run cancels the other.
+          #
+          # Required status checks still report success because each
+          # downstream job has a step-level "Skipped" fallback that runs
+          # when should_run != 'true'.
+          concurrent_skipping: 'same_content_newer'
           skip_after_successful_duplicate: 'true'
           do_not_skip: '["workflow_dispatch", "schedule", "merge_group"]'
       - uses: dorny/paths-filter@v4

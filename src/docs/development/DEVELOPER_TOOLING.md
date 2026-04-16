@@ -173,7 +173,8 @@ The gate job also runs [`fkirc/skip-duplicate-actions@v5`](https://github.com/fk
 
 Key configuration choices:
 
-- `concurrent_skipping: 'never'` — we already have `concurrency.cancel-in-progress: true` at the workflow level, so older runs on the same branch are cancelled. Letting skip-duplicate-actions also do concurrent-skipping would be double work.
+- `concurrent_skipping: 'same_content_newer'` — when push and PR events fire simultaneously on the same commit (e.g. commit to a branch that already has an open PR), the action sees two concurrent runs with identical tree hashes and skips whichever started second. Combined with the event-scoped concurrency group below, this means exactly one run does the work while the other short-circuits; neither cancels the other, so required status checks don't end up in a cancelled state.
+- Workflow-level `concurrency.group` is scoped by `github.event_name` so push and pull_request runs on the same ref don't share a group — they no longer cross-cancel. Previously a push to `dev` with an open PR was cancelled the moment the PR run started, leaving branch protection with a cancelled required check even though the PR run succeeded.
 - `skip_after_successful_duplicate: 'true'` (default) — only skip when the duplicate has a **successful** conclusion. A duplicate of a failed run still triggers a fresh test run.
 - `do_not_skip: '["workflow_dispatch", "schedule", "merge_group"]'` — manual re-runs via the UI use `workflow_dispatch` and intentionally want to re-test; scheduled runs are cron-driven and shouldn't skip; merge-queue runs must run fresh because the queue may have updated `master` between the PR and the merge-queue entry. Notably `push` and `pull_request` are NOT in this list — they dedupe as expected.
 
@@ -589,6 +590,7 @@ Open the run on the Actions tab and expand the **Detect Code Changes** job's "Lo
 - **`code=true`, sensible file list on a pure docs push**: the filter matched a file you didn't expect — inspect the list. Adjust the negations or add a new one (docs directory? config file? auto-generated artifact? lock file?)
 - **`duplicate=false` when a prior successful run had the same content**: the prior run may have failed or been cancelled (only `success` conclusions dedupe), or the tree hash differs (one file changed that you didn't realize — check `git diff <prior-sha>..HEAD --stat`). Manual re-runs via the UI intentionally bypass dedup via `do_not_skip: ["workflow_dispatch", ...]`
 - **`duplicate=true` but you wanted a re-run**: trigger via "Re-run all jobs" in the Actions UI (uses `workflow_dispatch`, bypasses dedup) rather than pushing a no-op commit
+- **PR blocked with a cancelled push-event check alongside a successful pull_request-event check**: the workflow's concurrency group must be scoped by `github.event_name` — without it, the two events collide in the same group and `cancel-in-progress: true` cancels the first-started run. Immediate fix: `gh run rerun <cancelled-run-id>` on the cancelled run (safe because the sibling has already completed). Durable fix: confirm the workflow's `concurrency.group` includes `github.event_name`
 
 Never remove the positive `**` catch-all when adding more negations — with `predicate-quantifier: 'every'`, a negation-only list always produces `code=false` regardless of the actual changeset.
 
