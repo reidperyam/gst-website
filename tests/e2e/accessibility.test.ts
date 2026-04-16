@@ -25,11 +25,11 @@ const PAGES = [
  * Each entry documents the violation ID and the max allowed node count.
  */
 const KNOWN_SERIOUS: Record<string, Record<string, number>> = {
-  '/services': { 'color-contrast': 10 },
-  '/about': { 'color-contrast': 3 },
-  '/ma-portfolio': { 'color-contrast': 8, 'nested-interactive': 57 },
-  '/hub': { 'color-contrast': 10 },
-  '/hub/tools/techpar': { 'color-contrast': 34 },
+  '/services': { 'color-contrast': 1 },
+  '/about': { 'color-contrast': 1 },
+  '/ma-portfolio': { 'color-contrast': 2 },
+  '/hub': { 'color-contrast': 1 },
+  '/hub/tools/techpar': { 'color-contrast': 4 },
 };
 
 test.describe('Accessibility — WCAG 2.1 AA', () => {

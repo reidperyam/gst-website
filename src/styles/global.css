@@ -487,13 +487,13 @@ main {
 .filter-chip:hover {
   background: var(--filter-chip-bg-hover, rgba(26, 26, 26, 0.08));
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .filter-chip.active {
-  background: var(--color-primary);
-  color: var(--bg-light);
-  border-color: var(--color-primary);
+  background: var(--filter-chip-bg-active);
+  color: var(--filter-chip-text-active);
+  border-color: var(--filter-chip-bg-active);
 }
 
 .filter-chip.chip-unavailable {
@@ -649,13 +649,13 @@ html.dark-theme .filter-chip {
 html.dark-theme .filter-chip:hover {
   background: var(--filter-chip-bg-hover);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 html.dark-theme .filter-chip.active {
-  background: var(--color-primary);
-  color: var(--bg-dark);
-  border-color: var(--color-primary);
+  background: var(--filter-chip-bg-active);
+  color: var(--filter-chip-text-active);
+  border-color: var(--filter-chip-bg-active);
 }
 
 html.dark-theme .filter-chip.chip-unavailable {
@@ -820,7 +820,7 @@ html.dark-theme .brutal-btn--secondary:hover {
 }
 
 .brutal-breadcrumb__item a {
-  color: var(--color-primary);
+  color: var(--color-tertiary);
   text-decoration: none;
   transition: opacity var(--transition-fast);
 }
@@ -1390,12 +1390,12 @@ html.dark-theme .brutal-input {
 
 .brutal-filter-chip:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .brutal-filter-chip--active {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
   border-color: var(--color-primary);
 }
 
@@ -1409,14 +1409,14 @@ html.dark-theme .brutal-filter-chip:hover {
 
 html.dark-theme .brutal-filter-chip--active {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 /* Category-specific filter chip variants (regulatory map categories) */
 .brutal-filter-chip--all:hover,
 .brutal-filter-chip--privacy:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .brutal-filter-chip--ai:hover {
@@ -1437,7 +1437,7 @@ html.dark-theme .brutal-filter-chip--active {
 .brutal-filter-chip--all.brutal-filter-chip--active,
 .brutal-filter-chip--privacy.brutal-filter-chip--active {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
   border-color: var(--color-primary);
 }
 

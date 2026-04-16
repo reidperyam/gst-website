@@ -32,7 +32,7 @@
   /* Text Colors - Light Theme */
   --text-light-primary: rgba(26, 26, 26, 0.95);
   --text-light-secondary: rgba(26, 26, 26, 0.7);
-  --text-light-muted: rgba(26, 26, 26, 0.6);
+  --text-light-muted: rgba(26, 26, 26, 0.65);
   --text-light-faded: rgba(26, 26, 26, 0.65);
 
   /* Text Colors - Dark Theme */
@@ -287,6 +287,8 @@ html.dark-theme {
   /* Accent & UI Elements */
   --filter-chip-bg: var(--color-primary-10);
   --filter-chip-bg-hover: var(--color-primary-15);
+  --filter-chip-bg-active: var(--color-tertiary);
+  --filter-chip-text-active: var(--bg-light);
   --filter-chip-border: var(--color-primary-20);
   --filter-button-bg: var(--color-primary-10);
   --filter-button-bg-hover: var(--color-primary-15);

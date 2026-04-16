@@ -278,13 +278,13 @@ const { projects } = Astro.props;
   .filter-chip:hover {
     background: var(--filter-chip-bg-hover);
     border-color: var(--color-primary);
-    color: var(--color-primary);
+    color: var(--color-tertiary);
   }
 
   .filter-chip.active {
-    background: var(--color-primary);
-    color: var(--bg-light);
-    border-color: var(--color-primary);
+    background: var(--filter-chip-bg-active);
+    color: var(--filter-chip-text-active);
+    border-color: var(--filter-chip-bg-active);
   }
 
   .clear-filters-btn {
