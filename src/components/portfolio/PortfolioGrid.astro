@@ -198,15 +198,15 @@ const { projects } = Astro.props;
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1rem 0;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
   }
 
   .tag {
     font-family: monospace;
     background: var(--accent-dark-bg);
     color: var(--color-primary);
-    padding: 0.35rem 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-md);
     border-radius: 0;
     font-size: var(--text-xs);
     font-weight: 600;
