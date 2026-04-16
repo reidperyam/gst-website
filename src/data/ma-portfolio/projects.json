@@ -1613,5 +1613,36 @@
     "challenge": "Combinging acquired technology platform into portfolio company SaaS platform.",
     "solution": "Integrating disparate product architectures into near-term and designed future-state, combined platform architecture to support immediate revenue growth and cross-selling enablement.",
     "engagementCategory": "Value Creation"
+  },
+  {
+    "id": "claymore",
+    "codeName": "Claymore",
+    "industry": "Construction Consulting",
+    "theme": "Professional Services",
+    "summary": "Global project management and cost consulting firm delivering large-scale construction and infrastructure projects across the Americas, EMEA, and Asia-Pacific, underpinned by Procore (PMIS), Deltek VantagePoint (ERP), and a Databricks analytics platform with emerging AI cost-benchmarking capabilities.",
+    "arr": "Not in source",
+    "arrNumeric": 0,
+    "currency": "USD",
+    "growthStage": "Mature Enterprise",
+    "year": 2026,
+    "technologies": [
+      "Procore",
+      "Databricks",
+      "Power BI",
+      "Azure",
+      "Microsoft Entra ID",
+      "Microsoft Intune",
+      "Microsoft 365",
+      "Dynamics 365",
+      "Primavera P6",
+      "Workday",
+      "CrowdStrike"
+    ],
+    "engagementType": "Technical Diligence",
+    "engagementTypeTag": "technical-diligence",
+    "engagementTypeDescription": "Technical diligence for M&A transactions",
+    "challenge": "Preliminary buy-side technical due diligence of a 2,500-person, globally distributed project management and cost consulting firm spanning 20+ legal entities, evaluating platform fragmentation, security posture and RWI readiness, integration-playbook maturity, and AI governance ahead of acquisition.",
+    "solution": "Confirmed ISO 27001:2022 certification, a defense-in-depth commercial security stack (BlueVoyant MDR, CrowdStrike EDR, ThreatLocker, Mimecast, Cymulate, Vanta), a tiered disaster-recovery program with dual datacenters, and a disciplined three-stage integration playbook (proven on recent LeftField, Seneca, and WWPS acquisitions) as strengths that reduce post-close risk; flagged IT service desk SLA compliance at 82.47% (below the 90%+ professional-services norm), five of seven integration workstreams still in progress or not started, EMEA entities outside the ISO certification boundary, and nascent AI governance lacking formal model risk management as the primary post-close remediation areas (estimated $100K–$200K).",
+    "engagementCategory": "Buy-Side"
   }
 ]
