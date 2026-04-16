@@ -61,6 +61,9 @@ export const PALETTE_CONCEPTS: Record<number, string> = Object.fromEntries(
 export const TOKEN_TIPS: Record<string, string> = {
   '--color-primary': 'Brand accent \u2014 links, buttons, active states, hub cards',
   '--color-primary-dark': 'Hover/pressed variant of primary',
+  '--color-tertiary':
+    'Accessible text accent on light surfaces \u2014 card chips, metric highlights (WCAG AA)',
+  '--color-tertiary-dark': 'Hover/pressed variant of tertiary',
   '--color-secondary': 'Secondary emphasis \u2014 alternative CTAs, TechPar R&D CapEx',
   '--color-success': 'Positive outcomes \u2014 DM positive, ICG optimizing, TechPar ahead',
   '--color-warning': 'Caution \u2014 DM warning, ICG aware, TechPar underinvest/above',

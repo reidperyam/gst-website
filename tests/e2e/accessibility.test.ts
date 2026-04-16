@@ -27,7 +27,7 @@ const PAGES = [
 const KNOWN_SERIOUS: Record<string, Record<string, number>> = {
   '/services': { 'color-contrast': 10 },
   '/about': { 'color-contrast': 3 },
-  '/ma-portfolio': { 'color-contrast': 220, 'nested-interactive': 57 },
+  '/ma-portfolio': { 'color-contrast': 130, 'nested-interactive': 57 },
   '/hub': { 'color-contrast': 10 },
   '/hub/tools/techpar': { 'color-contrast': 34 },
 };
