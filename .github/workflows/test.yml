@@ -11,7 +11,13 @@ on:
     types: [opened, synchronize, reopened]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  # Include event_name in the group so push and pull_request runs on the
+  # same ref do NOT cross-cancel. A push to dev with an open PR previously
+  # had both events fire with identical group keys; cancel-in-progress
+  # then killed the push run, leaving branch protection with a cancelled
+  # required check. Separating the groups lets push run to completion
+  # while skip-duplicate-actions short-circuits the concurrent PR run.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -26,16 +32,89 @@ jobs:
     name: Detect Code Changes
     runs-on: ubuntu-latest
     timeout-minutes: 2
+    # pull-requests: read lets dorny/paths-filter use the GitHub API on PR
+    # events instead of falling back to git-based detection. actions: write
+    # is required by fkirc/skip-duplicate-actions to query prior workflow
+    # runs via the REST API.
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: write
     outputs:
+      # `code` — true if this push/PR touches non-docs files (see filters)
+      # `duplicate` — true if a prior workflow run already completed
+      #   successfully with the same tree hash (content-identical). The
+      #   canonical case: push to dev passes, PR dev→master fires the
+      #   same workflow on a synthetic merge SHA whose tree is identical,
+      #   so the new run is a duplicate of work already validated.
+      # `should_run` — true only when BOTH code changed AND no duplicate
+      #   exists. Downstream jobs key off this single output.
       code: ${{ steps.filter.outputs.code }}
+      matched-files: ${{ steps.filter.outputs.code_files }}
+      duplicate: ${{ steps.skip_dup.outputs.should_skip }}
+      should_run: ${{ steps.decide.outputs.should_run }}
     steps:
       - uses: actions/checkout@v5
+      - id: skip_dup
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          # Dedupe on tree hash across two scenarios:
+          #
+          # 1. Successive duplicate (post-hoc): push to dev passes, later
+          #    PR(dev→master) fires on a synthetic merge SHA with identical
+          #    tree. `skip_after_successful_duplicate: true` catches this.
+          #
+          # 2. Concurrent duplicate (simultaneous): push to dev AND open PR
+          #    fire both events on the same commit. Without this handling,
+          #    the workflow runs twice in parallel with the same content.
+          #    `same_content_newer` skips whichever run started second
+          #    (by created_at), so exactly one run does the work and the
+          #    other short-circuits. Combined with the event_name-scoped
+          #    concurrency group above, neither run cancels the other.
+          #
+          # Required status checks still report success because each
+          # downstream job has a step-level "Skipped" fallback that runs
+          # when should_run != 'true'.
+          concurrent_skipping: 'same_content_newer'
+          skip_after_successful_duplicate: 'true'
+          do_not_skip: '["workflow_dispatch", "schedule", "merge_group"]'
       - uses: dorny/paths-filter@v4
         id: filter
         with:
+          # For push events, compare against the previous commit on the
+          # SAME branch. The action's default base is the repository's
+          # default branch (master), which for a push to dev means the
+          # diff spans ALL unmerged commits — not just this push. That
+          # caused every push to dev to look like a full code change
+          # regardless of what the push actually touched. Setting base
+          # to the pushed branch triggers paths-filter's "same branch"
+          # codepath: diff against `github.event.before`. Ignored on
+          # pull_request events (per the action's docs).
+          base: ${{ github.ref_name }}
+          predicate-quantifier: 'every'
+          # list-files: json emits the matched files as `<name>_files` so we
+          # can log them for diagnostics. Without this, a broken filter
+          # silently flips the gate and looks identical to a working one.
+          list-files: json
           filters: |
             code:
-              - '!(**.md|src/docs/**|.claude/**)'
+              - '**'
+              - '!**/*.md'
+              - '!src/docs/**'
+              - '!.claude/**'
+      - id: decide
+        run: |
+          if [ "${{ steps.filter.outputs.code }}" = "true" ] && [ "${{ steps.skip_dup.outputs.should_skip }}" != "true" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Log gate decision
+        run: |
+          echo "code=${{ steps.filter.outputs.code }}"
+          echo "duplicate=${{ steps.skip_dup.outputs.should_skip }}"
+          echo "should_run=${{ steps.decide.outputs.should_run }}"
+          echo "matched files: ${{ steps.filter.outputs.code_files }}"
 
   lint-and-typecheck:
     name: Lint & Type Check
@@ -45,43 +124,48 @@ jobs:
 
     steps:
       - name: Checkout code
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm ci
 
       - name: Astro type check
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npx astro check
 
       - name: ESLint
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm run lint
 
       - name: Stylelint
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm run lint:css
 
       - name: Prettier check
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npx prettier --check .
 
       - name: npm audit (production dependencies only)
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm audit --audit-level=moderate --omit=dev
 
-      - name: Skipped (docs-only change)
-        if: needs.changes.outputs.code != 'true'
-        run: echo "Skipped — no code changes in this push/PR."
+      - name: Skipped (docs-only or duplicate run)
+        if: needs.changes.outputs.should_run != 'true'
+        run: |
+          if [ "${{ needs.changes.outputs.duplicate }}" = "true" ]; then
+            echo "Skipped — duplicate of a prior successful run (tree hash match)."
+          else
+            echo "Skipped — no code changes in this push/PR."
+          fi
 
   unit-and-integration:
     name: Unit & Integration Tests
@@ -91,22 +175,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm ci
 
       - name: Run tests with coverage
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: |
           npm run test:coverage 2>&1 | tee coverage-output.txt
           SUMMARY=$(grep "^All files" coverage-output.txt || echo "")
@@ -125,9 +209,14 @@ jobs:
             echo "| Lines | ${LINES}% |" >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Skipped (docs-only change)
-        if: needs.changes.outputs.code != 'true'
-        run: echo "Skipped — no code changes in this push/PR."
+      - name: Skipped (docs-only or duplicate run)
+        if: needs.changes.outputs.should_run != 'true'
+        run: |
+          if [ "${{ needs.changes.outputs.duplicate }}" = "true" ]; then
+            echo "Skipped — duplicate of a prior successful run (tree hash match)."
+          else
+            echo "Skipped — no code changes in this push/PR."
+          fi
 
   e2e-tests:
     name: E2E Tests (Playwright)
@@ -137,27 +226,27 @@ jobs:
 
     steps:
       - name: Checkout code
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm ci
 
       - name: Get Playwright version
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         id: playwright-version
         run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
       - name: Cache Playwright browsers
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         uses: actions/cache@v5
         id: playwright-cache
         with:
@@ -165,29 +254,34 @@ jobs:
           key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
 
       - name: Install Playwright browsers
-        if: needs.changes.outputs.code == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        if: needs.changes.outputs.should_run == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
       - name: Install Playwright deps (cached browsers)
-        if: needs.changes.outputs.code == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
+        if: needs.changes.outputs.should_run == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps
 
       - name: Build application
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm run build
 
       - name: Run E2E tests
-        if: needs.changes.outputs.code == 'true'
+        if: needs.changes.outputs.should_run == 'true'
         run: npm run test:e2e
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
-        if: always() && needs.changes.outputs.code == 'true'
+        if: always() && needs.changes.outputs.should_run == 'true'
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
 
-      - name: Skipped (docs-only change)
-        if: needs.changes.outputs.code != 'true'
-        run: echo "Skipped — no code changes in this push/PR."
+      - name: Skipped (docs-only or duplicate run)
+        if: needs.changes.outputs.should_run != 'true'
+        run: |
+          if [ "${{ needs.changes.outputs.duplicate }}" = "true" ]; then
+            echo "Skipped — duplicate of a prior successful run (tree hash match)."
+          else
+            echo "Skipped — no code changes in this push/PR."
+          fi

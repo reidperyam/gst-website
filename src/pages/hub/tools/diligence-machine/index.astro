@@ -1686,14 +1686,13 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
       transform var(--transition-normal);
   }
 
+  :global(html.dark-theme) .progress-number {
+    color: var(--border-dark-default);
+  }
+
   .progress-segment.active .progress-number {
     color: var(--color-primary);
     transform: scale(1.15);
-  }
-
-  .progress-segment.completed .progress-number path {
-    fill: var(--color-primary);
-    stroke: var(--color-primary);
   }
 
   .progress-number-text {
@@ -1724,10 +1723,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
   .progress-segment.active .progress-label {
     color: var(--text-primary);
-  }
-
-  :global(html.dark-theme) .progress-number {
-    color: var(--border-dark-default);
   }
 
   :global(html.dark-theme) .progress-segment.completed .progress-number-text {
@@ -1810,6 +1805,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
   }
 
   .progress-dot.completed svg path {
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+  }
+
+  .progress-segment.completed .progress-number path {
     fill: var(--color-primary);
     stroke: var(--color-primary);
   }
@@ -1987,11 +1987,9 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     font-family: monospace;
   }
 
-  /* stylelint-disable-next-line selector-id-pattern --
-     * Pre-existing camelCase ID — rename requires coordinated update of
-     * HTML id, getElementById, and event listener (see lines 188, 358, 1225).
-     * Logged to Phase 9 backlog as a follow-on cleanup. */
-  #btnGoBack {
+  /* Use attribute selector instead of #id to keep specificity low (camelCase
+     * id rename requires coordinated HTML + JS update; logged to Phase 9 backlog). */
+  [id='btnGoBack'] {
     margin-right: auto;
   }
 
@@ -2093,6 +2091,10 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
   .doc-divider--post-toc {
     display: block;
+  }
+
+  .doc-footer .doc-divider {
+    margin: 0 0 var(--spacing-xs) 0;
   }
 
   :global(html.dark-theme) .doc-divider {
@@ -2696,10 +2698,6 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     opacity: 0.5;
   }
 
-  .doc-footer .doc-divider {
-    margin: 0 0 var(--spacing-xs) 0;
-  }
-
   .doc-footer-brand {
     display: flex;
     align-items: center;
@@ -3144,11 +3142,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-attention-grid :global(.doc-attention-card.relevance-high) {
-      border-left-color: #5b7a9d;
+      border-left-color: var(--color-authority);
     }
 
     .doc-attention-grid :global(.doc-attention-card.relevance-medium) {
-      border-left-color: #8c7a6b;
+      border-left-color: var(--color-subdued);
     }
 
     .doc-attention-grid :global(.doc-attention-header) {
@@ -3242,11 +3240,11 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     }
 
     .doc-topics :global(.doc-question.priority-high) {
-      border-left-color: #5b7a9d;
+      border-left-color: var(--color-authority);
     }
 
     .doc-topics :global(.doc-question.priority-medium) {
-      border-left-color: #8c7a6b;
+      border-left-color: var(--color-subdued);
     }
 
     .doc-topics :global(.doc-q-header) {
@@ -3290,7 +3288,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
       line-height: 1.3;
       margin: 0;
       font-style: italic;
-      color: #333;
+      color: var(--text-primary);
       page-break-after: avoid;
     }
 
@@ -3361,17 +3359,17 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
 
     .doc-topics :global(.exit-impact-multiple-expander) {
       background: rgba(46, 139, 87, 0.15);
-      color: #2e8b57;
+      color: var(--color-success);
     }
 
     .doc-topics :global(.exit-impact-valuation-drag) {
       background: rgba(178, 102, 34, 0.15);
-      color: #b26622;
+      color: var(--color-editors-pick);
     }
 
     .doc-topics :global(.exit-impact-operational-risk) {
       background: rgba(178, 34, 34, 0.15);
-      color: #b22222;
+      color: var(--color-error);
     }
 
     /* v2: Red flag signals */
@@ -3380,7 +3378,7 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
       line-height: 1.3;
       margin: 0 0 2px;
       padding: 2px 6px;
-      color: #b22222;
+      color: var(--color-error);
       background: rgba(178, 34, 34, 0.05);
       border-left: 2px solid rgba(178, 34, 34, 0.3);
       page-break-after: avoid;

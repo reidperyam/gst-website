@@ -90,17 +90,6 @@ html.dark-theme .toc {
   border-left: 2px solid transparent;
 }
 
-.toc__list a:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.toc__list a.is-active {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
 /* ── Separator ─────────────────────────────────────────── */
 
 .toc__separator {
@@ -157,6 +146,17 @@ html.dark-theme .toc {
   font-weight: 400;
 }
 
+.toc__list a:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.toc__list a.is-active {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
 .toc__sublist a:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
@@ -182,14 +182,14 @@ html.dark-theme .toc {
     margin-left: auto;
   }
 
-  .toc--collapsible.is-collapsed .toc__list {
-    display: none;
-  }
-
   .toc--collapsible .toc__list {
     max-height: 50vh;
     overflow-y: auto;
     margin-top: var(--spacing-sm);
+  }
+
+  .toc--collapsible.is-collapsed .toc__list {
+    display: none;
   }
 
   .toc--collapsible .toc__sublist {

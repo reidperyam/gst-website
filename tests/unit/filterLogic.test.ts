@@ -10,6 +10,7 @@ import {
   getUniqueThemes,
   getUniqueYears,
   getUniqueEngagementTypes,
+  getUniqueEngagementCategories,
   createSearchableText,
   filterProjects,
   type FilterCriteria,
@@ -30,7 +31,8 @@ const mockProjects: Project[] = [
     growthStage: 'Early-Stage Growth',
     year: 2024,
     technologies: ['Node.js', 'React'],
-    engagementType: 'Value Creation - Growth',
+    engagementType: 'Value Creation',
+    engagementCategory: 'Sell-Side',
   },
   {
     id: 'project-2',
@@ -44,7 +46,8 @@ const mockProjects: Project[] = [
     growthStage: 'Mature Enterprise',
     year: 2023,
     technologies: ['Python', 'AWS'],
-    engagementType: 'Value Creation - Modernization',
+    engagementType: 'Value Creation',
+    engagementCategory: 'Sell-Side',
   },
   {
     id: 'project-3',
@@ -58,7 +61,8 @@ const mockProjects: Project[] = [
     growthStage: 'Scaling Growth',
     year: 2024,
     technologies: ['Go', 'Kubernetes'],
-    engagementType: 'Early Stage Assessment',
+    engagementType: 'Technical Diligence',
+    engagementCategory: 'Buy-Side',
   },
   {
     id: 'project-4',
@@ -73,6 +77,7 @@ const mockProjects: Project[] = [
     year: 2022,
     technologies: ['Java', 'Microservices'],
     engagementType: undefined,
+    engagementCategory: 'Sell-Side',
   },
 ];
 
@@ -103,12 +108,11 @@ describe('filterLogic', () => {
 
   describe('categorizeEngagementType', () => {
     it('should categorize value creation types', () => {
-      expect(categorizeEngagementType('Value Creation - Growth')).toBe('value-creation');
-      expect(categorizeEngagementType('Value Creation - Integration')).toBe('value-creation');
+      expect(categorizeEngagementType('Value Creation')).toBe('value-creation');
     });
 
     it('should categorize technical diligence types', () => {
-      expect(categorizeEngagementType('Early Stage Assessment')).toBe('technical-diligence');
+      expect(categorizeEngagementType('Technical Diligence')).toBe('technical-diligence');
       expect(categorizeEngagementType('Technical Assessment')).toBe('technical-diligence');
     });
 
@@ -177,9 +181,9 @@ describe('filterLogic', () => {
   describe('getUniqueEngagementTypes', () => {
     it('should extract and sort unique engagement types', () => {
       const types = getUniqueEngagementTypes(mockProjects);
-      expect(types).toContain('Value Creation - Growth');
-      expect(types).toContain('Early Stage Assessment');
-      expect(types.length).toBe(3); // Excludes undefined
+      expect(types).toContain('Value Creation');
+      expect(types).toContain('Technical Diligence');
+      expect(types.length).toBe(2); // Excludes undefined; project-1 and project-2 share 'Value Creation'
     });
 
     it('should handle projects without engagement types', () => {
@@ -210,12 +214,24 @@ describe('filterLogic', () => {
     });
   });
 
+  describe('getUniqueEngagementCategories', () => {
+    it('should extract and sort unique engagement categories', () => {
+      const categories = getUniqueEngagementCategories(mockProjects);
+      expect(categories).toContain('Buy-Side');
+      expect(categories).toContain('Sell-Side');
+      expect(categories.length).toBe(2);
+      expect(categories).toEqual([...categories].sort());
+    });
+
+    it('should handle empty project list', () => {
+      expect(getUniqueEngagementCategories([])).toEqual([]);
+    });
+  });
+
   describe('filterProjects', () => {
     const criteria: FilterCriteria = {
       search: '',
-      stage: 'all',
       theme: 'all',
-      year: 'all',
       engagement: 'all',
     };
 
@@ -238,31 +254,15 @@ describe('filterLogic', () => {
       expect(result[0].id).toBe('project-1');
     });
 
-    it('should filter by year', () => {
-      const yearCriteria = { ...criteria, year: '2024' };
-      const result = filterProjects(mockProjects, yearCriteria);
-      expect(result.length).toBe(2);
-      expect(result.map((p) => p.year)).toEqual([2024, 2024]);
-    });
-
-    it('should filter by growth stage category', () => {
-      const growthStages = getGrowthStageProjects(mockProjects);
-      const matureStages = getMatureStageProjects(mockProjects);
-      const stageCriteria = { ...criteria, stage: 'growth-category' };
-      const result = filterProjects(mockProjects, stageCriteria, growthStages, matureStages);
-      expect(result.length).toBeGreaterThan(0);
-      expect(result.every((p) => growthStages.includes(p.growthStage))).toBe(true);
-    });
-
-    it('should filter by value creation engagement type', () => {
-      const engagementCriteria = { ...criteria, engagement: 'value-creation' };
+    it('should filter by engagement category Sell-Side', () => {
+      const engagementCriteria = { ...criteria, engagement: 'Sell-Side' };
       const result = filterProjects(mockProjects, engagementCriteria);
-      expect(result.length).toBe(2);
-      expect(result.map((p) => p.id)).toEqual(['project-1', 'project-2']);
+      expect(result.length).toBe(3);
+      expect(result.map((p) => p.id)).toEqual(['project-1', 'project-2', 'project-4']);
     });
 
-    it('should filter by technical diligence engagement type', () => {
-      const engagementCriteria = { ...criteria, engagement: 'technical-diligence' };
+    it('should filter by engagement category Buy-Side', () => {
+      const engagementCriteria = { ...criteria, engagement: 'Buy-Side' };
       const result = filterProjects(mockProjects, engagementCriteria);
       expect(result).toHaveLength(1);
       expect(result[0].id).toBe('project-3');
@@ -271,10 +271,8 @@ describe('filterLogic', () => {
     it('should combine multiple filters (intersection)', () => {
       const multiCriteria: FilterCriteria = {
         search: '',
-        stage: 'all',
         theme: 'Healthcare',
-        year: '2023',
-        engagement: 'all',
+        engagement: 'Sell-Side',
       };
       const result = filterProjects(mockProjects, multiCriteria);
       expect(result).toHaveLength(1);
@@ -296,8 +294,8 @@ describe('filterLogic', () => {
 
   describe('Constants', () => {
     it('should export engagement categories', () => {
-      expect(ENGAGEMENT_CATEGORIES.valueCreation).toContain('Value Creation - Growth');
-      expect(ENGAGEMENT_CATEGORIES.technicalDiligence).toContain('Early Stage Assessment');
+      expect(ENGAGEMENT_CATEGORIES.valueCreation).toContain('Value Creation');
+      expect(ENGAGEMENT_CATEGORIES.technicalDiligence).toContain('Technical Diligence');
     });
 
     it('should export growth keywords', () => {

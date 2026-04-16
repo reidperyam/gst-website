@@ -183,10 +183,6 @@ html.dark-theme .tool-action-bar--frosted {
   transition: transform var(--transition-fast);
 }
 
-.tool-methodology[open] > .tool-methodology__trigger::before {
-  transform: rotate(90deg);
-}
-
 /* Delta icon variant — uses GST brand delta SVG mask */
 .tool-methodology--delta > .tool-methodology__trigger::before {
   content: '';
@@ -198,6 +194,10 @@ html.dark-theme .tool-action-bar--frosted {
   mask-image: url('/images/logo/gst-delta-icon-teal-stroke-thick.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
+}
+
+.tool-methodology[open] > .tool-methodology__trigger::before {
+  transform: rotate(90deg);
 }
 
 .tool-methodology--delta[open] > .tool-methodology__trigger::before {
@@ -355,13 +355,13 @@ a:hover {
   outline-offset: 0.25rem;
 }
 
-.cta-button:focus:not(:focus-visible) {
-  outline: none;
-}
-
 .cta-button:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 0.25rem;
+}
+
+.cta-button:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Dark Theme - Background Grid Pattern */
@@ -487,13 +487,19 @@ main {
 .filter-chip:hover {
   background: var(--filter-chip-bg-hover, rgba(26, 26, 26, 0.08));
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .filter-chip.active {
-  background: var(--color-primary);
-  color: var(--bg-light);
-  border-color: var(--color-primary);
+  background: var(--filter-chip-bg-active);
+  color: var(--filter-chip-text-active);
+  border-color: var(--filter-chip-bg-active);
+}
+
+.filter-chip.chip-unavailable {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Search Input - Base Styles */
@@ -579,19 +585,27 @@ main {
   outline-offset: 2px;
 }
 
-/* Filter Drawer - Base Styles */
+/* Filter Drawer - Base Styles
+   Background + blur are provided by a frosted-glass utility (e.g.
+   `.brutal-frosted--blur-only`) co-applied in markup. Keep layout /
+   position / border here only.
+
+   Positioning model: anchored by `top` and `bottom` (not `height`) so a
+   scroll listener in PortfolioHeader.astro can raise `bottom` when the
+   page footer enters the viewport, keeping the drawer flush with (never
+   behind) the footer. The box-shadow intentionally uses a clipped offset
+   so it doesn't bleed past the drawer's own bounds onto the footer. */
 .filter-drawer {
   position: fixed;
   right: -400px;
   top: 133px;
+  bottom: 0;
   width: 350px;
-  height: calc(100vh - 133px);
-  background: var(--bg-light);
   border-left: 2px solid var(--color-primary);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: -4px 0 20px -4px rgba(0, 0, 0, 0.15);
   transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: var(--z-modal-overlay);
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -635,13 +649,17 @@ html.dark-theme .filter-chip {
 html.dark-theme .filter-chip:hover {
   background: var(--filter-chip-bg-hover);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 html.dark-theme .filter-chip.active {
-  background: var(--color-primary);
-  color: var(--bg-dark);
-  border-color: var(--color-primary);
+  background: var(--filter-chip-bg-active);
+  color: var(--filter-chip-text-active);
+  border-color: var(--filter-chip-bg-active);
+}
+
+html.dark-theme .filter-chip.chip-unavailable {
+  opacity: 0.3;
 }
 
 html.dark-theme .search-input {
@@ -683,7 +701,6 @@ html.dark-theme .clear-filters-button:hover {
 }
 
 html.dark-theme .filter-drawer {
-  background: var(--filter-drawer-bg);
   border-left-color: var(--color-primary);
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
 }
@@ -734,12 +751,12 @@ html.dark-theme .brutal-btn {
   border: 2px solid var(--color-primary);
 }
 
-.brutal-btn--primary:hover:not(:disabled) {
-  background: rgba(5, 205, 153, 0.25);
-}
-
 html.dark-theme .brutal-btn--primary {
   background: rgba(5, 205, 153, 0.12);
+}
+
+.brutal-btn--primary:hover:not(:disabled) {
+  background: rgba(5, 205, 153, 0.25);
 }
 
 .brutal-btn--secondary {
@@ -795,8 +812,15 @@ html.dark-theme .brutal-btn--secondary:hover {
   font-weight: var(--font-weight-bold);
 }
 
-.brutal-breadcrumb__item a {
+.legal-page-body a {
   color: var(--color-primary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.brutal-breadcrumb__item a {
+  color: var(--color-tertiary);
   text-decoration: none;
   transition: opacity var(--transition-fast);
 }
@@ -996,6 +1020,11 @@ html.dark-theme .brutal-callout--warning {
   border-bottom: 1px solid var(--border-light);
 }
 
+.brutal-bench-table__active td {
+  border-left: 3px solid var(--color-primary);
+  background: transparent;
+}
+
 .brutal-bench-table td:first-child {
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
@@ -1008,11 +1037,6 @@ html.dark-theme .brutal-callout--warning {
   font-family: monospace;
   font-weight: var(--font-weight-bold);
   color: var(--text-secondary);
-}
-
-.brutal-bench-table__active td {
-  border-left: 3px solid var(--color-primary);
-  background: transparent;
 }
 
 .brutal-bench-table__active td:last-child {
@@ -1226,6 +1250,25 @@ html.dark-theme .brutal-transition:hover {
   background: transparent;
 }
 
+.brutal-option-card__label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+}
+
+.brutal-option-card__description {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-left: calc(10px + var(--spacing-sm));
+}
+
 .brutal-option-card--selected .brutal-option-card__label {
   color: var(--color-primary);
 }
@@ -1257,25 +1300,6 @@ html.dark-theme .brutal-option-card--selected {
 
 html.dark-theme .brutal-option-card--selected .brutal-option-card__description {
   color: var(--text-secondary);
-}
-
-.brutal-option-card__label {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
-  font-family: monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-primary);
-}
-
-.brutal-option-card__description {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-left: calc(10px + var(--spacing-sm));
 }
 
 /* -- compact: text-only, centered (no __label / __description needed) -- */
@@ -1320,16 +1344,16 @@ html.dark-theme .brutal-option-card--selected-outline {
     border-style var(--transition-fast);
 }
 
-html.dark-theme .brutal-input {
-  border-color: var(--border-dark-prominent);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
 .brutal-input:focus {
   outline: none;
   border-color: var(--color-primary);
   border-style: solid;
+}
+
+html.dark-theme .brutal-input {
+  border-color: var(--border-dark-prominent);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .brutal-input::placeholder {
@@ -1366,12 +1390,12 @@ html.dark-theme .brutal-input {
 
 .brutal-filter-chip:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .brutal-filter-chip--active {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
   border-color: var(--color-primary);
 }
 
@@ -1385,14 +1409,14 @@ html.dark-theme .brutal-filter-chip:hover {
 
 html.dark-theme .brutal-filter-chip--active {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 /* Category-specific filter chip variants (regulatory map categories) */
 .brutal-filter-chip--all:hover,
 .brutal-filter-chip--privacy:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .brutal-filter-chip--ai:hover {
@@ -1413,7 +1437,7 @@ html.dark-theme .brutal-filter-chip--active {
 .brutal-filter-chip--all.brutal-filter-chip--active,
 .brutal-filter-chip--privacy.brutal-filter-chip--active {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
   border-color: var(--color-primary);
 }
 
@@ -1463,17 +1487,17 @@ html.dark-theme .brutal-filter-chip--active {
   border-radius: 0;
 }
 
+.brutal-choice-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--text-primary);
+}
+
 html.dark-theme .brutal-choice-btn {
   background: rgba(200, 220, 255, 0.03);
   border-color: var(--border-dark-default);
   box-shadow:
     inset 0 1px 0 var(--border-dark-subtle),
     0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.brutal-choice-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--text-primary);
 }
 
 .brutal-choice-btn--selected {
@@ -1635,6 +1659,10 @@ html.dark-theme .brutal-segmented {
   border-right: none;
 }
 
+.brutal-segmented--sm .brutal-segmented__btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
 html.dark-theme .brutal-segmented__btn {
   border-color: var(--border-dark-default);
 }
@@ -1650,10 +1678,6 @@ html.dark-theme .brutal-segmented__btn {
 
 .brutal-segmented--sm {
   max-width: 180px;
-}
-
-.brutal-segmented--sm .brutal-segmented__btn {
-  padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .brutal-segmented--wide {
@@ -4066,13 +4090,6 @@ html.dark-theme .teaser-card {
 
 .legal-page-body li {
   margin-bottom: 0.75rem;
-}
-
-.legal-page-body a {
-  color: var(--color-primary);
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: border-color var(--transition-fast);
 }
 
 .legal-page-body a:hover {

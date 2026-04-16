@@ -1885,7 +1885,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       font-size: 14pt;
       font-weight: 700;
       letter-spacing: 0.1em;
-      color: #1a1a1a;
+      color: var(--text-primary);
     }
 
     .print-report-header__title {
@@ -1894,13 +1894,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #666;
+      color: var(--text-muted);
     }
 
     .print-report-header__date {
       font-family: monospace;
       font-size: 9pt;
-      color: #999;
+      color: var(--text-faded);
     }
 
     .print-report-footer {
@@ -1913,7 +1913,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     .print-report-footer p {
       font-family: monospace;
       font-size: 8pt;
-      color: #999;
+      color: var(--text-faded);
       margin: 0 0 4px;
       line-height: 1.4;
     }
@@ -1953,7 +1953,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     :global(.timeline-track .brutal-timeline-entry) {
-      color: #333;
+      color: var(--text-primary);
     }
 
     /* FAQ: readable, no collapse */

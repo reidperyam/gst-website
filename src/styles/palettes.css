@@ -11,6 +11,8 @@
   --alt1-color-success: #16a34a;
   --alt1-color-warning: #ca8a04;
   --alt1-color-error: #b91c1c;
+  --alt1-color-tertiary: #1e3a8a;
+  --alt1-color-tertiary-dark: #172554;
 
   /* 2: Indigo Signal — vivid violet + electric lime */
   --alt2-color-primary: #7c3aed;
@@ -19,6 +21,8 @@
   --alt2-color-success: #10b981;
   --alt2-color-warning: #e67e22;
   --alt2-color-error: #dc2626;
+  --alt2-color-tertiary: #5b21b6;
+  --alt2-color-tertiary-dark: #4c1d95;
 
   /* 3: Copper Forge — dark rust + electric cyan */
   --alt3-color-primary: #b45309;
@@ -27,6 +31,8 @@
   --alt3-color-success: #16a34a;
   --alt3-color-warning: #eab308;
   --alt3-color-error: #c0392b;
+  --alt3-color-tertiary: #78350f;
+  --alt3-color-tertiary-dark: #5c2809;
 
   /* 4: Jade Edge — vivid emerald + hot rose */
   --alt4-color-primary: #059669;
@@ -35,6 +41,8 @@
   --alt4-color-success: #15803d;
   --alt4-color-warning: #d97706;
   --alt4-color-error: #9f1239;
+  --alt4-color-tertiary: #065f46;
+  --alt4-color-tertiary-dark: #064e3b;
 
   /* 5: Shadow Garden — deep forest + electric violet */
   --alt5-color-primary: #166534;
@@ -43,6 +51,8 @@
   --alt5-color-success: #22c55e;
   --alt5-color-warning: #ca8a04;
   --alt5-color-error: #991b1b;
+  --alt5-color-tertiary: #14532d;
+  --alt5-color-tertiary-dark: #0e3d22;
   --alt5-black: #060606;
   --alt5-black-soft: #101010;
   --alt5-purple-muted: rgba(168, 85, 247, 0.3);
@@ -77,6 +87,8 @@ html.dark-theme {
   --alt1-color-success: #4ade80;
   --alt1-color-warning: #facc15;
   --alt1-color-error: #ef4444;
+  --alt1-color-tertiary: var(--alt1-color-primary);
+  --alt1-color-tertiary-dark: var(--alt1-color-primary-dark);
 
   /* 2: Indigo Signal */
   --alt2-color-primary: #a78bfa;
@@ -85,6 +97,8 @@ html.dark-theme {
   --alt2-color-success: #34d399;
   --alt2-color-warning: #f59e0b;
   --alt2-color-error: #f87171;
+  --alt2-color-tertiary: var(--alt2-color-primary);
+  --alt2-color-tertiary-dark: var(--alt2-color-primary-dark);
 
   /* 3: Copper Forge */
   --alt3-color-primary: #d97706;
@@ -93,6 +107,8 @@ html.dark-theme {
   --alt3-color-success: #4ade80;
   --alt3-color-warning: #fbbf24;
   --alt3-color-error: #ef4444;
+  --alt3-color-tertiary: var(--alt3-color-primary);
+  --alt3-color-tertiary-dark: var(--alt3-color-primary-dark);
 
   /* 4: Jade Edge */
   --alt4-color-primary: #10b981;
@@ -101,6 +117,8 @@ html.dark-theme {
   --alt4-color-success: #4ade80;
   --alt4-color-warning: #f59e0b;
   --alt4-color-error: #e11d48;
+  --alt4-color-tertiary: var(--alt4-color-primary);
+  --alt4-color-tertiary-dark: var(--alt4-color-primary-dark);
 
   /* 5: Shadow Garden */
   --alt5-color-primary: #22c55e;
@@ -109,6 +127,8 @@ html.dark-theme {
   --alt5-color-success: #4ade80;
   --alt5-color-warning: #eab308;
   --alt5-color-error: #ef4444;
+  --alt5-color-tertiary: var(--alt5-color-primary);
+  --alt5-color-tertiary-dark: var(--alt5-color-primary-dark);
   --alt5-black: #040404;
   --alt5-black-soft: #0a0a0a;
   --alt5-purple-muted: rgba(192, 132, 252, 0.25);
@@ -181,6 +201,8 @@ html.palette-1 {
   --color-success: var(--alt1-color-success);
   --color-warning: var(--alt1-color-warning);
   --color-error: var(--alt1-color-error);
+  --color-tertiary: var(--alt1-color-tertiary);
+  --color-tertiary-dark: var(--alt1-color-tertiary-dark);
   --color-authority: var(--alt1-color-authority);
   --color-distinguish: var(--alt1-color-distinguish);
   --color-subdued: var(--alt1-color-subdued);
@@ -200,6 +222,8 @@ html.palette-2 {
   --color-success: var(--alt2-color-success);
   --color-warning: var(--alt2-color-warning);
   --color-error: var(--alt2-color-error);
+  --color-tertiary: var(--alt2-color-tertiary);
+  --color-tertiary-dark: var(--alt2-color-tertiary-dark);
   --color-authority: var(--alt2-color-authority);
   --color-distinguish: var(--alt2-color-distinguish);
   --color-subdued: var(--alt2-color-subdued);
@@ -219,6 +243,8 @@ html.palette-3 {
   --color-success: var(--alt3-color-success);
   --color-warning: var(--alt3-color-warning);
   --color-error: var(--alt3-color-error);
+  --color-tertiary: var(--alt3-color-tertiary);
+  --color-tertiary-dark: var(--alt3-color-tertiary-dark);
   --color-authority: var(--alt3-color-authority);
   --color-distinguish: var(--alt3-color-distinguish);
   --color-subdued: var(--alt3-color-subdued);
@@ -238,6 +264,8 @@ html.palette-4 {
   --color-success: var(--alt4-color-success);
   --color-warning: var(--alt4-color-warning);
   --color-error: var(--alt4-color-error);
+  --color-tertiary: var(--alt4-color-tertiary);
+  --color-tertiary-dark: var(--alt4-color-tertiary-dark);
   --color-authority: var(--alt4-color-authority);
   --color-distinguish: var(--alt4-color-distinguish);
   --color-subdued: var(--alt4-color-subdued);
@@ -257,6 +285,8 @@ html.palette-5 {
   --color-success: var(--alt5-color-success);
   --color-warning: var(--alt5-color-warning);
   --color-error: var(--alt5-color-error);
+  --color-tertiary: var(--alt5-color-tertiary);
+  --color-tertiary-dark: var(--alt5-color-tertiary-dark);
   --color-authority: var(--alt5-color-authority);
   --color-distinguish: var(--alt5-color-distinguish);
   --color-subdued: var(--alt5-color-subdued);

@@ -25,15 +25,15 @@ export const GrowthStageSchema = z.enum(GROWTH_STAGE_VALUES);
 
 /** Engagement type values. */
 export const ENGAGEMENT_TYPE_VALUES = [
-  'Value Creation - Growth',
-  'Value Creation - Integration',
-  'Value Creation - Modernization',
-  'Value Creation - Turnaround',
-  'Early Stage Assessment',
+  'Value Creation',
   'Technical Assessment',
-  'Buy-Side Technical Diligence',
+  'Technical Diligence',
 ] as const;
 export const EngagementTypeSchema = z.enum(ENGAGEMENT_TYPE_VALUES);
+
+/** Engagement category values (Buy-Side, Sell-Side, Value Creation). */
+export const ENGAGEMENT_CATEGORY_VALUES = ['Buy-Side', 'Sell-Side'] as const;
+export const EngagementCategorySchema = z.enum(ENGAGEMENT_CATEGORY_VALUES);
 
 /** Columns that projects can be sorted by. */
 export const SORTABLE_COLUMNS = ['codeName', 'theme', 'arr', 'growthStage', 'year'] as const;
@@ -57,12 +57,11 @@ export const ProjectSchema = z.object({
   year: z.number().int().min(1900).max(2100),
   technologies: z.array(z.string()).readonly(),
   engagementType: EngagementTypeSchema.optional(),
-  engagementTypeTag: z.string().optional(),
-  engagementTypeDescription: z.string().optional(),
   // challenge and solution use .nullish() because existing records use
   // `null` to mean "field intentionally empty" (10 of 57 projects today).
   challenge: z.string().nullish(),
   solution: z.string().nullish(),
+  engagementCategory: EngagementCategorySchema.optional(),
 });
 
 /** Array of projects — the shape of `src/data/ma-portfolio/projects.json`. */
@@ -72,6 +71,7 @@ export const ProjectsArraySchema = z.array(ProjectSchema);
 export type Currency = z.infer<typeof CurrencySchema>;
 export type GrowthStage = z.infer<typeof GrowthStageSchema>;
 export type EngagementType = z.infer<typeof EngagementTypeSchema>;
+export type EngagementCategory = z.infer<typeof EngagementCategorySchema>;
 export type SortableColumn = z.infer<typeof SortableColumnSchema>;
 export type SortDirection = z.infer<typeof SortDirectionSchema>;
 export type Project = z.infer<typeof ProjectSchema>;

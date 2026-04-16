@@ -1353,7 +1353,7 @@ trackPageView('techpar', 'TechPar | GST');
   }
 
   .tp-tab--active {
-    color: var(--color-primary);
+    color: var(--color-tertiary);
     border-bottom-color: var(--color-primary);
     background: var(--accent-light-bg);
   }
@@ -1402,7 +1402,7 @@ trackPageView('techpar', 'TechPar | GST');
   }
 
   .tp-step {
-    color: var(--color-primary);
+    color: var(--color-tertiary);
     display: block;
     margin-bottom: var(--spacing-sm);
   }
@@ -1432,16 +1432,6 @@ trackPageView('techpar', 'TechPar | GST');
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-  }
-
-  .tp-section:has(.tp-sec-label--cat) > .tp-field,
-  .tp-section:has(.tp-sec-label--cat) > [data-rd-quick],
-  .tp-section:has(.tp-sec-label--cat) > [data-rd-deep],
-  .tp-section:has(.tp-sec-label--cat) > .tp-deep-wrap,
-  .tp-section:has(.tp-sec-label--cat) > .tp-hint {
-    padding-left: var(--spacing-lg);
-    border-left: 2px solid var(--border-light);
-    margin-left: var(--spacing-xs);
   }
 
   .tp-cat-dot {
@@ -1692,6 +1682,10 @@ trackPageView('techpar', 'TechPar | GST');
     border-right: none;
   }
 
+  :global(html.dark-theme) .tp-arr-chip {
+    border-color: var(--border-dark-default);
+  }
+
   .tp-arr-chip:hover:not(.tp-arr-chip--active) {
     color: var(--text-secondary);
   }
@@ -1753,6 +1747,10 @@ trackPageView('techpar', 'TechPar | GST');
     color: var(--color-primary);
   }
 
+  :global(html.dark-theme) .tp-stage-card {
+    border-color: var(--border-dark-default);
+  }
+
   .tp-stage-card:hover:not(.tp-stage-card--active) {
     border-color: var(--color-primary);
   }
@@ -1811,6 +1809,10 @@ trackPageView('techpar', 'TechPar | GST');
 
   .tp-seg--wide {
     max-width: 440px;
+  }
+
+  :global(html.dark-theme) .tp-seg__btn {
+    border-color: var(--border-dark-default);
   }
 
   .tp-seg__btn:hover:not(.tp-seg__btn--active) {
@@ -2812,6 +2814,20 @@ trackPageView('techpar', 'TechPar | GST');
     border-color: var(--border-dark-default);
   }
 
+  :global(html.dark-theme) .tp-deep-wrap {
+    border-color: var(--border-dark-default);
+  }
+
+  .tp-section:has(.tp-sec-label--cat) > .tp-field,
+  .tp-section:has(.tp-sec-label--cat) > [data-rd-quick],
+  .tp-section:has(.tp-sec-label--cat) > [data-rd-deep],
+  .tp-section:has(.tp-sec-label--cat) > .tp-deep-wrap,
+  .tp-section:has(.tp-sec-label--cat) > .tp-hint {
+    padding-left: var(--spacing-lg);
+    border-left: 2px solid var(--border-light);
+    margin-left: var(--spacing-xs);
+  }
+
   :global(html.dark-theme) .tp-section:has(.tp-sec-label--cat) > .tp-field,
   :global(html.dark-theme) .tp-section:has(.tp-sec-label--cat) > [data-rd-quick],
   :global(html.dark-theme) .tp-section:has(.tp-sec-label--cat) > [data-rd-deep],
@@ -2829,23 +2845,7 @@ trackPageView('techpar', 'TechPar | GST');
     border-color: var(--border-dark-default);
   }
 
-  :global(html.dark-theme) .tp-arr-chip {
-    border-color: var(--border-dark-default);
-  }
-
-  :global(html.dark-theme) .tp-stage-card {
-    border-color: var(--border-dark-default);
-  }
-
   :global(html.dark-theme) .tp-seg {
-    border-color: var(--border-dark-default);
-  }
-
-  :global(html.dark-theme) .tp-seg__btn {
-    border-color: var(--border-dark-default);
-  }
-
-  :global(html.dark-theme) .tp-deep-wrap {
     border-color: var(--border-dark-default);
   }
 
@@ -3106,6 +3106,10 @@ trackPageView('techpar', 'TechPar | GST');
       display: none !important;
     }
 
+    .tp-panel__header {
+      display: none !important;
+    }
+
     /* ── Trajectory: include on its own page ─────────────────── */
     .tp-panel[data-panel='trajectory'] {
       display: block !important;
@@ -3134,10 +3138,6 @@ trackPageView('techpar', 'TechPar | GST');
     }
 
     .tp-traj-dot {
-      display: none !important;
-    }
-
-    .tp-panel__header {
       display: none !important;
     }
 
@@ -3200,7 +3200,7 @@ trackPageView('techpar', 'TechPar | GST');
 
     .tp-kpi-hero__num {
       font-size: 3rem !important;
-      color: #111 !important;
+      color: var(--text-primary) !important;
     }
 
     /* ── Signal card ─────────────────────────────────────────── */
@@ -3216,7 +3216,7 @@ trackPageView('techpar', 'TechPar | GST');
     }
 
     .tp-signal :global(.tp-sig-mval) {
-      color: #111 !important;
+      color: var(--text-primary) !important;
     }
 
     /* ── KPI grid ────────────────────────────────────────────── */
@@ -3226,11 +3226,11 @@ trackPageView('techpar', 'TechPar | GST');
     }
 
     .tp-kpi-grid :global(.tp-kpi-val) {
-      color: #111 !important;
+      color: var(--text-primary) !important;
     }
 
     .tp-kpi-grid :global(.tp-kpi-sub) {
-      border-color: #ccc !important;
+      border-color: var(--border-light) !important;
     }
 
     /* ── Recommendations ─────────────────────────────────────── */
@@ -3300,12 +3300,12 @@ trackPageView('techpar', 'TechPar | GST');
     .tp-cat-section :global(.tp-cat-bench),
     .tp-bench-table-head,
     .tp-industry-note {
-      color: #333 !important;
+      color: var(--text-primary) !important;
     }
 
     .tp-signal__head,
     .tp-cat-section :global(.tp-cat-pct) {
-      color: #111 !important;
+      color: var(--text-primary) !important;
     }
 
     /* ── Methodology: force visible ──────────────────────────── */
@@ -3314,7 +3314,7 @@ trackPageView('techpar', 'TechPar | GST');
     }
 
     .tool-methodology__body {
-      border-color: #ccc !important;
+      border-color: var(--border-light) !important;
     }
 
     /* ── Page margins ────────────────────────────────────────── */

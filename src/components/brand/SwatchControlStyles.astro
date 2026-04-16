@@ -12,6 +12,10 @@
   /* ── JS-injected swatch controls (:global required) ────────── */
 
   :global(.swatch-controls) {
+    --swatch-label-r: #c44040;
+    --swatch-label-g: #16a34a;
+    --swatch-label-b: #3b82f6;
+
     margin-top: var(--spacing-xs);
     display: flex;
     flex-direction: column;
@@ -104,13 +108,13 @@
   }
 
   :global(.swatch-slider-label--r) {
-    color: #c44040;
+    color: var(--swatch-label-r);
   }
   :global(.swatch-slider-label--g) {
-    color: #16a34a;
+    color: var(--swatch-label-g);
   }
   :global(.swatch-slider-label--b) {
-    color: #3b82f6;
+    color: var(--swatch-label-b);
   }
 
   :global(.swatch-slider) {

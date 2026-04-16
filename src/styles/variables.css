@@ -9,6 +9,8 @@
   --color-primary-dark: #04a87a;
   --color-secondary: #cc8800;
   --color-secondary-dark: #ffaa33;
+  --color-tertiary: #02724f;
+  --color-tertiary-dark: #01633f;
 
   /* Editor's Pick */
   --color-editors-pick: #b26622;
@@ -30,8 +32,8 @@
   /* Text Colors - Light Theme */
   --text-light-primary: rgba(26, 26, 26, 0.95);
   --text-light-secondary: rgba(26, 26, 26, 0.7);
-  --text-light-muted: rgba(26, 26, 26, 0.6);
-  --text-light-faded: rgba(26, 26, 26, 0.6);
+  --text-light-muted: rgba(26, 26, 26, 0.65);
+  --text-light-faded: rgba(26, 26, 26, 0.65);
 
   /* Text Colors - Dark Theme */
   --text-dark-primary: rgba(245, 245, 245, 0.95);
@@ -260,6 +262,8 @@ html.dark-theme {
   --text-muted: var(--text-dark-muted);
   --text-faded: var(--text-dark-faded);
   --color-secondary: var(--color-secondary-dark);
+  --color-tertiary: var(--color-primary);
+  --color-tertiary-dark: var(--color-primary-dark);
   --color-editors-pick: #d4923a;
   --color-editors-pick-hover: #b26622;
 
@@ -283,6 +287,8 @@ html.dark-theme {
   /* Accent & UI Elements */
   --filter-chip-bg: var(--color-primary-10);
   --filter-chip-bg-hover: var(--color-primary-15);
+  --filter-chip-bg-active: var(--color-tertiary);
+  --filter-chip-text-active: var(--bg-light);
   --filter-chip-border: var(--color-primary-20);
   --filter-button-bg: var(--color-primary-10);
   --filter-button-bg-hover: var(--color-primary-15);

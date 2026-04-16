@@ -4,17 +4,8 @@ import type { Project, EngagementType } from '../types/portfolio';
  * Engagement type categorization constants
  */
 export const ENGAGEMENT_CATEGORIES = {
-  valueCreation: [
-    'Value Creation - Growth',
-    'Value Creation - Integration',
-    'Value Creation - Modernization',
-    'Value Creation - Turnaround',
-  ],
-  technicalDiligence: [
-    'Early Stage Assessment',
-    'Technical Assessment',
-    'Buy-Side Technical Diligence',
-  ],
+  valueCreation: ['Value Creation'],
+  technicalDiligence: ['Technical Assessment', 'Technical Diligence'],
 } as const;
 
 /**
@@ -48,10 +39,8 @@ export const MATURE_KEYWORDS = [
  */
 export interface FilterCriteria {
   search: string;
-  stage: string; // 'all' | 'growth-category' | 'mature-category' | specific stage name
   theme: string; // 'all' | specific theme name
-  year: string; // 'all' | year as string
-  engagement: string; // 'all' | 'value-creation' | 'technical-diligence'
+  engagement: string; // 'all' | specific engagementCategory value
 }
 
 /**
@@ -104,8 +93,8 @@ export function isTechnicalDiligenceEngagement(engagementType: string | undefine
  * @param engagementType - The engagement type to categorize (may be undefined)
  * @returns 'value-creation' for growth engagements, 'technical-diligence' for assessment engagements, 'other' for unknown
  * @example
- * categorizeEngagementType('Value Creation - Growth') // returns 'value-creation'
- * categorizeEngagementType('Early Stage Assessment') // returns 'technical-diligence'
+ * categorizeEngagementType('Value Creation') // returns 'value-creation'
+ * categorizeEngagementType('Technical Diligence') // returns 'technical-diligence'
  */
 export function categorizeEngagementType(
   engagementType: string | undefined
@@ -176,6 +165,21 @@ export function getUniqueEngagementTypes(projects: Project[]): EngagementType[] 
 }
 
 /**
+ * Gets all unique engagement categories from a list of projects
+ * @param projects - Array of projects to analyze
+ * @returns Sorted array of unique engagement category strings
+ */
+export function getUniqueEngagementCategories(projects: Project[]): string[] {
+  return [
+    ...new Set(
+      projects
+        .map((p) => p.engagementCategory)
+        .filter((c): c is NonNullable<typeof c> => c !== undefined && c !== null)
+    ),
+  ].sort();
+}
+
+/**
  * Extracts searchable text from a project
  * @param project - Project to extract text from
  * @returns Combined searchable text
@@ -190,16 +194,9 @@ export function createSearchableText(project: Project): string {
  * Filters projects based on provided criteria
  * @param projects - Array of projects to filter
  * @param criteria - Filter criteria to apply
- * @param growthStages - List of growth stage values
- * @param matureStages - List of mature stage values
  * @returns Filtered array of projects
  */
-export function filterProjects(
-  projects: Project[],
-  criteria: FilterCriteria,
-  growthStages: string[] = [],
-  matureStages: string[] = []
-): Project[] {
+export function filterProjects(projects: Project[], criteria: FilterCriteria): Project[] {
   return projects.filter((project) => {
     // Search filter
     if (criteria.search) {
@@ -209,38 +206,14 @@ export function filterProjects(
       if (!searchableText.includes(searchLower)) return false;
     }
 
-    // Stage filter - handle category filtering
-    if (criteria.stage !== 'all') {
-      if (criteria.stage === 'growth-category') {
-        if (!growthStages.includes(project.growthStage)) return false;
-      } else if (criteria.stage === 'mature-category') {
-        if (!matureStages.includes(project.growthStage)) return false;
-      } else if (project.growthStage !== criteria.stage) {
-        return false;
-      }
-    }
-
     // Theme filter
     if (criteria.theme !== 'all' && project.theme !== criteria.theme) {
       return false;
     }
 
-    // Year filter
-    if (criteria.year !== 'all' && project.year.toString() !== criteria.year) {
-      return false;
-    }
-
-    // Engagement type filter - categorized by type
+    // Engagement category filter (engagementCategory field)
     if (criteria.engagement !== 'all') {
-      if (criteria.engagement === 'value-creation') {
-        if (!isValueCreationEngagement(project.engagementType)) {
-          return false;
-        }
-      } else if (criteria.engagement === 'technical-diligence') {
-        if (!isTechnicalDiligenceEngagement(project.engagementType)) {
-          return false;
-        }
-      }
+      if (project.engagementCategory !== criteria.engagement) return false;
     }
 
     return true;
