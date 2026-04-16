@@ -12,7 +12,6 @@ Read `src/data/ma-portfolio/projects.json`. Extract all unique values currently 
 - `theme`
 - `growthStage`
 - `engagementType`
-- `engagementTypeTag`
 - `engagementCategory`
 
 You MUST use only existing values for these enumerated fields. Do not invent new ones. Also note the exact field structure of an existing record — this is your schema contract.
@@ -35,8 +34,6 @@ Read the PDF at `$ARGUMENTS`. Extract the following:
 | `year`                      | Year of the engagement / report publication                                                                   |
 | `technologies`              | Core platform technologies and key integrations — concise string array                                        |
 | `engagementType`            | Use existing value from Step 1                                                                                |
-| `engagementTypeTag`         | Matching tag from Step 1                                                                                      |
-| `engagementTypeDescription` | One-line description of the engagement type                                                                   |
 | `challenge`                 | 1–2 sentences: the core technology assessment challenge                                                       |
 | `solution`                  | 1–2 sentences: key findings and conclusions                                                                   |
 | `engagementCategory`        | Use existing value from Step 1                                                                                |
