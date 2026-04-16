@@ -1067,6 +1067,25 @@ html.dark-theme .brutal-callout--warning {
   border: 1px solid var(--color-authority);
 }
 
+@media (max-width: 480px) {
+  .brutal-bench-table tr {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .brutal-bench-table td {
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .brutal-bench-table td:last-child {
+    text-align: left;
+    margin-top: var(--spacing-xs);
+  }
+}
+
 /* ==============================
    Brutalist Skeleton Loading
    ============================== */
@@ -2406,6 +2425,14 @@ html.dark-theme .brutal-rec-card {
   flex-wrap: wrap;
 }
 
+.brutal-rec-card__text {
+  flex-basis: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
 .brutal-rec-card__desc {
   font-size: var(--text-sm);
   font-family: monospace;
@@ -2422,6 +2449,12 @@ html.dark-theme .brutal-rec-card {
 .brutal-rec-card.is-collapsed .brutal-rec-card__desc {
   max-height: 0;
   opacity: 0;
+}
+
+@media (max-width: 480px) {
+  .brutal-rec-card.is-collapsed {
+    padding: var(--spacing-sm);
+  }
 }
 
 .brutal-rec-card__badge {
