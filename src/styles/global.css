@@ -1906,7 +1906,6 @@ html.dark-theme .brutal-filter-drawer {
 }
 
 .brutal-slider__input::-webkit-slider-thumb {
-  -webkit-appearance: none;
   appearance: none;
   width: 16px;
   height: 16px;
@@ -1960,7 +1959,6 @@ html.dark-theme .brutal-filter-drawer {
 
 .brutal-slider__direct::-webkit-inner-spin-button,
 .brutal-slider__direct::-webkit-outer-spin-button {
-  -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }
@@ -2813,7 +2811,6 @@ html.dark-theme .brutal-na-btn:hover {
 }
 
 .brutal-search__input::-webkit-search-cancel-button {
-  -webkit-appearance: none;
   appearance: none;
 }
 
@@ -3706,7 +3703,6 @@ html.dark-theme .brutal-bottom-sheet__handle-bar {
 }
 
 .calc-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
   appearance: none;
   width: 20px;
   height: 20px;
@@ -3769,7 +3765,6 @@ html.dark-theme .calc-slider::-moz-range-track {
 
 .hint-input::-webkit-inner-spin-button,
 .hint-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }
