@@ -74,6 +74,10 @@ import { palettes } from '../../data/palettes';
     </button>
   </div>
   <div class="palette-panel__body" id="panel-body">
+    <div class="palette-panel__grab-handle" id="panel-grab-handle" aria-hidden="true">
+      <span class="palette-panel__grab-bar"></span>
+    </div>
+    <div class="palette-panel__mobile-header" id="panel-mobile-header"></div>
     <div class="palette-panel__header">
       <span class="brutal-label" id="panel-palette-name">0. Current</span>
       <button
@@ -166,6 +170,24 @@ import { palettes } from '../../data/palettes';
     </div>
   </div>
 </div>
+
+<div class="palette-panel__backdrop" id="panel-backdrop" hidden></div>
+<button
+  class="palette-panel__fab"
+  id="panel-fab"
+  type="button"
+  aria-label="Open palette editor"
+  data-testid="palette-fab"
+>
+  <svg viewBox="0 0 64 64" fill="none" class="palette-panel__fab-icon"
+    ><path
+      d="M32 12 L52 52 L12 52 Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="6"
+      stroke-linejoin="miter"></path></svg
+  >
+</button>
 
 <script is:inline>
   // Set popout active state before transitions fire to prevent animation on page load
@@ -398,17 +420,183 @@ import { palettes } from '../../data/palettes';
     display: none;
   }
 
+  /* ── Mobile bottom sheet elements (hidden on desktop) ────── */
+  .palette-panel__grab-handle {
+    display: none;
+  }
+
+  .palette-panel__grab-bar {
+    width: 40px;
+    height: 4px;
+    background: rgba(128, 128, 128, 0.4);
+    border-radius: 2px;
+  }
+
+  .palette-panel__mobile-header {
+    display: none;
+  }
+
+  .palette-panel__backdrop {
+    display: none;
+  }
+
+  .palette-panel__fab {
+    display: none;
+  }
+
+  .palette-panel__fab-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* ── Visibility gating for FAB + backdrop (same as panel) ── */
+  :global(html:not(.palette-popped-out, [data-palette-always])) .palette-panel__fab,
+  :global(html:not(.palette-popped-out, [data-palette-always])) .palette-panel__backdrop {
+    display: none !important;
+  }
+
+  /* ── Mobile: bottom sheet layout ───────────────────────── */
   @media (max-width: 768px) {
+    /* Hide desktop-only elements */
     .palette-panel__resize {
       display: none !important;
     }
 
-    .palette-panel__body {
-      width: 280px;
+    .palette-panel__edge {
+      display: none !important;
     }
 
+    /* Convert panel to bottom sheet */
+    .palette-panel {
+      inset: auto 0 0;
+      transform: translateY(100%);
+      transition: transform var(--transition-slow);
+      flex-direction: column;
+    }
+
+    .palette-panel.is-open {
+      transform: translateY(0);
+    }
+
+    /* Body becomes full-width sheet content */
+    .palette-panel__body {
+      width: 100%;
+      max-height: 60vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      border: none;
+      border-top: 2px solid var(--color-primary);
+      border-right: none;
+    }
+
+    /* Always show body when is-open on mobile (desktop uses display toggle) */
+    .palette-panel.is-open .palette-panel__body {
+      display: block;
+    }
+
+    /* Grab handle */
+    .palette-panel__grab-handle {
+      display: flex;
+      justify-content: center;
+      padding: var(--spacing-sm) 0 var(--spacing-xs);
+      cursor: grab;
+      touch-action: none;
+    }
+
+    /* Mobile header — horizontal tab row + controls */
+    .palette-panel__mobile-header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 var(--spacing-lg) var(--spacing-sm);
+      scrollbar-width: none;
+    }
+
+    .palette-panel__mobile-header::-webkit-scrollbar {
+      display: none;
+    }
+
+    .palette-panel__mobile-header .palette-panel__tab {
+      flex-shrink: 0;
+      min-width: 44px;
+      min-height: 44px;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      border-right: 1px solid var(--border-light);
+    }
+
+    .palette-panel__mobile-header .palette-panel__tab--active {
+      border-color: var(--color-primary);
+      border-bottom-width: 2px;
+    }
+
+    .palette-panel__mobile-header .palette-panel__theme-toggle,
+    .palette-panel__mobile-header .palette-panel__popout {
+      flex-shrink: 0;
+      min-width: 44px;
+      min-height: 44px;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      margin-top: 0;
+    }
+
+    /* Swatch grid — 2 columns on mobile */
     .palette-panel__swatch-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Backdrop overlay */
+    .palette-panel__backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: calc(var(--z-palette-panel) - 1);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-slow);
+    }
+
+    .palette-panel__backdrop.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* FAB — floating action button */
+    .palette-panel__fab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: var(--bg-light);
+      border: none;
+      box-shadow: var(--shadow-md);
+      z-index: var(--z-palette-panel);
+      cursor: pointer;
+      transition:
+        transform var(--transition-fast),
+        opacity var(--transition-fast),
+        bottom var(--transition-fast);
+    }
+
+    .palette-panel__fab:active {
+      transform: scale(0.92);
+    }
+
+    /* Hide FAB when sheet is open */
+    .palette-panel.is-open ~ .palette-panel__fab {
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
     }
   }
 </style>
