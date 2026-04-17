@@ -455,14 +455,18 @@ document.addEventListener('DOMContentLoaded', () => {
           /* ignore */
         }
         if (isMobile()) {
-          if (wasPopped) {
-            // Popping in: close sheet and hide FAB
+          const isBrandPage = html.hasAttribute('data-palette-always');
+          if (wasPopped && !isBrandPage) {
+            // Popping in on non-brand page: close sheet and hide FAB
+            // (CSS will also hide them, but clean up state explicitly)
             closeMobileSheet();
             if (fab) fab.style.display = 'none';
-          } else {
-            // Popping out: show FAB
+          } else if (!wasPopped && !isBrandPage) {
+            // Popping out on non-brand page: show FAB
             if (fab) fab.style.display = '';
           }
+          // On brand page: FAB stays visible regardless — the panel is
+          // always available there. Popping in only affects other pages.
         }
       });
     }
@@ -616,10 +620,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
       if (isMobile()) {
-        if (wasPopped) {
+        const isBrandPage = document.documentElement.hasAttribute('data-palette-always');
+        if (wasPopped && !isBrandPage) {
           closeMobileSheet();
           if (fab) fab.style.display = 'none';
-        } else {
+        } else if (!wasPopped && !isBrandPage) {
           if (fab) fab.style.display = '';
         }
       }
