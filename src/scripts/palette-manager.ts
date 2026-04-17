@@ -336,6 +336,24 @@ document.addEventListener('DOMContentLoaded', () => {
   injectControls();
   readAndPopulate();
 
+  // Mobile: tap swatch to expand its controls (only one at a time)
+  document.querySelectorAll<HTMLElement>('.palette-panel .brand-swatch').forEach((swatch) => {
+    swatch.addEventListener('click', (e) => {
+      if (!isMobile()) return;
+      // Don't toggle if clicking an input/button inside controls
+      const target = e.target as HTMLElement;
+      if (target.closest('.swatch-controls')) return;
+
+      const wasExpanded = swatch.classList.contains('swatch-expanded');
+      // Collapse any other expanded swatch
+      document
+        .querySelectorAll<HTMLElement>('.palette-panel .brand-swatch.swatch-expanded')
+        .forEach((s) => s.classList.remove('swatch-expanded'));
+      // Toggle this one
+      if (!wasExpanded) swatch.classList.add('swatch-expanded');
+    });
+  });
+
   // Palette tab switching
   document.querySelectorAll<HTMLElement>('#palette-tabs .palette-panel__tab').forEach((tab) => {
     tab.addEventListener('click', () => {
