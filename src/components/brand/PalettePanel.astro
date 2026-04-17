@@ -565,7 +565,7 @@ import { palettes } from '../../data/palettes';
       pointer-events: auto;
     }
 
-    /* FAB — floating action button */
+    /* FAB — floating action button (triangle to match delta brand) */
     .palette-panel__fab {
       display: flex;
       align-items: center;
@@ -575,12 +575,12 @@ import { palettes } from '../../data/palettes';
       right: 16px;
       width: 56px;
       height: 56px;
-      border-radius: 50%;
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
       background: var(--color-primary);
       color: var(--bg-light);
       border: none;
-      box-shadow: var(--shadow-md);
       z-index: var(--z-palette-panel);
+      padding-top: 12px; /* shift icon into triangle's visual center */
       cursor: pointer;
       transition:
         transform var(--transition-fast),
