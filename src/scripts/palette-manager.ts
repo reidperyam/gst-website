@@ -457,10 +457,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch {
           /* ignore */
         }
-        // Always close the mobile sheet when popping in — backdrop and
-        // body scroll lock must be cleaned up regardless of page.
-        if (wasPopped && isMobile()) {
-          closeMobileSheet();
+        if (isMobile()) {
+          if (wasPopped) {
+            // Popping in: close sheet and hide FAB
+            closeMobileSheet();
+            if (fab) fab.style.display = 'none';
+          } else {
+            // Popping out: show FAB
+            if (fab) fab.style.display = '';
+          }
         }
       });
     }
@@ -596,9 +601,13 @@ document.addEventListener('DOMContentLoaded', () => {
           level: 'warning',
         });
       }
-      // Always close mobile sheet when popping in
-      if (wasPopped && isMobile()) {
-        closeMobileSheet();
+      if (isMobile()) {
+        if (wasPopped) {
+          closeMobileSheet();
+          if (fab) fab.style.display = 'none';
+        } else {
+          if (fab) fab.style.display = '';
+        }
       }
     });
   }
