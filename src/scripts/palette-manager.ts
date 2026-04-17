@@ -439,6 +439,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch {
           /* ignore */
         }
+        // If popping IN on a non-brand page, close the mobile sheet —
+        // otherwise the sheet, backdrop, and body scroll lock become
+        // orphaned behind the CSS visibility rule that hides the panel.
+        const isBrandPage = html.hasAttribute('data-palette-always');
+        if (wasPopped && !isBrandPage && isMobile()) {
+          closeMobileSheet();
+        }
       });
     }
   }
@@ -572,6 +579,11 @@ document.addEventListener('DOMContentLoaded', () => {
           message: 'localStorage write failed',
           level: 'warning',
         });
+      }
+      // Close mobile sheet when popping in on a non-brand page
+      const isBrandPage = document.documentElement.hasAttribute('data-palette-always');
+      if (wasPopped && !isBrandPage && isMobile()) {
+        closeMobileSheet();
       }
     });
   }
