@@ -570,11 +570,12 @@ trackPageView('diligence-machine', 'The Diligence Machine | GST');
     syncMultiRegion,
     MULTI_REGION_ID,
     generateScript,
+    type UserInputs,
+    type GeneratedScript,
   } from '../../../../utils/diligence-engine';
   import { getOptionLabel, WIZARD_STEPS } from '../../../../data/diligence-machine/wizard-config';
   import { trackCTA, trackEvent } from '../../../../utils/analytics';
   import { copyWithFeedback } from '../../../../utils/copy-feedback';
-  import type { UserInputs, GeneratedScript } from '../../../../utils/diligence-engine';
 
   // Analytics: fire dm_start once per page load on first wizard interaction
   let dmStartFired = false;
