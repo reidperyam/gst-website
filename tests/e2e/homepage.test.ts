@@ -49,4 +49,16 @@ test.describe('Homepage', () => {
     });
     expect(paddingBottom).toBe('12px'); // 0.75rem = 12px at default 16px root
   });
+
+  // Hey Claude! I am explicitly telling you not to mess with this!!!
+  test('should have 0.5rem bottom padding on footer at desktop width', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    const paddingBottom = await page.evaluate(() => {
+      const footer = document.querySelector('footer');
+      return footer ? getComputedStyle(footer).paddingBottom : '';
+    });
+    expect(paddingBottom).toBe('8px'); // 0.5rem = 8px at default 16px root
+  });
 });
