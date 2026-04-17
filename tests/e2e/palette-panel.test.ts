@@ -118,7 +118,8 @@ test.describe('Palette Panel', () => {
       });
 
       const result = await page.evaluate(() => {
-        const active = document.querySelectorAll('.palette-panel__tab--active');
+        // Scope to desktop edge tabs — mobile clones also have active state
+        const active = document.querySelectorAll('#palette-tabs .palette-panel__tab--active');
         return { count: active.length, palette: (active[0] as HTMLElement)?.dataset.palette };
       });
       expect(result).toEqual({ count: 1, palette: '3' });
@@ -226,6 +227,52 @@ test.describe('Palette Panel', () => {
         () => document.documentElement.style.getPropertyValue('--color-primary') === '',
         { timeout: 10000 }
       );
+    });
+  });
+
+  test.describe('Cross-Page Popout (Mobile)', () => {
+    test('popout toggle persists to localStorage', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      await clickPanelButton(page, 'panel-popout-toggle');
+      await page.waitForFunction(() => localStorage.getItem('palette-popped-out') === 'true', {
+        timeout: 10000,
+      });
+    });
+
+    test('pop-in toggle persists false to localStorage', async ({ page }) => {
+      await page.goto('/brand', { waitUntil: 'domcontentloaded' });
+      // Set to popped out first
+      await page.evaluate(() => localStorage.setItem('palette-popped-out', 'true'));
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      // Toggle to pop in
+      await clickPanelButton(page, 'panel-popout-toggle');
+      await page.waitForFunction(() => localStorage.getItem('palette-popped-out') === 'false', {
+        timeout: 10000,
+      });
+    });
+
+    test('panel hidden on non-brand page without popout at mobile viewport', async ({ page }) => {
+      await page.setViewportSize({ width: 480, height: 800 });
+      await page.goto('/services', { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => localStorage.setItem('palette-popped-out', 'false'));
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      const display = await page.evaluate(() => {
+        const panel = document.getElementById('palette-panel');
+        return panel ? getComputedStyle(panel).display : '';
+      });
+      expect(display).toBe('none');
+    });
+
+    test('FAB visible on non-brand page with popout at mobile viewport', async ({ page }) => {
+      await page.setViewportSize({ width: 480, height: 800 });
+      await page.goto('/services', { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => localStorage.setItem('palette-popped-out', 'true'));
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      const display = await page.evaluate(() => {
+        const fab = document.getElementById('panel-fab');
+        return fab ? getComputedStyle(fab).display : '';
+      });
+      expect(display).toBe('flex');
     });
   });
 });
