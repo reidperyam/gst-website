@@ -544,6 +544,16 @@ import { palettes } from '../../data/palettes';
       transform: rotate(0deg);
     }
 
+    /* Hide popout on brand page — it has no visible effect there.
+       Theme toggle expands to fill the full row. */
+    :global(html[data-palette-always]) .palette-panel__mobile-header .palette-panel__popout {
+      display: none;
+    }
+
+    :global(html[data-palette-always]) .palette-panel__mobile-header .palette-panel__theme-toggle {
+      grid-column: span 6;
+    }
+
     /* Swatch grid — 3 compact columns on mobile, no horizontal overflow */
     .palette-panel__swatch-grid {
       grid-template-columns: repeat(3, 1fr);
