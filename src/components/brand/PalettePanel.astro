@@ -399,8 +399,16 @@ import { palettes } from '../../data/palettes';
   }
 
   @media (max-width: 768px) {
-    .palette-panel {
+    .palette-panel__resize {
       display: none !important;
+    }
+
+    .palette-panel__body {
+      width: 280px;
+    }
+
+    .palette-panel__swatch-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

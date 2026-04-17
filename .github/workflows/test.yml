@@ -33,13 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     # pull-requests: read lets dorny/paths-filter use the GitHub API on PR
-    # events instead of falling back to git-based detection. actions: write
-    # is required by fkirc/skip-duplicate-actions to query prior workflow
-    # runs via the REST API.
+    # events instead of falling back to git-based detection.
     permissions:
       contents: read
       pull-requests: read
-      actions: write
+      actions: read
     outputs:
       # `code` — true if this push/PR touches non-docs files (see filters)
       # `duplicate` — true if a prior workflow run already completed
@@ -56,28 +54,35 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - id: skip_dup
-        uses: fkirc/skip-duplicate-actions@v5
-        with:
-          # Dedupe on tree hash across two scenarios:
-          #
-          # 1. Successive duplicate (post-hoc): push to dev passes, later
-          #    PR(dev→master) fires on a synthetic merge SHA with identical
-          #    tree. `skip_after_successful_duplicate: true` catches this.
-          #
-          # 2. Concurrent duplicate (simultaneous): push to dev AND open PR
-          #    fire both events on the same commit. Without this handling,
-          #    the workflow runs twice in parallel with the same content.
-          #    `same_content_newer` skips whichever run started second
-          #    (by created_at), so exactly one run does the work and the
-          #    other short-circuits. Combined with the event_name-scoped
-          #    concurrency group above, neither run cancels the other.
-          #
-          # Required status checks still report success because each
-          # downstream job has a step-level "Skipped" fallback that runs
-          # when should_run != 'true'.
-          concurrent_skipping: 'same_content_newer'
-          skip_after_successful_duplicate: 'true'
-          do_not_skip: '["workflow_dispatch", "schedule", "merge_group"]'
+        # Check if a prior workflow run already passed with the same tree
+        # hash. Replaces fkirc/skip-duplicate-actions (Node 20 deprecated).
+        # Queries the GitHub API for recent successful runs of this workflow,
+        # compares their head SHA's tree hash against the current commit's
+        # tree hash. If a match is found, the run is a duplicate.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          CURRENT_TREE=$(git rev-parse HEAD^{tree})
+          echo "current_tree=$CURRENT_TREE"
+
+          SHOULD_SKIP=false
+
+          # Query last 10 successful runs of this workflow
+          SHAS=$(gh api "repos/${{ github.repository }}/actions/workflows/test.yml/runs?status=success&per_page=10" \
+            --jq '.workflow_runs[].head_sha' 2>/dev/null || echo "")
+
+          for SHA in $SHAS; do
+            # Fetch the tree hash for each successful run's commit
+            TREE=$(gh api "repos/${{ github.repository }}/git/commits/$SHA" \
+              --jq '.tree.sha' 2>/dev/null || echo "")
+            if [ "$TREE" = "$CURRENT_TREE" ]; then
+              echo "Duplicate found: commit $SHA has identical tree $TREE"
+              SHOULD_SKIP=true
+              break
+            fi
+          done
+
+          echo "should_skip=$SHOULD_SKIP" >> "$GITHUB_OUTPUT"
       - uses: dorny/paths-filter@v4
         id: filter
         with:

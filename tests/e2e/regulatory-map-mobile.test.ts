@@ -235,4 +235,66 @@ test.describe('Regulatory Map — Mobile UX', () => {
       expect(selectedPaths).toBe(0);
     });
   });
+
+  test.describe('7. FAQ / Bottom Sheet Stacking', () => {
+    test('should not let FAQ section paint over the compliance panel bottom sheet', async ({
+      page,
+    }) => {
+      // Scroll FAQ into the viewport BEFORE opening the sheet, because
+      // openBottomSheet() sets body overflow:hidden which prevents further scrolling.
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+      // Open bottom sheet — helpers use dispatchEvent, so they work regardless of scroll position
+      await openBottomSheetFor(page, 'BRA');
+
+      // Get the panel's bounding rect to sample points inside it
+      const panelRect = await page.evaluate(() => {
+        const el = document.getElementById('compliancePanel');
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { top: r.top, left: r.left, right: r.right, bottom: r.bottom };
+      });
+      expect(panelRect).not.toBeNull();
+
+      // Sample 3 horizontal points at 25%/50%/75% across the panel,
+      // at 2 vertical positions (near top and midpoint).
+      // Pattern follows portfolio-drawer-scroll.test.ts §199-213.
+      const xs = [0.25, 0.5, 0.75].map(
+        (p) => panelRect!.left + (panelRect!.right - panelRect!.left) * p
+      );
+      const ys = [panelRect!.top + 20, (panelRect!.top + panelRect!.bottom) / 2];
+
+      const hits = await page.evaluate(
+        ({ xs, ys }) =>
+          xs.flatMap((x) =>
+            ys.map((y) => {
+              const el = document.elementFromPoint(x, y);
+              if (el?.closest('#compliancePanel') || el?.closest('#bottomSheetOverlay'))
+                return 'panel';
+              if (el?.closest('.faq-section')) return 'faq';
+              return 'other';
+            })
+          ),
+        { xs, ys }
+      );
+
+      // Every sample must hit the panel or overlay — never the FAQ section
+      expect(hits.every((h) => h === 'panel')).toBe(true);
+    });
+
+    test('should allow dismissing bottom sheet when FAQ is scrolled behind it', async ({
+      page,
+    }) => {
+      // Scroll FAQ into viewport first, then open sheet
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      await openBottomSheetFor(page, 'BRA');
+
+      // Dismiss — helper waits for brutal-panel--sheet-open class removal
+      await dismissBottomSheet(page);
+
+      // Verify body scroll is restored
+      const overflow = await page.evaluate(() => document.body.style.overflow);
+      expect(overflow).toBe('');
+    });
+  });
 });
