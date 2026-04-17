@@ -7,6 +7,20 @@ import { PALETTE_NAMES, PALETTE_CONCEPTS, TOKEN_TIPS } from '../data/palettes';
 import { rgbToHex, hexToRgb, parseAlpha } from '../utils/palette-utils';
 import * as Sentry from '@sentry/browser';
 
+// ── Helpers ────────────────────────────────────────────────
+
+function isMobile(): boolean {
+  return window.innerWidth <= 768;
+}
+
+/** Sync active tab state across both desktop edge tabs and mobile header tabs. */
+function syncTabActiveState(id: number): void {
+  document.querySelectorAll<HTMLElement>('.palette-panel__tab').forEach((tab) => {
+    const tabId = parseInt(tab.dataset.palette || '0');
+    tab.classList.toggle('palette-panel__tab--active', tabId === id);
+  });
+}
+
 // ── Read & Populate ────────────────────────────────────────
 
 function readAndPopulate(): void {
@@ -280,11 +294,8 @@ function switchPalette(id: number) {
   const nameEl = document.getElementById('panel-palette-name');
   if (nameEl) nameEl.textContent = PALETTE_NAMES[id] || '';
 
-  // Update tab active state
-  document.querySelectorAll<HTMLElement>('#palette-tabs .palette-panel__tab').forEach((tab) => {
-    const tabId = parseInt(tab.dataset.palette || '0');
-    tab.classList.toggle('palette-panel__tab--active', tabId === id);
-  });
+  // Update tab active state (both desktop edge tabs and mobile header tabs)
+  syncTabActiveState(id);
 
   requestAnimationFrame(() => readAndPopulate());
 }
@@ -345,8 +356,173 @@ document.addEventListener('DOMContentLoaded', () => {
   const panelBody = document.getElementById('panel-body');
   const panelResize = document.getElementById('panel-resize');
 
+  // ── Mobile bottom sheet ──────────────────────────────────
+  const fab = document.getElementById('panel-fab');
+  const backdrop = document.getElementById('panel-backdrop');
+  const grabHandle = document.getElementById('panel-grab-handle');
+  const mobileHeader = document.getElementById('panel-mobile-header');
+
+  function openMobileSheet(): void {
+    if (!panel) return;
+    panel.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    if (backdrop) {
+      backdrop.hidden = false;
+      void backdrop.offsetHeight; // force reflow before transition
+      backdrop.classList.add('is-visible');
+    }
+    requestAnimationFrame(() => readAndPopulate());
+  }
+
+  function closeMobileSheet(): void {
+    if (!panel) return;
+    panel.classList.remove('is-open');
+    document.body.style.overflow = '';
+    backdrop?.classList.remove('is-visible');
+    setTimeout(() => {
+      if (backdrop) backdrop.hidden = true;
+    }, 300);
+  }
+
+  // Clone palette tabs and controls into mobile header
+  if (mobileHeader) {
+    document.querySelectorAll<HTMLElement>('#palette-tabs .palette-panel__tab').forEach((tab) => {
+      const clone = tab.cloneNode(true) as HTMLElement;
+      mobileHeader.appendChild(clone);
+      clone.addEventListener('click', () => {
+        const id = parseInt(clone.dataset.palette || '0');
+        themeObserverPaused = true;
+        switchPalette(id);
+        themeObserverPaused = false;
+      });
+    });
+
+    // Clone theme toggle and popout into mobile header
+    const themeClone = document.getElementById('panel-theme-toggle')?.cloneNode(true) as
+      | HTMLElement
+      | undefined;
+    const popoutClone = document.getElementById('panel-popout-toggle')?.cloneNode(true) as
+      | HTMLElement
+      | undefined;
+
+    if (themeClone) {
+      themeClone.removeAttribute('id');
+      mobileHeader.appendChild(themeClone);
+      themeClone.addEventListener('click', () => {
+        themeObserverPaused = true;
+        document.documentElement.classList.toggle('dark-theme');
+        const isDark = document.documentElement.classList.contains('dark-theme');
+        try {
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } catch {
+          /* ignore */
+        }
+        themeObserverPaused = false;
+        resetAllOverrides();
+      });
+    }
+
+    if (popoutClone) {
+      popoutClone.removeAttribute('id');
+      mobileHeader.appendChild(popoutClone);
+      popoutClone.addEventListener('click', () => {
+        const html = document.documentElement;
+        const wasPopped = html.classList.contains('palette-popped-out');
+        themeObserverPaused = true;
+        html.classList.toggle('palette-popped-out');
+        themeObserverPaused = false;
+        popoutClone.classList.toggle('is-active');
+        // Sync desktop popout button state
+        document.getElementById('panel-popout-toggle')?.classList.toggle('is-active');
+        try {
+          localStorage.setItem('palette-popped-out', wasPopped ? 'false' : 'true');
+        } catch {
+          /* ignore */
+        }
+      });
+    }
+  }
+
+  // FAB click → open sheet
+  fab?.addEventListener('click', openMobileSheet);
+
+  // Backdrop click → close sheet
+  backdrop?.addEventListener('click', closeMobileSheet);
+
+  // Swipe-down-to-dismiss on grab handle
+  let sheetStartY = 0;
+  let sheetCurrentY = 0;
+
+  grabHandle?.addEventListener(
+    'touchstart',
+    (e) => {
+      sheetStartY = e.touches[0].clientY;
+      sheetCurrentY = sheetStartY;
+      if (panel) panel.style.transition = 'none';
+    },
+    { passive: true }
+  );
+
+  grabHandle?.addEventListener(
+    'touchmove',
+    (e) => {
+      sheetCurrentY = e.touches[0].clientY;
+      const dy = Math.max(0, sheetCurrentY - sheetStartY);
+      if (panel) panel.style.transform = `translateY(${dy}px)`;
+    },
+    { passive: true }
+  );
+
+  grabHandle?.addEventListener('touchend', () => {
+    if (panel) {
+      panel.style.transition = '';
+      panel.style.transform = '';
+    }
+    const dy = sheetCurrentY - sheetStartY;
+    if (dy > 80) {
+      closeMobileSheet();
+    }
+  });
+
+  // Footer-aware FAB positioning via IntersectionObserver
+  const footer = document.querySelector('footer');
+  if (footer && fab) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!isMobile()) return;
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const footerRect = footer.getBoundingClientRect();
+            const viewportH = window.innerHeight;
+            const footerVisibleH = viewportH - footerRect.top;
+            fab.style.bottom = `${Math.max(16, footerVisibleH + 16)}px`;
+          } else {
+            fab.style.bottom = '16px';
+          }
+        }
+      },
+      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    observer.observe(footer);
+  }
+
+  // Clean up mobile state on resize to desktop
+  window.addEventListener('resize', () => {
+    if (!isMobile() && panel?.classList.contains('is-open') && backdrop) {
+      document.body.style.overflow = '';
+      backdrop.classList.remove('is-visible');
+      backdrop.hidden = true;
+      if (fab) fab.style.bottom = '16px';
+    }
+  });
+
+  // Desktop panel toggle (unchanged behavior)
   if (panelToggle && panel && panelBody) {
     panelToggle.addEventListener('click', () => {
+      if (isMobile()) {
+        openMobileSheet();
+        return;
+      }
       panel.classList.toggle('is-open');
       if (panel.classList.contains('is-open')) {
         requestAnimationFrame(() => readAndPopulate());
@@ -434,14 +610,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Sync active tab with persisted palette on load
+  // Sync active tab with persisted palette on load (both desktop and mobile tabs)
   const currentPalette = document.documentElement.className.match(/palette-(\d)/);
   if (currentPalette) {
     const id = parseInt(currentPalette[1]);
-    document.querySelectorAll<HTMLElement>('#palette-tabs .palette-panel__tab').forEach((tab) => {
-      const tabId = parseInt(tab.dataset.palette || '0');
-      tab.classList.toggle('palette-panel__tab--active', tabId === id);
-    });
+    syncTabActiveState(id);
     const nameEl = document.getElementById('panel-palette-name');
     if (nameEl) nameEl.textContent = PALETTE_NAMES[id] || '';
     const conceptEl = document.getElementById('palette-concept');
