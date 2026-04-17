@@ -54,7 +54,7 @@ const {
   }
 
   .cta-box {
-    background: var(--bg-light);
+    background: var(--cta-box-bg);
     border: 2px solid var(--color-primary);
     padding: 4rem;
     max-width: 800px;
@@ -64,13 +64,13 @@ const {
 
   .cta-box h2 {
     font-size: 2.5rem;
-    color: var(--text-primary);
+    color: light-dark(var(--text-primary), var(--text-dark-primary));
     margin-bottom: 1.5rem;
     font-weight: 600;
   }
 
   .cta-box p {
-    color: var(--text-secondary);
+    color: var(--cta-box-text);
     font-size: var(--text-lg);
     margin-bottom: 2.5rem;
   }
@@ -92,19 +92,6 @@ const {
 
   .cta-email a:hover {
     border-bottom-color: var(--color-primary);
-  }
-
-  :global(html.dark-theme) .cta-box {
-    background: var(--cta-box-bg);
-    border-color: var(--color-primary);
-  }
-
-  :global(html.dark-theme) .cta-box h2 {
-    color: var(--text-dark-primary);
-  }
-
-  :global(html.dark-theme) .cta-box p {
-    color: var(--cta-box-text);
   }
 
   @media (max-width: 480px) {
