@@ -124,20 +124,12 @@ body::before {
 
 .tool-action-bar--bordered {
   padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--border-light);
-}
-
-html.dark-theme .tool-action-bar--bordered {
-  border-top-color: var(--accent-dark-bg);
+  border-top: 1px solid light-dark(var(--border-light), var(--accent-dark-bg));
 }
 
 .tool-action-bar--frosted {
-  background: rgba(0, 0, 0, 0.005);
+  background: light-dark(rgba(0, 0, 0, 0.005), rgba(255, 255, 255, 0.005));
   backdrop-filter: blur(3px);
-}
-
-html.dark-theme .tool-action-bar--frosted {
-  background: rgba(255, 255, 255, 0.005);
 }
 
 @media (max-width: 480px) {
@@ -760,22 +752,12 @@ html.dark-theme .brutal-btn--primary {
 }
 
 .brutal-btn--secondary {
-  background: rgba(0, 0, 0, 0.02);
+  background: light-dark(rgba(0, 0, 0, 0.02), rgba(200, 220, 255, 0.03));
   color: var(--text-secondary);
-  border: 2px solid var(--border-light);
+  border: 2px solid light-dark(var(--border-light), var(--border-dark-default));
 }
 
 .brutal-btn--secondary:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-html.dark-theme .brutal-btn--secondary {
-  background: rgba(200, 220, 255, 0.03);
-  border-color: var(--border-dark-default);
-}
-
-html.dark-theme .brutal-btn--secondary:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
 }

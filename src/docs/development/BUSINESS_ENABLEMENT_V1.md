@@ -166,13 +166,51 @@ test(email): verify form passes axe-core WCAG 2.1 AA checks
 
 ---
 
+## Initiative 3: Site-Wide light-dark() CSS Migration
+
+**Status**: Proposed (blocked on Hardening-2 pilot validation)
+**Priority**: Low — pure DX improvement, no user-visible change
+**Effort**: 1-2 days
+**Dependencies**: Hardening-2 Stage 5 pilot must be validated first
+
+### Problem
+
+The `html.dark-theme` override block in `variables.css` (51 variable redeclarations, lines 251-359) plus ~30 scattered `html.dark-theme` selectors in `global.css` require maintaining two rules per themed declaration. This dual-rule pattern is error-prone (easy to update one and forget the other) and increases CSS surface area. CSS's `light-dark()` function collapses this into single declarations, and LightningCSS (already adopted) compiles it to universally compatible output using `--lightningcss-light` / `--lightningcss-dark` CSS variable tricks.
+
+### Scope
+
+- Migrate all 51 dark-theme variable redeclarations in `variables.css` to `light-dark()` at the `:root` level
+- Migrate scattered `html.dark-theme` selectors in `global.css` and scoped component styles to inline `light-dark()` calls
+- Remove the `html.dark-theme` override block once all declarations use `light-dark()`
+- Verify all 6 alternative palettes still work (palettes override CSS variables, not `light-dark()` directly)
+- Verify LightningCSS compiled output is functionally equivalent
+
+### Commits
+
+```
+refactor(css): migrate variables.css dark-theme block to light-dark()
+refactor(css): migrate global.css dark-theme selectors to light-dark()
+refactor(css): migrate scoped component dark-theme to light-dark()
+test(css): verify palette compatibility with light-dark() migration
+```
+
+### Success Criteria
+
+- Zero `html.dark-theme` override selectors remain for color/background declarations
+- All themes and palettes visually identical pre/post migration
+- Compiled CSS output size equal or smaller
+- All unit, integration, and E2E tests pass with zero assertion changes
+
+---
+
 ## Summary Timeline
 
-| Initiative | Scope                            | Effort     | Prerequisite                                          |
-| ---------- | -------------------------------- | ---------- | ----------------------------------------------------- |
-| 1          | Cookie Consent & GDPR Compliance | 2 days     | Platform Hardening V1 complete                        |
-| 2          | Email Capture                    | 2 days     | Initiative 1 + Platform Hardening V1 complete         |
-|            | **Total**                        | **4 days** | **~1 week at full focus, ~2 weeks at 50% allocation** |
+| Initiative | Scope                            | Effort       | Prerequisite                                           |
+| ---------- | -------------------------------- | ------------ | ------------------------------------------------------ |
+| 1          | Cookie Consent & GDPR Compliance | 2 days       | Platform Hardening V1 complete                         |
+| 2          | Email Capture                    | 2 days       | Initiative 1 + Platform Hardening V1 complete          |
+| 3          | Site-Wide light-dark() Migration | 1-2 days     | Hardening-2 Stage 5 pilot validated                    |
+|            | **Total**                        | **5-6 days** | **~2 weeks at full focus, ~3 weeks at 50% allocation** |
 
 ---
 
