@@ -735,9 +735,6 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
         this.setAttribute('tabindex', '0');
       }
     });
-
-    // Signal that regulation data is applied — E2E tests and other consumers can wait on this
-    document.getElementById('mapContainer')?.setAttribute('data-map-ready', 'true');
   }
 
   // Category → CSS class map (used by timeline rendering and search)
@@ -750,43 +747,6 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
   // Initial timeline render (requires regionMap)
   renderTimeline();
-
-  // --- Restore bookmarked state from URL ---
-  (function restoreFromUrl() {
-    const { region, filter } = getUrlParams();
-
-    if (filter) {
-      activeCategory = filter;
-      document.querySelectorAll('#regulation-filter-chips .brutal-filter-chip').forEach((c) => {
-        c.classList.toggle(
-          'brutal-filter-chip--active',
-          (c as HTMLElement).dataset.category === filter
-        );
-      });
-      updateMapHighlighting();
-      renderTimeline();
-    }
-
-    if (region) {
-      const isSubnational = region.includes('-');
-      const selector = isSubnational
-        ? `path[data-state-code="${CSS.escape(region)}"]`
-        : `path[data-alpha3="${CSS.escape(region)}"]`;
-      const pathEl = document.querySelector(selector) as SVGPathElement | null;
-
-      if (
-        pathEl &&
-        (pathEl.classList.contains('country-path--active') ||
-          pathEl.classList.contains('state-path--active'))
-      ) {
-        selectRegion(
-          pathEl,
-          region,
-          isSubnational ? 'state-path--selected' : 'country-path--selected'
-        );
-      }
-    }
-  })();
 
   // --- Tooltip ---
   const tooltip = document.getElementById('mapTooltip')!;
@@ -960,6 +920,51 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       openBottomSheet();
     }
   }) as EventListener);
+
+  // --- Restore bookmarked state from URL ---
+  // Must run AFTER the regionSelected listener is registered (above) so that
+  // dispatching regionSelected from selectRegion() actually opens the panel.
+  (function restoreFromUrl() {
+    const { region, filter } = getUrlParams();
+
+    if (filter) {
+      activeCategory = filter;
+      document.querySelectorAll('#regulation-filter-chips .brutal-filter-chip').forEach((c) => {
+        c.classList.toggle(
+          'brutal-filter-chip--active',
+          (c as HTMLElement).dataset.category === filter
+        );
+      });
+      updateMapHighlighting();
+      renderTimeline();
+    }
+
+    if (region) {
+      const isSubnational = region.includes('-');
+      const selector = isSubnational
+        ? `path[data-state-code="${CSS.escape(region)}"]`
+        : `path[data-alpha3="${CSS.escape(region)}"]`;
+      const pathEl = document.querySelector(selector) as SVGPathElement | null;
+
+      if (
+        pathEl &&
+        (pathEl.classList.contains('country-path--active') ||
+          pathEl.classList.contains('state-path--active'))
+      ) {
+        selectRegion(
+          pathEl,
+          region,
+          isSubnational ? 'state-path--selected' : 'country-path--selected'
+        );
+      }
+    }
+  })();
+
+  // Signal ready AFTER URL state restoration — consumers waiting on this
+  // attribute (e.g. E2E tests) can trust that bookmarked state is applied.
+  if (Object.keys(regionMap).length > 0) {
+    document.getElementById('mapContainer')?.setAttribute('data-map-ready', 'true');
+  }
 
   function renderRegulationCard(reg: Regulation): string {
     const date = new Date(reg.effectiveDate).toLocaleDateString('en-US', {
