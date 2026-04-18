@@ -17,7 +17,7 @@ export const SECURITY_HEADERS: Record<string, string> = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
   'Content-Security-Policy': [
     "default-src 'none'",
-    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://va.vercel-scripts.com",
+    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://va.vercel-scripts.com https://cdn.vercel-insights.com",
     "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.ingest.sentry.io https://vitals.vercel-insights.com",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' https: data:",
