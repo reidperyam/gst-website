@@ -86,14 +86,14 @@ import DeltaIcon from './DeltaIcon.astro';
   const themeToggle = document.getElementById('themeToggle');
 
   if (themeToggle) {
-    const LONG_PRESS_MS = 7000;
+    const LONG_PRESS_MS = 5000;
 
     // Haptic pulse schedule: [delay from press start, vibration duration]
     const HAPTIC_SCHEDULE: [number, number][] = [
-      [1500, 50],
-      [3000, 75],
-      [4500, 100],
-      [6000, 150],
+      [1000, 50],
+      [2000, 75],
+      [3000, 100],
+      [4000, 150],
     ];
     const HAPTIC_SUCCESS_DURATION = 300;
 

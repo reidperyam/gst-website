@@ -809,23 +809,24 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 **Source**: Research spike (April 2026) | **Effort**: 2-3 hours | **Status**: Open
 
-**As a** PWA user, **I want** to long-press the footer delta icon for 7 seconds to pop out the palette panel **so that** I can access the color palette editor without navigating to the brand page (which isn't reachable when the address bar is hidden in PWA mode).
+**As a** PWA user, **I want** to long-press the footer delta icon for 5 seconds to pop out the palette panel **so that** I can access the color palette editor without navigating to the brand page (which isn't reachable when the address bar is hidden in PWA mode).
 
 #### Acceptance Criteria
 
-- [ ] Long-press (7s) on the ThemeToggle delta icon in the footer triggers palette popout
+- [ ] Long-press (5s) on the ThemeToggle delta icon in the footer triggers palette popout
 - [ ] Short click continues to toggle light/dark theme (no regression)
-- [ ] Progressive haptic feedback during hold: vibration pulses at 1.5s intervals with increasing intensity (via `navigator.vibrate`)
-- [ ] Visual hold feedback: subtle pulse animation on the delta icon while held
+- [ ] Progressive haptic feedback during hold: vibration pulses at 1s intervals with increasing intensity (via `navigator.vibrate`)
+- [ ] Visual hold feedback: subtle pulse animation on the delta icon starting at 3s into the hold
 - [ ] Haptic feedback degrades gracefully on unsupported browsers (iOS Safari, Firefox) — visual feedback still works
+- [ ] No-op when palette panel is already popped out (no haptics, no visual pulse, no behavior)
 - [ ] `prefers-reduced-motion: reduce` disables the visual pulse animation
 - [ ] Works in both light/dark themes on desktop and mobile viewports
 
 #### Technical Context
 
 - The footer delta icon is the existing `ThemeToggle` component (`#themeToggle` in `src/components/ThemeToggle.astro`), which renders a `DeltaIcon`
-- Replace the `click` listener with pointer events (`pointerdown`/`pointerup`/`pointerleave`/`pointercancel`) to distinguish short click from long-press
-- Haptic pulse schedule: 50ms at 1.5s, 75ms at 3s, 100ms at 4.5s, 150ms at 6s, 300ms success buzz at 7s — all cancelled on early release
+- Pointer events (`pointerdown`/`pointerup`/`pointerleave`/`pointercancel`) distinguish short click from long-press; theme toggle fires on `click` event, gated by `didLongPress` flag
+- Haptic pulse schedule: 50ms at 1s, 75ms at 2s, 100ms at 3s, 150ms at 4s, 300ms success buzz at 5s — all cancelled on early release
 - Palette popout triggered via `palettePopoutRequested` custom event on `document`, handled by `palette-manager.ts` calling `handlePopoutToggle()`
 - `touch-action: none` on the button to prevent scroll interference during mobile long-press
 - Web Vibration API: supported in Chrome/Edge (desktop + Android), NOT supported in Safari (iOS) or Firefox v129+. ~77% global coverage but iOS gap is significant
