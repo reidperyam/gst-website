@@ -14,7 +14,7 @@ Security architecture, headers, privacy configuration, and compliance posture fo
 - **Sentry privacy**: Error-only, no PII, legitimate-interest basis ([SENTRY_MANUAL_SETUP.md](../development/SENTRY_MANUAL_SETUP.md))
 - **No user auth**: No login, sessions, or stored credentials
 - **No user data**: No forms submit to server (CalendarBridge is external navigation)
-- **Cookie consent**: Not yet implemented — tracked in [BUSINESS_ENABLEMENT_V1.md](../development/BUSINESS_ENABLEMENT_V1.md) Initiative 1
+- **Cookie consent**: Not yet implemented — tracked in [BACKLOG.md](../development/BACKLOG.md) BL-001
 
 ## When to Update These Docs
 

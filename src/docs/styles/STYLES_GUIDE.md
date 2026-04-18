@@ -780,7 +780,7 @@ Three tiers: `--border-dark-subtle` (0.10), `--border-dark-default` (0.15), `--b
 - [VARIABLES_REFERENCE.md](./VARIABLES_REFERENCE.md) — Complete design token catalog
 - [TYPOGRAPHY_REFERENCE.md](./TYPOGRAPHY_REFERENCE.md) — Typography utility classes
 - [STYLES_REMEDIATION_ROADMAP.md](./STYLES_REMEDIATION_ROADMAP.md) — Tracked initiatives for closing convention gaps
-- [FAVICON_AND_ICONS.md](../development/FAVICON_AND_ICONS.md) — PWA icon system
+- [Development Backlog](../development/BACKLOG.md) — All open development initiatives
 
 ---
 
