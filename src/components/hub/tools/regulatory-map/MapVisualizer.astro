@@ -114,12 +114,17 @@
     }
   }
 
-  /* Remove browser default focus outline on SVG paths; selection is shown via fill/stroke */
+  /* Replace browser focus outline with visible stroke indicator for keyboard navigation */
   :global(.country-path:focus),
-  :global(.country-path:focus-visible),
-  :global(.state-path:focus),
-  :global(.state-path:focus-visible) {
+  :global(.state-path:focus) {
     outline: none;
+  }
+
+  :global(.country-path--active:focus-visible),
+  :global(.state-path--active:focus-visible) {
+    outline: none;
+    stroke: var(--color-secondary);
+    stroke-width: 2;
   }
 
   /* Country path base state */
