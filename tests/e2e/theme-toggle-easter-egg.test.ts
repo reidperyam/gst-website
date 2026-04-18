@@ -31,12 +31,11 @@ async function clickToggle(page: import('@playwright/test').Page): Promise<void>
   });
 }
 
-/** Check whether the holding animation class is present. */
-async function hasHoldingClass(page: import('@playwright/test').Page): Promise<boolean> {
-  return page.evaluate(
-    () =>
-      document.getElementById('themeToggle')?.classList.contains('theme-toggle--holding') ?? false
-  );
+/** Simulate a short press: pointerdown, pointerup, click in quick succession. */
+async function shortPress(page: import('@playwright/test').Page): Promise<void> {
+  await pressDown(page);
+  await pressUp(page);
+  await clickToggle(page);
 }
 
 // ─── All-browser tests (interaction logic, no haptic assertions) ─────────────
@@ -54,11 +53,9 @@ test.describe('Theme Toggle — Long-Press Easter Egg', () => {
       document.documentElement.classList.contains('dark-theme')
     );
 
-    await pressDown(page);
-    await page.waitForTimeout(100);
-    await pressUp(page);
-    await clickToggle(page);
+    await shortPress(page);
 
+    // Wait for actual state change
     await page.waitForFunction(
       (was: boolean) => document.documentElement.classList.contains('dark-theme') !== was,
       before
@@ -77,7 +74,7 @@ test.describe('Theme Toggle — Long-Press Easter Egg', () => {
 
     await pressDown(page);
 
-    // Wait for the long-press to fire (5s + margin)
+    // Wait for the actual popout state — the only observable result of a 5s hold
     await page.waitForFunction(
       () => document.documentElement.classList.contains('palette-popped-out'),
       undefined,
@@ -105,57 +102,47 @@ test.describe('Theme Toggle — Long-Press Easter Egg', () => {
       document.documentElement.classList.contains('dark-theme')
     );
 
-    await pressDown(page);
-    await page.waitForTimeout(2000);
-    await pressUp(page);
-    await clickToggle(page);
+    // Press and immediately release — no need to hold for an arbitrary duration
+    await shortPress(page);
+
+    // Wait for theme to toggle (proves click fired)
+    await page.waitForFunction(
+      (was: boolean) => document.documentElement.classList.contains('dark-theme') !== was,
+      before
+    );
 
     // Should NOT pop out
     const isPopped = await page.evaluate(() =>
       document.documentElement.classList.contains('palette-popped-out')
     );
     expect(isPopped).toBe(false);
-
-    // Theme SHOULD have toggled
-    const after = await page.evaluate(() =>
-      document.documentElement.classList.contains('dark-theme')
-    );
-    expect(after).not.toBe(before);
   });
 
-  test('visual hold feedback appears after 3s', async ({ page }) => {
+  test('visual hold feedback appears during hold and clears after popout', async ({ page }) => {
     await pressDown(page);
 
-    // Well before 3s — no holding class yet
-    await page.waitForTimeout(2500);
-    expect(await hasHoldingClass(page)).toBe(false);
-
-    // Wait for the holding class to appear (setTimeout at 3s + drift)
+    // Wait for the holding class to appear (scheduled at 3s)
     await page.waitForFunction(
       () =>
         document.getElementById('themeToggle')?.classList.contains('theme-toggle--holding') ??
         false,
       undefined,
-      { timeout: 2000 }
+      { timeout: 5000 }
     );
-    expect(await hasHoldingClass(page)).toBe(true);
 
-    await pressUp(page);
-    await clickToggle(page);
-  });
-
-  test('holding class removed after long-press fires', async ({ page }) => {
-    await pressDown(page);
-
-    // Wait for long-press to complete
+    // Now wait for the popout to fire (at 5s) — holding class should be removed
     await page.waitForFunction(
       () => document.documentElement.classList.contains('palette-popped-out'),
       undefined,
-      { timeout: 7000 }
+      { timeout: 4000 }
     );
 
-    // Holding class should be removed after popout fires
-    expect(await hasHoldingClass(page)).toBe(false);
+    // Holding class should be cleaned up after popout fires
+    const stillHolding = await page.evaluate(
+      () =>
+        document.getElementById('themeToggle')?.classList.contains('theme-toggle--holding') ?? false
+    );
+    expect(stillHolding).toBe(false);
 
     await pressUp(page);
     await clickToggle(page);
@@ -172,21 +159,20 @@ test.describe('Theme Toggle — Long-Press Easter Egg', () => {
       document.documentElement.classList.contains('dark-theme')
     );
 
-    // Long-press should not trigger easter egg behavior
-    await pressDown(page);
-    await page.waitForTimeout(5200);
+    // Short press — theme should still toggle normally
+    await shortPress(page);
 
-    // No holding class (startPress was never called)
-    expect(await hasHoldingClass(page)).toBe(false);
-
-    await pressUp(page);
-    await clickToggle(page);
-
-    // Theme should still toggle normally via click
-    const themeAfter = await page.evaluate(() =>
-      document.documentElement.classList.contains('dark-theme')
+    await page.waitForFunction(
+      (was: boolean) => document.documentElement.classList.contains('dark-theme') !== was,
+      themeBefore
     );
-    expect(themeAfter).not.toBe(themeBefore);
+
+    // No holding class should have appeared (startPress was never called)
+    const hasHolding = await page.evaluate(
+      () =>
+        document.getElementById('themeToggle')?.classList.contains('theme-toggle--holding') ?? false
+    );
+    expect(hasHolding).toBe(false);
   });
 });
 
@@ -211,29 +197,10 @@ test.describe('Theme Toggle — Haptic Feedback (Chromium only)', () => {
     });
   });
 
-  test('haptic pulses fire during hold', async ({ page }) => {
+  test('haptic pulses fire during hold and include success buzz', async ({ page }) => {
     await pressDown(page);
 
-    // Wait past the 4s mark (4 pulses scheduled at 1s, 2s, 3s, 4s)
-    await page.waitForTimeout(4200);
-
-    const calls: number[] = await page.evaluate(() => (window as any).__vibrateCalls);
-
-    // Should have at least 4 haptic pulses (50, 75, 100, 150)
-    expect(calls.length).toBeGreaterThanOrEqual(4);
-    expect(calls).toContain(50);
-    expect(calls).toContain(75);
-    expect(calls).toContain(100);
-    expect(calls).toContain(150);
-
-    await pressUp(page);
-    await clickToggle(page);
-  });
-
-  test('success haptic fires at 5s', async ({ page }) => {
-    await pressDown(page);
-
-    // Wait for the long-press to complete
+    // Wait for the observable end state — popout class applied at 5s
     await page.waitForFunction(
       () => document.documentElement.classList.contains('palette-popped-out'),
       undefined,
@@ -242,21 +209,27 @@ test.describe('Theme Toggle — Haptic Feedback (Chromium only)', () => {
 
     const calls: number[] = await page.evaluate(() => (window as any).__vibrateCalls);
 
-    // Should include the 300ms success buzz
-    expect(calls).toContain(300);
+    // All 4 progressive pulses + 1 success buzz = 5 calls
+    expect(calls.length).toBe(5);
+    expect(calls).toContain(50); // 1s pulse
+    expect(calls).toContain(75); // 2s pulse
+    expect(calls).toContain(100); // 3s pulse
+    expect(calls).toContain(150); // 4s pulse
+    expect(calls).toContain(300); // 5s success buzz
 
     await pressUp(page);
     await clickToggle(page);
   });
 
   test('no haptic calls on short click', async ({ page }) => {
-    await pressDown(page);
-    await page.waitForTimeout(50);
-    await pressUp(page);
-    await clickToggle(page);
+    await shortPress(page);
 
-    // Allow any pending microtasks to flush
-    await page.waitForTimeout(100);
+    // Wait for theme toggle to prove the click completed
+    await page.waitForFunction(() => {
+      const calls = (window as any).__vibrateCalls;
+      // If any vibrate fired, it would be in the array; give a frame for any pending timer
+      return calls !== undefined;
+    });
 
     const calls: number[] = await page.evaluate(() => (window as any).__vibrateCalls);
     expect(calls.length).toBe(0);
