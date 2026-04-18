@@ -52,7 +52,7 @@ Tracked initiatives to close the gap between documented conventions and actual i
 
 1. **Semantic color system** — added `--color-success`, `--color-warning`, `--color-error`, `--color-info` with dark theme overrides
 2. **Color usage hierarchy** — 5-tier priority documented in BRAND_GUIDELINES.md and STYLES_GUIDE.md
-3. **WCAG contrast fix** — `--text-faded` opacity increased from 0.5 to 0.6; contrast thresholds documented
+3. **WCAG contrast fix** — `--text-muted` opacity increased from 0.5 to 0.6; contrast thresholds documented
 4. **Data visualization standards** — regulatory map colors migrated to `--regmap-category-industry`/`--regmap-category-cyber` variables; CVD-safe sequence documented
 5. **Brand asset usage rules** — delta icon sizing, clearance, and placement guidelines finalized
 
@@ -353,13 +353,13 @@ Tracked initiatives to close the gap between documented conventions and actual i
      --text-primary: var(--text-light-primary);
      --text-secondary: var(--text-light-secondary);
      --text-muted: var(--text-light-muted);
-     --text-faded: var(--text-light-faded);
+     --text-muted: var(--text-light-faded);
    }
    html.dark-theme {
      --text-primary: var(--text-dark-primary);
      --text-secondary: var(--text-dark-secondary);
      --text-muted: var(--text-dark-muted);
-     --text-faded: var(--text-dark-faded);
+     --text-muted: var(--text-dark-faded);
    }
    ```
 2. Migrate components from `--text-light-*` → `--text-*`

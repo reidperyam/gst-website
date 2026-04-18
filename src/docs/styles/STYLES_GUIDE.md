@@ -77,7 +77,21 @@ src/styles/
 ├── palettes.css            # Alternative color palette definitions (6 palettes, light + dark theme)
 ├── typography.css          # 11 semantic text utilities (.brutal-heading-*, .brutal-text-*, .brutal-label-*, .nav-link, .button-text-*)
 ├── interactions.css        # Interactive state patterns (.interactive, .link-interactive, .control-*, .focus-outline-*)
-└── global.css             # Page layout, component styles, responsive rules, dark theme overrides
+├── global.css              # Page layout, utilities, responsive rules — imports component modules below
+└── components/             # Extracted component-specific styles (from global.css)
+    ├── tool-ui.css          # Tool bench notes, action bars, methodology panels
+    ├── tool-shell.css       # .brutal-tool-shell container and variants
+    ├── skeleton.css         # Skeleton loading placeholders + @keyframes
+    ├── buttons.css          # .cta-button + .brutal-btn variants
+    ├── filter.css           # Filter chips, search input, filter drawer, brutal search
+    ├── breadcrumb.css       # .brutal-breadcrumb
+    ├── progress.css         # .brutal-progress-bar
+    ├── tiles.css            # .brutal-stat-tile, .brutal-callout
+    ├── table.css            # .brutal-bench-table
+    ├── cards.css            # Option cards, trust cards, teaser cards, rec cards, attention cards, FAQ, gateway cards
+    ├── form.css             # Input, choice buttons, tab bar, segmented controls, fields, sliders
+    ├── portfolio.css        # .brutal-project-card
+    └── map.css              # Legend, timeline, map controls, panel, reg cards
 ```
 
 ### Import Order
@@ -99,7 +113,8 @@ In stylesheets, always import in cascade order:
 | `palettes.css`               | Adding/updating alternative color palette definitions                         |
 | `typography.css`             | Adding reusable text styles                                                   |
 | `interactions.css`           | Adding focus/hover/active patterns                                            |
-| `global.css`                 | Page layout, responsive rules, dark theme overrides for page-level components |
+| `global.css`                 | Page layout, utilities, responsive rules — imports `components/*.css` modules |
+| `components/*.css`           | Individual component styles (extracted from global.css for maintainability)   |
 | Component `.astro` `<style>` | Single-use component-specific styling                                         |
 
 ---
