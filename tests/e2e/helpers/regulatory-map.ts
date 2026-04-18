@@ -23,12 +23,11 @@ export async function clickSvgPath(page: Page, selector: string): Promise<void> 
  */
 export async function waitForMapReady(page: Page): Promise<void> {
   // Wait for D3 to render country paths AND for at least one to be active
-  // (regulations loaded and applied). Under CI parallel load with mobile
-  // device emulation, D3 init can take 15-20s on a 2-core runner.
+  // (regulations loaded and applied). Under parallel load, D3 init takes longer.
   await page.waitForFunction(
     () =>
       document.querySelectorAll('.country-path').length > 0 &&
       document.querySelectorAll('.country-path--active').length > 0,
-    { timeout: 30000 }
+    { timeout: 15000 }
   );
 }
