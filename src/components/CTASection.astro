@@ -83,7 +83,7 @@ const {
   }
 
   .cta-email a {
-    color: var(--color-primary);
+    color: light-dark(var(--color-tertiary-dark), var(--color-primary));
     text-decoration: none;
     font-family: monospace;
     transition: border-bottom var(--transition-fast);
@@ -91,7 +91,7 @@ const {
   }
 
   .cta-email a:hover {
-    border-bottom-color: var(--color-primary);
+    border-bottom-color: currentColor;
   }
 
   @media (max-width: 480px) {
