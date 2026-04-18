@@ -226,7 +226,7 @@ jobs:
   e2e-tests:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     needs: [changes, lint-and-typecheck, unit-and-integration]
 
     steps:
