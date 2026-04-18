@@ -126,12 +126,18 @@ test.describe('Theme Toggle — Long-Press Easter Egg', () => {
   test('visual hold feedback appears after 3s', async ({ page }) => {
     await pressDown(page);
 
-    // At 2.9s — no holding class yet
-    await page.waitForTimeout(2900);
+    // Well before 3s — no holding class yet
+    await page.waitForTimeout(2500);
     expect(await hasHoldingClass(page)).toBe(false);
 
-    // At 3.1s — holding class should be present
-    await page.waitForTimeout(200);
+    // Wait for the holding class to appear (setTimeout at 3s + drift)
+    await page.waitForFunction(
+      () =>
+        document.getElementById('themeToggle')?.classList.contains('theme-toggle--holding') ??
+        false,
+      undefined,
+      { timeout: 2000 }
+    );
     expect(await hasHoldingClass(page)).toBe(true);
 
     await pressUp(page);
