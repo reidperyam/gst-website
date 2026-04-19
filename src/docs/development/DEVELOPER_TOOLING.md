@@ -215,6 +215,7 @@ The `actions: write` permission on the gate job is required by skip-duplicate-ac
 | [tsconfig.json](../../../tsconfig.json)                           | TypeScript config, including the `@/*` → `src/*` path alias                                     |
 | [.husky/pre-commit](../../../.husky/pre-commit)                   | Single line: `npx lint-staged`                                                                  |
 | [.github/workflows/test.yml](../../../.github/workflows/test.yml) | CI pipeline (3 jobs + changes gate)                                                             |
+| [.github/dependabot.yml](../../../.github/dependabot.yml)         | Automated dependency updates (npm + GitHub Actions)                                             |
 
 ---
 
@@ -540,6 +541,8 @@ npm audit --audit-level=moderate --omit=dev
 **Package overrides** — see [package.json](../../../package.json) `overrides` block:
 
 - `path-to-regexp: 6.3.0` — forces the patched version across the dependency tree to close `GHSA-9wv6-86v2-598j` without a destructive `@astrojs/vercel` downgrade. Re-evaluate when `@vercel/routing-utils` ships a clean upgrade path.
+
+**Automated dependency updates** — [Dependabot](../../../.github/dependabot.yml) opens PRs weekly for npm and GitHub Actions version bumps. When reviewing Dependabot PRs that update `@astrojs/vercel` or `@vercel/routing-utils`, check whether the `path-to-regexp` override can be removed by running `npm audit --omit=dev` after deleting the `overrides` block.
 
 ---
 

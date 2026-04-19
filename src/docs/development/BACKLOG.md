@@ -867,16 +867,17 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 #### Acceptance Criteria
 
-- [ ] Monthly CI workflow (`.github/workflows/dep-override-review.yml`) checks whether the override is still necessary
-- [ ] When `@vercel/routing-utils` ships a version requiring `path-to-regexp >= 6.3.0`, a GitHub issue is auto-created prompting removal
+- [ ] GitHub Dependabot (`.github/dependabot.yml`) monitors npm and GitHub Actions dependencies weekly
+- [ ] When Dependabot opens a PR updating `@astrojs/vercel` or `@vercel/routing-utils`, reviewer checks whether the `path-to-regexp` override can be removed
 - [ ] Override removal steps: delete `overrides` block from `package.json`, run `npm install`, verify `npm audit --omit=dev` reports 0 vulnerabilities, update DEVELOPER_TOOLING.md
 - [ ] After removal: CI `npm audit` step continues to catch any future advisories without the override
 
 #### Technical Context
 
 - The override pins `path-to-regexp@6.3.0` to close `GHSA-9wv6-86v2-598j` — the vulnerable `6.1.0` is a transitive dependency via `@astrojs/vercel@10.0.4` → `@vercel/routing-utils@5.3.3`
-- CI already runs `npm audit --audit-level=moderate --omit=dev` on every push/PR (`.github/workflows/test.yml`, lines 162-164) — this catches new vulnerabilities but does not check whether existing overrides are stale
-- Override documentation: DEVELOPER_TOOLING.md § npm audit policy (lines 540-542)
+- CI already runs `npm audit --audit-level=moderate --omit=dev` on every push/PR (`.github/workflows/test.yml`, lines 162-164) — this catches new vulnerabilities
+- Dependabot will surface the update opportunity by opening a PR when `@astrojs/vercel` or `@vercel/routing-utils` ships a new version
+- Override documentation: DEVELOPER_TOOLING.md § npm audit policy
 - The override is zero-cost at runtime but adds cognitive overhead for dependency updates
 
 ---
