@@ -52,7 +52,7 @@ jobs:
       duplicate: ${{ steps.skip_dup.outputs.should_skip }}
       should_run: ${{ steps.decide.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - id: skip_dup
         # Check if a prior workflow run already passed with the same tree
         # hash. Replaces fkirc/skip-duplicate-actions (Node 20 deprecated).
@@ -130,7 +130,7 @@ jobs:
     steps:
       - name: Checkout code
         if: needs.changes.outputs.should_run == 'true'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         if: needs.changes.outputs.should_run == 'true'
@@ -181,7 +181,7 @@ jobs:
     steps:
       - name: Checkout code
         if: needs.changes.outputs.should_run == 'true'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         if: needs.changes.outputs.should_run == 'true'
@@ -232,7 +232,7 @@ jobs:
     steps:
       - name: Checkout code
         if: needs.changes.outputs.should_run == 'true'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         if: needs.changes.outputs.should_run == 'true'
