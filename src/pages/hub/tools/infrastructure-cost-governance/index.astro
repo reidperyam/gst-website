@@ -1,10 +1,7 @@
 ---
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import HubHeader from '../../../../components/hub/HubHeader.astro';
-import { trackPageView } from '../../../../utils/analytics';
 import { DOMAINS, TOTAL_QUESTIONS } from '../../../../data/infrastructure-cost-governance/domains';
-
-trackPageView('infrastructure-cost-governance', 'Infrastructure Cost Governance | GST');
 
 const domainCount = DOMAINS.length;
 ---
@@ -601,7 +598,7 @@ const domainCount = DOMAINS.length;
   .icg-foundational-badge {
     font-size: 0.6rem;
     font-weight: var(--font-weight-bold);
-    font-family: monospace;
+    font-family: var(--font-family-mono);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 1px var(--spacing-sm);
@@ -639,7 +636,7 @@ const domainCount = DOMAINS.length;
 
   :global(.icg-question-text) {
     font-size: var(--text-sm);
-    font-family: monospace;
+    font-family: var(--font-family-mono);
     font-weight: var(--font-weight-normal);
     color: var(--text-primary);
     margin-bottom: var(--spacing-md);
@@ -649,7 +646,7 @@ const domainCount = DOMAINS.length;
   :global(.icg-question-num) {
     color: var(--text-muted);
     font-size: var(--text-xs);
-    font-family: monospace;
+    font-family: var(--font-family-mono);
     font-weight: var(--font-weight-bold);
     margin-right: var(--spacing-xs);
   }
@@ -864,7 +861,7 @@ const domainCount = DOMAINS.length;
   :global(.icg-recs-group__label) {
     font-size: 0.65rem;
     font-weight: var(--font-weight-bold);
-    font-family: monospace;
+    font-family: var(--font-family-mono);
     margin-bottom: var(--spacing-sm);
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -875,7 +872,7 @@ const domainCount = DOMAINS.length;
     padding: var(--spacing-xl) 0;
     color: var(--text-muted);
     font-size: var(--text-sm);
-    font-family: monospace;
+    font-family: var(--font-family-mono);
   }
 
   /* brutal-rec-card margin between cards */
@@ -1048,7 +1045,7 @@ const domainCount = DOMAINS.length;
   }
 
   .icg-stage-hint {
-    color: var(--text-faded);
+    color: var(--text-muted);
   }
 
   /* ── Stage context in results ─────────────────────────────────────────── */
@@ -1268,7 +1265,7 @@ const domainCount = DOMAINS.length;
       display: block;
       font-size: 14px;
       font-weight: 600;
-      font-family: monospace;
+      font-family: var(--font-family-mono);
       color: var(--color-primary);
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -1329,22 +1326,12 @@ const domainCount = DOMAINS.length;
   import { DOMAINS, ANSWER_OPTIONS } from '../../../../data/infrastructure-cost-governance/domains';
   import { RECOMMENDATIONS } from '../../../../data/infrastructure-cost-governance/recommendations';
   import { copyWithFeedback } from '../../../../utils/copy-feedback';
+  import { escapeHtml } from '../../../../utils/escape-html';
 
   // ─── DOM helpers ────────────────────────────────────────────────────────────
 
   function qs<T extends HTMLElement>(sel: string): T {
     return document.querySelector(sel) as T;
-  }
-
-  const ESC_MAP: Record<string, string> = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-  };
-  function escHtml(s: string): string {
-    return s.replace(/[&<>"']/g, (c) => ESC_MAP[c]);
   }
 
   // ─── URL state ──────────────────────────────────────────────────────────────
@@ -1488,7 +1475,7 @@ const domainCount = DOMAINS.length;
     // Use explicit colors so the SVG is print-safe (currentColor fails
     // when dark-mode text color meets white print paper)
     const gridColor = 'var(--text-muted)';
-    const labelColor = 'var(--text-faded)';
+    const labelColor = 'var(--text-muted)';
     const primaryColor = 'var(--color-primary)';
 
     // Grid rings at 25%, 50%, 75%, 100%
@@ -2097,7 +2084,7 @@ const domainCount = DOMAINS.length;
           return `
         <div class="icg-snapshot-row">
           <span class="icg-snapshot-row__info">
-            <span>${escHtml(s.label)}</span>
+            <span>${escapeHtml(s.label)}</span>
             <span class="icg-snapshot-row__score">${score}/100</span>
           </span>
           <button class="icg-snapshot-row__delete" data-delete-snapshot="${s.id}" type="button" title="Delete this snapshot">&times;</button>
@@ -2158,7 +2145,7 @@ const domainCount = DOMAINS.length;
           <span class="icg-delta ${deltaClass(comparison.overallDelta)}">${deltaText(comparison.overallDelta)}</span>
         </span>
       </div>
-      <div class="brutal-tool-shell__section-label" style="margin-top:var(--spacing-md)">${escHtml(comparison.a.label)} &rarr; ${escHtml(comparison.b.label)}</div>
+      <div class="brutal-tool-shell__section-label" style="margin-top:var(--spacing-md)">${escapeHtml(comparison.a.label)} &rarr; ${escapeHtml(comparison.b.label)}</div>
       ${comparison.domainDeltas
         .map(
           (dd) => `
@@ -2206,7 +2193,7 @@ const domainCount = DOMAINS.length;
             return `
             <div class="icg-snapshot-item">
               <input type="checkbox" id="snap-sel-${i}" data-snap-select="${i}" />
-              <label for="snap-sel-${i}">${escHtml(s.label)} <span class="icg-snapshot-item__date">${score}/100</span></label>
+              <label for="snap-sel-${i}">${escapeHtml(s.label)} <span class="icg-snapshot-item__date">${score}/100</span></label>
             </div>`;
           })
           .join('')}

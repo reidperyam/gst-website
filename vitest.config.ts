@@ -16,12 +16,7 @@ export default defineConfig({
         'src/utils/techpar-ui.ts',
         'src/utils/techpar/chart.ts',
         'src/utils/techpar/dom.ts',
-        'src/utils/techpar/state.ts',
-        'src/utils/breadcrumbs.ts',
         'src/utils/copy-feedback.ts',
-        'src/utils/analytics.ts',
-        'src/utils/fetchRegulations.ts',
-        'src/utils/validateData.ts',
       ],
       thresholds: {
         lines: 70,

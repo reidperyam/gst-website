@@ -76,7 +76,7 @@ Use these in all new code. They auto-switch in dark theme.
 | `--text-primary`   | `rgba(26,26,26, 0.95)` | `rgba(245,245,245, 0.95)` | Headings, primary text                                                                                                    |
 | `--text-secondary` | `rgba(26,26,26, 0.7)`  | `rgba(200,200,200, 0.8)`  | Body text, descriptions                                                                                                   |
 | `--text-muted`     | `rgba(26,26,26, 0.6)`  | `rgba(200,200,200, 0.6)`  | Labels, captions                                                                                                          |
-| `--text-faded`     | `rgba(26,26,26, 0.6)`  | `rgba(200,200,200, 0.6)`  | Disabled, placeholders (large text only — see [contrast requirements](./BRAND_GUIDELINES.md#color-contrast-requirements)) |
+| `--text-muted`     | `rgba(26,26,26, 0.6)`  | `rgba(200,200,200, 0.6)`  | Disabled, placeholders (large text only — see [contrast requirements](./BRAND_GUIDELINES.md#color-contrast-requirements)) |
 
 > Components reference `--text-primary` etc. and get dark values automatically. No dark theme overrides needed for text colors.
 

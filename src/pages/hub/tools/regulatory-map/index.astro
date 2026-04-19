@@ -4,9 +4,6 @@ import HubHeader from '../../../../components/hub/HubHeader.astro';
 import MapVisualizer from '../../../../components/hub/tools/regulatory-map/MapVisualizer.astro';
 import CompliancePanel from '../../../../components/hub/tools/regulatory-map/CompliancePanel.astro';
 import PrintReportHeader from '../../../../components/PrintReportHeader.astro';
-import { trackPageView } from '../../../../utils/analytics';
-
-trackPageView('regulatory-map', 'Regulatory Map | GST');
 
 const faqItems = [
   {
@@ -275,6 +272,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
   import { fipsToStateCode, stateCodeToName } from '../../../../utils/fipsToStateCode';
   import { provinceCodeToName } from '../../../../utils/canadianProvinceMap';
   import { trackEvent } from '../../../../utils/analytics';
+  import { escapeHtml } from '../../../../utils/escape-html';
   import * as Sentry from '@sentry/browser';
 
   // Analytics: fire rm_start once per page load on first interaction
@@ -997,12 +995,6 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
     html += '</div>';
     return html;
-  }
-
-  function escapeHtml(str: string): string {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
   }
 
   // --- Sync panel max-height to map height so the back-link stays stable ---
@@ -1759,7 +1751,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     justify-content: center;
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
-    font-family: monospace;
+    font-family: var(--font-family-mono);
     font-size: var(--text-xs);
     color: var(--text-secondary);
   }
@@ -1906,7 +1898,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       display: flex;
       align-items: center;
       gap: var(--spacing-sm);
-      font-family: monospace;
+      font-family: var(--font-family-mono);
       font-size: 14pt;
       font-weight: 700;
       letter-spacing: 0.1em;
@@ -1914,7 +1906,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     .print-report-header__title {
-      font-family: monospace;
+      font-family: var(--font-family-mono);
       font-size: 11pt;
       font-weight: 700;
       text-transform: uppercase;
@@ -1923,9 +1915,9 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     .print-report-header__date {
-      font-family: monospace;
+      font-family: var(--font-family-mono);
       font-size: 9pt;
-      color: var(--text-faded);
+      color: var(--text-muted);
     }
 
     .print-report-footer {
@@ -1936,9 +1928,9 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     .print-report-footer p {
-      font-family: monospace;
+      font-family: var(--font-family-mono);
       font-size: 8pt;
-      color: var(--text-faded);
+      color: var(--text-muted);
       margin: 0 0 4px;
       line-height: 1.4;
     }

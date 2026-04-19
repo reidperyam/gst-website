@@ -805,6 +805,81 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 - Decision framework: Go (passes all 6 criteria) / No-go (archive, document findings) / Kill (requires external dependencies or exceeds 8h)
 - This is exploratory — no commitment to ship
 
+### BL-036: Haptic Feedback Easter Egg — Footer Delta Long-Press
+
+**Source**: Research spike (April 2026) | **Effort**: 2-3 hours | **Status**: Open
+
+**As a** PWA user, **I want** to long-press the footer delta icon for 5 seconds to pop out the palette panel **so that** I can access the color palette editor without navigating to the brand page (which isn't reachable when the address bar is hidden in PWA mode).
+
+#### Acceptance Criteria
+
+- [ ] Long-press (5s) on the ThemeToggle delta icon in the footer triggers palette popout
+- [ ] Short click continues to toggle light/dark theme (no regression)
+- [ ] Progressive haptic feedback during hold: vibration pulses at 1s intervals with increasing intensity (via `navigator.vibrate`)
+- [ ] Visual hold feedback: subtle pulse animation on the delta icon starting at 3s into the hold
+- [ ] Haptic feedback degrades gracefully on unsupported browsers (iOS Safari, Firefox) — visual feedback still works
+- [ ] No-op when palette panel is already popped out (no haptics, no visual pulse, no behavior)
+- [ ] `prefers-reduced-motion: reduce` disables the visual pulse animation
+- [ ] Works in both light/dark themes on desktop and mobile viewports
+
+#### Technical Context
+
+- The footer delta icon is the existing `ThemeToggle` component (`#themeToggle` in `src/components/ThemeToggle.astro`), which renders a `DeltaIcon`
+- Pointer events (`pointerdown`/`pointerup`/`pointerleave`/`pointercancel`) distinguish short click from long-press; theme toggle fires on `click` event, gated by `didLongPress` flag
+- Haptic pulse schedule: 50ms at 1s, 75ms at 2s, 100ms at 3s, 150ms at 4s, 300ms success buzz at 5s — all cancelled on early release
+- Palette popout triggered via `palettePopoutRequested` custom event on `document`, handled by `palette-manager.ts` calling `handlePopoutToggle()`
+- `touch-action: none` on the button to prevent scroll interference during mobile long-press
+- Web Vibration API: supported in Chrome/Edge (desktop + Android), NOT supported in Safari (iOS) or Firefox v129+. ~77% global coverage but iOS gap is significant
+- No permission prompt required — Vibration API only needs sticky user activation (click/tap), which is inherent to this interaction
+- This is an easter egg — intentionally undisclosed, no ARIA announcement
+
+---
+
+### BL-037: FilterDrawer Sub-Component Extraction
+
+**Source**: Technical debt remediation (April 2026) | **Effort**: S (2 hours) | **Status**: Open
+
+**As a** developer maintaining the portfolio page, **I want** the filter drawer markup extracted into a dedicated `FilterDrawer.astro` sub-component **so that** the PortfolioHeader component is easier to navigate and the drawer template can be reused or modified independently.
+
+#### Acceptance Criteria
+
+- [ ] Filter drawer HTML (currently PortfolioHeader.astro lines 96-177) extracted to `src/components/portfolio/FilterDrawer.astro`
+- [ ] FilterDrawer receives `uniqueThemes` and `uniqueEngagementCategories` as props
+- [ ] Event wiring (open/close, chip clicks, clear-all) remains in PortfolioHeader's script block — FilterDrawer is template-only
+- [ ] No UX change — identical HTML rendered, same filter behavior, same E2E test results
+- [ ] Portfolio E2E tests pass without modification
+
+#### Technical Context
+
+- **Prerequisite**: BL-037 depends on Initiative 1 (PortfolioHeader architecture migration) being complete — the `is:inline` to module script migration must land first, as sub-component extraction requires module-scoped script coordination
+- The drawer DOM is referenced by ID from both PortfolioHeader and StickyControls via the shared `window.portfolioFilters` API
+- The drawer's visual backdrop (`.filter-overlay`) has `pointer-events: none` — click-outside-to-close is handled at document level, not on the overlay element
+- Extraction is template-only (~120 lines of markup); the script block (main complexity source) does not shrink
+- Expected result: PortfolioHeader reduces from ~1,028 lines to ~850 lines
+
+---
+
+### BL-038: Dependency Override Governance — path-to-regexp
+
+**Source**: Technical debt remediation (April 2026) | **Effort**: S (30 min when removable) | **Status**: Monitoring
+
+**As a** platform maintainer, **I want** the `path-to-regexp` package override removed when the upstream dependency ships a fix **so that** the dependency tree has no unnecessary overrides and `npm audit` reflects the true security posture without manual intervention.
+
+#### Acceptance Criteria
+
+- [ ] GitHub Dependabot (`.github/dependabot.yml`) monitors npm and GitHub Actions dependencies weekly
+- [ ] When Dependabot opens a PR updating `@astrojs/vercel` or `@vercel/routing-utils`, reviewer checks whether the `path-to-regexp` override can be removed
+- [ ] Override removal steps: delete `overrides` block from `package.json`, run `npm install`, verify `npm audit --omit=dev` reports 0 vulnerabilities, update DEVELOPER_TOOLING.md
+- [ ] After removal: CI `npm audit` step continues to catch any future advisories without the override
+
+#### Technical Context
+
+- The override pins `path-to-regexp@6.3.0` to close `GHSA-9wv6-86v2-598j` — the vulnerable `6.1.0` is a transitive dependency via `@astrojs/vercel@10.0.4` → `@vercel/routing-utils@5.3.3`
+- CI already runs `npm audit --audit-level=moderate --omit=dev` on every push/PR (`.github/workflows/test.yml`, lines 162-164) — this catches new vulnerabilities
+- Dependabot will surface the update opportunity by opening a PR when `@astrojs/vercel` or `@vercel/routing-utils` ships a new version
+- Override documentation: DEVELOPER_TOOLING.md § npm audit policy
+- The override is zero-cost at runtime but adds cognitive overhead for dependency updates
+
 ---
 
 _Created: April 18, 2026_

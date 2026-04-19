@@ -38,17 +38,14 @@
   --text-light-primary: rgba(26, 26, 26, 0.95);
   --text-light-secondary: rgba(26, 26, 26, 0.7);
   --text-light-muted: rgba(26, 26, 26, 0.65);
-  --text-light-faded: rgba(26, 26, 26, 0.65);
   --text-dark-primary: rgba(245, 245, 245, 0.95);
   --text-dark-secondary: rgba(200, 200, 200, 0.8);
   --text-dark-muted: rgba(200, 200, 200, 0.6);
-  --text-dark-faded: rgba(200, 200, 200, 0.6);
 
   /* Theme-Agnostic Text Aliases (auto-switch via light-dark) */
   --text-primary: light-dark(rgba(26, 26, 26, 0.95), rgba(245, 245, 245, 0.95));
   --text-secondary: light-dark(rgba(26, 26, 26, 0.7), rgba(200, 200, 200, 0.8));
   --text-muted: light-dark(rgba(26, 26, 26, 0.65), rgba(200, 200, 200, 0.6));
-  --text-faded: light-dark(rgba(26, 26, 26, 0.65), rgba(200, 200, 200, 0.6));
 
   /* Primary Color Opacity Scale */
   --color-primary-02: rgba(var(--color-primary-rgb), 0.02);
@@ -106,6 +103,7 @@
 
   /* Typography */
   --font-family: 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: monospace;
   --font-weight-normal: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
@@ -231,7 +229,7 @@
   --icg-maturity-optimizing: var(--color-success);
   --icg-maturity-strategic: var(--color-primary);
   --icg-radar-grid: var(--text-muted);
-  --icg-radar-label: var(--text-faded);
+  --icg-radar-label: var(--text-muted);
   --regmap-category-industry: var(--color-distinguish);
   --regmap-category-cyber: var(--color-error);
 
