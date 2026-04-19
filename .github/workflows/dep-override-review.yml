@@ -1,0 +1,87 @@
+# Monthly check: can the path-to-regexp override be removed?
+#
+# The package.json override pins path-to-regexp@6.3.0 to close
+# GHSA-9wv6-86v2-598j (the vulnerable 6.1.0 comes from
+# @vercel/routing-utils). This workflow checks whether the
+# upstream dependency has shipped a fix, making the override
+# removable.
+#
+# If npm audit passes without the override, a GitHub issue is
+# created to prompt cleanup.
+
+name: Dependency Override Review
+
+on:
+  schedule:
+    - cron: '0 9 1 * *' # 1st of each month at 09:00 UTC
+  workflow_dispatch: # manual trigger
+
+permissions:
+  issues: write
+
+jobs:
+  check-override:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Remove path-to-regexp override
+        run: |
+          node -e "
+            const pkg = require('./package.json');
+            delete pkg.overrides['path-to-regexp'];
+            if (Object.keys(pkg.overrides).length === 0) delete pkg.overrides;
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+      - name: Install without override
+        run: npm install --ignore-scripts
+        continue-on-error: true
+
+      - name: Audit without override
+        id: audit
+        run: npm audit --audit-level=moderate --omit=dev
+        continue-on-error: true
+
+      - name: Create issue if override is removable
+        if: steps.audit.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'path-to-regexp override may be removable';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependency-override',
+            });
+            if (issues.some(i => i.title === title)) {
+              console.log('Issue already exists, skipping.');
+              return;
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body: [
+                '## Override removal opportunity',
+                '',
+                '`npm audit --omit=dev` passed without the `path-to-regexp` override.',
+                'This suggests `@vercel/routing-utils` has shipped a version that no longer',
+                'depends on the vulnerable `path-to-regexp@6.1.0`.',
+                '',
+                '### Steps to remove',
+                '1. Delete the `overrides` block from `package.json`',
+                '2. Run `npm install`',
+                '3. Run `npm audit --omit=dev` — confirm 0 vulnerabilities',
+                '4. Run `npm run test:run` and `npm run build`',
+                '5. Update DEVELOPER_TOOLING.md to remove override documentation',
+                '',
+                'See: `GHSA-9wv6-86v2-598j`, DEVELOPER_TOOLING.md § npm audit policy',
+              ].join('\n'),
+              labels: ['dependency-override', 'chore'],
+            });
