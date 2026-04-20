@@ -920,8 +920,8 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
     outline: none;
   }
 
-  :global(html.dark-theme) .currency-select option {
-    background-color: var(--bg-dark-secondary);
+  .currency-select option {
+    background-color: light-dark(inherit, var(--bg-dark-secondary));
   }
 
   /* ── Copy Link button ─────────────────────────────────────────────────── */

@@ -2238,20 +2238,12 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
   .doc-toc :global(.doc-toc-link:focus-visible) {
     color: var(--color-primary);
-    background-color: var(--accent-light-bg);
+    background-color: light-dark(var(--accent-light-bg), var(--accent-light-bg-hover));
   }
 
   .doc-toc :global(.doc-toc-link:active) {
     color: var(--color-primary);
-    background-color: var(--accent-light-bg-hover);
-  }
-
-  :global(html.dark-theme) .doc-toc :global(.doc-toc-link:focus-visible) {
-    background-color: var(--accent-light-bg-hover);
-  }
-
-  :global(html.dark-theme) .doc-toc :global(.doc-toc-link:active) {
-    background-color: var(--border-dark);
+    background-color: light-dark(var(--accent-light-bg-hover), var(--border-dark));
   }
 
   .doc-toc :global(.doc-toc-topic-name) {
