@@ -123,6 +123,11 @@ Smaller text, uppercase, tight padding. Distinct from .cta-button
   color: var(--color-primary);
 }
 
+.brutal-btn--copied {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
 .brutal-btn--full {
   width: 100%;
 }
