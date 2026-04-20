@@ -2790,6 +2790,19 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     .tp-seg {
       max-width: 100%;
     }
+
+    .tp-seg--wide {
+      flex-wrap: wrap;
+      overflow: visible;
+      border: none;
+      gap: 0;
+    }
+
+    .tp-seg--wide .tp-seg__btn {
+      flex: 0 0 auto;
+      border: 2px solid light-dark(var(--border-light), var(--border-dark-default));
+      margin: -1px;
+    }
   }
 
   @media (max-width: 480px) {
