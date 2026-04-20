@@ -61,8 +61,16 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
       <div data-techpar class="techpar-shell">
         <!-- Tab bar -->
-        <div class="tool-tab-bar" data-tab-bar>
-          <button class="tool-tab tool-tab--active" data-tab="profile" type="button">
+        <div class="tool-tab-bar" data-tab-bar role="tablist" aria-label="TechPar sections">
+          <button
+            class="tool-tab tool-tab--active"
+            data-tab="profile"
+            type="button"
+            id="tab-profile"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-profile"
+          >
             <svg
               class="tool-tab__icon"
               width="16"
@@ -78,7 +86,15 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             </svg>
             <span class="tool-tab__label">Profile</span>
           </button>
-          <button class="tool-tab" data-tab="costs" type="button">
+          <button
+            class="tool-tab"
+            data-tab="costs"
+            type="button"
+            id="tab-costs"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-costs"
+          >
             <svg
               class="tool-tab__icon"
               width="16"
@@ -94,7 +110,15 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             </svg>
             <span class="tool-tab__label">Costs</span>
           </button>
-          <button class="tool-tab" data-tab="analysis" type="button">
+          <button
+            class="tool-tab"
+            data-tab="analysis"
+            type="button"
+            id="tab-analysis"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-analysis"
+          >
             <svg
               class="tool-tab__icon"
               width="16"
@@ -110,7 +134,15 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             </svg>
             <span class="tool-tab__label">Analysis</span>
           </button>
-          <button class="tool-tab" data-tab="trajectory" type="button">
+          <button
+            class="tool-tab"
+            data-tab="trajectory"
+            type="button"
+            id="tab-trajectory"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-trajectory"
+          >
             <svg
               class="tool-tab__icon"
               width="16"
@@ -134,7 +166,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
         </div>
 
         <!-- ── TAB: PROFILE ──────────────────────────────────── -->
-        <div class="tp-panel tp-panel--active" data-panel="profile">
+        <div
+          class="tp-panel tp-panel--active"
+          data-panel="profile"
+          id="panel-profile"
+          role="tabpanel"
+          aria-labelledby="tab-profile"
+        >
           <details class="tp-onboarding" data-onboarding open>
             <summary class="tp-onboarding__trigger brutal-label-small">How to use TechPar</summary>
             <div class="tp-onboarding__body brutal-text-tiny">
@@ -171,11 +209,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             <span class="brutal-tool-shell__section-label tp-sec-label"
               >Company stage <span class="brutal-field__req">(required)</span></span
             >
-            <div class="tp-stage-grid" data-stage-grid>
+            <div class="tp-stage-grid" data-stage-grid role="radiogroup" aria-label="Company stage">
               <button
                 class="brutal-option-card brutal-option-card--compact"
                 data-stage="seed"
                 type="button"
+                role="radio"
+                aria-checked="false"
               >
                 <span class="brutal-option-card__label">Seed / Pre-A</span>
                 <span class="brutal-option-card__description">60&ndash;100%</span>
@@ -184,6 +224,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 class="brutal-option-card brutal-option-card--compact"
                 data-stage="series_a"
                 type="button"
+                role="radio"
+                aria-checked="false"
               >
                 <span class="brutal-option-card__label">Series A</span>
                 <span class="brutal-option-card__description">45&ndash;75%</span>
@@ -192,6 +234,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 class="brutal-option-card brutal-option-card--compact"
                 data-stage="series_bc"
                 type="button"
+                role="radio"
+                aria-checked="false"
               >
                 <span class="brutal-option-card__label">Series B&ndash;C</span>
                 <span class="brutal-option-card__description">35&ndash;55%</span>
@@ -200,6 +244,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 class="brutal-option-card brutal-option-card--compact"
                 data-stage="pe"
                 type="button"
+                role="radio"
+                aria-checked="false"
               >
                 <span class="brutal-option-card__label">PE-backed</span>
                 <span class="brutal-option-card__description">25&ndash;40%</span>
@@ -208,6 +254,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 class="brutal-option-card brutal-option-card--compact"
                 data-stage="enterprise"
                 type="button"
+                role="radio"
+                aria-checked="false"
               >
                 <span class="brutal-option-card__label">Enterprise</span>
                 <span class="brutal-option-card__description">18&ndash;32%</span>
@@ -220,16 +268,47 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
           <div class="tp-section">
             <span class="brutal-tool-shell__section-label tp-sec-label">Industry</span>
-            <div class="tp-seg tp-seg--wide" data-seg="industry">
-              <button class="tp-seg__btn tp-seg__btn--active" data-industry="saas" type="button"
-                >SaaS</button
+            <div
+              class="tp-seg tp-seg--wide"
+              data-seg="industry"
+              role="radiogroup"
+              aria-label="Industry"
+            >
+              <button
+                class="tp-seg__btn tp-seg__btn--active"
+                data-industry="saas"
+                type="button"
+                role="radio"
+                aria-checked="true">SaaS</button
               >
-              <button class="tp-seg__btn" data-industry="fintech" type="button">Fintech</button>
-              <button class="tp-seg__btn" data-industry="marketplace" type="button"
-                >Marketplace</button
+              <button
+                class="tp-seg__btn"
+                data-industry="fintech"
+                type="button"
+                role="radio"
+                aria-checked="false">Fintech</button
               >
-              <button class="tp-seg__btn" data-industry="infra_hw" type="button">Hardware</button>
-              <button class="tp-seg__btn" data-industry="other" type="button">Other</button>
+              <button
+                class="tp-seg__btn"
+                data-industry="marketplace"
+                type="button"
+                role="radio"
+                aria-checked="false">Marketplace</button
+              >
+              <button
+                class="tp-seg__btn"
+                data-industry="infra_hw"
+                type="button"
+                role="radio"
+                aria-checked="false">Hardware</button
+              >
+              <button
+                class="tp-seg__btn"
+                data-industry="other"
+                type="button"
+                role="radio"
+                aria-checked="false">Other</button
+              >
             </div>
             <div class="brutal-field__hint brutal-text-tiny">
               Adds industry-specific context to the analysis. Benchmark ranges remain the same
@@ -239,14 +318,42 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
           <div class="tp-section">
             <span class="brutal-tool-shell__section-label tp-sec-label">Display currency</span>
-            <div class="tp-seg" data-seg="currency">
-              <button class="tp-seg__btn tp-seg__btn--active" data-currency="$" type="button"
-                >USD</button
+            <div class="tp-seg" data-seg="currency" role="radiogroup" aria-label="Display currency">
+              <button
+                class="tp-seg__btn tp-seg__btn--active"
+                data-currency="$"
+                type="button"
+                role="radio"
+                aria-checked="true">USD</button
               >
-              <button class="tp-seg__btn" data-currency="€" type="button">EUR</button>
-              <button class="tp-seg__btn" data-currency="£" type="button">GBP</button>
-              <button class="tp-seg__btn" data-currency="C$" type="button">CAD</button>
-              <button class="tp-seg__btn" data-currency="A$" type="button">AUD</button>
+              <button
+                class="tp-seg__btn"
+                data-currency="€"
+                type="button"
+                role="radio"
+                aria-checked="false">EUR</button
+              >
+              <button
+                class="tp-seg__btn"
+                data-currency="£"
+                type="button"
+                role="radio"
+                aria-checked="false">GBP</button
+              >
+              <button
+                class="tp-seg__btn"
+                data-currency="C$"
+                type="button"
+                role="radio"
+                aria-checked="false">CAD</button
+              >
+              <button
+                class="tp-seg__btn"
+                data-currency="A$"
+                type="button"
+                role="radio"
+                aria-checked="false">AUD</button
+              >
             </div>
             <div class="brutal-field__hint brutal-text-tiny">
               Display only. All values remain in your local currency.
@@ -260,11 +367,36 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 >ARR or TTM Revenue <span class="brutal-field__req">(required)</span></label
               >
               <div class="tp-arr-quick" data-arr-quick>
-                <button class="tp-arr-chip" data-arr-val="10000000" type="button">$10M</button>
-                <button class="tp-arr-chip" data-arr-val="25000000" type="button">$25M</button>
-                <button class="tp-arr-chip" data-arr-val="50000000" type="button">$50M</button>
-                <button class="tp-arr-chip" data-arr-val="100000000" type="button">$100M</button>
-                <button class="tp-arr-chip" data-arr-val="250000000" type="button">$250M</button>
+                <button
+                  class="tp-arr-chip"
+                  aria-pressed="false"
+                  data-arr-val="10000000"
+                  type="button">$10M</button
+                >
+                <button
+                  class="tp-arr-chip"
+                  aria-pressed="false"
+                  data-arr-val="25000000"
+                  type="button">$25M</button
+                >
+                <button
+                  class="tp-arr-chip"
+                  aria-pressed="false"
+                  data-arr-val="50000000"
+                  type="button">$50M</button
+                >
+                <button
+                  class="tp-arr-chip"
+                  aria-pressed="false"
+                  data-arr-val="100000000"
+                  type="button">$100M</button
+                >
+                <button
+                  class="tp-arr-chip"
+                  aria-pressed="false"
+                  data-arr-val="250000000"
+                  type="button">$250M</button
+                >
               </div>
               <div class="brutal-field__input-wrap">
                 <span class="brutal-field__prefix">$</span>
@@ -290,11 +422,40 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
               >Revenue growth assumption</span
             >
             <div class="tp-seg-row">
-              <div class="tp-seg" data-seg="growth">
-                <button class="tp-seg__btn" data-growth="10" type="button">10%</button>
-                <button class="tp-seg__btn" data-growth="20" type="button">20%</button>
-                <button class="tp-seg__btn" data-growth="30" type="button">30%</button>
-                <button class="tp-seg__btn" data-growth="50" type="button">50%</button>
+              <div
+                class="tp-seg"
+                data-seg="growth"
+                role="radiogroup"
+                aria-label="Revenue growth rate"
+              >
+                <button
+                  class="tp-seg__btn"
+                  data-growth="10"
+                  type="button"
+                  role="radio"
+                  aria-checked="false">10%</button
+                >
+                <button
+                  class="tp-seg__btn"
+                  data-growth="20"
+                  type="button"
+                  role="radio"
+                  aria-checked="false">20%</button
+                >
+                <button
+                  class="tp-seg__btn"
+                  data-growth="30"
+                  type="button"
+                  role="radio"
+                  aria-checked="false">30%</button
+                >
+                <button
+                  class="tp-seg__btn"
+                  data-growth="50"
+                  type="button"
+                  role="radio"
+                  aria-checked="false">50%</button
+                >
               </div>
             </div>
             <div class="brutal-field__input-wrap">
@@ -305,6 +466,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 min="1"
                 max="500"
                 placeholder="Custom"
+                aria-label="Custom growth rate (%)"
                 class="brutal-field__input--no-prefix brutal-field__input--has-suffix"
               />
               <span class="brutal-field__suffix">%</span>
@@ -329,30 +491,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             <div class="tp-arr-quick">
               <button
                 class="tp-arr-chip"
+                aria-pressed="false"
                 data-preset-for="exitMult"
                 data-preset-val="6"
                 type="button">6×</button
               >
               <button
                 class="tp-arr-chip"
+                aria-pressed="false"
                 data-preset-for="exitMult"
                 data-preset-val="10"
                 type="button">10×</button
               >
               <button
                 class="tp-arr-chip"
+                aria-pressed="false"
                 data-preset-for="exitMult"
                 data-preset-val="12"
                 type="button">12×</button
               >
               <button
                 class="tp-arr-chip"
+                aria-pressed="false"
                 data-preset-for="exitMult"
                 data-preset-val="15"
                 type="button">15×</button
               >
               <button
                 class="tp-arr-chip"
+                aria-pressed="false"
                 data-preset-for="exitMult"
                 data-preset-val="20"
                 type="button">20×</button
@@ -399,7 +566,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
         </div>
 
         <!-- ── TAB: COSTS ────────────────────────────────────── -->
-        <div class="tp-panel" data-panel="costs">
+        <div
+          class="tp-panel"
+          data-panel="costs"
+          id="panel-costs"
+          role="tabpanel"
+          aria-labelledby="tab-costs"
+        >
           <div class="tp-panel__header">
             <span class="tp-step brutal-label-small">Step 2 of 4</span>
             <h2 class="tp-panel__title brutal-heading-md">Technology costs</h2>
@@ -412,11 +585,21 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
           <!-- Mode toggle -->
           <div class="tp-section">
             <span class="brutal-tool-shell__section-label tp-sec-label">Input mode</span>
-            <div class="tp-seg" data-seg="mode">
-              <button class="tp-seg__btn tp-seg__btn--active" data-mode="quick" type="button"
-                >Quick</button
+            <div class="tp-seg" data-seg="mode" role="radiogroup" aria-label="R&D input mode">
+              <button
+                class="tp-seg__btn tp-seg__btn--active"
+                data-mode="quick"
+                type="button"
+                role="radio"
+                aria-checked="true">Quick</button
               >
-              <button class="tp-seg__btn" data-mode="deepdive" type="button">Deep Dive</button>
+              <button
+                class="tp-seg__btn"
+                data-mode="deepdive"
+                type="button"
+                role="radio"
+                aria-checked="false">Deep Dive</button
+              >
             </div>
             <div class="brutal-field__hint brutal-text-tiny">
               Deep Dive breaks R&D into sub-categories and unlocks the revenue-per-engineer KPI.
@@ -441,41 +624,59 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 ><span data-infra-label>Monthly cloud spend</span>
                 <span class="brutal-field__req">(required)</span></label
               >
-              <div class="tp-seg tp-seg--sm" data-seg="infra-period">
+              <div
+                class="tp-seg tp-seg--sm"
+                data-seg="infra-period"
+                role="radiogroup"
+                aria-label="Infrastructure cost period"
+              >
                 <button
                   class="tp-seg__btn tp-seg__btn--active"
                   data-infra-period="monthly"
-                  type="button">Monthly</button
+                  type="button"
+                  role="radio"
+                  aria-checked="true">Monthly</button
                 >
-                <button class="tp-seg__btn" data-infra-period="annual" type="button">Annual</button>
+                <button
+                  class="tp-seg__btn"
+                  data-infra-period="annual"
+                  type="button"
+                  role="radio"
+                  aria-checked="false">Annual</button
+                >
               </div>
               <div class="tp-arr-quick" data-infra-chips-monthly>
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="5000"
                   type="button">$5K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="15000"
                   type="button">$15K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="50000"
                   type="button">$50K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="150000"
                   type="button">$150K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="500000"
                   type="button">$500K</button
@@ -484,30 +685,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
               <div class="tp-arr-quick" data-infra-chips-annual style="display:none">
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="50000"
                   type="button">$50K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="200000"
                   type="button">$200K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="500000"
                   type="button">$500K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="2000000"
                   type="button">$2M</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infra"
                   data-preset-val="5000000"
                   type="button">$5M</button
@@ -551,30 +757,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
               <div class="tp-arr-quick">
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infraPers"
                   data-preset-val="250000"
                   type="button">$250K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infraPers"
                   data-preset-val="500000"
                   type="button">$500K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infraPers"
                   data-preset-val="1000000"
                   type="button">$1M</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infraPers"
                   data-preset-val="2000000"
                   type="button">$2M</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="infraPers"
                   data-preset-val="5000000"
                   type="button">$5M</button
@@ -618,30 +829,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 <div class="tp-arr-quick">
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdOpEx"
                     data-preset-val="1000000"
                     type="button">$1M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdOpEx"
                     data-preset-val="3000000"
                     type="button">$3M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdOpEx"
                     data-preset-val="5000000"
                     type="button">$5M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdOpEx"
                     data-preset-val="10000000"
                     type="button">$10M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdOpEx"
                     data-preset-val="25000000"
                     type="button">$25M</button
@@ -680,30 +896,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 <div class="tp-arr-quick">
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdEng"
                     data-preset-val="500000"
                     type="button">$500K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdEng"
                     data-preset-val="1000000"
                     type="button">$1M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdEng"
                     data-preset-val="3000000"
                     type="button">$3M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdEng"
                     data-preset-val="5000000"
                     type="button">$5M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdEng"
                     data-preset-val="10000000"
                     type="button">$10M</button
@@ -732,30 +953,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 <div class="tp-arr-quick">
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdProd"
                     data-preset-val="250000"
                     type="button">$250K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdProd"
                     data-preset-val="500000"
                     type="button">$500K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdProd"
                     data-preset-val="1000000"
                     type="button">$1M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdProd"
                     data-preset-val="2000000"
                     type="button">$2M</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdProd"
                     data-preset-val="5000000"
                     type="button">$5M</button
@@ -783,30 +1009,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
                 <div class="tp-arr-quick">
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdTool"
                     data-preset-val="50000"
                     type="button">$50K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdTool"
                     data-preset-val="100000"
                     type="button">$100K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdTool"
                     data-preset-val="250000"
                     type="button">$250K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdTool"
                     data-preset-val="500000"
                     type="button">$500K</button
                   >
                   <button
                     class="tp-arr-chip"
+                    aria-pressed="false"
                     data-preset-for="rdTool"
                     data-preset-val="1000000"
                     type="button">$1M</button
@@ -843,30 +1074,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
               <div class="tp-arr-quick">
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="engFTE"
                   data-preset-val="5"
                   type="button">5</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="engFTE"
                   data-preset-val="10"
                   type="button">10</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="engFTE"
                   data-preset-val="25"
                   type="button">25</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="engFTE"
                   data-preset-val="50"
                   type="button">50</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="engFTE"
                   data-preset-val="100"
                   type="button">100</button
@@ -902,30 +1138,35 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
               <div class="tp-arr-quick">
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="rdCapEx"
                   data-preset-val="500000"
                   type="button">$500K</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="rdCapEx"
                   data-preset-val="1000000"
                   type="button">$1M</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="rdCapEx"
                   data-preset-val="2000000"
                   type="button">$2M</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="rdCapEx"
                   data-preset-val="5000000"
                   type="button">$5M</button
                 >
                 <button
                   class="tp-arr-chip"
+                  aria-pressed="false"
                   data-preset-for="rdCapEx"
                   data-preset-val="10000000"
                   type="button">$10M</button
@@ -974,7 +1215,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
         </div>
 
         <!-- ── TAB: ANALYSIS ─────────────────────────────────── -->
-        <div class="tp-panel" data-panel="analysis">
+        <div
+          class="tp-panel"
+          data-panel="analysis"
+          id="panel-analysis"
+          role="tabpanel"
+          aria-labelledby="tab-analysis"
+        >
           <div class="tp-panel__header">
             <span class="tp-step brutal-label-small">Step 3 of 4</span>
             <h2 class="tp-panel__title brutal-heading-md">Analysis</h2>
@@ -1010,7 +1257,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
           <!-- Content -->
           <div data-analysis-content class="tp-analysis-content">
             <!-- Primary KPI -->
-            <div class="tp-kpi-hero" data-kpi-hero>
+            <div class="tp-kpi-hero" data-kpi-hero aria-live="polite" aria-atomic="true">
               <div class="tp-kpi-hero__num" data-hero-num>&#8212;</div>
               <div class="tp-kpi-hero__lbl brutal-text-small">
                 total technology cost as % of revenue
@@ -1064,13 +1311,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             </div>
 
             <!-- Recommendations -->
-            <div class="tp-recs" data-recommendations style="display:none">
+            <div class="tp-recs" data-recommendations style="display:none" aria-live="polite">
               <div class="tp-recs__title brutal-label-small">Recommended actions</div>
               <ol class="tp-recs__list" data-recs-list></ol>
             </div>
 
             <!-- KPI grid -->
-            <div class="tp-kpi-grid" data-kpi-grid></div>
+            <div class="tp-kpi-grid" data-kpi-grid aria-live="polite"></div>
 
             <!-- Deep Dive prompt -->
             <div class="tp-deepdive-prompt" data-deepdive-prompt style="display:none"></div>
@@ -1221,7 +1468,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
         </div>
 
         <!-- ── TAB: TRAJECTORY ───────────────────────────────── -->
-        <div class="tp-panel" data-panel="trajectory">
+        <div
+          class="tp-panel"
+          data-panel="trajectory"
+          id="panel-trajectory"
+          role="tabpanel"
+          aria-labelledby="tab-trajectory"
+        >
           <div class="tp-panel__header">
             <span class="tp-step brutal-label-small">Step 4 of 4</span>
             <h2 class="tp-panel__title brutal-heading-md">Trajectory</h2>
@@ -1246,7 +1499,10 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
             <div class="tp-traj-note" data-traj-note></div>
 
             <div class="tp-traj-chart-wrap">
-              <canvas data-traj-canvas></canvas>
+              <canvas
+                data-traj-canvas
+                aria-label="36-month technology cost trajectory chart showing projected spending as a percentage of revenue with benchmark zones"
+              ></canvas>
               <div class="tp-traj-dot" data-traj-dot></div>
             </div>
             <div class="tp-traj-legend" data-traj-legend></div>
