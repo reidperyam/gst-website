@@ -51,7 +51,7 @@ export function goTab(
 // ─── Copy link ────────────────────────────────────────────
 export function copyLink(btn: HTMLButtonElement) {
   trackEvent({ event: 'tp_copy_link', category: 'tool', page: 'techpar' });
-  copyWithFeedback(window.location.href, btn, { copiedClass: 'tp-btn-share--copied' });
+  copyWithFeedback(window.location.href, btn, { copiedClass: 'brutal-btn--copied' });
 }
 
 // ─── Copy summary ─────────────────────────────────────────
@@ -68,7 +68,7 @@ export function copySummary(btn: HTMLButtonElement) {
     window.location.href,
     validHist.length ? validHist : undefined
   );
-  copyWithFeedback(text, btn, { copiedClass: 'tp-btn-share--copied' });
+  copyWithFeedback(text, btn, { copiedClass: 'brutal-btn--copied' });
 }
 
 // ─── Export PDF ───────────────────────────────────────────
@@ -279,7 +279,9 @@ export function resetAll(deps: {
     b.classList.toggle('tp-seg__btn--active', (b as HTMLElement).dataset.industry === 'saas');
   });
 
-  $$('.tp-stage-card').forEach((c) => c.classList.remove('tp-stage-card--active'));
+  $$('.brutal-option-card[data-stage]').forEach((c) =>
+    c.classList.remove('brutal-option-card--selected')
+  );
   $$('[data-growth]').forEach((b) => b.classList.remove('tp-seg__btn--active'));
   const growthCustomEl = document.getElementById('tp-growth-custom') as HTMLInputElement | null;
   if (growthCustomEl) growthCustomEl.value = '';
@@ -607,8 +609,11 @@ export function hydrateFromUrl() {
 
   if (state.stage) {
     tp.stageKey = state.stage;
-    $$('.tp-stage-card').forEach((c) => {
-      c.classList.toggle('tp-stage-card--active', (c as HTMLElement).dataset.stage === tp.stageKey);
+    $$('.brutal-option-card[data-stage]').forEach((c) => {
+      c.classList.toggle(
+        'brutal-option-card--selected',
+        (c as HTMLElement).dataset.stage === tp.stageKey
+      );
     });
   }
 

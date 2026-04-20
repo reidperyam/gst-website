@@ -193,10 +193,12 @@ document.querySelectorAll('[data-action]').forEach((btn) => {
 });
 
 // Stage selector
-$$('.tp-stage-card').forEach((card) => {
+$$('.brutal-option-card[data-stage]').forEach((card) => {
   card.addEventListener('click', () => {
-    $$('.tp-stage-card').forEach((c) => c.classList.remove('tp-stage-card--active'));
-    card.classList.add('tp-stage-card--active');
+    $$('.brutal-option-card[data-stage]').forEach((c) =>
+      c.classList.remove('brutal-option-card--selected')
+    );
+    card.classList.add('brutal-option-card--selected');
     tp.stageKey = (card as HTMLElement).dataset.stage || 'series_bc';
     trackEvent({ event: 'tp_stage_select', category: 'tool', stage: tp.stageKey, page: 'techpar' });
     if (!tpStartFired) {
