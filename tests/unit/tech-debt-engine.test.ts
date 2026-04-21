@@ -26,6 +26,8 @@ import {
   DEPLOY_OPTIONS,
   encodeState,
   decodeState,
+  burdenClassify,
+  contextNote,
 } from '../../src/utils/tech-debt-engine';
 
 import type { CalcState } from '../../src/utils/tech-debt-engine';
@@ -435,6 +437,93 @@ describe('DEFAULT_STATE', () => {
 
   it('initialises contextSwitchOn to false', () => {
     expect(DEFAULT_STATE.contextSwitchOn).toBe(false);
+  });
+});
+
+// ─── burdenClassify ─────────────────────────────────────────────────────────
+
+describe('burdenClassify', () => {
+  it('returns Well-managed for pct 0', () => {
+    expect(burdenClassify(0).text).toBe('Well-managed');
+  });
+
+  it('returns Well-managed for pct 9 (boundary)', () => {
+    expect(burdenClassify(9).text).toBe('Well-managed');
+    expect(burdenClassify(9).range).toBe('< 10%');
+  });
+
+  it('returns Acceptable for pct 10 (boundary)', () => {
+    expect(burdenClassify(10).text).toBe('Acceptable');
+    expect(burdenClassify(10).range).toBe('10–15%');
+  });
+
+  it('returns Acceptable for pct 14', () => {
+    expect(burdenClassify(14).text).toBe('Acceptable');
+  });
+
+  it('returns Yellow flag for pct 15 (boundary)', () => {
+    expect(burdenClassify(15).text).toBe('Yellow flag');
+    expect(burdenClassify(15).range).toBe('15–25%');
+  });
+
+  it('returns Yellow flag for pct 24', () => {
+    expect(burdenClassify(24).text).toBe('Yellow flag');
+  });
+
+  it('returns Red flag for pct 25 (boundary)', () => {
+    expect(burdenClassify(25).text).toBe('Red flag');
+    expect(burdenClassify(25).range).toBe('25–40%');
+  });
+
+  it('returns Red flag for pct 39', () => {
+    expect(burdenClassify(39).text).toBe('Red flag');
+  });
+
+  it('returns Deal risk for pct 40 (boundary)', () => {
+    expect(burdenClassify(40).text).toBe('Deal risk');
+    expect(burdenClassify(40).range).toBe('40%+');
+  });
+
+  it('returns Deal risk for pct 100', () => {
+    expect(burdenClassify(100).text).toBe('Deal risk');
+  });
+
+  it('every level returns a non-empty color', () => {
+    for (const pct of [0, 10, 15, 25, 40]) {
+      expect(burdenClassify(pct).color.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+// ─── contextNote ────────────────────────────────────────────────────────────
+
+describe('contextNote', () => {
+  it('returns different text for each burden tier', () => {
+    const tiers = [5, 12, 20, 30, 50];
+    const notes = tiers.map((pct) => contextNote(pct, '$1M'));
+    const unique = new Set(notes);
+    expect(unique.size).toBe(tiers.length);
+  });
+
+  it('returns non-empty string for all tiers', () => {
+    for (const pct of [0, 10, 15, 25, 40, 100]) {
+      expect(contextNote(pct, '$500K').length).toBeGreaterThan(0);
+    }
+  });
+
+  it('interpolates pct in the 25+ tiers', () => {
+    expect(contextNote(30, '$1M')).toContain('30%');
+    expect(contextNote(45, '$2M')).toContain('45%');
+  });
+
+  it('interpolates formatted cost in the 25+ tiers', () => {
+    expect(contextNote(30, '$1.5M')).toContain('$1.5M');
+    expect(contextNote(45, '$3M')).toContain('$3M');
+  });
+
+  it('does not interpolate pct in the < 25 tiers', () => {
+    const note5 = contextNote(5, '$100K');
+    expect(note5).not.toContain('5%');
   });
 });
 

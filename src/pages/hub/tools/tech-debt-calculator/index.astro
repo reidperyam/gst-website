@@ -1317,9 +1317,11 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
     encodeState,
     decodeState,
     buildSummaryText,
+    burdenClassify,
+    contextNote,
   } from '../../../../utils/tech-debt-engine';
 
-  import type { CalcState } from '../../../../utils/tech-debt-engine';
+  import type { CalcState, CalcResult } from '../../../../utils/tech-debt-engine';
   import { trackEvent } from '../../../../utils/analytics';
   import { copyWithFeedback } from '../../../../utils/copy-feedback';
 
@@ -1387,33 +1389,11 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
 
   const state: CalcState = { ...DEFAULT_STATE };
 
-  // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-  function burdenLabel(pct: number): { text: string; range: string; color: string } {
-    if (pct < 10) return { text: 'Well-managed', range: '< 10%', color: 'var(--color-primary)' };
-    if (pct < 15) return { text: 'Acceptable', range: '10–15%', color: 'var(--color-primary)' };
-    if (pct < 25) return { text: 'Yellow flag', range: '15–25%', color: 'var(--color-secondary)' };
-    if (pct < 40) return { text: 'Red flag', range: '25–40%', color: '#d93636' };
-    return { text: 'Deal risk', range: '40%+', color: '#b82e2e' };
-  }
-
-  function contextNote(pct: number, formattedAnnualCost: string): string {
-    if (pct < 10)
-      return 'Engineering capacity is predominantly forward-looking. Maintain discipline as the team scales.';
-    if (pct < 15)
-      return 'Some accumulated friction is present. Normal for companies that have shipped fast, but should be on the 100-day plan.';
-    if (pct < 25)
-      return `At ${pct}% burden, maintenance is a material drag on velocity. Warrants targeted investigation into root causes and active mitigation: SDLC maturity, infrastructure architecture, test coverage, and deployment pipeline should all be examined.`;
-    if (pct < 40)
-      return `At ${pct}% burden, debt is a strategic liability carrying ${formattedAnnualCost}/yr in costs. Expect architectural problems, manual processes, fragile deployments, and potential talent retention risk. Remediation cost belongs in the deal model.`;
-    return `At ${pct}% burden, debt is the dominant constraint on this technology organization. The ${formattedAnnualCost}/yr carrying cost signals the platform may require significant restructuring or rewrite post-close. Factor directly into valuation.`;
-  }
-
-  // ─── Render ───────────────────────────────────────────────────────────────────
+  // ─── Render sub-functions ──────────────────────────────────────────────────────
 
   let tdcCompleteFired = false;
-  function render(): void {
-    const result = calculate(state);
+
+  function renderAnalytics(result: CalcResult): void {
     if (tdcStartFired && !tdcCompleteFired) {
       trackEvent({
         event: 'tdc_complete',
@@ -1423,16 +1403,16 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
       });
       tdcCompleteFired = true;
     }
-    const teamSize = posToTeamSize(state.teamSizePos);
+  }
 
-    // ── Core results ──
+  function renderCoreMetrics(state: CalcState, result: CalcResult, teamSize: number): void {
     getMetric('annual-cost').textContent = fmtShortC(result.annualCost);
     getMetric('per-month').textContent = fmtShortC(result.totalMonthly);
     getMetric('hrs-lost').textContent = result.hoursLostPerEng.toFixed(0) + 'h';
     getMetric('cost-per-eng').textContent = fmtShortC(result.costPerEng);
 
     const engsLost = ((teamSize * state.maintPct) / 100).toFixed(1);
-    const burden = burdenLabel(state.maintPct);
+    const burden = burdenClassify(state.maintPct);
 
     el('ctx-engs-lost').textContent = engsLost + ' FTEs';
     el('ctx-engs-lost').style.color =
@@ -1443,11 +1423,11 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
     el('ctx-burden-range').style.color = burden.color;
     el('ctx-note').textContent = contextNote(state.maintPct, fmtShortC(result.annualCost));
 
-    // Colour the primary cost figure by severity
     getMetric('annual-cost').style.color =
       state.maintPct >= 35 ? 'var(--color-secondary)' : 'var(--color-primary)';
+  }
 
-    // ── Advanced panel + results visibility ──
+  function renderAdvancedPanel(state: CalcState, result: CalcResult): void {
     const advPanel = document.querySelector('[data-advanced-panel]') as HTMLElement | null;
     const advResults = document.querySelector('[data-adv-results]') as HTMLElement | null;
     if (advPanel) advPanel.classList.toggle('is-hidden', !state.advancedOpen);
@@ -1475,7 +1455,6 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
       getMetric('incident-labor').style.color = 'var(--color-secondary)';
       getMetric('direct-labor').style.color = '';
 
-      // Context-switch line item
       const ctxSwitchStat = document.getElementById('ctx-switch-stat');
       if (ctxSwitchStat) {
         ctxSwitchStat.style.display = state.contextSwitchOn ? '' : 'none';
@@ -1492,8 +1471,9 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
       el('payback-disclaimer').textContent =
         `Remediation efficiency: ${state.remediationPct}% · Budget: ${fmtC(posTobudget(state.budgetPos))}`;
     }
+  }
 
-    // ── Deploy buttons ──
+  function renderDeployButtons(state: CalcState): void {
     document.querySelectorAll('[data-deploy-btn]').forEach((btn) => {
       const b = btn as HTMLElement;
       const isActive = Number(b.dataset.deployBtn) === state.deployIdx;
@@ -1501,7 +1481,6 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
       b.setAttribute('aria-pressed', String(isActive));
     });
 
-    // ── DORA message ──
     const doraEl = document.querySelector('[data-dora-message]') as HTMLElement;
     if (state.deployIdx >= 6) {
       doraEl.textContent =
@@ -1515,8 +1494,9 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
       doraEl.textContent = '';
       doraEl.style.color = '';
     }
+  }
 
-    // ── Slider display values ──
+  function renderSliderValues(state: CalcState, teamSize: number): void {
     getDisplay('team-size').textContent = String(teamSize);
     getDisplay('salary').textContent = fmtShortC(posToSalary(state.salaryPos));
     getDisplay('maint-pct').textContent = state.maintPct + '%';
@@ -1526,11 +1506,9 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
     getDisplay('arr').textContent = fmtShortC(posToArr(state.arrPos));
     getDisplay('remediation').textContent = state.remediationPct + '%';
 
-    // ── Context-switch checkbox sync ──
     const ctxCheckbox = document.getElementById('input-context-switch') as HTMLInputElement | null;
     if (ctxCheckbox) ctxCheckbox.checked = state.contextSwitchOn;
 
-    // ── Slider ARIA (screen-reader-friendly value announcements) ──
     const setAriaValue = (id: string, now: number, text: string) => {
       const slider = document.getElementById(id);
       if (slider) {
@@ -1551,7 +1529,6 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
     setAriaValue('input-budget', state.budgetPos, fmtShortC(posTobudget(state.budgetPos)));
     setAriaValue('input-remediation', state.remediationPct, `${state.remediationPct}%`);
 
-    // ── Slider endpoint hint labels (currency-sensitive) ──
     const hint = (key: string): HTMLElement | null =>
       document.querySelector(`[data-hint="${key}"]`);
     const salaryMin = hint('salary-min');
@@ -1566,8 +1543,16 @@ import { DEPLOY_OPTIONS, DEFAULT_STATE } from '../../../../utils/tech-debt-engin
     if (budgetMin) budgetMin.textContent = fmtShortC(10000);
     const budgetMax = hint('budget-max');
     if (budgetMax) budgetMax.textContent = fmtShortC(50000000);
+  }
 
-    // ── Sync direct inputs and persist state to URL ──
+  function render(): void {
+    const result = calculate(state);
+    const teamSize = posToTeamSize(state.teamSizePos);
+    renderAnalytics(result);
+    renderCoreMetrics(state, result, teamSize);
+    renderAdvancedPanel(state, result);
+    renderDeployButtons(state);
+    renderSliderValues(state, teamSize);
     syncDirectInputs();
     pushUrlState(state);
   }

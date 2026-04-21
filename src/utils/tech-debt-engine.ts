@@ -193,8 +193,24 @@ export const fmtShortC = (n: number, symbol: string = '$', multiplier: number = 
   return `${symbol}${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(v)}`;
 };
 
-// ─── Plain-text summary for clipboard export ─────────────────────────────────
+// ─── Burden classification ───────────────────────────────────────────────────
 
+export interface BurdenLevel {
+  text: string;
+  range: string;
+  color: string;
+}
+
+/** Rich burden classification for UI display (label + range + color). */
+export function burdenClassify(pct: number): BurdenLevel {
+  if (pct < 10) return { text: 'Well-managed', range: '< 10%', color: 'var(--color-primary)' };
+  if (pct < 15) return { text: 'Acceptable', range: '10–15%', color: 'var(--color-primary)' };
+  if (pct < 25) return { text: 'Yellow flag', range: '15–25%', color: 'var(--color-secondary)' };
+  if (pct < 40) return { text: 'Red flag', range: '25–40%', color: '#d93636' };
+  return { text: 'Deal risk', range: '40%+', color: '#b82e2e' };
+}
+
+/** Plain-text burden label for clipboard/summary export. */
 function burdenLabel(pct: number): string {
   if (pct < 10) return 'Well-managed (< 10%)';
   if (pct < 15) return 'Acceptable (10-15%)';
@@ -203,7 +219,10 @@ function burdenLabel(pct: number): string {
   return 'Deal risk (40%+)';
 }
 
-function contextNote(pct: number, formattedAnnualCost: string): string {
+// ─── Plain-text summary for clipboard export ─────────────────────────────────
+
+/** Contextual narrative for a given burden level. */
+export function contextNote(pct: number, formattedAnnualCost: string): string {
   if (pct < 10)
     return 'Engineering capacity is predominantly forward-looking. Maintain discipline as the team scales.';
   if (pct < 15)
