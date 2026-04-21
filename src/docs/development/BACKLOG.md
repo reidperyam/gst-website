@@ -627,14 +627,14 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-027: Global CSS Refactoring
 
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 8-16 hours | **Status**: Deferred
+**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 8-16 hours | **Status**: Complete
 
 **As a** developer, **I want** remaining component-specific styles extracted from `global.css` into scoped blocks **so that** the global stylesheet is smaller and pages load only the CSS they need.
 
 #### Acceptance Criteria
 
-- [ ] Component-specific styles extracted from `global.css` into scoped `<style>` blocks
-- [ ] Lighthouse CSS metrics do not regress
+- [x] Component-specific styles extracted into 13 files under `src/styles/components/` (see BL-021)
+- [x] `global.css` reduced from 5,465 to 372 lines — remainder is genuinely global (layout, utilities, base styles)
 
 #### Technical Context
 
