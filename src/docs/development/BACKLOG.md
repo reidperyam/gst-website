@@ -381,7 +381,7 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-016: Tech Debt Calculator — Executive Summary Mode (P5)
 
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Open
+**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Will Not Implement
 
 **As a** PE advisor, **I want** an executive summary tab with industry archetype presets **so that** I can quickly generate a narrative output for board presentations without manually configuring sliders.
 
