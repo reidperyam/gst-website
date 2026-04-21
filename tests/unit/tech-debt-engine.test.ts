@@ -231,25 +231,81 @@ describe('calculate() — expanded mode (advancedOpen: true)', () => {
     expect(calculate(state).paybackMonths).toBe(Infinity);
   });
 
-  it('paybackMonths equals budgetVal / totalMonthly — concrete arithmetic', () => {
-    // Use salary with exact hourlyRate to make incidentMonthly deterministic
-    // budgetToPos(600000) → budgetVal ≈ 600000; verify exact formula holds
+  it('paybackMonths equals budgetVal / monthlySavings — concrete arithmetic', () => {
     const state = makeState({
       advancedOpen: true,
       budgetPos: budgetToPos(600000),
       maintPct: 50,
       incidents: 0,
       mttr: 1,
+      remediationPct: 70,
     });
     const result = calculate(state);
     const budgetVal = posTobudget(state.budgetPos);
-    expect(result.paybackMonths).toBeCloseTo(budgetVal / result.totalMonthly, 5);
+    expect(result.paybackMonths).toBeCloseTo(budgetVal / result.monthlySavings, 5);
   });
 
   it('paybackMonths decreases as remediation budget decreases', () => {
     const hi = calculate(makeState({ advancedOpen: true, budgetPos: budgetToPos(1_000_000) }));
     const lo = calculate(makeState({ advancedOpen: true, budgetPos: budgetToPos(100_000) }));
     expect(lo.paybackMonths).toBeLessThan(hi.paybackMonths);
+  });
+});
+
+// ─── Remediation efficiency ──────────────────────────────────────────────────
+
+describe('calculate — remediationPct', () => {
+  it('monthlySavings equals totalMonthly × remediationPct/100', () => {
+    const result = calculate(makeState({ remediationPct: 70 }));
+    expect(result.monthlySavings).toBeCloseTo(result.totalMonthly * 0.7, 5);
+  });
+
+  it('remediationPct: 100 gives monthlySavings equal to totalMonthly (backward-compatible)', () => {
+    const result = calculate(makeState({ remediationPct: 100 }));
+    expect(result.monthlySavings).toBeCloseTo(result.totalMonthly, 5);
+  });
+
+  it('remediationPct: 0 gives zero savings and infinite payback', () => {
+    const result = calculate(makeState({ remediationPct: 0 }));
+    expect(result.monthlySavings).toBe(0);
+    expect(result.paybackMonths).toBe(Infinity);
+  });
+
+  it('payback period increases as remediation efficiency decreases', () => {
+    const hi = calculate(makeState({ advancedOpen: true, remediationPct: 90 }));
+    const lo = calculate(makeState({ advancedOpen: true, remediationPct: 30 }));
+    expect(lo.paybackMonths).toBeGreaterThan(hi.paybackMonths);
+  });
+});
+
+// ─── Context-switch overhead ────────────────────────────────────────────────
+
+describe('calculate — contextSwitchOn', () => {
+  it('contextSwitchMonthly is 23% of directMonthly when enabled', () => {
+    const result = calculate(makeState({ contextSwitchOn: true }));
+    expect(result.contextSwitchMonthly).toBeCloseTo(result.directMonthly * 0.23, 5);
+  });
+
+  it('contextSwitchMonthly is 0 when disabled', () => {
+    const result = calculate(makeState({ contextSwitchOn: false }));
+    expect(result.contextSwitchMonthly).toBe(0);
+  });
+
+  it('totalMonthly includes context-switch overhead when enabled', () => {
+    const on = calculate(makeState({ contextSwitchOn: true, incidents: 0, mttr: 1 }));
+    expect(on.totalMonthly).toBeCloseTo(on.directMonthly + on.contextSwitchMonthly, 5);
+  });
+
+  it('enabling context-switch increases annualCost', () => {
+    const off = calculate(makeState({ contextSwitchOn: false }));
+    const on = calculate(makeState({ contextSwitchOn: true }));
+    expect(on.annualCost).toBeGreaterThan(off.annualCost);
+  });
+
+  it('combined: both features active simultaneously', () => {
+    const result = calculate(makeState({ contextSwitchOn: true, remediationPct: 50 }));
+    expect(result.contextSwitchMonthly).toBeCloseTo(result.directMonthly * 0.23, 5);
+    expect(result.monthlySavings).toBeCloseTo(result.totalMonthly * 0.5, 5);
   });
 });
 
@@ -372,6 +428,14 @@ describe('DEFAULT_STATE', () => {
   it('initialises ARR within 3 × $100K snap of $10M', () => {
     expect(Math.abs(posToArr(DEFAULT_STATE.arrPos) - 10_000_000)).toBeLessThanOrEqual(300_000);
   });
+
+  it('initialises remediationPct to 70', () => {
+    expect(DEFAULT_STATE.remediationPct).toBe(70);
+  });
+
+  it('initialises contextSwitchOn to false', () => {
+    expect(DEFAULT_STATE.contextSwitchOn).toBe(false);
+  });
 });
 
 // ─── encodeState / decodeState ────────────────────────────────────────────────
@@ -421,6 +485,8 @@ describe('decodeState', () => {
     expect(decoded!.mttr).toBe(DEFAULT_STATE.mttr);
     expect(decoded!.budgetPos).toBe(DEFAULT_STATE.budgetPos);
     expect(decoded!.arrPos).toBe(DEFAULT_STATE.arrPos);
+    expect(decoded!.remediationPct).toBe(DEFAULT_STATE.remediationPct);
+    expect(decoded!.contextSwitchOn).toBe(DEFAULT_STATE.contextSwitchOn);
   });
 
   it('returns null for an empty string', () => {
@@ -516,5 +582,47 @@ describe('decodeState', () => {
     expect(result.maintPct).toBe(50);
     expect((result as any).future_field).toBeUndefined();
     expect((result as any).another).toBeUndefined();
+  });
+
+  // ── remediationPct (re) ──
+
+  it('round-trips remediationPct through encode/decode', () => {
+    const state = makeState({ remediationPct: 42 });
+    const decoded = decodeState(encodeState(state))!;
+    expect(decoded.remediationPct).toBe(42);
+  });
+
+  it('rejects out-of-range remediationPct (> 100)', () => {
+    expect(decodeState(btoa(JSON.stringify({ re: 101 })))!.remediationPct).toBeUndefined();
+  });
+
+  it('rejects negative remediationPct', () => {
+    expect(decodeState(btoa(JSON.stringify({ re: -1 })))!.remediationPct).toBeUndefined();
+  });
+
+  it('rejects float remediationPct', () => {
+    expect(decodeState(btoa(JSON.stringify({ re: 50.5 })))!.remediationPct).toBeUndefined();
+  });
+
+  // ── contextSwitchOn (cs) ──
+
+  it('round-trips contextSwitchOn through encode/decode', () => {
+    const stateOn = makeState({ contextSwitchOn: true });
+    expect(decodeState(encodeState(stateOn))!.contextSwitchOn).toBe(true);
+    const stateOff = makeState({ contextSwitchOn: false });
+    expect(decodeState(encodeState(stateOff))!.contextSwitchOn).toBe(false);
+  });
+
+  it('rejects contextSwitchOn values that are not 0 or 1', () => {
+    expect(decodeState(btoa(JSON.stringify({ cs: 2 })))!.contextSwitchOn).toBeUndefined();
+  });
+
+  it('backward compatibility: old URLs without re/cs decode fine', () => {
+    const oldEncoded = btoa(JSON.stringify({ mp: 25, ts: 50 }));
+    const result = decodeState(oldEncoded)!;
+    expect(result.maintPct).toBe(25);
+    expect(result.teamSizePos).toBe(50);
+    expect(result.remediationPct).toBeUndefined();
+    expect(result.contextSwitchOn).toBeUndefined();
   });
 });
