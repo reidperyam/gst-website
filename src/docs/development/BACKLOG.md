@@ -844,17 +844,17 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-037: FilterDrawer Sub-Component Extraction
 
-**Source**: Technical debt remediation (April 2026) | **Effort**: S (2 hours) | **Status**: Open
+**Source**: Technical debt remediation (April 2026) | **Effort**: S (2 hours) | **Status**: Complete
 
 **As a** developer maintaining the portfolio page, **I want** the filter drawer markup extracted into a dedicated `FilterDrawer.astro` sub-component **so that** the PortfolioHeader component is easier to navigate and the drawer template can be reused or modified independently.
 
 #### Acceptance Criteria
 
-- [ ] Filter drawer HTML (currently PortfolioHeader.astro lines 96-177) extracted to `src/components/portfolio/FilterDrawer.astro`
-- [ ] FilterDrawer receives `uniqueThemes` and `uniqueEngagementCategories` as props
-- [ ] Event wiring (open/close, chip clicks, clear-all) remains in PortfolioHeader's script block — FilterDrawer is template-only
-- [ ] No UX change — identical HTML rendered, same filter behavior, same E2E test results
-- [ ] Portfolio E2E tests pass without modification
+- [x] Filter drawer HTML extracted to `src/components/portfolio/FilterDrawer.astro` with scoped drawer styles
+- [x] FilterDrawer receives `uniqueThemes` and `uniqueEngagementCategories` as props
+- [x] Event wiring remains in PortfolioHeader's script block — FilterDrawer is template + style only
+- [x] No UX change — all 22 portfolio E2E tests pass without modification
+- [x] FilterDrawer showcase added to brand page, 13 integration tests for data contract
 
 #### Technical Context
 
