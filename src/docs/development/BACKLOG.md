@@ -767,14 +767,14 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-034: GitHub Branch Protection Update
 
-**Source**: PLATFORM_HARDENING_V1.md | **Effort**: 10 min | **Status**: Open
+**Source**: PLATFORM_HARDENING_V1.md | **Effort**: 10 min | **Status**: Complete
 
 **As a** developer, **I want** the branch protection ruleset updated to require the `Lint & Type Check` CI job **so that** PRs cannot merge without passing lint and type checks.
 
 #### Acceptance Criteria
 
-- [ ] Branch protection ruleset on `master` updated to require `Lint & Type Check` status check
-- [ ] PRs that fail lint or type checks are blocked from merging
+- [x] Branch protection ruleset on `master` updated to require `Lint & Type Check` status check (via gh API)
+- [x] PRs that fail lint or type checks are blocked from merging — all 3 checks now required: E2E, Unit/Integration, Lint & Type Check
 
 #### Technical Context
 
