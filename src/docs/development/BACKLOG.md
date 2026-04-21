@@ -663,7 +663,7 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-029: Diligence Machine Wizard Lazy-Rendering
 
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 4-6 hours | **Status**: Deferred
+**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 4-6 hours | **Status**: Will Not Implement
 
 **As a** developer, **I want** the Diligence Machine wizard to defer rendering of non-visible steps **so that** initial page load is faster.
 
