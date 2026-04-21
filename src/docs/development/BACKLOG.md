@@ -868,16 +868,16 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-038: Dependency Override Governance — path-to-regexp
 
-**Source**: Technical debt remediation (April 2026) | **Effort**: S (30 min when removable) | **Status**: Monitoring
+**Source**: Technical debt remediation (April 2026) | **Effort**: S (30 min when removable) | **Status**: Complete
 
 **As a** platform maintainer, **I want** the `path-to-regexp` package override removed when the upstream dependency ships a fix **so that** the dependency tree has no unnecessary overrides and `npm audit` reflects the true security posture without manual intervention.
 
 #### Acceptance Criteria
 
-- [ ] GitHub Dependabot (`.github/dependabot.yml`) monitors npm and GitHub Actions dependencies weekly
-- [ ] When Dependabot opens a PR updating `@astrojs/vercel` or `@vercel/routing-utils`, reviewer checks whether the `path-to-regexp` override can be removed
-- [ ] Override removal steps: delete `overrides` block from `package.json`, run `npm install`, verify `npm audit --omit=dev` reports 0 vulnerabilities, update DEVELOPER_TOOLING.md
-- [ ] After removal: CI `npm audit` step continues to catch any future advisories without the override
+- [x] GitHub Dependabot (`.github/dependabot.yml`) monitors npm and GitHub Actions dependencies weekly
+- [x] When Dependabot opens a PR updating `@astrojs/vercel` or `@vercel/routing-utils`, reviewer checks whether the `path-to-regexp` override can be removed
+- [x] Override removal steps: delete `overrides` block from `package.json`, run `npm install`, verify `npm audit --omit=dev` reports 0 vulnerabilities, update DEVELOPER_TOOLING.md
+- [x] After removal: CI `npm audit` step continues to catch any future advisories without the override
 
 #### Technical Context
 
