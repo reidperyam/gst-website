@@ -490,16 +490,16 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-021: global.css Split
 
-**Source**: DESIGN_SYSTEM_FUTURE_INITIATIVES.md | **Effort**: Medium | **Status**: Deferred
+**Source**: DESIGN_SYSTEM_FUTURE_INITIATIVES.md | **Effort**: Medium | **Status**: Complete
 
 **As a** developer preparing for package extraction, **I want** `global.css` split into `tokens.css`, `components.css`, and `layout.css` **so that** the design system's reusable parts are separated from application-specific styles.
 
 #### Acceptance Criteria
 
-- [ ] `tokens.css` contains CSS custom properties, reset styles, root declarations
-- [ ] `components.css` contains all `.brutal-*` reusable component classes
-- [ ] `layout.css` contains application-specific page layouts
-- [ ] Import order preserved, no visual regressions
+- [x] Tokens in `variables.css`, `palettes.css`, `typography.css`, `interactions.css`
+- [x] Components split into 13 files under `src/styles/components/` (buttons, cards, filter, form, map, etc.)
+- [x] `global.css` reduced from 5,465 lines to 372 lines (layout + utilities only)
+- [x] Import order preserved, no visual regressions
 
 #### Technical Context
 
