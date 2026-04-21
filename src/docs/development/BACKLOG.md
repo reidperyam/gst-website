@@ -320,7 +320,7 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-013: Tech Debt Calculator — Scenario Comparison Mode (P2)
 
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Open
+**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Will Not Implement
 
 **As a** PE advisor, **I want** to compare a baseline scenario against modified inputs **so that** I can model "before vs. after remediation" in a single view.
 
