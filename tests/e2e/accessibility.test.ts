@@ -1,7 +1,7 @@
 /**
  * Accessibility E2E Tests — axe-core WCAG 2.1 AA scanning.
  *
- * Scans 6 critical pages for accessibility violations.
+ * Scans 7 critical pages for accessibility violations.
  * Critical and serious violations must be zero; moderate/minor are
  * tracked as a ratchet count that can only decrease over time.
  *
@@ -17,6 +17,7 @@ const PAGES = [
   { name: 'M&A Portfolio', path: '/ma-portfolio' },
   { name: 'Hub', path: '/hub' },
   { name: 'TechPar', path: '/hub/tools/techpar' },
+  { name: 'Tech Debt Calculator', path: '/hub/tools/tech-debt-calculator' },
 ];
 
 /**
@@ -30,6 +31,7 @@ const KNOWN_SERIOUS: Record<string, Record<string, number>> = {
   '/ma-portfolio': { 'color-contrast': 2 },
   '/hub': { 'color-contrast': 1 },
   '/hub/tools/techpar': { 'color-contrast': 4 },
+  '/hub/tools/tech-debt-calculator': { 'color-contrast': 14 },
 };
 
 test.describe('Accessibility — WCAG 2.1 AA', () => {
