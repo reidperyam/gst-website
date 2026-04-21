@@ -297,16 +297,16 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-012: Tech Debt Calculator — Shareable State and Export (P1)
 
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S-XS per item | **Status**: Open
+**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S-XS per item | **Status**: Complete
 
 **As a** PE advisor, **I want** to persist, share, and export calculator results **so that** I can carry outputs into diligence conversations, memos, and slide decks.
 
 #### Acceptance Criteria
 
-- [ ] URL-encoded state persistence: `CalcState` serialized into URL search params on every `render()`, deserialized on mount before `initSliders()`
-- [ ] Copy link button: single-click copies current URL (with encoded state) to clipboard with visual confirmation
-- [ ] Print stylesheet: `@media print` collapses inputs panel, expands outputs/context for clean 1-page PDF
-- [ ] Plain-text export: "Copy Summary" button formats structured text block (annual cost, per-eng cost, burden level, payback) for pasting into memos
+- [x] URL-encoded state persistence: `encodeState()`/`decodeState()` in `tech-debt-engine.ts`, compact base64 via `?s=` param, updates on every slider change
+- [x] Copy link button: "Copy Link" copies current URL with encoded state to clipboard with visual feedback
+- [x] Print stylesheet: 200+ lines of `@media print` CSS with professional report layout, hides interactive elements
+- [x] Plain-text export: "Copy Summary" calls `buildSummaryText()` — structured block with inputs, results, and contextual note
 
 #### Technical Context
 
