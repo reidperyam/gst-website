@@ -403,7 +403,7 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ### BL-017: Tech Debt Calculator — Diligence Machine Cross-Link (P6)
 
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S | **Status**: Open
+**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S | **Status**: Will Not Implement
 
 **As a** PE advisor using the Diligence Machine, **I want** a contextual link to the Tech Debt Calculator when high technical debt risk is flagged **so that** I can quantify the cost without manually navigating.
 
