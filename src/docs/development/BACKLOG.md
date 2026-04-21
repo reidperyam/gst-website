@@ -1,8 +1,8 @@
 # Development Backlog
 
-Consolidated backlog of all open development initiatives for the GST website. Each item is a self-contained user story with enough context to design and implement a solution. Items are grouped by theme, not priority — triage happens separately.
+Consolidated backlog of open development initiatives for the GST website. Each item is a self-contained user story with enough context to design and implement a solution. Items are grouped by theme, not priority — triage happens separately.
 
-> **Git archaeology**: The initiative documents consolidated into this backlog were removed in the same commit that created this file. Use `git log --diff-filter=D -- src/docs/development/` to find them, then `git show <SHA>~1:src/docs/development/<FILENAME>` to view originals.
+> **Completed and closed items**: 26 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021, 023–025, 027–030, 034, 036–038). Use `git log` to find their original acceptance criteria and technical context.
 
 ---
 
@@ -10,7 +10,6 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 - [Compliance and Privacy](#compliance-and-privacy)
 - [Business Capabilities](#business-capabilities)
-- [Hub Tools](#hub-tools)
 - [CSS and Design System](#css-and-design-system)
 - [Testing and CI](#testing-and-ci)
 - [Performance](#performance)
@@ -46,56 +45,6 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 - Update `src/pages/privacy.astro` cookie section with consent disclosure
 - Custom implementation preferred over external libraries (Klaro, Osano) — site uses one tracking tool plus error monitoring; lightweight component is simpler
 - Tests: unit (GA4 gating, persistence), E2E (banner flow), axe-core (WCAG 2.1 AA)
-
----
-
-### BL-002: Sentry Source Map Upload Activation
-
-**Source**: SENTRY_MANUAL_SETUP.md | **Effort**: 30 min | **Status**: Complete (April 2026)
-
-**As a** developer, **I want** Sentry source maps uploaded on production deploys **so that** error stack traces show original TypeScript source lines instead of minified output.
-
-#### Acceptance Criteria
-
-- [x] Organization Auth Token created at sentry.io
-- [x] `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` environment variables set in Vercel (Production only)
-- [x] Production deploy logs show source map upload (silent mode suppresses verbose output)
-- [x] Source map artifacts appear in Sentry Releases dashboard
-- [x] Error stack traces in Sentry resolve to original source files
-- [x] GitHub stack trace linking configured (code path mapping: `src/` → `src/`)
-- [x] CSP updated for Sentry US region (`*.ingest.us.sentry.io`) and replay worker (`worker-src blob:`)
-
-#### Technical Context
-
-- Sentry is already integrated in code (`sentry.client.config.ts`, `sentry.server.config.ts`)
-- Source map upload wired in `astro.config.mjs` with `silent: true` to suppress inline script warnings
-- CSP fix landed in PR #95 — connect-src wildcard didn't cover US regional endpoint
-- GitHub stack trace linking configured in Sentry dashboard (Settings → Integrations → GitHub → Code Mappings)
-- Alert tag infrastructure in place (`area:inoreader-api`, `area:redis-connection`, etc.)
-
----
-
-### BL-003: Sentry Alert Rule Configuration
-
-**Source**: SENTRY_MANUAL_SETUP.md | **Effort**: 30 min | **Status**: Complete (April 2026)
-
-**As a** site operator, **I want** Sentry alert rules configured **so that** I am notified of new errors, error spikes, and critical subsystem failures.
-
-#### Acceptance Criteria
-
-- [x] "New issue" alert created (triggers on all new issues)
-- [x] "High-volume error spike" alert created (>10 events/hour)
-- [x] "Inoreader API failure" alert created (tag: `area:inoreader-api`)
-- [x] "Redis connection failure" alert created (tag: `area:redis-connection`)
-- [x] Alerts tested with a manual error trigger
-- [ ] Optional: Slack or PagerDuty integration configured
-
-#### Technical Context
-
-- All configuration happens in the Sentry dashboard, not in code
-- Alert tags are already instrumented in the codebase
-- GitHub auto-issue creation available via alert rule actions (Settings → Alerts → THEN → "Create a new GitHub issue")
-- See [SENTRY_MANUAL_SETUP.md](./SENTRY_MANUAL_SETUP.md) for tag reference table, troubleshooting guide, and consent gating evaluation
 
 ---
 
@@ -197,276 +146,7 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ---
 
-## Hub Tools
-
-### BL-008: Hub Tools UX Unification Phase 1 — Quick Wins
-
-**Source**: HUB_TOOLS_UX_UNIFICATION.md | **Effort**: Small | **Status**: Complete (April 2026)
-
-**As a** developer, **I want** the option card and button patterns unified across hub tools **so that** I maintain one pattern instead of three independent implementations.
-
-#### Acceptance Criteria
-
-- [x] DM's `.option-card` pattern extracted to shared `brutal-option-card` in `components/cards.css`
-- [x] TechPar `.tp-stage-card` migrated to `brutal-option-card--compact` + `brutal-option-card--selected`
-- [x] ICG already using `brutal-option-card--compact` (no `.icg-stage-card` ever existed)
-- [x] TechPar `.tp-btn-share` replaced with `brutal-btn--secondary`; `.tp-btn-next`/`.tp-btn-back` already used `brutal-btn` as base
-- [x] ICG `.icg-btn-primary--full` wrapper removed (was a 3-line padding override)
-- [x] Shared `.brutal-btn--copied` modifier added to `components/buttons.css` for copy-feedback state
-- [x] `.no-print` utility added to `global.css`
-- [x] RegMap already had `@media print` block (no change needed)
-
-#### Technical Context
-
-- All hub tools now use `brutal-option-card` for stage/option selection and `brutal-btn` for actions
-- TechPar JS updated in `techpar-ui.ts` and `techpar/dom.ts` (class selectors + active state toggles)
-- Copy feedback uses shared `brutal-btn--copied` modifier (reusable by any tool)
-- Net CSS impact: ~65 lines of tool-specific card/button CSS deleted
-
----
-
-### BL-009: Hub Tools UX Unification Phase 2 — Dark Theme Variable Migration
-
-**Source**: HUB_TOOLS_UX_UNIFICATION.md | **Effort**: Medium | **Status**: Complete ✅
-
-**As a** developer, **I want** all hub tools to use CSS variables for dark theme instead of explicit `:global(html.dark-theme)` selectors **so that** theme changes require editing one variable, not 82 scattered overrides.
-
-#### Acceptance Criteria
-
-- [x] All 82 explicit dark theme overrides audited and cataloged (DM: 27, ICG: 31, RegMap: 24)
-- [x] Missing dark-theme variables created in `variables.css` (~5-10 new vars)
-- [x] DM: 27 → 2 remaining (opacity overrides — non-color, correct per STYLES_GUIDE)
-- [x] ICG: 31 → 0 remaining
-- [x] RegMap: 24 → 1 remaining (CompliancePanel box-shadow — non-color, correct per STYLES_GUIDE)
-- [x] TDC: 1 → 0 remaining
-- [x] TechPar: 1 → 0 remaining (was redundant no-op, deleted)
-- [x] All color-property overrides migrated to `light-dark()` or CSS variables
-- [x] 3 legitimate non-color overrides remain (DM opacity ×2, CompliancePanel box-shadow) — permitted by STYLES_GUIDE.md
-
-#### Technical Context
-
-- All hub tools now follow the target pattern: `light-dark()` for color properties, `:global(html.dark-theme)` reserved for non-color properties only
-- Original 82 overrides reduced to 3 (all non-color, all correct per STYLES_GUIDE.md)
-- Verification: build, tests, visual diff in both themes across all tools
-
----
-
-### BL-010: Hub Tools UX Unification Phase 3 — Navigation and Form Patterns
-
-**Source**: HUB_TOOLS_UX_UNIFICATION.md | **Effort**: Medium | **Status**: Complete ✅
-
-**As a** developer, **I want** navigation and form patterns extracted into shared classes **so that** new tools can reuse tab bars, progress indicators, and form fields without reimplementing them.
-
-#### Acceptance Criteria
-
-- [x] TechPar `.tp-tab-bar`/`.tp-tab` extracted to shared `.tool-tab-bar`/`.tool-tab` in `tool-ui.css`
-- [x] DM `.wizard-progress`/`.progress-segment` extracted to `.tool-wizard-progress`/`.tool-wizard-step` in `progress.css`
-- [x] ICG `.icg-progress` removed — uses `.brutal-progress-bar` directly
-- [x] TechPar `.tp-field`/`.tp-hint`/`.tp-input-wrap` migrated to existing `.brutal-field` + new prefix/suffix modifiers in `form.css`
-- [x] TDC `.calc-slider`/`.slider-row` consolidated into existing `.brutal-slider` in `form.css`
-- [x] Brand page demos updated to use shared classes (removed ~140 lines of `.brand-*` duplicates)
-- [x] All tools adopt shared classes
-
-#### Technical Context
-
-- Used existing `.brutal-field` and `.brutal-slider` patterns instead of creating `.tool-*` duplicates
-- Three navigation paradigms kept distinct (tabs, wizard, progress bar) — unified naming only
-- Brand page now serves as living reference using actual shared classes
-
----
-
-### BL-011: Hub Tools UX Unification Phase 4 — Tool Shell Alignment
-
-**Source**: HUB_TOOLS_UX_UNIFICATION.md | **Effort**: Small | **Status**: Open
-
-**As a** developer, **I want** tool container naming to follow the `.tool-shell` convention **so that** the codebase uses consistent naming for layout containers.
-
-#### Acceptance Criteria
-
-- [ ] TechPar `.techpar-shell` renamed to `.tool-shell--fluid` (already exists in global)
-- [ ] DM output wrapped in `.tool-shell--document` (800px, already exists)
-- [ ] RegMap `.map-layout` unchanged (full-width map is intentional)
-
-#### Technical Context
-
-- TechPar, DM, and RegMap skip `.tool-shell` for valid reasons (fluid layout, wizard pattern, map visualization)
-- This is a naming alignment, not a layout change — adopt `.tool-shell` naming conventions where feasible
-- RegMap explicitly excluded from changes
-
----
-
-### BL-012: Tech Debt Calculator — Shareable State and Export (P1)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S-XS per item | **Status**: Open
-
-**As a** PE advisor, **I want** to persist, share, and export calculator results **so that** I can carry outputs into diligence conversations, memos, and slide decks.
-
-#### Acceptance Criteria
-
-- [ ] URL-encoded state persistence: `CalcState` serialized into URL search params on every `render()`, deserialized on mount before `initSliders()`
-- [ ] Copy link button: single-click copies current URL (with encoded state) to clipboard with visual confirmation
-- [ ] Print stylesheet: `@media print` collapses inputs panel, expands outputs/context for clean 1-page PDF
-- [ ] Plain-text export: "Copy Summary" button formats structured text block (annual cost, per-eng cost, burden level, payback) for pasting into memos
-
-#### Technical Context
-
-- All 4 items implementable entirely within `src/pages/hub/tools/tech-debt-calculator/index.astro` — no new files required
-- URL state encoding: `URLSearchParams` + `btoa`/`atob` to stay within no-dependency constraint
-- Engine: `src/utils/tech-debt-engine.ts` (pure TypeScript, 38 unit tests)
-- Layout already has logical separation between `[data-calc-inputs]` and `[data-calc-outputs]`
-- Highest-ROI cluster — minimal code, maximum PE workflow impact
-
----
-
-### BL-013: Tech Debt Calculator — Scenario Comparison Mode (P2)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Open
-
-**As a** PE advisor, **I want** to compare a baseline scenario against modified inputs **so that** I can model "before vs. after remediation" in a single view.
-
-#### Acceptance Criteria
-
-- [ ] "Set as Baseline" button freezes current `CalcResult` in memory
-- [ ] Metrics bar gains delta indicators (down-arrow $X / down-arrow N%) showing change from baseline
-- [ ] Baseline cleared on mode switch or explicit "Clear Baseline" action
-
-#### Technical Context
-
-- Engine is already stateless and pure — comparison is a UI-only addition
-- Use case: model "what if we cut maint% from 50 to 25 after a $1M remediation" against original state
-
----
-
-### BL-014: Tech Debt Calculator — Calculation Model Improvements (P3)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S per item | **Status**: Open
-
-**As a** PE advisor, **I want** more realistic calculation parameters **so that** outputs are defensible in diligence conversations.
-
-#### Acceptance Criteria
-
-- [ ] Partial remediation efficiency slider (0-100%, default 70%): `monthlySavings = totalMonthly * (efficiency/100)` instead of assuming 100% resolution
-- [ ] Context-switch overhead toggle in Deep Dive: adds ~23% overhead to direct labor cost (Weinberg's research), displayed as separate line item
-- [ ] Currency selector (USD/EUR/GBP/CAD/AUD): static multiplier applied to formatted outputs via `fmt()` and `fmtShort()` currency param
-
-#### Technical Context
-
-- Remediation slider replaces `monthlySavings = totalMonthly` alias — the current assumption of 100% debt resolution is unrealistic
-- Currency selector requires only a `fmtCurrency(n, currency)` wrapper in `tech-debt-engine.ts` — engine math is currency-agnostic
-- Context-switch overhead kept as separate line item for transparency and auditability
-
----
-
-### BL-015: Tech Debt Calculator — Accessibility and CSS Hardening (P4)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S | **Status**: Open
-
-**As a** user with assistive technology, **I want** proper ARIA attributes on calculator controls **so that** screen readers announce input values and recalculation results.
-
-#### Acceptance Criteria
-
-- [ ] All `<input type="range">` elements get `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext` (updated in `render()`)
-- [ ] Deploy frequency buttons get `aria-pressed` state (updated to reflect `state.deployIdx`)
-- [ ] Metrics bar wrapped in `role="status" aria-live="polite" aria-atomic="false"`
-- [ ] All hardcoded `rgba(5, 205, 153, ...)` replaced with `var(--color-primary-rgb)` tokens
-- [ ] All bare font-size literals (`0.56rem`, `0.58rem`, etc.) replaced with typography scale variables
-
-#### Technical Context
-
-- CSS violations are against the project's own standards documented in STYLES_GUIDE.md and VARIABLES_REFERENCE.md
-- `aria-valuetext` should reuse formatted strings already computed in `render()` (e.g., "8 engineers", "$150K salary")
-- All CSS changes must be verified in both light and dark theme
-
----
-
-### BL-016: Tech Debt Calculator — Executive Summary Mode (P5)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Open
-
-**As a** PE advisor, **I want** an executive summary tab with industry archetype presets **so that** I can quickly generate a narrative output for board presentations without manually configuring sliders.
-
-#### Acceptance Criteria
-
-- [ ] Third tab alongside Quick / Deep Dive
-- [ ] 4-5 pre-configured archetypes (SaaS Series A, SaaS Series C, PE Portfolio Co., Enterprise ISV) with preset values
-- [ ] Selecting an archetype populates `state` and renders a 3-4 sentence executive narrative paragraph
-- [ ] "Customize" button transitions to Deep Dive with archetype values pre-loaded
-- [ ] Narrative templates are pure functions in `tech-debt-engine.ts` (testable)
-
-#### Technical Context
-
-- Completes the audience spectrum: Quick (napkin), Deep Dive (analyst), Executive Summary (board/memo)
-- No sliders in this mode — archetypes are pre-configured input sets
-- Archetype examples: SaaS Series A (8 eng, $130K, 45% maint, weekly deploys), PE Portfolio Co. (20 eng, $140K, 55% maint, monthly deploys)
-
----
-
-### BL-017: Tech Debt Calculator — Diligence Machine Cross-Link (P6)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: S | **Status**: Open
-
-**As a** PE advisor using the Diligence Machine, **I want** a contextual link to the Tech Debt Calculator when high technical debt risk is flagged **so that** I can quantify the cost without manually navigating.
-
-#### Acceptance Criteria
-
-- [ ] When DM output flags "high technical debt risk", a CTA card links to Tech Debt Calculator
-- [ ] URL state pre-populated based on DM inputs (team size, maturity level)
-- [ ] Navigation/UX change only — no new data infrastructure
-
-#### Technical Context
-
-- Depends on BL-012 (URL-encoded state persistence) being implemented first
-- Cross-link is between two existing tools — no new APIs or data sources
-
----
-
-### BL-018: Tech Debt Calculator — Architecture and Testing (P7)
-
-**Source**: TECH_DEBT_CALC_ROADMAP.md | **Effort**: M | **Status**: Open
-
-**As a** developer, **I want** the calculator's render layer decomposed and tested **so that** DOM-layer changes can be safely refactored.
-
-#### Acceptance Criteria
-
-- [ ] `render()` decomposed into sub-functions: `renderMetricsBar()`, `renderContextPanel()`, `renderPayback()`, `renderSliderDisplays()` — each takes `CalcResult` and `CalcState` as params
-- [ ] DOM integration tests added (Vitest + JSDOM): mode switch, slider input, deploy button click, URL state round-trip
-- [ ] `SoftwareApplication` JSON-LD structured data added to page `<head>`
-
-#### Technical Context
-
-- Current `render()` is a 100-line monolith with no sub-renders — hard to unit-test DOM layer
-- `el()`/`getInput()` helpers cast to non-null without null guards
-- JSON-LD: `name`, `description`, `applicationCategory: "BusinessApplication"`, `operatingSystem: "Web"` — zero runtime cost
-
----
-
 ## CSS and Design System
-
-### BL-019: Site-Wide light-dark() CSS Migration
-
-**Source**: BUSINESS_ENABLEMENT_V1.md, DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 1-4 days | **Status**: Blocked
-
-**As a** developer, **I want** dark theme declarations to use CSS `light-dark()` instead of paired base-rule + override-rule **so that** each themed declaration is a single-location edit instead of two disjoint locations.
-
-#### Acceptance Criteria
-
-- [ ] All 51 dark-theme variable redeclarations in `variables.css` migrated to `light-dark()` at `:root` level
-- [ ] Scattered `html.dark-theme` selectors in `global.css` and scoped component styles migrated to inline `light-dark()` calls
-- [ ] `html.dark-theme` override block reduced from ~211 lines to <50 lines
-- [ ] All 6 alternative palettes visually identical pre/post migration
-- [ ] Compiled CSS output size equal or smaller
-- [ ] All unit, integration, and E2E tests pass with zero assertion changes
-- [ ] STYLES_GUIDE.md updated to document `light-dark()` as preferred pattern
-
-#### Technical Context
-
-- **Blocked on**: Hardening-2 pilot validation — `light-dark()` pilot must land and meet success signals (tests pass, visual diff zero across both themes and all 6 palettes, LightningCSS output stable)
-- LightningCSS (already active as Vite CSS transformer) compiles `light-dark()` to universally compatible output
-- Requires `color-scheme: light`/`color-scheme: dark` wired on `html`/`html.dark-theme`
-- Implementation should proceed in 4-6 commits grouped by component area, with visual verification after each batch
-- Does NOT affect the 6-palette alternative system (palettes use a different cascade mechanism)
-
----
 
 ### BL-020: Design System Package Extraction
 
@@ -485,28 +165,7 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 - **Deferred indefinitely** — no current need. Re-evaluate when: a second project needs the same design language, the design system stabilizes, or the team grows beyond one person
 - Single consumer (GST website only), no monorepo infrastructure exists
 - Current architecture is already clean (single import through BaseLayout)
-- Depends on BL-021 (global.css Split) as a prerequisite
-
----
-
-### BL-021: global.css Split
-
-**Source**: DESIGN_SYSTEM_FUTURE_INITIATIVES.md | **Effort**: Medium | **Status**: Deferred
-
-**As a** developer preparing for package extraction, **I want** `global.css` split into `tokens.css`, `components.css`, and `layout.css` **so that** the design system's reusable parts are separated from application-specific styles.
-
-#### Acceptance Criteria
-
-- [ ] `tokens.css` contains CSS custom properties, reset styles, root declarations
-- [ ] `components.css` contains all `.brutal-*` reusable component classes
-- [ ] `layout.css` contains application-specific page layouts
-- [ ] Import order preserved, no visual regressions
-
-#### Technical Context
-
-- **Deferred** — only needed if BL-020 (Package Extraction) becomes active
-- `global.css` is currently 5,465 lines mixing tokens, components, and layout
-- The split is mechanical but large — careful import order management required
+- Prerequisite: global.css split (BL-021, complete) already done
 
 ---
 
@@ -536,72 +195,6 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ---
 
-### BL-023: E2E Test for Image Loading Regression
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 30 min | **Status**: Open
-
-**As a** developer, **I want** an E2E test verifying `fetchpriority="high"` on About page founder images **so that** LCP optimizations don't regress during refactoring.
-
-#### Acceptance Criteria
-
-- [ ] Test added to `tests/e2e/about-page.test.ts`
-- [ ] Verifies image is not lazy-loaded
-- [ ] Verifies `fetchpriority="high"` attribute present
-- [ ] Verifies image dimensions are set (prevents CLS)
-- [ ] Test passes on every commit with no false positives
-
-#### Technical Context
-
-- About page has founder images optimized with `fetchpriority="high"` — no automated regression detection if attributes are accidentally removed
-- Target selector: `.founder-image`
-- Expected dimensions: `width="600"`, `height="450"`
-
----
-
-### BL-024: Unit Tests for Error Handling
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 1-2 hours | **Status**: Open
-
-**As a** developer, **I want** unit tests covering error handling for localStorage, JSON parsing, and DOM element access **so that** error handling code is validated and fallback behavior is verified.
-
-#### Acceptance Criteria
-
-- [ ] localStorage error handling tested (ThemeToggle: unavailable storage, setItem failure in private browsing)
-- [ ] JSON parsing error handling tested (Portfolio: malformed JSON, empty array fallback)
-- [ ] DOM element access tested (ProjectModal: missing elements, partial element existence)
-- [ ] 100% coverage of error paths
-- [ ] All tests pass on every commit
-
-#### Technical Context
-
-- Error handling was added during Console Error Elimination (Feb 2026) but never tested
-- Components: ThemeToggle.astro (localStorage), Portfolio components (JSON parsing), ProjectModal (DOM access)
-- Create `tests/unit/error-handling.test.ts`
-
----
-
-### BL-025: Single-Browser CI for E2E Tests
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 30 min | **Status**: Open
-
-**As a** developer, **I want** E2E tests to run on Chromium only in the default CI pipeline **so that** CI wall-clock time drops from ~20 min to ~7 min without sacrificing cross-browser safety.
-
-#### Acceptance Criteria
-
-- [ ] Default CI E2E step runs `--project=chromium` only and completes in <8 minutes
-- [ ] Separate GitHub Actions workflow (`test-cross-browser.yml`) runs all 3 browsers on nightly schedule, PRs targeting `master`, and manual dispatch
-- [ ] Cross-browser regressions caught within 24 hours
-- [ ] Zero cross-browser bugs shipped that would have been caught by old config
-
-#### Technical Context
-
-- Current 3-browser configuration runs every test 3 times, tripling CI wall-clock time
-- Cross-browser bugs are rare for this codebase (static Astro site, no browser-specific JS APIs)
-- Add a `chromium-only` project to `playwright.config.ts`
-- Tag known cross-browser-sensitive tests with `@crossbrowser` annotation
-
----
-
 ## Performance
 
 ### BL-026: Performance Monitoring Dashboard
@@ -622,78 +215,6 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 - Graduate to GitHub Pages with automated Lighthouse CI summaries (Option B) if team needs historical data visualization
 - Premium options (Calibre, SpeedCurve) available but not recommended initially
 - Depends on BL-022 (Lighthouse CI) for automated data
-
----
-
-### BL-027: Global CSS Refactoring
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 8-16 hours | **Status**: Deferred
-
-**As a** developer, **I want** remaining component-specific styles extracted from `global.css` into scoped blocks **so that** the global stylesheet is smaller and pages load only the CSS they need.
-
-#### Acceptance Criteria
-
-- [ ] Component-specific styles extracted from `global.css` into scoped `<style>` blocks
-- [ ] Lighthouse CSS metrics do not regress
-
-#### Technical Context
-
-- **Deferred** — high risk (8-16h effort), `global.css` already reduced significantly in Platform Hardening V1 Phase 3
-- Only revisit if Lighthouse CSS metrics regress
-
----
-
-### BL-028: CSS Code Splitting via @layer
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 4-8 hours | **Status**: Deferred
-
-**As a** developer, **I want** non-critical CSS layers loaded with lower priority **so that** initial page render performance improves.
-
-#### Acceptance Criteria
-
-- [ ] Non-critical CSS layers identified and loaded with lower priority
-- [ ] No visual regressions
-
-#### Technical Context
-
-- **Deferred** — CSS `@layer` adopted in Phase 3 for organization, but code-splitting deferred because marginal gain doesn't justify architectural complexity
-- Revisit only after BL-027 (Global CSS Refactoring) is complete
-
----
-
-### BL-029: Diligence Machine Wizard Lazy-Rendering
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 4-6 hours | **Status**: Deferred
-
-**As a** developer, **I want** the Diligence Machine wizard to defer rendering of non-visible steps **so that** initial page load is faster.
-
-#### Acceptance Criteria
-
-- [ ] Non-visible wizard steps use `content-visibility: auto` or equivalent
-- [ ] SEO and accessibility not degraded
-
-#### Technical Context
-
-- **Deferred** — all 10 wizard steps are server-rendered upfront; switching to client-side rendering would degrade SEO and accessibility
-- Consider `content-visibility: auto` as middle-ground if Speed Insights score remains below 80
-
----
-
-### BL-030: Transition Rule Consolidation
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 3-5 hours | **Status**: Deferred
-
-**As a** developer, **I want** the 82 `transition:` declarations consolidated where possible **so that** CSS maintenance surface is reduced.
-
-#### Acceptance Criteria
-
-- [ ] Transition declarations consolidated where safe
-- [ ] No hover/focus animation regressions
-
-#### Technical Context
-
-- **Deferred** — each declaration serves a specific component; consolidating risks breaking animations
-- Low impact — transition declarations add negligible parse-time cost
 
 ---
 
@@ -765,23 +286,71 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 
 ---
 
-### BL-034: GitHub Branch Protection Update
+### BL-039: Repository Transfer to Global Strategic Technologies GitHub Organization
 
-**Source**: PLATFORM_HARDENING_V1.md | **Effort**: 10 min | **Status**: Open
+**Source**: Organizational governance (April 2026) | **Effort**: M (2-4 hours) | **Status**: Open
 
-**As a** developer, **I want** the branch protection ruleset updated to require the `Lint & Type Check` CI job **so that** PRs cannot merge without passing lint and type checks.
+**As a** platform owner, **I want** the `gst-website` repository transferred from `reidperyam/gst-website` to the `Global-Strategic-Technologies` GitHub organization **so that** the codebase is housed under the company's organizational account with proper ownership, team access controls, and professional branding on all integrations.
 
 #### Acceptance Criteria
 
-- [ ] Branch protection ruleset on `master` updated to require `Lint & Type Check` status check
-- [ ] PRs that fail lint or type checks are blocked from merging
+##### Repository Transfer
+
+- [ ] Repository transferred via GitHub Settings → Transfer repository → `Global-Strategic-Technologies`
+- [ ] New canonical URL: `https://github.com/Global-Strategic-Technologies/gst-website`
+- [ ] GitHub automatically redirects old URL (`reidperyam/gst-website`) to new location
+- [ ] Branch protection rulesets (master: require 3 status checks) preserved or re-created post-transfer
+- [ ] Repository secrets (`SENTRY_AUTH_TOKEN`, etc.) re-created in new org (secrets do not transfer)
+- [ ] `reidperyam` retains admin access via org team membership
+
+##### Vercel Hosting
+
+- [ ] Vercel project reconnected to new GitHub org/repo (Settings → Git → Connected Git Repository)
+- [ ] Production deploys trigger on push to `master` at new org
+- [ ] Preview deploys trigger on PRs to new org
+- [ ] Environment variables verified intact (`PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `INOREADER_APP_ID`, `INOREADER_APP_KEY`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`)
+- [ ] Custom domain (`globalstrategic.tech`) continues resolving — DNS is Cloudflare-managed, independent of GitHub org
+- [ ] Vercel Speed Insights and Web Analytics uninterrupted
+
+##### Sentry.io
+
+- [ ] Sentry GitHub integration updated: Code Mappings → change repo from `reidperyam/gst-website` to `Global-Strategic-Technologies/gst-website`
+- [ ] Source map uploads continue working on production deploys (verify in Sentry Releases)
+- [ ] GitHub stack trace linking resolves to correct source files in new org
+- [ ] Alert rules and tag infrastructure unchanged (no code-level Sentry config references the repo)
+
+##### CI/CD (GitHub Actions)
+
+- [ ] All 3 workflows functional: `test.yml`, `test-cross-browser.yml`, Dependabot
+- [ ] `${{ github.repository }}` references in `test.yml` automatically resolve to new org/repo
+- [ ] Dependabot reviewer updated from `reidperyam` to org team or member username
+- [ ] Required status checks re-enabled on `master`: `E2E Tests`, `Unit & Integration Tests`, `Lint & Type Check`
+
+##### Codebase Updates
+
+- [ ] `.github/dependabot.yml` line 18: update reviewer to org team or member
+- [ ] `src/docs/development/SENTRY_MANUAL_SETUP.md` line 133: update repo reference in config table
+- [ ] `package.json`: add `"repository"` field pointing to new org URL
+- [ ] Local developer remotes updated: `git remote set-url origin https://github.com/Global-Strategic-Technologies/gst-website.git`
+
+##### Verification
+
+- [ ] `npx astro check && npm run lint && npm run lint:css && npm run test:run` — all pass
+- [ ] Push to `dev` triggers CI at new org
+- [ ] PR from `dev` → `master` triggers all 3 required checks
+- [ ] Production deploy succeeds with source maps uploaded to Sentry
+- [ ] Radar API feed functional (Inoreader + KV tokens work from new org's Vercel project)
 
 #### Technical Context
 
-- The `Lint & Type Check` job was introduced in Platform Hardening V1 Phase 2 CI restructure
-- Could not be added before merge because GitHub doesn't recognize status checks that haven't run yet on the target branch
-- Manual step: GitHub repository settings -> Branch protection rules -> Add `Lint & Type Check` to required status checks
-- Verify `astro dev` no longer emits `[content] Content config not loaded` warning (also from Phase 2)
+- **GitHub transfer** preserves issues, PRs, wiki, stars, watchers, and creates automatic redirects from the old URL — collaborators and forks continue to work
+- **Secrets do NOT transfer** — repository secrets (`SENTRY_AUTH_TOKEN`, any GitHub-stored tokens) must be re-created manually in the new org. Vercel environment variables are stored in Vercel (not GitHub) and persist independently
+- **Vercel reconnection** is the highest-risk step — Vercel's Git integration is tied to a specific org/repo. After transfer, the project must be manually reconnected in Vercel dashboard (Settings → Git). Build configuration (`npm run build`, output directory `dist`) carries over
+- **Sentry** references the repo only in the GitHub integration's Code Mapping config (dashboard setting, not code). The DSN, org, and project are environment variables stored in Vercel — no code changes needed
+- **GitHub Actions** use `${{ github.repository }}` (dynamic) — no hardcoded owner/repo in workflow files. Workflows run automatically after transfer
+- **No code references to `reidperyam`** exist outside documentation — LinkedIn profile URLs in page content are author attribution, not integration points
+- **DNS/domain** is managed in Cloudflare, completely independent of GitHub org. No DNS changes required
+- **Recommended order**: (1) transfer repo, (2) re-create secrets, (3) reconnect Vercel, (4) update Sentry code mapping, (5) verify CI, (6) verify production deploy, (7) commit codebase updates
 
 ---
 
@@ -812,81 +381,6 @@ Consolidated backlog of all open development initiatives for the GST website. Ea
 - Decision framework: Go (passes all 6 criteria) / No-go (archive, document findings) / Kill (requires external dependencies or exceeds 8h)
 - This is exploratory — no commitment to ship
 
-### BL-036: Haptic Feedback Easter Egg — Footer Delta Long-Press
-
-**Source**: Research spike (April 2026) | **Effort**: 2-3 hours | **Status**: Open
-
-**As a** PWA user, **I want** to long-press the footer delta icon for 5 seconds to pop out the palette panel **so that** I can access the color palette editor without navigating to the brand page (which isn't reachable when the address bar is hidden in PWA mode).
-
-#### Acceptance Criteria
-
-- [ ] Long-press (5s) on the ThemeToggle delta icon in the footer triggers palette popout
-- [ ] Short click continues to toggle light/dark theme (no regression)
-- [ ] Progressive haptic feedback during hold: vibration pulses at 1s intervals with increasing intensity (via `navigator.vibrate`)
-- [ ] Visual hold feedback: subtle pulse animation on the delta icon starting at 3s into the hold
-- [ ] Haptic feedback degrades gracefully on unsupported browsers (iOS Safari, Firefox) — visual feedback still works
-- [ ] No-op when palette panel is already popped out (no haptics, no visual pulse, no behavior)
-- [ ] `prefers-reduced-motion: reduce` disables the visual pulse animation
-- [ ] Works in both light/dark themes on desktop and mobile viewports
-
-#### Technical Context
-
-- The footer delta icon is the existing `ThemeToggle` component (`#themeToggle` in `src/components/ThemeToggle.astro`), which renders a `DeltaIcon`
-- Pointer events (`pointerdown`/`pointerup`/`pointerleave`/`pointercancel`) distinguish short click from long-press; theme toggle fires on `click` event, gated by `didLongPress` flag
-- Haptic pulse schedule: 50ms at 1s, 75ms at 2s, 100ms at 3s, 150ms at 4s, 300ms success buzz at 5s — all cancelled on early release
-- Palette popout triggered via `palettePopoutRequested` custom event on `document`, handled by `palette-manager.ts` calling `handlePopoutToggle()`
-- `touch-action: none` on the button to prevent scroll interference during mobile long-press
-- Web Vibration API: supported in Chrome/Edge (desktop + Android), NOT supported in Safari (iOS) or Firefox v129+. ~77% global coverage but iOS gap is significant
-- No permission prompt required — Vibration API only needs sticky user activation (click/tap), which is inherent to this interaction
-- This is an easter egg — intentionally undisclosed, no ARIA announcement
-
 ---
 
-### BL-037: FilterDrawer Sub-Component Extraction
-
-**Source**: Technical debt remediation (April 2026) | **Effort**: S (2 hours) | **Status**: Open
-
-**As a** developer maintaining the portfolio page, **I want** the filter drawer markup extracted into a dedicated `FilterDrawer.astro` sub-component **so that** the PortfolioHeader component is easier to navigate and the drawer template can be reused or modified independently.
-
-#### Acceptance Criteria
-
-- [ ] Filter drawer HTML (currently PortfolioHeader.astro lines 96-177) extracted to `src/components/portfolio/FilterDrawer.astro`
-- [ ] FilterDrawer receives `uniqueThemes` and `uniqueEngagementCategories` as props
-- [ ] Event wiring (open/close, chip clicks, clear-all) remains in PortfolioHeader's script block — FilterDrawer is template-only
-- [ ] No UX change — identical HTML rendered, same filter behavior, same E2E test results
-- [ ] Portfolio E2E tests pass without modification
-
-#### Technical Context
-
-- **Prerequisite**: BL-037 depends on Initiative 1 (PortfolioHeader architecture migration) being complete — the `is:inline` to module script migration must land first, as sub-component extraction requires module-scoped script coordination
-- The drawer DOM is referenced by ID from both PortfolioHeader and StickyControls via the shared `window.portfolioFilters` API
-- The drawer's visual backdrop (`.filter-overlay`) has `pointer-events: none` — click-outside-to-close is handled at document level, not on the overlay element
-- Extraction is template-only (~120 lines of markup); the script block (main complexity source) does not shrink
-- Expected result: PortfolioHeader reduces from ~1,028 lines to ~850 lines
-
----
-
-### BL-038: Dependency Override Governance — path-to-regexp
-
-**Source**: Technical debt remediation (April 2026) | **Effort**: S (30 min when removable) | **Status**: Monitoring
-
-**As a** platform maintainer, **I want** the `path-to-regexp` package override removed when the upstream dependency ships a fix **so that** the dependency tree has no unnecessary overrides and `npm audit` reflects the true security posture without manual intervention.
-
-#### Acceptance Criteria
-
-- [ ] GitHub Dependabot (`.github/dependabot.yml`) monitors npm and GitHub Actions dependencies weekly
-- [ ] When Dependabot opens a PR updating `@astrojs/vercel` or `@vercel/routing-utils`, reviewer checks whether the `path-to-regexp` override can be removed
-- [ ] Override removal steps: delete `overrides` block from `package.json`, run `npm install`, verify `npm audit --omit=dev` reports 0 vulnerabilities, update DEVELOPER_TOOLING.md
-- [ ] After removal: CI `npm audit` step continues to catch any future advisories without the override
-
-#### Technical Context
-
-- The override pins `path-to-regexp@6.3.0` to close `GHSA-9wv6-86v2-598j` — the vulnerable `6.1.0` is a transitive dependency via `@astrojs/vercel@10.0.4` → `@vercel/routing-utils@5.3.3`
-- CI already runs `npm audit --audit-level=moderate --omit=dev` on every push/PR (`.github/workflows/test.yml`, lines 162-164) — this catches new vulnerabilities
-- Dependabot will surface the update opportunity by opening a PR when `@astrojs/vercel` or `@vercel/routing-utils` ships a new version
-- Override documentation: DEVELOPER_TOOLING.md § npm audit policy
-- The override is zero-cost at runtime but adds cognitive overhead for dependency updates
-
----
-
-_Created: April 18, 2026_
+_Created: April 18, 2026 | Last pruned: April 21, 2026_

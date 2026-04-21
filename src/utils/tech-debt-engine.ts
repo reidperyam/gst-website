@@ -58,6 +58,8 @@ export interface CalcState {
   mttr: number;
   budgetPos: number;
   arrPos: number;
+  remediationPct: number;
+  contextSwitchOn: boolean;
 }
 
 export interface CalcResult {
@@ -66,6 +68,7 @@ export interface CalcResult {
   hoursLostPerEng: number;
   costPerEng: number;
   directMonthly: number;
+  contextSwitchMonthly: number;
   incidentMonthly: number;
   V: number;
   doraLabel: string;
@@ -86,12 +89,13 @@ export function calculate(state: CalcState): CalcResult {
   const V = deploy.V;
 
   const directMonthly = teamSize * (salary / 12) * (state.maintPct / 100) * V;
+  const contextSwitchMonthly = state.contextSwitchOn ? directMonthly * 0.23 : 0;
   const incidentMonthly = state.incidents * state.mttr * hourlyRate;
   const hoursLostPerEng = 40 * (state.maintPct / 100);
-  const totalMonthly = directMonthly + incidentMonthly;
+  const totalMonthly = directMonthly + contextSwitchMonthly + incidentMonthly;
   const annualCost = totalMonthly * 12;
   const debtPctArr = arrVal > 0 ? (annualCost / arrVal) * 100 : 0;
-  const monthlySavings = totalMonthly;
+  const monthlySavings = totalMonthly * (state.remediationPct / 100);
   const paybackMonths = monthlySavings > 0 ? budgetVal / monthlySavings : Infinity;
 
   return {
@@ -100,6 +104,7 @@ export function calculate(state: CalcState): CalcResult {
     hoursLostPerEng,
     costPerEng: totalMonthly / teamSize,
     directMonthly,
+    contextSwitchMonthly,
     incidentMonthly,
     V,
     doraLabel: deploy.doraLabel,
@@ -146,6 +151,8 @@ export function encodeState(state: CalcState): string {
     mttr: state.mttr,
     bp: state.budgetPos,
     ap: state.arrPos,
+    re: state.remediationPct,
+    cs: state.contextSwitchOn ? 1 : 0,
   };
   return btoa(JSON.stringify(compact));
 }
@@ -166,6 +173,8 @@ export function decodeState(encoded: string): Partial<CalcState> | null {
     if (Number.isInteger(raw.mttr) && raw.mttr >= 1 && raw.mttr <= 48) out.mttr = raw.mttr;
     if (Number.isInteger(raw.bp) && raw.bp >= 0 && raw.bp <= 100) out.budgetPos = raw.bp;
     if (Number.isInteger(raw.ap) && raw.ap >= 0 && raw.ap <= 100) out.arrPos = raw.ap;
+    if (Number.isInteger(raw.re) && raw.re >= 0 && raw.re <= 100) out.remediationPct = raw.re;
+    if (raw.cs === 0 || raw.cs === 1) out.contextSwitchOn = raw.cs === 1;
 
     return out;
   } catch {
@@ -184,8 +193,24 @@ export const fmtShortC = (n: number, symbol: string = '$', multiplier: number = 
   return `${symbol}${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(v)}`;
 };
 
-// ─── Plain-text summary for clipboard export ─────────────────────────────────
+// ─── Burden classification ───────────────────────────────────────────────────
 
+export interface BurdenLevel {
+  text: string;
+  range: string;
+  color: string;
+}
+
+/** Rich burden classification for UI display (label + range + color). */
+export function burdenClassify(pct: number): BurdenLevel {
+  if (pct < 10) return { text: 'Well-managed', range: '< 10%', color: 'var(--color-primary)' };
+  if (pct < 15) return { text: 'Acceptable', range: '10–15%', color: 'var(--color-primary)' };
+  if (pct < 25) return { text: 'Yellow flag', range: '15–25%', color: 'var(--color-secondary)' };
+  if (pct < 40) return { text: 'Red flag', range: '25–40%', color: '#d93636' };
+  return { text: 'Deal risk', range: '40%+', color: '#b82e2e' };
+}
+
+/** Plain-text burden label for clipboard/summary export. */
 function burdenLabel(pct: number): string {
   if (pct < 10) return 'Well-managed (< 10%)';
   if (pct < 15) return 'Acceptable (10-15%)';
@@ -194,7 +219,10 @@ function burdenLabel(pct: number): string {
   return 'Deal risk (40%+)';
 }
 
-function contextNote(pct: number, formattedAnnualCost: string): string {
+// ─── Plain-text summary for clipboard export ─────────────────────────────────
+
+/** Contextual narrative for a given burden level. */
+export function contextNote(pct: number, formattedAnnualCost: string): string {
   if (pct < 10)
     return 'Engineering capacity is predominantly forward-looking. Maintain discipline as the team scales.';
   if (pct < 15)
@@ -237,11 +265,14 @@ export function buildSummaryText(
   ];
 
   if (state.advancedOpen) {
+    lines.push('', `Direct labor: ${f(result.directMonthly)}/mo`);
+    if (state.contextSwitchOn) {
+      lines.push(`Context-switch overhead (+23%): ${f(result.contextSwitchMonthly)}/mo`);
+    }
     lines.push(
-      '',
-      `Direct labor: ${f(result.directMonthly)}/mo`,
       `Incident labor: ${f(result.incidentMonthly)}/mo`,
       `Debt as % of ARR: ${result.debtPctArr.toFixed(1)}%`,
+      `Remediation efficiency: ${state.remediationPct}%`,
       `Payback period: ${fmtPayback(result.paybackMonths)}`
     );
   }
@@ -267,4 +298,6 @@ export const DEFAULT_STATE: CalcState = {
   mttr: 4,
   budgetPos: budgetToPos(500000),
   arrPos: arrToPos(10000000),
+  remediationPct: 70,
+  contextSwitchOn: false,
 };

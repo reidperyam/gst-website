@@ -82,20 +82,23 @@ import DeltaIcon from './DeltaIcon.astro';
 
 <script>
   import { trackThemeToggle } from '../utils/analytics';
+  import * as Sentry from '@sentry/browser';
 
   const themeToggle = document.getElementById('themeToggle');
 
   if (themeToggle) {
-    const LONG_PRESS_MS = 5000;
+    const LONG_PRESS_MS = 7000;
 
     // Haptic pulse schedule: [delay from press start, vibration duration]
     const HAPTIC_SCHEDULE: [number, number][] = [
       [1000, 50],
       [2000, 75],
       [3000, 100],
-      [4000, 150],
+      [4000, 125],
+      [5000, 150],
+      [6000, 200],
     ];
-    const HAPTIC_SUCCESS_DURATION = 300;
+    const HAPTIC_SUCCESS_DURATION = 400;
 
     let pressTimer: ReturnType<typeof setTimeout> | null = null;
     let hapticTimers: ReturnType<typeof setTimeout>[] = [];
@@ -114,8 +117,12 @@ import DeltaIcon from './DeltaIcon.astro';
       const isDark = document.documentElement.classList.contains('dark-theme');
       try {
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      } catch (e) {
-        console.error('Failed to save theme preference:', e);
+      } catch {
+        Sentry.addBreadcrumb({
+          category: 'theme-toggle',
+          message: 'localStorage write failed',
+          level: 'warning',
+        });
       }
       trackThemeToggle(isDark ? 'dark' : 'light');
     }
@@ -141,7 +148,7 @@ import DeltaIcon from './DeltaIcon.astro';
         setTimeout(() => themeToggle!.classList.add('theme-toggle--holding'), 3000)
       );
 
-      // At 7s: success buzz + trigger palette popout
+      // At LONG_PRESS_MS: success buzz + trigger palette popout
       pressTimer = setTimeout(() => {
         didLongPress = true;
         vibrate(HAPTIC_SUCCESS_DURATION);
