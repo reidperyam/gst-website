@@ -258,7 +258,7 @@ export function resetAll(deps: {
   updateAll: () => void;
   renderHistRows: () => void;
 }) {
-  document.querySelectorAll<HTMLInputElement>('.techpar-shell input').forEach((el) => {
+  document.querySelectorAll<HTMLInputElement>('.brutal-tool-shell--fluid input').forEach((el) => {
     if (el.type === 'checkbox') el.checked = false;
     else if (el.dataset.input === 'exitMult') el.value = '12';
     else el.value = '';

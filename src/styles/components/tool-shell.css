@@ -26,6 +26,10 @@ Brutalist Tool Shell
   max-width: 800px;
 }
 
+.brutal-tool-shell--fluid {
+  max-width: 100%;
+}
+
 .brutal-tool-shell__content {
   padding: var(--spacing-xl) var(--spacing-lg);
 }
