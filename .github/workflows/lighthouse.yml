@@ -1,0 +1,73 @@
+name: Lighthouse CI
+
+permissions:
+  contents: read
+  statuses: write
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for running Lighthouse audit'
+        required: false
+        default: 'Manual performance audit'
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run Lighthouse CI
+        run: npx lhci autorun --config=lighthouserc.cjs 2>&1 | tee lhci-output.txt
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lighthouse scores summary
+        if: always()
+        run: |
+          echo "## Lighthouse CI Scores" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          MANIFEST=".lighthouseci/manifest.json"
+          if [ -f "$MANIFEST" ]; then
+            echo "| Page | Performance | FCP | LCP | TBT | CLS |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|-------------|-----|-----|-----|-----|" >> $GITHUB_STEP_SUMMARY
+            node -e "
+              const m = require('./$MANIFEST');
+              m.forEach(r => {
+                const s = require('./' + r.jsonPath);
+                const perf = Math.round((s.categories.performance?.score || 0) * 100);
+                const fcp = Math.round(s.audits['first-contentful-paint'].numericValue);
+                const lcp = Math.round(s.audits['largest-contentful-paint'].numericValue);
+                const tbt = Math.round(s.audits['total-blocking-time'].numericValue);
+                const cls = s.audits['cumulative-layout-shift'].numericValue.toFixed(3);
+                const url = new URL(r.url).pathname || '/';
+                const icon = perf >= 90 ? '🟢' : perf >= 50 ? '🟠' : '🔴';
+                console.log('| ' + icon + ' \`' + url + '\` | **' + perf + '** | ' + fcp + 'ms | ' + lcp + 'ms | ' + tbt + 'ms | ' + cls + ' |');
+              });
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No Lighthouse results found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          retention-days: 14

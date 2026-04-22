@@ -369,6 +369,45 @@ expect(results.critical).toHaveLength(0);
 
 `npm run test:coverage` reports line coverage via `@vitest/coverage-v8`. Source files under `src/utils/`, `src/data/*.ts`, and `src/scripts/` are instrumented. Current threshold: 35% lines (ratchet — can only increase).
 
+## Lighthouse CI (performance budgets)
+
+Lighthouse CI (`@lhci/cli`) runs automated performance audits against 10 key pages. Configuration is in `lighthouserc.cjs` at the project root.
+
+### When it runs
+
+- **Automatically** on PRs targeting `master` (`.github/workflows/lighthouse.yml`)
+- **Manually** via GitHub Actions → Lighthouse CI → Run workflow (same as cross-browser tests)
+
+### Performance budgets
+
+| Metric | Threshold | Level |
+| --- | --- | --- |
+| First Contentful Paint | < 1800ms | warn |
+| Largest Contentful Paint | < 2500ms | warn |
+| Cumulative Layout Shift | < 0.1 | error |
+| Total Blocking Time | < 200ms | warn |
+| Time to Interactive | < 3500ms | warn |
+
+CLS violations fail the check (`error`). Other metrics produce warnings while baselines stabilize.
+
+### Running locally
+
+```bash
+npx lhci autorun
+```
+
+This starts the dev server, audits all 10 URLs, and uploads results to temporary public storage. The report link is printed at the end.
+
+### Adjusting budgets
+
+Edit `lighthouserc.cjs` → `ci.assert.assertions`. Use `'error'` to block PRs, `'warn'` for informational. Add URLs in `ci.collect.url`.
+
+### Notes
+
+- Scores are measured against the **dev server** (`npm run dev`), not a production build. Absolute scores may differ from Vercel Speed Insights — use for **regression detection**, not absolute benchmarking.
+- `/hub/radar` is excluded (SSR page that fetches external API — unreliable in CI without mocked data).
+- Job summary shows a per-page table with Performance score, FCP, LCP, TBT, CLS (same format as code coverage summary).
+
 ---
 
 ## Environment variables

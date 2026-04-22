@@ -2,7 +2,7 @@
 
 Consolidated backlog of open development initiatives for the GST website. Each item is a self-contained user story with enough context to design and implement a solution. Items are grouped by theme, not priority — triage happens separately.
 
-> **Completed and closed items**: 26 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021, 023–025, 027–030, 034, 036–038). Use `git log` to find their original acceptance criteria and technical context.
+> **Completed and closed items**: 27 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021, 023–025, 027–030, 034, 036–039). Use `git log` to find their original acceptance criteria and technical context.
 
 ---
 
@@ -218,6 +218,72 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ---
 
+### BL-040: Desktop Performance — Regulatory Map and Radar Speed Improvements
+
+**Source**: Vercel Speed Insights (April 2026) | **Effort**: M (4-8 hours) | **Status**: Open
+
+**As a** desktop user, **I want** the Regulatory Map and Radar pages to load faster **so that** I don't experience jank or delays when using the most data-heavy hub tools.
+
+#### Current Metrics (Vercel Speed Insights — Desktop, Last 7 Days)
+
+| Route                       | Score | Issue             |
+| --------------------------- | ----- | ----------------- |
+| `/hub/tools/regulatory-map` | 78    | Needs Improvement |
+| `/hub/radar`                | 78    | Needs Improvement |
+
+Site-wide desktop: FCP 0.94s, LCP 0.94s, INP 48ms, CLS 0, TTFB 0.4s — overall score 100. These two pages are the only desktop outliers.
+
+#### Acceptance Criteria
+
+- [ ] `/hub/tools/regulatory-map` desktop score ≥ 90 in Vercel Speed Insights
+- [ ] `/hub/radar` desktop score ≥ 90 in Vercel Speed Insights
+- [ ] No regressions on other pages (all currently ≥ 90)
+- [ ] Lighthouse desktop audit confirms improvements
+
+#### Investigation Areas
+
+- **Regulatory Map**: loads 120 regulation JSON files + TopoJSON map data + D3 rendering. Profile for: large JS bundle (D3), blocking data fetches, render-blocking map initialization, timeline DOM size
+- **Radar**: fetches Inoreader API feed via serverless function + renders feed items. Profile for: API response time (Inoreader → KV cache → client), large DOM from feed items, client-side filtering/rendering cost
+- Common patterns to evaluate: lazy-load below-fold content, defer non-critical JS, reduce initial DOM size, optimize data fetching (prefetch vs. on-demand)
+
+---
+
+### BL-041: Mobile Performance — Brand, Portfolio, and Diligence Machine Optimization
+
+**Source**: Vercel Speed Insights (April 2026) | **Effort**: M-L (6-12 hours) | **Status**: Open
+
+**As a** mobile user, **I want** the Brand, M&A Portfolio, and Diligence Machine pages to load and respond faster **so that** the experience on phones and tablets matches the desktop quality.
+
+#### Current Metrics (Vercel Speed Insights — Mobile, Last 7 Days)
+
+| Route                          | Score | Issue                     |
+| ------------------------------ | ----- | ------------------------- |
+| `/brand`                       | 22    | Needs Improvement (worst) |
+| `/hub/tools/diligence-mach...` | 56    | Needs Improvement         |
+| `/ma-portfolio`                | 75    | Needs Improvement         |
+| `/services`                    | 54    | Needs Improvement         |
+
+Site-wide mobile: FCP 1.08s, LCP 1.1s, INP 136ms, CLS 0, TTFB 0.43s — overall score 100. These pages drag down the per-route mobile experience.
+
+#### Acceptance Criteria
+
+- [ ] `/brand` mobile score ≥ 50 (from 22 — largest improvement target)
+- [ ] `/hub/tools/diligence-machine` mobile score ≥ 70 (from 56)
+- [ ] `/ma-portfolio` mobile score ≥ 85 (from 75)
+- [ ] `/services` mobile score ≥ 70 (from 54)
+- [ ] INP ≤ 100ms on all target pages (currently 136ms site-wide)
+- [ ] No regressions on pages currently scoring well
+
+#### Investigation Areas
+
+- **Brand page** (score 22): massive DOM — renders every design system component as a showcase. Profile for: total DOM nodes, unused CSS loaded for specimens, image/SVG weight, consider lazy-loading sections below the fold or paginating component groups
+- **Diligence Machine** (score 56): 10 wizard steps server-rendered upfront. Profile for: total DOM size (all steps rendered but hidden), JS initialization cost for wizard logic, form input event handling overhead
+- **M&A Portfolio** (score 75): 57 project cards + filter drawer + modal. Profile for: initial card render count (consider virtual scrolling or progressive loading), filter chip interaction cost (INP), modal pre-rendering overhead
+- **Services page** (score 54): profile for image weight, animation cost on mobile, DOM complexity
+- Cross-cutting: mobile INP at 136ms suggests event handler overhead — audit `touchstart`/`click` handlers for expensive synchronous work, consider `requestAnimationFrame` deferral
+
+---
+
 ## Infrastructure
 
 ### BL-031: MCP Server — Internal Prototype (Phase 1)
@@ -283,91 +349,6 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 - Tool outputs must be sanitized against prompt injection
 - Audit logging every tool invocation for compliance
 - This is a competitive differentiator — boutique advisory + AI-native tooling is rare in M&A advisory
-
----
-
-### BL-039: Repository Transfer to Global Strategic Technologies GitHub Organization
-
-**Source**: Organizational governance (April 2026) | **Effort**: S (30 min) | **Status**: Complete
-
-**As a** platform owner, **I want** the `gst-website` repository transferred from `reidperyam/gst-website` to the `Global-Strategic-Technologies` GitHub organization **so that** the codebase is housed under the company's organizational account with proper ownership, team access controls, and professional branding on all integrations.
-
-#### Implementation Plan
-
-Per [GitHub docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository), GitHub automatically transfers: issues, PRs, wiki, stars, watchers, **secrets, webhooks, deploy keys**, Git history, fork associations, and GitHub Actions workflows. Old URL redirects permanently.
-
-##### Step 1: Transfer Repository (GitHub UI)
-
-1. `https://github.com/reidperyam/gst-website/settings` → Danger Zone → **Transfer**
-2. Select `Global-Strategic-Technologies` as new owner, keep name `gst-website`
-3. Confirm by typing repo name
-
-##### Step 2: Verify/Re-create Branch Protection Rulesets
-
-After transfer, run `gh api repos/Global-Strategic-Technologies/gst-website/rulesets` to check if rulesets survived. If missing, re-create from this backup:
-
-**Ruleset 1: "Protect master branch"** (enforcement: active)
-
-- Target: `refs/heads/master`
-- Rules: deletion protection, non-fast-forward protection, pull request required (0 approvals, dismiss stale reviews), required status checks (strict):
-  - `E2E Tests (Playwright)` (integration_id: 15368)
-  - `Unit & Integration Tests` (integration_id: 15368)
-  - `Lint & Type Check` (integration_id: 15368)
-- Bypass actors: none (`current_user_can_bypass: never`)
-
-**Ruleset 2: "Require passing tests on feature/fix branches"** (enforcement: active)
-
-- Target: `refs/heads/feat/**`, `refs/heads/fix/**`
-- Rules: required status checks (non-strict, skip on create):
-  - `Unit & Integration Tests` (integration_id: 15368)
-  - `E2E Tests (Playwright)` (integration_id: 15368)
-- Bypass actors: RepositoryRole id 5 (Maintain), mode: always
-
-Note: `integration_id: 15368` is GitHub Actions — this ID may change in the new org. Use the new integration ID from `gh api repos/Global-Strategic-Technologies/gst-website/rulesets` if re-creating.
-
-##### Step 3: Reconnect Vercel (Vercel Dashboard)
-
-1. Vercel project → Settings → Git → disconnect old repo, connect `Global-Strategic-Technologies/gst-website`
-2. Environment variables are stored in Vercel (not GitHub) — should be unaffected
-3. Trigger a test deploy to confirm
-4. Verify: production deploys on push to `master`, preview deploys on PRs, custom domain (`globalstrategic.tech`) still resolves
-
-##### Step 4: Update Sentry Code Mapping (Sentry Dashboard)
-
-1. Sentry → Settings → Integrations → GitHub → Code Mappings
-2. Change repo from `reidperyam/gst-website` to `Global-Strategic-Technologies/gst-website`
-3. Verify stack trace linking resolves to new org
-
-##### Step 5: Update Local Remote
-
-```bash
-git remote set-url origin https://github.com/Global-Strategic-Technologies/gst-website.git
-```
-
-##### Step 6: Codebase Updates (3 files)
-
-| File                                          | Change                                                                                                           |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `src/docs/development/SENTRY_MANUAL_SETUP.md` | Line 133: `reidperyam/gst-website` → `Global-Strategic-Technologies/gst-website`                                 |
-| `package.json`                                | Add `"repository": { "type": "git", "url": "https://github.com/Global-Strategic-Technologies/gst-website.git" }` |
-| `.github/dependabot.yml`                      | Line 18: keep `reidperyam` (valid as org member) or change to org team name                                      |
-
-##### Step 7: Verify
-
-- [ ] `npx astro check && npm run lint && npm run lint:css && npm run test:run` — all pass
-- [ ] Push to `dev` triggers CI at new org
-- [ ] PR from `dev` → `master` triggers all 3 required checks
-- [ ] Production deploy succeeds with source maps uploaded to Sentry
-- [ ] Radar API feed functional (Inoreader + KV tokens)
-- [ ] Old URL `github.com/reidperyam/gst-website` redirects to new location
-
-#### Technical Context
-
-- **GitHub Actions** use `${{ github.repository }}` (dynamic) — no hardcoded owner/repo in workflow files, auto-updates after transfer
-- **Vercel reconnection** is the highest-risk step — Vercel's Git integration is tied to a specific org/repo. Build config (`npm run build`, output `dist`) carries over
-- **Sentry** references the repo only in the Code Mapping dashboard config (not code). DSN, org, project are env vars in Vercel
-- **DNS/domain** is Cloudflare-managed, independent of GitHub org — no DNS changes needed
-- **No code references to `reidperyam`** exist outside documentation (LinkedIn URLs are author attribution, not integration points)
 
 ---
 
