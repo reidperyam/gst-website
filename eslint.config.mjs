@@ -30,6 +30,8 @@ export default [
       // Generated / vendored
       '**/*.min.js',
       '**/*.min.css',
+      // CommonJS config files (Lighthouse CI)
+      '**/*.cjs',
     ],
   },
 
