@@ -465,6 +465,97 @@ expect(selectedPaths).toBe(0);
 
 **Key principle:** When an element uses CSS transitions that override `[hidden]`, assert on the class or state that controls the transition — not on Playwright's visibility check. This is a specific case of §4 (test behavior, not implementation).
 
+### 9. ❌ Asserting on Debounced Side Effects Immediately
+
+When code debounces a side effect (e.g., `localStorage.setItem` via `setTimeout`), tests that check the side effect immediately after the triggering action will find stale or missing state.
+
+**Bad:**
+
+```typescript
+test('should persist wizard state after option click', async ({ page }) => {
+  await page.locator('.option-card').first().click();
+
+  // ❌ saveState() is debounced with 500ms delay — localStorage is still empty
+  const state = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem('wizard-state') ?? 'null')
+  );
+  expect(state.currentStep).toBe(2); // TypeError: Cannot read properties of null
+});
+```
+
+**Good:**
+
+```typescript
+test('should persist wizard state after option click', async ({ page }) => {
+  await page.locator('.option-card').first().click();
+
+  // ✅ Wait for the debounced write to flush
+  await page.waitForFunction(
+    () => {
+      const raw = localStorage.getItem('wizard-state');
+      return raw && JSON.parse(raw).currentStep === 2;
+    },
+    { timeout: 5000 }
+  );
+
+  const state = await page.evaluate(() => JSON.parse(localStorage.getItem('wizard-state')!));
+  expect(state.currentStep).toBe(2);
+});
+```
+
+**Better — fix the code, not the test:** Distinguish significant state transitions from rapid interactions. Step navigation should call `saveState()` directly (tests and users expect it to persist), while rapid option clicks within a step can be debounced.
+
+```typescript
+// In application code:
+function showStep(step) {
+  // ...
+  saveState(); // Immediate — significant transition
+}
+
+function handleOptionClick(card) {
+  // ...
+  saveStateDebounced(); // Debounced — rapid clicks batched
+}
+```
+
+**Key principle:** When adding debouncing for performance, identify which actions are "checkpoints" that users and tests expect to be durable. Those should flush immediately. Only debounce the truly rapid-fire operations.
+
+### 10. ❌ Counting DOM Elements That Now Have Loading States
+
+When code is changed from synchronous rendering to async (e.g., fetching data on demand), a loading indicator may temporarily occupy the same selector space as the final content. Tests that count elements by base class will include loading placeholders in the count.
+
+**Bad:**
+
+```typescript
+test('should update regulation count when filter changes', async ({ page }) => {
+  await selectRegion(page, 'DEU');
+
+  // ❌ renderPanel() is now async — first renders a .brutal-reg-card--loading element,
+  //    then fetches and replaces with actual cards. This may count the loading indicator
+  //    or get 0 if the fetch hasn't started yet.
+  const allCount = await page.locator('.brutal-reg-card').count();
+  expect(allCount).toBeGreaterThan(0);
+});
+```
+
+**Good:**
+
+```typescript
+test('should update regulation count when filter changes', async ({ page }) => {
+  await selectRegion(page, 'DEU');
+
+  // ✅ Exclude loading state from selector — wait for real cards to appear
+  await page.waitForFunction(() => {
+    return document.querySelectorAll('.brutal-reg-card:not(.brutal-reg-card--loading)').length > 0;
+  });
+
+  const allCount = await page.locator('.brutal-reg-card:not(.brutal-reg-card--loading)').count();
+  expect(allCount).toBeGreaterThan(0);
+});
+```
+
+**Key principle:** When synchronous rendering becomes async (common during performance optimization), every test that counts or queries the rendered elements must exclude intermediate states (loading indicators, skeletons, placeholders). Use `:not(.loading-class)` in selectors and wait for the final state. If you add a loading class to existing components, grep `tests/` for every selector that matches the base class.
+
 ---
 
 ## Common Test Patterns
