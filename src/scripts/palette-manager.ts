@@ -332,9 +332,31 @@ new MutationObserver(() => {
 
 // ── DOM Ready ──────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
+// Guard: defer swatch control injection until the palette panel is actually
+// opened. On non-brand pages the panel is hidden via CSS (display: none) and
+// no .brand-swatch elements exist, so injectControls() would be pure waste.
+// On the brand page (data-palette-always), defer to requestIdleCallback so it
+// doesn't block the critical rendering path.
+let controlsInjected = false;
+
+function ensureControlsInjected(): void {
+  if (controlsInjected) return;
   injectControls();
-  readAndPopulate();
+  controlsInjected = true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Defer swatch injection: on brand page, run at idle; on other pages, skip
+  // entirely until the panel is opened.
+  const isBrandPage = document.documentElement.hasAttribute('data-palette-always');
+  if (isBrandPage) {
+    const deferInit =
+      window.requestIdleCallback ?? ((cb: IdleRequestCallback) => setTimeout(cb, 0));
+    deferInit(() => {
+      ensureControlsInjected();
+      readAndPopulate();
+    });
+  }
 
   // ── DOM references ──────────────────────────────────────
   const panel = document.getElementById('palette-panel');
@@ -348,6 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Shared action: open panel ───────────────────────────
   function openPanel(): void {
     if (!panel) return;
+    ensureControlsInjected();
     panel.classList.add('is-open');
     if (isMobile()) {
       document.body.style.overflow = 'hidden';

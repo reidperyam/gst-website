@@ -10,31 +10,33 @@ interface Props {
 }
 
 const { categories } = Astro.props;
+
+// Compute gravity --d values at build time to avoid CLS from client-side margin changes.
+// --d is 0 at center, 1 at edges; margin grows quadratically via CSS.
+const catEntries = Object.entries(categories);
+const totalButtons = catEntries.length + 1; // +1 for "All"
+const center = (totalButtons - 1) / 2;
+const maxDist = center || 1;
+const allD = (Math.abs(0 - center) / maxDist).toFixed(3);
 ---
 
 <nav class="category-filter" aria-label="Filter by category">
-  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn active" data-filter="all" style={`--d: ${allD}`}>All</button>
   {
-    Object.entries(categories).map(([key, cat]) => (
-      <button class="filter-btn" data-filter={key} style={`--btn-color: ${cat.color}`}>
-        {cat.label}
-      </button>
-    ))
+    catEntries.map(([key, cat], i) => {
+      const d = (Math.abs(i + 1 - center) / maxDist).toFixed(3);
+      return (
+        <button class="filter-btn" data-filter={key} style={`--btn-color: ${cat.color}; --d: ${d}`}>
+          {cat.label}
+        </button>
+      );
+    })
   }
 </nav>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.filter-btn');
-
-    // Gravity: set --d (0–1) based on distance from center index
-    const count = buttons.length;
-    const center = (count - 1) / 2;
-    const maxDist = center || 1;
-    buttons.forEach((btn, i) => {
-      const d = Math.abs(i - center) / maxDist;
-      (btn as HTMLElement).style.setProperty('--d', d.toFixed(3));
-    });
 
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {

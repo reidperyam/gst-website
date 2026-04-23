@@ -27,7 +27,7 @@ import {
 
 const API_BASE = 'https://www.inoreader.com/reader/api/0';
 const OAUTH_BASE = 'https://www.inoreader.com/oauth2';
-const FETCH_TIMEOUT_MS = 10_000;
+const FETCH_TIMEOUT_MS = 5_000;
 
 // ---------------------------------------------------------------------------
 // Upstash Redis — lazy-loaded, gracefully degrades when unavailable
