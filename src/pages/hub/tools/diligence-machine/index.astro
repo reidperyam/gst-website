@@ -624,6 +624,14 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
   const attentionAreasGrid = document.getElementById('attentionAreasGrid')!;
   const scriptTopics = document.getElementById('scriptTopics')!;
 
+  // Cached NodeLists — avoids re-querying the DOM on every step navigation
+  const cachedWizardSteps = document.querySelectorAll<HTMLElement>('.wizard-step');
+  const cachedProgressSteps = document.querySelectorAll<HTMLElement>('.tool-wizard-step');
+  const cachedProgressDots = document.querySelectorAll<HTMLElement>('.tool-wizard-dot');
+  const cachedProgressBar = document.querySelector<HTMLElement>('.tool-wizard-progress');
+  const cachedMobileCurrent = document.querySelector('.tool-wizard-progress-mobile__current');
+  const cachedMobileName = document.querySelector('.tool-wizard-progress-mobile__name');
+
   // ─── LOCAL STORAGE ───────────────────────────────────────────────────
 
   function saveState(): void {
@@ -643,6 +651,12 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     } catch {
       // localStorage may be unavailable in private browsing
     }
+  }
+
+  let saveTimer: ReturnType<typeof setTimeout> | null = null;
+  function saveStateDebounced(): void {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveState, 500);
   }
 
   function loadState(): SavedState | null {
@@ -677,15 +691,13 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     currentStep = step;
     highestStepReached = Math.max(highestStepReached, step);
 
-    // Update step panels
-    document.querySelectorAll('.wizard-step').forEach((el) => {
-      const stepEl = el as HTMLElement;
+    // Update step panels (cached NodeList)
+    cachedWizardSteps.forEach((stepEl) => {
       stepEl.classList.toggle('active', stepEl.dataset.step === String(step));
     });
 
-    // Update progress indicators
-    document.querySelectorAll('.tool-wizard-step').forEach((el) => {
-      const segEl = el as HTMLElement;
+    // Update progress indicators (cached NodeList)
+    cachedProgressSteps.forEach((segEl) => {
       const segStep = Number(segEl.dataset.stepIndicator);
       segEl.classList.toggle('tool-wizard-step--active', segStep === step);
       segEl.classList.toggle('tool-wizard-step--completed', segStep < step);
@@ -695,21 +707,18 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       );
     });
 
-    // Update progress bar aria
-    const progressBar = document.querySelector('.tool-wizard-progress') as HTMLElement;
-    if (progressBar) progressBar.setAttribute('aria-valuenow', String(step));
+    // Update progress bar aria (cached ref)
+    if (cachedProgressBar) cachedProgressBar.setAttribute('aria-valuenow', String(step));
 
-    // Update mobile compact progress
-    const mobileCurrent = document.querySelector('.tool-wizard-progress-mobile__current');
-    const mobileName = document.querySelector('.tool-wizard-progress-mobile__name');
-    if (mobileCurrent) mobileCurrent.textContent = String(step);
-    if (mobileName) {
+    // Update mobile compact progress (cached refs)
+    if (cachedMobileCurrent) cachedMobileCurrent.textContent = String(step);
+    if (cachedMobileName) {
       const activeLabel = document.querySelector(
         `.tool-wizard-step[data-step-indicator="${step}"] .tool-wizard-step__label`
       );
-      if (activeLabel) mobileName.textContent = activeLabel.textContent ?? '';
+      if (activeLabel) cachedMobileName.textContent = activeLabel.textContent ?? '';
     }
-    document.querySelectorAll('.tool-wizard-dot').forEach((dot) => {
+    cachedProgressDots.forEach((dot) => {
       const dotStep = Number((dot as HTMLElement).dataset.dotStep);
       dot.classList.toggle('tool-wizard-dot--active', dotStep === step);
       dot.classList.toggle('tool-wizard-dot--completed', dotStep < step);
@@ -732,7 +741,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     updateNextButtonState();
-    saveState();
+    saveStateDebounced();
   }
 
   /** Update the multi-region card's DOM state and sync the geographies array */
@@ -830,7 +839,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       }
 
       updateNextButtonState();
-      saveState();
+      saveStateDebounced();
 
       // Auto-advance to next step after brief delay for visual feedback
       autoAdvanceTimer = setTimeout(() => {
@@ -861,7 +870,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       }
 
       updateNextButtonState();
-      saveState();
+      saveStateDebounced();
     }
   }
 
@@ -894,7 +903,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     }
 
     updateNextButtonState();
-    saveState();
+    saveStateDebounced();
 
     // Auto-advance once all compound fields are filled
     if (inputs.headcount && inputs.revenueRange && inputs.growthStage && inputs.companyAge) {
@@ -1004,7 +1013,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 
     // Scroll to top of output
     outputContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    saveState();
+    saveStateDebounced();
   }
 
   function wireCardInteractions(): void {
@@ -1023,7 +1032,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
           if (isNowCollapsed) collapsedQuestions.add(questionId);
           else collapsedQuestions.delete(questionId);
         }
-        saveState();
+        saveStateDebounced();
       });
     });
 
@@ -1044,7 +1053,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
           (btn as HTMLElement).textContent = 'Restore';
           (btn as HTMLElement).title = 'Restore this item';
         }
-        saveState();
+        saveStateDebounced();
       });
     });
 
@@ -1065,7 +1074,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
           (btn as HTMLElement).textContent = 'Restore';
           (btn as HTMLElement).title = 'Restore this item';
         }
-        saveState();
+        saveStateDebounced();
       });
     });
   }
@@ -1220,7 +1229,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     const identifierInput = document.getElementById('targetIdentifierInput') as HTMLInputElement;
     identifierInput.addEventListener('input', () => {
       targetIdentifier = identifierInput.value || 'Target';
-      saveState();
+      saveStateDebounced();
     });
 
     // Wire up CTA analytics tracking
