@@ -31,9 +31,6 @@ jobs:
 
       - run: npm ci
 
-      - name: Build for production
-        run: npm run build
-
       # ── Desktop audit ──────────────────────────────────────
       - name: Run Lighthouse CI (desktop)
         continue-on-error: true
