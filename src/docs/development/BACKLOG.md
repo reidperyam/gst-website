@@ -2,7 +2,7 @@
 
 Consolidated backlog of open development initiatives for the GST website. Each item is a self-contained user story with enough context to design and implement a solution. Items are grouped by theme, not priority — triage happens separately.
 
-> **Completed and closed items**: 27 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021, 023–025, 027–030, 034, 036–039). Use `git log` to find their original acceptance criteria and technical context.
+> **Completed and closed items**: 29 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021, 023–025, 027–030, 034, 036–041). Use `git log` to find their original acceptance criteria and technical context.
 
 ---
 
@@ -223,67 +223,46 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ### BL-040: Desktop Performance — Regulatory Map and Radar Speed Improvements
 
-**Source**: Vercel Speed Insights (April 2026) | **Effort**: M (4-8 hours) | **Status**: Open
+**Source**: Vercel Speed Insights (April 2026) | **Effort**: M (4-8 hours) | **Status**: Complete
 
 **As a** desktop user, **I want** the Regulatory Map and Radar pages to load faster **so that** I don't experience jank or delays when using the most data-heavy hub tools.
 
-#### Current Metrics (Vercel Speed Insights — Desktop, Last 7 Days)
-
-| Route                       | Score | Issue             |
-| --------------------------- | ----- | ----------------- |
-| `/hub/tools/regulatory-map` | 78    | Needs Improvement |
-| `/hub/radar`                | 78    | Needs Improvement |
-
-Site-wide desktop: FCP 0.94s, LCP 0.94s, INP 48ms, CLS 0, TTFB 0.4s — overall score 100. These two pages are the only desktop outliers.
-
 #### Acceptance Criteria
 
-- [ ] `/hub/tools/regulatory-map` desktop score ≥ 90 in Vercel Speed Insights
-- [ ] `/hub/radar` desktop score ≥ 90 in Vercel Speed Insights
-- [ ] No regressions on other pages (all currently ≥ 90)
-- [ ] Lighthouse desktop audit confirms improvements
+- [x] `/hub/tools/regulatory-map` desktop score ≥ 90 in Vercel Speed Insights
+- [x] `/hub/radar` desktop score ≥ 90 in Vercel Speed Insights
+- [x] No regressions on other pages (all currently ≥ 90)
+- [x] Lighthouse desktop audit confirms improvements
 
-#### Investigation Areas
+#### Completed Work (PRs #111–#116, April 2026)
 
-- **Regulatory Map**: loads 120 regulation JSON files + TopoJSON map data + D3 rendering. Profile for: large JS bundle (D3), blocking data fetches, render-blocking map initialization, timeline DOM size
-- **Radar**: fetches Inoreader API feed via serverless function + renders feed items. Profile for: API response time (Inoreader → KV cache → client), large DOM from feed items, client-side filtering/rendering cost
-- Common patterns to evaluate: lazy-load below-fold content, defer non-critical JS, reduce initial DOM size, optimize data fetching (prefetch vs. on-demand)
+- **Regulatory Map**: deferred subnational geodata (220KB off critical path), externalized regulation index to prerendered JSON endpoint, lazy-loaded d3-transition, added brutalist skeleton placeholder, fixed CLS 0.38→<0.1 via timeline min-height reservation
+- **Radar**: parallelized API calls via Promise.allSettled, reduced fetch timeout, computed gravity CSS at build time, added `/hub/radar` to Lighthouse CI configs (desktop + mobile)
+- **Cross-cutting**: eliminated Zod from client bundles (69.9KB→297B), lazy-loaded Chart.js, CSS code-split 5 component stylesheets, added performance monitoring dashboard on GitHub Pages
 
 ---
 
 ### BL-041: Mobile Performance — Brand, Portfolio, and Diligence Machine Optimization
 
-**Source**: Vercel Speed Insights (April 2026) | **Effort**: M-L (6-12 hours) | **Status**: Open
+**Source**: Vercel Speed Insights (April 2026) | **Effort**: M-L (6-12 hours) | **Status**: Complete
 
 **As a** mobile user, **I want** the Brand, M&A Portfolio, and Diligence Machine pages to load and respond faster **so that** the experience on phones and tablets matches the desktop quality.
 
-#### Current Metrics (Vercel Speed Insights — Mobile, Last 7 Days)
-
-| Route                          | Score | Issue                     |
-| ------------------------------ | ----- | ------------------------- |
-| `/brand`                       | 22    | Needs Improvement (worst) |
-| `/hub/tools/diligence-mach...` | 56    | Needs Improvement         |
-| `/ma-portfolio`                | 75    | Needs Improvement         |
-| `/services`                    | 54    | Needs Improvement         |
-
-Site-wide mobile: FCP 1.08s, LCP 1.1s, INP 136ms, CLS 0, TTFB 0.43s — overall score 100. These pages drag down the per-route mobile experience.
-
 #### Acceptance Criteria
 
-- [ ] `/brand` mobile score ≥ 50 (from 22 — largest improvement target)
-- [ ] `/hub/tools/diligence-machine` mobile score ≥ 70 (from 56)
-- [ ] `/ma-portfolio` mobile score ≥ 85 (from 75)
-- [ ] `/services` mobile score ≥ 70 (from 54)
-- [ ] INP ≤ 100ms on all target pages (currently 136ms site-wide)
-- [ ] No regressions on pages currently scoring well
+- [x] `/brand` mobile score ≥ 50 (from 22 — largest improvement target)
+- [x] `/hub/tools/diligence-machine` mobile score ≥ 70 (from 56)
+- [x] `/ma-portfolio` mobile score ≥ 85 (from 75)
+- [x] `/services` mobile score ≥ 70 (from 54)
+- [x] INP ≤ 100ms on all target pages (currently 136ms site-wide)
+- [x] No regressions on pages currently scoring well
 
-#### Investigation Areas
+#### Completed Work (PRs #111–#116, April 2026)
 
-- **Brand page** (score 22): massive DOM — renders every design system component as a showcase. Profile for: total DOM nodes, unused CSS loaded for specimens, image/SVG weight, consider lazy-loading sections below the fold or paginating component groups
-- **Diligence Machine** (score 56): 10 wizard steps server-rendered upfront. Profile for: total DOM size (all steps rendered but hidden), JS initialization cost for wizard logic, form input event handling overhead
-- **M&A Portfolio** (score 75): 57 project cards + filter drawer + modal. Profile for: initial card render count (consider virtual scrolling or progressive loading), filter chip interaction cost (INP), modal pre-rendering overhead
-- **Services page** (score 54): profile for image weight, animation cost on mobile, DOM complexity
-- Cross-cutting: mobile INP at 136ms suggests event handler overhead — audit `touchstart`/`click` handlers for expensive synchronous work, consider `requestAnimationFrame` deferral
+- **Brand page**: removed content-visibility CLS regression, deferred palette controls injection
+- **Diligence Machine**: cached DOM queries, debounced state persistence, added progress.css code-split
+- **M&A Portfolio**: removed define:vars JSON duplication, deferred state init to DOMContentLoaded, added portfolio.css code-split
+- **Cross-cutting**: mobile Lighthouse CI audits added to PR workflow and performance dashboard, eliminated Zod from client bundles, lazy-loaded Chart.js, CSS code-split, moved checkerboard from fixed pseudo-element to body background
 
 ---
 
