@@ -11,13 +11,13 @@
 @import './components/breadcrumb.css';
 @import './components/tiles.css';
 @import './components/table.css';
+@import './components/cards.css';
 @import './components/form.css';
 
 /* Page-specific component CSS — imported by the pages that use them:
    filter.css     → PortfolioHeader.astro (ma-portfolio)
    portfolio.css  → PortfolioGrid.astro (ma-portfolio)
    map.css        → MapVisualizer.astro (regulatory-map)
-   cards.css      → brand.astro
    progress.css   → diligence-machine/index.astro */
 
 * {
