@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clickSvgPath, waitForMapReady } from './helpers/regulatory-map';
+import { clickSvgPath, waitForMapReady, waitForSubnationalReady } from './helpers/regulatory-map';
 
 test.describe('Regulatory Map E2E', () => {
   test.beforeEach(async ({ page }) => {
@@ -121,6 +121,9 @@ test.describe('Regulatory Map E2E', () => {
     test('should show state-level regulation when clicking a highlighted US state', async ({
       page,
     }) => {
+      // Wait for subnational paths to load (deferred after world map)
+      await waitForSubnationalReady(page);
+
       // Use Texas (US-TX) — large state with TDPSA
       const texasSelector = '[data-state-code="US-TX"].state-path--active';
       const texasExists = await page.locator(texasSelector).count();

@@ -41,9 +41,20 @@ import '../../../../styles/components/map.css';
   <svg
     id="mapSvg"
     class="map-svg"
+    viewBox="0 0 960 440"
     role="img"
     aria-label="Interactive world map showing countries with regulatory data highlighted. Use scroll wheel or pinch to zoom, drag to pan."
     preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="map-loading-skeleton" aria-hidden="true">
+    <div class="brutal-skeleton-bar" style="width: 18%; margin-left: 52%; margin-top: 8%"></div>
+    <div class="brutal-skeleton-bar" style="width: 12%; margin-left: 55%; margin-top: 2%"></div>
+    <div class="brutal-skeleton-bar" style="width: 22%; margin-left: 10%; margin-top: 4%"></div>
+    <div class="brutal-skeleton-bar" style="width: 15%; margin-left: 14%; margin-top: 2%"></div>
+    <div class="brutal-skeleton-bar" style="width: 30%; margin-left: 50%; margin-top: -8%"></div>
+    <div class="brutal-skeleton-bar" style="width: 20%; margin-left: 65%; margin-top: 2%"></div>
+    <div class="brutal-skeleton-bar" style="width: 10%; margin-left: 8%; margin-top: 4%"></div>
+    <span class="map-loading-label">Loading map</span>
+  </div>
   <div class="brutal-map-tooltip" id="mapTooltip" role="tooltip" aria-hidden="true"></div>
   <div class="map-quick-zoom" id="mapQuickZoom">
     <button class="brutal-quick-zoom" data-region="americas" aria-label="Zoom to Americas"
@@ -271,5 +282,31 @@ import '../../../../styles/components/map.css';
 
   .brutal-map-tooltip.visible {
     opacity: 1;
+  }
+
+  /* Map loading skeleton — shown until D3 appends its <g> */
+  .map-loading-skeleton {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    pointer-events: none;
+    transition: opacity var(--transition-normal);
+  }
+
+  :global(.brutal-map-container:has(svg g)) .map-loading-skeleton {
+    opacity: 0;
+  }
+
+  .map-loading-label {
+    display: block;
+    text-align: center;
+    margin-top: var(--spacing-lg);
+    font-family: var(--font-family-mono);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    animation: brutal-blink 1.5s step-end infinite;
   }
 </style>

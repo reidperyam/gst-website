@@ -4,11 +4,7 @@ import HubHeader from '../../../../components/hub/HubHeader.astro';
 import MapVisualizer from '../../../../components/hub/tools/regulatory-map/MapVisualizer.astro';
 import CompliancePanel from '../../../../components/hub/tools/regulatory-map/CompliancePanel.astro';
 import PrintReportHeader from '../../../../components/PrintReportHeader.astro';
-import { fetchAllRegulations, buildRegulationIndex } from '../../../../utils/fetchRegulations';
 import '../../../../styles/components/filter.css';
-
-const regulations = await fetchAllRegulations();
-const regIndex = buildRegulationIndex(regulations);
 
 const faqItems = [
   {
@@ -53,8 +49,8 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
 >
   {/* Preload geodata so downloads start during HTML parsing, before the D3 module executes */}
   <link rel="preload" href="/data/world-110m.json" as="fetch" crossorigin />
-  <link rel="preload" href="/data/us-states-10m.json" as="fetch" crossorigin />
-  <link rel="preload" href="/data/canada-provinces.json" as="fetch" crossorigin />
+  <link rel="prefetch" href="/data/us-states-10m.json" as="fetch" crossorigin />
+  <link rel="prefetch" href="/data/canada-provinces.json" as="fetch" crossorigin />
 
   <script
     is:inline
@@ -267,14 +263,21 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
       <a href="/hub/tools" class="cta-button secondary back-link">Back to Tools</a>
     </div>
   </section>
-  <script is:inline type="application/json" id="regIndex" set:html={JSON.stringify(regIndex)} />
+  <link rel="preload" href="/data/reg-index.json" as="fetch" crossorigin />
 </BaseLayout>
 
 <script>
   import { geoEquirectangular, geoPath } from 'd3-geo';
   import { select } from 'd3-selection';
   import { zoom as d3Zoom, zoomIdentity } from 'd3-zoom';
-  import 'd3-transition';
+  // d3-transition loaded lazily on first zoom interaction (saves ~10-15KB from initial bundle)
+  let transitionLoaded = false;
+  async function ensureTransition(): Promise<void> {
+    if (!transitionLoaded) {
+      await import('d3-transition');
+      transitionLoaded = true;
+    }
+  }
   import { feature } from 'topojson-client';
   import type { Topology, GeometryCollection } from 'topojson-specification';
   import type { FeatureCollection, Geometry } from 'geojson';
@@ -294,12 +297,6 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     category: string;
     regions: string[];
   }
-
-  // --- Parse the build-time regulation index from inline JSON ---
-  const regIndexRaw = JSON.parse(document.getElementById('regIndex')!.textContent!) as {
-    regions: Record<string, string[]>;
-    regs: RegIndexEntry[];
-  };
 
   // --- Detail cache: full regulation objects fetched on demand ---
   const detailCache = new Map<string, Regulation>();
@@ -322,24 +319,22 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
   // Analytics: fire rm_start once per page load on first interaction
   let rmStartFired = false;
 
-  const [topology, usTopo, caTopo] = await Promise.all([
+  // Phase 1: world geodata + regulation index in parallel (critical path)
+  const [topology, regIndexRaw] = await Promise.all([
     fetch('/data/world-110m.json').then((r) => r.json()) as Promise<Topology>,
-    fetch('/data/us-states-10m.json').then((r) => r.json()) as Promise<Topology>,
-    fetch('/data/canada-provinces.json').then((r) => r.json()) as Promise<Topology>,
+    fetch('/data/reg-index.json').then((r) => r.json()) as Promise<{
+      regions: Record<string, string[]>;
+      regs: RegIndexEntry[];
+    }>,
   ]);
 
-  // regionMap: region code → array of regulation IDs (from inline index)
+  // regionMap: region code → array of regulation IDs
   const regionMap: Record<string, string[]> = regIndexRaw.regions;
 
-  const usStates = feature(
-    usTopo as unknown as Topology<{ states: GeometryCollection }>,
-    usTopo.objects.states as GeometryCollection
-  ) as unknown as FeatureCollection<Geometry, { name?: string }>;
-
-  const caProvinces = feature(
-    caTopo as unknown as Topology<{ collection: GeometryCollection }>,
-    caTopo.objects.collection as GeometryCollection
-  ) as unknown as FeatureCollection<Geometry, { iso_3166_2?: string; name?: string }>;
+  // Subnational data loaded after world map renders (Phase 2)
+  let usStates: FeatureCollection<Geometry, { name?: string }> | null = null;
+  let caProvinces: FeatureCollection<Geometry, { iso_3166_2?: string; name?: string }> | null =
+    null;
 
   // --- Mobile detection ---
   const isMobile = (): boolean => window.innerWidth < 1024;
@@ -544,10 +539,7 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
   const MAP_WIDTH = 960;
   const MAP_HEIGHT = 440;
 
-  const svg = select<SVGSVGElement, unknown>('#mapSvg').attr(
-    'viewBox',
-    `0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`
-  );
+  const svg = select<SVGSVGElement, unknown>('#mapSvg');
 
   const projection = geoEquirectangular().fitSize([MAP_WIDTH, MAP_HEIGHT], visibleCountries);
 
@@ -578,16 +570,19 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
   const zoomOutBtn = document.getElementById('zoomOut');
   const zoomResetBtn = document.getElementById('zoomReset');
 
-  zoomInBtn?.addEventListener('click', () => {
+  zoomInBtn?.addEventListener('click', async () => {
+    await ensureTransition();
     svg.transition().duration(300).call(zoomBehavior.scaleBy, 1.5);
   });
-  zoomOutBtn?.addEventListener('click', () => {
+  zoomOutBtn?.addEventListener('click', async () => {
+    await ensureTransition();
     svg
       .transition()
       .duration(300)
       .call(zoomBehavior.scaleBy, 1 / 1.5);
   });
-  zoomResetBtn?.addEventListener('click', () => {
+  zoomResetBtn?.addEventListener('click', async () => {
+    await ensureTransition();
     svg.transition().duration(300).call(zoomBehavior.transform, zoomIdentity);
   });
 
@@ -601,13 +596,14 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     'africa-mideast': { x: -1088, y: -432, k: 2.8 },
   };
 
-  document.getElementById('mapQuickZoom')?.addEventListener('click', (e) => {
+  document.getElementById('mapQuickZoom')?.addEventListener('click', async (e) => {
     const btn = (e.target as HTMLElement).closest('.brutal-quick-zoom') as HTMLElement | null;
     if (!btn) return;
     const region = btn.dataset.region ?? '';
     const view = REGION_VIEWS[region];
     if (!view) return;
 
+    await ensureTransition();
     const transform = zoomIdentity.translate(view.x, view.y).scale(view.k);
     svg.transition().duration(500).call(zoomBehavior.transform, transform);
 
@@ -674,82 +670,124 @@ import DeltaIcon from '../../../../components/DeltaIcon.astro';
     .on('mouseenter', handleMouseEnter)
     .on('mouseleave', handleMouseLeave);
 
-  // --- Render US state paths ---
-  // Phase A: base classes only — active state applied in Phase B
-  g.selectAll('path.state-path')
-    .data(usStates.features)
-    .enter()
-    .append('path')
-    .attr('d', (d) => pathGenerator(d) ?? '')
-    .attr('class', 'state-path')
-    .attr('data-state-code', (d) => fipsToStateCode[d.id as string] ?? '')
-    .attr('aria-label', (d) => {
-      const code = fipsToStateCode[d.id as string];
-      return code ? (stateCodeToName[code] ?? '') : '';
-    })
-    .attr('role', 'presentation')
-    .on('click', function (event: MouseEvent) {
-      if (this.classList.contains('state-path--active')) handleStateClick(event);
-    })
-    .on('keydown', function (event: KeyboardEvent) {
-      if (
-        this.classList.contains('state-path--active') &&
-        (event.key === 'Enter' || event.key === ' ')
-      ) {
-        event.preventDefault();
-        handleStateClick(event);
-      }
-    })
-    .on('mouseenter', handleMouseEnter)
-    .on('mouseleave', handleMouseLeave);
+  // --- Deferred subnational rendering (US states + Canada provinces) ---
+  // Loaded after world map renders to reduce critical-path payload by ~220KB.
+  async function loadSubnationalData(): Promise<void> {
+    const [usTopo, caTopo] = await Promise.all([
+      fetch('/data/us-states-10m.json').then((r) => r.json()) as Promise<Topology>,
+      fetch('/data/canada-provinces.json').then((r) => r.json()) as Promise<Topology>,
+    ]);
 
-  // --- Render Canadian province paths ---
-  // Phase A: base classes only — active state applied in Phase B
-  g.selectAll('path.province-path')
-    .data(caProvinces.features)
-    .enter()
-    .append('path')
-    .attr('d', (d) => pathGenerator(d) ?? '')
-    .attr('class', 'state-path')
-    .attr('data-state-code', (d) => d.properties?.iso_3166_2 ?? '')
-    .attr('aria-label', (d) => {
-      const code = d.properties?.iso_3166_2 ?? '';
-      return provinceCodeToName[code] ?? '';
-    })
-    .attr('role', 'presentation')
-    .on('click', function (event: MouseEvent) {
-      if (this.classList.contains('state-path--active')) handleStateClick(event);
-    })
-    .on('keydown', function (event: KeyboardEvent) {
-      if (
-        this.classList.contains('state-path--active') &&
-        (event.key === 'Enter' || event.key === ' ')
-      ) {
-        event.preventDefault();
-        handleStateClick(event);
+    usStates = feature(
+      usTopo as unknown as Topology<{ states: GeometryCollection }>,
+      usTopo.objects.states as GeometryCollection
+    ) as unknown as FeatureCollection<Geometry, { name?: string }>;
+
+    caProvinces = feature(
+      caTopo as unknown as Topology<{ collection: GeometryCollection }>,
+      caTopo.objects.collection as GeometryCollection
+    ) as unknown as FeatureCollection<Geometry, { iso_3166_2?: string; name?: string }>;
+
+    // Render US state paths
+    g.selectAll('path.state-path')
+      .data(usStates.features)
+      .enter()
+      .append('path')
+      .attr('d', (d) => pathGenerator(d) ?? '')
+      .attr('class', 'state-path')
+      .attr('data-state-code', (d) => fipsToStateCode[d.id as string] ?? '')
+      .attr('aria-label', (d) => {
+        const code = fipsToStateCode[d.id as string];
+        return code ? (stateCodeToName[code] ?? '') : '';
+      })
+      .attr('role', 'presentation')
+      .on('click', function (event: MouseEvent) {
+        if (this.classList.contains('state-path--active')) handleStateClick(event);
+      })
+      .on('keydown', function (event: KeyboardEvent) {
+        if (
+          this.classList.contains('state-path--active') &&
+          (event.key === 'Enter' || event.key === ' ')
+        ) {
+          event.preventDefault();
+          handleStateClick(event);
+        }
+      })
+      .on('mouseenter', handleMouseEnter)
+      .on('mouseleave', handleMouseLeave);
+
+    // Render Canadian province paths
+    g.selectAll('path.province-path')
+      .data(caProvinces.features)
+      .enter()
+      .append('path')
+      .attr('d', (d) => pathGenerator(d) ?? '')
+      .attr('class', 'state-path')
+      .attr('data-state-code', (d) => d.properties?.iso_3166_2 ?? '')
+      .attr('aria-label', (d) => {
+        const code = d.properties?.iso_3166_2 ?? '';
+        return provinceCodeToName[code] ?? '';
+      })
+      .attr('role', 'presentation')
+      .on('click', function (event: MouseEvent) {
+        if (this.classList.contains('state-path--active')) handleStateClick(event);
+      })
+      .on('keydown', function (event: KeyboardEvent) {
+        if (
+          this.classList.contains('state-path--active') &&
+          (event.key === 'Enter' || event.key === ' ')
+        ) {
+          event.preventDefault();
+          handleStateClick(event);
+        }
+      })
+      .on('mouseenter', handleMouseEnter)
+      .on('mouseleave', handleMouseLeave);
+
+    // Apply active state to subnational paths with regulations
+    applySubnationalHighlighting();
+
+    // Restore URL-bookmarked subnational region if present
+    const { region } = getUrlParams();
+    if (region && region.includes('-')) {
+      const pathEl = document.querySelector(
+        `path[data-state-code="${CSS.escape(region)}"]`
+      ) as SVGPathElement | null;
+      if (pathEl?.classList.contains('state-path--active')) {
+        selectRegion(pathEl, region, 'state-path--selected');
       }
-    })
-    .on('mouseenter', handleMouseEnter)
-    .on('mouseleave', handleMouseLeave);
+    }
+
+    // Signal that subnational paths are ready (used by E2E tests)
+    document.getElementById('mapContainer')?.setAttribute('data-subnational-ready', 'true');
+  }
+
+  /** Apply --active class to subnational paths that have regulations */
+  function applySubnationalHighlighting(): void {
+    const filteredMap = getFilteredRegionMap();
+    g.selectAll<SVGPathElement, unknown>('.state-path').each(function () {
+      const code = this.getAttribute('data-state-code') ?? '';
+      if (code && filteredMap[code]) {
+        this.classList.add('state-path--active');
+        this.setAttribute('role', 'button');
+        this.setAttribute('tabindex', '0');
+      }
+    });
+  }
+
+  // Fire subnational load — does not block world map rendering
+  loadSubnationalData();
 
   // --- Phase B: apply regulation data from inline index ---
-  // regById and searchIndex are already populated from the inline JSON above.
-  // Apply --active class, role="button", and tabindex to paths with regulations.
+  // Apply --active class, role="button", and tabindex to country paths with regulations.
+  // Subnational paths (US states, Canadian provinces) are handled by applySubnationalHighlighting()
+  // after deferred loading completes.
   if (Object.keys(regionMap).length > 0) {
     g.selectAll<SVGPathElement, unknown>('.country-path').each(function () {
       const alpha3 = this.getAttribute('data-alpha3') ?? '';
       if (alpha3 === 'USA' || alpha3 === 'CAN') return;
       if (alpha3 && regionMap[alpha3]) {
         this.classList.add('country-path--active');
-        this.setAttribute('role', 'button');
-        this.setAttribute('tabindex', '0');
-      }
-    });
-
-    g.selectAll<SVGPathElement, unknown>('.state-path').each(function () {
-      const code = this.getAttribute('data-state-code') ?? '';
-      if (code && regionMap[code]) {
-        this.classList.add('state-path--active');
         this.setAttribute('role', 'button');
         this.setAttribute('tabindex', '0');
       }
