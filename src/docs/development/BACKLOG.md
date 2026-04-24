@@ -2,7 +2,7 @@
 
 Consolidated backlog of open development initiatives for the GST website. Each item is a self-contained user story with enough context to design and implement a solution. Items are grouped by theme, not priority — triage happens separately.
 
-> **Completed and closed items**: 29 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021, 023–025, 027–030, 034, 036–041). Use `git log` to find their original acceptance criteria and technical context.
+> **Completed and closed items**: 31 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021–026, 027–030, 034, 036–041). Use `git log` to find their original acceptance criteria and technical context.
 
 ---
 
@@ -11,8 +11,6 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 - [Compliance and Privacy](#compliance-and-privacy)
 - [Business Capabilities](#business-capabilities)
 - [CSS and Design System](#css-and-design-system)
-- [Testing and CI](#testing-and-ci)
-- [Performance](#performance)
 - [Infrastructure](#infrastructure)
 - [Exploration](#exploration)
 
@@ -169,103 +167,6 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ---
 
-## Testing and CI
-
-### BL-022: Lighthouse CI for Performance Monitoring
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 2-3 hours | **Status**: Complete
-
-**As a** developer, **I want** Lighthouse CI integrated into the GitHub Actions pipeline **so that** performance regressions are caught before reaching production and performance budgets are enforced on every PR.
-
-#### Acceptance Criteria
-
-- [x] `@lhci/cli` installed and configured
-- [x] GitHub Actions workflow created (`.github/workflows/lighthouse.yml`)
-- [x] Performance budgets set: LCP < 2.5s, FCP < 1.8s, CLS < 0.1, TBT < 200ms
-- [x] First baseline report generated
-- [x] Build fails if LCP degrades beyond threshold
-- [x] Developers notified of performance impact in PRs
-
-#### Technical Context
-
-- Lighthouse CI runs on every PR to `master` and via manual dispatch
-- Configuration in `lighthouserc.cjs` with desktop preset, 10 audited pages
-- Step summary renders full scores table (Performance, FCP, LCP, TBT, CLS) with report links
-- CLS assertion set to `error` (blocks merge); other metrics set to `warn`
-- Reports uploaded to temporary-public-storage for review
-
----
-
-## Performance
-
-### BL-026: Performance Monitoring Dashboard
-
-**Source**: DEVELOPMENT_OPPORTUNITIES.md | **Effort**: 1-2 hours | **Status**: Complete
-
-**As a** site operator, **I want** a consolidated view of performance metrics **so that** I can track trends over time and communicate improvements to stakeholders.
-
-#### Acceptance Criteria
-
-- [x] Monthly performance reports tracking LCP, FCP, CLS, TBT over time
-- [x] Year-over-year trend visibility
-- [x] Single source of truth for performance metrics
-
-#### Technical Context
-
-- Static HTML + Chart.js dashboard deployed to GitHub Pages via `gh-pages` branch
-- Weekly cron (`perf-dashboard.yml`) runs Lighthouse CI, appends scores to `data/lighthouse-history.json`
-- Dashboard URL: `global-strategic-technologies.github.io/gst-website/`
-- Brutalist dark theme with frosted-glass panels matching the main site aesthetic
-- Scripts on `master`: `scripts/extract-lighthouse-metrics.mjs`, `scripts/merge-lighthouse-history.mjs`
-- Dashboard templates on `master`: `scripts/dashboard/` (seeded to `gh-pages` on each run)
-
----
-
-### BL-040: Desktop Performance — Regulatory Map and Radar Speed Improvements
-
-**Source**: Vercel Speed Insights (April 2026) | **Effort**: M (4-8 hours) | **Status**: Complete
-
-**As a** desktop user, **I want** the Regulatory Map and Radar pages to load faster **so that** I don't experience jank or delays when using the most data-heavy hub tools.
-
-#### Acceptance Criteria
-
-- [x] `/hub/tools/regulatory-map` desktop score ≥ 90 in Vercel Speed Insights
-- [x] `/hub/radar` desktop score ≥ 90 in Vercel Speed Insights
-- [x] No regressions on other pages (all currently ≥ 90)
-- [x] Lighthouse desktop audit confirms improvements
-
-#### Completed Work (PRs #111–#116, April 2026)
-
-- **Regulatory Map**: deferred subnational geodata (220KB off critical path), externalized regulation index to prerendered JSON endpoint, lazy-loaded d3-transition, added brutalist skeleton placeholder, fixed CLS 0.38→<0.1 via timeline min-height reservation
-- **Radar**: parallelized API calls via Promise.allSettled, reduced fetch timeout, computed gravity CSS at build time, added `/hub/radar` to Lighthouse CI configs (desktop + mobile)
-- **Cross-cutting**: eliminated Zod from client bundles (69.9KB→297B), lazy-loaded Chart.js, CSS code-split 5 component stylesheets, added performance monitoring dashboard on GitHub Pages
-
----
-
-### BL-041: Mobile Performance — Brand, Portfolio, and Diligence Machine Optimization
-
-**Source**: Vercel Speed Insights (April 2026) | **Effort**: M-L (6-12 hours) | **Status**: Complete
-
-**As a** mobile user, **I want** the Brand, M&A Portfolio, and Diligence Machine pages to load and respond faster **so that** the experience on phones and tablets matches the desktop quality.
-
-#### Acceptance Criteria
-
-- [x] `/brand` mobile score ≥ 50 (from 22 — largest improvement target)
-- [x] `/hub/tools/diligence-machine` mobile score ≥ 70 (from 56)
-- [x] `/ma-portfolio` mobile score ≥ 85 (from 75)
-- [x] `/services` mobile score ≥ 70 (from 54)
-- [x] INP ≤ 100ms on all target pages (currently 136ms site-wide)
-- [x] No regressions on pages currently scoring well
-
-#### Completed Work (PRs #111–#116, April 2026)
-
-- **Brand page**: removed content-visibility CLS regression, deferred palette controls injection
-- **Diligence Machine**: cached DOM queries, debounced state persistence, added progress.css code-split
-- **M&A Portfolio**: removed define:vars JSON duplication, deferred state init to DOMContentLoaded, added portfolio.css code-split
-- **Cross-cutting**: mobile Lighthouse CI audits added to PR workflow and performance dashboard, eliminated Zod from client bundles, lazy-loaded Chart.js, CSS code-split, moved checkerboard from fixed pseudo-element to body background
-
----
-
 ## Infrastructure
 
 ### BL-031: MCP Server — Internal Prototype (Phase 1)
@@ -363,4 +264,4 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ---
 
-_Created: April 18, 2026 | Last pruned: April 21, 2026_
+_Created: April 18, 2026 | Last pruned: April 24, 2026_
