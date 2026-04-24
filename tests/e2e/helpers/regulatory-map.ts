@@ -27,3 +27,16 @@ export async function waitForMapReady(page: Page): Promise<void> {
     { timeout: 15000 }
   );
 }
+
+/**
+ * Wait for subnational paths (US states, Canadian provinces) to load.
+ * These load asynchronously after the world map renders.
+ */
+export async function waitForSubnationalReady(page: Page): Promise<void> {
+  await page.waitForFunction(
+    () =>
+      document.getElementById('mapContainer')?.getAttribute('data-subnational-ready') === 'true',
+    undefined,
+    { timeout: 15000 }
+  );
+}
