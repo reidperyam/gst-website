@@ -171,9 +171,11 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ### BL-031: MCP Server — Internal Prototype (Phase 1)
 
-**Source**: MCP_SERVER_INITIATIVE.md (archived) | **Effort**: 1-2 days | **Status**: Open
+**Source**: MCP_SERVER_INITIATIVE.md (archived) | **Architecture & plan**: [MCP_SERVER_ARCHITECTURE_BL-031.md](MCP_SERVER_ARCHITECTURE_BL-031.md) | **Effort**: 1-2 days | **Status**: Open
 
 **As a** GST team member, **I want** a local MCP server exposing the diligence engine and portfolio search **so that** I can query GST's tools from Claude Desktop and Claude Code without opening the website.
+
+> **Implementation plan**: see [MCP_SERVER_ARCHITECTURE_BL-031.md](MCP_SERVER_ARCHITECTURE_BL-031.md) — covers MCP architecture introduction, repo-placement and lifecycle decisions, the Phase 1 file layout and tool surface, and verification steps. Note: that document supersedes the `@modelcontextprotocol/sdk` package reference in the acceptance criteria below — current canonical SDK is the v2 split-package family (`@modelcontextprotocol/server` + companions).
 
 #### Planning Criteria
 
@@ -277,6 +279,195 @@ The relative-import dance keeps the engines as the single source of truth — no
 3. Add the local server to `claude_desktop_config.json`, restart Claude Desktop, confirm tools appear in the tool list
 4. Invoke each tool with the README's example payload, confirm a sensible response
 5. Invoke `generate_diligence_agenda` with a deliberately invalid `transactionType` (e.g. `"foo"`), confirm a clean MCP error rather than a stack trace
+
+---
+
+### BL-031.5: MCP Server — Hub Surface Extension
+
+**Source**: BL-031.5 — extends Phase 1 surface | **Architecture & plan**: [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) | **Effort**: 3-5 days | **Status**: Open | **Depends on**: BL-031
+
+**As a** GST team member, **I want** the local MCP server to also expose the remaining Hub tool engines (ICG, TechPar, Tech Debt, Regulatory Map) and to expose the Library articles and the Radar snapshot as MCP **Resources** **so that** my agents can pull GST's full advisory toolkit and reference content into any conversation without opening the website.
+
+> **Implementation plan**: see [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) — covers the MCP "Resources" primitive, the Tool/Resource taxonomy across the Hub surface, content-source decisions for Library articles, the Radar-snapshot constraint that protects the Inoreader 200 req/day budget, and verification steps.
+
+#### Planning Criteria
+
+**Use cases**
+
+- **Cost-governance assessment in-flow** — while drafting an ICG memo for a target, ask the model to score the company's cost maturity (`assess_infrastructure_cost_governance { answers: {...}, stage: 'scaling' }`) and produce a prioritized remediation list inline; eliminates the wizard round-trip
+- **TechPar benchmarking mid-conversation** — drop a target's spend breakdown into a chat (`compute_techpar { arr: 25_000_000, stage: 'expansion', ... }`) and get the blended cost ratio + 36-month trajectory back without leaving the document
+- **Tech-debt sizing on the call** — during a CTO conversation, estimate the carrying cost of legacy maintenance (`estimate_tech_debt_cost { teamSize, salary, maintenanceBurdenPct }`) for a defensible figure to anchor the discussion
+- **Regulatory framework as native context** — pin `gst://regulations/eu/gdpr` or `gst://regulations/us/ca/ccpa` into a deal-review conversation; the model treats it as referenceable context rather than re-typed quotes
+- **Library article reuse** — pull the **VDR Structure Guide** (`gst://library/vdr-structure`) into a client-prep conversation as a single resource the model can read and adapt without us re-explaining it
+- **Radar context for prep work** — read `gst://radar/fyi/latest` from the local snapshot to surface the most recent annotated items before a partner call (offline-safe; no Inoreader calls)
+- **Proof-of-concept for Resources primitive** — exercises the read-only Resource handler pattern that BL-032 (radar live) and BL-033 (per-client regulatory access) will inherit
+
+**Outcomes**
+
+- Tool parity: `assess_infrastructure_cost_governance`, `compute_techpar`, `estimate_tech_debt_cost`, `search_regulations`, `list_regulation_facets`, and `search_radar_cache` all installed locally by every GST team member alongside the BL-031 tools
+- Resource exposure: Library × 2, Regulations × 120+, Radar Wire/FYI streams visible in Claude Desktop's resource picker; at least one team member uses a pinned Library or Regulation URI in a real client-prep conversation within the first two weeks
+- Zero Inoreader API calls attributable to MCP traffic — the local snapshot pattern (`npm run radar:seed`) holds; verified by absence of 4xx/5xx Inoreader log entries in the seed window
+- URI stability invariant: a frozen Vitest-asserted manifest of expected resource URIs prevents accidental contract breakage
+- Foundation validated: hybrid Tool+Resource pattern proven locally before BL-032 layers HTTP transport on top
+
+**Business value**
+
+- **Multiplies the BL-031 productivity win** — the Hub has 5 tools; BL-031 covers 1; BL-031.5 brings the other 4 into the same conversational surface
+- **De-risks BL-032's hybrid surface** — Resources are not just a "nice extra"; they are the right primitive for regulatory, library, and per-item radar exposure. Validating the URI scheme + freshness semantics now (locally, low-stakes) is the cheapest place to learn the ergonomics
+- **Concrete differentiator for narrative** — "agents can pin GST's regulatory library and TechPar engine as native context" reads materially stronger than "agents can call our diligence tool"
+- **Marginal cost** — same workspace, same SDK, same CI; the 3-5 day estimate covers four engine wrappers, the Resources registry, library-content sourcing, and the snapshot-based radar handler
+
+#### Acceptance Criteria
+
+**New tools (extend BL-031's tool registry)**
+
+- [ ] `assess_infrastructure_cost_governance` — wraps the ICG engine; input includes `answers` map and `stage`; output is `{ overall, domainScores[], recommendations[] }`
+- [ ] `compute_techpar` — wraps the TechPar engine; input is `TechParInputs`; output is `TechParResult`
+- [ ] `estimate_tech_debt_cost` — wraps the Tech Debt engine; **input MUST be raw values** (team size, salary, maintenance burden, deploy frequency) — slider-position helpers stay on the website side
+- [ ] `search_regulations` — facet/search across the regulatory-map JSON files; input `{ jurisdiction?, domain?, query?, limit? }`; output includes the resource `uri` for each matched framework
+- [ ] `list_regulation_facets` — companion enumerator for `{ jurisdictions[], domains[] }`
+- [ ] `search_radar_cache` — local-only equivalent of BL-032's `search_radar`; reads from the seed snapshot ONLY; explicitly named to avoid future collision with the live remote tool
+
+**Resources primitive (new for this initiative)**
+
+- [ ] MCP server registers `resources/list` and `resources/read` handlers
+- [ ] Library: `gst://library/business-architectures` and `gst://library/vdr-structure`, `mimeType: text/markdown`, body sourced from a single canonical location (Astro content collection migration preferred; sibling `article.md` acceptable as interim — see [MCP_SERVER_HUB_SURFACE.md § Content-source question](MCP_SERVER_HUB_SURFACE.md#library--articles-that-become-mcp-resources))
+- [ ] Regulations: one Resource per framework, URI `gst://regulations/<jurisdiction>/<framework-id>`, `mimeType: application/json` (or `text/markdown` if the framework has a long-form body)
+- [ ] Radar: `gst://radar/fyi/latest`, `gst://radar/wire/latest`, `gst://radar/wire/<category>` (one per category), and `gst://radar/item/<itemId>` for each cached item; resource description includes `lastSeededAt`; if seed snapshot is missing, the Resource returns a structured "run `npm run radar:seed`" message
+- [ ] **No live Inoreader calls** from any radar-related tool or resource — enforced by a scoped ESLint `no-restricted-imports` rule that prevents `mcp-server/src/` from importing `src/lib/inoreader/client.ts`
+- [ ] Resource URI manifest frozen as a Vitest test (`tests/resource-uri-stability.test.ts`); deliberate URI changes require updating the manifest AND bumping `mcp-server/package.json` version
+
+**Verification & docs**
+
+- [ ] [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) updated with any deviations made during implementation
+- [ ] `mcp-server/README.md` extended with the new tool and resource catalog plus a "How Resources work in this server" section
+- [ ] Vitest tests for each new tool (parity test against the corresponding website engine) and each Resource shape (URI parsing, body retrieval, missing-snapshot graceful failure)
+- [ ] Manual parity check recorded in the README: side-by-side outputs of the website wizard vs the MCP tool for ICG, TechPar, Tech Debt, with a representative input set, must match
+- [ ] Repo-root `npx astro check && npm run lint && npm run lint:css && npm run test:run` continues to pass
+
+#### Technical Context
+
+**Tool/Resource fit summary**
+
+| Surface                 | Primitive | URI / Tool name                                                                       |
+| ----------------------- | --------- | ------------------------------------------------------------------------------------- |
+| ICG, TechPar, Tech Debt | Tool      | `assess_infrastructure_cost_governance`, `compute_techpar`, `estimate_tech_debt_cost` |
+| Regulatory Map          | Hybrid    | Tool: `search_regulations`; Resource: `gst://regulations/<j>/<id>`                    |
+| Library                 | Resource  | `gst://library/<slug>`                                                                |
+| Radar (cached)          | Hybrid    | Tool: `search_radar_cache`; Resources: `gst://radar/...`                              |
+
+**Why this is its own initiative (not folded into BL-031)**
+
+- BL-031 is "wrap two pure functions, prove the path, ship in 1-2 days" — small enough to validate the engineering decisions cheaply
+- BL-031.5 introduces a new MCP primitive (Resources), four new engine wrappers, content-source decisions for the Library, and the radar-snapshot constraint — each of which has its own design call
+- Splitting them lets BL-031 ship and start delivering value while BL-031.5 absorbs the design questions on its own timeline
+
+**Key constraint — Inoreader budget protection**
+
+The local MCP server MUST NOT make Inoreader API calls. The 200 req/day budget is shared with the website's ISR (~28 calls/day) and BL-032's planned remote rate-limit logic. An always-on local MCP server fetching live data would burn the budget within hours. The server reads the snapshot produced by `npm run radar:seed` (already documented in [RADAR.md](../hub/RADAR.md)) and returns a structured "snapshot missing" error if the file is absent.
+
+**Out of scope** (covered by BL-032 / BL-033)
+
+- Live radar fetching, HTTP transport, OAuth, rate limiting, audit logs — all unchanged from the BL-031 deferral list
+- A "write" tool surface (the MCP server stays read-only)
+- MCP Prompts primitive
+- Per-client / per-tier resource access controls (BL-033)
+
+---
+
+### BL-031.75: MCP Server — Consultant Prompt Library
+
+**Source**: BL-031.75 — extends Phase 1 surface with Prompts | **Architecture & plan**: [MCP_SERVER_PROMPTS_BL-031_75.md](MCP_SERVER_PROMPTS_BL-031_75.md) | **Effort**: 2-3 days engineering + senior-consultant review time | **Status**: Open | **Depends on**: BL-031, BL-031.5
+
+**As a** GST analyst (or onboarding new hire), **I want** GST's repeatable consultant workflows packaged as named slash-command prompts in Claude Desktop **so that** I can invoke "/gst_diligence_kickoff" or "/gst_target_quick_look" and get a templated, GST-house-style brief that orchestrates the right Tools and Resources without me needing to remember the recipe.
+
+> **Implementation plan**: see [MCP_SERVER_PROMPTS_BL-031_75.md](MCP_SERVER_PROMPTS_BL-031_75.md) — covers the MCP "Prompts" primitive, the proposed prompt library and naming convention (`gst_*` prefix), the per-prompt module shape (with `version` and `lastReviewedAt` fields), the senior-consultant review gate, and verification steps.
+
+#### Planning Criteria
+
+**Use cases**
+
+- **New-engagement kickoff** — `/gst_diligence_kickoff { targetName, transactionType, productType, ... }` produces a starter agenda + VDR follow-up suggestions in GST's house style; replaces the unwritten "what does a senior consultant do at engagement kickoff" tacit knowledge with a runnable template
+- **Target first-look** — `/gst_target_quick_look { targetName, productType, arr, stage, hqJurisdiction }` orchestrates ICG + TechPar + Tech Debt + regulatory exposure into one digestible brief; consistent format across analysts
+- **Comparable engagement memo** — `/gst_comparable_engagements_memo { targetDescription, theme? }` finds 3-5 comparable past engagements via the portfolio search, summarizes the relevant lesson from each, frames analogically
+- **Regulatory exposure brief** — `/gst_regulatory_exposure_brief { targetJurisdictions[], dataCategories[], productType }` compiles applicable frameworks with summaries pulled from BL-031.5's regulation Resources
+- **VDR audit** — `/gst_vdr_audit` compares a target's actual VDR contents against the canonical 10-folder taxonomy from the Library; flags gaps and surfaces follow-up requests
+- **Architecture review** — `/gst_architecture_layer_review { targetSummary }` walks the target through the 5-layer architecture framework (Software → Infrastructure → Data → Org → Industry) using the Library article
+- **Daily radar digest** — `/gst_radar_brief_today { category?, sinceHours? }` summarizes the most recent annotated radar items in GST Take voice from the local snapshot
+- **Diligence handoff memo** — `/gst_diligence_handoff_memo { targetName, ... }` combines agenda + comparables + VDR follow-ups into a draft memo for the deal team
+
+**Outcomes**
+
+- Eight `gst_*` prompts visible in Claude Desktop's slash-command picker for every team member with the local MCP server installed
+- New-analyst onboarding shifts from "shadow a senior consultant" to "run `/gst_target_quick_look` on three real targets and review with mentor" — measurable reduction in time-to-first-deliverable for new hires
+- Each prompt has senior-consultant sign-off (gating step) confirming the output reads "as if I wrote it myself"
+- Annual review cadence operational; prompts have `lastReviewedAt` tracked; CI fails if any prompt is over 12 months stale
+- ≥5 prompts used per active team member per week for two consecutive weeks — proves the slash-menu is the natural entry point for GST workflows
+- Foundation for paid prompt-pack offering (BL-033) validated: the same prompt module shape is portable to a per-client tier
+
+**Business value**
+
+- **Codifies tacit consulting judgment** — the most valuable, least-documented asset in a boutique advisory firm. Prompts become firm IP that survives consultant turnover
+- **Compresses onboarding ramp time** — measured in real days saved per new hire; for a firm where consultants are the cost driver, this compounds
+- **Multiplies BL-031 + BL-031.5 ROI** — Tools and Resources are useful to people who already know the workflow. Prompts make them useful to people learning it. Same engineering cost, dramatically broader audience
+- **Consistency across deliverables** — when every analyst's first-look brief uses the same prompt, output quality variance collapses; clients see GST's house style every time
+- **Concrete asset for narrative** — "GST has codified its diligence workflows as agent-native templates" reads materially differently from "GST has a website with tools." Pitch surface, hiring surface, investor surface all benefit
+- **Cost**: 2-3 days engineering + senior-consultant review time (the latter is the binding constraint — frame as ~30 min per prompt)
+- **Marginal infrastructure cost**: zero — same `mcp-server/` workspace, same SDK, same CI
+
+#### Acceptance Criteria
+
+**Prompts primitive (new for this initiative)**
+
+- [ ] MCP server registers `prompts/list` and `prompts/get` handlers via the SDK's `registerPrompt` API
+- [ ] All prompts use the `gst_` name prefix (avoids slash-menu collisions with other installed MCP servers); enforced by a regex check in `mcp-server/src/prompts/_registry.ts`
+- [ ] Per-prompt module exports a uniform shape: `{ name, description, version, lastReviewedAt, argsSchema, build }` — see [MCP_SERVER_PROMPTS_BL-031_75.md § Per-prompt module shape](MCP_SERVER_PROMPTS_BL-031_75.md#per-prompt-module-shape)
+- [ ] Argument schemas re-use (via Zod composition) the same source-of-truth schemas as the Tools the prompt orchestrates — CI test asserts no drift
+
+**Prompt library (8 prompts)**
+
+- [ ] `gst_diligence_kickoff` — wraps `generate_diligence_agenda` Tool + references VDR Library Resource
+- [ ] `gst_target_quick_look` — orchestrates ICG + TechPar + Tech Debt + regulatory search Tools
+- [ ] `gst_comparable_engagements_memo` — wraps `search_portfolio` + `list_portfolio_facets` Tools
+- [ ] `gst_regulatory_exposure_brief` — wraps `search_regulations` Tool + reads regulation Resources by URI
+- [ ] `gst_vdr_audit` — references `gst://library/vdr-structure` Resource (interactive: argument-less mode supported)
+- [ ] `gst_architecture_layer_review` — references `gst://library/business-architectures` Resource
+- [ ] `gst_radar_brief_today` — reads `gst://radar/fyi/latest` Resource (filter by category if supplied)
+- [ ] `gst_diligence_handoff_memo` — orchestrates diligence + portfolio Tools + VDR Library Resource
+
+**Verification & docs**
+
+- [ ] [MCP_SERVER_PROMPTS_BL-031_75.md](MCP_SERVER_PROMPTS_BL-031_75.md) updated with any deviations made during implementation
+- [ ] `mcp-server/README.md` extended with a "Prompts: GST consultant workflows" section listing every prompt, its arguments, an example invocation, and a sample output
+- [ ] Vitest test per prompt asserting: (a) name has `gst_` prefix, (b) `argsSchema` parses a representative payload, (c) `build()` returns at least one message, (d) the message body references the expected Tool/Resource names
+- [ ] Prompt-registry invariant tests: every prompt has `version`, `lastReviewedAt` ≤ 12 months old, `orchestrates` field listing each Tool/Resource it invokes — CI fails if any registered Tool/Resource is missing
+- [ ] Golden-output snapshots per prompt (at least one representative invocation per prompt) — committed to `mcp-server/tests/examples/*.golden.md`; regression-tested on each Claude model upgrade
+- [ ] **Senior-consultant review gate**: each prompt's output on a representative input has been reviewed and signed off by a senior team member as "this reads as if I wrote it." This is a **blocking acceptance criterion**, not a nice-to-have
+
+#### Technical Context
+
+**Why this is its own initiative (not folded into BL-031.5)**
+
+- BL-031.5 is engineering work — wrapping engines, parsing regulation files, reading the radar snapshot. The competency is TypeScript + schema design
+- BL-031.75 is content design — what does a senior consultant actually do step-by-step on each motion? The competency is consulting judgment, not code
+- The bottleneck is senior-consultant review time, not engineering time. Splitting the initiatives prevents engineering from waiting on consulting review and vice versa
+
+**Why the `gst_` prefix matters**
+
+Prompts appear in Claude Desktop's slash-command picker alongside every other installed MCP server's prompts AND Claude Code's built-in slash commands. Without a prefix, `/diligence_kickoff` could collide with another server's prompt or a future Claude built-in. The `gst_` prefix is namespacing that costs four characters per name and pays for itself the first time another MCP server is installed.
+
+**Why prompts have `version` and `lastReviewedAt`**
+
+A prompt's behavior is determined by its message body — pure content. A senior consultant edits the body, every analyst's `/gst_diligence_kickoff` output changes silently. Tracking version + last-review-date forces deliberate review cycles and gives downstream users (BL-033 external clients, eventually) a stable contract.
+
+**Out of scope** (covered by BL-032 / BL-033 or deferred indefinitely)
+
+- HTTP transport / remote prompt access (BL-032)
+- Per-client prompt customization (a paying client's white-labeled `/gst_diligence_kickoff`) — defer to BL-033 if requested
+- Prompt usage telemetry — requires BL-032's logging surface; not applicable to local-stdio
+- Localization — English only until GST signs a non-English-language engagement
+- A prompt-builder UI on the website — authoring stays in `mcp-server/src/prompts/`
+- Mutation prompts (write tools) — the MCP server stays read-only across all phases of BL-031.x
 
 ---
 
@@ -413,6 +604,202 @@ The relative-import dance keeps the engines as the single source of truth — no
 5. From Claude Desktop pointed at staging: invoke `search_radar { query: "kubernetes" }`, confirm results return in <2s and a corresponding log entry appears in `wrangler tail`
 6. Hammer the staging endpoint with 100 requests in 60s → confirm rate limiter returns 429 with `RateLimit-*` headers after the threshold
 7. `wrangler deploy --env production` only after all six steps pass on staging
+
+---
+
+### BL-032.5: MCP Server — Resources & Prompts on Remote
+
+**Source**: BL-032.5 — extends Phase 2 surface | **Architecture & plan**: [MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md) | **Effort**: 3-5 days | **Status**: Open | **Depends on**: BL-031.5, BL-031.75, BL-032
+
+**As a** GST team member at a client site / on the Claude mobile app / on a borrowed laptop, **I want** the Library articles, regulatory frameworks, radar snapshot Resources, and consultant Prompts (`gst_*`) to be reachable over the same remote HTTP endpoint as BL-032's Tools **so that** the orchestration value of BL-031.75 doesn't evaporate the moment I leave my dev machine.
+
+> **Implementation plan**: see [MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md) — covers HTTP caching semantics for Resources (per-Resource freshness strategy), Prompt fan-out under per-key rate limits, the scope catalog (forward-compatible with BL-033's OAuth), URI-stability discipline across the local→remote boundary, and periodic radar snapshot refresh via Worker Cron.
+
+#### Planning Criteria
+
+**Use cases**
+
+- **Mobile prep before a partner call** — on Claude mobile, pin `gst://library/vdr-structure` into the conversation and read the canonical 10-folder taxonomy without opening a laptop
+- **Field consulting with no repo access** — at a client site on a borrowed device, invoke `/gst_target_quick_look` and get the four-Tool orchestration over HTTP exactly as it works locally
+- **Regulatory review with cross-jurisdictional pinning** — pin `gst://regulations/eu/gdpr` and `gst://regulations/us/ca/ccpa` into a deal-review conversation; both resolve over HTTP with identical content to the local version
+- **Scope-gated radar access** — issue a bearer key without `resource:radar:read` to a sales-associate teammate who shouldn't see the GST Take voice; their MCP client lists Tools and Library Resources but no radar Resources
+- **Pinned conversations survive client moves** — a consultant pinning `gst://library/business-architectures` on Monday's local server uses the same URI on Tuesday's remote server without re-pinning; URI-stability test enforces this
+
+**Outcomes**
+
+- All Resources and Prompts from BL-031.5 / BL-031.75 reachable via the BL-032 remote endpoint with parity to local-stdio behavior; URI-stability test asserts byte-identical resource manifests across both transports
+- Radar snapshot refreshed hourly via Worker Cron (~24 Inoreader calls/day from the 200/day budget) — total budget consumption (Cron + ISR + per-key rate-limited Tools) stays under the documented envelope
+- HTTP cache hit rate ≥80% on Library and Regulation Resources after one week (most reads served from Upstash without invoking the handler) — measured via the observability initiative (BL-032.75)
+- Zero Inoreader 429 errors over the first 30 days post-deploy — the layered rate limit + Cron + budget hard-cap holds
+- Per-key scope checks pass: a key without `resource:radar:read` returns `403 Forbidden` for radar URIs with a structured error
+- Prompt fan-out budget verified: `gst_target_quick_look` (4 Tools) lands inside the per-key burst allowance from a fresh-quota state
+
+**Business value**
+
+- **Removes the "have to be at my desk" constraint** for the full surface, not just Tools — completing the productivity multiplier BL-032 starts
+- **De-risks BL-033 substantially** — the scope catalog, URI stability discipline, and HTTP caching layer are all production-tested by trusted internal users before any external pilot client touches them
+- **Validates the per-Resource caching strategy** — Library / Regulations have radically different freshness semantics from Radar; getting the cache headers right under internal load is much cheaper than under contractual SLA
+- **Establishes URI / prompt-name versioning discipline** — the `BREAKING_CHANGES.md` + version-bump pattern introduced here is exactly what BL-033 external clients will rely on as their stability contract
+- **Cost**: same Cloudflare Workers / Upstash substrate as BL-032; Cron triggers are free on the Workers paid tier already justified by BL-032's volume; Resource cache writes consume a small slice of Upstash quota (~5k commands/day, well under the free-tier ceiling)
+
+#### Acceptance Criteria
+
+**Resources over HTTP**
+
+- [ ] Worker registers `resources/list` and `resources/read` handlers binding to the same Resource modules as the BL-031.5 stdio entrypoint
+- [ ] Per-Resource cache strategy implemented per the strategy table in [MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md § Resources](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md#resources--the-design-questions-http-forces): Library + Regulations strong cache (24h), Radar latest weak cache (15min), Radar items strong cache (24h immutable)
+- [ ] `Cache-Control`, `ETag`, and `Last-Modified` headers set per Resource; `If-None-Match` requests return `304 Not Modified` when the ETag matches
+- [ ] Per-Resource scope check: bearer keys lacking the required scope receive `403 Forbidden` with a structured error and the missing-scope name
+- [ ] Periodic radar snapshot refresh: Cloudflare Cron trigger every hour calls `fetchAllStreams` + `fetchAnnotatedItems`, transforms, and writes to Upstash
+- [ ] Snapshot-missing path returns `503 Service Unavailable` with a structured retry hint (Cron will repopulate within the next interval)
+
+**Prompts over HTTP**
+
+- [ ] Worker registers `prompts/list` and `prompts/get` handlers binding to the same Prompt modules as the BL-031.75 stdio entrypoint
+- [ ] `prompts/list` includes each prompt's `version` so clients can detect drift after server upgrades
+- [ ] New introspection endpoint `GET /prompts/<name>/scopes` returns the prompt's required scope set (derived from its `orchestrates: [...]` field) so clients can pre-flight against their key
+- [ ] Per-key burst allowance configured to accommodate the heaviest prompt fan-out (4 Tool calls in `gst_target_quick_look`) without false 429 from a fresh-quota state
+- [ ] New aggregate metric `prompt_invocations_total` (incremented per `prompts/get`, independent of downstream Tool fan-out) — observable via BL-032.75 dashboards
+
+**Scope catalog (forward-compatible with BL-033)**
+
+- [ ] Scope strings defined per the catalog table in [MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md § Scope catalog](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md#critical-cross-cutting-decisions): `tool:<name>`, `tool:radar:*`, `resource:library:read`, `resource:regulations:read`, `resource:radar:read`, `prompt:*`
+- [ ] Scope catalog implemented in `mcp-server/src/auth/scopes.ts` as the single source of truth; BL-033 reuses these strings unchanged via OAuth tokens
+- [ ] `wrangler secret`-issued internal keys carry the full scope set by default (per-key scope variation is BL-033's product surface; the infrastructure is in place here)
+
+**URI / prompt-name stability discipline**
+
+- [ ] URI-stability test extended to run against both stdio and HTTP transports (`unstable_dev` from `wrangler`); identical resource manifests required
+- [ ] `mcp-server/BREAKING_CHANGES.md` introduced; CI test fails if a URI or prompt name changes without a corresponding entry AND a `version` bump in `mcp-server/package.json`
+- [ ] On first deploy after a breaking change, server emits a `notifications/message` push to all connected clients describing the change
+
+**Verification & docs**
+
+- [ ] [MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md) updated with any deviations made during implementation
+- [ ] `mcp-server/README.md` extended with: Resources-over-HTTP example (curl + ETag round-trip), Prompts-over-HTTP example, scope-failure example
+- [ ] Vitest tests cover: cache-header correctness per Resource, scope-gating per Resource and per Prompt, snapshot-missing path returns 503 not 500, URI manifest stability across transports, breaking-change discipline
+- [ ] Worker integration test using `unstable_dev` exercises a complete prompt fan-out (`gst_target_quick_look` → 4 downstream Tool calls) under a realistic per-key budget
+- [ ] One-week post-deploy review: cache hit rate, Inoreader budget burn, zero 429s confirmed
+
+#### Technical Context
+
+**Why this is its own initiative (not folded into BL-032)**
+
+- BL-032 is the largest milestone in the chain — Workers, auth, rate limiting, radar Tools, Sentry, CI for staging+production. Adding Resources + Prompts pushes the milestone into multi-week territory and dilutes the value-delivery cadence
+- Splitting buys: BL-032 ships sooner; BL-032.5 designs against measured baselines from BL-032 in production; the Tools-vs-Resources/Prompts competency split mirrors BL-031.5/031.75's local-stdio version
+
+**HTTP-specific design questions** (full detail in the architecture doc):
+
+- Resources need cache headers (ETag, Last-Modified) and per-Resource freshness strategy — Library is near-immutable, Radar is hourly-fresh, Regulations are file-versioned
+- Prompts trigger downstream Tool calls that hit the per-key rate limit — burst allowance configured to accommodate the heaviest documented fan-out
+- URI rename = breaking change for every pinned client conversation — discipline (BREAKING_CHANGES.md + version bump + notifications/message push) introduced here
+
+**Out of scope** (covered by BL-033 or later)
+
+- OAuth 2.1, dynamic client registration, token introspection — bearer keys remain through BL-032.5
+- Per-client scope variation (different keys = different scope sets) — infrastructure in place; product surface is BL-033
+- Compliance-grade audit logging (full request/response retention, R2, hash chains) — BL-032.5 logs metadata only
+- White-labeled per-client prompt customization — explicitly deferred to BL-033 or post-pilot
+- Status-page integration for Resource freshness — observability initiative (BL-032.75)
+
+---
+
+### BL-032.75: MCP Server — Production Observability Maturity
+
+**Source**: BL-032.75 — extends Phase 2 substrate | **Architecture & plan**: [MCP_SERVER_OBSERVABILITY_BL-032_75.md](MCP_SERVER_OBSERVABILITY_BL-032_75.md) | **Effort**: 1 sprint engineering + 10-14 day baselining window | **Status**: Open | **Depends on**: BL-032 (BL-032.5 strongly preferred for full surface coverage)
+
+**As a** GST engineering lead approaching BL-033's contractual SLA commitments, **I want** SLO dashboards, alerting, and error-budget tracking against measured production baselines **so that** the SLAs we commit to in pilot legal paper are defensible operational reality, not aspirational numbers.
+
+> **Implementation plan**: see [MCP_SERVER_OBSERVABILITY_BL-032_75.md](MCP_SERVER_OBSERVABILITY_BL-032_75.md) — covers the metrics catalog (typed emitters per Tool/Resource/Prompt), SLO definitions and burn-rate alerts, the Cloudflare Analytics Engine + Grafana Cloud + Slack/PagerDuty stack, and the three-phase implementation (instrument → baseline → dashboard+alert).
+
+#### Planning Criteria
+
+**Use cases**
+
+- **Pre-incident detection** — Inoreader daily budget passes 70% by midday → ticket lands in `#mcp-alerts` so an engineer can investigate the consuming key/tool before the budget exhausts and starts serving stale radar
+- **SLO defensibility for pilot SLA** — when BL-033 legal review asks "why 99.5% uptime?", point to 60 days of measured 99.6% with the burn-rate dashboards as evidence
+- **Anomaly detection on key-level traffic** — one key bursts 50× normal traffic in 5 min → page fires; turns out an analyst left a runaway agent loop running. Without the alert, rate limits would silently absorb the burst until the daily budget exhausts
+- **Radar snapshot freshness signal** — Cron job fails silently for 90 minutes → page fires (snapshot age >2× Cron interval); without observability, first signal would be a confused user reading stale radar
+- **Daily ops digest** — every morning, all eng + senior consultants get an email summarizing yesterday's traffic by tool, top users by `key_prefix`, and any SLO breaches; team learns the system's normal shape and notices anomalies faster
+- **Status page evidence** — the BL-033-required public status page reads from the same Analytics Engine source as internal dashboards, ensuring what clients see matches what eng sees
+
+**Outcomes**
+
+- 30+ days of production traffic data backing every SLO target before BL-033's legal review begins; targets sit at p95-baseline × 1.5 buffer, calibrated against measured reality
+- All four canonical alerts (Inoreader budget, radar snapshot stale, health failing, traffic spike) wired to Slack + PagerDuty; each has been test-fired and resolved by a runbook execution
+- Cache hit rate (BL-032.5 Resources) ≥80% measurable on the dashboard
+- Daily Inoreader budget burn-down panel shows >20% headroom on a typical day; alert fires at 70% pre-emptively
+- On-call rotation operating (single engineer initially); runbook for each alert tested at least once
+- Status page (initially internal-IP-restricted) live at `https://status.mcp.globalstrategic.tech` showing per-tool availability + Inoreader budget consumption
+
+**Business value**
+
+- **Makes BL-033 SLA commitments defensible** — moves the pilot conversation from "we will commit to 99.5% uptime" to "we measured 99.6% over 60 days." This is the single most consequential output of the initiative for the commercial path
+- **Surfaces incidents pre-customer-impact** — alerts fire on leading indicators (budget burn rate, snapshot age, anomalous traffic) rather than lagging indicators (an angry user). For a B2B advisory product, prevented incidents are worth far more than detected ones
+- **Operational maturity signal** — when a PE compliance team asks "show us your monitoring," there's a real answer with screenshots. Hard to overstate how much this matters for enterprise sales
+- **Foundation for capacity planning** — once measured, easy to project when Cloudflare/Upstash/Sentry tiers will need an upgrade; budget conversations have data instead of guesswork
+- **Cost**: Cloudflare Analytics Engine free tier covers projected volume (~30× headroom); Grafana Cloud free tier sufficient for 3 users + 10k metric series; Slack webhook + PagerDuty starter tier ($25/mo) covers a single on-call rotation. Total ongoing: <$50/mo through pilot scale
+
+#### Acceptance Criteria
+
+**Phase 1 — Instrumentation**
+
+- [ ] Typed metric emitters introduced in `mcp-server/src/metrics/` for: `tool_invocation`, `resource_read`, `prompt_invocation`, `prompt_tool_fanout`, `rate_limit_decision`, `inoreader_call`, `radar_snapshot_age`, `health_check_duration`
+- [ ] Tool / Resource / Prompt registry decorators auto-emit metrics — no per-handler boilerplate; handlers stay focused on their domain logic
+- [ ] Cloudflare Analytics Engine binding configured in `wrangler.toml` (`env.METRICS`); each emitter writes structured events with the dimensions documented in [MCP_SERVER_OBSERVABILITY_BL-032_75.md § Metrics](MCP_SERVER_OBSERVABILITY_BL-032_75.md#1-metrics--whats-happening-in-numbers)
+- [ ] Vitest test asserts every registered Tool / Resource / Prompt emits at least one metric event in a representative invocation
+- [ ] Cardinality budget per metric documented in `metrics/_index.ts`; CI test caps emission cardinality to prevent dimension explosion
+
+**Phase 2 — Baselining**
+
+- [ ] Instrumented build deployed to production; runs with normal team usage for ≥10 days
+- [ ] Weekly traffic data extracts produce `mcp-server/observability/slo-baselines.md` documenting measured p50/p95/p99 latency and error rate per Tool / Resource / Prompt
+- [ ] Initial SLO targets set at p95-baseline × 1.5 buffer; senior-engineer review and sign-off recorded in `slo-baselines.md`
+- [ ] All SLO definitions captured: non-radar Tool availability, non-radar Tool latency p95, radar latency cold/warm, Resource latency, health-endpoint availability, Inoreader budget consumption, radar snapshot freshness
+
+**Phase 3 — Dashboards & Alerts**
+
+- [ ] `mcp-server/observability/grafana-dashboard.json` covers traffic, latency histograms, error rates, rate-limit pressure, Inoreader budget burn-down, radar snapshot age, cache hit rate
+- [ ] `mcp-server/observability/alert-rules.yaml` covers every SLO from the baselining phase
+- [ ] Slack webhook + PagerDuty integration wired; test-fired with a synthetic SLO breach (5% injected error rate); alert lands in correct channel within 5 min
+- [ ] Runbooks authored for the four canonical alerts under `mcp-server/observability/runbooks/`: `inoreader-budget-exhausted.md`, `radar-snapshot-stale.md`, `health-check-failing.md`, `traffic-spike-detected.md`
+- [ ] Status page deployed at `https://status.mcp.globalstrategic.tech` (Cloudflare Pages, signed query against Analytics Engine); initially internal-IP-restricted; BL-033 reviews and chooses what becomes externally visible
+- [ ] Each runbook has a `lastReviewedAt` field; CI test fails if any runbook is over 6 months stale OR the alert that links to it has changed since last review
+
+**Verification & docs**
+
+- [ ] [MCP_SERVER_OBSERVABILITY_BL-032_75.md](MCP_SERVER_OBSERVABILITY_BL-032_75.md) updated with any deviations made during implementation
+- [ ] `mcp-server/README.md` extended with: how to import the dashboard JSON, how to test-fire an alert, how to rotate Slack webhooks
+- [ ] Two-week post-deploy review: SLO compliance, alert noise rate (target: <1 false-positive/week), dashboard usefulness (engineer survey)
+- [ ] Test page through PagerDuty receives a synthetic page within 5 min; runbook link in the alert resolves to the correct markdown file
+
+#### Technical Context
+
+**Why this is its own initiative (not folded into BL-032 or BL-033)**
+
+- Not BL-032: BL-032's job is to ship the remote substrate. Adding a complete observability stack pushes it into multi-week territory and risks neither piece landing
+- Not BL-033: SLO baselines need real production traffic; putting observability inside BL-033 would force "guess at SLO targets, then commit them to legal paper" — exactly the sequence that produces broken contracts
+- Its own initiative because: the competency is operations engineering (different from auth/audit-log focus); the work is sequenced by measured production data (a 10-14 day wait is hard to schedule inside a single milestone); the output is config-as-code (dashboards, alert rules, runbooks), not server code; the downstream value (BL-033 signs SLAs from a place of measured baselines) is concrete and worth a separately-tracked deliverable
+
+**Stack** (full rationale in the architecture doc):
+
+| Component      | Choice                                                                      |
+| -------------- | --------------------------------------------------------------------------- |
+| Metrics store  | Cloudflare Analytics Engine (free tier, native to Workers)                  |
+| Dashboards     | Grafana Cloud (free tier)                                                   |
+| Alerting       | Grafana alerts → Slack webhook + PagerDuty                                  |
+| Error tracking | Sentry (already wired in BL-032)                                            |
+| Status page    | Cloudflare Pages, static + signed Analytics Engine query                    |
+| Tracing        | Deferred (OpenTelemetry-on-Workers; revisit if a debugging case demands it) |
+
+**Out of scope** (deferred indefinitely or to BL-033)
+
+- Distributed tracing — value is real but adds complexity; revisit when a specific debugging case demands it
+- Synthetic monitoring (external probes from multiple regions) — useful for true uptime measurement under SLA reporting; defer to BL-033
+- Per-client usage dashboards (clients see their own traffic) — BL-033 product decision
+- Cost observability (Cloudflare/Upstash/Sentry billing dashboards) — separate concern, low priority while spend is under $100/mo
+- Audit-log integrity dashboards — that surface belongs to BL-033's compliance-grade audit log
+- ML-based anomaly detection beyond simple z-score / threshold rules — premature
 
 ---
 
