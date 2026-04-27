@@ -74,6 +74,58 @@ The plan below targets **v2 (`@modelcontextprotocol/server`)**. The v2 SDK accep
 
 ---
 
+## Discovery, connection, build, and deployment
+
+This section covers how MCP clients (Claude Desktop, Claude Code, Cursor, and others) actually find, run, and use the BL-031 server. The mechanics differ sharply from [BL-032](BACKLOG.md#bl-032-mcp-server--internal-remote-phase-2) (remote HTTP) and [BL-033](BACKLOG.md#bl-033-mcp-server--external-pilot-phase-3) (external pilot with OAuth + public MCP-directory listings) — those phases' discovery story is documented in their own initiative entries.
+
+### Discovery — manual config per client
+
+There is no global registry at this phase. Each MCP-aware client reads its own config file; a team member pastes the snippet from `mcp-server/README.md` once and the client picks the server up at next launch.
+
+| Client                      | Config file                                                       | Snippet shape                                                                                                 |
+| --------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Claude Desktop (macOS)      | `~/Library/Application Support/Claude/claude_desktop_config.json` | `mcpServers.gst-tools = { command: "node", args: ["/abs/path/to/mcp-server/dist/index.js"] }`                 |
+| Claude Desktop (Windows)    | `%APPDATA%\Claude\claude_desktop_config.json`                     | same shape; absolute Windows path                                                                             |
+| Claude Code (project-level) | `.mcp.json` at repo root                                          | `mcpServers.gst-tools = { command: "node", args: ["./mcp-server/dist/index.js"] }` — relative path OK         |
+| Claude Code (user-level)    | `~/.claude/settings.json` `mcpServers` entry                      | same shape; absolute path                                                                                     |
+| Cursor                      | `~/.cursor/mcp.json`                                              | same shape                                                                                                    |
+| ChatGPT (Desktop / web)     | "Connectors" UI                                                   | not stdio-capable; needs HTTP transport — see [BL-032](BACKLOG.md#bl-032-mcp-server--internal-remote-phase-2) |
+
+### Connection — child-process spawn over stdio
+
+When a client launches, it reads its config and **spawns the server as a child process**. JSON-RPC messages flow over the child's stdin/stdout, framed by Content-Length headers per the Language Server Protocol convention MCP inherits. There is no port, no network, no listening socket. Trust is process-level — the user has already chosen to put the binary on their own machine.
+
+Implications for our code:
+
+- `console.log` is forbidden — anything written to stdout becomes corrupt protocol data. All logging goes to `console.error` (stderr). The client may surface stderr to the user (Claude Desktop shows it in the MCP server panel; Claude Code shows it in `.claude/logs/`).
+- The server runs only as long as the client is open. Each client launch spawns a fresh process; there is no shared state across runs.
+- The server's `cwd` is whatever the client launched with — typically the user's home directory, NOT the repo root. Path resolution must use `import.meta.url` + `fileURLToPath`, never `process.cwd()`.
+
+### Use — `tools/list` then `tools/call`
+
+Once the connection is up, the client immediately calls `initialize`, then `tools/list`. The server responds with the three tool definitions (name, description, JSON-Schema input). The client renders these in its tool picker and exposes them to the model.
+
+When the model decides to call a tool, the client sends `tools/call { name, arguments }`; the server validates against the Zod schema, invokes the underlying engine, and returns either `{ content: [...], structuredContent }` (success) or `{ isError: true, content: [...] }` (validation failure or runtime error). The model sees the response inline and continues the conversation.
+
+### Build — `tsc` to `dist/index.js`
+
+`cd mcp-server && npm run build` runs `tsc` against `mcp-server/tsconfig.json`, compiling `src/**/*.ts` to `dist/`. The `bin` field in `mcp-server/package.json` declares `dist/index.js` as the executable entry point. Source maps stay on so stack traces in stderr logs point back at TypeScript line numbers.
+
+### Deployment — there isn't one
+
+There is no deploy step in BL-031. Each team member runs the server on their own machine, started by their MCP client on demand. Updates ship the same way as any other repo change: `git pull && npm install && cd mcp-server && npm run build`. A teammate who pulls a new tool registration sees it in their client at the next client launch.
+
+### Where the server lives
+
+- **Source code**: `mcp-server/` workspace inside the `gst-website` monorepo. Imported engines stay in the `src/utils/` and `src/data/` directories of the same repo via relative imports — that is the entire point of the [Repo placement](#repo-placement--single-repo-recommended) decision below.
+- **Compiled binary**: `mcp-server/dist/index.js` on each team member's machine, built locally.
+- **Runtime**: a child process of whichever MCP client launched it; lives only while that client is open.
+- **Public surface**: none. The server is not network-addressable, not registered anywhere, and not discoverable by anyone outside the team.
+
+This stays true through [BL-031.5](MCP_SERVER_HUB_SURFACE_BL-031_5.md) (adds Resources) and [BL-031.75](MCP_SERVER_PROMPTS_BL-031_75.md) (adds Prompts) — those initiatives extend the surface but do not change the transport, build, or deploy story. [BL-032](BACKLOG.md#bl-032-mcp-server--internal-remote-phase-2) is the first phase where the server becomes a deployed, network-addressable artifact (Cloudflare Workers); [BL-033](BACKLOG.md#bl-033-mcp-server--external-pilot-phase-3) is when it becomes publicly discoverable (MCP directory listings).
+
+---
+
 ## Repo placement — single repo (recommended)
 
 |                        | Same repo (chosen)                                           | Separate repo                                               |

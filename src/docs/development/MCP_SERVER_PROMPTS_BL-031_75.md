@@ -59,6 +59,26 @@ A Prompt has: a `name`, a human-readable `description`, an optional list of type
 
 5. **Versioning matters more than for Tools or Resources.** A Tool's behavior is determined by its underlying engine. A Resource is a snapshot. A Prompt's behavior depends on its message body — and tweaking that body changes outputs for everyone using it. Prompt versioning, change-review discipline, and an "examples / golden outputs" testing pattern need explicit treatment, not retrofit.
 
+### How clients surface and invoke Prompts
+
+Prompts ride the same stdio transport as Tools and Resources (see [MCP_SERVER_ARCHITECTURE_BL-031.md § Discovery, connection, build, and deployment](MCP_SERVER_ARCHITECTURE_BL-031.md#discovery-connection-build-and-deployment)). What changes is who initiates the invocation and how the UI surfaces them:
+
+| Client         | How Prompts appear                                                                                                                                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Desktop | Slash-command picker in the chat input — typing `/` shows every prompt across every connected MCP server. The `gst_*` prefix groups GST's prompts visibly and avoids collisions with other servers' prompts                     |
+| Claude Code    | Same slash-command picker; prompts appear alongside Claude Code's built-ins. The `gst_` prefix prevents collision with any future Claude Code slash command                                                                     |
+| Cursor         | Command palette entries (Cmd+Shift+P or equivalent); prompts are user-invoked actions                                                                                                                                           |
+| ChatGPT        | No prompts UI in the local stdio phase; Prompts become reachable via HTTP in [BL-032.5](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md), where ChatGPT's connector UI surfaces them as suggested actions on the connector card |
+
+The wire calls are:
+
+- `prompts/list` — returns each prompt's `name`, `description`, `arguments` schema, and `version`. Called once at session start
+- `prompts/get { name, arguments }` — returns `{ messages: [...] }` — one or more user/assistant message bodies that the client splices into the active conversation. The model then sees those messages and continues from there
+
+This is the fundamental difference from Tools and Resources: **Prompts are user-driven, not model-driven**. The model never decides to invoke a prompt; the user does, by selecting it from the slash-command picker. That is precisely why Prompts are the right primitive for "named consultant workflows" — they map cleanly to "this is the motion I want to start" rather than "this is a function the model might want to call mid-thought."
+
+Required arguments appear in the picker as form fields the user fills before the prompt expands. Optional arguments can be omitted; the prompt body itself drives the conversation forward (the "interactive mode" pattern documented under [The prompt library — proposed surface](#the-prompt-library--proposed-surface)).
+
 ---
 
 ## The prompt library — proposed surface

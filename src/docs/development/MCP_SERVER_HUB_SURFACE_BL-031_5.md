@@ -47,6 +47,24 @@ A Resource in MCP has: a `uri` (e.g. `gst://library/vdr-structure`), a human-fri
 4. **Validates the hybrid architecture.** BL-032 and BL-033 will inevitably mix Tools and Resources (e.g. a `search_radar` Tool plus per-item `gst://radar/<id>` Resources). Proving that the same `mcp-server` workspace cleanly registers both primitives with shared schemas is a Phase-2 prerequisite that's easier to validate locally first.
 5. **Concrete artifact for narrative.** "Our agents have GST's regulatory framework library available as native context" reads stronger in pitches than "you can call a tool that returns regulatory text."
 
+### How clients discover and read Resources
+
+Resources sit alongside Tools in the same MCP connection — same stdio transport described in [MCP_SERVER_ARCHITECTURE_BL-031.md § Discovery, connection, build, and deployment](MCP_SERVER_ARCHITECTURE_BL-031.md#discovery-connection-build-and-deployment). What's new is how the client surfaces them to the user and the model:
+
+| Client         | How Resources appear                                                                                                                                                                                                                   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Desktop | Resource picker in the conversation chrome — the user can browse `gst://library/...`, `gst://regulations/...`, `gst://radar/...` and pin specific Resources into the active conversation as referenceable context                      |
+| Claude Code    | Resources are listed alongside tools; the model can pull them on demand via `resources/read`. The user can also reference a URI directly in a prompt and the client will fetch it                                                      |
+| Cursor         | Similar — Resources are auto-discovered and the model decides when to pull                                                                                                                                                             |
+| ChatGPT        | Local stdio not supported in this phase; Resources become reachable via HTTP in [BL-032.5](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md), where ChatGPT's connector UI surfaces them as referenceable context on the connector card |
+
+The wire calls are:
+
+- `resources/list` — returns the full URI manifest with `name`, `description`, `mimeType` per Resource. Called once at session start
+- `resources/read { uri }` — returns `{ contents: [{ uri, mimeType, text? | blob? }] }` for the requested URI
+
+This is the conceptual difference from Tools: a Tool is invoked by the model with arguments; a Resource is identified by a URI and read back as content. No arguments, no decision logic — the model treats it like a file. URI stability becomes a contract — once `gst://library/vdr-structure` is published, it must not move (the URI-stability invariant gets formalized for HTTP in [BL-032.5](MCP_SERVER_REMOTE_RESOURCES_PROMPTS_BL-032_5.md), but the discipline starts here).
+
 ---
 
 ## Surface inventory and primitive choice
