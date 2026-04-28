@@ -6,6 +6,11 @@ import { z } from 'zod';
  * These schemas are the single source of truth for the shape of the
  * data files in `src/data/techpar/`. The TechPar engine
  * (`src/utils/techpar-engine.ts`) imports inferred types from this file.
+ *
+ * The human-readable reference for the `compute_techpar` MCP tool
+ * (per-field semantics, mode/capexView interactions, zone classification
+ * rules, R&D CapEx benchmark derivation) lives at:
+ *   `mcp-server/src/docs/techpar/CONTRACT.md`
  */
 
 // ─── Enums ───────────────────────────────────────────────────────────────────

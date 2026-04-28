@@ -11,6 +11,11 @@ import { z } from 'zod';
  * The deployment-frequency labels are duplicated here verbatim from
  * `DEPLOY_OPTIONS` in the engine. Drift is caught by a unit test that
  * asserts the two lists stay in sync.
+ *
+ * The human-readable reference for the MCP tool (per-field semantics,
+ * the DORA-aligned velocity multiplier table, slider-bypass rationale,
+ * payback-period semantics) lives at:
+ *   `mcp-server/src/docs/tech-debt/CONTRACT.md`
  */
 
 export const DEPLOY_FREQUENCY_VALUES = [

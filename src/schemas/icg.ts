@@ -5,6 +5,11 @@ import { z } from 'zod';
  *
  * Single source of truth for the shape of files in
  * `src/data/infrastructure-cost-governance/`.
+ *
+ * The human-readable reference for the `assess_infrastructure_cost_governance`
+ * MCP tool (per-field labels, valid values, downstream-effect summaries,
+ * hidden-semantics callouts like the foundational-domain flag) lives at:
+ *   `mcp-server/src/docs/icg/CONTRACT.md`
  */
 
 // ─── domains.ts ──────────────────────────────────────────────────────────────

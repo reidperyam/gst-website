@@ -1,0 +1,100 @@
+# Input Contract: `assess_infrastructure_cost_governance`
+
+> **Tool**: `assess_infrastructure_cost_governance` — assesses a target company's Infrastructure Cost Governance maturity. Wraps the website's pure `calculateResults` + `getRecommendations` engines.
+>
+> **Sources of truth** (the contract cites these; it does not duplicate them):
+>
+> - **Validation**: [`src/schemas/icg.ts`](../../../../src/schemas/icg.ts) — `ICGInputsSchema`, `ICGAnswerScoreSchema`, `CompanyStageSchema` (`COMPANY_STAGE_VALUES` tuple)
+> - **Question and domain definitions**: [`src/data/infrastructure-cost-governance/domains.ts`](../../../../src/data/infrastructure-cost-governance/domains.ts) — `DOMAINS` (6 domains, ~30 questions total), `ANSWER_OPTIONS` (4 maturity levels)
+> - **Recommendation triggers**: [`src/data/infrastructure-cost-governance/recommendations.ts`](../../../../src/data/infrastructure-cost-governance/recommendations.ts) — `RECOMMENDATIONS` (impact / effort / domain / threshold per record)
+> - **Engine logic**: [`src/utils/icg-engine.ts`](../../../../src/utils/icg-engine.ts) — `calculateResults` (lines 106–154), `getRecommendations` (lines 84–102), `getMaturityLevel` (lines 60–70), `MATURITY_THRESHOLDS` (line 49–53), `FOUNDATIONAL_THRESHOLD` (line 56), `BENCHMARK_RANGES` (lines 332–337)
+>
+> **Version**: `v1` | **Last authored**: 2026-04-28
+>
+> **Registry**: see [`../contracts/README.md`](../contracts/README.md) for the "what is an input contract" narrative, cross-tool registry, and per-tool spec template.
+
+---
+
+## Field overview
+
+The tool accepts a 2-field input. The first (`answers`) is a map keyed by question ID, not a fixed enum — it's the only contract field whose surface is variable across versions of the underlying domain definitions.
+
+| Field          | Type                    | Cardinality | Required |
+| -------------- | ----------------------- | ----------- | -------- |
+| `answers`      | `Record<string, -1..3>` | map         | yes      |
+| `companyStage` | enum (4 values)         | single      | no       |
+
+**The answer scale**: `0` = "Not in place", `1` = "Ad hoc", `2` = "Established", `3` = "Optimized" — these are the four `ANSWER_OPTIONS` defined in `domains.ts`. The score `-1` is a special value meaning **"Not sure"** — the engine treats it as a score of zero for raw-score arithmetic but counts it separately for skipped-count reporting.
+
+**`answers` is sparse**: the map need not contain every question. Missing keys are treated as zero, exactly like `0` ("Not in place"). The engine never throws on a missing question; submit only the questions you have signals for and the score reflects an honest absence of information.
+
+---
+
+## Per-field detail
+
+### `answers`
+
+- **Display label**: Domain answers
+- **What it asks**: For each ICG question, your assessment of the target company's current maturity.
+
+**Valid keys**: question IDs of the form `q<domain>_<index>` — `q1_1`, `q1_2`, `q2_1`, ..., `q6_N`. The complete set is enumerated in [`src/data/infrastructure-cost-governance/domains.ts`](../../../../src/data/infrastructure-cost-governance/domains.ts) — 6 domains × 3–7 questions each. Unknown keys are silently ignored (not validated).
+
+**Valid values**: integers in `-1..3`.
+
+| Value | Label        | Maturity    | Engine effect                                                                                       |
+| ----- | ------------ | ----------- | --------------------------------------------------------------------------------------------------- |
+| `0`   | Not in place | Reactive    | Counts toward raw score (sum); contributes 0 points                                                 |
+| `1`   | Ad hoc       | Aware       | Counts toward raw score; contributes 1 point                                                        |
+| `2`   | Established  | Optimizing  | Counts toward raw score; contributes 2 points                                                       |
+| `3`   | Optimized    | Strategic   | Counts toward raw score; contributes 3 points                                                       |
+| `-1`  | Not sure     | (penalised) | Treated as 0 for raw arithmetic AND counted in the `skippedCount` field (visible in summary output) |
+
+**Downstream effect**: The answers map gates **everything**. Per-domain scores are computed as a percentage of the maximum possible (`questions.length × 3`), then weighted by `domain.weight` to produce the `overallScore` (0–100). The overall score determines the `maturityLevel` via `MATURITY_THRESHOLDS` (Reactive ≤ 25, Aware ≤ 50, Optimizing ≤ 75, Strategic > 75). Below-threshold answers also drive the `recommendations[]` list — each `Recommendation` has a `triggerQuestionId` and `triggerThreshold`, surfacing when `answers[triggerQuestionId] <= triggerThreshold`. Recommendations are sorted by impact (high / medium / low), then effort (quick-win / project / initiative), then domain order.
+
+**Hidden semantics — foundational gap**: Three of the six domains are flagged `foundational: true` in the data. If any foundational domain scores at or below `FOUNDATIONAL_THRESHOLD` (33/100), the engine sets `showFoundationalFlag: true` in the result — independent of the overall score. This catches the case where a high overall score masks a critical-domain gap.
+
+---
+
+### `companyStage` (optional)
+
+- **Display label**: Company growth stage
+- **What it asks**: The target's funding / growth stage, used only for benchmark contextualization.
+
+| ID             | Label              | Benchmark range (overall score) |
+| -------------- | ------------------ | ------------------------------- |
+| `pre-series-b` | Pre-Series B       | 15–35                           |
+| `series-bc`    | Series B–C         | 30–55                           |
+| `pe-backed`    | PE-backed (2+ yrs) | 45–70                           |
+| `enterprise`   | Enterprise         | 65–90                           |
+
+**Downstream effect**: Optional. If supplied, the engine uses `contextualizeScore(score, stage)` to add a stage-specific benchmark band so the consumer can see whether the target is below / within / above the typical range for its stage. **Does not change the score itself** — it changes the narrative around the score. If omitted, the result is computed identically; the benchmark band is simply absent.
+
+---
+
+## Output shape (return value)
+
+The tool returns:
+
+```ts
+{
+  overallScore: number,          // 0–100
+  maturityLevel: 'Reactive' | 'Aware' | 'Optimizing' | 'Strategic',
+  maturityColor: string,         // CSS variable name; ignore for non-UI consumers
+  domainScores: DomainScore[],   // 6 entries, one per domain
+  showFoundationalFlag: boolean,
+  recommendations: Recommendation[], // sorted high→low priority
+  answeredCount: number,         // distinct keys in answers
+  totalQuestions: number,        // sum of questions across all domains
+  skippedCount: number           // count of -1 ("Not sure") answers
+}
+```
+
+`DomainScore` includes `domainId`, `name`, `score` (0–100), `rawScore`, `maxScore`, `isFoundational`, `belowFoundationalThreshold`, `skippedCount`. `Recommendation` includes `id`, `title`, `description`, `impact`, `effort`, `domain`, `triggerQuestionId`, `triggerThreshold`.
+
+---
+
+## Related
+
+- Tool wrapper: [`mcp-server/src/tools/icg.ts`](../../tools/icg.ts)
+- Live website: <https://globalstrategic.tech/hub/tools/infrastructure-cost-governance>
+- Architecture: [BL-031.5 Hub Surface Extension](../../../../src/docs/development/MCP_SERVER_HUB_SURFACE_BL-031_5.md)

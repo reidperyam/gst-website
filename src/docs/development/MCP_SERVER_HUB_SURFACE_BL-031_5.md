@@ -236,4 +236,37 @@ mcp-server/
 
 ---
 
-_Last updated: 2026-04-25_
+_Last updated: 2026-04-28_
+
+---
+
+## Implementation history & deviations
+
+### Deviation — Library content source (BL-031.5)
+
+The original plan offered three options for sourcing Library article bodies (architecture doc § "Content-source question"). The execution discovered that the live Library Astro pages are heavier than the planning anticipated — both pages are >29k tokens, with embedded `<DeltaIcon>` components throughout, custom CSS classes (`arch-section`, `arch-body`, `arch-list--labeled`), and TableOfContents components that depend on explicit `id="layer-1"` etc. anchors on `<section>` tags.
+
+Refactoring the Astro pages to import a markdown body via Astro's `<Content />` would have:
+
+- Required extracting ~30k tokens of prose into markdown for each article
+- Broken the TOC anchors (auto-slugified markdown headings would change the IDs from `layer-1` to `layer-1-software-architecture`)
+- Removed the inline `<DeltaIcon>` decorations next to each `<h2>`
+
+Instead, BL-031.5 ships **parallel canonical digests** at `src/data/library/<slug>/article.md`. Each `.md` is a substantial markdown rendering at ~25–33% of the original Astro page length — preserving section structure, key insights, diligence callouts, and reference lists without attempting 1:1 fidelity. The Astro pages are unchanged; the website continues to render the long-form text.
+
+**Drift policy** (documented in each article frontmatter): if the two sources drift, the website Astro page is authoritative. The article.md digest is MCP-canonical; updating the Astro page should trigger a digest refresh, but the runtime invariant is the website. A future BL-031.5 follow-up may revisit Option A (Astro content-collection migration) if/when the Library grows enough to justify the website refactor.
+
+This is the architecture doc's documented "drift accepted only as a last resort" path — chosen deliberately because the alternatives (parallel summaries breaking parity invariants, or a heavyweight Astro refactor outside BL-031.5 scope) had worse trade-offs.
+
+### Deviation — Radar per-item URIs deferred
+
+The original plan included `gst://radar/item/<itemId>` per-cached-item Resources. Implementation deferred this for two reasons:
+
+1. **ID volatility.** Cached item IDs change every time `npm run radar:seed` runs (the mock fixtures regenerate them), and would also change against live Inoreader data. A Resource manifest that mutates between snapshots breaks the URI-stability invariant the test suite enforces.
+2. **Search is sufficient.** `search_radar_cache` returns items directly with all the per-item fields (id, title, url, source, category, publishedAt, summary, annotation). Adding a per-item Resource layer above that would force agents to make two calls (search → resource read) when one suffices.
+
+The per-item Resource pattern can land later if a use case emerges — most likely under BL-032 when live data has stable item IDs.
+
+### Build pipeline addition — codegen for inlined data
+
+The plan called for inlining the 120 regulation JSON files and the 2 Library article markdowns into the bundled binary. The chosen mechanism is a small pre-build script (`mcp-server/scripts/generate-regulations-index.mjs`) that emits two `.generated.ts` files: `regulations-data.generated.ts` and `library-data.generated.ts`. Both vitest (Vite-backed; no `.md` text loader by default) and esbuild (production bundle) consume plain TS imports, removing the need for environment-specific loaders. The generated files are committed for self-contained fresh-clone builds; the `.generated.ts` filename suffix is the audit signal.

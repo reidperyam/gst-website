@@ -284,7 +284,7 @@ The relative-import dance keeps the engines as the single source of truth — no
 
 ### BL-031.5: MCP Server — Hub Surface Extension
 
-**Source**: BL-031.5 — extends Phase 1 surface | **Architecture & plan**: [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) | **Effort**: 3-5 days | **Status**: Open | **Depends on**: BL-031
+**Source**: BL-031.5 — extends Phase 1 surface | **Architecture & plan**: [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) | **Effort**: 3-5 days | **Status**: Complete (April 28, 2026) | **Depends on**: BL-031
 
 **As a** GST team member, **I want** the local MCP server to also expose the remaining Hub tool engines (ICG, TechPar, Tech Debt, Regulatory Map) and to expose the Library articles and the Radar snapshot as MCP **Resources** **so that** my agents can pull GST's full advisory toolkit and reference content into any conversation without opening the website.
 
@@ -321,29 +321,29 @@ The relative-import dance keeps the engines as the single source of truth — no
 
 **New tools (extend BL-031's tool registry)**
 
-- [ ] `assess_infrastructure_cost_governance` — wraps the ICG engine; input includes `answers` map and `stage`; output is `{ overall, domainScores[], recommendations[] }`
-- [ ] `compute_techpar` — wraps the TechPar engine; input is `TechParInputs`; output is `TechParResult`
-- [ ] `estimate_tech_debt_cost` — wraps the Tech Debt engine; **input MUST be raw values** (team size, salary, maintenance burden, deploy frequency) — slider-position helpers stay on the website side
-- [ ] `search_regulations` — facet/search across the regulatory-map JSON files; input `{ jurisdiction?, domain?, query?, limit? }`; output includes the resource `uri` for each matched framework
-- [ ] `list_regulation_facets` — companion enumerator for `{ jurisdictions[], domains[] }`
-- [ ] `search_radar_cache` — local-only equivalent of BL-032's `search_radar`; reads from the seed snapshot ONLY; explicitly named to avoid future collision with the live remote tool
+- [x] `assess_infrastructure_cost_governance` — wraps the ICG engine; input includes `answers` map and `stage`; output is `{ overall, domainScores[], recommendations[] }`
+- [x] `compute_techpar` — wraps the TechPar engine; input is `TechParInputs`; output is `TechParResult`
+- [x] `estimate_tech_debt_cost` — wraps the Tech Debt engine; **input MUST be raw values** (team size, salary, maintenance burden, deploy frequency) — slider-position helpers stay on the website side
+- [x] `search_regulations` — facet/search across the regulatory-map JSON files; input `{ jurisdiction?, domain?, query?, limit? }`; output includes the resource `uri` for each matched framework
+- [x] `list_regulation_facets` — companion enumerator for `{ jurisdictions[], domains[] }`
+- [x] `search_radar_cache` — local-only equivalent of BL-032's `search_radar`; reads from the seed snapshot ONLY; explicitly named to avoid future collision with the live remote tool
 
 **Resources primitive (new for this initiative)**
 
-- [ ] MCP server registers `resources/list` and `resources/read` handlers
-- [ ] Library: `gst://library/business-architectures` and `gst://library/vdr-structure`, `mimeType: text/markdown`, body sourced from a single canonical location (Astro content collection migration preferred; sibling `article.md` acceptable as interim — see [MCP_SERVER_HUB_SURFACE.md § Content-source question](MCP_SERVER_HUB_SURFACE.md#library--articles-that-become-mcp-resources))
-- [ ] Regulations: one Resource per framework, URI `gst://regulations/<jurisdiction>/<framework-id>`, `mimeType: application/json` (or `text/markdown` if the framework has a long-form body)
-- [ ] Radar: `gst://radar/fyi/latest`, `gst://radar/wire/latest`, `gst://radar/wire/<category>` (one per category), and `gst://radar/item/<itemId>` for each cached item; resource description includes `lastSeededAt`; if seed snapshot is missing, the Resource returns a structured "run `npm run radar:seed`" message
-- [ ] **No live Inoreader calls** from any radar-related tool or resource — enforced by a scoped ESLint `no-restricted-imports` rule that prevents `mcp-server/src/` from importing `src/lib/inoreader/client.ts`
-- [ ] Resource URI manifest frozen as a Vitest test (`tests/resource-uri-stability.test.ts`); deliberate URI changes require updating the manifest AND bumping `mcp-server/package.json` version
+- [x] MCP server registers `resources/list` and `resources/read` handlers
+- [x] Library: `gst://library/business-architectures` and `gst://library/vdr-structure`, `mimeType: text/markdown`, body sourced from a single canonical location ([deviation](MCP_SERVER_HUB_SURFACE_BL-031_5.md#deviation--library-content-source-bl-0315): heavily-componentized Astro pages led to parallel-canonical `.md` digests at `src/data/library/<slug>/article.md` rather than an Astro content-collection migration; live website page is authoritative if drift)
+- [x] Regulations: one Resource per framework, URI `gst://regulations/<jurisdiction>/<framework-id>`, `mimeType: application/json` (full JSON body returned as text)
+- [x] Radar: `gst://radar/fyi/latest`, `gst://radar/wire/latest`, `gst://radar/wire/<category>` (one per category) — resource description includes `lastSeededAt`; if seed snapshot is missing, the Resource returns a structured "run `npm run radar:seed`" message. Per-item URIs (`gst://radar/item/<id>`) deferred — `search_radar_cache` returns items directly so callers don't need to chain into a per-item Resource
+- [x] **No live Inoreader calls** from any radar-related tool or resource — enforced by a scoped ESLint `no-restricted-imports` rule that prevents `mcp-server/src/` from importing `src/lib/inoreader/client.ts`
+- [x] Resource URI manifest frozen as a Vitest test (`mcp-server/tests/integration/resource-uri-stability.test.ts`); deliberate URI changes require updating the manifest AND bumping `mcp-server/package.json` version
 
 **Verification & docs**
 
-- [ ] [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) updated with any deviations made during implementation
-- [ ] `mcp-server/README.md` extended with the new tool and resource catalog plus a "How Resources work in this server" section
-- [ ] Vitest tests for each new tool (parity test against the corresponding website engine) and each Resource shape (URI parsing, body retrieval, missing-snapshot graceful failure)
-- [ ] Manual parity check recorded in the README: side-by-side outputs of the website wizard vs the MCP tool for ICG, TechPar, Tech Debt, with a representative input set, must match
-- [ ] Repo-root `npx astro check && npm run lint && npm run lint:css && npm run test:run` continues to pass
+- [x] [MCP_SERVER_HUB_SURFACE_BL-031_5.md](MCP_SERVER_HUB_SURFACE_BL-031_5.md) updated with any deviations made during implementation (Library content-source decision section appended)
+- [x] `mcp-server/README.md` extended with the new tool and resource catalog plus a "How Resources work in this server" section
+- [x] Vitest tests for each new tool (parity test against the corresponding website engine) and each Resource shape (URI parsing, body retrieval, missing-snapshot graceful failure) — 93 tests total, was 33
+- [x] Manual parity check recorded in the README — `Last verified (BL-031.5 surface): April 28, 2026` stanza covers all 6 new tools + 3 Resource families with concrete output values
+- [x] Repo-root `npx astro check && npm run lint && npm run lint:css && npm run test:run` continues to pass
 
 #### Technical Context
 

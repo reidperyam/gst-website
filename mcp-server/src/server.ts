@@ -5,8 +5,10 @@ import { registerIcgTool } from './tools/icg';
 import { registerTechparTool } from './tools/techpar';
 import { registerTechDebtTool } from './tools/tech-debt';
 import { registerRegulationsTool } from './tools/regulations';
+import { registerRadarCacheTool } from './tools/radar-cache';
 import { registerLibraryResources } from './resources/library';
 import { registerRegulationResources } from './resources/regulations';
+import { registerRadarResources } from './resources/radar';
 
 export function createServer(): McpServer {
   const server = new McpServer({
@@ -21,10 +23,12 @@ export function createServer(): McpServer {
   registerTechparTool(server);
   registerTechDebtTool(server);
   registerRegulationsTool(server);
+  registerRadarCacheTool(server);
 
   // Resources
   registerLibraryResources(server);
   registerRegulationResources(server);
+  registerRadarResources(server);
 
   return server;
 }

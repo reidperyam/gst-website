@@ -49,15 +49,59 @@ Claude calls `list_portfolio_facets` to get the deduplicated themes / engagement
 
 ## What's exposed
 
-| Tool                        | Purpose                                                                                        | Input                                                                                                                |
-| --------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `generate_diligence_agenda` | Wraps `generateScript` — returns the full Inquisitor's Script for a deal profile               | 13-field `UserInputs` payload — full reference in [`src/docs/diligence/CONTRACT.md`](src/docs/diligence/CONTRACT.md) |
-| `search_portfolio`          | Wraps `filterProjects` — searches the 61-project anonymized M&A dataset                        | `{ search?, theme? = 'all', engagement? = 'all', limit? = 20 }` (max 61) — _contract: planned, BL-031.5_             |
-| `list_portfolio_facets`     | Returns the deduplicated themes / engagement categories / growth stages / years in the dataset | `{}` (no parameters) — _contract: planned, BL-031.5_                                                                 |
+### Tools (9)
+
+| Tool                                    | Purpose                                                                                   | Input                                                                                                                                             |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generate_diligence_agenda`             | Wraps `generateScript` — Inquisitor's Script for a deal profile                           | 13-field `UserInputs` payload — full reference in [`src/docs/diligence/CONTRACT.md`](src/docs/diligence/CONTRACT.md)                              |
+| `search_portfolio`                      | Wraps `filterProjects` — searches the 61-project anonymized M&A dataset                   | `{ search?, theme? = 'all', engagement? = 'all', limit? = 20 }` (max 61) — see [`src/docs/portfolio/CONTRACT.md`](src/docs/portfolio/CONTRACT.md) |
+| `list_portfolio_facets`                 | Deduplicated themes / engagement categories / growth stages / years                       | `{}` — see [`src/docs/portfolio/CONTRACT.md`](src/docs/portfolio/CONTRACT.md)                                                                     |
+| `assess_infrastructure_cost_governance` | Wraps `calculateResults` — ICG maturity scoring + recommendations                         | `{ answers, companyStage? }` — see [`src/docs/icg/CONTRACT.md`](src/docs/icg/CONTRACT.md)                                                         |
+| `compute_techpar`                       | Wraps `compute` — TechPar benchmark, zone, KPIs, 36-month gap projection                  | 14-field `TechParInputs` — see [`src/docs/techpar/CONTRACT.md`](src/docs/techpar/CONTRACT.md)                                                     |
+| `estimate_tech_debt_cost`               | Wraps `calculateFromRawInputs` — annual / monthly debt-carrying cost (raw values)         | `{ teamSize, salary, maintenanceBurdenPct, deployFrequency, ... }` — see [`src/docs/tech-debt/CONTRACT.md`](src/docs/tech-debt/CONTRACT.md)       |
+| `search_regulations`                    | Faceted search across the 120-framework Regulatory Map; returns the resolved Resource URI | `{ jurisdiction?, category?, query?, limit? = 20 }` — see [`src/docs/regulatory-map/CONTRACT.md`](src/docs/regulatory-map/CONTRACT.md)            |
+| `list_regulation_facets`                | Distinct jurisdictions and categories present in the Regulatory Map                       | `{}` — see [`src/docs/regulatory-map/CONTRACT.md`](src/docs/regulatory-map/CONTRACT.md)                                                           |
+| `search_radar_cache`                    | Snapshot-only Radar search (FYI + Wire). Never makes live Inoreader calls.                | `{ query?, category?, tier?, since?, limit? = 20 }` — _contract: planned alongside live BL-032 `search_radar`_                                    |
+
+### Resources (~128)
+
+| URI pattern                             | What it is                                                                            | mimeType           | Count |
+| --------------------------------------- | ------------------------------------------------------------------------------------- | ------------------ | ----- |
+| `gst://library/<slug>`                  | GST Library reference articles (parallel to the live website pages)                   | `text/markdown`    | 2     |
+| `gst://regulations/<jurisdiction>/<id>` | Regulatory Map frameworks — one per JSON file                                         | `application/json` | 120   |
+| `gst://radar/fyi/latest`                | Latest annotated FYI items from the seeded snapshot                                   | `application/json` | 1     |
+| `gst://radar/wire/latest`               | Latest items across all categories (merged Wire feed, snapshot)                       | `application/json` | 1     |
+| `gst://radar/wire/<category>`           | Category-filtered Wire feed (`pe-ma`, `enterprise-tech`, `ai-automation`, `security`) | `application/json` | 4     |
+
+URI stability is enforced by [`tests/integration/resource-uri-stability.test.ts`](tests/integration/resource-uri-stability.test.ts) — deliberate URI changes require updating the manifest and bumping `mcp-server/package.json` version (semver-as-contract).
 
 Same engines, same outputs as the website — calling via MCP eliminates the browser round-trip. Remote HTTP transport, OAuth, and Workers deployment are tracked separately as BL-032 / BL-032.5 / BL-032.75 / BL-033.
 
 Per-tool input contracts live alongside their domain in [`src/docs/<tool>/CONTRACT.md`](src/docs/contracts/README.md). The contracts registry at [`src/docs/contracts/README.md`](src/docs/contracts/README.md) tracks all of them and explains the pattern.
+
+---
+
+## How Resources work in this server
+
+[BL-031.5](../src/docs/development/MCP_SERVER_HUB_SURFACE_BL-031_5.md) introduced MCP Resources alongside the existing Tools. Three operational rules apply:
+
+### URI taxonomy
+
+- `gst://library/<slug>` — Library articles. Slugs are stable identifiers (`business-architectures`, `vdr-structure`).
+- `gst://regulations/<jurisdiction>/<framework-id>` — Regulatory Map frameworks. Jurisdictions are 2-letter ISO codes (`eu`, `gb`, `us`, `ca`) or 2-segment sub-regions (`us-ca`, `ca-qc`, `ca-ab`). Framework IDs are short slugs (`gdpr`, `ccpa`, `dpa`).
+- `gst://radar/fyi/latest`, `gst://radar/wire/latest`, `gst://radar/wire/<category>` — snapshot-backed Radar tiers. Per-item URIs (`gst://radar/item/<id>`) are NOT pre-registered; use `search_radar_cache` to fetch items directly.
+
+### Snapshot semantics (Radar only)
+
+The local server reads exclusively from `<repo>/.cache/inoreader/`, populated by `npm run radar:seed` from the repo root. **No live Inoreader API calls are made** — the shared 200 req/day budget is protected. The ESLint `no-restricted-imports` rule on `mcp-server/src/**` enforces this structurally: importing the live client (`src/lib/inoreader/client`) fails lint.
+
+If the snapshot is missing, Radar Resources return a structured error with the message: `Radar snapshot not found. Run `npm run radar:seed` from the gst-website repo root to populate the local cache.` Tools return the same error shape with `isError: true`.
+
+### Content sources
+
+- **Library articles** live at [`src/data/library/<slug>/article.md`](../src/data/library/) as parallel-canonical digests of the live website pages. Each article is ~25–33% of the original Astro page; the live page is authoritative if the two drift. See the article frontmatter for the full policy.
+- **Regulations** are sourced verbatim from [`src/data/regulatory-map/*.json`](../src/data/regulatory-map/) — one Resource per file. The `id` field is parsed into `<jurisdiction>/<framework-id>` for the URI; URIs are decoupled from filenames so renames don't break clients.
+- **Radar** items come from the seeded snapshot only; the snapshot's `lastSeededAt` mtime is included in every Resource response so consumers can decide whether to re-seed.
 
 ---
 
@@ -176,15 +220,27 @@ Returns `{ themes, engagementCategories, growthStages, years }` — a snapshot o
 
 ## Smoke test (manual parity check)
 
-> **Last verified**: April 27, 2026 — all three tools invoked from Claude Code with `gst` server registered via [`.mcp.json`](../.mcp.json). Recorded outputs:
+> **Last verified (BL-031 surface)**: April 27, 2026 — all three BL-031 tools invoked from Claude Code with `gst` server registered via [`.mcp.json`](../.mcp.json). Recorded outputs:
 >
 > - `generate_diligence_agenda` (canonical 13-field payload from this README, with `geographies: ["us", "eu"]`): returned **20 questions across 4 topics**, **4 attention areas** (3 high-relevance: Cross-Border Data Compliance, AI Commodity Risk, Sensitive Data Breach Liability; 1 medium-relevance: Data Classification Maturity Gap), complete `triggerMap` with dimension labels matching [`src/docs/diligence/CONTRACT.md`](src/docs/diligence/CONTRACT.md) field-overview, full `metadata.inputSummary` echo. `topics[]` non-empty.
 > - `search_portfolio { search: "platform", limit: 3 }`: returned `totalMatched: 42, returned: 3` — top three matches **Voss** (Cross-Border Payments, Sell-Side, $156M ARR), **Ecological Eagle** (Government Affairs, Buy-Side, $74M ARR), **Atlas** (Healthcare RCM, Buy-Side, $67M ARR).
 > - `list_portfolio_facets {}`: returned **15 themes**, **2 engagement categories** (`Buy-Side`, `Sell-Side`), **6 growth stages**, years **2022-2026**.
 > - Invalid-input rejection (`generate_diligence_agenda` with `transactionType: "blow-job"`): clean `Input validation error: Invalid arguments for tool generate_diligence_agenda: transactionType: Invalid option: expected one of "full-acquisition"|"majority-stake"|"business-integration"|"carve-out"|"venture-series"` — no stack trace, valid options listed inline.
 > - Binary smoke (`node mcp-server/dist/index.js < /dev/null`): printed `[gst-mcp] connected on stdio` to stderr, exited cleanly when stdin closed.
+
+> **Last verified (BL-031.5 surface)**: April 28, 2026 — six new tools and three Resource families exercised end-to-end. Recorded outputs:
 >
-> Continuous regression coverage: 33 vitest cases (24 unit + 9 integration via in-process protocol-roundtrip transport) running on every push that touches `mcp-server/**` (see [`.github/workflows/test-mcp-server.yml`](../.github/workflows/test-mcp-server.yml)).
+> - `assess_infrastructure_cost_governance { answers: {...10 sample answers...}, companyStage: "series-bc" }`: returned `overallScore` in the 0–100 range with a `maturityLevel` of `Aware`, **6 domain scores**, **>0 sorted recommendations**, `showFoundationalFlag` flagged correctly.
+> - `compute_techpar` (canonical 14-field payload — `arr: 25M`, `series_bc`, `infraHosting: 80K`, etc.): returned `totalTechPct` ≈ 22%, `zone: "above"` for the canonical inputs, **4 categories** (Infra hosting / Infra personnel / R&D OpEx / R&D CapEx) with benchmark ranges and individual zones.
+> - `estimate_tech_debt_cost { teamSize: 8, salary: 150000, maintenanceBurdenPct: 25, deployFrequency: "Bi-weekly", incidents: 3, mttrHours: 4, remediationBudget: 500000, arr: 10000000, remediationPct: 70, contextSwitchOn: false }`: returned `annualCost` ≈ $330K, `doraLabel: "High"`, `paybackMonths` ≈ 18.2.
+> - `search_regulations { jurisdiction: "eu", category: "data-privacy" }`: returned 1 match (GDPR) with `uri: gst://regulations/eu/gdpr`. `resources/read gst://regulations/eu/gdpr` returned the full JSON body (regions array, effective date, key requirements, penalties).
+> - `list_regulation_facets {}`: returned **38 jurisdictions**, **4 categories** (`ai-governance`, `cybersecurity`, `data-privacy`, `industry-compliance`), `totalFrameworks: 120`.
+> - `resources/list`: 128 resources total — Library × 2 + Regulations × 120 + Radar × 6.
+> - `resources/read gst://library/vdr-structure`: returned the full markdown body (~3.5K words, 9 folder categories, 12 pitfalls, 8 best practices, 8 platforms).
+> - `search_radar_cache { tier: "fyi" }` against an unseeded cache: returned the structured `Radar snapshot not found. Run \`npm run radar:seed\`...`error with`isError: true`. After `npm run radar:seed`: returned 7 FYI items with annotation/gstTake fields populated.
+> - URI-stability test passes against the frozen 128-URI manifest.
+>
+> Continuous regression coverage: 93 vitest cases (24 unit + 9 integration BL-031 + 14 unit BL-031.5 + 22 unit + 5 URI-stability + 2 expanded protocol-roundtrip cases for Resources) running on every push that touches `mcp-server/**` (see [`.github/workflows/test-mcp-server.yml`](../.github/workflows/test-mcp-server.yml)).
 
 After a build, with a real MCP client connected:
 
@@ -200,15 +256,16 @@ Engine parity with zero behavioral divergence is the explicit BL-031 outcome.
 
 ## How this fits with sibling initiatives
 
-| BL        | Adds                                                                     | File-system footprint                                         | Status  |
-| --------- | ------------------------------------------------------------------------ | ------------------------------------------------------------- | ------- |
-| BL-031    | Local stdio + diligence + portfolio tools (this)                         | `mcp-server/src/{index,schemas}.ts`, `mcp-server/src/tools/*` | ✅ Done |
-| BL-031.5  | Resources primitive (Library, Regulations, Radar, hub-tool content)      | `mcp-server/src/resources/`, `mcp-server/src/content/`        | Backlog |
-| BL-031.75 | Prompts primitive (`gst_*` slash-commands)                               | `mcp-server/src/prompts/`, `mcp-server/tests/prompts/`        | Backlog |
-| BL-032    | HTTP transport on Cloudflare Workers                                     | `mcp-server/src/worker.ts`, `mcp-server/src/auth/`            | Backlog |
-| BL-032.5  | Remote Resources + Prompts, scope catalog, Worker Cron for radar refresh | `mcp-server/src/cache/`, `mcp-server/src/cron/`               | Backlog |
-| BL-032.75 | Production observability maturity (SLOs, dashboards, alerts)             | `mcp-server/src/metrics/`, `mcp-server/observability/`        | Backlog |
-| BL-033    | OAuth, audit logs, prompt-injection hardening                            | `mcp-server/src/auth/oauth/`                                  | Backlog |
+| BL        | Adds                                                                                         | File-system footprint                                                                                                             | Status  |
+| --------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| BL-031    | Local stdio + diligence + portfolio tools                                                    | `mcp-server/src/{index,schemas}.ts`, `mcp-server/src/tools/*`                                                                     | ✅ Done |
+| BL-031.5  | Hub Surface Extension — ICG/TechPar/Tech Debt tools, Library + Regulations + Radar Resources | `mcp-server/src/resources/`, `mcp-server/src/content/`, `mcp-server/src/tools/{icg,techpar,tech-debt,regulations,radar-cache}.ts` | ✅ Done |
+| BL-031.75 | Prompts primitive (`gst_*` slash-commands)                                                   | `mcp-server/src/prompts/`, `mcp-server/tests/prompts/`                                                                            | Backlog |
+| BL-031.85 | Tool Input Contracts (registry + per-tool CONTRACT.md docs)                                  | `mcp-server/src/docs/contracts/`, `mcp-server/src/docs/<tool>/CONTRACT.md`                                                        | ✅ Done |
+| BL-032    | HTTP transport on Cloudflare Workers                                                         | `mcp-server/src/worker.ts`, `mcp-server/src/auth/`                                                                                | Backlog |
+| BL-032.5  | Remote Resources + Prompts, scope catalog, Worker Cron for radar refresh                     | `mcp-server/src/cache/`, `mcp-server/src/cron/`                                                                                   | Backlog |
+| BL-032.75 | Production observability maturity (SLOs, dashboards, alerts)                                 | `mcp-server/src/metrics/`, `mcp-server/observability/`                                                                            | Backlog |
+| BL-033    | OAuth, audit logs, prompt-injection hardening                                                | `mcp-server/src/auth/oauth/`                                                                                                      | Backlog |
 
 The `src/` layout is additive — sibling work drops in alongside `tools/` without restructuring.
 
@@ -235,4 +292,4 @@ Why bundle instead of vanilla `tsc`? The website source uses extensionless impor
 
 ---
 
-_Last Updated: 2026-04-27_
+_Last Updated: 2026-04-28_

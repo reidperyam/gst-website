@@ -178,6 +178,34 @@ export default [
     },
   },
 
+  // ── Inoreader budget protection (BL-031.5) ─────────────────────────
+  // The local MCP server MUST NOT make live Inoreader API calls — they
+  // would burn the shared 200 req/day budget. Radar tools/resources read
+  // exclusively from the seeded snapshot. Enforced structurally here:
+  // mcp-server/src/** cannot import the live client.
+  {
+    files: ['mcp-server/src/**/*.{ts,mts}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/lib/inoreader/client',
+                '**/lib/inoreader/client.ts',
+                '../../src/lib/inoreader/client*',
+                '../../../src/lib/inoreader/client*',
+              ],
+              message:
+                'mcp-server/src/** must not import the live Inoreader client. Read from the cached snapshot via mcp-server/src/content/radar-snapshot.ts instead. See MCP_SERVER_HUB_SURFACE_BL-031_5.md § Radar.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // ── Prettier compatibility: MUST be last ───────────────────────────
   prettier,
 ];

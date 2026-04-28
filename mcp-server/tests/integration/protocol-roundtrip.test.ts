@@ -160,6 +160,7 @@ describe('protocol roundtrip', () => {
           'list_portfolio_facets',
           'list_regulation_facets',
           'search_portfolio',
+          'search_radar_cache',
           'search_regulations',
         ].sort()
       );
