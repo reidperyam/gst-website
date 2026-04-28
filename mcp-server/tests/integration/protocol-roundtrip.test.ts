@@ -40,6 +40,29 @@ interface ListToolsResultPayload {
   tools: ToolDescriptor[];
 }
 
+interface ResourceDescriptor {
+  uri: string;
+  name: string;
+  description?: string;
+  mimeType?: string;
+}
+
+interface ListResourcesResultPayload {
+  resources: ResourceDescriptor[];
+  nextCursor?: string;
+}
+
+interface ResourceContent {
+  uri: string;
+  mimeType?: string;
+  text?: string;
+  blob?: string;
+}
+
+interface ReadResourceResultPayload {
+  contents: ResourceContent[];
+}
+
 const validDiligencePayload = {
   transactionType: 'majority-stake',
   productType: 'b2b-saas',
@@ -135,7 +158,9 @@ describe('protocol roundtrip', () => {
           'estimate_tech_debt_cost',
           'generate_diligence_agenda',
           'list_portfolio_facets',
+          'list_regulation_facets',
           'search_portfolio',
+          'search_regulations',
         ].sort()
       );
 
@@ -281,6 +306,67 @@ describe('protocol roundtrip', () => {
       expect(parsed.matches).toEqual([]);
       expect(parsed.totalMatched).toBe(0);
       expect(parsed.returned).toBe(0);
+    });
+  });
+
+  describe('Resources primitive — list and read', () => {
+    it('resources/list returns library + regulation URIs with stable mime types', async () => {
+      const res = await rpc('resources/list', {});
+      expect(isErrorResponse(res)).toBe(false);
+      if (isErrorResponse(res)) return;
+
+      const payload = res.result as unknown as ListResourcesResultPayload;
+      const uris = payload.resources.map((r) => r.uri);
+
+      // Library × 2 + Regulations × 120
+      expect(uris).toContain('gst://library/business-architectures');
+      expect(uris).toContain('gst://library/vdr-structure');
+      expect(uris).toContain('gst://regulations/eu/gdpr');
+      expect(uris).toContain('gst://regulations/us-ca/ccpa');
+
+      const libraryEntries = payload.resources.filter((r) => r.uri.startsWith('gst://library/'));
+      const regulationEntries = payload.resources.filter((r) =>
+        r.uri.startsWith('gst://regulations/')
+      );
+      expect(libraryEntries.length).toBe(2);
+      expect(regulationEntries.length).toBe(120);
+
+      for (const r of libraryEntries) {
+        expect(r.mimeType).toBe('text/markdown');
+      }
+      for (const r of regulationEntries) {
+        expect(r.mimeType).toBe('application/json');
+      }
+    });
+
+    it('resources/read returns the markdown body for a Library URI', async () => {
+      const res = await rpc('resources/read', { uri: 'gst://library/vdr-structure' });
+      expect(isErrorResponse(res)).toBe(false);
+      if (isErrorResponse(res)) return;
+
+      const payload = res.result as unknown as ReadResourceResultPayload;
+      expect(payload.contents.length).toBe(1);
+      const block = payload.contents[0];
+      expect(block.uri).toBe('gst://library/vdr-structure');
+      expect(block.mimeType).toBe('text/markdown');
+      expect(block.text).toBeTruthy();
+      expect(block.text!.length).toBeGreaterThan(500);
+      // Sanity check on the digest content.
+      expect(block.text).toMatch(/Virtual Data Room/i);
+    });
+
+    it('resources/read returns the JSON body for a Regulation URI', async () => {
+      const res = await rpc('resources/read', { uri: 'gst://regulations/eu/gdpr' });
+      expect(isErrorResponse(res)).toBe(false);
+      if (isErrorResponse(res)) return;
+
+      const payload = res.result as unknown as ReadResourceResultPayload;
+      const block = payload.contents[0];
+      expect(block.mimeType).toBe('application/json');
+      expect(block.text).toBeTruthy();
+      const parsed = JSON.parse(block.text!) as { id: string; name: string; category: string };
+      expect(parsed.id).toBe('eu-gdpr');
+      expect(parsed.category).toBe('data-privacy');
     });
   });
 });

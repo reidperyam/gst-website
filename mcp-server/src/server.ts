@@ -4,6 +4,9 @@ import { registerPortfolioTools } from './tools/portfolio';
 import { registerIcgTool } from './tools/icg';
 import { registerTechparTool } from './tools/techpar';
 import { registerTechDebtTool } from './tools/tech-debt';
+import { registerRegulationsTool } from './tools/regulations';
+import { registerLibraryResources } from './resources/library';
+import { registerRegulationResources } from './resources/regulations';
 
 export function createServer(): McpServer {
   const server = new McpServer({
@@ -11,11 +14,17 @@ export function createServer(): McpServer {
     version: '0.1.0',
   });
 
+  // Tools
   registerDiligenceTool(server);
   registerPortfolioTools(server);
   registerIcgTool(server);
   registerTechparTool(server);
   registerTechDebtTool(server);
+  registerRegulationsTool(server);
+
+  // Resources
+  registerLibraryResources(server);
+  registerRegulationResources(server);
 
   return server;
 }

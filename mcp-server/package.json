@@ -11,8 +11,11 @@
     "dist"
   ],
   "scripts": {
+    "prebuild": "node scripts/generate-regulations-index.mjs",
     "build": "tsc --noEmit && node build.mjs",
+    "pretypecheck": "node scripts/generate-regulations-index.mjs",
     "typecheck": "tsc --noEmit",
+    "pretest": "node scripts/generate-regulations-index.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

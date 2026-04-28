@@ -54,6 +54,17 @@ export {
   type DeployFrequency,
 } from '../../src/schemas/tech-debt';
 
+export {
+  RegulationSchema,
+  RegulationCategorySchema,
+  RegulationSearchInputSchema,
+  RegulationFacetsInputSchema,
+  type Regulation,
+  type RegulationCategory,
+  type RegulationSearchInput,
+  type RegulationFacetsInput,
+} from '../../src/schemas/regulatory-map';
+
 // ─── MCP tool input schemas ──────────────────────────────────────────────
 
 /** Input for the `search_portfolio` tool. */
