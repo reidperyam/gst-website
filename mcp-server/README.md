@@ -43,7 +43,7 @@ Claude calls `list_portfolio_facets` to get the deduplicated themes / engagement
 - The website wizard's visual scaffolding remains the right surface for stakeholders who want to _see_ the question hierarchy and tweak inputs interactively. The MCP path is for users already in a Claude conversation who'd rather not leave it.
 - This is an internal tool today — no client-facing endpoints. Remote HTTP, OAuth, and rate-limiting are tracked under BL-032 / BL-033.
 
-> **Want to see one of these scenarios end-to-end?** [`src/docs/diligence/HYPOTHETICAL_USAGE.md`](src/docs/diligence/HYPOTHETICAL_USAGE.md) walks through scenario #1 (live agenda drafting) for a hypothetical PE majority-stake TDD — full prose prompt, schema mapping, engine output, trigger map, comparable engagements, and iteration patterns.
+> **Want to see one of these scenarios end-to-end?** [`src/docs/diligence/USAGE.md`](src/docs/diligence/USAGE.md) walks through scenario #1 (live agenda drafting) for a hypothetical PE majority-stake TDD — full prose prompt, schema mapping, engine output, trigger map, comparable engagements, and iteration patterns. Each per-tool directory under `src/docs/<tool>/` ships its own `USAGE.md` walkthrough.
 
 ---
 

@@ -493,7 +493,7 @@ A prompt's behavior is determined by its message body — pure content. A senior
 
 - Diligence Machine input contract authored at `mcp-server/src/docs/diligence/CONTRACT.md` — 13 fields, valid enums, downstream-effect summaries, hidden-semantics callouts (multi-region auto-sync, ordinal bracket comparison)
 - Contracts registry at `mcp-server/src/docs/contracts/README.md` — what-is-an-input-contract narrative, table of all known Hub-tool contracts (diligence today; ICG / TechPar / Tech Debt / Regulatory Map / Portfolio listed as `⏳ BL-031.5`), ~10-line IRL forward-look
-- Cross-references wired from `mcp-server/src/docs/diligence/HYPOTHETICAL_USAGE.md`, `mcp-server/README.md` Tool Inventory, `src/schemas/diligence.ts` top-of-file comment, `src/docs/README.md` Quick Navigation
+- Cross-references wired from `mcp-server/src/docs/diligence/USAGE.md`, `mcp-server/README.md` Tool Inventory, `src/schemas/diligence.ts` top-of-file comment, `src/docs/README.md` Quick Navigation
 - Versioning discipline: each contract has a version + last-authored date; pattern reusable when BL-031.5 contracts are authored alongside their MCP tools
 - Zero engine changes; zero schema changes; zero test changes — pure documentation initiative on top of the existing BL-031 surface
 
@@ -522,7 +522,7 @@ A prompt's behavior is determined by its message body — pure content. A senior
 
 **Cross-references**
 
-- [ ] `mcp-server/src/docs/diligence/HYPOTHETICAL_USAGE.md` — schema-mapping table linked to the new `CONTRACT.md`
+- [ ] `mcp-server/src/docs/diligence/USAGE.md` — schema-mapping table linked to the new `CONTRACT.md`
 - [ ] `mcp-server/README.md` — "What's exposed" table's `Input` column links to `CONTRACT.md` for diligence; planned-contract notes for the other tools
 - [ ] `src/schemas/diligence.ts` — top-of-file comment block (4-6 lines) pointing to `mcp-server/src/docs/diligence/CONTRACT.md` as the human-readable reference. No schema changes.
 - [ ] `src/docs/README.md` — Quick Navigation row "Understand a Hub tool's input contract" → `mcp-server/src/docs/contracts/README.md`

@@ -1,8 +1,10 @@
-# Hypothetical Usage: A TDD Walkthrough via the MCP Server
+# Usage — `generate_diligence_agenda`: A TDD Walkthrough
 
-A complete, reproducible end-to-end example of using the [`@gst/mcp-server`](../../../README.md) for a real-shaped task: drafting a Technical Due Diligence agenda for a client evaluating a private-equity investment.
+A complete, reproducible end-to-end example of using the [`@gst/mcp-server`](../../../README.md) `generate_diligence_agenda` tool for a real-shaped task: drafting a Technical Due Diligence agenda for a client evaluating a private-equity investment.
 
 This document is a **stakeholder orientation aid** — it answers "what does it actually look like to use this" without requiring the reader to install the server first. Every input and output below is reproducible by anyone with the MCP server registered in their Claude client.
+
+> Companion docs: [`CONTRACT.md`](./CONTRACT.md) (per-field input reference) | [`../contracts/README.md`](../contracts/README.md) (registry of all per-tool contracts).
 
 > **The deal in this document is hypothetical.** No real client, target, or codename. The portfolio engagements pulled in for analogical reference (Fusion, Ultra2, Fender) are real anonymized engagements from the bundled portfolio dataset, but their use here as comparables is illustrative — actual engagement matching in a real deal would involve human judgment, not a string match.
 
@@ -228,4 +230,4 @@ For other use cases (comparable-deal recall, pitch / scope mapping), see [`mcp-s
 
 ---
 
-_Last Updated: 2026-04-27_
+_Last Updated: 2026-04-28_

@@ -59,7 +59,7 @@ Every per-tool `CONTRACT.md` follows this structure (the diligence-machine versi
 2. **Field overview table** — one row per input field with `field` / `type` / `multi or single` / `dimension label`. Dimension labels come from the engine's `CONDITION_LABELS` map (canonical at runtime) so the contract and trigger-map output stay aligned by construction
 3. **Per-field detail sections** — one section per field, each with the field identifier, display label, subtitle, valid-values table (id / label / description), 1–3 line downstream-effect summary, cardinality / hidden-semantics callout where relevant
 4. **Versioning header** — `version`, `lastAuthored` date, schema-source line range
-5. **Related** — cross-references to the workspace HYPOTHETICAL_USAGE doc (if present), this registry, and the BL-031 architecture doc
+5. **Related** — cross-references to the sibling `USAGE.md` walkthrough (if present), this registry, and the BL-031 architecture doc
 
 ---
 

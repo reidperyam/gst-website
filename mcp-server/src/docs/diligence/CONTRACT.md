@@ -281,7 +281,7 @@ The `triggerMap`'s dimension labels are sourced from the engine's `CONDITION_LAB
 
 ## Related
 
-- [`HYPOTHETICAL_USAGE.md`](./HYPOTHETICAL_USAGE.md) — end-to-end walkthrough using this contract for a hypothetical TDD scenario
+- [`USAGE.md`](./USAGE.md) — end-to-end walkthrough using this contract for a hypothetical TDD scenario
 - [`../contracts/README.md`](../contracts/README.md) — registry of all per-tool input contracts; what an input contract is; the IRL forward-look
 - [BL-031 in BACKLOG.md](../../../../src/docs/development/BACKLOG.md#bl-031-mcp-server--internal-prototype-phase-1) — the initiative that ships the underlying tool
 - [BL-031.85 in BACKLOG.md](../../../../src/docs/development/BACKLOG.md#bl-03185-mcp-server--tool-input-contracts) — the initiative that ships this contract
