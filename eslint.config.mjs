@@ -19,6 +19,7 @@ export default [
   {
     ignores: [
       'dist/**',
+      '**/dist/**',
       '.astro/**',
       '.vercel/**',
       'coverage/**',
@@ -26,6 +27,7 @@ export default [
       'test-results/**',
       '.cache/**',
       'node_modules/**',
+      '**/node_modules/**',
       'public/**',
       // Generated / vendored
       '**/*.min.js',
@@ -99,7 +101,11 @@ export default [
     // Vitest globals (describe, it, expect, beforeAll, afterEach, vi)
     // are declared via the "vitest/globals" types entry in tsconfig
     // but ESLint also needs them declared to avoid no-undef.
-    files: ['tests/unit/**/*.{ts,tsx}', 'tests/integration/**/*.{ts,tsx}'],
+    files: [
+      'tests/unit/**/*.{ts,tsx}',
+      'tests/integration/**/*.{ts,tsx}',
+      'mcp-server/tests/**/*.{ts,tsx}',
+    ],
     languageOptions: {
       globals: {
         describe: 'readonly',

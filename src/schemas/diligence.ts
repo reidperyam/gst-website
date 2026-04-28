@@ -1,4 +1,31 @@
+/**
+ * Diligence engine input schemas (Zod).
+ *
+ * Validation surface only — no `.describe()` calls. The human-readable
+ * reference (per-field labels, valid-value descriptions, downstream-effect
+ * summaries, hidden-semantics callouts) lives at:
+ *   `mcp-server/src/docs/diligence/CONTRACT.md`
+ *
+ * The wizard-config at `src/data/diligence-machine/wizard-config.ts` is the
+ * source of user-facing labels; the contract doc cites both files.
+ */
 import { z } from 'zod';
+
+import {
+  TRANSACTION_TYPE_IDS,
+  PRODUCT_TYPE_IDS,
+  TECH_ARCHETYPE_IDS,
+  HEADCOUNT_IDS,
+  REVENUE_RANGE_IDS,
+  GROWTH_STAGE_IDS,
+  COMPANY_AGE_IDS,
+  GEOGRAPHY_IDS,
+  BUSINESS_MODEL_IDS,
+  SCALE_INTENSITY_IDS,
+  TRANSFORMATION_STATE_IDS,
+  DATA_SENSITIVITY_IDS,
+  OPERATING_MODEL_IDS,
+} from '../data/diligence-machine/wizard-config';
 
 /**
  * Zod schemas for Diligence Machine data sources.
@@ -99,6 +126,32 @@ export const AttentionAreaSchema = z.object({
 
 export const AttentionAreasArraySchema = z.array(AttentionAreaSchema);
 
+// ─── User inputs (consumed by The Diligence Machine wizard + MCP tool) ──────
+
+/**
+ * Runtime-validated shape of the wizard's submitted answers.
+ *
+ * Every enum is bound to the `*_IDS` tuple in
+ * `src/data/diligence-machine/wizard-config.ts` so adding a new option to the
+ * wizard without updating the schema (or vice versa) trips the
+ * `diligence-wizard-schema.test.ts` subset invariant.
+ */
+export const UserInputsSchema = z.object({
+  transactionType: z.enum(TRANSACTION_TYPE_IDS),
+  productType: z.enum(PRODUCT_TYPE_IDS),
+  techArchetype: z.enum(TECH_ARCHETYPE_IDS),
+  headcount: z.enum(HEADCOUNT_IDS),
+  revenueRange: z.enum(REVENUE_RANGE_IDS),
+  growthStage: z.enum(GROWTH_STAGE_IDS),
+  companyAge: z.enum(COMPANY_AGE_IDS),
+  geographies: z.array(z.enum(GEOGRAPHY_IDS)).min(1),
+  businessModel: z.enum(BUSINESS_MODEL_IDS),
+  scaleIntensity: z.enum(SCALE_INTENSITY_IDS),
+  transformationState: z.enum(TRANSFORMATION_STATE_IDS),
+  dataSensitivity: z.enum(DATA_SENSITIVITY_IDS),
+  operatingModel: z.enum(OPERATING_MODEL_IDS),
+});
+
 // ─── Inferred types ──────────────────────────────────────────────────────────
 
 export type WizardOption = z.infer<typeof WizardOptionSchema>;
@@ -107,3 +160,10 @@ export type WizardStep = z.infer<typeof WizardStepSchema>;
 export type QuestionCondition = z.infer<typeof QuestionConditionSchema>;
 export type DiligenceQuestion = z.infer<typeof DiligenceQuestionSchema>;
 export type AttentionArea = z.infer<typeof AttentionAreaSchema>;
+
+/**
+ * Strict literal-union shape produced by `UserInputsSchema.parse()`.
+ * Used at the MCP boundary; the engine itself uses the looser
+ * `UserInputs` interface in `src/utils/diligence-engine.ts`.
+ */
+export type ValidatedUserInputs = z.infer<typeof UserInputsSchema>;

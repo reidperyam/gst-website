@@ -171,11 +171,11 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ### BL-031: MCP Server — Internal Prototype (Phase 1)
 
-**Source**: MCP_SERVER_INITIATIVE.md (archived) | **Architecture & plan**: [MCP_SERVER_ARCHITECTURE_BL-031.md](MCP_SERVER_ARCHITECTURE_BL-031.md) | **Effort**: 1-2 days | **Status**: Open
+**Source**: MCP_SERVER_INITIATIVE.md (archived) | **Architecture & plan**: [MCP_SERVER_ARCHITECTURE_BL-031.md](MCP_SERVER_ARCHITECTURE_BL-031.md) ([test-completion companion](MCP_SERVER_ARCHITECTURE_BL-031_tests.md)) | **Effort**: 1-2 days | **Status**: Complete — local stdio MCP server shipped with three tools (`generate_diligence_agenda`, `search_portfolio`, `list_portfolio_facets`); engine parity verified end-to-end, invalid-input rejection clean, in-process protocol-roundtrip integration tests in CI, recorded smoke evidence in workspace README (April 27, 2026).
 
 **As a** GST team member, **I want** a local MCP server exposing the diligence engine and portfolio search **so that** I can query GST's tools from Claude Desktop and Claude Code without opening the website.
 
-> **Implementation plan**: see [MCP_SERVER_ARCHITECTURE_BL-031.md](MCP_SERVER_ARCHITECTURE_BL-031.md) — covers MCP architecture introduction, repo-placement and lifecycle decisions, the Phase 1 file layout and tool surface, and verification steps. Note: that document supersedes the `@modelcontextprotocol/sdk` package reference in the acceptance criteria below — current canonical SDK is the v2 split-package family (`@modelcontextprotocol/server` + companions).
+> **Implementation plan**: see [MCP_SERVER_ARCHITECTURE_BL-031.md](MCP_SERVER_ARCHITECTURE_BL-031.md) — covers MCP architecture introduction, repo-placement and lifecycle decisions, the Phase 1 file layout and tool surface, and verification steps. The canonical SDK is the v2 split-package family (`@modelcontextprotocol/server` + companions); the implementation pins `@modelcontextprotocol/server@2.0.0-alpha.2` and adds `@cfworker/json-schema` directly because v2 alpha imports it unconditionally despite declaring it as an optional peer.
 
 #### Planning Criteria
 
@@ -199,37 +199,37 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 - **Time saved**: ~10–15 min per agenda drafting session by eliminating the browser context switch and manual transcription of wizard output into client-facing artifacts
 - **Risk reduction for BL-032/BL-033**: API ergonomics, schema gaps, and edge cases surface in low-stakes internal use rather than during a paid pilot
 - **Concrete artifact for narrative**: gives investor conversations and partner pitches something real to point at when describing GST's "AI-native advisory" positioning — moves the claim from aspirational to demonstrated
-- **Zero incremental cost**: uses existing infrastructure (no new SaaS, no new dependencies beyond `@modelcontextprotocol/sdk`) — this is a 1-2 day spend that unlocks the rest of the MCP roadmap
+- **Zero incremental cost**: uses existing infrastructure (no new SaaS, no new runtime dependencies beyond `@modelcontextprotocol/server` + the `@cfworker/json-schema` peer it requires) — this is a 1-2 day spend that unlocks the rest of the MCP roadmap
 
 #### Acceptance Criteria
 
 **Server scaffolding**
 
-- [ ] New workspace directory `mcp-server/` at repo root with its own `package.json`, `tsconfig.json`, and `README.md` — does NOT touch the Astro build
-- [ ] Built with `@modelcontextprotocol/sdk` (latest stable) using stdio transport — no HTTP, no auth
-- [ ] Single entry point `mcp-server/src/index.ts` compiled to `mcp-server/dist/index.js` via `tsc`; `npm run build` produces a runnable binary
-- [ ] Binary declared via `bin` field in `mcp-server/package.json` so it can be invoked as `node /abs/path/to/dist/index.js` from a Claude Desktop / Claude Code config block
-- [ ] Tool input schemas declared with **Zod** (already a project dependency) and converted to JSON Schema for MCP via `zod-to-json-schema` or the SDK's helper
+- [x] New workspace directory `mcp-server/` at repo root with its own `package.json`, `tsconfig.json`, and `README.md` — does NOT touch the Astro build
+- [x] Built with `@modelcontextprotocol/server` (v2 split-package family; v2.0.0-alpha at the time of this work) using stdio transport — no HTTP, no auth
+- [x] Single entry point `mcp-server/src/index.ts` bundled to `mcp-server/dist/index.js` (`tsc --noEmit` for typecheck + `esbuild` for the bundle, since the website source uses extensionless imports that vanilla `tsc --moduleResolution NodeNext` can't run); `npm run build` produces a runnable binary
+- [x] Binary declared via `bin` field in `mcp-server/package.json` so it can be invoked as `node /abs/path/to/dist/index.js` from a Claude Desktop / Claude Code config block
+- [x] Tool input schemas declared with **Zod** (already a project dependency) and converted to JSON Schema for MCP via `zod-to-json-schema` or the SDK's helper
 
 **Tools exposed**
 
-- [ ] `generate_diligence_agenda` — wraps `generateScript(inputs)` from [src/utils/diligence-engine.ts](../../utils/diligence-engine.ts)
+- [x] `generate_diligence_agenda` — wraps `generateScript(inputs)` from [src/utils/diligence-engine.ts](../../utils/diligence-engine.ts)
   - Input schema mirrors `UserInputs` (13 fields: transactionType, productType, techArchetype, headcount, revenueRange, growthStage, companyAge, geographies[], businessModel, scaleIntensity, transformationState, dataSensitivity, operatingModel)
   - Enum values for each field sourced from [src/data/diligence-machine/wizard-config.ts](../../data/diligence-machine/wizard-config.ts) so the schema stays in lockstep with the website wizard
   - Returns the full `GeneratedScript` (topics, attentionAreas, triggerMap, metadata) as MCP `text` content, JSON-stringified
   - Returns a structured MCP error (not a thrown exception) when input fails Zod validation
-- [ ] `search_portfolio` — wraps `filterProjects(projects, criteria)` from [src/utils/filterLogic.ts](../../utils/filterLogic.ts)
-  - Loads `src/data/ma-portfolio/projects.json` once at server startup (57 projects, validated via existing Zod schema in `src/schemas/portfolio.ts`)
-  - Input schema: `{ search?: string, theme?: string, engagement?: string, limit?: number (default 20, max 57) }` — defaults `theme`/`engagement` to `'all'` to match `FilterCriteria` semantics
+- [x] `search_portfolio` — wraps `filterProjects(projects, criteria)` from [src/utils/filterLogic.ts](../../utils/filterLogic.ts)
+  - Bundles `src/data/ma-portfolio/projects.json` (61 projects) at build time via esbuild's JSON loader, validated at module init against the existing Zod schema in `src/schemas/portfolio.ts`
+  - Input schema: `{ search?: string, theme?: string, engagement?: string, limit?: number (default 20, max 61) }` — defaults `theme`/`engagement` to `'all'` to match `FilterCriteria` semantics
   - Returns array of matched `Project` objects plus a count summary
   - Optional companion tool `list_portfolio_facets` returning `{ themes: string[], engagementCategories: string[], growthStages: string[], years: number[] }` from the existing `getUnique*` helpers — saves callers a roundtrip when discovering filter values
 
 **Verification & docs**
 
-- [ ] `mcp-server/README.md` documents: install/build steps, JSON config snippets for both Claude Desktop (`claude_desktop_config.json`) and Claude Code (`.mcp.json` or `~/.claude/settings.json` `mcpServers` entry), each tool's input schema with one concrete example invocation
-- [ ] Vitest unit tests for the tool handlers using the SDK's in-memory test transport — cover happy path, invalid input rejection, and empty-result cases for both tools
-- [ ] Manual smoke test recorded in the README: launch the server, invoke `generate_diligence_agenda` from Claude Desktop with the example payload, confirm a non-empty topic list comes back
-- [ ] Repo-root `npm run lint` and `npx astro check` continue to pass (the new directory is excluded from Astro's tsconfig but still linted by the existing flat ESLint config)
+- [x] `mcp-server/README.md` documents: install/build steps, JSON config snippets for both Claude Desktop (`claude_desktop_config.json`) and Claude Code (`.mcp.json` or `~/.claude/settings.json` `mcpServers` entry), each tool's input schema with one concrete example invocation
+- [x] Vitest unit tests for the tool handlers using the SDK's in-memory test transport — cover happy path, invalid input rejection, and empty-result cases for both tools (24 unit + 9 in-process protocol-roundtrip integration tests via vendored `PairedTransport` — see [MCP_SERVER_ARCHITECTURE_BL-031_tests.md](MCP_SERVER_ARCHITECTURE_BL-031_tests.md))
+- [x] Manual smoke test recorded in the README: launch the server, invoke `generate_diligence_agenda` from Claude Desktop with the example payload, confirm a non-empty topic list comes back
+- [x] Repo-root `npm run lint` and `npx astro check` continue to pass (the new directory is excluded from Astro's tsconfig but still linted by the existing flat ESLint config)
 
 #### Technical Context
 
@@ -242,7 +242,7 @@ Consolidated backlog of open development initiatives for the GST website. Each i
 
 ```
 mcp-server/
-├── package.json          # type: module, bin entry, depends on @modelcontextprotocol/sdk + zod
+├── package.json          # type: module, bin entry, depends on @modelcontextprotocol/server + @cfworker/json-schema + zod
 ├── tsconfig.json         # extends ../tsconfig.json (or standalone strict config), outDir: dist
 ├── README.md             # install + Claude Desktop/Code config snippets + tool examples
 ├── src/
@@ -269,7 +269,7 @@ The relative-import dance keeps the engines as the single source of truth — no
 **Risks & mitigations**
 
 - **Engine drift**: if a future PR adds a field to `UserInputs` without updating the MCP schema, callers will get silent rejections. Mitigation — derive the MCP input schema from the existing Zod schema in `src/schemas/diligence.ts` rather than redefining it
-- **Dataset growth**: `projects.json` is loaded once at boot; this is fine at 57 projects but the README should call out that growth past ~1000 records would warrant a streaming or paginated response
+- **Dataset growth**: `projects.json` is loaded once at boot; this is fine at 61 projects but the README should call out that growth past ~1000 records would warrant a streaming or paginated response
 - **Path-resolution under stdio**: when Claude Desktop spawns the server its `cwd` is the user's home dir, not the repo. Resolve `projects.json` via `import.meta.url` / `fileURLToPath`, not `process.cwd()`
 
 **Validation sequence before marking done**
@@ -471,6 +471,107 @@ A prompt's behavior is determined by its message body — pure content. A senior
 
 ---
 
+### BL-031.85: MCP Server — Tool Input Contracts
+
+**Source**: BL-031.85 — formalizes input-schema documentation across the local-stdio surface | **Architecture & plan**: [MCP_SERVER_CONTRACTS_BL-031_85.md](MCP_SERVER_CONTRACTS_BL-031_85.md) | **Effort**: 1-2 days | **Status**: Open | **Depends on**: BL-031
+
+**As a** GST team member (or external AI agent), **I want** every MCP tool's input schema documented as a first-class versioned contract — covering valid values, multi-select semantics, ordinal-bracket rules, downstream effects on engine output, and a registry index across all tools — **so that** I can compose calls correctly without reading the Zod schema, agents can introspect what they need before invoking a tool, and a future Information Request List (IRL) generator has a stable surface to consume.
+
+> **Implementation plan**: see [MCP_SERVER_CONTRACTS_BL-031_85.md](MCP_SERVER_CONTRACTS_BL-031_85.md) — covers what an input contract is, the registry pattern (`mcp-server/src/docs/contracts/`), the per-tool spec template, the lightweight downstream-effect convention, the versioning discipline borrowed from BL-031.75, and the IRL forward-look (out of scope for this initiative).
+
+#### Planning Criteria
+
+**Use cases**
+
+- **Self-service tool invocation** — a team member preparing a prompt for an analyst doesn't have to open `src/schemas/diligence.ts` to know what `transactionType` enum values are valid; the contract doc lists them with descriptions and downstream-effect notes
+- **AI-agent introspection** — an agent in a long-running conversation can fetch the contract for a tool, plan its inputs, and avoid wasted invocations against invalid enum values
+- **Onboarding new analysts** — the contract doc explains _why_ each input matters (e.g. "high data sensitivity surfaces the breach-liability attention area"), not just what's valid; reduces ramp time for first diligence agenda
+- **Drift surveillance** — a contract version bump makes schema changes visible at PR review time; aligns with the schema-reuse risk mitigation BL-031.5 calls out
+- **Foundation for IRL generator** — the contracts collectively become the input to a future tool that emits structured fill-in forms for analysts or external agents working offline; not in scope for BL-031.85, but the contracts are the substrate that makes it tractable
+
+**Outcomes**
+
+- Diligence Machine input contract authored at `mcp-server/src/docs/diligence/CONTRACT.md` — 13 fields, valid enums, downstream-effect summaries, hidden-semantics callouts (multi-region auto-sync, ordinal bracket comparison)
+- Contracts registry at `mcp-server/src/docs/contracts/README.md` — what-is-an-input-contract narrative, table of all known Hub-tool contracts (diligence today; ICG / TechPar / Tech Debt / Regulatory Map / Portfolio listed as `⏳ BL-031.5`), ~10-line IRL forward-look
+- Cross-references wired from `mcp-server/src/docs/diligence/HYPOTHETICAL_USAGE.md`, `mcp-server/README.md` Tool Inventory, `src/schemas/diligence.ts` top-of-file comment, `src/docs/README.md` Quick Navigation
+- Versioning discipline: each contract has a version + last-authored date; pattern reusable when BL-031.5 contracts are authored alongside their MCP tools
+- Zero engine changes; zero schema changes; zero test changes — pure documentation initiative on top of the existing BL-031 surface
+
+**Business value**
+
+- **Reduces friction** for both human and AI-agent consumers of the local MCP surface — composing valid tool calls becomes self-evident from the doc, not a TS-archaeology exercise
+- **De-risks BL-031.5** — when ICG / TechPar / Tech Debt / Regulatory Map ship as MCP tools, their contracts get authored alongside following the established pattern; no per-tool format invention, no drift
+- **Enables BL-032+ remote consumers** — external agents pinning to a versioned contract gives the team a clean break-change semantic when remote API stability matters (BL-032.5 / BL-033)
+- **Strategic asset for the IRL generator** — the contracts ARE the foundation; without them, IRL is unscoped; with them, IRL becomes a small downstream tool
+- **Marginal cost**: 1-2 days of consolidation work, zero infrastructure cost, zero runtime impact
+
+#### Acceptance Criteria
+
+**Contracts authored**
+
+- [ ] `mcp-server/src/docs/diligence/CONTRACT.md` — full contract for `generate_diligence_agenda`. Each of the 13 fields has: identifier, display label (from `wizard-config.ts`), subtitle, valid-values table (id / label / description), 1-3 line downstream-effect summary, cardinality / hidden semantics where relevant
+- [ ] Hidden semantics documented: `geographies` multi-region auto-sync, `headcount` / `revenueRange` / `companyAge` ordinal bracket comparison via `meetsMinimumBracket`
+- [ ] Versioning header: `version: v1`, `lastAuthored: 2026-04-27`, schema-source line range citation
+- [ ] Source-of-truth pointers in the doc header: Zod schema file, wizard-config file, engine `CONDITION_LABELS` line range
+
+**Contracts registry**
+
+- [ ] `mcp-server/src/docs/contracts/README.md` exists with three sections: "What an input contract is", "Why the contract is its own artifact", "The contracts registry table"
+- [ ] Registry table lists all six known Hub tools (diligence ✅ Authored, ICG / TechPar / Tech Debt / Regulatory Map / Portfolio Search as `⏳ BL-031.5` or `⏳ Backlog`); no stub files for the planned entries
+- [ ] IRL forward-look section (~10 lines) explains what an Information Request List would be, that contracts make it tractable, and that IRL design is explicitly out of scope for BL-031.85
+
+**Cross-references**
+
+- [ ] `mcp-server/src/docs/diligence/HYPOTHETICAL_USAGE.md` — schema-mapping table linked to the new `CONTRACT.md`
+- [ ] `mcp-server/README.md` — "What's exposed" table's `Input` column links to `CONTRACT.md` for diligence; planned-contract notes for the other tools
+- [ ] `src/schemas/diligence.ts` — top-of-file comment block (4-6 lines) pointing to `mcp-server/src/docs/diligence/CONTRACT.md` as the human-readable reference. No schema changes.
+- [ ] `src/docs/README.md` — Quick Navigation row "Understand a Hub tool's input contract" → `mcp-server/src/docs/contracts/README.md`
+
+**Verification & docs**
+
+- [ ] [MCP_SERVER_CONTRACTS_BL-031_85.md](MCP_SERVER_CONTRACTS_BL-031_85.md) updated with any deviations made during implementation
+- [ ] Cross-check: every option ID in `CONTRACT.md` matches the corresponding tuple in `src/schemas/diligence.ts` (`TRANSACTION_TYPE_IDS`, etc.). Zero drift expected — the doc copies from the source.
+- [ ] Discoverability: from `src/docs/README.md`, a reader following links arrives at the contracts registry in ≤2 hops
+- [ ] Live MCP exercise unchanged: `mcp__gst__generate_diligence_agenda` trigger-map dimension labels match the labels in `CONTRACT.md`'s field-overview table (since `CONDITION_LABELS` at runtime is canonical)
+
+#### Technical Context
+
+**Why this is its own initiative (not folded into BL-031 / BL-031.5 / BL-031.75)**
+
+- BL-031 is "wrap two pure functions, prove the path" — small enough to validate the engineering decisions cheaply. Adding a documentation layer on top would have inflated the scope; better to ship BL-031, exercise it, then formalize.
+- BL-031.5 is engineering work — wrapping additional engines, parsing regulation files, reading the radar snapshot. Schema reuse is in its risk-mitigation list (CI tests prevent drift) but human-readable contract authoring is a separate competency.
+- BL-031.75 is content-design work — what does a senior consultant actually do step-by-step on each motion? Different competency from "what does the input schema mean for downstream output?"
+- BL-031.85 is consolidation + technical writing — sits between engineering and content design. Different cognitive mode; deserves its own deliverable.
+
+**Why position between BL-031.75 and BL-032**
+
+- Both BL-031.5 and BL-031.75 already have schema-reuse-discipline acceptance criteria built in via CI tests; contracts are the documentation layer over that runtime invariant, not a hard prerequisite
+- Authoring contracts AFTER multiple Hub-tool surfaces ship (BL-031.5) gives the contract format real cross-tool variance to ground in, not speculation from a sample size of one
+- Stabilizing contracts before BL-032 (HTTP transport) ensures remote consumers don't depend on inline schemas that need refactoring later — contracts become the public-API stability surface
+
+**Why no `.describe()` calls on the Zod schemas (deferred)**
+
+- No precedent in `src/schemas/`; would be a separate consistency pass affecting all schemas
+- The markdown contract doc is sufficient documentation surface today
+- Adding `.describe()` later (e.g. when a runtime tool surfaces tool descriptions to clients) is a mechanical lift; not blocking the contract doc
+
+**Why no YAML/JSON sidecar (deferred)**
+
+- The wizard-config TS is already structured machine-readable data
+- A future IRL generator should consume the wizard-config directly, not re-parse markdown
+- Avoiding a second source of truth keeps drift risk minimal; the markdown is the human surface, the TS is the machine surface
+
+**Out of scope** (deferred to BL-031.5 or future)
+
+- Stub contract docs for the other four Hub tools (ICG, TechPar, Tech Debt, Regulatory Map) — those get authored alongside their MCP tool wrappers in BL-031.5
+- The IRL generator surface itself — schema, rendering format, UI; tracked separately if/when warranted
+- A YAML/JSON sidecar duplicating the wizard-config — duplicate-source-of-truth anti-pattern
+- Modifications to `questions.ts` / `attention-areas.ts` — out of scope; contract doc reads them, doesn't modify them
+- Updates to existing tests; contracts are documentation, not code
+- A CI test that asserts every option ID in the contract matches the Zod tuple — nice-to-have, but the runtime trigger map already enforces this implicitly (a missing option produces a different label)
+
+---
+
 ### BL-032: MCP Server — Internal Remote (Phase 2)
 
 **Source**: MCP_SERVER_INITIATIVE.md (archived) | **Effort**: 1 week | **Status**: Open | **Depends on**: BL-031
@@ -509,7 +610,7 @@ A prompt's behavior is determined by its message body — pure content. A senior
 
 - [ ] MCP server deployed to **Cloudflare Workers** (rationale below) at a stable subdomain such as `mcp.globalstrategic.tech`
 - [ ] **Streamable HTTP transport** (not the deprecated SSE-only transport) — required for compatibility with Claude Desktop, Claude Code, mobile clients, and ChatGPT's MCP support
-- [ ] Worker built with `wrangler` and `@modelcontextprotocol/sdk`; `mcp-server/` workspace from BL-031 grows a second entrypoint `src/worker.ts` that registers the same tools but binds them to the HTTP transport
+- [ ] Worker built with `wrangler` and `@modelcontextprotocol/server` (v2 split-package family); `mcp-server/` workspace from BL-031 grows a second entrypoint `src/worker.ts` that registers the same tools but binds them to the HTTP transport
 - [ ] Tool registry is shared between stdio (BL-031) and HTTP (BL-032) entrypoints — register-once, transport-twice; CI guarantees they stay in sync
 - [ ] CORS headers restricted to known MCP client origins (`claude.ai`, `chatgpt.com`, `cursor.sh`, etc.) — no `Access-Control-Allow-Origin: *`
 

@@ -12,6 +12,14 @@ import { BRACKET_ORDER } from '../data/diligence-machine/wizard-config';
 import type { DiligenceQuestion, QuestionCondition } from '../data/diligence-machine/questions';
 import type { AttentionArea } from '../data/diligence-machine/attention-areas';
 
+/**
+ * Engine-facing input shape. Fields are typed as `string` so partial wizard
+ * state (mid-flow, with sentinels) and validated MCP payloads (literal-typed
+ * by `UserInputsSchema` in `src/schemas/diligence.ts`) both assign cleanly.
+ *
+ * The strict literal-union shape lives on the schema's `z.infer<>` —
+ * callers that want the narrower type can derive it from the schema.
+ */
 export interface UserInputs {
   transactionType: string;
   productType: string;
@@ -21,7 +29,6 @@ export interface UserInputs {
   growthStage: string;
   companyAge: string;
   geographies: string[];
-  // v2 dimensions
   businessModel: string;
   scaleIntensity: string;
   transformationState: string;
