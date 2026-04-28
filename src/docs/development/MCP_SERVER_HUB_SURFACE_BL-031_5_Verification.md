@@ -25,14 +25,16 @@ By the BL-031 closure standard, both gaps need real evidence before "Complete" s
 
 | #   | Step                                   | Command / location                                                                                                                                                                                                 | Verified |
 | --- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| 1   | Repo cloned                            | (any clone of the gst-website repo)                                                                                                                                                                                | [ ]      |
-| 2   | Dependencies installed                 | `npm install` from repo root                                                                                                                                                                                       | [ ]      |
-| 3   | mcp-server build current               | `npm -w @gst/mcp-server run build` → produces `mcp-server/dist/index.js` (~430 KB)                                                                                                                                 | [ ]      |
-| 4   | Binary smoke-tested                    | `node mcp-server/dist/index.js < /dev/null` → prints `[gst-mcp] connected on stdio`                                                                                                                                | [ ]      |
-| 5   | Radar snapshot seeded                  | `npm run radar:seed` from repo root → populates `.cache/inoreader/` with two SHA256-keyed JSON files                                                                                                               | [ ]      |
-| 6   | Claude Desktop installed               | <https://claude.ai/download>                                                                                                                                                                                       | [ ]      |
-| 7   | gst-mcp registered with Claude Desktop | Per [`mcp-server/README.md` § Configure clients](../../../mcp-server/README.md#configure-clients) — edit `claude_desktop_config.json`, add the `gst` server entry with absolute path to `mcp-server/dist/index.js` | [ ]      |
-| 8   | Claude Desktop restarted               | Quit fully (not just close window) and reopen — required for `claude_desktop_config.json` changes to take effect                                                                                                   | [ ]      |
+| 1   | Repo cloned                            | (any clone of the gst-website repo)                                                                                                                                                                                | [x]      |
+| 2   | Dependencies installed                 | `npm install` from repo root                                                                                                                                                                                       | [x]      |
+| 3   | mcp-server build current               | `npm -w @gst/mcp-server run build` → produces `mcp-server/dist/index.js` (~430 KB)                                                                                                                                 | [x]      |
+| 4   | Binary smoke-tested                    | `node mcp-server/dist/index.js < /dev/null` → prints `[gst-mcp] connected on stdio`                                                                                                                                | [x]      |
+| 5   | Radar snapshot seeded                  | `npm run radar:seed` from repo root → populates `.cache/inoreader/` with two SHA256-keyed JSON files                                                                                                               | [x]      |
+| 6   | Claude Desktop installed               | <https://claude.ai/download>                                                                                                                                                                                       | [x]      |
+| 7   | gst-mcp registered with Claude Desktop | Per [`mcp-server/README.md` § Configure clients](../../../mcp-server/README.md#configure-clients) — edit `claude_desktop_config.json`, add the `gst` server entry with absolute path to `mcp-server/dist/index.js` | [x]      |
+| 8   | Claude Desktop restarted               | Quit fully (not just close window) and reopen — required for `claude_desktop_config.json` changes to take effect                                                                                                   | [x]      |
+
+> **Verified 2026-04-28 22:38 UTC** via Claude Desktop MCP log (`mcp-server-gst.log`) — server spawned, protocol `2025-11-25` negotiated, `tools/list` + `resources/list` both returned non-error responses with substantive payloads. Server-side stderr line `[gst-mcp] connected on stdio` confirmed.
 
 > **Why Claude Desktop and not Claude Code for verification?** Both support MCP. Claude Desktop has the most prominent **resource picker** UI — pinning `gst://library/vdr-structure` into a conversation visually demonstrates the Resources primitive. Claude Code is a terminal-style interface where Resources are model-discovered rather than user-pinned. The tools (steps V1-V3, V6) work identically in both clients; the Resource verification (steps V4, V5) is most convincingly done in Claude Desktop.
 
@@ -120,7 +122,7 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 ### V1. ICG — side-by-side wizard parity
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **MCP invocation** (paste into Claude Desktop):
 
@@ -168,7 +170,7 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 ### V2. TechPar — side-by-side wizard parity
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **MCP invocation**:
 
@@ -219,7 +221,7 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 ### V3. Tech Debt — side-by-side wizard parity
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **Caveat — slider quantization**: the website wizard uses sliders that quantize values (`posToTeamSize` rounds to specific integers; `posToSalary` rounds to nearest $5K; `posTobudget` rounds to nearest $1K; `posToArr` rounds to nearest $100K). The MCP tool accepts arbitrary raw values. Pick verification inputs that hit slider stops cleanly so byte-identity is achievable. The values below are slider-stop-friendly.
 
@@ -270,7 +272,7 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 
 ### V4. Pinned Library Resource — `gst://library/vdr-structure`
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **Procedure**:
 
@@ -285,13 +287,13 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 - Pin succeeded: [ ]
 - 9 folders enumerated correctly: [ ]
 - Model cited the pinned content (vs hallucinating): [ ]
-- Notes: **************\_\_**************
+- Notes: ******\*\*******\_\_******\*\*******
 
 ---
 
 ### V5. Pinned Regulation Resource — `gst://regulations/eu/gdpr`
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **Procedure**:
 
@@ -304,13 +306,13 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 - Pin succeeded: [ ]
 - Breach window correct (72 hours): [ ]
 - Penalty correct (4% / €20M): [ ]
-- Notes: **************\_\_**************
+- Notes: ******\*\*******\_\_******\*\*******
 
 ---
 
 ### V6. Snapshot-missing Radar error path
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **Procedure** (do this when no other Radar verification work is in flight):
 
@@ -326,13 +328,13 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 - Structured error returned (no stack trace): [ ]
 - Error message text matches: [ ]
 - Re-seed restored functionality: [ ]
-- Notes: **************\_\_**************
+- Notes: ******\*\*******\_\_******\*\*******
 
 ---
 
 ### V7. Update the README "Last verified" stanza
 
-- [ ] **Verified** (date / verifier: ********\_\_\_\_********)
+- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
 **Procedure**:
 
