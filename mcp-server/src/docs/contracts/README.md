@@ -101,3 +101,23 @@ When BL-031.5 (or any future initiative) ships a new MCP tool:
 5. Link the contract from `mcp-server/README.md` "What's exposed" table's `Input` column for that tool
 
 That's the entire ceremony. No new files invented, no new conventions; the pattern is reusable and additive.
+
+---
+
+## Transitional notes (remove when [BL-034](../../../../src/docs/development/BACKLOG.md#bl-034-mcp-server--documentation-cleanup) closes)
+
+> **These two notes are temporary scaffolding** that exists while we transition from "AC text owns field names" (the BL-031 / BL-031.5 baseline) to "CONTRACT.md owns field names, AC describes intent" (the going-forward convention). Once every active MCP-server initiative has been authored under the new convention and the precedence is well-understood by reviewers, **delete this entire section as part of [BL-034](../../../../src/docs/development/BACKLOG.md#bl-034-mcp-server--documentation-cleanup)**. The notes are guardrails, not durable rules.
+
+### Precedence rule (transitional)
+
+If the AC text in [`BACKLOG.md`](../../../../src/docs/development/BACKLOG.md) disagrees with a per-tool `CONTRACT.md` on field names, **the contract is canonical**. The AC describes intent; the contract describes the actual shape, derived from the canonical Zod schema. AC text is authored at planning time and is treated as a frozen architectural decision record after the initiative ships — it is not maintained against subsequent schema changes.
+
+### AC-authoring convention (transitional)
+
+When authoring AC for a future initiative that adds an MCP tool surface, write at the **conceptual level** rather than the literal-name level. Example:
+
+> ❌ Don't: `assess_infrastructure_cost_governance` — input includes `answers` map and `stage`
+>
+> ✅ Do: `assess_infrastructure_cost_governance` — input includes the answers map and an optional company-stage field. Full reference in [`../icg/CONTRACT.md`](../icg/CONTRACT.md).
+
+This way the AC commits only to the _concept_, and the CONTRACT.md (which is maintained) commits to the field names. Drift becomes structurally impossible because the AC isn't claiming any specific identifier.

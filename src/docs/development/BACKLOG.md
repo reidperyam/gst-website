@@ -2,7 +2,9 @@
 
 Consolidated backlog of open development initiatives for the GST website. Each item is a self-contained user story with enough context to design and implement a solution. Items are grouped by theme, not priority — triage happens separately.
 
-> **Completed and closed items**: 31 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021–026, 027–030, 034, 036–041). Use `git log` to find their original acceptance criteria and technical context.
+> **Completed and closed items**: 30 items were completed or closed through April 2026 (BL-002, 003, 008–019, 021–026, 027–030, 036–041). Use `git log` to find their original acceptance criteria and technical context.
+>
+> **BL-034** was previously closed and has been re-opened with new scope as the MCP-server doc-cleanup catch-all (April 2026). The historical BL-034 contents are reachable via `git log -- src/docs/development/BACKLOG.md`.
 
 ---
 
@@ -321,11 +323,11 @@ The relative-import dance keeps the engines as the single source of truth — no
 
 **New tools (extend BL-031's tool registry)**
 
-- [x] `assess_infrastructure_cost_governance` — wraps the ICG engine; input includes `answers` map and `stage`; output is `{ overall, domainScores[], recommendations[] }`
-- [x] `compute_techpar` — wraps the TechPar engine; input is `TechParInputs`; output is `TechParResult`
-- [x] `estimate_tech_debt_cost` — wraps the Tech Debt engine; **input MUST be raw values** (team size, salary, maintenance burden, deploy frequency) — slider-position helpers stay on the website side
-- [x] `search_regulations` — facet/search across the regulatory-map JSON files; input `{ jurisdiction?, domain?, query?, limit? }`; output includes the resource `uri` for each matched framework
-- [x] `list_regulation_facets` — companion enumerator for `{ jurisdictions[], domains[] }`
+- [x] `assess_infrastructure_cost_governance` — wraps the ICG engine; input includes the `answers` map and an optional `companyStage`; output is `{ overallScore, maturityLevel, domainScores[], showFoundationalFlag, recommendations[], answeredCount, totalQuestions, skippedCount }`. Field names are canonical to the engine; full reference in [`mcp-server/src/docs/icg/CONTRACT.md`](../../../mcp-server/src/docs/icg/CONTRACT.md)
+- [x] `compute_techpar` — wraps the TechPar engine; input is `TechParInputs` (14 fields); output is `TechParResult`. Full reference in [`mcp-server/src/docs/techpar/CONTRACT.md`](../../../mcp-server/src/docs/techpar/CONTRACT.md)
+- [x] `estimate_tech_debt_cost` — wraps the Tech Debt engine; **input MUST be raw values** (team size, salary, maintenance burden, deploy frequency, etc.) — slider-position helpers stay on the website side. Full reference in [`mcp-server/src/docs/tech-debt/CONTRACT.md`](../../../mcp-server/src/docs/tech-debt/CONTRACT.md)
+- [x] `search_regulations` — facet/search across the regulatory-map JSON files; input `{ jurisdiction?, category?, query?, limit? }`; output includes the resource `uri` for each matched framework. Full reference in [`mcp-server/src/docs/regulatory-map/CONTRACT.md`](../../../mcp-server/src/docs/regulatory-map/CONTRACT.md)
+- [x] `list_regulation_facets` — companion enumerator for `{ jurisdictions[], categories[], totalFrameworks }`
 - [x] `search_radar_cache` — local-only equivalent of BL-032's `search_radar`; reads from the seed snapshot ONLY; explicitly named to avoid future collision with the live remote tool
 
 **Resources primitive (new for this initiative)**
@@ -1052,6 +1054,83 @@ The diligence engine takes structured enum inputs only — low risk. The portfol
 6. Two pilot agreements signed (legal + technical) — engineering does not "soft launch" without paper
 7. Status page live, on-call rotation defined, incident response runbook in place
 8. Public listing on at least one MCP directory with a working "try it" demo
+
+---
+
+### BL-034: MCP Server — Documentation Cleanup
+
+**Source**: BL-034 — rolling cleanup catch-all for the MCP server doc surface | **Effort**: 0.5-1 day (executed at the end of the BL-031.x / BL-032.x / BL-033 sequence) | **Status**: Open | **Depends on**: BL-031.75, BL-032, BL-032.5, BL-032.75, BL-033
+
+**As a** future maintainer of the GST MCP server documentation, **I want** the transitional scaffolding and accumulated cleanup items left behind by the BL-031.x / BL-032.x / BL-033 implementations consolidated into a single closing pass **so that** the doc surface stops carrying conventions that were only useful while the system was being assembled.
+
+> **Why a catch-all**: rolling cleanup items inevitably accumulate during a multi-phase initiative — transitional precedence rules, deferred-now-tractable items, "remove me when X ships" callouts, ADR sections that have served their purpose. Tracking them in their parent initiative would inflate that initiative's AC list and risk the cleanup being skipped. Tracking them here keeps the parent initiatives focused on shipping, and gives a single place to land the "does this still need to exist?" review at the end of the MCP-server initiative sequence.
+
+#### Planning Criteria
+
+**Use cases**
+
+- **Cleanup discipline**: every time a BL-031.x / BL-032.x / BL-033 initiative adds a transitional note (e.g. "remove when BL-Y closes"), add a corresponding bullet to BL-034's AC. The cleanup work itself is small; the discipline is keeping the list in sync as items emerge.
+- **Convention maturation**: the BL-031.85 contracts pattern introduced "CONTRACT.md is canonical, AC describes intent". Until that convention is well-understood by reviewers, the per-tool CONTRACT.md docs and the contracts registry need explicit guardrails. Once the convention is internalized (i.e. when reviewers stop asking "is the AC or the CONTRACT.md authoritative?"), the guardrails become noise and should go.
+- **ADR-vs-living-doc separation**: architectural decision records (`MCP_SERVER_ARCHITECTURE_BL-031.md`, `MCP_SERVER_HUB_SURFACE_BL-031_5.md`, `MCP_SERVER_CONTRACTS_BL-031_85.md`, etc.) freeze at authoring time and are not maintained against subsequent schema changes. Living docs (per-tool CONTRACT.md, USAGE.md, the contracts registry README) ARE maintained. BL-034's discipline is to verify, at end-of-sequence, that the right artifacts are in the right category — and that no living doc is silently inheriting prose from a frozen ADR.
+
+**Outcomes**
+
+- Transitional sections in `mcp-server/src/docs/contracts/README.md` removed (precedence rule + AC-authoring convention)
+- Cleanup AC list below has accumulated bullets from each BL-031.x / BL-032.x / BL-033 initiative as they shipped
+- A single closing PR rolls all the cleanup items together — no scope creep into other initiatives
+
+**Business value**
+
+- **Doc-debt prevention** — without an explicit cleanup pass, transitional scaffolding becomes permanent and confuses future maintainers
+- **Convention migration** — the contracts pattern (CONTRACT.md canonical, AC conceptual) only matures if the transitional guardrails are removed at the right time; otherwise the convention is "remember to look at the canonical thing" forever, which is weaker
+- **Single accountability point** — anyone reviewing the MCP server doc surface at end-of-sequence has one ticket to read, not five "what was that about" archaeology trips
+
+#### Acceptance Criteria
+
+**Transitional scaffolding to remove**
+
+- [ ] `mcp-server/src/docs/contracts/README.md` § "Transitional notes (remove when BL-034 closes)" — the precedence rule and the AC-authoring convention sections — DELETED in full. The convention has either matured (no longer needed) or has been escalated into a permanent doc somewhere appropriate (in which case the redirect is the cleanup item)
+- [ ] Verify no other doc references the deleted "Transitional notes" section by anchor; broken links are caught here, not in production
+
+**ADR-vs-living-doc audit**
+
+- [ ] Every per-tool `CONTRACT.md` cross-referenced against its Zod schema and engine source — drift caught and fixed in the contract (the contract is canonical; the schema is the source of truth)
+- [ ] Every architectural-decision doc under `src/docs/development/MCP_SERVER_*.md` audited for prose that has become stale since authoring (e.g., "the planned URI manifest" when the URIs have shipped). Stale prose either edited to past tense ("the URI manifest authored under BL-031.5 is...") or deleted; ADRs are not maintained, so they should not contain present-tense claims about the codebase
+
+**Items accumulated during prior initiatives** (append as they emerge)
+
+- [ ] Library content-source convergence — if/when an Astro content-collection migration happens, replace the parallel-canonical `.md` digests with the unified source. Tracked here pending that decision; see [BL-031.5 deviation](MCP_SERVER_HUB_SURFACE_BL-031_5.md#deviation--library-content-source-bl-0315)
+- [ ] Radar per-item URIs — `gst://radar/item/<id>` URIs were deferred in BL-031.5. Re-evaluate after BL-032 ships live data with stable item IDs; either author them as a Resource family or formally drop them from scope
+- [ ] Portfolio per-tool `CONTRACT.md` and `USAGE.md` — Portfolio Search is `⏳ Backlog` in the contracts registry; if it stays that way through the MCP-server sequence, decide whether to author the docs or drop the tool from the registry
+- [ ] (Add bullets here as new transitional items emerge during BL-031.75 / BL-032 / BL-032.5 / BL-032.75 / BL-033 implementation)
+
+**Verification & docs**
+
+- [ ] Repo-root `npx astro check && npm run lint && npm run lint:css && npm run test:run` continues to pass after the cleanup
+- [ ] `mcp-server/` workspace `npm run typecheck && npm run test && npm run build` continues to pass
+- [ ] All markdown links across the MCP doc surface resolve (no 404s introduced by the cleanup)
+
+#### Technical Context
+
+**The discipline**
+
+When implementing any BL-031.x / BL-032.x / BL-033 initiative:
+
+1. If the initiative adds a transitional note (e.g., a "remove when X closes" callout), append a corresponding bullet to BL-034's AC list in the same PR. This keeps the AC list current.
+2. If the initiative defers an item (e.g. "we'll author this later"), check whether it belongs here vs. its own ticket. Items that are scoped + bounded get their own ticket; items that are "see if this still matters at end-of-sequence" go here.
+3. The discipline is conventional, not enforced by CI. Reviewers should ask "did this PR introduce a transitional note? if so, is it tracked under BL-034?"
+
+**Why this is its own initiative (not folded into BL-031.85 or BL-033)**
+
+- BL-031.85 is content-authoring work (the contracts pattern). The cleanup of _its own_ transitional scaffolding is a separate concern that depends on the convention having matured — which only happens after the convention has been used in subsequent initiatives.
+- BL-033 is hardening work (OAuth, audit logs, prompt-injection sanitization). Bundling cleanup into BL-033 would risk the cleanup being skipped under hardening pressure.
+- A separate ticket means a separate review gate: "does the doc surface need closing items?" is a question worth asking explicitly at the end of the sequence.
+
+**Out of scope**
+
+- Active doc maintenance during BL-031.x / BL-032.x / BL-033 — that's each initiative's responsibility
+- Architectural decision docs are explicitly NOT in scope to be maintained — they are point-in-time records and the cleanup audits them for stale present-tense claims, not for current accuracy
+- Any new feature work — BL-034 is exclusively a doc-cleanup pass
 
 ---
 
