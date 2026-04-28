@@ -27,6 +27,33 @@ export {
   type EngagementType,
 } from '../../src/schemas/portfolio';
 
+// Re-export ICG / TechPar / Tech Debt input schemas (BL-031.5).
+export {
+  ICGInputsSchema,
+  CompanyStageSchema,
+  COMPANY_STAGE_VALUES,
+  type ICGInputs,
+  type CompanyStage,
+} from '../../src/schemas/icg';
+
+export {
+  TechParInputsSchema,
+  ModeSchema,
+  CapExViewSchema,
+  StageSchema as TechParStageSchema,
+  type TechParInputs,
+  type Mode as TechParMode,
+  type CapExView,
+} from '../../src/schemas/techpar';
+
+export {
+  TechDebtInputsSchema,
+  DeployFrequencySchema,
+  DEPLOY_FREQUENCY_VALUES,
+  type TechDebtInputs,
+  type DeployFrequency,
+} from '../../src/schemas/tech-debt';
+
 // ─── MCP tool input schemas ──────────────────────────────────────────────
 
 /** Input for the `search_portfolio` tool. */

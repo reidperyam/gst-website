@@ -1,0 +1,67 @@
+/**
+ * MCP tool: assess_infrastructure_cost_governance
+ *
+ * Wraps the website's pure ICG calculation engine. Computes the maturity
+ * score, per-domain breakdown, and triggered recommendations for a target
+ * company's cost-governance posture.
+ */
+
+import type { McpServer } from '@modelcontextprotocol/server';
+import { calculateResults, getRecommendations, type ICGState } from '../../../src/utils/icg-engine';
+import { DOMAINS } from '../../../src/data/infrastructure-cost-governance/domains';
+import { RECOMMENDATIONS } from '../../../src/data/infrastructure-cost-governance/recommendations';
+import { ICGInputsSchema } from '../schemas';
+
+const TOOL_DESCRIPTION = `Assess a target company's Infrastructure Cost Governance maturity.
+
+Given an \`answers\` map keyed by ICG question ID (values: 0-3 for the four maturity levels, or -1 for "Not sure" which is penalised) and an optional \`companyStage\` ('pre-series-b' | 'series-bc' | 'pe-backed' | 'enterprise'), returns:
+
+- \`overallScore\` (0-100) and \`maturityLevel\` ('Reactive' | 'Aware' | 'Optimizing' | 'Strategic')
+- Per-domain scores with foundational-flag status
+- Sorted recommendations triggered by below-threshold answers (impact-then-effort ordering)
+- Aggregate counts (answered, total, "Not sure" responses)
+
+Same engine that powers https://globalstrategic.tech/hub/tools/infrastructure-cost-governance — calling it via MCP eliminates the wizard round-trip.`;
+
+export function registerIcgTool(server: McpServer): void {
+  server.registerTool(
+    'assess_infrastructure_cost_governance',
+    {
+      title: 'Assess Infrastructure Cost Governance',
+      description: TOOL_DESCRIPTION,
+      inputSchema: ICGInputsSchema,
+      annotations: {
+        readOnlyHint: true,
+        idempotentHint: true,
+      },
+    },
+    async (inputs) => {
+      try {
+        const state: ICGState = {
+          answers: inputs.answers,
+          currentStep: 0,
+          dismissed: [],
+          companyStage: inputs.companyStage,
+        };
+        const result = calculateResults(state, DOMAINS);
+        const recommendations = getRecommendations(state, RECOMMENDATIONS);
+        const payload = { ...result, recommendations };
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(payload, null, 2),
+            },
+          ],
+          structuredContent: payload as unknown as Record<string, unknown>,
+        };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return {
+          content: [{ type: 'text', text: `Failed to assess ICG: ${message}` }],
+          isError: true,
+        };
+      }
+    }
+  );
+}

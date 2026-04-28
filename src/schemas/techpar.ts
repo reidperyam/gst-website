@@ -95,3 +95,35 @@ export type Industry = z.infer<typeof IndustrySchema>;
 export type StageConfig = z.infer<typeof StageConfigSchema>;
 export type SignalCopy = z.infer<typeof SignalCopySchema>;
 export type IndustryNote = z.infer<typeof IndustryNoteSchema>;
+
+// ─── MCP tool input ──────────────────────────────────────────────────────────
+//
+// Used by the `compute_techpar` MCP tool. Mirrors the engine's `TechParInputs`
+// interface — kept in sync with `src/utils/techpar-engine.ts`.
+
+export const MODE_VALUES = ['quick', 'deepdive'] as const;
+export const ModeSchema = z.enum(MODE_VALUES);
+
+export const CAPEX_VIEW_VALUES = ['cash', 'gaap'] as const;
+export const CapExViewSchema = z.enum(CAPEX_VIEW_VALUES);
+
+export const TechParInputsSchema = z.object({
+  arr: z.number().nonnegative(),
+  stage: StageSchema,
+  mode: ModeSchema,
+  capexView: CapExViewSchema,
+  growthRate: z.number(),
+  exitMultiple: z.number().nonnegative(),
+  infraHosting: z.number().nonnegative(),
+  infraPersonnel: z.number().nonnegative(),
+  rdOpEx: z.number().nonnegative(),
+  rdCapEx: z.number().nonnegative(),
+  engFTE: z.number().nonnegative(),
+  engCost: z.number().nonnegative(),
+  prodCost: z.number().nonnegative(),
+  toolingCost: z.number().nonnegative(),
+});
+
+export type Mode = z.infer<typeof ModeSchema>;
+export type CapExView = z.infer<typeof CapExViewSchema>;
+export type TechParInputs = z.infer<typeof TechParInputsSchema>;

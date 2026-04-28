@@ -121,7 +121,7 @@ describe('protocol roundtrip', () => {
       expect(isErrorResponse(res)).toBe(false);
     });
 
-    it('tools/list returns the three registered tools with input schemas', async () => {
+    it('tools/list returns the registered tools with input schemas', async () => {
       const res = await rpc('tools/list', {});
       expect(isErrorResponse(res)).toBe(false);
       if (isErrorResponse(res)) return;
@@ -129,7 +129,14 @@ describe('protocol roundtrip', () => {
       const payload = res.result as unknown as ListToolsResultPayload;
       const toolNames = payload.tools.map((t) => t.name).sort();
       expect(toolNames).toEqual(
-        ['generate_diligence_agenda', 'list_portfolio_facets', 'search_portfolio'].sort()
+        [
+          'assess_infrastructure_cost_governance',
+          'compute_techpar',
+          'estimate_tech_debt_cost',
+          'generate_diligence_agenda',
+          'list_portfolio_facets',
+          'search_portfolio',
+        ].sort()
       );
 
       // Every tool publishes a JSON Schema input — proves the Zod→JSON-Schema

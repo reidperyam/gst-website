@@ -11,30 +11,18 @@ import { STAGES } from '../data/techpar/stages';
 
 // Data-shape types are inferred from Zod schemas in src/schemas/techpar.ts
 // (single source of truth) and re-exported here so existing imports stay
-// stable. Engine-only computation types (TechParInputs, TechParResult,
-// TrajectoryDataset, etc.) remain declared locally below.
-import type { Stage, Frame, Zone, StageConfig } from '../schemas/techpar';
-export type { Stage, Frame, Zone, StageConfig };
-
-export type Mode = 'quick' | 'deepdive';
-export type CapExView = 'cash' | 'gaap';
-
-export interface TechParInputs {
-  arr: number;
-  stage: Stage;
-  mode: Mode;
-  capexView: CapExView;
-  growthRate: number;
-  exitMultiple: number;
-  infraHosting: number;
-  infraPersonnel: number;
-  rdOpEx: number;
-  rdCapEx: number;
-  engFTE: number;
-  engCost: number;
-  prodCost: number;
-  toolingCost: number;
-}
+// stable. Engine-only computation types (TechParResult, TrajectoryDataset,
+// etc.) remain declared locally below.
+import type {
+  Stage,
+  Frame,
+  Zone,
+  StageConfig,
+  Mode,
+  CapExView,
+  TechParInputs,
+} from '../schemas/techpar';
+export type { Stage, Frame, Zone, StageConfig, Mode, CapExView, TechParInputs };
 
 export interface CategoryKPI {
   label: string;
