@@ -1102,6 +1102,7 @@ The diligence engine takes structured enum inputs only — low risk. The portfol
 - [ ] Library content-source convergence — if/when an Astro content-collection migration happens, replace the parallel-canonical `.md` digests with the unified source. Tracked here pending that decision; see [BL-031.5 deviation](MCP_SERVER_HUB_SURFACE_BL-031_5.md#deviation--library-content-source-bl-0315)
 - [ ] Radar per-item URIs — `gst://radar/item/<id>` URIs were deferred in BL-031.5. Re-evaluate after BL-032 ships live data with stable item IDs; either author them as a Resource family or formally drop them from scope
 - [ ] Portfolio per-tool `CONTRACT.md` and `USAGE.md` — Portfolio Search is `⏳ Backlog` in the contracts registry; if it stays that way through the MCP-server sequence, decide whether to author the docs or drop the tool from the registry
+- [ ] Delete [`MCP_SERVER_HUB_SURFACE_BL-031_5_Verification.md`](MCP_SERVER_HUB_SURFACE_BL-031_5_Verification.md) once the BL-031.5 closing commit lands the recorded parity values into [`mcp-server/README.md`](../../../mcp-server/README.md). The verification doc is a transitional punch list; its evidence migrates to the README on closure
 - [ ] (Add bullets here as new transitional items emerge during BL-031.75 / BL-032 / BL-032.5 / BL-032.75 / BL-033 implementation)
 
 **Verification & docs**
