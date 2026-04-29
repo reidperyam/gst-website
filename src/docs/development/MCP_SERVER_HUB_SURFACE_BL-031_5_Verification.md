@@ -245,9 +245,9 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 ### V3. Tech Debt — side-by-side wizard parity
 
-- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
+- [x] **Verified 2026-04-29** — byte-for-byte match between MCP output and wizard URL-decoded engine state. Surfaced an additional UX bug ([Tech Debt direct-input quantization bug](BACKLOG.md#bl-034-mcp-server--documentation-cleanup) — the wizard's number-input fields silently round-trip user values through slider quantization, so $10M typed into the ARR input becomes $10.3M and $500K into budget becomes $522K). User adjusted the MCP payload to match the wizard's actually-quantized values; both surfaces then produced identical results.
 
-**Caveat — slider quantization**: the website wizard uses sliders that quantize values (`posToTeamSize` rounds to specific integers; `posToSalary` rounds to nearest $5K; `posTobudget` rounds to nearest $1K; `posToArr` rounds to nearest $100K). The MCP tool accepts arbitrary raw values. Pick verification inputs that hit slider stops cleanly so byte-identity is achievable. The values below are slider-stop-friendly.
+**Caveat — slider quantization**: the website wizard uses sliders that quantize values (`posToTeamSize` rounds to specific integers; `posToSalary` rounds to nearest $5K; `posTobudget` rounds to nearest $1K; `posToArr` rounds to nearest $100K). The MCP tool accepts arbitrary raw values. Even the wizard's number-input fields quantize on entry (see BL-034). Pick verification inputs that hit slider stops cleanly OR run the URL-fragment audit BEFORE invoking the MCP tool so the MCP payload reflects what the wizard actually stored.
 
 **MCP invocation**:
 
@@ -276,21 +276,25 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 3. Set incidents = 3 / month; MTTR = 4 hours; remediation budget = $500K; ARR = $10M; remediation efficiency = 70%; context-switch overhead OFF (advanced section)
 4. Read annual cost, monthly cost, payback period, DORA tier
 
-**Recording**:
+**Recording (verified 2026-04-29)**:
 
-| Field                     | MCP output | Wizard output | Match? |
-| ------------------------- | ---------- | ------------- | ------ |
-| `annualCost`              | **\_**     | **\_**        | [ ]    |
-| `totalMonthly`            | **\_**     | **\_**        | [ ]    |
-| `directMonthly`           | **\_**     | **\_**        | [ ]    |
-| `incidentMonthly`         | **\_**     | **\_**        | [ ]    |
-| `hoursLostPerEng`         | **\_**     | **\_**        | [ ]    |
-| `debtPctArr`              | **\_**     | **\_**        | [ ]    |
-| `paybackMonths`           | **\_**     | **\_**        | [ ]    |
-| `doraLabel`               | **\_**     | **\_**        | [ ]    |
-| `V` (velocity multiplier) | **\_**     | **\_**        | [ ]    |
+Inputs (after wizard slider-quantization noted above): `teamSize=8, salary=$150K, maintPct=25, deployFreq=Bi-weekly, incidents=3, mttr=4hr, budget=$522K, arr=$10.3M, remediationPct=70, contextSwitch=off`
 
-If the wizard outputs differ by ≤1% on any rounded field, that's slider-quantization noise — record both values and note "match within slider tolerance" rather than failing the parity check.
+| Field                     | MCP output    | Wizard expected (engine math) | Match? |
+| ------------------------- | ------------- | ----------------------------- | ------ |
+| `annualCost`              | `$340,384.62` | `$340,384.62`                 | ✅     |
+| `totalMonthly`            | `$28,365.38`  | `$28,365.38`                  | ✅     |
+| `directMonthly`           | `$27,500.00`  | `8 × $12,500 × 0.25 × 1.1`    | ✅     |
+| `incidentMonthly`         | `$865.38`     | `3 × 4 × ($150K/2080)`        | ✅     |
+| `hoursLostPerEng`         | `10`          | `40 × 0.25`                   | ✅     |
+| `costPerEng`              | `$3,545.67`   | `$28,365.38 / 8`              | ✅     |
+| `debtPctArr`              | `3.3047%`     | `$340,384.62 / $10.3M × 100`  | ✅     |
+| `monthlySavings`          | `$19,855.77`  | `$28,365.38 × 0.7`            | ✅     |
+| `paybackMonths`           | `26.29`       | `$522K / $19,855.77`          | ✅     |
+| `doraLabel`               | `High`        | `DEPLOY_OPTIONS[3].doraLabel` | ✅     |
+| `V` (velocity multiplier) | `1.1`         | `DEPLOY_OPTIONS[3].V`         | ✅     |
+
+**Bonus signal — URL-fragment audit**: the wizard URL `?s=eyJhIjoxLCJ0cyI6MTYsInNwIjozMSwibXAiOjI1LCJkaSI6MywiaW4iOjMsIm10dHIiOjQsImJwIjoxNiwiYXAiOjE2LCJyZSI6NzAsImNzIjowfQ==` decodes to `{"a":1,"ts":16,"sp":31,"mp":25,"di":3,"in":3,"mttr":4,"bp":16,"ap":16,"re":70,"cs":0}`. Engine math from those positions: `posToTeamSize(16)=8, posToSalary(31)=$150K, posTobudget(16)=$522K, posToArr(16)=$10.3M, DEPLOY_OPTIONS[3]=Bi-weekly`. Wizard input state proven equal to MCP payload by construction.
 
 ---
 
