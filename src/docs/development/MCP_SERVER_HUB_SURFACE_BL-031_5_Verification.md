@@ -74,7 +74,7 @@ The resource picker should list (or `resources/list` should return) **128 URIs**
 | `gst://radar/wire/latest`                         | 1     | same                                                           |
 | `gst://radar/wire/<category>`                     | 4     | same — `pe-ma`, `enterprise-tech`, `ai-automation`, `security` |
 
-> **MCP UX note — why "ask Claude to list the resources" doesn't work**: in MCP, `resources/list` is a **protocol method called by the client** (Claude Desktop), not a tool the model can invoke. The model in a conversation has first-class access only to _tools_. Resources are surfaced to the user through the resource picker UI in the conversation chrome (paperclip / attachment icon in Claude Desktop) and become visible to the model only after they're _pinned_ into the active context. This is not a server bug or a missing capability — it's the architectural distinction between Tools (model-invoked) and Resources (user-pinned or model-pulled-by-URI).
+> **MCP UX note — why "ask Claude to list the resources" doesn't work**: in MCP, `resources/list` is a **protocol method called by the client** (Claude Desktop), not a tool the model can invoke. The model in a conversation has first-class access only to _tools_. Resources are surfaced to the user through the resource picker UI in the conversation chrome (the **"connectors" UX** in Claude Desktop, verified 2026-04-29) and become visible to the model only after they're brought into the active context (Claude Desktop currently inlines the resource body into the prompt; other MCP clients may attach a persistent-pin object). This is not a server bug or a missing capability — it's the architectural distinction between Tools (model-invoked) and Resources (user-pinned or model-pulled-by-URI).
 >
 > **For verification purposes**: the count of 128 is confirmed by the Claude Desktop MCP log (`mcp-server-gst.log`) which captures the `resources/list` response from server startup — the client did enumerate them, even if the model cannot surface that enumeration conversationally. Visual confirmation of the catalog happens in V4/V5 (pinning a Library + Regulation Resource via the resource picker UI).
 
@@ -105,7 +105,7 @@ For verification, **explicit invocation with a frozen payload** is preferred —
 
 In Claude Desktop:
 
-1. Open the resource picker (typically a paperclip or attachment icon in the conversation chrome)
+1. Open the resource picker (in Claude Desktop, this is the **"connectors" UX** in the conversation chrome — verified 2026-04-29)
 2. Browse to `gst://library/...` or `gst://regulations/...` — the resource is "pinned" to the conversation
 3. The model now treats the pinned resource's body as referenceable context — you can ask follow-up questions like _"according to the pinned Quebec Law 25, what's the breach notification window?"_ and the model cites from the pinned content
 
@@ -300,11 +300,11 @@ Inputs (after wizard slider-quantization noted above): `teamSize=8, salary=$150K
 
 ### V4. Pinned Library Resource — `gst://library/vdr-structure`
 
-- [x] **Verified 2026-04-29** — resource was discoverable via the Claude Desktop paperclip dialog; the body got inlined into the prompt window (Claude Desktop's current Resources UX is paste-the-content rather than persistent-pin); model returned all 9 folder categories in exact order with no paraphrasing or hallucination.
+- [x] **Verified 2026-04-29** — resource was discoverable via the Claude Desktop "connectors" UX (initially mis-described as "paperclip" — corrected during V5); the body got inlined into the prompt window (Claude Desktop's current Resources UX is paste-the-content rather than persistent-pin); model returned all 9 folder categories in exact order with no paraphrasing or hallucination.
 
 **Procedure**:
 
-1. Open the resource picker in Claude Desktop (paperclip / attachment icon in the conversation chrome)
+1. Open the resource picker in Claude Desktop ("connectors" UX in the conversation chrome — verified 2026-04-29 against Claude Desktop; not the paperclip as initially assumed)
 2. Browse to `gst://library/vdr-structure` and select it. (UX note: Claude Desktop's current implementation INLINES the resource body into the prompt window when you select it — different from the persistent-pin model some MCP clients use. Both behaviors satisfy the AC; the functional outcome — content reachable by the model — is what's being verified.)
 3. Confirm the resource content is present in the conversation (either as a pinned attachment or as inlined prompt text — implementation-dependent)
 4. Ask: _"From the pinned VDR Structure Guide, list the 9 folder categories under the recommended folder taxonomy."_
@@ -312,7 +312,7 @@ Inputs (after wizard slider-quantization noted above): `teamSize=8, salary=$150K
 
 **Recording (verified 2026-04-29)**:
 
-- Resource discoverable in resource picker: ✅ (paperclip dialog)
+- Resource discoverable in resource picker: ✅ (Claude Desktop "connectors" UX in the conversation chrome)
 - Content reached the conversation: ✅ (inlined into prompt window — Claude Desktop UX)
 - 9 folders enumerated correctly: ✅
 - Model cited the pinned content (vs hallucinating): ✅ (exact match in exact order)
@@ -322,20 +322,22 @@ Inputs (after wizard slider-quantization noted above): `teamSize=8, salary=$150K
 
 ### V5. Pinned Regulation Resource — `gst://regulations/eu/gdpr`
 
-- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
+- [x] **Verified 2026-04-29** — both GDPR facts cited verbatim (72-hour notification window, up to 4% / €20M penalty); bonus check confirms the regulation catalog (~120 entries under `gst://regulations/...`) is fully visible in the connectors UX.
 
 **Procedure**:
 
-1. Open the resource picker, browse to `gst://regulations/eu/gdpr`, pin it
+1. Open the resource picker (Claude Desktop "connectors" UX), browse to `gst://regulations/eu/gdpr`, select it
 2. Ask: _"From the pinned GDPR resource, what's the breach notification window and the maximum penalty?"_
 3. Expected: 72-hour breach notification; up to 4% of annual global turnover or €20M, whichever is greater.
 
-**Recording**:
+**Recording (verified 2026-04-29)**:
 
-- Pin succeeded: [ ]
-- Breach window correct (72 hours): [ ]
-- Penalty correct (4% / €20M): [ ]
-- Notes: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\***
+- Resource discoverable in connectors UX: ✅
+- Content reached the conversation: ✅ (inline-paste UX, same as V4)
+- Breach window correct (72 hours): ✅ ("72 hours to supervisory authorities")
+- Penalty correct (4% / €20M): ✅ ("Up to 4% of annual global turnover or EUR 20 million, whichever is greater.")
+- **Bonus** — regulation catalog visible in connectors UX: ✅ (~120 regulation Resources visible — implicit confirmation of the 128-Resource manifest from server startup)
+- Notes: V5 corrected the V4 misnomer — affordance is the "connectors" UX, not the paperclip; V4 procedure has been updated retroactively with the same correction.
 
 ---
 
