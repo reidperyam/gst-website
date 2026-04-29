@@ -74,6 +74,10 @@ The resource picker should list (or `resources/list` should return) **128 URIs**
 | `gst://radar/wire/latest`                         | 1     | same                                                           |
 | `gst://radar/wire/<category>`                     | 4     | same — `pe-ma`, `enterprise-tech`, `ai-automation`, `security` |
 
+> **MCP UX note — why "ask Claude to list the resources" doesn't work**: in MCP, `resources/list` is a **protocol method called by the client** (Claude Desktop), not a tool the model can invoke. The model in a conversation has first-class access only to _tools_. Resources are surfaced to the user through the resource picker UI in the conversation chrome (paperclip / attachment icon in Claude Desktop) and become visible to the model only after they're _pinned_ into the active context. This is not a server bug or a missing capability — it's the architectural distinction between Tools (model-invoked) and Resources (user-pinned or model-pulled-by-URI).
+>
+> **For verification purposes**: the count of 128 is confirmed by the Claude Desktop MCP log (`mcp-server-gst.log`) which captures the `resources/list` response from server startup — the client did enumerate them, even if the model cannot surface that enumeration conversationally. Visual confirmation of the catalog happens in V4/V5 (pinning a Library + Regulation Resource via the resource picker UI).
+
 ### Inspecting MCP logs (when something fails)
 
 Claude Desktop's MCP log location:
@@ -124,16 +128,21 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 - [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
 
+**Important — wizard / API asymmetry** (re-discovered during V1 trial 1, see commit history): the wizard requires an answer for every one of the 20 questions before it produces a result; the "Next domain" button stays disabled until the current domain's questions are complete. The MCP API allows sparse maps (missing keys treated as `0`), but a sparse-map call produces a state the wizard cannot reproduce. So this V1 procedure uses a **complete 20-answer payload** for byte-identical parity. See [`mcp-server/src/docs/icg/CONTRACT.md`](../../../mcp-server/src/docs/icg/CONTRACT.md) § Hidden semantics — wizard / API asymmetry for the full explanation.
+
 **MCP invocation** (paste into Claude Desktop):
 
-> _"Invoke `mcp__gst__assess_infrastructure_cost_governance` with this exact payload:_
+> _"Invoke the `gst:assess_infrastructure_cost_governance` tool with this exact payload, then show me the raw JSON output without any commentary or summarization:_
 >
 > ````json
 > {
 >   "answers": {
 >     "q1_1": 2, "q1_2": 1, "q1_3": 0,
 >     "q2_1": 3, "q2_2": 2, "q2_3": -1, "q2_4": 1,
->     "q3_1": 2, "q3_2": 2, "q3_3": 1
+>     "q3_1": 2, "q3_2": 2, "q3_3": 1,
+>     "q4_1": 1, "q4_2": 0, "q4_3": -1,
+>     "q5_1": 2, "q5_2": 1, "q5_3": 0,
+>     "q6_1": 1, "q6_2": -1, "q6_3": 2, "q6_4": 1
 >   },
 >   "companyStage": "series-bc"
 > }
@@ -144,13 +153,13 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 1. Open <https://globalstrategic.tech/hub/tools/infrastructure-cost-governance/> (or local dev: `npm run dev` then `http://localhost:4321/hub/tools/infrastructure-cost-governance/`)
 2. Set company stage = "Series B–C" (top-of-page selector)
-3. Answer each question per the canonical map. The wizard answer-button labels map to scores:
+3. Answer **every one of the 20 questions** per the canonical map. The wizard answer-button labels map to scores:
    - "Not in place" = `0`
    - "Ad hoc" = `1`
    - "Established" = `2`
    - "Optimized" = `3`
-   - "Not sure" = `-1` (skip / I-don't-know)
-4. Skip remaining questions in domains 4-6 (treated as `0` by both surfaces)
+   - "Not sure" = `-1`
+4. The wizard's "Next domain" / "View results" button stays disabled until every question in the current domain has a value — there is no skip path. Use "Not sure" for the three `-1` entries above (`q2_3`, `q4_3`, `q6_2`).
 5. Read the rendered overall score, maturity level, per-domain scores
 
 **Recording**:
@@ -287,7 +296,7 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 - Pin succeeded: [ ]
 - 9 folders enumerated correctly: [ ]
 - Model cited the pinned content (vs hallucinating): [ ]
-- Notes: ******\*\*******\_\_******\*\*******
+- Notes: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\***
 
 ---
 
@@ -306,7 +315,7 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 - Pin succeeded: [ ]
 - Breach window correct (72 hours): [ ]
 - Penalty correct (4% / €20M): [ ]
-- Notes: ******\*\*******\_\_******\*\*******
+- Notes: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\***
 
 ---
 
@@ -328,7 +337,7 @@ If the wizard outputs differ by ≤1% on any rounded field, that's slider-quanti
 - Structured error returned (no stack trace): [ ]
 - Error message text matches: [ ]
 - Re-seed restored functionality: [ ]
-- Notes: ******\*\*******\_\_******\*\*******
+- Notes: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\***
 
 ---
 

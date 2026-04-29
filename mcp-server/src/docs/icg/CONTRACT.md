@@ -51,7 +51,16 @@ The tool accepts a 2-field input. The first (`answers`) is a map keyed by questi
 
 **Downstream effect**: The answers map gates **everything**. Per-domain scores are computed as a percentage of the maximum possible (`questions.length × 3`), then weighted by `domain.weight` to produce the `overallScore` (0–100). The overall score determines the `maturityLevel` via `MATURITY_THRESHOLDS` (Reactive ≤ 25, Aware ≤ 50, Optimizing ≤ 75, Strategic > 75). Below-threshold answers also drive the `recommendations[]` list — each `Recommendation` has a `triggerQuestionId` and `triggerThreshold`, surfacing when `answers[triggerQuestionId] <= triggerThreshold`. Recommendations are sorted by impact (high / medium / low), then effort (quick-win / project / initiative), then domain order.
 
-**Hidden semantics — foundational gap**: Three of the six domains are flagged `foundational: true` in the data. If any foundational domain scores at or below `FOUNDATIONAL_THRESHOLD` (33/100), the engine sets `showFoundationalFlag: true` in the result — independent of the overall score. This catches the case where a high overall score masks a critical-domain gap.
+**Hidden semantics — foundational gap**: Two of the six domains are flagged `foundational: true` in the data — `d1` (Visibility & Tagging) and `d2` (Account Structure & Attribution). If either foundational domain scores at or below `FOUNDATIONAL_THRESHOLD` (33/100), the engine sets `showFoundationalFlag: true` in the result — independent of the overall score. This catches the case where a high overall score masks a critical-domain gap.
+
+**Hidden semantics — wizard / API asymmetry**: The website wizard at [`/hub/tools/infrastructure-cost-governance/`](https://globalstrategic.tech/hub/tools/infrastructure-cost-governance/) **forces the user to answer every question** before they can proceed past a domain — the "Next" button stays disabled until every question in the current domain has a value (one of `0`/`1`/`2`/`3`/`-1`). The wizard cannot produce a state where `answeredCount < totalQuestions`.
+
+The MCP API has the opposite policy: a sparse `answers` map is a valid input. Missing keys are treated as `0` for raw-score arithmetic, but they are NOT counted in `skippedCount` (which only counts explicit `-1` answers). This serves agents that have direct signals for some questions but cannot assess others.
+
+The asymmetry is intentional — different surfaces, different completion semantics. But it has two consequences worth knowing:
+
+1. **`overallScore` interpretability differs between surfaces.** A wizard score of `25` always reflects 20 deliberate answers; an API score of `25` may reflect 8 deliberate answers + 12 absent (treated as zero). Consumers comparing the two should look at `answeredCount` to know which case they're in.
+2. **Side-by-side parity testing requires picking a wizard-reachable state.** To verify MCP/wizard equivalence, the API call must include all 20 question keys (use `-1` for any question the agent genuinely cannot assess). A sparse map will produce results the wizard literally cannot reproduce.
 
 ---
 
