@@ -203,7 +203,7 @@ mcp-server/
 
 ### Verification (run before marking complete)
 
-All ten steps **completed and verified 2026-04-29** — recorded evidence is in [`mcp-server/README.md` § Smoke test](../../../mcp-server/README.md#smoke-test-manual-parity-check) (the "Last verified (BL-031.5 surface)" stanza). The transitional verification doc [`MCP_SERVER_HUB_SURFACE_BL-031_5_Verification.md`](MCP_SERVER_HUB_SURFACE_BL-031_5_Verification.md) holds the full per-step recording tables and surfaced UX findings (logged under [BL-034](BACKLOG.md#bl-034-mcp-server--documentation-cleanup) for end-of-sequence cleanup).
+All ten steps **completed and verified 2026-04-29** — recorded evidence is in [`mcp-server/README.md` § Smoke test](../../../mcp-server/README.md#smoke-test-manual-parity-check) (the "Last verified (BL-031.5 surface)" stanza). UX findings surfaced during verification are logged under [BL-034](BACKLOG.md#bl-034-mcp-server--documentation-cleanup) for end-of-sequence resolution. (A transitional verification punch-list doc was authored to operationalize this work; it has been deleted post-closure since its evidence migrated to the README — see `git log` for the history.)
 
 1. ✅ `cd mcp-server && npm run build && npm test` — green (93/93 vitest cases).
 2. ✅ From repo root: `npx astro check && npm run lint && npm run lint:css && npm run test:run` — green (1063/1063 vitest cases).
