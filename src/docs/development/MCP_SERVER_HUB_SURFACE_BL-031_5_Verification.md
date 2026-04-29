@@ -126,7 +126,7 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 ### V1. ICG — side-by-side wizard parity
 
-- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
+- [x] **Verified 2026-04-29** — byte-for-byte match across all measurable fields (see recording table below). Trial 2 procedure (corrected after trial 1 used a sparse-map payload the wizard cannot reproduce; see commit `5e5680e`).
 
 **Important — wizard / API asymmetry** (re-discovered during V1 trial 1, see commit history): the wizard requires an answer for every one of the 20 questions before it produces a result; the "Next domain" button stays disabled until the current domain's questions are complete. The MCP API allows sparse maps (missing keys treated as `0`), but a sparse-map call produces a state the wizard cannot reproduce. So this V1 procedure uses a **complete 20-answer payload** for byte-identical parity. See [`mcp-server/src/docs/icg/CONTRACT.md`](../../../mcp-server/src/docs/icg/CONTRACT.md) § Hidden semantics — wizard / API asymmetry for the full explanation.
 
@@ -162,18 +162,25 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 4. The wizard's "Next domain" / "View results" button stays disabled until every question in the current domain has a value — there is no skip path. Use "Not sure" for the three `-1` entries above (`q2_3`, `q4_3`, `q6_2`).
 5. Read the rendered overall score, maturity level, per-domain scores
 
-**Recording**:
+**Recording (verified 2026-04-29)**:
 
-| Field                        | MCP output | Wizard output | Match? |
-| ---------------------------- | ---------- | ------------- | ------ |
-| `overallScore`               | **\_**     | **\_**        | [ ]    |
-| `maturityLevel`              | **\_**     | **\_**        | [ ]    |
-| `domainScores[0].score` (d1) | **\_**     | **\_**        | [ ]    |
-| `domainScores[1].score` (d2) | **\_**     | **\_**        | [ ]    |
-| `domainScores[2].score` (d3) | **\_**     | **\_**        | [ ]    |
-| `showFoundationalFlag`       | **\_**     | **\_**        | [ ]    |
-| `recommendations[].length`   | **\_**     | **\_**        | [ ]    |
-| Top-3 recommendation IDs     | **\_**     | **\_**        | [ ]    |
+| Field                                | MCP output                                                        | Wizard output                                | Match? |
+| ------------------------------------ | ----------------------------------------------------------------- | -------------------------------------------- | ------ |
+| `overallScore`                       | `32`                                                              | `32`                                         | ✅     |
+| `maturityLevel`                      | `Aware`                                                           | `Aware`                                      | ✅     |
+| `answeredCount` / `totalQuestions`   | `20 / 20`                                                         | `20 of 20`                                   | ✅     |
+| `skippedCount`                       | `3`                                                               | `3` ("Not sure" responses)                   | ✅     |
+| `showFoundationalFlag`               | `true` (d1.belowFoundationalThreshold: true)                      | `⚠ Foundational gap: Visibility and Tagging` | ✅     |
+| `d1` Visibility & Tagging            | `33` (Aware)                                                      | `33/100` (Aware)                             | ✅     |
+| `d2` Account Structure & Attribution | `42` (Aware)                                                      | `42/100` (Aware)                             | ✅     |
+| `d3` Right-Sizing & Utilization      | `56` (Optimizing)                                                 | `56/100` (Optimizing)                        | ✅     |
+| `d4` Lifecycle & Waste               | `0` (Reactive)                                                    | `0/100` (Reactive)                           | ✅     |
+| `d5` Architectural Efficiency        | `33` (Aware)                                                      | `33/100` (Aware)                             | ✅     |
+| `d6` Governance & Alerting           | `25` (Reactive)                                                   | `25/100` (Reactive)                          | ✅     |
+| `recommendations[].length`           | `13`                                                              | `13`                                         | ✅     |
+| Recommendation order (top→bottom)    | `r03, r16, r17, r21, r26, r07, r09, r04, r10, r11, r14, r19, r25` | identical                                    | ✅     |
+
+**Bonus signal**: the wizard URL fragment `?s=eyJzIjo3LCJh...` (base64-decoded) shows the wizard's recorded answer map matches the MCP payload exactly — same input → same output, both surfaces.
 
 ---
 
