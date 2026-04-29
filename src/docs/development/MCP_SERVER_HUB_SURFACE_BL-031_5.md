@@ -203,16 +203,18 @@ mcp-server/
 
 ### Verification (run before marking complete)
 
-1. `cd mcp-server && npm run build && npm test` — green.
-2. From repo root: `npx astro check && npm run lint && npm run lint:css && npm run test:run` — still green.
-3. `npm run radar:seed` from repo root — populates the local snapshot.
-4. Restart the local MCP server, confirm Claude Desktop's resource picker lists all expected URIs (Library × 2, Regulations × 120+, Radar items).
-5. Pin `gst://library/vdr-structure` into a Claude Desktop conversation, confirm the model treats it as available context.
-6. Invoke `assess_infrastructure_cost_governance` with a worked example, compare output to the website wizard at `/hub/tools/infrastructure-cost-governance/` for the same answers — must be identical.
-7. Same parity check for `compute_techpar` and `estimate_tech_debt_cost`.
-8. Invoke `search_regulations { domain: 'privacy', jurisdiction: 'eu' }`, confirm GDPR appears with a working URI; read that URI, confirm full framework body returns.
-9. With the radar snapshot deleted, invoke a radar Resource — confirm a clean "snapshot missing, run `npm run radar:seed`" error rather than a stack trace.
-10. Run `npx tsc --noEmit` from `mcp-server/` AND from repo root — confirm no cross-workspace type leakage.
+All ten steps **completed and verified 2026-04-29** — recorded evidence is in [`mcp-server/README.md` § Smoke test](../../../mcp-server/README.md#smoke-test-manual-parity-check) (the "Last verified (BL-031.5 surface)" stanza). The transitional verification doc [`MCP_SERVER_HUB_SURFACE_BL-031_5_Verification.md`](MCP_SERVER_HUB_SURFACE_BL-031_5_Verification.md) holds the full per-step recording tables and surfaced UX findings (logged under [BL-034](BACKLOG.md#bl-034-mcp-server--documentation-cleanup) for end-of-sequence cleanup).
+
+1. ✅ `cd mcp-server && npm run build && npm test` — green (93/93 vitest cases).
+2. ✅ From repo root: `npx astro check && npm run lint && npm run lint:css && npm run test:run` — green (1063/1063 vitest cases).
+3. ✅ `npm run radar:seed` from repo root — populates the local snapshot (`.cache/inoreader/`).
+4. ✅ Claude Desktop MCP log (`mcp-server-gst.log`) confirms `tools/list` returned 9 tools and `resources/list` returned 128 URIs at handshake; user-visible enumeration via the Claude Desktop "connectors" UX confirmed Library × 2 + Regulations × 120 + Radar × 6.
+5. ✅ Library Resource pinning: `gst://library/vdr-structure` brought into a conversation; model returned all 9 folder categories verbatim. Regulation Resource pinning: `gst://regulations/eu/gdpr` brought into a conversation; model cited 72-hour breach window + 4%/€20M penalty verbatim.
+6. ✅ ICG parity: byte-for-byte match (overallScore 32 / Aware / 6 domain scores / 13 recommendations in identical order) between MCP tool call and the Series B–C wizard with the canonical 20-answer payload.
+7. ✅ TechPar parity: byte-for-byte match (total $6.06M / 24.24% / `ahead` zone / 4 category percentages) and Tech Debt parity ($340,384.62 annualCost / High DORA tier / 26.29 paybackMonths) — both at slider-quantized inputs to ensure wizard reachability.
+8. ✅ `search_regulations { jurisdiction: "eu", category: "data-privacy" }` returned GDPR with `uri: gst://regulations/eu/gdpr`; `resources/read` returned the full Regulation JSON body.
+9. ✅ Snapshot-missing error path: with `.cache/inoreader/` moved aside, `search_radar_cache` returned the structured `isError: true` envelope with the documented message; no stack trace; restore confirmed normal operation.
+10. ✅ `npx tsc --noEmit` clean at both `mcp-server/` (via `prebuild` hook) and repo root (via `astro check`) — no cross-workspace type leakage.
 
 ### Risks & mitigations
 

@@ -1,7 +1,7 @@
 {
   "name": "@gst/mcp-server",
-  "version": "0.1.0",
-  "description": "Local stdio MCP server exposing the GST diligence engine and portfolio search.",
+  "version": "0.2.0",
+  "description": "Local stdio MCP server exposing the GST Hub surface (diligence, portfolio, ICG, TechPar, Tech Debt, Regulations, Radar) and Library + Regulation + Radar Resources.",
   "type": "module",
   "private": true,
   "bin": {
