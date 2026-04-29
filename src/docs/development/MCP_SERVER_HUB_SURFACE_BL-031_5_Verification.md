@@ -186,7 +186,7 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 
 ### V2. TechPar — side-by-side wizard parity
 
-- [ ] **Verified** (date / verifier: **\*\*\*\***\_\_\_\_**\*\*\*\***)
+- [x] **Verified 2026-04-29** — byte-for-byte match across all measurable fields after trial 1 surfaced two unrelated issues (an `infraPersonnel` typo of $6M instead of $600K — fixed in trial 2 — and a TechPar `exitMultiple` UX bug where the field is hidden at Series B–C stage but state persists from prior PE/Enterprise-stage interaction; the latter is moot for this scenario because `gap.cumulative36 = 0` makes `exitMultiple` irrelevant to any visible output, but is recorded under [BL-034](BACKLOG.md#bl-034-mcp-server--documentation-cleanup) for end-of-sequence resolution).
 
 **MCP invocation**:
 
@@ -219,19 +219,27 @@ To verify the Radar Resources fail gracefully when the seed snapshot is missing:
 3. Mode = Quick; infra hosting (monthly) = $80K; infra personnel = $600K; R&D OpEx = $4M; R&D CapEx = $500K; engineering FTE = 25
 4. Read totalTechPct, zone, per-category KPIs, 36-month gap
 
-**Recording**:
+**Recording (verified 2026-04-29, trial 2)**:
 
-| Field                                    | MCP output | Wizard output | Match? |
-| ---------------------------------------- | ---------- | ------------- | ------ |
-| `totalTechPct`                           | **\_**     | **\_**        | [ ]    |
-| `zone`                                   | **\_**     | **\_**        | [ ]    |
-| `categories[0].pctArr` (Infra hosting)   | **\_**     | **\_**        | [ ]    |
-| `categories[1].pctArr` (Infra personnel) | **\_**     | **\_**        | [ ]    |
-| `categories[2].pctArr` (R&D OpEx)        | **\_**     | **\_**        | [ ]    |
-| `categories[3].pctArr` (R&D CapEx)       | **\_**     | **\_**        | [ ]    |
-| `gap.cumulative36`                       | **\_**     | **\_**        | [ ]    |
-| `gap.exitValue`                          | **\_**     | **\_**        | [ ]    |
-| `kpis.revenuePerEngineer`                | **\_**     | **\_**        | [ ]    |
+| Field                                    | MCP output             | Wizard output                                                | Match? |
+| ---------------------------------------- | ---------------------- | ------------------------------------------------------------ | ------ |
+| `total` (Cash basis)                     | `$6,060,000`           | `$6.1M/yr` (display-rounded)                                 | ✅     |
+| `totalTechPct`                           | `24.24`                | `24.2%` (1-decimal display)                                  | ✅     |
+| `zone`                                   | `ahead`                | `Efficiency advantage` (zoneLabel mapping in techpar-engine) | ✅     |
+| `categories[0].pctArr` (Infra hosting)   | `3.84` (bench [8, 18]) | `3.8%` (bench 8–18%)                                         | ✅     |
+| `categories[1].pctArr` (Infra personnel) | `2.4` (bench [2, 6])   | `2.4%` (bench 2–6%)                                          | ✅     |
+| `categories[2].pctArr` (R&D OpEx)        | `16` (bench [25, 40])  | `16.0%` (bench 25–40%)                                       | ✅     |
+| `categories[3].pctArr` (R&D CapEx)       | `2` (bench [3.6, 7.2]) | `2.0%` (bench 3.6–7.2%)                                      | ✅     |
+| `gap.underinvestGap`                     | `12,139,071.22`        | `$12.1M` (below 35% floor)                                   | ✅     |
+| `gap.cumulative36` / `gap.exitValue`     | `0 / 0`                | (not displayed — no excess to multiply)                      | ✅     |
+
+**Bonus signal — URL-fragment audit**: the wizard URL `?s=series_bc&a=25000000&g=30&e=15&h=80000&p=600000&r=4000000&x=500000&f=25&k=5000000&q=1000000&t=250000&u=A%24&n=marketplace` confirms the corrected `p=600000` (infraPersonnel). Other params:
+
+- `e=15` — pre-existing wizard UX bug (BL-034 cleanup item); has zero output impact here because `gap.cumulative36 = 0`
+- `k=5000000`, `q=1000000`, `t=250000` — deepdive-mode fields, ignored when mode is `quick` (no `m=` param means default `quick` mode)
+- `u=A%24` (currency = AUD), `n=marketplace` — purely cosmetic display values; engine ignores
+
+**Procedural lesson learned (folded into V3 below)**: always diff the wizard URL fragment against the MCP payload BEFORE declaring parity — input mismatches cause spurious "engine drift" alarms. This was the lesson from V2 trial 1.
 
 ---
 
